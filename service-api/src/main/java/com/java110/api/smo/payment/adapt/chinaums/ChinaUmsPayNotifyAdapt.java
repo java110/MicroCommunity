@@ -17,13 +17,12 @@ package com.java110.api.smo.payment.adapt.chinaums;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
@@ -31,9 +30,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
@@ -57,7 +57,7 @@ import java.util.*;
  */
 
 @Component(value = "chinaUmsPayNotifyAdapt")
-public class ChinaUmsPayNotifyAdapt extends DefaultAbstractComponentSMO implements IPayNotifyAdapt {
+public class ChinaUmsPayNotifyAdapt extends DefaultAbstractComponentSMO implements IOweFeeToNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(ChinaUmsPayNotifyAdapt.class);
 
