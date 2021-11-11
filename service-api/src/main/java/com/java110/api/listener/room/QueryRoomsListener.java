@@ -117,12 +117,12 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
                     roomDto.setOwnerName(tmpOwnerDto.getName());
                     //对业主身份证号隐藏处理
                     String idCard = tmpOwnerDto.getIdCard();
-                    if (mark.size() == 0 && idCard != null && !idCard.equals("")) {
+                    if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 15) {
                         idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     }
                     //对业主手机号隐藏处理
                     String link = tmpOwnerDto.getLink();
-                    if (mark.size() == 0 && link != null && !link.equals("")) {
+                    if (mark.size() == 0 && link != null && !link.equals("") && link.length() > 10) {
                         link = link.substring(0, 3) + "****" + link.substring(7);
                     }
                     roomDto.setIdCard(idCard);
