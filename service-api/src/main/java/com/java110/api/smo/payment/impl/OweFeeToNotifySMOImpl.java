@@ -26,7 +26,7 @@ public class OweFeeToNotifySMOImpl implements IOweFeeToNotifySMO {
     @Override
     public ResponseEntity<String> toNotify(String param, HttpServletRequest request) {
         String wId = request.getParameter("wId");
-        String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_NOTIFY_ADAPT);
+        String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_OWE_FEE_NOTIFY_ADAPT);
         payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_OWE_FEE_TO_NOTIFY_ADAPT : payNotifyAdapt;
         //支付适配器
         IOweFeeToNotifyAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IOweFeeToNotifyAdapt.class);

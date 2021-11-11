@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
+import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.CommonConstant;
@@ -57,7 +58,7 @@ import java.util.*;
  */
 
 @Component(value = "chinaUmsPayNotifyAdapt")
-public class ChinaUmsPayNotifyAdapt extends DefaultAbstractComponentSMO implements IOweFeeToNotifyAdapt {
+public class ChinaUmsPayNotifyAdapt extends DefaultAbstractComponentSMO implements IPayNotifyAdapt {
 
     private static final Logger logger = LoggerFactory.getLogger(ChinaUmsPayNotifyAdapt.class);
 

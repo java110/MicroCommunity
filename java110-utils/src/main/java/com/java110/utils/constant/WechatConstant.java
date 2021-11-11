@@ -62,4 +62,7 @@ public class WechatConstant {
     public static final String PAY_ADAPT = "PAY_ADAPT";
     //支付通知适配器
     public static final String PAY_NOTIFY_ADAPT = "PAY_NOTIFY_ADAPT";
+    public static final String PAY_OWE_FEE_NOTIFY_ADAPT = "PAY_OWE_FEE_NOTIFY_ADAPT";
+
+
 }
