@@ -1,54 +1,66 @@
 {
-  "templateKeyName": "报表ID",
-  "templateName": "报表",
+  "templateKeyName": "组件ID",
+  "templateName": "报表组件",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "customId",
-      "limitErrInfo": "报表编号不能超过30",
-      "cnCode": "报表编号",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，报表编号"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "groupId",
-      "limitErrInfo": "组编号不能超过30",
-      "cnCode": "组编号",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，组编号"
-    },
-    {
-      "hasDefaultValue": false,
       "limitParam": "64",
-      "code": "title",
-      "limitErrInfo": "选项标题不能超过64",
-      "cnCode": "选项标题",
+      "code": "name",
+      "limitErrInfo": "组件名称不能超过64",
+      "cnCode": "组件名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，选项标题"
+      "desc": "必填，组件名称"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "seq",
-      "limitErrInfo": "排序不能超过11",
-      "cnCode": "排序",
+      "limitParam": "12",
+      "code": "componentType",
+      "limitErrInfo": "组件类型不能超过12",
+      "cnCode": "组件类型",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，排序"
+      "desc": "必填，组件类型"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "1",
+      "code": "queryModel",
+      "limitErrInfo": "查询方式不能超过1",
+      "cnCode": "查询方式",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，查询方式"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "1024",
+      "code": "sql",
+      "limitErrInfo": "执行sql不能超过1024",
+      "cnCode": "执行sql",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": false,
+      "desc": "执行sql"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "1024",
+      "code": "javaScript",
+      "limitErrInfo": "执行java脚本代码不能超过1024",
+      "cnCode": "执行java脚本代码",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": false,
+      "desc": "执行java脚本代码"
     },
     {
       "hasDefaultValue": false,
@@ -63,29 +75,29 @@
       "desc": "描述"
     }
   ],
-  "searchName": "报表ID",
+  "searchName": "组件ID",
   "directories": "dev",
-  "searchCode": "customId",
-  "templateCode": "reportCustom",
+  "searchCode": "componentId",
+  "templateCode": "reportCustomComponent",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "customId",
-      "name": "报表编号",
+      "code": "componentId",
+      "name": "组件ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "groupId",
-      "name": "组编号",
+      "code": "name",
+      "name": "组件名称",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "title",
-      "name": "选项标题",
+      "code": "componentType",
+      "name": "组件类型",
       "inputType": "input"
     }
   ],
-  "templateKey": "customId"
+  "templateKey": "componentId"
 }

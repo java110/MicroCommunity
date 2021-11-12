@@ -55,7 +55,6 @@ public class SaveReportCustomComponentCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-        Assert.hasKeyAndValue(reqJson, "componentGroup", "请求报文中未包含componentGroup");
         Assert.hasKeyAndValue(reqJson, "componentType", "请求报文中未包含componentType");
         Assert.hasKeyAndValue(reqJson, "queryModel", "请求报文中未包含queryModel");
 
@@ -67,6 +66,7 @@ public class SaveReportCustomComponentCmd extends AbstractServiceCmdListener {
 
         ReportCustomComponentPo reportCustomComponentPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentPo.class);
         reportCustomComponentPo.setComponentId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        reportCustomComponentPo.setComponentGroup("C");
         int flag = reportCustomComponentV1InnerServiceSMOImpl.saveReportCustomComponent(reportCustomComponentPo);
 
         if (flag < 1) {
