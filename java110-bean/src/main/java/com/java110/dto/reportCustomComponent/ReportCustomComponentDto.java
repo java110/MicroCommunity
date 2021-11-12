@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class ReportCustomComponentDto extends PageDto implements Serializable {
 
+    public static final String QUERY_MODEL_SQL = "1";
+    public static final String QUERY_MODEL_JAVA = "2";
+
     private String componentType;
     private String componentId;
     private String javaScript;

@@ -19,13 +19,16 @@
     <select id="getReportCustomComponentRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.component_id,t.component_id componentId,t.status_cd,t.status_cd
         statusCd,t.custom_id,t.custom_id customId,t.seq,cc.`name` componentName,t.create_time createTime,
-        cc.component_type componentType,cc.java_script javaScript,cc.component_group
-        componentGroup,cc.query_model queryModel,cc.component_sql componentSql
+        cc.component_type componentType,cc.component_group
+        componentGroup,cc.query_model queryModel
         from report_custom_component_rel t
         left join report_custom_component cc on t.component_id = cc.component_id and cc.status_cd = '0'
         where 1 =1
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
+        </if>
+        <if test="componentType !=null and componentType != ''">
+            and t.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}
@@ -76,6 +79,9 @@
         where 1 =1
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
+        </if>
+        <if test="componentType !=null and componentType != ''">
+            and t.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}
