@@ -23,7 +23,9 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,7 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
 
         if (count > 0) {
             reportCustomComponentDtos = reportCustomComponentV1InnerServiceSMOImpl.queryReportCustomComponents(reportCustomComponentDto);
+            desCode(reportCustomComponentDtos);
         } else {
             reportCustomComponentDtos = new ArrayList<>();
         }
@@ -77,5 +80,23 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void desCode(List<ReportCustomComponentDto> reportCustomComponentDtos) {
+        if (reportCustomComponentDtos == null || reportCustomComponentDtos.size() < 1) {
+            return;
+        }
+        for(ReportCustomComponentDto reportCustomComponentDto: reportCustomComponentDtos) {
+            try {
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getComponentSql())) {
+                    reportCustomComponentDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getComponentSql()),"UTF-8"));
+                }
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getJavaScript())) {
+                    reportCustomComponentDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getJavaScript()),"UTF-8"));
+                }
+            } catch (Exception e) {
+                logger.error("编码失败", e);
+            }
+        }
     }
 }
