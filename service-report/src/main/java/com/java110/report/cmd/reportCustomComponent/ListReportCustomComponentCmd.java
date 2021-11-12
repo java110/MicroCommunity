@@ -70,7 +70,7 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
 
         if (count > 0) {
             reportCustomComponentDtos = reportCustomComponentV1InnerServiceSMOImpl.queryReportCustomComponents(reportCustomComponentDto);
-            desCode(reportCustomComponentDtos);
+
         } else {
             reportCustomComponentDtos = new ArrayList<>();
         }
@@ -82,21 +82,5 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void desCode(List<ReportCustomComponentDto> reportCustomComponentDtos) {
-        if (reportCustomComponentDtos == null || reportCustomComponentDtos.size() < 1) {
-            return;
-        }
-        for(ReportCustomComponentDto reportCustomComponentDto: reportCustomComponentDtos) {
-            try {
-                if (!StringUtil.isEmpty(reportCustomComponentDto.getComponentSql())) {
-                    reportCustomComponentDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getComponentSql()),"UTF-8"));
-                }
-                if (!StringUtil.isEmpty(reportCustomComponentDto.getJavaScript())) {
-                    reportCustomComponentDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getJavaScript()),"UTF-8"));
-                }
-            } catch (Exception e) {
-                logger.error("编码失败", e);
-            }
-        }
-    }
+
 }

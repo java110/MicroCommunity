@@ -16,19 +16,19 @@
 package com.java110.report.smo.impl;
 
 
-import com.java110.report.dao.IReportCustomComponentV1ServiceDao;
-import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
-import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
-import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
+import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
+import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
+import com.java110.report.dao.IReportCustomComponentV1ServiceDao;
+import com.java110.utils.util.Base64Convert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,26 +47,26 @@ public class ReportCustomComponentV1InnerServiceSMOImpl extends BaseServiceSMO i
 
 
     @Override
-    public int saveReportCustomComponent(@RequestBody  ReportCustomComponentPo reportCustomComponentPo) {
+    public int saveReportCustomComponent(@RequestBody ReportCustomComponentPo reportCustomComponentPo) {
         int saveFlag = reportCustomComponentV1ServiceDaoImpl.saveReportCustomComponentInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateReportCustomComponent(@RequestBody  ReportCustomComponentPo reportCustomComponentPo) {
+    @Override
+    public int updateReportCustomComponent(@RequestBody ReportCustomComponentPo reportCustomComponentPo) {
         int saveFlag = reportCustomComponentV1ServiceDaoImpl.updateReportCustomComponentInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteReportCustomComponent(@RequestBody  ReportCustomComponentPo reportCustomComponentPo) {
-       reportCustomComponentPo.setStatusCd("1");
-       int saveFlag = reportCustomComponentV1ServiceDaoImpl.updateReportCustomComponentInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentPo));
-       return saveFlag;
+    @Override
+    public int deleteReportCustomComponent(@RequestBody ReportCustomComponentPo reportCustomComponentPo) {
+        reportCustomComponentPo.setStatusCd("1");
+        int saveFlag = reportCustomComponentV1ServiceDaoImpl.updateReportCustomComponentInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentPo));
+        return saveFlag;
     }
 
     @Override
-    public List<ReportCustomComponentDto> queryReportCustomComponents(@RequestBody  ReportCustomComponentDto reportCustomComponentDto) {
+    public List<ReportCustomComponentDto> queryReportCustomComponents(@RequestBody ReportCustomComponentDto reportCustomComponentDto) {
 
         //校验是否传了 分页信息
 
@@ -77,13 +77,31 @@ public class ReportCustomComponentV1InnerServiceSMOImpl extends BaseServiceSMO i
         }
 
         List<ReportCustomComponentDto> reportCustomComponents = BeanConvertUtil.covertBeanList(reportCustomComponentV1ServiceDaoImpl.getReportCustomComponentInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentDto)), ReportCustomComponentDto.class);
-
+        desCode(reportCustomComponents);
         return reportCustomComponents;
     }
 
 
     @Override
     public int queryReportCustomComponentsCount(@RequestBody ReportCustomComponentDto reportCustomComponentDto) {
-        return reportCustomComponentV1ServiceDaoImpl.queryReportCustomComponentsCount(BeanConvertUtil.beanCovertMap(reportCustomComponentDto));    }
+        return reportCustomComponentV1ServiceDaoImpl.queryReportCustomComponentsCount(BeanConvertUtil.beanCovertMap(reportCustomComponentDto));
+    }
+
+    private void desCode(List<ReportCustomComponentDto> reportCustomComponentDtos) {
+        if (reportCustomComponentDtos == null || reportCustomComponentDtos.size() < 1) {
+            return;
+        }
+        for (ReportCustomComponentDto reportCustomComponentDto : reportCustomComponentDtos) {
+            try {
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getComponentSql())) {
+                    reportCustomComponentDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getComponentSql()), "UTF-8"));
+                }
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getJavaScript())) {
+                    reportCustomComponentDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getJavaScript()), "UTF-8"));
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
 
 }
