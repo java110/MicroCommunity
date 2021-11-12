@@ -28,7 +28,7 @@
             and t.rel_id= #{relId}
         </if>
         <if test="componentType !=null and componentType != ''">
-            and t.component_type= #{componentType}
+            and cc.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}
@@ -81,7 +81,7 @@
             and t.rel_id= #{relId}
         </if>
         <if test="componentType !=null and componentType != ''">
-            and t.component_type= #{componentType}
+            and cc.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}
