@@ -1,6 +1,7 @@
 package com.java110.dto.reportCustomComponentRel;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class ReportCustomComponentRelDto extends PageDto implements Serializable {
 
     private String relId;
-private String componentId;
-private String customId;
-private String seq;
+    private String componentId;
+    private String customId;
+    private String seq;
+    private String componentName;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String seq;
     public String getRelId() {
         return relId;
     }
-public void setRelId(String relId) {
+
+    public void setRelId(String relId) {
         this.relId = relId;
     }
-public String getComponentId() {
+
+    public String getComponentId() {
         return componentId;
     }
-public void setComponentId(String componentId) {
+
+    public void setComponentId(String componentId) {
         this.componentId = componentId;
     }
-public String getCustomId() {
+
+    public String getCustomId() {
         return customId;
     }
-public void setCustomId(String customId) {
+
+    public void setCustomId(String customId) {
         this.customId = customId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -65,5 +74,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getComponentName() {
+        return componentName;
+    }
+
+    public void setComponentName(String componentName) {
+        this.componentName = componentName;
     }
 }

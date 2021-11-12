@@ -1,103 +1,61 @@
 {
-  "templateKeyName": "组件ID",
+  "templateKeyName": "关系编号",
   "templateName": "报表组件",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "name",
-      "limitErrInfo": "组件名称不能超过64",
-      "cnCode": "组件名称",
+      "limitParam": "30",
+      "code": "componentId",
+      "limitErrInfo": "组件ID不能超过30",
+      "cnCode": "组件ID",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组件名称"
+      "desc": "必填，组件ID"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "componentType",
-      "limitErrInfo": "组件类型不能超过12",
-      "cnCode": "组件类型",
+      "limitParam": "30",
+      "code": "customId",
+      "limitErrInfo": "报表编号不能超过30",
+      "cnCode": "报表编号",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组件类型"
+      "desc": "必填，报表编号"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "1",
-      "code": "queryModel",
-      "limitErrInfo": "查询方式不能超过1",
-      "cnCode": "查询方式",
+      "limitParam": "11",
+      "code": "seq",
+      "limitErrInfo": "组件序号不能超过11",
+      "cnCode": "组件序号",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，查询方式"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "1024",
-      "code": "sql",
-      "limitErrInfo": "执行sql不能超过1024",
-      "cnCode": "执行sql",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": false,
-      "desc": "执行sql"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "1024",
-      "code": "javaScript",
-      "limitErrInfo": "执行java脚本代码不能超过1024",
-      "cnCode": "执行java脚本代码",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": false,
-      "desc": "执行java脚本代码"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "remark",
-      "limitErrInfo": "描述不能超过512",
-      "cnCode": "描述",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": false,
-      "desc": "描述"
+      "desc": "必填，组件序号"
     }
   ],
-  "searchName": "组件ID",
+  "searchName": "关系编号",
   "directories": "dev",
-  "searchCode": "componentId",
-  "templateCode": "reportCustomComponent",
+  "searchCode": "relId",
+  "templateCode": "reportCustomComponentRel",
   "conditions": [
+    {
+      "whereCondition": "equal",
+      "code": "relId",
+      "name": "关系编号",
+      "inputType": "input"
+    },
     {
       "whereCondition": "equal",
       "code": "componentId",
       "name": "组件ID",
       "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "name",
-      "name": "组件名称",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "componentType",
-      "name": "组件类型",
-      "inputType": "input"
     }
   ],
-  "templateKey": "componentId"
+  "templateKey": "relId"
 }

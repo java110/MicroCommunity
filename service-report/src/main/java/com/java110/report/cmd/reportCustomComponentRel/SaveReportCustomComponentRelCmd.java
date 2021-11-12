@@ -28,9 +28,9 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,8 +55,8 @@ public class SaveReportCustomComponentRelCmd extends AbstractServiceCmdListener 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "componentId", "请求报文中未包含componentId");
-Assert.hasKeyAndValue(reqJson, "customId", "请求报文中未包含customId");
-Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
+        Assert.hasKeyAndValue(reqJson, "customId", "请求报文中未包含customId");
+        Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
 
     }
 
@@ -64,7 +64,7 @@ Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ReportCustomComponentRelPo reportCustomComponentRelPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentRelPo.class);
+        ReportCustomComponentRelPo reportCustomComponentRelPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentRelPo.class);
         reportCustomComponentRelPo.setRelId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = reportCustomComponentRelV1InnerServiceSMOImpl.saveReportCustomComponentRel(reportCustomComponentRelPo);
 
