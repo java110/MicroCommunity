@@ -1,30 +1,54 @@
 {
-  "templateKeyName": "组ID",
-  "templateName": "报表组",
+  "templateKeyName": "报表ID",
+  "templateName": "报表",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "128",
-      "code": "name",
-      "limitErrInfo": "组名称不能超过128",
-      "cnCode": "组名称",
+      "limitParam": "30",
+      "code": "customId",
+      "limitErrInfo": "报表编号不能超过30",
+      "cnCode": "报表编号",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组名称"
+      "desc": "必填，报表编号"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "url",
-      "limitErrInfo": "组url不能超过512",
-      "cnCode": "组url",
+      "limitParam": "30",
+      "code": "groupId",
+      "limitErrInfo": "组编号不能超过30",
+      "cnCode": "组编号",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组url"
+      "desc": "必填，组编号"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "64",
+      "code": "title",
+      "limitErrInfo": "选项标题不能超过64",
+      "cnCode": "选项标题",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，选项标题"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "11",
+      "code": "seq",
+      "limitErrInfo": "排序不能超过11",
+      "cnCode": "排序",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，排序"
     },
     {
       "hasDefaultValue": false,
@@ -35,33 +59,33 @@
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
-      "required": true,
+      "required": false,
       "desc": "描述"
     }
   ],
-  "searchName": "组ID",
+  "searchName": "报表ID",
   "directories": "dev",
-  "searchCode": "groupId",
-  "templateCode": "reportCustomGroup",
+  "searchCode": "customId",
+  "templateCode": "reportCustom",
   "conditions": [
     {
       "whereCondition": "equal",
+      "code": "customId",
+      "name": "报表编号",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
       "code": "groupId",
-      "name": "组ID",
+      "name": "组编号",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "name",
-      "name": "组名称",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "url",
-      "name": "组url",
+      "code": "title",
+      "name": "选项标题",
       "inputType": "input"
     }
   ],
-  "templateKey": "groupId"
+  "templateKey": "customId"
 }

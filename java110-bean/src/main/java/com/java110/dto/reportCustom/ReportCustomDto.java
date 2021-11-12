@@ -1,6 +1,7 @@
 package com.java110.dto.reportCustom;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class ReportCustomDto extends PageDto implements Serializable {
 
     private String groupId;
-private String remark;
-private String title;
-private String customId;
-private String seq;
+    private String remark;
+    private String title;
+    private String customId;
+    private String seq;
+    private String groupName;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String seq;
     public String getGroupId() {
         return groupId;
     }
-public void setGroupId(String groupId) {
+
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getTitle() {
+
+    public String getTitle() {
         return title;
     }
-public void setTitle(String title) {
+
+    public void setTitle(String title) {
         this.title = title;
     }
-public String getCustomId() {
+
+    public String getCustomId() {
         return customId;
     }
-public void setCustomId(String customId) {
+
+    public void setCustomId(String customId) {
         this.customId = customId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -72,5 +83,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

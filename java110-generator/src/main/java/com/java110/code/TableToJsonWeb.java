@@ -7,22 +7,23 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `report_custom_group` (\n" +
-            "  `group_id` varchar(30) NOT NULL COMMENT '组ID',\n" +
-            "  `name` varchar(128) NOT NULL COMMENT '组名称',\n" +
-            "  `url` varchar(512) NOT NULL COMMENT '组url',\n" +
+    public static final String createTableSql = "CREATE TABLE `report_custom` (\n" +
+            "  `custom_id` varchar(30) NOT NULL COMMENT '报表编号',\n" +
+            "  `group_id` varchar(30) NOT NULL COMMENT '组编号',\n" +
+            "  `title` varchar(64) NOT NULL COMMENT '选项标题',\n" +
+            "  `seq` int(11) NOT NULL COMMENT '排序',\n" +
             "  `remark` varchar(512) DEFAULT NULL COMMENT '描述',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
             "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
             ")";
 
     public static void main(String[] args) {
-        String templateName = "报表组"; //业务名称
-        String templateCode = "reportCustomGroup"; //表名大写
-        String templateKey = "groupId"; //表主键
-        String templateKeyName = "组ID";//主键说明
-        String searchCode = "groupId"; //分片字段
-        String searchName = "组ID"; //分片字段说明
+        String templateName = "报表"; //业务名称
+        String templateCode = "reportCustom"; //表名大写
+        String templateKey = "customId"; //表主键
+        String templateKeyName = "报表ID";//主键说明
+        String searchCode = "customId"; //分片字段
+        String searchName = "报表ID"; //分片字段说明
         String directories = "dev"; //前端生成到那个目录下
 
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
