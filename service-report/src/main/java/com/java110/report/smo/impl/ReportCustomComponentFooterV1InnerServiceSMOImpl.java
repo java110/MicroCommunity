@@ -16,24 +16,24 @@
 package com.java110.report.smo.impl;
 
 
-import com.java110.report.dao.IReportCustomComponentFooterV1ServiceDao;
-import com.java110.intf.report.IReportCustomComponentFooterV1InnerServiceSMO;
-import com.java110.dto.reportCustomComponentFooter.ReportCustomComponentFooterDto;
-import com.java110.po.reportCustomComponentFooter.ReportCustomComponentFooterPo;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.reportCustomComponentFooter.ReportCustomComponentFooterDto;
+import com.java110.intf.report.IReportCustomComponentFooterV1InnerServiceSMO;
+import com.java110.po.reportCustomComponentFooter.ReportCustomComponentFooterPo;
+import com.java110.report.dao.IReportCustomComponentFooterV1ServiceDao;
+import com.java110.utils.util.Base64Convert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2021-11-14 01:21:59 mail: 928255095@qq.com
+ * add by 吴学文 at 2021-11-14 01:32:10 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -47,26 +47,26 @@ public class ReportCustomComponentFooterV1InnerServiceSMOImpl extends BaseServic
 
 
     @Override
-    public int saveReportCustomComponentFooter(@RequestBody  ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
+    public int saveReportCustomComponentFooter(@RequestBody ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
         int saveFlag = reportCustomComponentFooterV1ServiceDaoImpl.saveReportCustomComponentFooterInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateReportCustomComponentFooter(@RequestBody  ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
+    @Override
+    public int updateReportCustomComponentFooter(@RequestBody ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
         int saveFlag = reportCustomComponentFooterV1ServiceDaoImpl.updateReportCustomComponentFooterInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteReportCustomComponentFooter(@RequestBody  ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
-       reportCustomComponentFooterPo.setStatusCd("1");
-       int saveFlag = reportCustomComponentFooterV1ServiceDaoImpl.updateReportCustomComponentFooterInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterPo));
-       return saveFlag;
+    @Override
+    public int deleteReportCustomComponentFooter(@RequestBody ReportCustomComponentFooterPo reportCustomComponentFooterPo) {
+        reportCustomComponentFooterPo.setStatusCd("1");
+        int saveFlag = reportCustomComponentFooterV1ServiceDaoImpl.updateReportCustomComponentFooterInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterPo));
+        return saveFlag;
     }
 
     @Override
-    public List<ReportCustomComponentFooterDto> queryReportCustomComponentFooters(@RequestBody  ReportCustomComponentFooterDto reportCustomComponentFooterDto) {
+    public List<ReportCustomComponentFooterDto> queryReportCustomComponentFooters(@RequestBody ReportCustomComponentFooterDto reportCustomComponentFooterDto) {
 
         //校验是否传了 分页信息
 
@@ -78,12 +78,32 @@ public class ReportCustomComponentFooterV1InnerServiceSMOImpl extends BaseServic
 
         List<ReportCustomComponentFooterDto> reportCustomComponentFooters = BeanConvertUtil.covertBeanList(reportCustomComponentFooterV1ServiceDaoImpl.getReportCustomComponentFooterInfo(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterDto)), ReportCustomComponentFooterDto.class);
 
+        desCode(reportCustomComponentFooters);
         return reportCustomComponentFooters;
+    }
+
+
+    private void desCode(List<ReportCustomComponentFooterDto> ReportCustomComponentFooterDtos) {
+        if (ReportCustomComponentFooterDtos == null || ReportCustomComponentFooterDtos.size() < 1) {
+            return;
+        }
+        for (ReportCustomComponentFooterDto reportCustomComponentDto : ReportCustomComponentFooterDtos) {
+            try {
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getComponentSql())) {
+                    reportCustomComponentDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getComponentSql()), "UTF-8"));
+                }
+                if (!StringUtil.isEmpty(reportCustomComponentDto.getJavaScript())) {
+                    reportCustomComponentDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getJavaScript()), "UTF-8"));
+                }
+            } catch (Exception e) {
+            }
+        }
     }
 
 
     @Override
     public int queryReportCustomComponentFootersCount(@RequestBody ReportCustomComponentFooterDto reportCustomComponentFooterDto) {
-        return reportCustomComponentFooterV1ServiceDaoImpl.queryReportCustomComponentFootersCount(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterDto));    }
+        return reportCustomComponentFooterV1ServiceDaoImpl.queryReportCustomComponentFootersCount(BeanConvertUtil.beanCovertMap(reportCustomComponentFooterDto));
+    }
 
 }

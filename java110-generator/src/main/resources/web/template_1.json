@@ -1,6 +1,6 @@
 {
-  "templateKeyName": "关系编号",
-  "templateName": "报表组件",
+  "templateKeyName": "统计ID",
+  "templateName": "组件统计",
   "columns": [
     {
       "hasDefaultValue": false,
@@ -16,46 +16,88 @@
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "customId",
-      "limitErrInfo": "报表编号不能超过30",
-      "cnCode": "报表编号",
+      "limitParam": "64",
+      "code": "name",
+      "limitErrInfo": "名称不能超过64",
+      "cnCode": "名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，报表编号"
+      "desc": "必填，名称"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "seq",
-      "limitErrInfo": "组件序号不能超过11",
-      "cnCode": "组件序号",
+      "limitParam": "1",
+      "code": "queryModel",
+      "limitErrInfo": "查询方式不能超过1",
+      "cnCode": "查询方式",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组件序号"
+      "desc": "必填，查询方式"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "1024",
+      "code": "javaScript",
+      "limitErrInfo": "执行java脚本代码不能超过1024",
+      "cnCode": "执行java脚本代码",
+      "limit": "maxLength",
+      "show": false,
+      "inputType": "input",
+      "required": false,
+      "desc": "执行java脚本代码"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "1024",
+      "code": "componentSql",
+      "limitErrInfo": "执行sql不能超过1024",
+      "cnCode": "执行sql",
+      "limit": "maxLength",
+      "show": false,
+      "inputType": "input",
+      "required": false,
+      "desc": "执行sql"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "512",
+      "code": "remark",
+      "limitErrInfo": "描述'不能超过512",
+      "cnCode": "描述'",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": false,
+      "desc": "描述'"
     }
   ],
-  "searchName": "关系编号",
+  "searchName": "统计ID",
   "directories": "dev",
-  "searchCode": "relId",
-  "templateCode": "reportCustomComponentRel",
+  "searchCode": "footerId",
+  "templateCode": "reportCustomComponentFooter",
   "conditions": [
-    {
-      "whereCondition": "equal",
-      "code": "relId",
-      "name": "关系编号",
-      "inputType": "input"
-    },
     {
       "whereCondition": "equal",
       "code": "componentId",
       "name": "组件ID",
       "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "name",
+      "name": "名称",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "queryModel",
+      "name": "查询方式",
+      "inputType": "input"
     }
   ],
-  "templateKey": "relId"
+  "templateKey": "footerId"
 }

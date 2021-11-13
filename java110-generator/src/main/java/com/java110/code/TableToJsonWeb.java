@@ -7,20 +7,22 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `report_custom_component_rel` (\n" +
-            "  `rel_id` varchar(30) NOT NULL COMMENT '关系编号',\n" +
+    public static final String createTableSql = "CREATE TABLE `report_custom_component_footer` (\n" +
+            "  `footer_id` varchar(30) NOT NULL COMMENT '报表底部同步ID',\n" +
             "  `component_id` varchar(30) NOT NULL COMMENT '组件ID',\n" +
-            "  `custom_id` varchar(30) NOT NULL COMMENT '报表编号',\n" +
-            "  `seq` int(11) NOT NULL COMMENT '组件序号',\n" +
-            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
+            "  `name` varchar(64) NOT NULL COMMENT '名称',\n" +
+            "  `query_model` varchar(1) NOT NULL COMMENT '查询方式 1、sql,2、java',\n" +
+            "  `java_script` longtext(1024) COMMENT '执行java脚本代码',\n" +
+            "  `component_sql` longtext(1024) COMMENT '执行sql',\n" +
+            "  `remark` varchar(512) DEFAULT NULL COMMENT '描述'\n" +
             ")";
     public static void main(String[] args) {
-        String templateName = "报表组件"; //业务名称
-        String templateCode = "reportCustomComponentRel"; //表名大写
-        String templateKey = "relId"; //表主键
-        String templateKeyName = "关系编号";//主键说明
-        String searchCode = "relId"; //分片字段
-        String searchName = "关系编号"; //分片字段说明
+        String templateName = "组件统计"; //业务名称
+        String templateCode = "reportCustomComponentFooter"; //表名大写
+        String templateKey = "footerId"; //表主键
+        String templateKeyName = "统计ID";//主键说明
+        String searchCode = "footerId"; //分片字段
+        String searchName = "统计ID"; //分片字段说明
         String directories = "dev"; //前端生成到那个目录下
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
