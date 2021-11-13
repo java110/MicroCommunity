@@ -1,66 +1,34 @@
 {
   "param": {
-    "heartbeatTime": "heartbeat_time",
-    "machineCode": "machine_code",
-    "authCode": "auth_code",
-    "locationTypeCd": "location_type_cd",
-    "machineVersion": "machine_version",
+    "footerId": "footer_id",
+    "componentId": "component_id",
+    "javaScript": "java_script",
+    "name": "name",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "machineName": "machine_name",
-    "machineMac": "machine_mac",
-    "machineId": "machine_id",
-    "typeId": "type_id",
-    "state": "state",
-    "communityId": "community_id",
-    "locationObjId": "location_obj_id",
-    "machineTypeCd": "machine_type_cd",
-    "machineIp": "machine_ip",
-    "direction": "direction"
+    "queryModel": "query_model",
+    "componentSql": "component_sql"
   },
-  "name": "machine",
-  "shareColumn": "community_id",
-  "id": "machineId",
-  "shareName": "common",
+  "name": "reportCustomComponentFooter",
+  "shareColumn": "footer_id",
+  "id": "footerId",
+  "shareName": "report",
   "autoMove": true,
   "required": [
     {
-      "msg": "设备ID不能为空",
-      "code": "machineId"
+      "msg": "报表底部同步ID不能为空",
+      "code": "footerId"
     },
     {
-      "msg": "设备编码不能为空",
-      "code": "machineCode"
+      "msg": "组件ID不能为空",
+      "code": "componentId"
     },
     {
-      "msg": "设备版本不能为空",
-      "code": "machineVersion"
-    },
-    {
-      "msg": "设备类型不能为空",
-      "code": "machineTypeCd"
-    },
-    {
-      "msg": "小区ID不能为空",
-      "code": "communityId"
-    },
-    {
-      "msg": "设备名称不能为空",
-      "code": "machineName"
-    },
-    {
-      "msg": "授权码不能为空",
-      "code": "authCode"
-    },
-    {
-      "msg": "设备方向进出不能为空",
-      "code": "direction"
-    },
-    {
-      "msg": "设备类型ID不能为空",
-      "code": "typeId"
+      "msg": "名称不能为空",
+      "code": "name"
     }
   ],
-  "desc": "设备信息",
-  "shareParam": "communityId",
-  "tableName": "machine"
+  "desc": "底部统计",
+  "shareParam": "footerId",
+  "tableName": "report_custom_component_footer"
 }

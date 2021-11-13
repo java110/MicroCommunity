@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomComponentFooterV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存底部统计信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomComponentFooterInfo" parameterType="Map">
+        insert into report_custom_component_footer(
+footer_id,component_id,java_script,name,remark,query_model,component_sql
+) values (
+#{footerId},#{componentId},#{javaScript},#{name},#{remark},#{queryModel},#{componentSql}
+)
+    </insert>
+
+
+
+    <!-- 查询底部统计信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomComponentFooterInfo" parameterType="Map" resultType="Map">
+        select  t.footer_id,t.footer_id footerId,t.component_id,t.component_id componentId,t.java_script,t.java_script javaScript,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.query_model,t.query_model queryModel,t.component_sql,t.component_sql componentSql 
+from report_custom_component_footer t 
+where 1 =1 
+<if test="footerId !=null and footerId != ''">
+   and t.footer_id= #{footerId}
+</if> 
+<if test="componentId !=null and componentId != ''">
+   and t.component_id= #{componentId}
+</if> 
+<if test="javaScript !=null and javaScript != ''">
+   and t.java_script= #{javaScript}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="queryModel !=null and queryModel != ''">
+   and t.query_model= #{queryModel}
+</if> 
+<if test="componentSql !=null and componentSql != ''">
+   and t.component_sql= #{componentSql}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改底部统计信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomComponentFooterInfo" parameterType="Map">
+        update  report_custom_component_footer t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="componentId !=null and componentId != ''">
+, t.component_id= #{componentId}
+</if> 
+<if test="javaScript !=null and javaScript != ''">
+, t.java_script= #{javaScript}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="queryModel !=null and queryModel != ''">
+, t.query_model= #{queryModel}
+</if> 
+<if test="componentSql !=null and componentSql != ''">
+, t.component_sql= #{componentSql}
+</if> 
+ where 1=1 <if test="footerId !=null and footerId != ''">
+and t.footer_id= #{footerId}
+</if> 
+
+    </update>
+
+    <!-- 查询底部统计数量 add by wuxw 2018-07-03 -->
+     <select id="queryReportCustomComponentFootersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from report_custom_component_footer t 
+where 1 =1 
+<if test="footerId !=null and footerId != ''">
+   and t.footer_id= #{footerId}
+</if> 
+<if test="componentId !=null and componentId != ''">
+   and t.component_id= #{componentId}
+</if> 
+<if test="javaScript !=null and javaScript != ''">
+   and t.java_script= #{javaScript}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="queryModel !=null and queryModel != ''">
+   and t.query_model= #{queryModel}
+</if> 
+<if test="componentSql !=null and componentSql != ''">
+   and t.component_sql= #{componentSql}
+</if> 
+
+
+     </select>
+
+</mapper>
