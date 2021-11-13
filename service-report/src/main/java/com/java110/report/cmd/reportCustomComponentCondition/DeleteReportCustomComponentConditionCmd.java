@@ -21,16 +21,16 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportCustomComponentConditionV1InnerServiceSMO;
 import com.java110.po.reportCustomComponentCondition.ReportCustomComponentConditionPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * 类表述：删除
  * 服务编码：reportCustomComponentCondition.deleteReportCustomComponentCondition
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "reportCustomComponentCondition.deleteReportCustomComponentCondition")
 public class DeleteReportCustomComponentConditionCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteReportCustomComponentConditionCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteReportCustomComponentConditionCmd.class);
 
     @Autowired
     private IReportCustomComponentConditionV1InnerServiceSMO reportCustomComponentConditionV1InnerServiceSMOImpl;
@@ -51,7 +51,7 @@ public class DeleteReportCustomComponentConditionCmd extends AbstractServiceCmdL
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "conditionId", "conditionId不能为空");
-Assert.hasKeyAndValue(reqJson, "conditionId", "conditionId不能为空");
+        Assert.hasKeyAndValue(reqJson, "conditionId", "conditionId不能为空");
 
     }
 
@@ -59,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "conditionId", "conditionId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ReportCustomComponentConditionPo reportCustomComponentConditionPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentConditionPo.class);
+        ReportCustomComponentConditionPo reportCustomComponentConditionPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentConditionPo.class);
         int flag = reportCustomComponentConditionV1InnerServiceSMOImpl.deleteReportCustomComponentCondition(reportCustomComponentConditionPo);
 
         if (flag < 1) {

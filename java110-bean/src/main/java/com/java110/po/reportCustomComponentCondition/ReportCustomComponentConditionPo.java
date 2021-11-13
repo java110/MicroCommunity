@@ -16,7 +16,7 @@
 package com.java110.po.reportCustomComponentCondition;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-11-09 13:33:12 mail: 928255095@qq.com
@@ -28,62 +28,84 @@ import java.util.Date;
 public class ReportCustomComponentConditionPo implements Serializable {
 
     private String componentId;
-private String conditionId;
-private String param;
-private String name;
-private String remark;
-private String statusCd = "0";
-private String holdpace;
-private String type;
-public String getComponentId() {
+    private String conditionId;
+    private String param;
+    private String name;
+    private String remark;
+    private String statusCd = "0";
+    private String holdpace;
+    private String type;
+    private String seq;
+
+    public String getComponentId() {
         return componentId;
     }
-public void setComponentId(String componentId) {
+
+    public void setComponentId(String componentId) {
         this.componentId = componentId;
     }
-public String getConditionId() {
+
+    public String getConditionId() {
         return conditionId;
     }
-public void setConditionId(String conditionId) {
+
+    public void setConditionId(String conditionId) {
         this.conditionId = conditionId;
     }
-public String getParam() {
+
+    public String getParam() {
         return param;
     }
-public void setParam(String param) {
+
+    public void setParam(String param) {
         this.param = param;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getHoldpace() {
+
+    public String getHoldpace() {
         return holdpace;
     }
-public void setHoldpace(String holdpace) {
+
+    public void setHoldpace(String holdpace) {
         this.holdpace = holdpace;
     }
-public String getType() {
+
+    public String getType() {
         return type;
     }
-public void setType(String type) {
+
+    public void setType(String type) {
         this.type = type;
     }
 
+    public String getSeq() {
+        return seq;
+    }
 
-
+    public void setSeq(String seq) {
+        this.seq = seq;
+    }
 }
