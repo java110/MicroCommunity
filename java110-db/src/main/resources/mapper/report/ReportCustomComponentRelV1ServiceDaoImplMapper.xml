@@ -28,7 +28,7 @@
             and t.rel_id= #{relId}
         </if>
         <if test="componentType !=null and componentType != ''">
-            and t.component_type= #{componentType}
+            and cc.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}
@@ -76,12 +76,13 @@
     <select id="queryReportCustomComponentRelsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from report_custom_component_rel t
+        left join report_custom_component cc on t.component_id = cc.component_id and cc.status_cd = '0'
         where 1 =1
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
         <if test="componentType !=null and componentType != ''">
-            and t.component_type= #{componentType}
+            and cc.component_type= #{componentType}
         </if>
         <if test="componentId !=null and componentId != ''">
             and t.component_id= #{componentId}

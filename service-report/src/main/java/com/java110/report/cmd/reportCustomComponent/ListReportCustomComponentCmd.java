@@ -23,7 +23,9 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,7 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
 
         if (count > 0) {
             reportCustomComponentDtos = reportCustomComponentV1InnerServiceSMOImpl.queryReportCustomComponents(reportCustomComponentDto);
+
         } else {
             reportCustomComponentDtos = new ArrayList<>();
         }
@@ -78,4 +81,6 @@ public class ListReportCustomComponentCmd extends AbstractServiceCmdListener {
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
+
+
 }

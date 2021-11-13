@@ -26,7 +26,9 @@ import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +69,17 @@ public class SaveReportCustomComponentCmd extends AbstractServiceCmdListener {
         ReportCustomComponentPo reportCustomComponentPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentPo.class);
         reportCustomComponentPo.setComponentId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         reportCustomComponentPo.setComponentGroup("C");
+        try {
+            if (!StringUtil.isEmpty(reportCustomComponentPo.getComponentSql())) {
+                reportCustomComponentPo.setComponentSql(Base64Convert.byteToBase64(reportCustomComponentPo.getComponentSql().getBytes("UTF-8")));
+            }
+            if (!StringUtil.isEmpty(reportCustomComponentPo.getJavaScript())) {
+                reportCustomComponentPo.setJavaScript(Base64Convert.byteToBase64(reportCustomComponentPo.getJavaScript().getBytes("UTF-8")));
+            }
+        } catch (Exception e) {
+            logger.error("编码失败", e);
+        }
+
         int flag = reportCustomComponentV1InnerServiceSMOImpl.saveReportCustomComponent(reportCustomComponentPo);
 
         if (flag < 1) {

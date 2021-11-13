@@ -101,7 +101,7 @@ public class ListReportCustomComponentDataCmd extends AbstractServiceCmdListener
             }
             reqJsonCount.put("count", "1");
             JSONObject data = queryServiceSMOImpl.execQuerySql(reqJsonCount, sql);
-            total = data.getJSONArray("data").getJSONObject(0).getIntValue("total");
+            total = data.getJSONArray("td").getJSONObject(0).getIntValue("total");
         }
         reqJson.put("count", "0");
         int page = reqJson.getInteger("page");

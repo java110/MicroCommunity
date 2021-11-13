@@ -64,8 +64,8 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
             //精髓的地方就在这里，类ResultSet有getMetaData()会返回数据的列和对应的值的信息，然后我们将列名和对应的值作为map的键值存入map对象之中...
             ResultSetMetaData rsmd = rs.getMetaData();
             if (columns != null) {
-                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
-                    columns.add(rsmd.getColumnLabel(i));
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    columns.add(rsmd.getColumnLabel(i+1));
                 }
             }
             while (rs.next()) {
