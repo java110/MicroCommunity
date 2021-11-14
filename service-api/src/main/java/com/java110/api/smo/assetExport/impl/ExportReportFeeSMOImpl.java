@@ -1461,10 +1461,12 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("费用编号");
         row.createCell(1).setCellValue("房号");
-        row.createCell(2).setCellValue("费用项");
-        row.createCell(3).setCellValue("费用开始时间");
-        row.createCell(4).setCellValue("欠费时长（天）");
-        row.createCell(5).setCellValue("欠费金额");
+        row.createCell(2).setCellValue("业主");
+        row.createCell(3).setCellValue("面积");
+        row.createCell(4).setCellValue("费用项");
+        row.createCell(5).setCellValue("费用开始时间");
+        row.createCell(6).setCellValue("欠费时长（天）");
+        row.createCell(7).setCellValue("欠费金额");
         //查询楼栋信息
         JSONArray rooms = this.getReportOweFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -1476,10 +1478,12 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(roomIndex + 1);
             row.createCell(1).setCellValue(dataObj.getString("objName"));
-            row.createCell(2).setCellValue(dataObj.getString("feeName"));
-            row.createCell(3).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(4).setCellValue(dataObj.getString("oweDay"));
-            row.createCell(5).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(2).setCellValue(dataObj.getString("ownerName"));
+            row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(4).setCellValue(dataObj.getString("feeName"));
+            row.createCell(5).setCellValue(dataObj.getString("feeCreateTime"));
+            row.createCell(6).setCellValue(dataObj.getString("oweDay"));
+            row.createCell(7).setCellValue(dataObj.getString("oweAmount"));
         }
     }
 
@@ -1488,11 +1492,13 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("费用编号");
         row.createCell(1).setCellValue("房号");
-        row.createCell(2).setCellValue("费用项");
-        row.createCell(3).setCellValue("费用开始时间");
-        row.createCell(4).setCellValue("费用结束时间");
-        row.createCell(5).setCellValue("应收金额");
-        row.createCell(6).setCellValue("实收金额");
+        row.createCell(2).setCellValue("业主");
+        row.createCell(3).setCellValue("面积");
+        row.createCell(4).setCellValue("费用项");
+        row.createCell(5).setCellValue("费用开始时间");
+        row.createCell(6).setCellValue("费用结束时间");
+        row.createCell(7).setCellValue("应收金额");
+        row.createCell(8).setCellValue("实收金额");
         //查询楼栋信息
         JSONArray rooms = this.getReportFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -1504,11 +1510,13 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(roomIndex + 1);
             row.createCell(1).setCellValue(dataObj.getString("objName"));
-            row.createCell(2).setCellValue(dataObj.getString("feeName"));
-            row.createCell(3).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(4).setCellValue(dataObj.getString("deadlineTime"));
-            row.createCell(5).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(6).setCellValue(dataObj.getString("receivedAmount"));
+            row.createCell(2).setCellValue(dataObj.getString("ownerName"));
+            row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(4).setCellValue(dataObj.getString("feeName"));
+            row.createCell(5).setCellValue(dataObj.getString("feeCreateTime"));
+            row.createCell(6).setCellValue(dataObj.getString("deadlineTime"));
+            row.createCell(7).setCellValue(dataObj.getString("receivableAmount"));
+            row.createCell(8).setCellValue(dataObj.getString("receivedAmount"));
         }
     }
 
