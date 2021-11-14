@@ -33,7 +33,6 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -49,10 +48,10 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "reportCustomComponent.listReportCustomComponentFooter")
-public class ListReportCustomComponentFooterCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "reportCustomComponent.listReportCustomComponentDataFooter")
+public class ListReportCustomComponentDataFooterCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentFooterCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentDataFooterCmd.class);
     @Autowired
     private IReportCustomComponentV1InnerServiceSMO reportCustomComponentV1InnerServiceSMOImpl;
     @Autowired
@@ -109,9 +108,9 @@ public class ListReportCustomComponentFooterCmd extends AbstractServiceCmdListen
         JSONObject data = queryServiceSMOImpl.execJava(reqJson, sql);
         JSONArray dataTd = data.getJSONArray("td");
         JSONObject paramOut = null;
-        if(dataTd != null && dataTd.size()>0){
+        if (dataTd != null && dataTd.size() > 0) {
             paramOut = dataTd.getJSONObject(0);
-        }else{
+        } else {
             paramOut = new JSONObject();
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(paramOut);
@@ -130,15 +129,14 @@ public class ListReportCustomComponentFooterCmd extends AbstractServiceCmdListen
         JSONObject data = queryServiceSMOImpl.execQuerySql(reqJson, sql);
         JSONArray dataTd = data.getJSONArray("td");
         JSONObject paramOut = null;
-        if(dataTd != null && dataTd.size()>0){
+        if (dataTd != null && dataTd.size() > 0) {
             paramOut = dataTd.getJSONObject(0);
-        }else{
+        } else {
             paramOut = new JSONObject();
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(paramOut);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
-
 
 
 }
