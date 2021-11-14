@@ -21,16 +21,17 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportCustomComponentFooterV1InnerServiceSMO;
 import com.java110.po.reportCustomComponentFooter.ReportCustomComponentFooterPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "reportCustomComponentFooter.updateReportCustomComponentFooter")
 public class UpdateReportCustomComponentFooterCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateReportCustomComponentFooterCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateReportCustomComponentFooterCmd.class);
 
 
     @Autowired
@@ -55,7 +56,7 @@ public class UpdateReportCustomComponentFooterCmd extends AbstractServiceCmdList
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "footerId", "footerId不能为空");
-Assert.hasKeyAndValue(reqJson, "footerId", "footerId不能为空");
+        Assert.hasKeyAndValue(reqJson, "footerId", "footerId不能为空");
 
     }
 
@@ -63,7 +64,17 @@ Assert.hasKeyAndValue(reqJson, "footerId", "footerId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ReportCustomComponentFooterPo reportCustomComponentFooterPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentFooterPo.class);
+        ReportCustomComponentFooterPo reportCustomComponentFooterPo = BeanConvertUtil.covertBean(reqJson, ReportCustomComponentFooterPo.class);
+        try {
+            if (!StringUtil.isEmpty(reportCustomComponentFooterPo.getComponentSql())) {
+                reportCustomComponentFooterPo.setComponentSql(Base64Convert.byteToBase64(reportCustomComponentFooterPo.getComponentSql().getBytes("UTF-8")));
+            }
+            if (!StringUtil.isEmpty(reportCustomComponentFooterPo.getJavaScript())) {
+                reportCustomComponentFooterPo.setJavaScript(Base64Convert.byteToBase64(reportCustomComponentFooterPo.getJavaScript().getBytes("UTF-8")));
+            }
+        } catch (Exception e) {
+            logger.error("编码失败", e);
+        }
         int flag = reportCustomComponentFooterV1InnerServiceSMOImpl.updateReportCustomComponentFooter(reportCustomComponentFooterPo);
 
         if (flag < 1) {
