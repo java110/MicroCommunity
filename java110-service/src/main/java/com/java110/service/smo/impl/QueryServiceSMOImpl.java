@@ -341,6 +341,25 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         }
     }
 
+    /**
+     * 执行java脚本
+     *
+     * @param javaCode
+     * @throws BusinessException
+     */
+    public JSONObject execJava(JSONObject params, String javaCode) throws BusinessException {
+        try {
+            //JSONObject params = dataQuery.getRequestParams();
+            Interpreter interpreter = new Interpreter();
+            interpreter.eval(javaCode);
+            interpreter.set("params", params);
+            return JSONObject.parseObject(interpreter.eval("execute(dataQuery)").toString());
+        } catch (Exception e) {
+            logger.error("数据交互异常：", e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常," + e.getMessage());
+        }
+    }
+
     @Override
     public JSONObject execQuerySql(JSONObject params, String currentSql) throws BusinessException {
         List<Map<String, Object>> results = null;

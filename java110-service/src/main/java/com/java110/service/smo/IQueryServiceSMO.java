@@ -48,4 +48,12 @@ public interface IQueryServiceSMO {
      * }
      */
     JSONObject execQuerySql(JSONObject param, String sql) throws BusinessException;
+
+    /**
+     * 执行java脚本
+     *
+     * @param javaCode
+     * @throws BusinessException
+     */
+    JSONObject execJava(JSONObject params, String javaCode);
 }

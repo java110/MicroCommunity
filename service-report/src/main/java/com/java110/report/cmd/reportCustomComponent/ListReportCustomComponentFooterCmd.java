@@ -40,23 +40,23 @@ import java.util.List;
 
 
 /**
- * 类表述：查询
- * 服务编码：reportCustomComponent.listReportCustomComponentData
- * 请求路劲：/app/reportCustomComponent.listReportCustomComponentData
+ * 类表述：组件底部
+ * 服务编码：reportCustomComponent.listReportCustomComponentFooter
+ * 请求路劲：/app/reportCustomComponent.listReportCustomComponentFooter
  * add by 吴学文 at 2021-11-09 13:18:41 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "reportCustomComponent.listReportCustomComponentData")
-public class ListReportCustomComponentDataCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "reportCustomComponent.listReportCustomComponentFooter")
+public class ListReportCustomComponentFooterCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentDataCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentFooterCmd.class);
     @Autowired
     private IReportCustomComponentV1InnerServiceSMO reportCustomComponentV1InnerServiceSMOImpl;
-
-
+    @Autowired
+    private IReportCustomComponentFooterV1InnerServiceSMO reportCustomComponentFooterV1InnerServiceSMOImpl;
 
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
@@ -66,6 +66,8 @@ public class ListReportCustomComponentDataCmd extends AbstractServiceCmdListener
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "componentId", "未包含组件ID");
     }
+
+
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
@@ -75,56 +77,68 @@ public class ListReportCustomComponentDataCmd extends AbstractServiceCmdListener
         List<ReportCustomComponentDto> reportCustomComponentDtos = reportCustomComponentV1InnerServiceSMOImpl.queryReportCustomComponents(reportCustomComponentDto);
         Assert.listOnlyOne(reportCustomComponentDtos, "组件不存在，请联系开发人员");
 
-        reportCustomComponentDto = reportCustomComponentDtos.get(0);
+        ReportCustomComponentFooterDto reportCustomComponentFooterDto = new ReportCustomComponentFooterDto();
+        reportCustomComponentFooterDto.setComponentId(reqJson.getString("componentId"));
+        List<ReportCustomComponentFooterDto> reportCustomComponentFooterDtos
+                = reportCustomComponentFooterV1InnerServiceSMOImpl.queryReportCustomComponentFooters(reportCustomComponentFooterDto);
 
-        if (ReportCustomComponentDto.QUERY_MODEL_SQL.equals(reportCustomComponentDto.getQueryModel())) {
-            doDealSql(reqJson, reportCustomComponentDto, cmdDataFlowContext);
-        } else if (ReportCustomComponentDto.QUERY_MODEL_JAVA.equals(reportCustomComponentDto.getQueryModel())) {
-            doDealJava(reqJson, reportCustomComponentDto, cmdDataFlowContext);
+        // 没有配置信息
+        if (reportCustomComponentFooterDtos == null || reportCustomComponentFooterDtos.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(new JSONObject()));
+            return;
+        }
+
+        reportCustomComponentFooterDto = reportCustomComponentFooterDtos.get(0);
+
+        if (ReportCustomComponentDto.QUERY_MODEL_SQL.equals(reportCustomComponentFooterDto.getQueryModel())) {
+            doDealSql(reqJson, reportCustomComponentFooterDto, cmdDataFlowContext);
+        } else if (ReportCustomComponentDto.QUERY_MODEL_JAVA.equals(reportCustomComponentFooterDto.getQueryModel())) {
+            doDealJava(reqJson, reportCustomComponentFooterDto, cmdDataFlowContext);
         } else {
             throw new CmdException("组件实现方式不支持，请联系开发人员");
         }
     }
 
-    private void doDealJava(JSONObject reqJson, ReportCustomComponentDto reportCustomComponentDto, ICmdDataFlowContext cmdDataFlowContext) {
-        //校验是否传了 分页信息
-        String javaScript = reportCustomComponentDto.getJavaScript();
+    private void doDealJava(JSONObject reqJson, ReportCustomComponentFooterDto reportCustomComponentFooterDto, ICmdDataFlowContext cmdDataFlowContext) {
+        String sql = reportCustomComponentFooterDto.getComponentSql();
+
         int page = reqJson.getInteger("page");
         if (page != PageDto.DEFAULT_PAGE) {
             reqJson.put("page", (page - 1) * reqJson.getIntValue("row"));
         }
-        JSONObject data = queryServiceSMOImpl.execJava(reqJson, javaScript);
-        long total = data.getLong("total");
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) total / (double) reqJson.getInteger("row")), total, data);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        JSONObject data = queryServiceSMOImpl.execJava(reqJson, sql);
+        JSONArray dataTd = data.getJSONArray("td");
+        JSONObject paramOut = null;
+        if(dataTd != null && dataTd.size()>0){
+            paramOut = dataTd.getJSONObject(0);
+        }else{
+            paramOut = new JSONObject();
+        }
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(paramOut);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+
     }
 
-    private void doDealSql(JSONObject reqJson, ReportCustomComponentDto reportCustomComponentDto, ICmdDataFlowContext cmdDataFlowContext) {
+    private void doDealSql(JSONObject reqJson, ReportCustomComponentFooterDto reportCustomComponentFooterDto, ICmdDataFlowContext cmdDataFlowContext) {
         //校验是否传了 分页信息
-        String sql = reportCustomComponentDto.getComponentSql();
+        String sql = reportCustomComponentFooterDto.getComponentSql();
         long total = reqJson.getIntValue("row");
-        if (sql.trim().contains("test=\"count")) { // 如果包含 count(1) 求总数
-            JSONObject reqJsonCount = new JSONObject();
-            for (String key : reqJson.keySet()) {
-                if ("row".equals(key) || "page".equals(key)) {
-                    continue;
-                }
-                reqJsonCount.put(key, reqJson.get(key));
-            }
-            reqJsonCount.put("count", "1");
-            JSONObject data = queryServiceSMOImpl.execQuerySql(reqJsonCount, sql);
-            total = data.getJSONArray("td").getJSONObject(0).getIntValue("total");
-        }
-        reqJson.put("count", "0");
         int page = reqJson.getInteger("page");
         if (page != PageDto.DEFAULT_PAGE) {
             reqJson.put("page", (page - 1) * reqJson.getIntValue("row"));
         }
         JSONObject data = queryServiceSMOImpl.execQuerySql(reqJson, sql);
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) total / (double) reqJson.getInteger("row")), total, data);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        JSONArray dataTd = data.getJSONArray("td");
+        JSONObject paramOut = null;
+        if(dataTd != null && dataTd.size()>0){
+            paramOut = dataTd.getJSONObject(0);
+        }else{
+            paramOut = new JSONObject();
+        }
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(paramOut);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
+
+
 
 }
