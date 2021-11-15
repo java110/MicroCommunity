@@ -97,6 +97,11 @@ public class ReportOweFeeApi {
                                                     @RequestParam(value = "configIds", required = false) String configIds,
                                                     @RequestParam(value = "payObjType", required = false) String payObjType,
                                                     @RequestParam(value = "num", required = false) String num,
+                                                    @RequestParam(value = "ownerName", required = false) String ownerName,
+                                                    @RequestParam(value = "floorId", required = false) String floorId,
+                                                    @RequestParam(value = "unitId", required = false) String unitId,
+                                                    @RequestParam(value = "roomSubType", required = false) String roomSubType,
+                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
@@ -105,6 +110,11 @@ public class ReportOweFeeApi {
         reportOweFeeDto.setPayerObjType(payObjType);
         reportOweFeeDto.setPayerObjName(num);
         reportOweFeeDto.setCommunityId(communityId);
+        reportOweFeeDto.setOwnerName(ownerName);
+        reportOweFeeDto.setFloorId(floorId);
+        reportOweFeeDto.setUnitId(unitId);
+        reportOweFeeDto.setRoomSubType(roomSubType);
+        reportOweFeeDto.setRoomNum(roomNum);
         if (!StringUtil.isEmpty(configIds)) {
             String[] tmpConfigIds = configIds.split(",");
             reportOweFeeDto.setConfigIds(tmpConfigIds);
@@ -122,9 +132,9 @@ public class ReportOweFeeApi {
      */
     @RequestMapping(value = "/queryReportAllOweFee", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportAllOweFee(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "configIds", required = false) String configIds,
-                                                    @RequestParam(value = "payObjType", required = false) String payObjType,
-                                                    @RequestParam(value = "num", required = false) String num) {
+                                                       @RequestParam(value = "configIds", required = false) String configIds,
+                                                       @RequestParam(value = "payObjType", required = false) String payObjType,
+                                                       @RequestParam(value = "num", required = false) String num) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjType(payObjType);
         reportOweFeeDto.setPayerObjName(num);

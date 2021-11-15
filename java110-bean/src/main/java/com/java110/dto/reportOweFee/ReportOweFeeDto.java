@@ -35,6 +35,10 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
     private String payerObjId;
     private String[] payerObjIds;
     private String hasOweFee;
+    private String floorId;
+    private String unitId;
+    private String roomSubType;
+    private String roomNum;
     List<ReportOweFeeItemDto> items;
 
 
@@ -218,5 +222,37 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
 
     public void setHasOweFee(String hasOweFee) {
         this.hasOweFee = hasOweFee;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
     }
 }
