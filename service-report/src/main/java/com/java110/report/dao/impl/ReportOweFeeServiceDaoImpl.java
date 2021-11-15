@@ -143,7 +143,7 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         if (businessReportOweFeeInfos.size() < 1) {
             return 0;
         }
-        return Integer.parseInt(businessReportOweFeeInfos.get(0).get("total").toString());
+        return Double.parseDouble(businessReportOweFeeInfos.get(0).get("total").toString());
     }
 
     @Override
