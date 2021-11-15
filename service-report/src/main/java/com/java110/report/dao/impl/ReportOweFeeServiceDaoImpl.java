@@ -1,6 +1,7 @@
 package com.java110.report.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.core.base.dao.BaseServiceDao;
@@ -134,6 +135,21 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         List<Map> businessReportOweFeeByCarInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFeesByCar", info);
 
         return businessReportOweFeeByCarInfos;
+    }
+
+    @Override
+    public double computeReportOweFeeTotalAmount(Map info) {
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeTotalAmount", info);
+        if (businessReportOweFeeInfos.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(businessReportOweFeeInfos.get(0).get("total").toString());
+    }
+
+    @Override
+    public List<Map> computeReportOweFeeItemAmount(Map info) {
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeItemAmount", info);
+        return businessReportOweFeeInfos;
     }
 
 

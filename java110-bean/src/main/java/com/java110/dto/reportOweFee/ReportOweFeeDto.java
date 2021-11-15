@@ -39,7 +39,9 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
     private String unitId;
     private String roomSubType;
     private String roomNum;
+    private double totalOweAmount;
     List<ReportOweFeeItemDto> items;
+    List<ReportOweFeeItemDto> itemTotalOweAmounts;
 
 
     private Date createTime;
@@ -254,5 +256,21 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public double getTotalOweAmount() {
+        return totalOweAmount;
+    }
+
+    public void setTotalOweAmount(double totalOweAmount) {
+        this.totalOweAmount = totalOweAmount;
+    }
+
+    public List<ReportOweFeeItemDto> getItemTotalOweAmounts() {
+        return itemTotalOweAmounts;
+    }
+
+    public void setItemTotalOweAmounts(List<ReportOweFeeItemDto> itemTotalOweAmounts) {
+        this.itemTotalOweAmounts = itemTotalOweAmounts;
     }
 }

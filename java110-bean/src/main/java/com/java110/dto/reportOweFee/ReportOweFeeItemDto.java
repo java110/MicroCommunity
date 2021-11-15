@@ -23,6 +23,7 @@ public class ReportOweFeeItemDto extends PageDto implements Serializable {
     private String payerObjId;
     private Date startTime;
     private Date endTime;
+    private double totalOweAmount;
 
 
     public String getConfigId() {
@@ -87,5 +88,13 @@ public class ReportOweFeeItemDto extends PageDto implements Serializable {
 
     public void setConfigName(String configName) {
         this.configName = configName;
+    }
+
+    public double getTotalOweAmount() {
+        return totalOweAmount;
+    }
+
+    public void setTotalOweAmount(double totalOweAmount) {
+        this.totalOweAmount = totalOweAmount;
     }
 }
