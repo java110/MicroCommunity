@@ -1,6 +1,5 @@
 package com.java110.report.smo.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
@@ -18,11 +17,7 @@ import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -242,24 +233,29 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         tmpReportFeeDto.setDeadlineTime(targetEndDate);
         double oweAmount = getOweAmountByCar(tmpReportFeeDto, null, tmpReportCarDto); //应收
 
-        dealBeforeUploadCarFee(tmpReportFeeDto, tmpReportCarDto);
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto,receivedAmount); //欠费
+        //dealBeforeUploadCarFee(tmpReportFeeDto, tmpReportCarDto);
+        //double receivableAmount = getReceivableAmount(tmpReportFeeDto, receivedAmount); //欠费
 
+        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, null, tmpReportCarDto);
+        tmpReportFeeDto.setFeePrice(feePrice);
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
         if (!ListUtil.isNull(statistics)) {
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());
-            reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
-            reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
+//            reportFeeMonthStatisticsPo.setReceivableAmount("0");
+//            reportFeeMonthStatisticsPo.setReceivedAmount("0");
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
-            reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
-            reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
+            reportFeeMonthStatisticsPo.setReceivedAmount("0");
+            reportFeeMonthStatisticsPo.setReceivableAmount("0");
             reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
             reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
             reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
@@ -273,6 +269,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
             reportFeeMonthStatisticsPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         }
 
@@ -286,7 +287,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         ReportFeeMonthStatisticsPo tmpReportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         tmpReportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_A));
+        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
     }
@@ -357,7 +358,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsPo.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
         reportFeeMonthStatisticsPo.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
-        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(),DateUtil.DATE_FORMATE_STRING_A));
+        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
         reportFeeMonthStatisticsPo.setObjId(tmpReportCarDto.getCarId());
         reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
         reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
@@ -417,7 +418,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 ReportFeeMonthStatisticsDto.class);
 
 
-        double receivedAmount = getReceivedAmount(tmpReportFeeDto); //实收
+        //double receivedAmount = getReceivedAmount(tmpReportFeeDto); //实收
 
         FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
         Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto, null);
@@ -426,11 +427,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         tmpReportFeeDto.setDeadlineTime(targetEndDate);
         double oweAmount = getOweAmount(tmpReportFeeDto, reportRoomDto, null); //欠费
 
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto, receivedAmount); //应收
+        //double receivableAmount = getReceivableAmount(tmpReportFeeDto, receivedAmount); //应收
         //解决上线时 之前欠费没有刷入导致费用金额对不上问题处理
-        dealBeforeUploadRoomFee(reportRoomDto, tmpReportFeeDto, receivableAmount);
+        //dealBeforeUploadRoomFee(reportRoomDto, tmpReportFeeDto);
 
-
+        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, null);
+        tmpReportFeeDto.setFeePrice(feePrice);
 
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(targetEndDate, DateUtil.DATE_FORMATE_STRING_A));
@@ -438,16 +440,19 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());
             //reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
-            reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
+            //reportFeeMonthStatisticsPo.setReceivedAmount("0");
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
             reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
+            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
-            reportFeeMonthStatisticsPo.setReceivedAmount(receivedAmount + "");
-            reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
+            reportFeeMonthStatisticsPo.setReceivedAmount("0");
+            reportFeeMonthStatisticsPo.setReceivableAmount("0");
             reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
             reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
             reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
@@ -464,6 +469,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             } else {
                 reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
             }
+            //计算历史欠费
+            reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         }
@@ -474,18 +485,96 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         ReportFeeMonthStatisticsPo tmpReportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         tmpReportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_A));
+        tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
     }
 
-    public static void main(String[] args) {
-        ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
-        feeDetailDto.setStartTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
-        feeDetailDto.setEndTime(DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
 
-        System.out.println(JSONObject.toJSONString(feeDetailDto));
+    /**
+     * @return
+     */
+    private double getReceivedAmount(ReportFeeDto tmpReportFeeDto, int flag) {
+        Map paramIn = new HashMap();
+        paramIn.put("startTime", DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
+        paramIn.put("endTime", DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
+        paramIn.put("feeId", tmpReportFeeDto.getFeeId());
+        paramIn.put("yearMonth", DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_M));
+        paramIn.put("flag", 1);
+        double curReceivedAmount = reportFeeMonthStatisticsServiceDaoImpl.getReceivedAmountByMonth(paramIn);
+        return curReceivedAmount;
     }
+
+    /**
+     * 当月应收
+     *
+     * @param tmpReportFeeDto
+     * @return
+     */
+    private double getCurFeeReceivableAmount(ReportFeeDto tmpReportFeeDto) {
+        BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
+
+        Date curDate = DateUtil.getFirstDate();
+        double month = 0.0;
+        //已经超过截止时间 和 还没有到开始时间
+        if (curDate.getTime() > tmpReportFeeDto.getDeadlineTime().getTime()
+                || curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
+            return 0.0;
+        }
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
+            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
+            month = Math.ceil(month);
+            if (month == 0) {
+                return 0.0;
+            }
+            double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            return money;
+        }
+        month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curDate);
+        if (month < 1) {
+            return feePriceDec.multiply(new BigDecimal(month)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }
+
+        return tmpReportFeeDto.getFeePrice();
+    }
+
+
+    /**
+     * 计算历史欠费
+     *
+     * @param tmpReportFeeDto
+     * @return
+     */
+    private double getHisOweAmount(ReportFeeDto tmpReportFeeDto) {
+
+        BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
+        Date curDate = DateUtil.getFirstDate();
+        //说明没有历史欠费
+        if (curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
+            return 0.0;
+        }
+
+        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
+            //说明一次性费用都欠了
+            if (tmpReportFeeDto.getDeadlineTime().getTime() < curDate.getTime()) {
+                return tmpReportFeeDto.getFeePrice();
+            }
+            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
+            month = Math.ceil(month);
+            double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            return money;
+        }
+
+        double month = 0.0;
+        if (tmpReportFeeDto.getDeadlineTime().getTime() < curDate.getTime()) {
+            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
+        } else {
+            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curDate);
+        }
+        BigDecimal curDegree = new BigDecimal(month);
+        return curDegree.multiply(feePriceDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+    }
+
 
     /**
      * 解决上线前 欠费数据
@@ -493,7 +582,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
      * @param reportRoomDto
      * @param tmpReportFeeDto
      */
-    private void dealBeforeUploadRoomFee(ReportRoomDto reportRoomDto, ReportFeeDto tmpReportFeeDto, double curMonthReceivableAmount) {
+    private void dealBeforeUploadRoomFee(ReportRoomDto reportRoomDto, ReportFeeDto tmpReportFeeDto) {
 
 
         Calendar preMonthDate = Calendar.getInstance();
@@ -551,7 +640,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsPo.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
         reportFeeMonthStatisticsPo.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
-        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(),DateUtil.DATE_FORMATE_STRING_A));
+        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
 
         reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
         reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
@@ -561,6 +650,13 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         } else {
             reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
         }
+        //计算历史欠费
+        reportFeeMonthStatisticsPo.setHisOweAmount("0");
+        reportFeeMonthStatisticsPo.setCurReceivableAmount(receivableAmount + "");
+        reportFeeMonthStatisticsPo.setCurReceivedAmount("0");
+        reportFeeMonthStatisticsPo.setHisOweReceivedAmount("0");
+        reportFeeMonthStatisticsPo.setPreReceivedAmount("0");
+
         reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
 
@@ -683,7 +779,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         month = Math.ceil(month);
 
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
-        double money = feePriceDec.divide(new BigDecimal(month),2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         return money;
     }
 

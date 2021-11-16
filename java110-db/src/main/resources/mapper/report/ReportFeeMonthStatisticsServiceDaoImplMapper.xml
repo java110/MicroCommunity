@@ -8,10 +8,12 @@
     <insert id="saveReportFeeMonthStatisticsInfo" parameterType="Map">
         insert into report_fee_month_statistics(
         receivable_amount,statistics_id,update_time,remark,obj_name,received_amount,fee_year,fee_month,fee_id,config_id,
-        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time,cur_max_time
+        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time,cur_max_time,
+        his_owe_amount,cur_receivable_amount,cur_received_amount, his_owe_received_amount,pre_received_amount
         ) values (
         #{receivableAmount},#{statisticsId},#{updateTime},#{remark},#{objName},#{receivedAmount},#{feeYear},#{feeMonth},
-        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime},#{curMaxTime}
+        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime},#{curMaxTime},
+        #{hisOweAmount},#{curReceivableAmount},#{curReceivedAmount},#{hisOweReceivedAmount},#{preReceivedAmount}
         )
     </insert>
 
@@ -23,7 +25,9 @@
         feeYear,t.fee_month,t.fee_month feeMonth,t.fee_id,t.fee_id feeId,t.config_id,t.config_id
         configId,t.obj_id,t.obj_id objId,t.fee_name,t.fee_name feeName,t.owe_amount,t.owe_amount
         oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
-        feeCreateTime,t.obj_type,t.obj_type objType,t.cur_max_time curMaxTime
+        feeCreateTime,t.obj_type,t.obj_type objType,t.cur_max_time curMaxTime,
+        t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,t.cur_received_amount curReceivedAmount,
+        t.his_owe_received_amount hisOweReceivedAmount,t.pre_received_amount preReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where 1 =1
@@ -145,12 +149,26 @@
         <if test="oweAmount !=null and oweAmount != ''">
             , t.owe_amount= #{oweAmount}
         </if>
-
         <if test="feeCreateTime !=null and feeCreateTime != ''">
             , t.fee_create_time= #{feeCreateTime}
         </if>
         <if test="objType !=null and objType != ''">
             , t.obj_type= #{objType}
+        </if>
+        <if test="hisOweAmount !=null and hisOweAmount != ''">
+            , t.his_owe_amount= #{hisOweAmount}
+        </if>
+        <if test="curReceivableAmount !=null and curReceivableAmount != ''">
+            , t.cur_receivable_amount= #{curReceivableAmount}
+        </if>
+        <if test="curReceivedAmount !=null and curReceivedAmount != ''">
+            , t.cur_received_amount= #{curReceivedAmount}
+        </if>
+        <if test="hisOweReceivedAmount !=null and hisOweReceivedAmount != ''">
+            , t.his_owe_received_amount= #{hisOweReceivedAmount}
+        </if>
+        <if test="preReceivedAmount !=null and preReceivedAmount != ''">
+            , t.pre_received_amount= #{preReceivedAmount}
         </if>
         where 1=1
         and t.statistics_id= #{statisticsId}
@@ -2442,4 +2460,27 @@
             limit #{page}, #{row}
         </if>
     </select>
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="getReceivedAmountByMonth" parameterType="Map" resultType="Map">
+        select sum(t.received_amount) total
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.create_time &gt; #{startTime}
+        and t.create_time &lt; #{endTime}
+        and t.fee_id = #{feeId}
+        <if test="flag == 1">
+            and concat(t.detail_year,t.detail_month) = #{yearMonth}
+        </if>
+        <if test="flag == 2">
+            and concat(t.detail_year,t.detail_month) &lt; #{yearMonth}
+        </if>
+        <if test="flag == 3">
+            and concat(t.detail_year,t.detail_month) &gt; #{yearMonth}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
 </mapper>

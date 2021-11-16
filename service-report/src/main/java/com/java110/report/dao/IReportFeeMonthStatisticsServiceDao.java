@@ -327,4 +327,11 @@ public interface IReportFeeMonthStatisticsServiceDao {
     List<Map> queryHuaningOweFeeDetail(Map beanCovertMap);
 
     void deleteReportFeeMonthStatisticsInfo(Map beanCovertMap);
+
+    /**
+     * 查询当月实收
+     * @param beanCovertMap
+     * @return
+     */
+    double getReceivedAmountByMonth(Map beanCovertMap);
 }

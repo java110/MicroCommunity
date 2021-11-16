@@ -125,6 +125,12 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String repairId;
 
+    private String hisOweAmount;
+    private String curReceivableAmount;
+    private String curReceivedAmount;
+    private String hisOweReceivedAmount;
+    private String preReceivedAmount;
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -618,5 +624,45 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setBuiltUpArea(String builtUpArea) {
         this.builtUpArea = builtUpArea;
+    }
+
+    public String getHisOweAmount() {
+        return hisOweAmount;
+    }
+
+    public void setHisOweAmount(String hisOweAmount) {
+        this.hisOweAmount = hisOweAmount;
+    }
+
+    public String getCurReceivableAmount() {
+        return curReceivableAmount;
+    }
+
+    public void setCurReceivableAmount(String curReceivableAmount) {
+        this.curReceivableAmount = curReceivableAmount;
+    }
+
+    public String getCurReceivedAmount() {
+        return curReceivedAmount;
+    }
+
+    public void setCurReceivedAmount(String curReceivedAmount) {
+        this.curReceivedAmount = curReceivedAmount;
+    }
+
+    public String getHisOweReceivedAmount() {
+        return hisOweReceivedAmount;
+    }
+
+    public void setHisOweReceivedAmount(String hisOweReceivedAmount) {
+        this.hisOweReceivedAmount = hisOweReceivedAmount;
+    }
+
+    public String getPreReceivedAmount() {
+        return preReceivedAmount;
+    }
+
+    public void setPreReceivedAmount(String preReceivedAmount) {
+        this.preReceivedAmount = preReceivedAmount;
     }
 }
