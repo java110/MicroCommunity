@@ -94,7 +94,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
             return 0;
         }
 
-        return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("total").toString());
     }
 
     /**
