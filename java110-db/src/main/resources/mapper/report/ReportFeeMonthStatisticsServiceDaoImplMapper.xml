@@ -315,7 +315,7 @@
     <select id="queryReportFeeSummary" parameterType="Map" resultType="Map">
         select t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime,SUM(t.his_owe_amount) hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
         SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount) hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
-        max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount) receivedAmount,sum(t.cur_received_amount+t.his_owe_received_amount+preReceivedAmount) receivedAmount
+        max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount) receivedAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
@@ -371,7 +371,7 @@
     <select id="queryReportFeeSummaryMajor" parameterType="Map" resultType="Map">
         select
         sum(t.his_owe_amount+t.cur_receivable_amount) allReceivableAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount+preReceivedAmount) allReceivedAmount,
+        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
         sum(t.his_owe_amount+t.cur_receivable_amount-t.cur_received_amount-his_owe_received_amount) allOweAmount
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
