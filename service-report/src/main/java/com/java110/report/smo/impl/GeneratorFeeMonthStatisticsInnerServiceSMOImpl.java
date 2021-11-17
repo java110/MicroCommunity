@@ -508,7 +508,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         paramIn.put("endTime", DateUtil.getFormatTimeString(DateUtil.getNextMonthFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
         paramIn.put("feeId", tmpReportFeeDto.getFeeId());
         paramIn.put("yearMonth", DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_M));
-        paramIn.put("flag", 1);
+        paramIn.put("flag", flag);
         double curReceivedAmount = reportFeeMonthStatisticsServiceDaoImpl.getReceivedAmountByMonth(paramIn);
         return curReceivedAmount;
     }
