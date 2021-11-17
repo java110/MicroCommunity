@@ -24,6 +24,9 @@ server:
   tomcat:
     uri-encoding: UTF-8
 
+java110:
+  community-service: community-service
+
 spring:
   profiles:
     active: share

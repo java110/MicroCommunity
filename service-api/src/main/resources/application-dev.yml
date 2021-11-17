@@ -44,6 +44,9 @@ spring:
       min-idle: 0
       timeout: 0
 
+java110:
+  community-service: community-service
+
 feign:
   client:
     config:
