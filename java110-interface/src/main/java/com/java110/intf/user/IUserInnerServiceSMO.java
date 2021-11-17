@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 用户服务接口类（供服务间调用）
  */
-@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.user-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/userApi")
 public interface IUserInnerServiceSMO {
 

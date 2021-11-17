@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/smsApi")
 public interface ISmsInnerServiceSMO {
 
