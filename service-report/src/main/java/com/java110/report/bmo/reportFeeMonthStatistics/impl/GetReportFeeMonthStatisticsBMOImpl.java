@@ -33,7 +33,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
@@ -93,9 +98,15 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 double receivableAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivableAmount());
                 //获取实收金额
                 double receivedAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivedAmount());
-                double chargeRate = (receivedAmount / receivableAmount) * 100.0;
-                reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
+                if (receivableAmount != 0) {
+                    double chargeRate = (receivedAmount / receivableAmount) * 100.0;
+                    reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
+                } else {
+                    reportFeeMonthStatistics.setChargeRate("0%");
+
+                }
                 reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
+
             }
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryMajor(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size() > 0) {
