@@ -46,6 +46,7 @@ spring:
 
 java110:
   community-service: community-service
+  acct-service: acct-service
 
 feign:
   client:

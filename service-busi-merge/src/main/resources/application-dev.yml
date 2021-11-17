@@ -25,7 +25,8 @@ server:
     uri-encoding: UTF-8
 
 java110:
-  community-service: community-service
+  community-service: busi-service
+  acct-service: busi-service
 
 spring:
   http:

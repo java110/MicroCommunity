@@ -48,14 +48,12 @@ import java.nio.charset.Charset;
 )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
-        basePackages = {"com.java110.user.listener"})
+        basePackages = {"com.java110.user.listener","com.java110.acct.listener"})
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
-        basePackages = {"com.java110.user.cmd"})
+        basePackages = {"com.java110.user.cmd","com.java110.acct.cmd"})
 public class BusiServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(BusiServiceApplicationStart.class);
-
-    private static final String LISTENER_PATH = "java110.UserService.listeners";
 
     public static void main(String[] args) throws Exception {
         try {

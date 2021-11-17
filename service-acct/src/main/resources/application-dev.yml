@@ -26,6 +26,15 @@ server:
 
 java110:
   community-service: community-service
+  acct-service: acct-service
+  user-service: user-service
+  store-service: store-service
+  common-service: common-service
+  job-service: job-service
+  fee-service: fee-service
+  report-service: report-service
+  dev-service: dev-service
+  oa-service: oa-service
 
 spring:
   http:
