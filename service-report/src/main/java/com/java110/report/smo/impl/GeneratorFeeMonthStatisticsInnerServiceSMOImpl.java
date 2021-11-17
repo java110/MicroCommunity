@@ -787,6 +787,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         month = Math.ceil(month);
 
         if (month == 0) {
+            logger.debug("相差月份为0，{}", JSONObject.toJSONString(tmpReportFeeDto);
             return tmpReportFeeDto.getFeePrice();
         }
 
