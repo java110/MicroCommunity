@@ -2463,7 +2463,7 @@
     </select>
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="getReceivedAmountByMonth" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) total
+        select ifnull(sum(t.received_amount),0) total
         from pay_fee_detail_month t
         where
         1=1

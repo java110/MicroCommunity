@@ -17,7 +17,11 @@ import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
-import com.java110.utils.util.*;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -777,6 +785,10 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
         month = Math.ceil(month);
+
+        if (month == 0) {
+            return tmpReportFeeDto.getFeePrice();
+        }
 
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
         double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
