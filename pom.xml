@@ -29,6 +29,7 @@
         <module>service-acct</module>
         <module>service-oa</module>
         <module>service-dev</module>
+        <module>service-busi-merge</module>
 
     </modules>
 
