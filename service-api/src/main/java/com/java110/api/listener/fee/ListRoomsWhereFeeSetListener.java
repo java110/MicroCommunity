@@ -126,7 +126,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         }
         int row = reqJson.getInteger("row");
-        apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
+        apiRoomVo.setRecords((int) Math.ceil((double) apiRoomVo.getRooms().size() / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
