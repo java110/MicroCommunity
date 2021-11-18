@@ -26,7 +26,8 @@
         configId,t.obj_id,t.obj_id objId,t.fee_name,t.fee_name feeName,t.owe_amount,t.owe_amount
         oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
         feeCreateTime,t.obj_type,t.obj_type objType,t.cur_max_time curMaxTime,
-        t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,t.cur_received_amount curReceivedAmount,
+        t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,t.cur_received_amount
+        curReceivedAmount,
         t.his_owe_received_amount hisOweReceivedAmount,t.pre_received_amount preReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
@@ -325,8 +326,10 @@
             ,t.config_id configId
         </if>
         ,SUM(t.his_owe_amount) hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
-        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount) hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
-        max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
+        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
+        hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
+        max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount)
+        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
@@ -511,7 +514,8 @@
             ,t.config_id configId
         </if>
         ,SUM(t.his_owe_amount) hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
-        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount) hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
+        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
+        hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
         max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,
         sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
         from report_fee_month_statistics t
@@ -697,10 +701,13 @@
      and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0
      -->
     <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,SUM(t.his_owe_amount) hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
-        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount) hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,SUM(t.his_owe_amount)
+        hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
+        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
+        hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
         max(t.update_time) updateTime,sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,max(t.update_time) updateTime
+        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,max(t.update_time)
+        updateTime
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -763,7 +770,10 @@
     </select>
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0 -->
     <select id="queryFeeBreakdownMajor" parameterType="Map" resultType="Map">
-        select sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount
+        select
+        SUM(t.hisOweAmount + t.cur_receivable_amount) allReceivableAmount,
+        SUM(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
+        SUM(t.hisOweAmount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) allOweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -874,7 +884,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value` ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
+        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
+        ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
         deadlineTime,t.create_time createTime,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount)
         receivedAmount,SUM(t.owe_amount) oweAmount,max(t.update_time) updateTime
         from report_fee_month_statistics t
@@ -1034,7 +1045,8 @@
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryOweFeeDetail" parameterType="Map" resultType="Map">
         select t.payer_obj_name objName,t.fee_name feeName,pf.end_time feeCreateTime,t.update_time
-        updateTime,pfa.`value` ownerName,br.built_up_area builtUpArea ,SUM(t.amount_owed) oweAmount,max(t.deadline_time) deadlineTime
+        updateTime,pfa.`value` ownerName,br.built_up_area builtUpArea ,SUM(t.amount_owed) oweAmount,max(t.deadline_time)
+        deadlineTime
         from report_owe_fee t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
@@ -2181,7 +2193,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
+        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
+        rfms.status_cd = '0'
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -2198,7 +2211,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and curT.status_cd = '0' and  curT.community_id = t.community_id
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and
+        curT.status_cd = '0' and curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -2226,7 +2240,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and rfms.status_cd = '0'
+        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
+        rfms.status_cd = '0'
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -2243,7 +2258,8 @@
         from f_floor t
         left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
         left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and curT.status_cd = '0' and  curT.community_id = t.community_id
+        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and
+        curT.status_cd = '0' and curT.community_id = t.community_id
         where t.status_cd = '0'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -2279,12 +2295,13 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningPayFee" parameterType="Map" resultType="Map">
-        select a.floorNum,f.receivableAmount,a.receivedAmount,b.receivedAmount1,c.receivedAmount2,d.receivedAmount3,e.receivedAmount4
+        select
+        a.floorNum,f.receivableAmount,a.receivedAmount,b.receivedAmount1,c.receivedAmount2,d.receivedAmount3,e.receivedAmount4
         from
         (select t.floor_num floorNum,sum(pfd.received_amount) receivedAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
@@ -2296,10 +2313,11 @@
         (select t.floor_num floorNum,sum(pfdm1.received_amount ) receivedAmount1
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2309,10 +2327,11 @@
         (select t.floor_num floorNum,sum(pfdm2.received_amount ) receivedAmount2
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month = #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2322,10 +2341,11 @@
         (select t.floor_num floorNum,sum(pfdm3.received_amount ) receivedAmount3
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm3 on  pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
+        LEFT JOIN pay_fee_detail_month pfdm3 on pf.fee_id = pfdm3.fee_id and pfd.detail_id = pfdm3.detail_id and
+        pfdm3.status_cd = '0' and pfdm3.detail_year = #{nextYear} and pfdm3.detail_month = #{nextMonth}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2335,10 +2355,11 @@
         (select t.floor_num floorNum,sum(pfdm4.received_amount ) receivedAmount4
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm4 on  pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
+        LEFT JOIN pay_fee_detail_month pfdm4 on pf.fee_id = pfdm4.fee_id and pfd.detail_id = pfdm4.detail_id and
+        pfdm4.status_cd = '0' and pfdm4.detail_year &lt; #{year}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2348,7 +2369,7 @@
         (select t.floor_num floorNum,SUM(rfms.receivable_amount) receivableAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.status_cd = '0'
         where t.community_id = #{communityId}
         and rfms.fee_year = #{year}
@@ -2374,7 +2395,7 @@
         (select t.floor_num floorNum,sum(pfd.received_amount) receivedAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
@@ -2386,10 +2407,11 @@
         (select t.floor_num floorNum,SUM(pfdm1.discount_amount) receivedAmount1
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year =  #{year}  and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2399,10 +2421,11 @@
         (select t.floor_num floorNum,SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year =  #{year}  and pfdm2.detail_month &gt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2412,7 +2435,7 @@
         (select t.floor_num floorNum,SUM(rfms.owe_amount) receivableAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.status_cd = '0'
         where t.community_id= #{communityId}
         group by t.floor_num
@@ -2432,7 +2455,7 @@
         (select t.floor_num floorNum,sum(pfd.received_amount) receivedAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
@@ -2444,10 +2467,11 @@
         (select t.floor_num floorNum,SUM(pfdm1.discount_amount) receivedAmount1
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on  pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and pfdm1.status_cd = '0' and pfdm1.detail_year =  #{year}  and pfdm1.detail_month &lt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2457,10 +2481,11 @@
         (select t.floor_num floorNum,SUM(pfdm2.received_amount) receivedAmount2
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm2 on  pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and pfdm2.status_cd = '0' and pfdm2.detail_year =  #{year}  and pfdm2.detail_month &gt; #{month}
+        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
         where 1=1
         and t.status_cd = '0'
         and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
@@ -2470,7 +2495,7 @@
         (select t.floor_num floorNum,SUM(rfms.owe_amount) receivableAmount
         from f_floor t
         inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id  and br.status_cd = '0'
+        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
         inner JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.status_cd = '0'
         where t.community_id= #{communityId}
         group by t.floor_num
