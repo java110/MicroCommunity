@@ -773,7 +773,8 @@
         select
         SUM(t.his_owe_amount + t.cur_receivable_amount) allReceivableAmount,
         SUM(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
-        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) allOweAmount
+        if(SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) &lt; 0,0,
+        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount)) allOweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -824,6 +825,9 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and pfc.start_time &lt;= #{endTime}
+        </if>
+        <if test="yearMonth !=null and yearMonth != ''">
+            and concat(t.fee_year,t.fee_month) = #{yearMonth}
         </if>
         order by t.create_time desc
     </select>
