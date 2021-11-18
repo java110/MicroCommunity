@@ -73,6 +73,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String computingFormulaText;
 
+    private double amount;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -266,5 +268,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setFeeNameEq(String feeNameEq) {
         this.feeNameEq = feeNameEq;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

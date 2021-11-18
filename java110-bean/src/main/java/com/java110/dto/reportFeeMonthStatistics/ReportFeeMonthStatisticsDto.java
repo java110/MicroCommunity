@@ -70,6 +70,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //支付方式
     private String primeRate;
 
+    private double configReceivedAmount = 0;
+
     //应收总金额(小计)
     private String totalReceivableAmount;
 
@@ -125,11 +127,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String repairId;
 
-    private String hisOweAmount;
-    private String curReceivableAmount;
-    private String curReceivedAmount;
-    private String hisOweReceivedAmount;
-    private String preReceivedAmount;
+    private double hisOweAmount;
+    private double curReceivableAmount;
+    private double curReceivedAmount;
+    private double hisOweReceivedAmount;
+    private double preReceivedAmount;
+
+    private String[] configIds;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -594,6 +598,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     public void setRepairId(String repairId) {
         this.repairId = repairId;
     }
+
     public String getAllOweAmount() {
         return allOweAmount;
     }
@@ -626,43 +631,60 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         this.builtUpArea = builtUpArea;
     }
 
-    public String getHisOweAmount() {
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
+    }
+
+    public double getConfigReceivedAmount() {
+        return configReceivedAmount;
+    }
+
+    public void setConfigReceivedAmount(double configReceivedAmount) {
+        this.configReceivedAmount = configReceivedAmount;
+    }
+
+    public double getHisOweAmount() {
         return hisOweAmount;
     }
 
-    public void setHisOweAmount(String hisOweAmount) {
+    public void setHisOweAmount(double hisOweAmount) {
         this.hisOweAmount = hisOweAmount;
     }
 
-    public String getCurReceivableAmount() {
+    public double getCurReceivableAmount() {
         return curReceivableAmount;
     }
 
-    public void setCurReceivableAmount(String curReceivableAmount) {
+    public void setCurReceivableAmount(double curReceivableAmount) {
         this.curReceivableAmount = curReceivableAmount;
     }
 
-    public String getCurReceivedAmount() {
+    public double getCurReceivedAmount() {
         return curReceivedAmount;
     }
 
-    public void setCurReceivedAmount(String curReceivedAmount) {
+    public void setCurReceivedAmount(double curReceivedAmount) {
         this.curReceivedAmount = curReceivedAmount;
     }
 
-    public String getHisOweReceivedAmount() {
+    public double getHisOweReceivedAmount() {
         return hisOweReceivedAmount;
     }
 
-    public void setHisOweReceivedAmount(String hisOweReceivedAmount) {
+    public void setHisOweReceivedAmount(double hisOweReceivedAmount) {
         this.hisOweReceivedAmount = hisOweReceivedAmount;
     }
 
-    public String getPreReceivedAmount() {
+    public double getPreReceivedAmount() {
         return preReceivedAmount;
     }
 
-    public void setPreReceivedAmount(String preReceivedAmount) {
+    public void setPreReceivedAmount(double preReceivedAmount) {
         this.preReceivedAmount = preReceivedAmount;
     }
 }

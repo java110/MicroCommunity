@@ -33,12 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
@@ -93,6 +88,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
         if (count > 0) {
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
+            if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
+                reportFeeMonthStatisticsList = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsList);
+            }
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsList) {
                 //获取应收金额
                 double receivableAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivableAmount());
@@ -125,6 +123,100 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * 将configId group by 后数据 合并处理
+     *
+     * @param reportFeeMonthStatisticsList
+     * @return
+     */
+    private List<ReportFeeMonthStatisticsDto> dealConfigReportFeeMonthStatisticsList(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList) {
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
+        BigDecimal hisOweAmountDec = null;
+        BigDecimal curReceivableAmountDec = null;
+        BigDecimal curReceivedAmountDec = null;
+        BigDecimal hisOweReceivedAmountDec = null;
+        BigDecimal preReceivedAmountDec = null;
+        BigDecimal receivableAmountDec = null;
+        BigDecimal receivedAmountDec = null;
+        List<FeeConfigDto> feeConfigDtos = null;
+        FeeConfigDto feeConfigDto = null;
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsList) {
+            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = hasReportFeeMonthStatisticsDto(reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsDto);
+            if (tmpReportFeeMonthStatisticsDto == null) {
+                feeConfigDtos = new ArrayList<>();
+                feeConfigDto = new FeeConfigDto();
+                feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
+                feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
+                feeConfigDtos.add(feeConfigDto);
+                reportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
+                reportFeeMonthStatisticsDtos.add(reportFeeMonthStatisticsDto);
+                continue;
+            }
+            feeConfigDtos = tmpReportFeeMonthStatisticsDto.getFeeConfigDtos();
+            feeConfigDto = new FeeConfigDto();
+            feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
+            feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
+            feeConfigDtos.add(feeConfigDto);
+            tmpReportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
+
+            //历史欠费
+            hisOweAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweAmount());
+            hisOweAmountDec = hisOweAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setHisOweAmount(hisOweAmountDec.doubleValue());
+
+
+            //当月应收
+            curReceivableAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivableAmount());
+            curReceivableAmountDec = curReceivableAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivableAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setCurReceivableAmount(curReceivableAmountDec.doubleValue());
+
+            //当月实收
+            curReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivedAmount());
+            curReceivedAmountDec = curReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setCurReceivedAmount(curReceivedAmountDec.doubleValue());
+
+            //欠费追回
+            hisOweReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweReceivedAmount());
+            hisOweReceivedAmountDec = hisOweReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setHisOweReceivedAmount(hisOweReceivedAmountDec.doubleValue());
+
+            //预交费
+            preReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getPreReceivedAmount());
+            preReceivedAmountDec = preReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getPreReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setPreReceivedAmount(preReceivedAmountDec.doubleValue());
+
+            //总费用
+            receivableAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivableAmount()));
+            receivableAmountDec = receivableAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivableAmount())))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setReceivableAmount(receivableAmountDec.doubleValue() + "");
+
+            //实收
+            receivedAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivedAmount()));
+            receivedAmountDec = receivedAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount())))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setReceivedAmount(receivedAmountDec.doubleValue() + "");
+        }
+
+        return reportFeeMonthStatisticsDtos;
+    }
+
+    private ReportFeeMonthStatisticsDto hasReportFeeMonthStatisticsDto(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            if (tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
+                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())) {
+                return tmpReportFeeMonthStatisticsDto;
+            }
+        }
+
+        return null;
     }
 
     @Override
