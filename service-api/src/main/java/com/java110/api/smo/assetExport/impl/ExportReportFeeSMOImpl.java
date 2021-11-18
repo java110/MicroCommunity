@@ -1622,24 +1622,35 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(0).setCellValue("日期");
         row.createCell(1).setCellValue("楼栋");
         row.createCell(2).setCellValue("单元");
-        row.createCell(3).setCellValue("应收金额");
-        row.createCell(4).setCellValue("实收金额");
-        row.createCell(5).setCellValue("欠费金额");
+        row.createCell(3).setCellValue("历史欠费(单位:元)");
+        row.createCell(4).setCellValue("当月应收(单位:元)");
+        row.createCell(5).setCellValue("当月实收(单位:元)");
+        row.createCell(6).setCellValue("欠费追回(单位:元)");
+        row.createCell(7).setCellValue("预交费用(单位:元)");
+        row.createCell(8).setCellValue("欠费金额(单位:元)");
         //查询楼栋信息
         JSONArray rooms = this.getReportFloorUnitFeeSummary(pd, result);
         if (rooms == null || rooms.size() == 0) {
             return;
         }
         JSONObject dataObj = null;
+        BigDecimal oweFeeDec = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
             row.createCell(1).setCellValue(dataObj.getString("floorNum") + "栋");
             row.createCell(2).setCellValue(dataObj.getString("unitNum") + "单元");
-            row.createCell(3).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(4).setCellValue(dataObj.getString("receivedAmount"));
-            row.createCell(5).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(3).setCellValue(dataObj.getString("hisOweAmount"));
+            row.createCell(4).setCellValue(dataObj.getString("curReceivableAmount"));
+            row.createCell(5).setCellValue(dataObj.getString("curReceivedAmount"));
+            row.createCell(6).setCellValue(dataObj.getString("hisOweReceivedAmount"));
+            row.createCell(7).setCellValue(dataObj.getString("preReceivedAmount"));
+            oweFeeDec = new BigDecimal(Double.parseDouble(dataObj.getString("hisOweAmount")))
+                    .add(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivableAmount"))))
+                    .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivedAmount"))))
+                    .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("hisOweReceivedAmount")))).setScale(2, BigDecimal.ROUND_HALF_UP);
+            row.createCell(8).setCellValue(oweFeeDec.doubleValue() < 0 ? "0" : oweFeeDec.doubleValue() + "");
         }
     }
 

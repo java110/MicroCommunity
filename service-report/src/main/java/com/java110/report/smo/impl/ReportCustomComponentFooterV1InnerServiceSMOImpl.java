@@ -83,19 +83,20 @@ public class ReportCustomComponentFooterV1InnerServiceSMOImpl extends BaseServic
     }
 
 
-    private void desCode(List<ReportCustomComponentFooterDto> ReportCustomComponentFooterDtos) {
-        if (ReportCustomComponentFooterDtos == null || ReportCustomComponentFooterDtos.size() < 1) {
+    private void desCode(List<ReportCustomComponentFooterDto> reportCustomComponentFooterDtos) {
+        if (reportCustomComponentFooterDtos == null || reportCustomComponentFooterDtos.size() < 1) {
             return;
         }
-        for (ReportCustomComponentFooterDto reportCustomComponentDto : ReportCustomComponentFooterDtos) {
+        for (ReportCustomComponentFooterDto reportCustomComponentFooterDto : reportCustomComponentFooterDtos) {
             try {
-                if (!StringUtil.isEmpty(reportCustomComponentDto.getComponentSql())) {
-                    reportCustomComponentDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getComponentSql()), "UTF-8"));
+                if (!StringUtil.isEmpty(reportCustomComponentFooterDto.getComponentSql())) {
+                    reportCustomComponentFooterDto.setComponentSql(new String(Base64Convert.base64ToByte(reportCustomComponentFooterDto.getComponentSql()), "UTF-8"));
                 }
-                if (!StringUtil.isEmpty(reportCustomComponentDto.getJavaScript())) {
-                    reportCustomComponentDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentDto.getJavaScript()), "UTF-8"));
+                if (!StringUtil.isEmpty(reportCustomComponentFooterDto.getJavaScript())) {
+                    reportCustomComponentFooterDto.setJavaScript(new String(Base64Convert.base64ToByte(reportCustomComponentFooterDto.getJavaScript()), "UTF-8"));
                 }
             } catch (Exception e) {
+
             }
         }
     }
