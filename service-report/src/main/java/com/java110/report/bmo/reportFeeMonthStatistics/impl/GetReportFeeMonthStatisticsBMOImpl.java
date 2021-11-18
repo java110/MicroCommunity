@@ -89,7 +89,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
-                reportFeeMonthStatisticsList = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsList);
+                reportFeeMonthStatisticsList = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsList, "FeeSummary");
             }
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsList) {
                 //获取应收金额
@@ -131,7 +131,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
      * @param reportFeeMonthStatisticsList
      * @return
      */
-    private List<ReportFeeMonthStatisticsDto> dealConfigReportFeeMonthStatisticsList(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList) {
+    private List<ReportFeeMonthStatisticsDto> dealConfigReportFeeMonthStatisticsList(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList, String flag) {
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
         BigDecimal hisOweAmountDec = null;
         BigDecimal curReceivableAmountDec = null;
@@ -143,7 +143,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<FeeConfigDto> feeConfigDtos = null;
         FeeConfigDto feeConfigDto = null;
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsList) {
-            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = hasReportFeeMonthStatisticsDto(reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsDto);
+            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = hasReportFeeMonthStatisticsDto(reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsDto, flag);
             if (tmpReportFeeMonthStatisticsDto == null) {
                 feeConfigDtos = new ArrayList<>();
                 feeConfigDto = new FeeConfigDto();
@@ -208,10 +208,17 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         return reportFeeMonthStatisticsDtos;
     }
 
-    private ReportFeeMonthStatisticsDto hasReportFeeMonthStatisticsDto(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+    private ReportFeeMonthStatisticsDto hasReportFeeMonthStatisticsDto(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto, String flag) {
         for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
-            if (tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
+            if ("FeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
                     && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())) {
+                return tmpReportFeeMonthStatisticsDto;
+            }
+            if ("FloorUnitFeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
+                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())
+                    && tmpReportFeeMonthStatisticsDto.getFloorNum().equals(reportFeeMonthStatisticsDto.getFloorNum())
+                    && tmpReportFeeMonthStatisticsDto.getUnitNum().equals(reportFeeMonthStatisticsDto.getUnitNum())
+            ) {
                 return tmpReportFeeMonthStatisticsDto;
             }
         }
@@ -226,6 +233,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
+            if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
+                reportFeeMonthStatisticsDtos = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsDtos, "FloorUnitFeeSummary");
+            }
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummaryMajor(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {

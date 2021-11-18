@@ -170,6 +170,7 @@ public class ReportFeeMonthStatisticsApi {
                                                            @RequestParam(value = "roomNum", required = false) String roomNum,
                                                            @RequestParam(value = "startTime", required = false) String startTime,
                                                            @RequestParam(value = "endTime", required = false) String endTime,
+                                                           @RequestParam(value = "configIds", required = false) String configIds,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -184,6 +185,9 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
+        if (!StringUtil.isEmpty(configIds)) {
+            reportFeeMonthStatisticsDto.setConfigIds(configIds.split(","));
+        }
         return getReportFeeMonthStatisticsBMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
     }
 
