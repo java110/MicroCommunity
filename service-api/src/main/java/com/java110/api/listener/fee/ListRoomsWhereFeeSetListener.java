@@ -114,6 +114,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
         OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(reqJson, OwnerRoomRelDto.class);
         ownerRoomRelDto.setByOwnerInfo(true);
+        ownerRoomRelDto.setCommunityId(reqJson.getString("communityId"));
         int total = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRelsCount(ownerRoomRelDto);
 
         apiRoomVo.setTotal(total);

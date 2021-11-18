@@ -107,6 +107,7 @@
         where 1 =1
         <if test="byOwnerInfo == true">
             and t.owner_id = bow.owner_id
+            and bow.community_id = #{communityId}
             and bow.status_cd = '0'
         </if>
         <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
@@ -197,6 +198,7 @@
         where 1 =1
         <if test="byOwnerInfo == true">
             and t.owner_id = bow.owner_id
+            and bow.community_id = #{communityId}
             and bow.status_cd = '0'
         </if>
         <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">

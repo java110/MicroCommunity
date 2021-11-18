@@ -569,6 +569,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             }
             double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
             month = Math.ceil(month);
+            if(month == 0){ // 防止除数为0
+                return 0;
+            }
             double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             return money;
         }
