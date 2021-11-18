@@ -75,7 +75,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //根据 业主来定位房屋信息
-        if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard")) {
+        if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard") || reqJson.containsKey("ownerNameLike")) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, context);
             return;
         }
