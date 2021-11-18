@@ -771,9 +771,9 @@
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0 -->
     <select id="queryFeeBreakdownMajor" parameterType="Map" resultType="Map">
         select
-        SUM(t.hisOweAmount + t.cur_receivable_amount) allReceivableAmount,
+        SUM(t.his_owe_amount + t.cur_receivable_amount) allReceivableAmount,
         SUM(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
-        SUM(t.hisOweAmount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) allOweAmount
+        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) allOweAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
