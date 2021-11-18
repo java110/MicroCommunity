@@ -761,7 +761,7 @@
             limit #{page}, #{row}
         </if>
     </select>
-    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0 -->
     <select id="queryFeeBreakdownMajor" parameterType="Map" resultType="Map">
         select sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount
         from report_fee_month_statistics t
@@ -772,7 +772,7 @@
         left join t_dict td on pfc.fee_type_cd = td.status_cd and td.table_name='pay_fee_config' and
         td.table_columns='fee_type_cd'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-        where t.status_cd = '0' and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0
+        where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
