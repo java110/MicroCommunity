@@ -274,18 +274,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
 
-        //查询该小区下的费用项目
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
-        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-
-        List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
-        for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
-            reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
-            reportList.add(reportFeeMonthStatistics);
-        }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

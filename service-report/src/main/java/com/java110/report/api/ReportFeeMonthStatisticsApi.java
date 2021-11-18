@@ -211,6 +211,7 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                                    @RequestParam(value = "yearMonth", required = false) String yearMonth,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -225,6 +226,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
+        reportFeeMonthStatisticsDto.setYearMonth(yearMonth);
         if (!StringUtil.isEmpty(startTime)) {
             reportFeeMonthStatisticsDto.setStartTime(startTime + " 00:00:00");
         }
