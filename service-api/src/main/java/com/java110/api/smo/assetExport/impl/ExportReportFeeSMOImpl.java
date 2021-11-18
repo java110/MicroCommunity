@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
+import com.java110.api.smo.assetExport.IExportReportFeeSMO;
 import com.java110.core.context.IPageData;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.api.smo.assetExport.IExportReportFeeSMO;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -1709,22 +1707,33 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Sheet sheet = workbook.createSheet("费用汇总表");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("日期");
-        row.createCell(1).setCellValue("应收金额");
-        row.createCell(2).setCellValue("实收金额");
-        row.createCell(3).setCellValue("欠费金额");
+        row.createCell(1).setCellValue("历史欠费(单位:元)");
+        row.createCell(2).setCellValue("当月应收(单位:元)");
+        row.createCell(3).setCellValue("当月实收(单位:元)");
+        row.createCell(4).setCellValue("欠费追回(单位:元)");
+        row.createCell(5).setCellValue("预交费用(单位:元)");
+        row.createCell(6).setCellValue("欠费金额(单位:元)");
         //查询楼栋信息
         JSONArray rooms = this.getReportFeeSummaryFee(pd, componentValidateResult);
         if (rooms == null || rooms.size() == 0) {
             return;
         }
         JSONObject dataObj = null;
+        BigDecimal oweFeeDec = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("feeYear") + "年" + dataObj.getString("feeMonth") + "月");
-            row.createCell(1).setCellValue(dataObj.getString("receivableAmount"));
-            row.createCell(2).setCellValue(dataObj.getString("receivedAmount"));
-            row.createCell(3).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(1).setCellValue(dataObj.getString("hisOweAmount"));
+            row.createCell(2).setCellValue(dataObj.getString("curReceivableAmount"));
+            row.createCell(3).setCellValue(dataObj.getString("curReceivedAmount"));
+            row.createCell(4).setCellValue(dataObj.getString("hisOweReceivedAmount"));
+            row.createCell(5).setCellValue(dataObj.getString("preReceivedAmount"));
+            oweFeeDec = new BigDecimal(Double.parseDouble(dataObj.getString("hisOweAmount")))
+                    .add(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivableAmount"))))
+                    .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivedAmount"))))
+                    .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("hisOweReceivedAmount")))).setScale(2, BigDecimal.ROUND_HALF_UP);
+            row.createCell(6).setCellValue(oweFeeDec.doubleValue() + "");
         }
     }
 

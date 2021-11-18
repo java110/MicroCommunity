@@ -393,7 +393,8 @@
     <!-- 查询费用月统计信息 大计 add by wuxw 2018-07-03 -->
     <select id="queryReportFeeSummaryMajor" parameterType="Map" resultType="Map">
         select
-        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount
+        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
+        sum(t.his_owe_received_amount) allHisOweReceivedAmount
         from report_fee_month_statistics t
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'

@@ -132,6 +132,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private double curReceivedAmount;
     private double hisOweReceivedAmount;
     private double preReceivedAmount;
+    private double allHisOweReceivedAmount;
 
     private String[] configIds;
 
@@ -696,5 +697,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setYearMonth(String yearMonth) {
         this.yearMonth = yearMonth;
+    }
+
+    public double getAllHisOweReceivedAmount() {
+        return allHisOweReceivedAmount;
+    }
+
+    public void setAllHisOweReceivedAmount(double allHisOweReceivedAmount) {
+        this.allHisOweReceivedAmount = allHisOweReceivedAmount;
     }
 }
