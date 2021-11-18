@@ -1733,7 +1733,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                     .add(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivableAmount"))))
                     .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("curReceivedAmount"))))
                     .subtract(new BigDecimal(Double.parseDouble(dataObj.getString("hisOweReceivedAmount")))).setScale(2, BigDecimal.ROUND_HALF_UP);
-            row.createCell(6).setCellValue(oweFeeDec.doubleValue() + "");
+            row.createCell(6).setCellValue(oweFeeDec.doubleValue() < 0 ? "0" : oweFeeDec.doubleValue() + "");
         }
     }
 
