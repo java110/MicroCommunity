@@ -175,6 +175,12 @@
         <if test="curYear != null and curYear != ''">
             and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curYear}
         </if>
+        <if test="states != null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
