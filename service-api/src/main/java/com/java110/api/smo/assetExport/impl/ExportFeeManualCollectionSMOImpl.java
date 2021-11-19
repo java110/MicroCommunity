@@ -6,6 +6,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.assetExport.IExportFeeManualCollectionSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.util.Assert;
@@ -340,6 +341,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
         BigDecimal totalPrice = new BigDecimal(0);
         String startTime = "";
         String endTime = "";
+        String squarePrice = "";
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             JSONObject feeObj = fees.getJSONObject(feeIndex);
             row = sheet.createRow(line + feeIndex + 3);
@@ -354,12 +356,18 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             } catch (ParseException e) {
                 logger.error("处理结束时间失败", e);
             }
+            squarePrice = feeObj.getString("squarePrice");
+
+            //动态费用单价就去动态单价
+            if(feeObj.containsKey("computingFormula") && "9009".equals(feeObj.getString("computingFormula"))){
+                squarePrice = feeObj.getString("mwPrice");
+            }
 
             cell0 = row.createCell(0);
             cell0.setCellValue(feeObj.getString("feeName"));
             cell0.setCellStyle(cellStyle);
             cell1 = row.createCell(1);
-            cell1.setCellValue(feeObj.getString("squarePrice"));
+            cell1.setCellValue(squarePrice);
             cell1.setCellStyle(cellStyle);
             cell2 = row.createCell(2);
             cell2.setCellValue(room.getString("builtUpArea"));
