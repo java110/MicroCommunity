@@ -103,7 +103,8 @@ public class SaveOwnerListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        if (!reqJson.containsKey("source") || !"BatchImport".equals(reqJson.getString("source"))) {
+        String userValidate = MappingCache.getValue("USER_VALIDATE");
+        if ((!reqJson.containsKey("source") || !"BatchImport".equals(reqJson.getString("source"))) && "ON".equals(userValidate)) {
             //获取手机号(判断手机号是否重复)
             String link = reqJson.getString("link");
             OwnerDto ownerDto = new OwnerDto();
