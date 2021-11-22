@@ -20,8 +20,8 @@ import org.springframework.http.ResponseEntity;
 /**
  * 扫码付
  */
-@Java110Cmd(serviceCode = "payment.qrCodePayment")
-public class QrCodePaymentCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "payment.checkPayFinish")
+public class CheckPayFinishCmd extends AbstractServiceCmdListener {
 
 
     private IQrCodePaymentSMO qrCodePaymentSMOImpl;
@@ -43,19 +43,19 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
         int pre = Integer.parseInt(authCode.substring(0, 2));
         if (pre > 24 && pre < 31) { // 支付宝
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
-        }else{
+        } else {
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
         }
 
         ResultVo resultVo = null;
         try {
-            resultVo = qrCodePaymentSMOImpl.pay(reqJson.getString("communityId"), orderId, receivedAmount, authCode, "");
+            resultVo = qrCodePaymentSMOImpl.checkPayFinish(reqJson.getString("communityId"), orderId);
         } catch (Exception e) {
             cmdDataFlowContext.setResponseEntity(ResultVo.error(e.getLocalizedMessage()));
             return;
         }
         if (ResultVo.CODE_OK != resultVo.getCode()) {
-            cmdDataFlowContext.setResponseEntity(ResultVo.error(resultVo.getMsg(),reqJson));
+            cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(resultVo));
             return;
         }
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);

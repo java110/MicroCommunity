@@ -257,6 +257,17 @@ public class ResultVo implements Serializable {
     }
 
     /**
+     * 成功通用回复
+     *
+     * @return
+     */
+    public static ResponseEntity<String> error(String msg,Object data) {
+        ResultVo resultVo = new ResultVo(CODE_ERROR, msg,data);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
      * 创建ResponseEntity对象
      *
      * @param records 页数

@@ -9,13 +9,16 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.java110.acct.smo.IQrCodePaymentSMO;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.vo.ResultVo;
+import org.springframework.stereotype.Service;
 
 /**
  * 阿里支付
  */
+@Service
 public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     /**
      * APP_ID 应用id
@@ -38,7 +41,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     /**
      * (沙箱)网关
      */
-    public final static String GETEWAY_URL = "https://openapi.alipaydev.com/gateway.do";
+    public final static String GETEWAY_URL = "https://openapi.alipay.com/gateway.do";
 
     /**
      * 格式化
@@ -54,9 +57,10 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
-        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
-                "app_id",
-                "your private_key", "json", "GBK", "alipay_public_key", "RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient(GETEWAY_URL,
+                CommunitySettingFactory.getValue(communityId,"APP_ID"),
+                CommunitySettingFactory.getRemark(communityId,"APP_PRIVATE_KEY"),
+                "json", "utf-8", CommunitySettingFactory.getRemark(communityId,"ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", orderNum);
@@ -84,8 +88,8 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", "app_id", "your private_key", "json", "GBK", "alipay_public_key", "RSA2");
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         request.setBizContent("{" +
-                "  \"out_trade_no\":\"20150320010101001\"," +
-                "  \"trade_no\":\"2014112611001004680 073956707\"," +
+                "  \"out_trade_no\":\""+orderNum+"\"," +
+                "  \"trade_no\":\"\"," +
                 "  \"query_options\":[" +
                 "    \"trade_settle_info\"" +
                 "  ]" +
