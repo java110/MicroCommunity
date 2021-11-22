@@ -42,6 +42,8 @@ public class ResultVo implements Serializable {
     public static final int DEFAULT_RECORD = 1;
     public static final int DEFAULT_TOTAL = 1;
 
+    public static final int CODE_WAIT_PAY = 41;// 支付未完成
+
     // 分页页数
     private int page;
     // 行数

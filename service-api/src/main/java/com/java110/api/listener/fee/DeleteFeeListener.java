@@ -79,7 +79,11 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
         feeDetailDto.setFeeId(reqJson.getString("feeId"));
         feeDetailDto.setStates(new String[]{"1400", "1000"});
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-        Assert.listOnlyOne(feeDetailDtos, "存在缴费记录，不能取消，如果需要取消，请先退费");
+        //Assert.listOnlyOne(feeDetailDtos, "存在缴费记录，不能取消，如果需要取消，请先退费");
+
+        if(feeDetailDtos != null && feeDetailDtos.size()>0){
+            throw new IllegalArgumentException("存在缴费记录，不能取消，如果需要取消，请先退费");
+        }
 
     }
 
