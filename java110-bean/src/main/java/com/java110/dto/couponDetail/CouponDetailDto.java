@@ -23,7 +23,6 @@ private String validityDay;
 private String poolId;
 private String detailId;
 private String shopId;
-private String primary;
 
 
     private Date createTime;
@@ -85,13 +84,6 @@ public String getShopId() {
 public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
 
     public Date getCreateTime() {
         return createTime;

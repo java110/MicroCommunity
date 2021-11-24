@@ -37,7 +37,6 @@ private String poolId;
 private String statusCd = "0";
 private String state;
 private String seq;
-private String primary;
 public String getBuyPrice() {
         return buyPrice;
     }
@@ -97,12 +96,6 @@ public String getSeq() {
     }
 public void setSeq(String seq) {
         this.seq = seq;
-    }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
     }
 
 

@@ -39,7 +39,6 @@ private String userId;
 private String poolId;
 private String tel;
 private String shopId;
-private String primary;
 public String getCouponName() {
         return couponName;
     }
@@ -111,12 +110,6 @@ public String getShopId() {
     }
 public void setShopId(String shopId) {
         this.shopId = shopId;
-    }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
     }
 
 

@@ -37,7 +37,6 @@ private String poolId;
 private String detailId;
 private String statusCd = "0";
 private String shopId;
-private String primary;
 public String getBuyPrice() {
         return buyPrice;
     }
@@ -98,13 +97,6 @@ public String getShopId() {
 public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
 
 
 }

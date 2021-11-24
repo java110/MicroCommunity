@@ -21,7 +21,6 @@ private String couponId;
 private String userName;
 private String userId;
 private String objType;
-private String primary;
 
 
     private Date createTime;
@@ -70,12 +69,6 @@ public String getObjType() {
     }
 public void setObjType(String objType) {
         this.objType = objType;
-    }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
     }
 
 

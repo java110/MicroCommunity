@@ -37,7 +37,6 @@ private String state;
 private String couponId;
 private String userName;
 private String userId;
-private String primary;
 public String getCouponName() {
         return couponName;
     }
@@ -98,13 +97,6 @@ public String getUserId() {
 public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
 
 
 }

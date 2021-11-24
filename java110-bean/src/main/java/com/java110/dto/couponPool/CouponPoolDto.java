@@ -23,7 +23,6 @@ private String couponType;
 private String poolId;
 private String state;
 private String seq;
-private String primary;
 
 
     private Date createTime;
@@ -84,12 +83,6 @@ public String getSeq() {
     }
 public void setSeq(String seq) {
         this.seq = seq;
-    }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
     }
 
 

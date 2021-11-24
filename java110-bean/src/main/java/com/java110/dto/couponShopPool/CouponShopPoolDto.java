@@ -21,7 +21,6 @@ private String poolId;
 private String shopId;
 private String stock;
 private String spId;
-private String primary;
 
 
     private Date createTime;
@@ -71,13 +70,6 @@ public String getSpId() {
 public void setSpId(String spId) {
         this.spId = spId;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
 
     public Date getCreateTime() {
         return createTime;

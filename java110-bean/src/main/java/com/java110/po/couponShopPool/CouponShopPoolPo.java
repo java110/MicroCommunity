@@ -35,7 +35,6 @@ private String statusCd = "0";
 private String shopId;
 private String stock;
 private String spId;
-private String primary;
 public String getCouponName() {
         return couponName;
     }
@@ -84,13 +83,6 @@ public String getSpId() {
 public void setSpId(String spId) {
         this.spId = spId;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
 
 
 }

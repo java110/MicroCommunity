@@ -69,6 +69,9 @@ public class TableToJson {
             if ("KEY".equals(key)) {
                 continue;
             }
+            if ("PRIMARY".equals(key)) {
+                continue;
+            }
             if ("b_id".equals(key)) {
                 continue;
             }
