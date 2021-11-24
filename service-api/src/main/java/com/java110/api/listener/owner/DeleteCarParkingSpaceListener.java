@@ -86,9 +86,9 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
             throw new IllegalArgumentException("车位已经释放无需释放");
         }
 
-        if (ownerCarDtos.get(0).getEndTime().getTime() > DateUtil.getCurrentDate().getTime()) {
-            throw new IllegalArgumentException("车位租用还未结束不能释放");
-        }
+//        if (ownerCarDtos.get(0).getEndTime().getTime() > DateUtil.getCurrentDate().getTime()) {
+//            throw new IllegalArgumentException("车位租用还未结束不能释放");
+//        }
         reqJson.put("ownerCarDto", ownerCarDtos.get(0));
     }
 
@@ -100,12 +100,14 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
         feeDto.setPayerObjId(reqJson.getString("carId"));
         feeDto.setCommunityId(reqJson.getString("communityId"));
         feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
+        feeDto.setState(FeeDto.STATE_FINISH);
         List<FeeDto> feeDtoList = feeInnerServiceSMOImpl.queryFees(feeDto);
         boolean oweFee = false;
         if (feeDtoList == null || feeDtoList.size() < 1) {
             oweFee = true;
         }
         for (FeeDto tmpFeeDto : feeDtoList) {
+
             if (tmpFeeDto.getEndTime().getTime() <= ownerCarDto.getEndTime().getTime()) {
                 oweFee = true;
                 break;
