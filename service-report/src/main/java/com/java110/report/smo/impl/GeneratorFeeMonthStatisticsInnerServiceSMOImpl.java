@@ -17,11 +17,7 @@ import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -529,16 +521,34 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 || curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
             return 0.0;
         }
+
+        //这里需要判断 结束时间 是否 大于了当月最后一天，当月天数 * 每天金额
+        Calendar nextDateC = Calendar.getInstance();
+        nextDateC.setTime(curDate);
+        nextDateC.add(Calendar.MONTH, 1);
+        Date nextDate = nextDateC.getTime();
+
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
-            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
-            month = Math.ceil(month);
-            if (month == 0) {
-                return 0.0;
+            double allDays = computeFeeSMOImpl.daysBetween(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
+            allDays = Math.ceil(allDays);
+            if (allDays == 0) { // 防止除数为0
+                return 0;
             }
-            double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-            return money;
+            BigDecimal moneyPreDay = feePriceDec.divide(new BigDecimal(allDays), 2, BigDecimal.ROUND_HALF_EVEN);
+            if (tmpReportFeeDto.getDeadlineTime().getTime() > nextDate.getTime()) {
+                int day = DateUtil.getCurrentMonthDay();
+                return moneyPreDay.multiply(new BigDecimal(day)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            }
+            // 结束时间 在当月内
+            double hisDays = computeFeeSMOImpl.daysBetween(tmpReportFeeDto.getEndTime(), curDate);
+            BigDecimal hisDayDec = moneyPreDay.multiply(new BigDecimal(hisDays)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return feePriceDec.subtract(hisDayDec).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
-        month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curDate);
+
+        month = computeFeeSMOImpl.dayCompare(curDate, tmpReportFeeDto.getDeadlineTime());
+        if (month < 0) {
+            return 0;
+        }
         if (month < 1) {
             return feePriceDec.multiply(new BigDecimal(month)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -556,7 +566,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     private double getHisOweAmount(ReportFeeDto tmpReportFeeDto) {
 
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
-        Date curDate = DateUtil.getFirstDate();
+        Date curDate = DateUtil.getFirstDate();//11月1日
         //说明没有历史欠费
         if (curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
             return 0.0;
@@ -567,13 +577,17 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             if (tmpReportFeeDto.getDeadlineTime().getTime() < curDate.getTime()) {
                 return tmpReportFeeDto.getFeePrice();
             }
-            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
-            month = Math.ceil(month);
-            if(month == 0){ // 防止除数为0
+            double allDays = computeFeeSMOImpl.daysBetween(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
+            allDays = Math.ceil(allDays);
+            if (allDays == 0) { // 防止除数为0
                 return 0;
             }
-            double money = feePriceDec.divide(new BigDecimal(month), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-            return money;
+            //这是每天的钱
+            BigDecimal moneyPreDay = feePriceDec.divide(new BigDecimal(allDays), 2, BigDecimal.ROUND_HALF_EVEN);
+
+            double hisDays = computeFeeSMOImpl.daysBetween(tmpReportFeeDto.getEndTime(), curDate);
+
+            return moneyPreDay.multiply(new BigDecimal(hisDays)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
 
         double month = 0.0;
