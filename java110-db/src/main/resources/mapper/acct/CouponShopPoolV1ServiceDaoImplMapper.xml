@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponShopPoolV1ServiceDaoImpl">
+
+
+    <!-- 保存商家优惠券池信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponShopPoolInfo" parameterType="Map">
+        insert into coupon_shop_pool(
+        coupon_name,actual_price,validity_day,pool_id,shop_id,stock,sp_id
+        ) values (
+        #{couponName},#{actualPrice},#{validityDay},#{poolId},#{shopId},#{stock},#{spId}
+        )
+    </insert>
+
+
+    <!-- 查询商家优惠券池信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponShopPoolInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.actual_price,t.actual_price
+        actualPrice,t.validity_day,t.validity_day validityDay,t.pool_id,t.pool_id poolId,t.status_cd,t.status_cd
+        statusCd,t.shop_id,t.shop_id shopId,t.stock,t.sp_id,t.sp_id spId
+        from coupon_shop_pool t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="spId !=null and spId != ''">
+            and t.sp_id= #{spId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商家优惠券池信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponShopPoolInfo" parameterType="Map">
+        update coupon_shop_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            , t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            , t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            , t.pool_id= #{poolId}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            , t.shop_id= #{shopId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        where 1=1
+        <if test="spId !=null and spId != ''">
+            and t.sp_id= #{spId}
+        </if>
+
+    </update>
+
+    <!-- 查询商家优惠券池数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponShopPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_shop_pool t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="spId !=null and spId != ''">
+            and t.sp_id= #{spId}
+        </if>
+
+
+    </select>
+
+</mapper>

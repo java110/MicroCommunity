@@ -7,23 +7,28 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `report_custom_component_footer` (\n" +
-            "  `footer_id` varchar(30) NOT NULL COMMENT '报表底部同步ID',\n" +
-            "  `component_id` varchar(30) NOT NULL COMMENT '组件ID',\n" +
-            "  `name` varchar(64) NOT NULL COMMENT '名称',\n" +
-            "  `query_model` varchar(1) NOT NULL COMMENT '查询方式 1、sql,2、java',\n" +
-            "  `java_script` longtext(1024) COMMENT '执行java脚本代码',\n" +
-            "  `component_sql` longtext(1024) COMMENT '执行sql',\n" +
-            "  `remark` varchar(512) DEFAULT NULL COMMENT '描述'\n" +
+    public static final String createTableSql = "CREATE TABLE `coupon_detail` (\n" +
+            "  `detail_id` varchar(30) NOT NULL COMMENT '记录ID',\n" +
+            "  `pool_id` varchar(30) NOT NULL COMMENT '优惠券',\n" +
+            "  `shop_id` varchar(30) NOT NULL COMMENT '店铺ID',\n" +
+            "  `coupon_name` varchar(64) NOT NULL COMMENT '优惠券名称',\n" +
+            "  `actual_price` decimal(10,2) NOT NULL COMMENT '面值',\n" +
+            "  `buy_price` decimal(10,2) NOT NULL COMMENT '购买价格',\n" +
+            "  `amount` decimal(10,2) NOT NULL COMMENT '付款金额',\n" +
+            "  `buy_count` bigint(20) NOT NULL COMMENT '购买数量',\n" +
+            "  `validity_day` bigint(20) NOT NULL COMMENT '有效期',\n" +
+            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
+            "  PRIMARY KEY (`detail_id`)\n" +
             ")";
     public static void main(String[] args) {
-        String templateName = "组件统计"; //业务名称
-        String templateCode = "reportCustomComponentFooter"; //表名大写
-        String templateKey = "footerId"; //表主键
-        String templateKeyName = "统计ID";//主键说明
-        String searchCode = "footerId"; //分片字段
-        String searchName = "统计ID"; //分片字段说明
-        String directories = "dev"; //前端生成到那个目录下
+        String templateName = "商家购买记录表"; //业务名称
+        String templateCode = "couponDetail"; //表名大写
+        String templateKey = "detailId"; //表主键
+        String templateKeyName = "商家购买记录表ID";//主键说明
+        String searchCode = "detailId"; //分片字段
+        String searchName = "商家购买记录表ID"; //分片字段说明
+        String directories = "admin"; //前端生成到那个目录下
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
         // directories 放在前端那个目录下
