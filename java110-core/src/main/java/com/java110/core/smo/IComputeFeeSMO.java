@@ -139,6 +139,11 @@ public interface IComputeFeeSMO {
      */
     double dayCompare(Date fromDate, Date toDate);
 
+    /**
+     　　 *字符串的日期格式的计算
+     　　 */
+    long daysBetween(Date smdate,Date bdate) ;
+
     double getReportFeePrice(ReportFeeDto tmpReportFeeDto, ReportRoomDto reportRoomDto, ReportCarDto reportCarDto);
 
     void computeEveryOweFee(FeeDto tmpFeeDto);
