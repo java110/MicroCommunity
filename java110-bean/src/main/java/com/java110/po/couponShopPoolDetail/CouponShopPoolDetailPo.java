@@ -17,6 +17,7 @@ package com.java110.po.couponShopPoolDetail;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-11-24 00:17:18 mail: 928255095@qq.com
@@ -28,90 +29,120 @@ import java.util.Date;
 public class CouponShopPoolDetailPo implements Serializable {
 
     private String couponName;
-private String actualPrice;
-private String validityDay;
-private String detailId;
-private String statusCd = "0";
-private String sendCount;
-private String userName;
-private String spId;
-private String userId;
-private String poolId;
-private String tel;
-private String shopId;
-public String getCouponName() {
+    private String actualPrice;
+    private String validityDay;
+    private String detailId;
+    private String statusCd = "0";
+    private String sendCount;
+    private String userName;
+    private String spId;
+    private String userId;
+    private String poolId;
+    private String tel;
+    private String shopId;
+    private String orderId;
+
+    public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getActualPrice() {
+
+    public String getActualPrice() {
         return actualPrice;
     }
-public void setActualPrice(String actualPrice) {
+
+    public void setActualPrice(String actualPrice) {
         this.actualPrice = actualPrice;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getSendCount() {
+
+    public String getSendCount() {
         return sendCount;
     }
-public void setSendCount(String sendCount) {
+
+    public void setSendCount(String sendCount) {
         this.sendCount = sendCount;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getSpId() {
+
+    public String getSpId() {
         return spId;
     }
-public void setSpId(String spId) {
+
+    public void setSpId(String spId) {
         this.spId = spId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getPoolId() {
+
+    public String getPoolId() {
         return poolId;
     }
-public void setPoolId(String poolId) {
+
+    public void setPoolId(String poolId) {
         this.poolId = poolId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getShopId() {
+
+    public String getShopId() {
         return shopId;
     }
-public void setShopId(String shopId) {
+
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
 
-
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }

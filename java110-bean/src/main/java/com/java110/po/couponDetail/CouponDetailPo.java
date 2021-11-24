@@ -37,6 +37,7 @@ private String poolId;
 private String detailId;
 private String statusCd = "0";
 private String shopId;
+private String orderId;
 public String getBuyPrice() {
         return buyPrice;
     }
@@ -98,5 +99,11 @@ public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
 
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }

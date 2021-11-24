@@ -23,6 +23,7 @@ private String validityDay;
 private String poolId;
 private String detailId;
 private String shopId;
+private String orderId;
 
 
     private Date createTime;
@@ -99,5 +100,13 @@ public void setShopId(String shopId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

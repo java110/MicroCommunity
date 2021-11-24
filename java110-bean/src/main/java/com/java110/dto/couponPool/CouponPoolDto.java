@@ -20,6 +20,7 @@ private String couponStock;
 private String actualPrice;
 private String validityDay;
 private String couponType;
+private String couponTypeName;
 private String poolId;
 private String state;
 private String seq;
@@ -100,5 +101,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCouponTypeName() {
+        return couponTypeName;
+    }
+
+    public void setCouponTypeName(String couponTypeName) {
+        this.couponTypeName = couponTypeName;
     }
 }

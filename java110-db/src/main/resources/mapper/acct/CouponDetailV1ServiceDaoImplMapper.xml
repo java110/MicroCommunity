@@ -8,9 +8,9 @@
     <!-- 保存商家购买记录表信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponDetailInfo" parameterType="Map">
         insert into coupon_detail(
-        buy_price,coupon_name,amount,buy_count,actual_price,validity_day,pool_id,detail_id,shop_id
+        buy_price,coupon_name,amount,buy_count,actual_price,validity_day,pool_id,detail_id,shop_id,order_id
         ) values (
-        #{buyPrice},#{couponName},#{amount},#{buyCount},#{actualPrice},#{validityDay},#{poolId},#{detailId},#{shopId}
+        #{buyPrice},#{couponName},#{amount},#{buyCount},#{actualPrice},#{validityDay},#{poolId},#{detailId},#{shopId},#{orderId}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.buy_price,t.buy_price buyPrice,t.coupon_name,t.coupon_name couponName,t.amount,t.buy_count,t.buy_count
         buyCount,t.actual_price,t.actual_price actualPrice,t.validity_day,t.validity_day validityDay,t.pool_id,t.pool_id
         poolId,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id
-        shopId
+        shopId,t.order_id orderId
         from coupon_detail t
         where 1 =1
         <if test="buyPrice !=null and buyPrice != ''">
@@ -50,6 +50,9 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
         </if>
@@ -75,6 +78,9 @@
         </if>
         <if test="amount !=null and amount != ''">
             , t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
         </if>
         <if test="buyCount !=null and buyCount != ''">
             , t.buy_count= #{buyCount}
@@ -114,6 +120,9 @@
         </if>
         <if test="buyCount !=null and buyCount != ''">
             and t.buy_count= #{buyCount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
         </if>
         <if test="actualPrice !=null and actualPrice != ''">
             and t.actual_price= #{actualPrice}

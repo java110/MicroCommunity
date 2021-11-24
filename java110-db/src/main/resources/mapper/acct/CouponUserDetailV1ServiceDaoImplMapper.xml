@@ -8,9 +8,9 @@
     <!-- 保存用户抵消记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponUserDetailInfo" parameterType="Map">
         insert into coupon_user_detail(
-        coupon_name,uo_id,obj_id,coupon_id,user_name,user_id,obj_type
+        coupon_name,uo_id,obj_id,coupon_id,user_name,user_id,obj_type,order_id
         ) values (
-        #{couponName},#{uoId},#{objId},#{couponId},#{userName},#{userId},#{objType}
+        #{couponName},#{uoId},#{objId},#{couponId},#{userName},#{userId},#{objType},#{orderId}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getCouponUserDetailInfo" parameterType="Map" resultType="Map">
         select t.coupon_name,t.coupon_name couponName,t.uo_id,t.uo_id uoId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.user_name,t.user_name
-        userName,t.user_id,t.user_id userId,t.obj_type,t.obj_type objType
+        userName,t.user_id,t.user_id userId,t.obj_type,t.obj_type objType,t.order_id orderId
         from coupon_user_detail t
         where 1 =1
         <if test="couponName !=null and couponName != ''">
@@ -30,6 +30,9 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -69,6 +72,9 @@
         <if test="couponId !=null and couponId != ''">
             , t.coupon_id= #{couponId}
         </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
         <if test="userName !=null and userName != ''">
             , t.user_name= #{userName}
         </if>
@@ -95,6 +101,9 @@
         </if>
         <if test="uoId !=null and uoId != ''">
             and t.uo_id= #{uoId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}

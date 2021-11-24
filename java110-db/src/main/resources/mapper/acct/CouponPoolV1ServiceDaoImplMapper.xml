@@ -20,8 +20,9 @@
         select t.buy_price,t.buy_price buyPrice,t.coupon_name,t.coupon_name couponName,t.coupon_stock,t.coupon_stock
         couponStock,t.actual_price,t.actual_price actualPrice,t.validity_day,t.validity_day
         validityDay,t.coupon_type,t.coupon_type couponType,t.pool_id,t.pool_id poolId,t.status_cd,t.status_cd
-        statusCd,t.state,t.seq
+        statusCd,t.state,t.seq,td.name couponTypeName
         from coupon_pool t
+        left join t_dict td on t.coupon_type  = td.status_cd and td.table_columns ='coupon_type' and td.table_name ='coupon_pool'
         where 1 =1
         <if test="buyPrice !=null and buyPrice != ''">
             and t.buy_price= #{buyPrice}
@@ -102,6 +103,7 @@
     <select id="queryCouponPoolsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from coupon_pool t
+        left join t_dict td on t.coupon_type  = td.status_cd and td.table_columns ='coupon_type' and td.table_name ='coupon_pool'
         where 1 =1
         <if test="buyPrice !=null and buyPrice != ''">
             and t.buy_price= #{buyPrice}

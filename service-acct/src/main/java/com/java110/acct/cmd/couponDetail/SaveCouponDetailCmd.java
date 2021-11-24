@@ -54,6 +54,7 @@ public class SaveCouponDetailCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+
         Assert.hasKeyAndValue(reqJson, "poolId", "请求报文中未包含poolId");
         Assert.hasKeyAndValue(reqJson, "shopId", "请求报文中未包含shopId");
         Assert.hasKeyAndValue(reqJson, "couponName", "请求报文中未包含couponName");

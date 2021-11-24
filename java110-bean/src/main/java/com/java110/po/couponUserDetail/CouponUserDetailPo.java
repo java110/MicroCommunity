@@ -35,7 +35,7 @@ private String couponId;
 private String userName;
 private String userId;
 private String objType;
-private String primary;
+private String orderId;
 public String getCouponName() {
         return couponName;
     }
@@ -84,13 +84,12 @@ public String getObjType() {
 public void setObjType(String objType) {
         this.objType = objType;
     }
-public String getPrimary() {
-        return primary;
-    }
-public void setPrimary(String primary) {
-        this.primary = primary;
+
+    public String getOrderId() {
+        return orderId;
     }
 
-
-
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }
