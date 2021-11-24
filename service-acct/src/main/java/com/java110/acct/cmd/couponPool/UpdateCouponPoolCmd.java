@@ -62,6 +62,7 @@ public class UpdateCouponPoolCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "couponStock", "请求报文中未包含couponStock");
         Assert.hasKeyAndValue(reqJson, "validityDay", "请求报文中未包含validityDay");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
     }
 
     @Override

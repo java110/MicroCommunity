@@ -70,6 +70,7 @@ public class SaveCouponPoolCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CouponPoolPo couponPoolPo = BeanConvertUtil.covertBean(reqJson, CouponPoolPo.class);
+        couponPoolPo.setState(CouponPoolPo.STATE_RUN);
         couponPoolPo.setPoolId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = couponPoolV1InnerServiceSMOImpl.saveCouponPool(couponPoolPo);
 
