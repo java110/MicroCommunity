@@ -23,6 +23,8 @@ private String validityDay;
 private String poolId;
 private String detailId;
 private String shopId;
+private String shopName;
+private String shopNameLike;
 private String orderId;
 
 
@@ -108,5 +110,21 @@ public void setShopId(String shopId) {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopNameLike() {
+        return shopNameLike;
+    }
+
+    public void setShopNameLike(String shopNameLike) {
+        this.shopNameLike = shopNameLike;
     }
 }
