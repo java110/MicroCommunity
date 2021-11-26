@@ -349,6 +349,7 @@ public class Java110MybatisInterceptor implements Interceptor {
         return sql;
     }
 
+
     private String getParameterValue(Object obj) {
         String value = null;
         if (obj instanceof String) {
@@ -370,10 +371,12 @@ public class Java110MybatisInterceptor implements Interceptor {
 
 
     public static void main(String[] args) {
-        String tmpTable = "product_label    t";
-        if(tmpTable.indexOf(" ") > 0){
-            tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
+        String tmpTable = "" +
+                "        id_card,open_id,link,remark,user_id,app_type,app_user_name,nickname,headimgurl,community_name,state,app_user_id,community_id,app_type_cd,member_id\n" +
+                "        ";
+        String[] a = tmpTable.split(",");
+        for(String a1:a){
+            System.out.println(a1);
         }
-        System.out.printf(tmpTable);
     }
 }

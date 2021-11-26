@@ -116,7 +116,7 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
         }
         //添加小区楼
         addOwnerAppUser(reqJson, ownerDtos);
-        registerUser(reqJson);
+        registerUser(reqJson, ownerDtos);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
@@ -148,7 +148,9 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
             communityDto.setState("1100");
             communityDto.setCommunityId(ownerDto.getCommunityId());
             communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            Assert.listOnlyOne(communityDtos, "手机号对应业主未查询到小区信息，请联系物业");
+            if (communityDtos == null || communityDtos.size() < 1) {
+                continue;
+            }
             tmpCommunityDto = communityDtos.get(0);
             ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
             //状态类型，10000 审核中，12000 审核成功，13000 审核失败
@@ -173,10 +175,8 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
      *
      * @param paramObj
      */
-    public void registerUser(JSONObject paramObj) {
-        Assert.jsonObjectHaveKey(paramObj, "name", "请求参数中未包含name 节点，请确认");
-        Assert.jsonObjectHaveKey(paramObj, "tel", "请求参数中未包含tel 节点，请确认");
-        Assert.jsonObjectHaveKey(paramObj, "password", "请求参数中未包含password 节点，请确认");
+    public void registerUser(JSONObject paramObj, List<OwnerDto> ownerDtos) {
+
         if (paramObj.containsKey("email") && !StringUtil.isEmpty(paramObj.getString("email"))) {
             Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
@@ -187,8 +187,14 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
         userPassword = AuthenticationFactory.passwdMd5(userPassword);
         paramObj.put("password", userPassword);
 
-
+        String tel = paramObj.getString("link");
+        String name = tel;
+        if (ownerDtos != null && ownerDtos.size() > 0) {
+            name = ownerDtos.get(0).getName();
+        }
         UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
+        userPo.setName(name);
+        userPo.setTel(tel);
         int flag = userV1InnerServiceSMOImpl.saveUser(userPo);
         if (flag < 1) {
             throw new CmdException("注册失败");
