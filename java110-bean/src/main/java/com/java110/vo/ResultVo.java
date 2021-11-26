@@ -250,6 +250,17 @@ public class ResultVo implements Serializable {
      *
      * @return
      */
+    public static ResponseEntity<String> error(String msg,HttpStatus status) {
+        ResultVo resultVo = new ResultVo(CODE_ERROR, msg);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), status);
+        return responseEntity;
+    }
+
+    /**
+     * 成功通用回复
+     *
+     * @return
+     */
     public static ResponseEntity<String> error(String msg) {
         ResultVo resultVo = new ResultVo(CODE_ERROR, msg);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);

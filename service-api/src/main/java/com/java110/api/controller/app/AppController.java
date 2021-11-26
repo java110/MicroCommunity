@@ -22,6 +22,7 @@ import com.java110.api.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.vo.ResultVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -92,7 +93,7 @@ public class AppController extends BaseController {
             responseEntity = apiSMOImpl.doApi(postInfo, headers,request);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
 
@@ -125,7 +126,7 @@ public class AppController extends BaseController {
 
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
 
@@ -161,7 +162,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", action, responseEntity);
 
@@ -199,7 +200,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", action, responseEntity);
 
@@ -234,7 +235,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
         return responseEntity;
@@ -266,7 +267,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
-            responseEntity = new ResponseEntity<String>("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
