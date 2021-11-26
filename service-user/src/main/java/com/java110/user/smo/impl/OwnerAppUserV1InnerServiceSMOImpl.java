@@ -20,6 +20,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.user.dao.IOwnerAppUserV1ServiceDao;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
+
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -33,7 +34,7 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2021-10-08 17:56:49 mail: 928255095@qq.com
+ * add by 吴学文 at 2021-11-26 13:03:41 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下

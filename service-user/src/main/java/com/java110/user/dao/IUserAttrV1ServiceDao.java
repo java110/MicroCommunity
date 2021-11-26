@@ -28,50 +28,50 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2021-11-26 13:03:41 mail: 928255095@qq.com
+ * add by 吴学文 at 2021-11-26 13:28:38 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IOwnerAppUserV1ServiceDao {
+public interface IUserAttrV1ServiceDao {
 
 
     /**
-     * 保存 业主绑定信息
+     * 保存 用户属性信息
      * @param info
      * @throws DAOException DAO异常
      */
-    int saveOwnerAppUserInfo(Map info) throws DAOException;
+    int saveUserAttrInfo(Map info) throws DAOException;
 
 
 
 
     /**
-     * 查询业主绑定信息（instance过程）
-     * 根据bId 查询业主绑定信息
+     * 查询用户属性信息（instance过程）
+     * 根据bId 查询用户属性信息
      * @param info bId 信息
-     * @return 业主绑定信息
+     * @return 用户属性信息
      * @throws DAOException DAO异常
      */
-    List<Map> getOwnerAppUserInfo(Map info) throws DAOException;
+    List<Map> getUserAttrInfo(Map info) throws DAOException;
 
 
 
     /**
-     * 修改业主绑定信息
+     * 修改用户属性信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updateOwnerAppUserInfo(Map info) throws DAOException;
+    int updateUserAttrInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询业主绑定总数
+     * 查询用户属性总数
      *
-     * @param info 业主绑定信息
-     * @return 业主绑定数量
+     * @param info 用户属性信息
+     * @return 用户属性数量
      */
-    int queryOwnerAppUsersCount(Map info);
+    int queryUserAttrsCount(Map info);
 
 }

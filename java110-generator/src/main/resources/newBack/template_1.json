@@ -1,51 +1,44 @@
 {
   "param": {
-    "couponName": "coupon_name",
-    "uoId": "uo_id",
-    "objId": "obj_id",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
     "statusCd": "status_cd",
-    "couponId": "coupon_id",
-    "userName": "user_name",
+    "id": "id",
     "userId": "user_id",
-    "objType": "obj_type",
-    "primary": "PRIMARY"
+    "value": "value"
   },
-  "name": "couponUserDetail",
-  "shareColumn": "uo_id",
-  "id": "uoId",
-  "shareName": "acct",
+  "name": "userAttr",
+  "shareColumn": "user_id",
+  "id": "userId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "记录表不能为空",
-      "code": "uoId"
+      "msg": "id不能为空",
+      "code": "id"
     },
     {
-      "msg": "优惠券ID不能为空",
-      "code": "couponId"
-    },
-    {
-      "msg": "优惠券名称不能为空",
-      "code": "couponName"
+      "msg": "属性id不能为空",
+      "code": "attrId"
     },
     {
       "msg": "用户ID不能为空",
       "code": "userId"
     },
     {
-      "msg": "用户名称不能为空",
-      "code": "userName"
+      "msg": "规格id,参考spec表不能为空",
+      "code": "specCd"
     },
     {
-      "msg": "抵消对象类型不能为空",
-      "code": "objType"
+      "msg": "属性值不能为空",
+      "code": "value"
     },
     {
-      "msg": "抵消对象不能为空",
-      "code": "objId"
+      "msg": "数据状态不能为空",
+      "code": "statusCd"
     }
   ],
-  "desc": "用户抵消记录",
-  "shareParam": "uoId",
-  "tableName": "coupon_user_detail"
+  "desc": "用户属性",
+  "shareParam": "userId",
+  "tableName": "u_user_attr"
 }
