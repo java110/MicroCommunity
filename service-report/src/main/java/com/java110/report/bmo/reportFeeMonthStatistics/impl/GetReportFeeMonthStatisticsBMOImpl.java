@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
@@ -390,17 +391,19 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
-        int size = 0;
+        //吴学文 注释 感觉和上面的369 功能重复
+        //int size = 0;
         if (count > 0) {
             //查询缴费明细
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
-            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
-                //查询所有缴费明细记录
-                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
-                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
-                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
-                size = reportFeeMonthStatisticsDtos1.size();
-            }
+            //吴学文 注释 感觉和上面的369 功能重复
+//            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+//                //查询所有缴费明细记录
+//                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
+//                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
+//                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
+//                size = reportFeeMonthStatisticsDtos1.size();
+//            }
             //查询应收、实收总金额(大计)
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPayFeeDetail(reportFeeMonthStatisticsDto);
             //查询(优惠、减免、滞纳金、空置房打折、空置房减免金额等)大计总金额
@@ -575,7 +578,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                         }
                     }
                 }
-                reportList.add(reportFeeMonthStatistics);
+                if (!hasInReportListAndMerge(reportList, reportFeeMonthStatistics)) {
+                    reportList.add(reportFeeMonthStatistics);
+                }
             }
             //应收总金额(小计)
             reportFeeMonthStatisticsTotalDto.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount));
@@ -611,11 +616,43 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsTotalDto = new ReportFeeMonthStatisticsTotalDto();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) reportFeeMonthStatisticsDto.getRow()), size, reportList, reportFeeMonthStatisticsTotalDto);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList, reportFeeMonthStatisticsTotalDto);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    private boolean hasInReportListAndMerge(List<ReportFeeMonthStatisticsDto> reportList, ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportList) {
+            if (reportFeeMonthStatisticsDto.getDetailId().equals(reportFeeMonthStatistics.getDetailId())) {
+                combineSydwCore(reportFeeMonthStatistics, reportFeeMonthStatisticsDto);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //针对所用对象
+    private static ReportFeeMonthStatisticsDto combineSydwCore(ReportFeeMonthStatisticsDto sourceBean, ReportFeeMonthStatisticsDto targetBean) {
+        Class sourceBeanClass = sourceBean.getClass();
+        Class targetBeanClass = targetBean.getClass();
+        Field[] sourceFields = sourceBeanClass.getDeclaredFields();
+        Field[] targetFields = sourceBeanClass.getDeclaredFields();
+        for (int i = 0; i < sourceFields.length; i++) {
+            Field sourceField = sourceFields[i];
+            Field targetField = targetFields[i];
+            sourceField.setAccessible(true);
+            targetField.setAccessible(true);
+            try {
+                if (!(sourceField.get(sourceBean) == null)) {
+                    targetField.set(targetBean, sourceField.get(sourceBean));
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return targetBean;
     }
 
     @Override
