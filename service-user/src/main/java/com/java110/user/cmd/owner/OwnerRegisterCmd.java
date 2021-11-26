@@ -122,15 +122,28 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
     }
 
     private void addOwnerAppUser(JSONObject paramInJson, List<OwnerDto> ownerDtos) {
+        List<CommunityDto> communityDtos = null;
+        CommunityDto tmpCommunityDto = null;
+        String communityName = "无";
+
         if (ownerDtos == null || ownerDtos.size() < 1) {
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setState("1100");
+            communityDto.setCommunityId(paramInJson.getString("defaultCommunityId"));
+            communityDto.setPage(1);
+            communityDto.setRow(1);
+            communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+            if (communityDtos != null && communityDtos.size() > 0) {
+                communityName = communityDtos.get(0).getName();
+            }
             OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
             //状态类型，10000 审核中，12000 审核成功，13000 审核失败
             ownerAppUserPo.setState("12000");
             ownerAppUserPo.setAppTypeCd("10010");
             ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
             ownerAppUserPo.setMemberId("-1");
-            ownerAppUserPo.setCommunityName("-1");
-            ownerAppUserPo.setCommunityId("无");
+            ownerAppUserPo.setCommunityName(communityName);
+            ownerAppUserPo.setCommunityId(paramInJson.getString("defaultCommunityId"));
             ownerAppUserPo.setAppUserName("游客");
             ownerAppUserPo.setIdCard("无");
 
@@ -140,8 +153,7 @@ public class OwnerRegisterCmd extends AbstractServiceCmdListener {
             }
             return;
         }
-        List<CommunityDto> communityDtos = null;
-        CommunityDto tmpCommunityDto = null;
+
         OwnerAppUserPo ownerAppUserPo = null;
         for (OwnerDto ownerDto : ownerDtos) {
             CommunityDto communityDto = new CommunityDto();
