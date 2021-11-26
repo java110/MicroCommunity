@@ -12,6 +12,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -66,17 +67,6 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
-
-        //     String userId = headers.get("userid");
-
-        //根据userId 查询openId
-//        UserDto userDto = new UserDto();
-//        userDto.setUserId(userId);
-//        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-//
-//        Assert.listOnlyOne(userDtos, "未找到相应用户信息，或查询到多条");
-//
-//        String openId = userDtos.get(0).getOpenId();
 
         if (!reqJson.containsKey("page")) {
             reqJson.put("page", 1);
@@ -141,6 +131,9 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     private String[] getCommunityIds(List<OwnerAppUserDto> ownerAppUserDtos) {
         List<String> communityIds = new ArrayList<String>();
         for (OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos) {
+            if (StringUtil.isEmpty(ownerAppUserDto.getCommunityId()) || "-1".equals(ownerAppUserDto.getCommunityId())) {
+                continue;
+            }
             communityIds.add(ownerAppUserDto.getCommunityId());
         }
 
