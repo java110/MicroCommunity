@@ -25,7 +25,10 @@
       <groupId>com.java110</groupId>
       <artifactId>java110-service</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>com.alipay.sdk</groupId>
+      <artifactId>alipay-sdk-java</artifactId>
+    </dependency>
 
   </dependencies>
 

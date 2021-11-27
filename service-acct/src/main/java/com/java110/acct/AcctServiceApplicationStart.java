@@ -1,7 +1,9 @@
 package com.java110.acct;
 
+import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -35,6 +37,8 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.acct.listener"})
+@Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
+        basePackages = {"com.java110.acct.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store",
         "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.user"})
 public class AcctServiceApplicationStart {
@@ -62,6 +66,18 @@ public class AcctServiceApplicationStart {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        return restTemplate;
+    }
+
+    /**
+     * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+     *
+     * @return restTemplate
+     */
+    @Bean
+    public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;

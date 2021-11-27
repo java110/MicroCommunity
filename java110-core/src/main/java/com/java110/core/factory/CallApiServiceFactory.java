@@ -6,7 +6,6 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.dto.app.AppDto;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
@@ -16,11 +15,7 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,9 +60,9 @@ public class CallApiServiceFactory {
      * @param <T>
      * @return
      */
-    public static <T> T postForApi(String appId, T param, String serviceCode, Class<T> t) {
+    public static <T> T postForApi(String appId, T param, String serviceCode, Class<T> t, String userId) {
 
-        IPageData pd = PageData.newInstance().builder("-1", "未知", "", "", "", "", "", "", appId);
+        IPageData pd = PageData.newInstance().builder(userId, "未知", "", "", "", "", "", "", appId);
 
         List<T> ts = postForApis(pd, param, serviceCode, t);
 
@@ -76,6 +71,21 @@ public class CallApiServiceFactory {
         }
 
         return ts.get(0);
+    }
+
+
+    /**
+     * 查询
+     *
+     * @param param       传入对象
+     * @param serviceCode 服务编码
+     * @param t           返回类
+     * @param <T>
+     * @return
+     */
+    public static <T> T postForApi(String appId, T param, String serviceCode, Class<T> t) {
+
+        return postForApi(appId, param, serviceCode, t, "-1");
     }
 
 
@@ -213,7 +223,7 @@ public class CallApiServiceFactory {
         if (pd.getHeaders() != null) {
             for (String key : pd.getHeaders().keySet()
             ) {
-                if(CommonConstant.USER_ID.equals(key.toLowerCase())){
+                if (CommonConstant.USER_ID.equals(key.toLowerCase())) {
                     continue;
                 }
                 header.add(key, pd.getHeaders().get(key).toString());
@@ -223,8 +233,8 @@ public class CallApiServiceFactory {
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
 
         header.add(CommonConstant.USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
-        header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), StringUtil.isEmpty(pd.getTransactionId())?GenerateCodeFactory.getUUID():pd.getTransactionId());
-        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), StringUtil.isEmpty(pd.getRequestTime())?DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT):pd.getRequestTime());
+        header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), StringUtil.isEmpty(pd.getTransactionId()) ? GenerateCodeFactory.getUUID() : pd.getTransactionId());
+        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), StringUtil.isEmpty(pd.getRequestTime()) ? DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) : pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
@@ -232,10 +242,10 @@ public class CallApiServiceFactory {
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            logger.error("调用中心服务失败",e);
+            logger.error("调用中心服务失败", e);
             responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
         } catch (Exception e) {
-            logger.error("调用中心服务失败",e);
+            logger.error("调用中心服务失败", e);
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);

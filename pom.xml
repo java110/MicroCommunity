@@ -492,6 +492,12 @@
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${oss.aliyun}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>4.10.111.ALL</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>

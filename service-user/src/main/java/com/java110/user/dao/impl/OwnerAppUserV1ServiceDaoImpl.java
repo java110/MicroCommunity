@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2021-10-08 17:56:48 mail: 928255095@qq.com
+ * add by 吴学文 at 2021-11-26 13:03:41 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -47,7 +47,7 @@ public class OwnerAppUserV1ServiceDaoImpl extends BaseServiceDao implements IOwn
 
 
     /**
-     * 保存业主用户小区关系信息 到 instance
+     * 保存业主绑定信息 到 instance
      * @param info   bId 信息
      * @throws DAOException DAO异常
      */
@@ -62,7 +62,7 @@ public class OwnerAppUserV1ServiceDaoImpl extends BaseServiceDao implements IOwn
 
 
     /**
-     * 查询业主用户小区关系信息（instance）
+     * 查询业主绑定信息（instance）
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
@@ -78,7 +78,7 @@ public class OwnerAppUserV1ServiceDaoImpl extends BaseServiceDao implements IOwn
 
 
     /**
-     * 修改业主用户小区关系信息
+     * 修改业主绑定信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
@@ -92,9 +92,9 @@ public class OwnerAppUserV1ServiceDaoImpl extends BaseServiceDao implements IOwn
     }
 
      /**
-     * 查询业主用户小区关系数量
-     * @param info 业主用户小区关系信息
-     * @return 业主用户小区关系数量
+     * 查询业主绑定数量
+     * @param info 业主绑定信息
+     * @return 业主绑定数量
      */
     @Override
     public int queryOwnerAppUsersCount(Map info) {

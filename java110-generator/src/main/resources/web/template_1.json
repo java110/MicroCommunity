@@ -1,103 +1,151 @@
 {
-  "templateKeyName": "统计ID",
-  "templateName": "组件统计",
+  "templateKeyName": "商家购买记录表ID",
+  "templateName": "商家购买记录表",
   "columns": [
     {
       "hasDefaultValue": false,
       "limitParam": "30",
-      "code": "componentId",
-      "limitErrInfo": "组件ID不能超过30",
-      "cnCode": "组件ID",
+      "code": "detailId",
+      "limitErrInfo": "记录ID不能超过30",
+      "cnCode": "记录ID",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，组件ID"
+      "desc": "必填，记录ID"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "30",
+      "code": "poolId",
+      "limitErrInfo": "优惠券不能超过30",
+      "cnCode": "优惠券",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，优惠券"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "30",
+      "code": "shopId",
+      "limitErrInfo": "店铺ID不能超过30",
+      "cnCode": "店铺ID",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，店铺ID"
     },
     {
       "hasDefaultValue": false,
       "limitParam": "64",
-      "code": "name",
-      "limitErrInfo": "名称不能超过64",
-      "cnCode": "名称",
+      "code": "couponName",
+      "limitErrInfo": "优惠券名称不能超过64",
+      "cnCode": "优惠券名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，名称"
+      "desc": "必填，优惠券名称"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "1",
-      "code": "queryModel",
-      "limitErrInfo": "查询方式不能超过1",
-      "cnCode": "查询方式",
+      "limitParam": "10",
+      "code": "actualPrice",
+      "limitErrInfo": "面值不能超过10",
+      "cnCode": "面值",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，查询方式"
+      "desc": "必填，面值"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "1024",
-      "code": "javaScript",
-      "limitErrInfo": "执行java脚本代码不能超过1024",
-      "cnCode": "执行java脚本代码",
-      "limit": "maxLength",
-      "show": false,
-      "inputType": "input",
-      "required": false,
-      "desc": "执行java脚本代码"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "1024",
-      "code": "componentSql",
-      "limitErrInfo": "执行sql不能超过1024",
-      "cnCode": "执行sql",
-      "limit": "maxLength",
-      "show": false,
-      "inputType": "input",
-      "required": false,
-      "desc": "执行sql"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "remark",
-      "limitErrInfo": "描述'不能超过512",
-      "cnCode": "描述'",
+      "limitParam": "10",
+      "code": "buyPrice",
+      "limitErrInfo": "购买价格不能超过10",
+      "cnCode": "购买价格",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
-      "required": false,
-      "desc": "描述'"
+      "required": true,
+      "desc": "必填，购买价格"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "10",
+      "code": "amount",
+      "limitErrInfo": "付款金额不能超过10",
+      "cnCode": "付款金额",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，付款金额"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "20",
+      "code": "buyCount",
+      "limitErrInfo": "购买数量不能超过20",
+      "cnCode": "购买数量",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，购买数量"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "20",
+      "code": "validityDay",
+      "limitErrInfo": "有效期不能超过20",
+      "cnCode": "有效期",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，有效期"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "`detail_id`",
+      "code": "primary",
+      "limitErrInfo": "primary不能超过`detail_id`",
+      "cnCode": "primary",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "primary"
     }
   ],
-  "searchName": "统计ID",
-  "directories": "dev",
-  "searchCode": "footerId",
-  "templateCode": "reportCustomComponentFooter",
+  "searchName": "商家购买记录表ID",
+  "directories": "admin",
+  "searchCode": "detailId",
+  "templateCode": "couponDetail",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "componentId",
-      "name": "组件ID",
+      "code": "poolId",
+      "name": "优惠券",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "name",
-      "name": "名称",
+      "code": "shopId",
+      "name": "店铺ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "queryModel",
-      "name": "查询方式",
+      "code": "validityDay",
+      "name": "有效期",
       "inputType": "input"
     }
   ],
-  "templateKey": "footerId"
+  "templateKey": "detailId"
 }

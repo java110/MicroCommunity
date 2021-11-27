@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponPoolV1ServiceDaoImpl">
+
+
+    <!-- 保存优惠券池信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponPoolInfo" parameterType="Map">
+        insert into coupon_pool(
+        buy_price,coupon_name,coupon_stock,actual_price,validity_day,coupon_type,pool_id,state,seq
+        ) values (
+        #{buyPrice},#{couponName},#{couponStock},#{actualPrice},#{validityDay},#{couponType},#{poolId},#{state},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询优惠券池信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponPoolInfo" parameterType="Map" resultType="Map">
+        select t.buy_price,t.buy_price buyPrice,t.coupon_name,t.coupon_name couponName,t.coupon_stock,t.coupon_stock
+        couponStock,t.actual_price,t.actual_price actualPrice,t.validity_day,t.validity_day
+        validityDay,t.coupon_type,t.coupon_type couponType,t.pool_id,t.pool_id poolId,t.status_cd,t.status_cd
+        statusCd,t.state,t.seq,td.name couponTypeName
+        from coupon_pool t
+        left join t_dict td on t.coupon_type  = td.status_cd and td.table_columns ='coupon_type' and td.table_name ='coupon_pool'
+        where 1 =1
+        <if test="buyPrice !=null and buyPrice != ''">
+            and t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="couponStock !=null and couponStock != ''">
+            and t.coupon_stock= #{couponStock}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="couponType !=null and couponType != ''">
+            and t.coupon_type= #{couponType}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改优惠券池信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponPoolInfo" parameterType="Map">
+        update coupon_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="buyPrice !=null and buyPrice != ''">
+            , t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="couponStock !=null and couponStock != ''">
+            , t.coupon_stock= #{couponStock}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            , t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            , t.validity_day= #{validityDay}
+        </if>
+        <if test="couponType !=null and couponType != ''">
+            , t.coupon_type= #{couponType}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+
+    </update>
+
+    <!-- 查询优惠券池数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_pool t
+        left join t_dict td on t.coupon_type  = td.status_cd and td.table_columns ='coupon_type' and td.table_name ='coupon_pool'
+        where 1 =1
+        <if test="buyPrice !=null and buyPrice != ''">
+            and t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="couponStock !=null and couponStock != ''">
+            and t.coupon_stock= #{couponStock}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="couponType !=null and couponType != ''">
+            and t.coupon_type= #{couponType}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

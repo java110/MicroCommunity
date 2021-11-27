@@ -1,34 +1,44 @@
 {
   "param": {
-    "footerId": "footer_id",
-    "componentId": "component_id",
-    "javaScript": "java_script",
-    "name": "name",
-    "remark": "remark",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
     "statusCd": "status_cd",
-    "queryModel": "query_model",
-    "componentSql": "component_sql"
+    "id": "id",
+    "userId": "user_id",
+    "value": "value"
   },
-  "name": "reportCustomComponentFooter",
-  "shareColumn": "footer_id",
-  "id": "footerId",
-  "shareName": "report",
+  "name": "userAttr",
+  "shareColumn": "user_id",
+  "id": "userId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "报表底部同步ID不能为空",
-      "code": "footerId"
+      "msg": "id不能为空",
+      "code": "id"
     },
     {
-      "msg": "组件ID不能为空",
-      "code": "componentId"
+      "msg": "属性id不能为空",
+      "code": "attrId"
     },
     {
-      "msg": "名称不能为空",
-      "code": "name"
+      "msg": "用户ID不能为空",
+      "code": "userId"
+    },
+    {
+      "msg": "规格id,参考spec表不能为空",
+      "code": "specCd"
+    },
+    {
+      "msg": "属性值不能为空",
+      "code": "value"
+    },
+    {
+      "msg": "数据状态不能为空",
+      "code": "statusCd"
     }
   ],
-  "desc": "底部统计",
-  "shareParam": "footerId",
-  "tableName": "report_custom_component_footer"
+  "desc": "用户属性",
+  "shareParam": "userId",
+  "tableName": "u_user_attr"
 }

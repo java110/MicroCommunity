@@ -369,6 +369,7 @@ public class DateUtil {
         return curDate;
     }
 
+
     public static String getNextMonthFirstDay(String fmt) {
         String returndate = "";
         Date date = getNextMonthFirstDate();
@@ -412,6 +413,10 @@ public class DateUtil {
         a.roll(Calendar.DATE, -1);
         int maxDate = a.get(Calendar.DATE);
         return maxDate;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getCurrentMonthDay());
     }
 
 

@@ -27,6 +27,14 @@ server:
 java110:
   community-service: busi-service
   acct-service: busi-service
+  user-service: busi-service
+  store-service: busi-service
+  common-service: busi-service
+  job-service: busi-service
+  fee-service: busi-service
+  report-service: busi-service
+  dev-service: busi-service
+  oa-service: busi-service
 
 spring:
   http:
