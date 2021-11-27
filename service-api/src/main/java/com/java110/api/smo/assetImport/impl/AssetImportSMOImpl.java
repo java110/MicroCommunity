@@ -444,6 +444,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         AssetImportLogDetailDto assetImportLogDetailDto = null;
         try {
             for (ImportRoom room : rooms) {
+                paramIn = new JSONObject();
                 JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
                 if (savedRoomInfo != null) {
                     //如果空闲入住一下
@@ -462,7 +463,6 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     }
                     continue;
                 }
-                paramIn = new JSONObject();
                 //保存 房屋
                 apiUrl = "room.saveRoom";
 
