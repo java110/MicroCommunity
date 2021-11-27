@@ -56,7 +56,7 @@ public class OwnerCommunityCmd extends AbstractServiceCmdListener {
         ownerDto.setLink(reqJson.getString("link"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
-        if (ownerDtos == null || ownerDtos.size() < 0) {
+        if (ownerDtos == null || ownerDtos.size() < 1) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
@@ -64,6 +64,7 @@ public class OwnerCommunityCmd extends AbstractServiceCmdListener {
         List<String> communityIds = new ArrayList<>();
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             communityIds.add(tmpOwnerDto.getCommunityId());
+            tmpOwnerDto.setAppUserName(tmpOwnerDto.getName());
         }
 
         CommunityDto communityDto = new CommunityDto();

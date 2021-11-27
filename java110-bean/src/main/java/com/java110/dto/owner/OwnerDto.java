@@ -56,6 +56,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String state;
     private String startTime;
     private String endTime;
+    private String appUserName;
 
     private String bId;
 
@@ -336,5 +337,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String getAppUserName() {
+        return appUserName;
+    }
+
+    public void setAppUserName(String appUserName) {
+        this.appUserName = appUserName;
     }
 }
