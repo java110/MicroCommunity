@@ -10,17 +10,9 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
 import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.entity.assetImport.ImportFee;
-import com.java110.entity.assetImport.ImportFloor;
-import com.java110.entity.assetImport.ImportOwner;
-import com.java110.entity.assetImport.ImportParkingSpace;
-import com.java110.entity.assetImport.ImportRoom;
+import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.CommonUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ImportExcelUtils;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -454,12 +446,23 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
             for (ImportRoom room : rooms) {
                 JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
                 if (savedRoomInfo != null) {
+                    //如果空闲入住一下
+                    if (RoomDto.STATE_FREE.equals(savedRoomInfo.getString("state")) && room.getImportOwner() != null) {
+                        paramIn.clear();
+                        apiUrl = "room.sellRoom";
+                        paramIn.put("communityId", result.getCommunityId());
+                        paramIn.put("ownerId", room.getImportOwner().getOwnerId());
+                        paramIn.put("roomId", savedRoomInfo.getString("roomId"));
+                        paramIn.put("state", "2001");
+                        paramIn.put("storeId", result.getStoreId());
+                        if (!StringUtil.isEmpty(room.getRoomFeeId()) && "0".equals(room.getRoomFeeId())) {
+                            paramIn.put("feeEndDate", room.getFeeEndDate());
+                        }
+                        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                    }
                     continue;
                 }
-
                 paramIn = new JSONObject();
-
-
                 //保存 房屋
                 apiUrl = "room.saveRoom";
 
