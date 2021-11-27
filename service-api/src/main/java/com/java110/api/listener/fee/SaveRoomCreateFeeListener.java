@@ -98,6 +98,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
         logger.debug("ServiceDataFlowEvent : {}", event);
+        String userId = context.getRequestHeaders().get("user-id");
+        reqJson.put("userId", userId);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
