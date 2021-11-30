@@ -60,13 +60,14 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
         }
         logger.debug("适配器返回结果:" + resultVo.toString());
         if (ResultVo.CODE_OK != resultVo.getCode()) {
+            reqJson.put("orderId", orderId);
             cmdDataFlowContext.setResponseEntity(ResultVo.error(resultVo.getMsg(), reqJson));
             return;
         }
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
-        cmdDataFlowContext.setResponseEntity(new ResponseEntity(paramOut.toJSONString(), HttpStatus.OK));
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
     }
 
 }
