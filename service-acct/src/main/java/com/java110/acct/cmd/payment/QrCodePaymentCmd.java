@@ -2,7 +2,6 @@ package com.java110.acct.cmd.payment;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
-import com.java110.acct.smo.impl.QrCodeWechatPaymentAdapt;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
@@ -47,7 +46,7 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
         int pre = Integer.parseInt(authCode.substring(0, 2));
         if (pre > 24 && pre < 31) { // 支付宝
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
-        }else{
+        } else {
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
         }
 
@@ -55,18 +54,19 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
         try {
             resultVo = qrCodePaymentSMOImpl.pay(reqJson.getString("communityId"), orderId, receivedAmount, authCode, "");
         } catch (Exception e) {
+            logger.error("异常了", e);
             cmdDataFlowContext.setResponseEntity(ResultVo.error(e.getLocalizedMessage()));
             return;
         }
-        logger.debug("适配器返回结果:"+resultVo.toString());
+        logger.debug("适配器返回结果:" + resultVo.toString());
         if (ResultVo.CODE_OK != resultVo.getCode()) {
-            cmdDataFlowContext.setResponseEntity(ResultVo.error(resultVo.getMsg(),reqJson));
+            cmdDataFlowContext.setResponseEntity(ResultVo.error(resultVo.getMsg(), reqJson));
             return;
         }
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
-        String paramOut = CallApiServiceFactory.postForApi(appId, reqJson.toJSONString(), "fee.payFee", String.class, userId);
-        cmdDataFlowContext.setResponseEntity(new ResponseEntity(paramOut, HttpStatus.OK));
+        JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
+        cmdDataFlowContext.setResponseEntity(new ResponseEntity(paramOut.toJSONString(), HttpStatus.OK));
     }
 
 }
