@@ -2,6 +2,7 @@ package com.java110.acct.cmd.payment;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
+import com.java110.acct.smo.impl.QrCodeWechatPaymentAdapt;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
@@ -14,6 +15,8 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,6 +25,7 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Cmd(serviceCode = "payment.qrCodePayment")
 public class QrCodePaymentCmd extends AbstractServiceCmdListener {
+    private static Logger logger = LoggerFactory.getLogger(QrCodePaymentCmd.class);
 
 
     private IQrCodePaymentSMO qrCodePaymentSMOImpl;
@@ -54,6 +58,7 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
             cmdDataFlowContext.setResponseEntity(ResultVo.error(e.getLocalizedMessage()));
             return;
         }
+        logger.debug("适配器返回结果:"+resultVo.toString());
         if (ResultVo.CODE_OK != resultVo.getCode()) {
             cmdDataFlowContext.setResponseEntity(ResultVo.error(resultVo.getMsg(),reqJson));
             return;
