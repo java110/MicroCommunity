@@ -12,6 +12,7 @@ import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,10 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
      * 格式化
      */
     public final static String FORMAT = "json";
+    /**
+     * 格式化
+     */
+    public final static String APP_AUTH_TOKEN = "APP_AUTH_TOKEN";
 
     /**
      * 签名类型
@@ -58,10 +63,13 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
         AlipayClient alipayClient = new DefaultAlipayClient(GETEWAY_URL,
-                CommunitySettingFactory.getValue(communityId,"APP_ID"),
-                CommunitySettingFactory.getRemark(communityId,"APP_PRIVATE_KEY"),
-                "json", "utf-8", CommunitySettingFactory.getRemark(communityId,"ALIPAY_PUBLIC_KEY"), "RSA2");
+                CommunitySettingFactory.getValue(communityId, "APP_ID"),
+                CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
+                "json", "utf-8", CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradePayRequest request = new AlipayTradePayRequest();
+        if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
+            request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
+        }
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", orderNum);
         bizContent.put("total_amount", money);
@@ -88,7 +96,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", "app_id", "your private_key", "json", "GBK", "alipay_public_key", "RSA2");
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         request.setBizContent("{" +
-                "  \"out_trade_no\":\""+orderNum+"\"," +
+                "  \"out_trade_no\":\"" + orderNum + "\"," +
                 "  \"trade_no\":\"\"," +
                 "  \"query_options\":[" +
                 "    \"trade_settle_info\"" +
