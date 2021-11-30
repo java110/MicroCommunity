@@ -14,6 +14,8 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +23,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
+
+    private static Logger logger = LoggerFactory.getLogger(QrCodeAliPaymentAdapt.class);
+
     /**
      * APP_ID 应用id
      */
@@ -65,7 +70,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         AlipayClient alipayClient = new DefaultAlipayClient(GETEWAY_URL,
                 CommunitySettingFactory.getValue(communityId, "APP_ID"),
                 CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
-                "json", "utf-8", CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
+                "json", "UTF-8", CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
             request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
@@ -78,6 +83,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         bizContent.put("auth_code", authCode);
         request.setBizContent(bizContent.toString());
         AlipayTradePayResponse response = alipayClient.execute(request);
+        logger.debug("支付宝返回:" + JSONObject.toJSONString(response));
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
