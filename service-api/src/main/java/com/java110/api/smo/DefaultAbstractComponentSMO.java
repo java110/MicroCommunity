@@ -2,8 +2,6 @@ package com.java110.api.smo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
@@ -23,7 +21,9 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
