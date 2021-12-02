@@ -1,151 +1,55 @@
 {
-  "templateKeyName": "商家购买记录表ID",
-  "templateName": "商家购买记录表",
+  "templateKeyName": "编号",
+  "templateName": "mydockerfile",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "detailId",
-      "limitErrInfo": "记录ID不能超过30",
-      "cnCode": "记录ID",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，记录ID"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "poolId",
-      "limitErrInfo": "优惠券不能超过30",
-      "cnCode": "优惠券",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，优惠券"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "shopId",
-      "limitErrInfo": "店铺ID不能超过30",
-      "cnCode": "店铺ID",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，店铺ID"
-    },
-    {
-      "hasDefaultValue": false,
       "limitParam": "64",
-      "code": "couponName",
-      "limitErrInfo": "优惠券名称不能超过64",
-      "cnCode": "优惠券名称",
+      "code": "name",
+      "limitErrInfo": "名称不能超过64",
+      "cnCode": "名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，优惠券名称"
+      "desc": "必填，name"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "10",
-      "code": "actualPrice",
-      "limitErrInfo": "面值不能超过10",
-      "cnCode": "面值",
+      "limitParam": "10000",
+      "code": "dockerfile",
+      "limitErrInfo": "内容不能超过10000",
+      "cnCode": "内容",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，面值"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "10",
-      "code": "buyPrice",
-      "limitErrInfo": "购买价格不能超过10",
-      "cnCode": "购买价格",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，购买价格"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "10",
-      "code": "amount",
-      "limitErrInfo": "付款金额不能超过10",
-      "cnCode": "付款金额",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，付款金额"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "20",
-      "code": "buyCount",
-      "limitErrInfo": "购买数量不能超过20",
-      "cnCode": "购买数量",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，购买数量"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "20",
-      "code": "validityDay",
-      "limitErrInfo": "有效期不能超过20",
-      "cnCode": "有效期",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，有效期"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "`detail_id`",
-      "code": "primary",
-      "limitErrInfo": "primary不能超过`detail_id`",
-      "cnCode": "primary",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "primary"
+      "desc": "必填，dockerfile"
     }
   ],
-  "searchName": "商家购买记录表ID",
+  "searchName": "编号",
   "directories": "admin",
-  "searchCode": "detailId",
-  "templateCode": "couponDetail",
+  "searchCode": "id",
+  "templateCode": "businessDockerfile",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "poolId",
-      "name": "优惠券",
+      "code": "id",
+      "name": "编号",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "shopId",
-      "name": "店铺ID",
+      "code": "name",
+      "name": "名称",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "validityDay",
-      "name": "有效期",
+      "code": "id1",
+      "name": "id1",
       "inputType": "input"
     }
   ],
-  "templateKey": "detailId"
+  "templateKey": "id"
 }
