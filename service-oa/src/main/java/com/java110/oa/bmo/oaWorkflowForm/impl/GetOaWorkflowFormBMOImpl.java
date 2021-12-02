@@ -6,13 +6,17 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.user.UserDto;
+import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IWorkflowDataFileV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
+import com.java110.po.workflowDataFile.WorkflowDataFilePo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -45,6 +49,9 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
 
     @Autowired
     private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkflowDataFileV1InnerServiceSMO workflowDataFileV1InnerServiceSMOImpl;
 
 
     /**
@@ -103,15 +110,36 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         List<Map> datas = null;
         if (count > 0) {
             datas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramIn);
+
         } else {
             datas = new ArrayList<>();
         }
+
+        //查询file
+        queryFilesFromData(datas);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (int) paramIn.get("row")), count, datas);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    private void queryFilesFromData(List<Map> datas) {
+        if (datas.size() != 1) {
+            return;
+        }
+
+        WorkflowDataFileDto workflowDataFileDto = new WorkflowDataFileDto();
+        workflowDataFileDto.setId(datas.get(0).get("id").toString());
+        workflowDataFileDto.setStoreId(datas.get(0).get("store_id").toString());
+        List<WorkflowDataFileDto> workflowDataFileDtos = workflowDataFileV1InnerServiceSMOImpl.queryWorkflowDataFiles(workflowDataFileDto);
+
+        if (workflowDataFileDtos == null || workflowDataFileDtos.size() < 1) {
+            return;
+        }
+
+        datas.get(0).put("files",workflowDataFileDtos);
     }
 
     /**
@@ -164,10 +192,37 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
             throw new IllegalArgumentException("保存失败");
         }
 
+        //判断是否有附件
+        saveOaWorkflowFile(reqJson);
+
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
         oaWorkflowUserInnerServiceSMOImpl.startProcess(reqJson);
 
         return ResultVo.success();
+    }
+
+    private void saveOaWorkflowFile(JSONObject reqJson) {
+        if (!reqJson.containsKey("fileName")) {
+            return;
+        }
+
+        String fileName = reqJson.getString("fileName");
+        if (StringUtil.isEmpty(fileName)) {
+            return;
+        }
+
+        WorkflowDataFilePo workflowDataFilePo = new WorkflowDataFilePo();
+        workflowDataFilePo.setCreateUserId(reqJson.getString("userId"));
+        workflowDataFilePo.setCreateUserName(reqJson.getString("createUserName"));
+        workflowDataFilePo.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+        workflowDataFilePo.setFileName(reqJson.getString("fileName"));
+        workflowDataFilePo.setId(reqJson.getString("id"));
+        workflowDataFilePo.setRealFileName(reqJson.getString("realFileName"));
+        workflowDataFilePo.setStoreId(reqJson.getString("storeId"));
+        int flag = workflowDataFileV1InnerServiceSMOImpl.saveWorkflowDataFile(workflowDataFilePo);
+        if (flag < 1) {
+            throw new CmdException("保存附件失败");
+        }
     }
 
     /**

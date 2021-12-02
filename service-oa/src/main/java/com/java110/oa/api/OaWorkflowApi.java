@@ -381,6 +381,13 @@ public class OaWorkflowApi {
             if ("flowId".equals(key)) {
                 continue;
             }
+            if("fileName".equals(key)){
+                continue;
+            }
+
+            if("realFileName".equals(key)){
+                continue;
+            }
 
             columns.add(key);
             values.add(reqJson.getString(key));

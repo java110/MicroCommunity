@@ -289,7 +289,6 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         sql.append("store_id varchar(30) not null COMMENT '商户ID',");
         sql.append("create_user_id varchar(30) not null COMMENT '创建人ID',");
         sql.append("create_user_name varchar(64) not null COMMENT '创建人',");
-        sql.append("file varchar(512)  COMMENT '附件地址',");
         sql.append("state varchar(12) not null COMMENT '状态 1001 申请 1002 待审核 1003 退回 1004 委托 1005 办结',");
         sql.append("create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',");
         sql.append("status_cd varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'");
