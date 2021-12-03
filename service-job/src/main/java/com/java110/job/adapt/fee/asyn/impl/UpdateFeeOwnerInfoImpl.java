@@ -16,7 +16,6 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.fee.asyn.IUpdateFeeOwnerInfo;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.owner.OwnerPo;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -51,18 +50,21 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(ownerPo.getMemberId());
         ownerDto.setCommunityId(ownerPo.getCommunityId());
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "业主不存在");
+        if (ownerDtos == null) { // 不是业主 不管他
+            return;
+        }
 
         List<FeeDto> feeDtos = getRoomFee(ownerPo);
-        if(feeDtos != null){
+        if (feeDtos != null) {
             for (FeeDto tmpFeeDto : feeDtos) {
                 doDealFeeDto(tmpFeeDto, ownerDtos.get(0));
             }
         }
 
         feeDtos = getOwnerCarFee(ownerPo);
-        if(feeDtos != null){
+        if (feeDtos != null) {
             for (FeeDto tmpFeeDto : feeDtos) {
                 doDealFeeDto(tmpFeeDto, ownerDtos.get(0));
             }
