@@ -64,6 +64,10 @@ public class ServiceConfiguration {
         exclusions.append("/app/floor.queryFloors,");
         exclusions.append("/app/unit.queryUnits,");
         exclusions.append("/app/room.queryRooms,");
+        exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
+        exclusions.append("/app/shop/queryShopCommunity,");
+        exclusions.append("/app/shopType/queryShopType,");
+        exclusions.append("/app/housekeepingType/queryHousekeepingType,");
         exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration");
 
 

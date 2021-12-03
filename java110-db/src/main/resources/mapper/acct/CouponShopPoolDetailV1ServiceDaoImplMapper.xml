@@ -45,14 +45,14 @@
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="createUserName !=null and createUserName != ''">
+            and t.user_name= #{createUserName}
         </if>
         <if test="spId !=null and spId != ''">
             and t.sp_id= #{spId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="poolId !=null and poolId != ''">
             and t.pool_id= #{poolId}
@@ -143,14 +143,14 @@
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="createUserName !=null and createUserName != ''">
+            and t.user_name= #{createUserName}
         </if>
         <if test="spId !=null and spId != ''">
             and t.sp_id= #{spId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="poolId !=null and poolId != ''">
             and t.pool_id= #{poolId}

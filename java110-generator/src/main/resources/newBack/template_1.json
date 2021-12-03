@@ -1,44 +1,38 @@
 {
   "param": {
-    "attrId": "attr_id",
-    "specCd": "spec_cd",
+    "fileName": "file_name",
+    "createUserId": "create_user_id",
+    "createUserName": "create_user_name",
     "statusCd": "status_cd",
     "id": "id",
-    "userId": "user_id",
-    "value": "value"
+    "realFileName": "real_file_name",
+    "storeId": "store_id",
+    "fileId": "file_id"
   },
-  "name": "userAttr",
-  "shareColumn": "user_id",
-  "id": "userId",
-  "shareName": "user",
+  "name": "workflowDataFile",
+  "shareColumn": "store_id",
+  "id": "fileId",
+  "shareName": "oa",
   "autoMove": true,
   "required": [
     {
-      "msg": "id不能为空",
+      "msg": "主键ID不能为空",
+      "code": "fileId"
+    },
+    {
+      "msg": "对应表的ID不能为空",
       "code": "id"
     },
     {
-      "msg": "属性id不能为空",
-      "code": "attrId"
+      "msg": "商户ID不能为空",
+      "code": "storeId"
     },
     {
-      "msg": "用户ID不能为空",
-      "code": "userId"
-    },
-    {
-      "msg": "规格id,参考spec表不能为空",
-      "code": "specCd"
-    },
-    {
-      "msg": "属性值不能为空",
-      "code": "value"
-    },
-    {
-      "msg": "数据状态不能为空",
-      "code": "statusCd"
+      "msg": "创建人不能为空",
+      "code": "createUserName"
     }
   ],
-  "desc": "用户属性",
-  "shareParam": "userId",
-  "tableName": "u_user_attr"
+  "desc": "OA附件",
+  "shareParam": "storeId",
+  "tableName": "oa_workflow_data_file"
 }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workflowDataFileV1ServiceDaoImpl">
+
+
+    <!-- 保存OA附件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkflowDataFileInfo" parameterType="Map">
+        insert into oa_workflow_data_file(
+        file_name,create_user_id,create_user_name,id,real_file_name,store_id,file_id
+        ) values (
+        #{fileName},#{createUserId},#{createUserName},#{id},#{realFileName},#{storeId},#{fileId}
+        )
+    </insert>
+
+
+    <!-- 查询OA附件信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkflowDataFileInfo" parameterType="Map" resultType="Map">
+        select t.file_name,t.file_name fileName,t.create_user_id,t.create_user_id
+        createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.id,t.real_file_name,t.real_file_name realFileName,t.store_id,t.store_id storeId,t.file_id,t.file_id
+        fileId
+        from oa_workflow_data_file t
+        where 1 =1
+        <if test="fileName !=null and fileName != ''">
+            and t.file_name= #{fileName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="realFileName !=null and realFileName != ''">
+            and t.real_file_name= #{realFileName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="fileId !=null and fileId != ''">
+            and t.file_id= #{fileId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改OA附件信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkflowDataFileInfo" parameterType="Map">
+        update oa_workflow_data_file t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="fileName !=null and fileName != ''">
+            , t.file_name= #{fileName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="id !=null and id != ''">
+            , t.id= #{id}
+        </if>
+        <if test="realFileName !=null and realFileName != ''">
+            , t.real_file_name= #{realFileName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="fileId !=null and fileId != ''">
+            and t.file_id= #{fileId}
+        </if>
+
+    </update>
+
+    <!-- 查询OA附件数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkflowDataFilesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from oa_workflow_data_file t
+        where 1 =1
+        <if test="fileName !=null and fileName != ''">
+            and t.file_name= #{fileName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="realFileName !=null and realFileName != ''">
+            and t.real_file_name= #{realFileName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="fileId !=null and fileId != ''">
+            and t.file_id= #{fileId}
+        </if>
+
+
+    </select>
+
+</mapper>

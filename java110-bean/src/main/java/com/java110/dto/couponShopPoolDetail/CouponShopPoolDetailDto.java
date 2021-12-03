@@ -20,8 +20,10 @@ private String validityDay;
 private String detailId;
 private String sendCount;
 private String userName;
+private String createUserName;
 private String spId;
 private String userId;
+private String createUserId;
 private String poolId;
 private String tel;
 private String shopId;
@@ -123,5 +125,21 @@ public void setShopId(String shopId) {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }

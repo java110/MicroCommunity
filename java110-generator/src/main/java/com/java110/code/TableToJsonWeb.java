@@ -7,19 +7,20 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "\n" +
-            "CREATE TABLE business_package(\n" +
-            "`id` varchar(64) PRIMARY KEY  NOT NULL comment 'ID',\n" +
-            "  `name` varchar(64) NOT NULL comment '名称',\n" +
-            "  `varsion` varchar(32) NOT NULL comment '版本号',\n" +
+    public static final String createTableSql = "CREATE TABLE business_images(\n" +
+            "    `id` varchar(64) PRIMARY KEY  NOT NULL comment '编号',\n" +
+            "    `name` varchar(64) NOT NULL comment '镜像名称',\n" +
+            "     images_type varchar(12) not null comment '镜像类型',\n" +
+            "     type_url varchar(512) not null comment '镜像url',\n" +
+            "     images_flag varchar(12) not null comment '镜像标识'\n" +
             ")";
     public static void main(String[] args) {
-        String templateName = "业务包"; //业务名称
-        String templateCode = "businessPackage"; //表名大写
+        String templateName = "镜像"; //业务名称
+        String templateCode = "businessImages"; //表名大写
         String templateKey = "id"; //表主键
-        String templateKeyName = "ID";//主键说明
+        String templateKeyName = "编号";//主键说明
         String searchCode = "id"; //分片字段
-        String searchName = "ID"; //分片字段说明
+        String searchName = "编号"; //分片字段说明
         String directories = "admin"; //前端生成到那个目录下
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
