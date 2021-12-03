@@ -11,6 +11,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -73,6 +74,11 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
 //            throw new IllegalArgumentException("当前费用为默认费用不能做删除");
 //        }
 
+        String feeValidate = MappingCache.getValue("DELETE_FEE_VALIDATE");
+        if ("ON".equals(feeValidate)) {
+            return;
+        }
+
         //判断是否已经存在 缴费记录
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setCommunityId(reqJson.getString("communityId"));
@@ -81,7 +87,7 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
         //Assert.listOnlyOne(feeDetailDtos, "存在缴费记录，不能取消，如果需要取消，请先退费");
 
-        if(feeDetailDtos != null && feeDetailDtos.size()>0){
+        if (feeDetailDtos != null && feeDetailDtos.size() > 0) {
             throw new IllegalArgumentException("存在缴费记录，不能取消，如果需要取消，请先退费");
         }
 
