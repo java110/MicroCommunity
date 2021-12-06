@@ -90,6 +90,8 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
+        //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
+
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT;
@@ -98,6 +100,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         } else {
             appType = OwnerAppUserDto.APP_TYPE_APP;
         }
+
         Map tmpParamIn = new HashMap();
         tmpParamIn.put("userId", pd.getUserId());
         tmpParamIn.put("appType", appType);
@@ -106,7 +109,6 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("未查询用户信息异常" + tmpParamIn);
         }
-
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody().toString());
         int total = userResult.getIntValue("total");
         if (total < 1) {

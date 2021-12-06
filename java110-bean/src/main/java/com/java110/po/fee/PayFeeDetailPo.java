@@ -23,6 +23,8 @@ public class PayFeeDetailPo implements Serializable {
     private String startTime;
     private String endTime;
     private String createTime;
+    private String bId;
+    private String statusCd = "0";
 
     private String state;
 
@@ -122,5 +124,19 @@ public class PayFeeDetailPo implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
 }

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payFeeDetailDiscountNewV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
+    <insert id="savePayFeeDetailDiscountNewInfo" parameterType="Map">
+        insert into pay_fee_detail_discount(
+detail_discount_id,discount_price,detail_id,remark,community_id,discount_id,fee_id
+) values (
+#{detailDiscountId},#{discountPrice},#{detailId},#{remark},#{communityId},#{discountId},#{feeId}
+)
+    </insert>
+
+
+
+    <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
+    <select id="getPayFeeDetailDiscountNewInfo" parameterType="Map" resultType="Map">
+        select  t.detail_discount_id,t.detail_discount_id detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id detailId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.discount_id,t.discount_id discountId,t.fee_id,t.fee_id feeId 
+from pay_fee_detail_discount t 
+where 1 =1 
+<if test="detailDiscountId !=null and detailDiscountId != ''">
+   and t.detail_discount_id= #{detailDiscountId}
+</if> 
+<if test="discountPrice !=null and discountPrice != ''">
+   and t.discount_price= #{discountPrice}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="discountId !=null and discountId != ''">
+   and t.discount_id= #{discountId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改费用明细信息 add by wuxw 2018-07-03 -->
+    <update id="updatePayFeeDetailDiscountNewInfo" parameterType="Map">
+        update  pay_fee_detail_discount t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="discountPrice !=null and discountPrice != ''">
+, t.discount_price= #{discountPrice}
+</if> 
+<if test="detailId !=null and detailId != ''">
+, t.detail_id= #{detailId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="discountId !=null and discountId != ''">
+, t.discount_id= #{discountId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+, t.fee_id= #{feeId}
+</if> 
+ where 1=1 <if test="detailDiscountId !=null and detailDiscountId != ''">
+and t.detail_discount_id= #{detailDiscountId}
+</if> 
+
+    </update>
+
+    <!-- 查询费用明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryPayFeeDetailDiscountNewsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from pay_fee_detail_discount t 
+where 1 =1 
+<if test="detailDiscountId !=null and detailDiscountId != ''">
+   and t.detail_discount_id= #{detailDiscountId}
+</if> 
+<if test="discountPrice !=null and discountPrice != ''">
+   and t.discount_price= #{discountPrice}
+</if> 
+<if test="detailId !=null and detailId != ''">
+   and t.detail_id= #{detailId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="discountId !=null and discountId != ''">
+   and t.discount_id= #{discountId}
+</if> 
+<if test="feeId !=null and feeId != ''">
+   and t.fee_id= #{feeId}
+</if> 
+
+
+     </select>
+
+</mapper>

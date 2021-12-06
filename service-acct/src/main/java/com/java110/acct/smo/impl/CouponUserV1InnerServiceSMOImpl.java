@@ -24,10 +24,12 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,26 +49,26 @@ public class CouponUserV1InnerServiceSMOImpl extends BaseServiceSMO implements I
 
 
     @Override
-    public int saveCouponUser(@RequestBody  CouponUserPo couponUserPo) {
+    public int saveCouponUser(@RequestBody CouponUserPo couponUserPo) {
         int saveFlag = couponUserV1ServiceDaoImpl.saveCouponUserInfo(BeanConvertUtil.beanCovertMap(couponUserPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateCouponUser(@RequestBody  CouponUserPo couponUserPo) {
+    @Override
+    public int updateCouponUser(@RequestBody CouponUserPo couponUserPo) {
         int saveFlag = couponUserV1ServiceDaoImpl.updateCouponUserInfo(BeanConvertUtil.beanCovertMap(couponUserPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteCouponUser(@RequestBody  CouponUserPo couponUserPo) {
-       couponUserPo.setStatusCd("1");
-       int saveFlag = couponUserV1ServiceDaoImpl.updateCouponUserInfo(BeanConvertUtil.beanCovertMap(couponUserPo));
-       return saveFlag;
+    @Override
+    public int deleteCouponUser(@RequestBody CouponUserPo couponUserPo) {
+        couponUserPo.setStatusCd("1");
+        int saveFlag = couponUserV1ServiceDaoImpl.updateCouponUserInfo(BeanConvertUtil.beanCovertMap(couponUserPo));
+        return saveFlag;
     }
 
     @Override
-    public List<CouponUserDto> queryCouponUsers(@RequestBody  CouponUserDto couponUserDto) {
+    public List<CouponUserDto> queryCouponUsers(@RequestBody CouponUserDto couponUserDto) {
 
         //校验是否传了 分页信息
 
@@ -77,13 +79,31 @@ public class CouponUserV1InnerServiceSMOImpl extends BaseServiceSMO implements I
         }
 
         List<CouponUserDto> couponUsers = BeanConvertUtil.covertBeanList(couponUserV1ServiceDaoImpl.getCouponUserInfo(BeanConvertUtil.beanCovertMap(couponUserDto)), CouponUserDto.class);
-
+        resfEndTime(couponUsers);
         return couponUsers;
+    }
+
+    private void resfEndTime(List<CouponUserDto> couponUsers) {
+        if (couponUsers == null || couponUsers.size() < 1) {
+            return;
+        }
+
+        for (CouponUserDto couponUser : couponUsers) {
+
+            try {
+                couponUser.setEndTime(DateUtil.getAddDayString(couponUser.getCreateTime(),DateUtil.DATE_FORMATE_STRING_B,Integer.parseInt(couponUser.getValidityDay())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
 
     @Override
     public int queryCouponUsersCount(@RequestBody CouponUserDto couponUserDto) {
-        return couponUserV1ServiceDaoImpl.queryCouponUsersCount(BeanConvertUtil.beanCovertMap(couponUserDto));    }
+        return couponUserV1ServiceDaoImpl.queryCouponUsersCount(BeanConvertUtil.beanCovertMap(couponUserDto));
+    }
 
 }
