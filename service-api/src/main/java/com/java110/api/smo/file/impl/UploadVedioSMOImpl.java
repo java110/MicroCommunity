@@ -4,9 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.client.FtpUploadTemplate;
+import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IUploadVedioSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.OSSUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,9 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
 
+    @Autowired
+    private OssUploadTemplate ossUploadTemplate;
+
     @Override
     public ResponseEntity<Object> upload(IPageData pd, MultipartFile uploadFile) throws IOException {
 
@@ -39,9 +46,21 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
             throw new IllegalArgumentException("上传文件超过1024兆");
         }
 
-        String fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
-                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+//        String fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+//                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+//                java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+//
+        String fileName = "";
+        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
+            fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+                    java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+        } else {
+            fileName = ossUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+                    java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+        }
         JSONObject outParam = new JSONObject();
         outParam.put("fileName", uploadFile.getOriginalFilename());
         outParam.put("realFileName", fileName);
