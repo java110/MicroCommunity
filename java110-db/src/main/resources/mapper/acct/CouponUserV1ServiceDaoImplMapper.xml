@@ -20,7 +20,7 @@
         select t.coupon_name,t.coupon_name couponName,t.actual_price,t.actual_price
         actualPrice,t.validity_day,t.validity_day validityDay,t.pool_id,t.pool_id poolId,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,t.coupon_id,t.coupon_id couponId,t.user_name,t.user_name userName,t.user_id,t.user_id
-        userId
+        userId,t.create_time createTime
         from coupon_user t
         where 1 =1
         <if test="couponName !=null and couponName != ''">
@@ -46,6 +46,12 @@
         </if>
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
+        </if>
+        <if test="couponIds !=null">
+            and t.coupon_id in
+            <foreach collection="couponIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="userName !=null and userName != ''">
             and t.user_name= #{userName}

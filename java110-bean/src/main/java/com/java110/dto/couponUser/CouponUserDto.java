@@ -1,6 +1,7 @@
 package com.java110.dto.couponUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,19 +14,24 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class CouponUserDto extends PageDto implements Serializable {
+    public static final String COUPON_STATE_RUN = "1001";
+    public static final String COUPON_STATE_STOP = "2002";
 
     private String couponName;
-private String actualPrice;
-private String validityDay;
-private String poolId;
-private String tel;
-private String state;
-private String couponId;
-private String userName;
-private String userId;
+    private String actualPrice;
+    private String validityDay;
+    private String poolId;
+    private String tel;
+    private String state;
+    private String couponId;
+    private String[] couponIds;
+    private String userName;
+    private String userId;
 
 
     private Date createTime;
+    private String endTime;
+    private String isExpire;
 
     private String statusCd = "0";
 
@@ -33,55 +39,72 @@ private String userId;
     public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getActualPrice() {
+
+    public String getActualPrice() {
         return actualPrice;
     }
-public void setActualPrice(String actualPrice) {
+
+    public void setActualPrice(String actualPrice) {
         this.actualPrice = actualPrice;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getPoolId() {
+
+    public String getPoolId() {
         return poolId;
     }
-public void setPoolId(String poolId) {
+
+    public void setPoolId(String poolId) {
         this.poolId = poolId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -99,5 +122,29 @@ public void setUserId(String userId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String[] getCouponIds() {
+        return couponIds;
+    }
+
+    public void setCouponIds(String[] couponIds) {
+        this.couponIds = couponIds;
+    }
+
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire;
     }
 }

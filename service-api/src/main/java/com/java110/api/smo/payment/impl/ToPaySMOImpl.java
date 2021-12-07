@@ -12,11 +12,13 @@ import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IToPaySMO;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +29,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service("toPaySMOImpl")
 public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
-
-
 
 
     @Autowired
@@ -90,6 +92,23 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
+        //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
+        if (money <= 0) {
+
+            JSONObject paramOut = new JSONObject();
+            paramOut.put("oId", orderId);
+            String urlOut = "fee.payFeeConfirm";
+            responseEntity = this.callCenterService(getHeaders("-1",pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
+            JSONObject param = new JSONObject();
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                param.put("code","101");
+                param.put("msg","扣费为0回调失败");
+                return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
+            }
+            param.put("code","100");
+            param.put("msg","扣费为0回调成功");
+            return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
+        }
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
             appType = OwnerAppUserDto.APP_TYPE_WECHAT;
@@ -98,6 +117,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         } else {
             appType = OwnerAppUserDto.APP_TYPE_APP;
         }
+
         Map tmpParamIn = new HashMap();
         tmpParamIn.put("userId", pd.getUserId());
         tmpParamIn.put("appType", appType);
@@ -106,7 +126,6 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("未查询用户信息异常" + tmpParamIn);
         }
-
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody().toString());
         int total = userResult.getIntValue("total");
         if (total < 1) {
@@ -126,7 +145,15 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         return responseEntity;
     }
 
-
+    private Map<String, String> getHeaders(String userId,String appId) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(CommonConstant.HTTP_APP_ID.toLowerCase(), appId);
+        headers.put(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
+        headers.put(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+        headers.put(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+        headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        return headers;
+    }
     private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
 
         ResponseEntity responseEntity = null;
@@ -136,7 +163,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 "smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId=" + paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;
