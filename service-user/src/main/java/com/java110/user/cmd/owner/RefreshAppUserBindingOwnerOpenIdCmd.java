@@ -70,7 +70,7 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends AbstractServiceCmdListe
         ownerAppUserV1InnerServiceSMOImpl.updateOwnerAppUser(ownerAppUserPo);
 
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserPo.setAppUserId(appUserId);
+        ownerAppUserDto.setAppUserId(appUserId);
         ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
