@@ -31,6 +31,7 @@ public class CouponUserDto extends PageDto implements Serializable {
 
     private Date createTime;
     private String endTime;
+    private String isExpire;
 
     private String statusCd = "0";
 
@@ -137,5 +138,13 @@ public class CouponUserDto extends PageDto implements Serializable {
 
     public void setCouponIds(String[] couponIds) {
         this.couponIds = couponIds;
+    }
+
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire;
     }
 }

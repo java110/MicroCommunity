@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,10 @@ public class CouponUserV1InnerServiceSMOImpl extends BaseServiceSMO implements I
 
             try {
                 couponUser.setEndTime(DateUtil.getAddDayString(couponUser.getCreateTime(),DateUtil.DATE_FORMATE_STRING_B,Integer.parseInt(couponUser.getValidityDay())));
+                //不计算已过期购物券金额
+                if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
+                    couponUser.setIsExpire("Y");
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
