@@ -6,11 +6,15 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
+import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IWorkflowDataFileV1InnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
+import com.java110.po.workflowDataFile.WorkflowDataFilePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -37,6 +41,9 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
 
     @Autowired
     private IGetOaWorkflowFormBMO getOaWorkflowFormBMOImpl;
+
+    @Autowired
+    private IWorkflowDataFileV1InnerServiceSMO workflowDataFileV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -79,6 +86,13 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
             if ("flowId".equals(key) || "id".equals(key) || "storeId".equals(key)) {
                 continue;
             }
+            if("fileName".equals(key)){
+                continue;
+            }
+
+            if("realFileName".equals(key)){
+                continue;
+            }
             columns.add(key + "='" + reqJson.getString(key)+"'");
 
             //简单校验
@@ -94,9 +108,54 @@ public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
             throw new IllegalArgumentException("保存失败");
         }
 
+        //判断是否有附件
+        saveOaWorkflowFile(reqJson);
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
 
+    }
+
+
+    private void saveOaWorkflowFile(JSONObject reqJson) {
+        if (!reqJson.containsKey("fileName")) {
+            return;
+        }
+
+        String fileName = reqJson.getString("fileName");
+        if (StringUtil.isEmpty(fileName)) {
+            return;
+        }
+
+        WorkflowDataFileDto workflowDataFileDto = new WorkflowDataFileDto();
+        workflowDataFileDto.setId(reqJson.getString("id"));
+        List<WorkflowDataFileDto> workflowDataFileDtos = workflowDataFileV1InnerServiceSMOImpl.queryWorkflowDataFiles(workflowDataFileDto);
+
+        if(workflowDataFileDtos == null || workflowDataFileDtos.size()< 1) {
+            WorkflowDataFilePo workflowDataFilePo = new WorkflowDataFilePo();
+            workflowDataFilePo.setCreateUserId(reqJson.getString("userId"));
+            workflowDataFilePo.setCreateUserName(reqJson.getString("createUserName"));
+            workflowDataFilePo.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            workflowDataFilePo.setFileName(reqJson.getString("fileName"));
+            workflowDataFilePo.setId(reqJson.getString("id"));
+            workflowDataFilePo.setRealFileName(reqJson.getString("realFileName"));
+            workflowDataFilePo.setStoreId(reqJson.getString("storeId"));
+            int flag = workflowDataFileV1InnerServiceSMOImpl.saveWorkflowDataFile(workflowDataFilePo);
+            if (flag < 1) {
+                throw new CmdException("保存附件失败");
+            }
+        }else{
+            WorkflowDataFilePo workflowDataFilePo = new WorkflowDataFilePo();
+            workflowDataFilePo.setFileId(workflowDataFileDtos.get(0).getFileId());
+            workflowDataFilePo.setFileName(reqJson.getString("fileName"));
+            workflowDataFilePo.setId(reqJson.getString("id"));
+            workflowDataFilePo.setRealFileName(reqJson.getString("realFileName"));
+            workflowDataFilePo.setStoreId(reqJson.getString("storeId"));
+            int flag = workflowDataFileV1InnerServiceSMOImpl.updateWorkflowDataFile(workflowDataFilePo);
+            if (flag < 1) {
+                throw new CmdException("保存附件失败");
+            }
+        }
     }
 
     private void validateColumns(List<String> columns) {
