@@ -53,9 +53,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="attrId !=null and attrId != ''">
-            , t.attr_id= #{attrId}
-        </if>
         <if test="specCd !=null and specCd != ''">
             , t.spec_cd= #{specCd}
         </if>
@@ -68,6 +65,9 @@
         where 1=1
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
         </if>
 
     </update>
