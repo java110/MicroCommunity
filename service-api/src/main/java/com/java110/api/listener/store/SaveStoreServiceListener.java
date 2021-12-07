@@ -94,7 +94,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
             //物品调拨流程
             businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_CASH));
             businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_INTEGRAL));
-            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_GOLD));
+//            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_GOLD));
         }
 
         //super.doResponse(dataFlowContext);
