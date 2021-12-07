@@ -79,8 +79,8 @@ public class SaveCommunityCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         communityBMOImpl.addCommunity(reqJson, cmdDataFlowContext);
         communityBMOImpl.addCommunityMembers(reqJson, cmdDataFlowContext);
-        //产生物业费配置信息
-        communityBMOImpl.addFeeConfigProperty(reqJson, cmdDataFlowContext);
+        //产生物业费配置信息 不要产生默认费
+        //communityBMOImpl.addFeeConfigProperty(reqJson, cmdDataFlowContext);
         communityBMOImpl.addFeeConfigRepair(reqJson, cmdDataFlowContext); // 报修费用
         communityBMOImpl.addFeeConfigParkingSpaceTemp(reqJson, cmdDataFlowContext);//地下出租
 
