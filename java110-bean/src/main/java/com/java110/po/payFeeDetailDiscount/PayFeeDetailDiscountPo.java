@@ -11,6 +11,8 @@ public class PayFeeDetailDiscountPo implements Serializable {
     private String communityId;
     private String discountId;
     private String feeId;
+    private String bId;
+    private String statusCd="0";
 
     public String getDetailDiscountId() {
         return detailDiscountId;
@@ -68,5 +70,19 @@ public class PayFeeDetailDiscountPo implements Serializable {
         this.feeId = feeId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
 }

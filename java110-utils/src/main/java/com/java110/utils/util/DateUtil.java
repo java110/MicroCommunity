@@ -415,10 +415,23 @@ public class DateUtil {
         return maxDate;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getCurrentMonthDay());
+    public static void main(String[] args) throws ParseException {
+
+//        SimpleDateFormat sf = new SimpleDateFormat(DateUtil.DATE_FORMATE_STRING_A);
+//        Calendar c = Calendar.getInstance();
+//        c.setTime(DateUtil.getDateFromString("2021-12-03",DateUtil.DATE_FORMATE_STRING_A));
+//        c.add(Calendar.DAY_OF_MONTH, 125);
+//        System.out.println("增加一天后日期:"+sf.format(c.getTime()));
+        System.out.println( "2021-12-07".compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
     }
 
+    public static String getAddDayString(Date date,String pattern,int days) throws ParseException {
+        SimpleDateFormat sf = new SimpleDateFormat(pattern);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, days);
+        return sf.format(c.getTime());
+    }
 
     /**
      * 在给定的日期加上或减去指定月份后的日期
