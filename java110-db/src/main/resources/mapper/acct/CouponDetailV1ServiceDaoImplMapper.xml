@@ -59,6 +59,9 @@
         <if test="orderId !=null and orderId != ''">
             and t.order_id= #{orderId}
         </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
         </if>
@@ -150,6 +153,9 @@
         </if>
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

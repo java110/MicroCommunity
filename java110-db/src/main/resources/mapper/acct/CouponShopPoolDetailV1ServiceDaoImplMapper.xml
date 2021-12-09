@@ -45,6 +45,9 @@
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
         </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
         <if test="createUserName !=null and createUserName != ''">
             and t.user_name= #{createUserName}
         </if>
@@ -142,6 +145,9 @@
         </if>
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
         </if>
         <if test="createUserName !=null and createUserName != ''">
             and t.user_name= #{createUserName}
