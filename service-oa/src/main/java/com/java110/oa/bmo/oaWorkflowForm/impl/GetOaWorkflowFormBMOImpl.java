@@ -1,6 +1,7 @@
 package com.java110.oa.bmo.oaWorkflowForm.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
@@ -330,6 +331,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
     }
 
     @Override
+    @Java110Transactional
     public ResponseEntity<String> auditOaWorkflow(JSONObject reqJson) {
         //查询流程是否存在
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();

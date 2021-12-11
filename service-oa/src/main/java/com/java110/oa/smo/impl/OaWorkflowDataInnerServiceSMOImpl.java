@@ -1,6 +1,7 @@
 package com.java110.oa.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
@@ -30,6 +31,7 @@ public class OaWorkflowDataInnerServiceSMOImpl extends BaseServiceSMO implements
 
 
     @Override
+    @Java110Transactional
     public int saveOaWorkflowData(@RequestBody OaWorkflowDataPo oaWorkflowDataPo) {
         int saveFlag = 1;
         oaWorkflowDataServiceDaoImpl.saveOaWorkflowDataInfo(BeanConvertUtil.beanCovertMap(oaWorkflowDataPo));

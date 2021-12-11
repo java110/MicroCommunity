@@ -107,7 +107,9 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberId(oaWorkflowDataPo.getStoreId());
         List<CommunityMemberDto> memberDtos = communityInnerServiceSMO.getCommunityMembers(communityMemberDto);
-        Assert.listOnlyOne(memberDtos, "物业未入住小区");
+        if(memberDtos == null || memberDtos.size()<1){
+            throw new IllegalArgumentException("物业未入住小区");
+        }
         //给维修师傅推送信息
         sendMsg(oaWorkflowDataPo, memberDtos.get(0));
     }

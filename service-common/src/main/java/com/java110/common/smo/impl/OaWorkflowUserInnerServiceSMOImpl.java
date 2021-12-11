@@ -2,6 +2,7 @@ package com.java110.common.smo.impl;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
@@ -256,6 +257,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     }
 
 
+    @Java110Transactional
     public boolean completeTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
@@ -373,6 +375,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      * @param reqJson
      * @return
      */
+    @Java110Transactional
     public boolean changeTaskToOtherUser(@RequestBody JSONObject reqJson) {
 
         //查询当前节点
@@ -420,7 +423,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
         return true;
     }
-
+    @Java110Transactional
     public boolean goBackTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
