@@ -661,6 +661,9 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<OwnerDto> ownerDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRoomAndParkingSpace(ownerDto);
         String objName = "";
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatisticsDto.getPayerObjType())) {
+                continue;
+            }
             for (OwnerDto ownerDto1 : ownerDtos) {
                 if (!reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
                     continue;
