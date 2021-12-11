@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
@@ -387,4 +388,12 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/queryHuaningOweFeeDetail", method = RequestMethod.POST)
     List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo);
+
+    /**
+     *
+     * @param ownerDto
+     * @return
+     */
+    @RequestMapping(value = "/queryRoomAndParkingSpace", method = RequestMethod.POST)
+    List<OwnerDto> queryRoomAndParkingSpace(@RequestBody OwnerDto ownerDto);
 }

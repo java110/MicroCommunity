@@ -353,7 +353,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(15).setCellValue("空置房打折金额");
         row.createCell(16).setCellValue("空置房减免金额");
         row.createCell(17).setCellValue("面积");
-//        row.createCell(14).setCellValue("业主");
+        row.createCell(18).setCellValue("车位");
         //查询楼栋信息
         JSONArray rooms = this.getReportPayFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -381,6 +381,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(15).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
             row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingReduction"));
             row.createCell(17).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(18).setCellValue(dataObj.getString("psName"));
         }
     }
 

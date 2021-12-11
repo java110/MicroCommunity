@@ -334,4 +334,11 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return
      */
     double getReceivedAmountByMonth(Map beanCovertMap);
+
+    /**
+     *
+     * @param info
+     * @return
+     */
+    List<Map> queryRoomAndParkingSpace(Map info);
 }

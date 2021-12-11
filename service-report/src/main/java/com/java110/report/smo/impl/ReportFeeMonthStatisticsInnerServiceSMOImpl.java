@@ -7,6 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
@@ -523,6 +524,13 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
             paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
         }
         List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail(paramInfo);
+        return deposits;
+    }
+
+    @Override
+    public List<OwnerDto> queryRoomAndParkingSpace(@RequestBody OwnerDto ownerDto) {
+        List<OwnerDto> deposits = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryRoomAndParkingSpace(BeanConvertUtil.beanCovertMap(ownerDto)),
+                OwnerDto.class);
         return deposits;
     }
 

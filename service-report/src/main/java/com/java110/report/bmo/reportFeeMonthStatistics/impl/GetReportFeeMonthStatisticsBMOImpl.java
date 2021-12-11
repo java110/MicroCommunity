@@ -20,7 +20,6 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -40,6 +39,9 @@ import java.util.*;
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
 
     private static final Logger logger = LoggerFactory.getLogger(GetReportFeeMonthStatisticsBMOImpl.class);
+
+
+    private int MAX_ROWS = 500;  // 最大行数
 
     @Autowired
     private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
@@ -391,6 +393,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
+
+
         //吴学文 注释 感觉和上面的369 功能重复
         //int size = 0;
         if (count > 0) {
@@ -448,6 +452,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             Double totalVacantHousingReduction = 0.0;
             //滞纳金(小计)
             Double totalLateFee = 0.0;
+            List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
@@ -455,6 +460,18 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 Double receivedAmount = Double.valueOf(reportFeeMonthStatistics.getReceivedAmount());
                 totalReceivableAmount = totalReceivableAmount + receivableAmount;
                 totalReceivedAmount = totalReceivedAmount + receivedAmount;
+
+                if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatistics.getPayerObjType())) {
+                    ownerIds.add(reportFeeMonthStatistics.getOwnerId());
+                }
+
+                // 最大记录时 就去刷新
+                //如果是车位刷房屋信息
+                if (ownerIds.size() == MAX_ROWS) {
+                    refreshReportFeeMonthStatistics(ownerIds, reportFeeMonthStatisticsDtos);
+                    ownerIds = new ArrayList<>();
+                }
+
                 //优惠金额
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("1")) {
                     //获取优惠金额
@@ -582,6 +599,12 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     reportList.add(reportFeeMonthStatistics);
                 }
             }
+
+            //如果是车位刷房屋信息
+            if (ownerIds.size() > 0) {
+                refreshReportFeeMonthStatistics(ownerIds, reportFeeMonthStatisticsDtos);
+            }
+
             //应收总金额(小计)
             reportFeeMonthStatisticsTotalDto.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount));
             //实收金额(小计)
@@ -621,6 +644,31 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * @param ownerIds
+     * @param reportFeeMonthStatisticsDtos
+     */
+    private void refreshReportFeeMonthStatistics(List<String> ownerIds, List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
+
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        List<OwnerDto> ownerDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRoomAndParkingSpace(ownerDto);
+        String objName = "";
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            for (OwnerDto ownerDto1 : ownerDtos) {
+                if (!reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
+                    continue;
+                }
+                objName = reportFeeMonthStatisticsDto.getObjName() + "(" + ownerDto1.getFloorNum() + "栋" + ownerDto1.getUnitNum() + "单元" + ownerDto1.getRoomNum() + "室)";
+                reportFeeMonthStatisticsDto.setObjName(objName);
+            }
+        }
     }
 
     private boolean hasInReportListAndMerge(List<ReportFeeMonthStatisticsDto> reportList, ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {

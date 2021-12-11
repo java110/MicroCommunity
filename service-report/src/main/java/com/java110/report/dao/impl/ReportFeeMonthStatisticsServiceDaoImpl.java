@@ -97,6 +97,15 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("total").toString());
     }
 
+    @Override
+    public List<Map> queryRoomAndParkingSpace(Map info) {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRoomAndParkingSpace", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
     /**
      * 修改费用月统计信息
      *

@@ -43,9 +43,11 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String roomId;
     private String roomNum;
     private String carNum;
+    private String psName;
     private String contractCode;
     private String payerObjType;
     private String ownerName;
+    private String ownerId;
     private String detailId;
     private String builtUpArea;
 
@@ -705,5 +707,21 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setAllHisOweReceivedAmount(double allHisOweReceivedAmount) {
         this.allHisOweReceivedAmount = allHisOweReceivedAmount;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getPsName() {
+        return psName;
+    }
+
+    public void setPsName(String psName) {
+        this.psName = psName;
     }
 }

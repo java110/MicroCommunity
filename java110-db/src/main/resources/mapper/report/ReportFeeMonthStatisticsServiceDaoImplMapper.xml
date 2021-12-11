@@ -776,7 +776,8 @@
         SUM(t.his_owe_amount + t.cur_receivable_amount) allReceivableAmount,
         SUM(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
         if(SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) &lt; 0,0,
-        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount)) allOweAmount,
+        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount))
+        allOweAmount,
         SUM(t.his_owe_received_amount) allHisOweReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1221,13 +1222,14 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryPayFeeDetail" parameterType="Map" resultType="Map">
-        select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,br.built_up_area builtUpArea ,oc.car_num carNum,
+        select pfc.fee_name feeName,f.floor_num floorNum,bu.unit_num unitNum,br.room_num roomNum,br.built_up_area
+        builtUpArea ,oc.car_num carNum,
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
         importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
         ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,cb.o_id oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
-        t.detail_id,t.detail_id detailId,pf.payer_obj_id
+        t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1235,7 +1237,10 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.car_type_cd='1001'
+        LEFT JOIN parking_space ps on oc.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
+        left join pay_fee_attrs pfb on t.fee_id = pfb.fee_id and pfb.spec_cd = '390007'
         left join pay_fee_attrs pfo on t.fee_id = pfo.fee_id and pfo.spec_cd = '390008'
         left join pay_fee_attrs pft on t.fee_id = pft.fee_id and pft.spec_cd = '390001'
         left join pay_fee_detail_discount pfdd on t.detail_id = pfdd.detail_id and pfdd.status_cd = '0'
@@ -2565,5 +2570,22 @@
             and t.community_id= #{communityId}
         </if>
     </select>
+
+    <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
+    <select id="queryRoomAndParkingSpace" parameterType="Map" resultType="Map">
+        select
+        br.room_id roomId,br.room_num roomNum,bu.unit_num unitNum,f.floor_num floorNum,t.owner_id ownerId
+        from building_owner_room_rel t
+        left join building_room br on t.room_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        where t.status_cd = '0'
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+
 
 </mapper>
