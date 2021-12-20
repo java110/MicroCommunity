@@ -42,6 +42,7 @@ public abstract class AbstractAllocationUserStorehouseBusinessServiceDataFlowLis
         businessAllocationUserStorehouseInfo.put("remark", businessAllocationUserStorehouseInfo.get("remark"));
         businessAllocationUserStorehouseInfo.put("storeId", businessAllocationUserStorehouseInfo.get("store_id"));
         businessAllocationUserStorehouseInfo.put("resId", businessAllocationUserStorehouseInfo.get("res_id"));
+        businessAllocationUserStorehouseInfo.put("resCode", businessAllocationUserStorehouseInfo.get("res_code"));
         businessAllocationUserStorehouseInfo.put("resName", businessAllocationUserStorehouseInfo.get("res_name"));
         businessAllocationUserStorehouseInfo.put("startUserId", businessAllocationUserStorehouseInfo.get("start_user_id"));
         businessAllocationUserStorehouseInfo.put("operate", businessAllocationUserStorehouseInfo.get("operate"));
@@ -78,6 +79,7 @@ public abstract class AbstractAllocationUserStorehouseBusinessServiceDataFlowLis
         currentAllocationUserStorehouseInfo.put("remark", currentAllocationUserStorehouseInfo.get("remark"));
         currentAllocationUserStorehouseInfo.put("storeId", currentAllocationUserStorehouseInfo.get("store_id"));
         currentAllocationUserStorehouseInfo.put("resId", currentAllocationUserStorehouseInfo.get("res_id"));
+        currentAllocationUserStorehouseInfo.put("resCode", currentAllocationUserStorehouseInfo.get("res_code"));
         currentAllocationUserStorehouseInfo.put("resName", currentAllocationUserStorehouseInfo.get("res_name"));
         currentAllocationUserStorehouseInfo.put("startUserId", currentAllocationUserStorehouseInfo.get("start_user_id"));
         currentAllocationUserStorehouseInfo.put("operate", currentAllocationUserStorehouseInfo.get("operate"));

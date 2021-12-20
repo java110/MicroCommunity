@@ -108,7 +108,7 @@ public class AccountApi {
                 OwnerCarDto ownerCarDto = new OwnerCarDto();
                 ownerCarDto.setCarId(payerObjId);
                 List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
+//                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
                 ownerId = ownerCarDtos.get(0).getOwnerId();
             }
             accountDto.setObjId(ownerId);
@@ -158,6 +158,8 @@ public class AccountApi {
     @RequestMapping(value = "/queryAccountDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryAccountDetail(@RequestHeader(value = "store-id", required = false) String storeId,
                                                      @RequestParam(value = "acctId", required = false) String acctId,
+                                                     @RequestParam(value = "detailType", required = false) String detailType,
+                                                     @RequestParam(value = "orderId", required = false) String orderId,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         AccountDetailDto accountDto = new AccountDetailDto();
@@ -165,6 +167,8 @@ public class AccountApi {
         accountDto.setRow(row);
         accountDto.setObjId(storeId);
         accountDto.setAcctId(acctId);
+        accountDto.setDetailType(detailType);
+        accountDto.setOrderId(orderId);
         return getAccountBMOImpl.getDetail(accountDto);
     }
 
@@ -181,7 +185,6 @@ public class AccountApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
         Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
         Assert.hasKeyAndValue(reqJson, "amount", "金额不能为空");
-
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setRemark(reqJson.getString("remark"));
         accountDetailPo.setObjId(reqJson.getString("ownerId"));

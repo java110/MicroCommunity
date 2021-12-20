@@ -29,6 +29,8 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String createUserName;
     private String unitCodeName;
     private String miniUnitCodeName;
+    private String isFixed;
+    private String isFixedName;
 
 
     public String getApplyOrderId() {
@@ -197,5 +199,21 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setMiniUnitCodeName(String miniUnitCodeName) {
         this.miniUnitCodeName = miniUnitCodeName;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

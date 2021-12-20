@@ -55,6 +55,23 @@ public interface ICommunityBMO extends IApiBaseBMO {
     /**
      * 添加小区成员
      *
+     * @param paramInJson 接口请求数据封装
+     * @return 封装好的 data数据
+     */
+    public JSONObject updateComplaint2(JSONObject paramInJson);
+
+    /**
+     * 添加小区成员
+     *
+     * @param paramInJson 接口请求数据封装
+     * @return 封装好的 data数据
+     */
+    public JSONObject updateComplaint3(JSONObject paramInJson);
+
+
+    /**
+     * 添加小区成员
+     *
      * @param paramInJson
      * @return
      */

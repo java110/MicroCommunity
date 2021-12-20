@@ -60,6 +60,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
@@ -117,6 +118,16 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
 
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
         super.delete(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
+        //查询app用户表
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+            for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
+                OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
+                super.delete(dataFlowContext, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER);
+            }
+        }
     }
 
 
@@ -167,7 +178,19 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         }
         businessOwner.put("state", ownerDtos.get(0).getState());
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
-        super.delete(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
+        super.update(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
+        //查询app用户表
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+            for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
+                OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
+                ownerAppUserPo.setLink(paramInJson.getString("link"));
+                ownerAppUserPo.setIdCard(paramInJson.getString("idCard"));
+                super.update(dataFlowContext, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
+            }
+        }
     }
 
     /**
@@ -249,9 +272,9 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         businessCommunityMember.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        Calendar endTime  = Calendar.getInstance();
-        endTime.add(Calendar.MONTH,Integer.parseInt(communityDtos.get(0).getPayFeeMonth()));
-        businessCommunityMember.put("endTime", DateUtil.getFormatTimeString(endTime.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.MONTH, Integer.parseInt(communityDtos.get(0).getPayFeeMonth()));
+        businessCommunityMember.put("endTime", DateUtil.getFormatTimeString(endTime.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
         super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
     }

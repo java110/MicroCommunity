@@ -247,12 +247,15 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         workflowDto.setStoreId(storeId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
         if (workflowDtos != null && workflowDtos.size() == 0) {
-            throw new IllegalArgumentException("未找到 调拨流程或找到多条，请在物业账号系统管理下流程管理中配置流程!");
+            throw new IllegalArgumentException("未找到 调拨流程，请在物业账号系统管理下流程管理中配置流程!");
         }
         List<String> flowIdList = new ArrayList<String>();
         for (WorkflowDto workflowDto1 : workflowDtos) {
-            if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey())) {
-                throw new IllegalArgumentException("调拨流程流程还未部署");
+            if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey()) && WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE.equals(workflowDto1.getFlowType())) {
+                throw new IllegalArgumentException("小区编码="+workflowDto1.getCommunityId()+"的物品调拨流程还未部署");
+            }
+            if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey()) && WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO.equals(workflowDto1.getFlowType())) {
+                throw new IllegalArgumentException("小区编码="+workflowDto1.getCommunityId()+"的物品被调拨还未部署");
             }
             flowIdList.add(WorkflowDto.DEFAULT_PROCESS + workflowDto1.getFlowId());
         }

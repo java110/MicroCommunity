@@ -57,6 +57,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         businessResourceStoreInfo.put("miniUnitStock", businessResourceStoreInfo.get("mini_unit_stock"));
         businessResourceStoreInfo.put("miniStock", businessResourceStoreInfo.get("mini_stock"));
         businessResourceStoreInfo.put("parentRstId", businessResourceStoreInfo.get("parent_rst_id"));
+        businessResourceStoreInfo.put("isFixed", businessResourceStoreInfo.get("is_fixed"));
         businessResourceStoreInfo.remove("bId");
         businessResourceStoreInfo.put("statusCd", statusCd);
     }
@@ -99,6 +100,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
         currentResourceStoreInfo.put("miniUnitStock", currentResourceStoreInfo.get("mini_unit_stock"));
         currentResourceStoreInfo.put("miniStock", currentResourceStoreInfo.get("mini_stock"));
         currentResourceStoreInfo.put("parentRstId", currentResourceStoreInfo.get("parent_rst_id"));
+        currentResourceStoreInfo.put("isFixed", currentResourceStoreInfo.get("is_fixed"));
         getResourceStoreServiceDaoImpl().saveBusinessResourceStoreInfo(currentResourceStoreInfo);
         for (Object key : currentResourceStoreInfo.keySet()) {
             if (businessResourceStore.get(key) == null) {

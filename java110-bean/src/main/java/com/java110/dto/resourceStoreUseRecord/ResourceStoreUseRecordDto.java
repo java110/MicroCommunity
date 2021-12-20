@@ -41,6 +41,9 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String isFixed;
+    private String isFixedName;
+
     public String getRepairId() {
         return repairId;
     }
@@ -231,5 +234,21 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setParentRstId(String parentRstId) {
         this.parentRstId = parentRstId;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

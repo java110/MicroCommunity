@@ -6,11 +6,10 @@
 
     <!-- 保存组织信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOrgInfo" parameterType="Map">
-        insert into business_org(
-        org_name,operate,parent_org_id,description,org_level,store_id,b_id,org_id,belong_community_id,allow_operation
-        ) values (
-        #{orgName},#{operate},#{parentOrgId},#{description},#{orgLevel},#{storeId},#{bId},#{orgId},#{belongCommunityId},#{allowOperation}
-        )
+        insert into business_org(org_name, operate, parent_org_id, description, org_level, store_id, b_id, org_id,
+                                 belong_community_id, allow_operation)
+        values (#{orgName}, #{operate}, #{parentOrgId}, #{description}, #{orgLevel}, #{storeId}, #{bId}, #{orgId},
+                #{belongCommunityId}, #{allowOperation})
     </insert>
 
 
@@ -60,7 +59,8 @@
     <insert id="saveOrgInfoInstance" parameterType="Map">
         insert into u_org(
         org_name,parent_org_id,description,org_level,status_cd,store_id,b_id,org_id,belong_community_id,allow_operation
-        ) select t.org_name,t.parent_org_id,t.description,t.org_level,'0',t.store_id,t.b_id,t.org_id,t.belong_community_id,t.allow_operation
+        ) select
+        t.org_name,t.parent_org_id,t.description,t.org_level,'0',t.store_id,t.b_id,t.org_id,t.belong_community_id,t.allow_operation
         from business_org t
         where 1=1
         <if test="orgName !=null and orgName != ''">
@@ -147,10 +147,10 @@
         <if test="allowOperation !=null and allowOperation != ''">
             and t.allow_operation= #{allowOperation}
         </if>
+        ORDER BY t.create_time ASC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
 
@@ -247,15 +247,30 @@
     <!-- 查询上级组织信息 -->
     <select id="getParentOrgInfo" parameterType="Map" resultType="Map">
         <![CDATA[
-            SELECT t.org_name,t.org_name orgName,t.parent_org_id,t.parent_org_id
-                parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.status_cd,t.status_cd
-                statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId
-            FROM u_org o,u_org t
-            WHERE o.`org_level` = #{orgLevel}
-                AND o.`store_id` = t.`store_id`
-                AND o.`parent_org_id` = t.`org_id`
-                AND o.`org_id` <> o.`parent_org_id`
-                AND o.`store_id` = #{storeId}
+        SELECT t.org_name,
+               t.org_name  orgName,
+               t.parent_org_id,
+               t.parent_org_id
+                           parentOrgId,
+               t.description,
+               t.org_level,
+               t.org_level orgLevel,
+               t.status_cd,
+               t.status_cd
+                           statusCd,
+               t.store_id,
+               t.store_id  storeId,
+               t.b_id,
+               t.b_id      bId,
+               t.org_id,
+               t.org_id    orgId
+        FROM u_org o,
+             u_org t
+        WHERE o.`org_level` = #{orgLevel}
+          AND o.`store_id` = t.`store_id`
+          AND o.`parent_org_id` = t.`org_id`
+          AND o.`org_id` <> o.`parent_org_id`
+          AND o.`store_id` = #{storeId}
         ]]>
     </select>
 

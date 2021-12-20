@@ -118,7 +118,12 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
                         resourceStoreDto.setResId(purchaseApplyDetailVo.getResId());
                         List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-                        Assert.listOnlyOne(resourceStoreDtos,"查询物品信息错误！");
+                        Assert.listOnlyOne(resourceStoreDtos, "查询物品信息错误！");
+                        //是否是固定物品
+                        apiPurchaseApplyDataVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
+                        apiPurchaseApplyDataVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
+                        purchaseApplyDetailVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
+                        purchaseApplyDetailVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
                         //获取仓库名称
                         String shName = resourceStoreDtos.get(0).getShName();
                         purchaseApplyDetailVo.setShName(shName);
