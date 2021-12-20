@@ -136,6 +136,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
     }
 
+
     /**
      * {"PARAM:"{
      * "param1": "$.a.#A#Object",
@@ -341,6 +342,78 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
     }
 
     /**
+     * 执行java脚本
+     *
+     * @param javaCode
+     * @throws BusinessException
+     */
+    public JSONObject execJava(JSONObject params, String javaCode) throws BusinessException {
+        try {
+            //JSONObject params = dataQuery.getRequestParams();
+            Interpreter interpreter = new Interpreter();
+            interpreter.eval(javaCode);
+            interpreter.set("params", params);
+            return JSONObject.parseObject(interpreter.eval("execute(dataQuery)").toString());
+        } catch (Exception e) {
+            logger.error("数据交互异常：", e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常," + e.getMessage());
+        }
+    }
+
+    @Override
+    public JSONObject execQuerySql(JSONObject params, String currentSql) throws BusinessException {
+        List<Map<String, Object>> results = null;
+        List<String> columns = new ArrayList<>();
+        try {
+            List<Object> currentParams = new ArrayList<Object>();
+            //处理 if 判断
+            logger.debug("dealSqlIf开始处理sql中的<if>节点 " + currentSql + " 入参:" + params.toJSONString());
+            currentSql = dealSqlIf(currentSql, params);
+            logger.debug("dealSqlIf处理完成sql中的<if>节点 " + currentSql + " 入参:" + params.toJSONString());
+            String[] sqls = currentSql.split("#");
+            String currentSqlNew = "";
+            for (int sqlIndex = 0; sqlIndex < sqls.length; sqlIndex++) {
+                if (sqlIndex % 2 == 0) {
+                    currentSqlNew += sqls[sqlIndex];
+                    continue;
+                }
+                currentSqlNew += "?";
+                Object param = params.getString(sqls[sqlIndex]);
+                if (params.get(sqls[sqlIndex]) instanceof Integer) {
+                    param = params.getInteger(sqls[sqlIndex]);
+                }
+                //这里对 page 和 rows 特殊处理 ，目前没有想到其他的办法
+                if (StringUtils.isNumeric(param.toString()) && "page,rows,row".contains(sqls[sqlIndex])) {
+                    param = Integer.parseInt(param.toString());
+                }
+                currentParams.add(param);
+            }
+            results = queryServiceDAOImpl.executeSql(currentSqlNew, currentParams.toArray(), columns);
+        } catch (Exception e) {
+            logger.error("解析sql 异常", e);
+            throw new BusinessException("1999", e.getLocalizedMessage());
+        }
+        JSONArray data = null;
+        if (results == null || results.size() < 1) {
+            data = new JSONArray();
+        } else {
+            data = JSONArray.parseArray(JSONArray.toJSONString(results));
+        }
+        JSONArray th = null;
+        if (columns.size() < 1) {
+            th = new JSONArray();
+        } else {
+            th = JSONArray.parseArray(JSONArray.toJSONString(columns));
+        }
+
+
+        JSONObject paramOut = new JSONObject();
+        paramOut.put("th", th);
+        paramOut.put("td", data);
+        return paramOut;
+    }
+
+    /**
      * 处理SQL语句
      *
      * @param oldSql select * from s_a a
@@ -357,7 +430,6 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         if (!oldSql.contains("<if")) {
             return oldSql;
         }
-
         String[] oSqls = oldSql.split("</if>");
         for (String oSql : oSqls) {
             logger.debug("处理if 节点，当前处理的oSql=" + oSql + "总的oSqls = " + oSqls);

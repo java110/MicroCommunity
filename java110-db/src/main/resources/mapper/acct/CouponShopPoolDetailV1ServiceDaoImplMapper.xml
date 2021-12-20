@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponShopPoolDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存商家赠送记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponShopPoolDetailInfo" parameterType="Map">
+        insert into coupon_shop_pool_detail(
+        coupon_name,actual_price,validity_day,detail_id,send_count,user_name,sp_id,user_id,pool_id,tel,shop_id,order_id
+        ) values (
+        #{couponName},#{actualPrice},#{validityDay},#{detailId},#{sendCount},#{userName},#{spId},#{userId},
+        #{poolId},#{tel},#{shopId},#{orderId}
+        )
+    </insert>
+
+
+    <!-- 查询商家赠送记录信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponShopPoolDetailInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.actual_price,t.actual_price
+        actualPrice,t.validity_day,t.validity_day validityDay,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd
+        statusCd,t.send_count,t.send_count sendCount,t.user_name,t.user_name userName,t.sp_id,t.sp_id
+        spId,t.user_id,t.user_id userId,t.pool_id,t.pool_id poolId,t.tel,t.shop_id,t.shop_id shopId,t.order_id orderId
+        from coupon_shop_pool_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.user_name= #{createUserName}
+        </if>
+        <if test="spId !=null and spId != ''">
+            and t.sp_id= #{spId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商家赠送记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponShopPoolDetailInfo" parameterType="Map">
+        update coupon_shop_pool_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            , t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            , t.validity_day= #{validityDay}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            , t.send_count= #{sendCount}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="spId !=null and spId != ''">
+            , t.sp_id= #{spId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            , t.pool_id= #{poolId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            , t.shop_id= #{shopId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询商家赠送记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponShopPoolDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_shop_pool_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.user_name= #{createUserName}
+        </if>
+        <if test="spId !=null and spId != ''">
+            and t.sp_id= #{spId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+
+
+    </select>
+
+</mapper>

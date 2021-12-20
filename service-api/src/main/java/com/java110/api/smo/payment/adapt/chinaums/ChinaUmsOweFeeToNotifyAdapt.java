@@ -17,15 +17,14 @@ package com.java110.api.smo.payment.adapt.chinaums;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
@@ -34,13 +33,19 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
 
 /**
  * 富友 支付 通知实现
@@ -131,8 +136,10 @@ public class ChinaUmsOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imp
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
         }
-        JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-        String orderId = billPayment.get("merOrderId").toString().substring(4);
+//        JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
+//        String orderId = billPayment.get("merOrderId").toString().substring(4);
+        String outTradeNo = map.get("merOrderId").toString();
+        String orderId = outTradeNo.substring(4);
         String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + orderId);
 
         if (StringUtil.isEmpty(order)) {
@@ -181,7 +188,6 @@ public class ChinaUmsOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imp
         headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         return headers;
     }
-
 
 
     private SmallWeChatDto getSmallWechat(String appId) {

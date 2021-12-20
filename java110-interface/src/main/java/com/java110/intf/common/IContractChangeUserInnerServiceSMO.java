@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/contractChangeUserApi")
 public interface IContractChangeUserInnerServiceSMO {
 

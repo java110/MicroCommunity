@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomV1ServiceDaoImpl">
+
+
+    <!-- 保存报表组件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomInfo" parameterType="Map">
+        insert into report_custom(
+        group_id,remark,title,custom_id,seq
+        ) values (
+        #{groupId},#{remark},#{title},#{customId},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询报表组件信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomInfo" parameterType="Map" resultType="Map">
+        select t.group_id,t.group_id groupId,t.remark,t.status_cd,t.status_cd statusCd,t.title,t.custom_id,t.custom_id
+        customId,t.seq,cg.`name` groupName
+        from report_custom t
+        left join report_custom_group cg on t.group_id = cg.group_id and cg.status_cd = '0'
+        where 1 =1
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="customId !=null and customId != ''">
+            and t.custom_id= #{customId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.seq
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报表组件信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomInfo" parameterType="Map">
+        update report_custom t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            , t.group_id= #{groupId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="title !=null and title != ''">
+            , t.title= #{title}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="customId !=null and customId != ''">
+            and t.custom_id= #{customId}
+        </if>
+
+    </update>
+
+    <!-- 查询报表组件数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportCustomsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from report_custom t
+        where 1 =1
+        <if test="groupId !=null and groupId != ''">
+            and t.group_id= #{groupId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="customId !=null and customId != ''">
+            and t.custom_id= #{customId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

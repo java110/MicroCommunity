@@ -32,6 +32,7 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_J = "yyyyMMddHHmmss.SSS";
     public static final String DATE_FORMATE_STRING_K = "yyyyMMddHHmmssSSS";
     public static final String DATE_FORMATE_STRING_L = "MMdd";
+    public static final String DATE_FORMATE_STRING_M = "yyyyMM";
 
     static {
         formats.put("yyyyMMddHHmmss", new SimpleDateFormat("yyyyMMddHHmmss"));
@@ -47,6 +48,7 @@ public class DateUtil {
         formats.put("yyyyMMddHHmmss.SSS", new SimpleDateFormat("yyyyMMddHHmmss.SSS"));
         formats.put("yyyyMMddHHmmssSSS", new SimpleDateFormat("yyyyMMddHHmmssSSS"));
         formats.put("MMdd", new SimpleDateFormat("MMdd"));
+        formats.put("yyyyMM", new SimpleDateFormat("yyyyMM"));
     }
 
 
@@ -350,15 +352,23 @@ public class DateUtil {
     public static Date getNextMonthFirstDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.add(Calendar.MONTH, 1);
         return calendar.getTime();
     }
 
     public static Date getFirstDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        return calendar.getTime();
+        Calendar curDateCal = Calendar.getInstance();
+        curDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        curDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        curDateCal.set(Calendar.MINUTE, 0);
+        curDateCal.set(Calendar.SECOND, 0);
+        Date curDate = curDateCal.getTime();
+        return curDate;
     }
+
 
     public static String getNextMonthFirstDay(String fmt) {
         String returndate = "";
@@ -405,6 +415,23 @@ public class DateUtil {
         return maxDate;
     }
 
+    public static void main(String[] args) throws ParseException {
+
+//        SimpleDateFormat sf = new SimpleDateFormat(DateUtil.DATE_FORMATE_STRING_A);
+//        Calendar c = Calendar.getInstance();
+//        c.setTime(DateUtil.getDateFromString("2021-12-03",DateUtil.DATE_FORMATE_STRING_A));
+//        c.add(Calendar.DAY_OF_MONTH, 125);
+//        System.out.println("增加一天后日期:"+sf.format(c.getTime()));
+        System.out.println( "2021-12-07".compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
+    }
+
+    public static String getAddDayString(Date date,String pattern,int days) throws ParseException {
+        SimpleDateFormat sf = new SimpleDateFormat(pattern);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, days);
+        return sf.format(c.getTime());
+    }
 
     /**
      * 在给定的日期加上或减去指定月份后的日期
@@ -425,7 +452,7 @@ public class DateUtil {
      * 在给定的日期加上或减去指定天数后的日期
      *
      * @param sourceDate 原始时间
-     * @param day      要调整的月份，向前为负数，向后为正数
+     * @param day        要调整的月份，向前为负数，向后为正数
      * @return
      */
     public static Date stepDay(Date sourceDate, int day) {

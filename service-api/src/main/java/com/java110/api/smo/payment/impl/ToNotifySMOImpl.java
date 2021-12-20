@@ -30,7 +30,8 @@ public class ToNotifySMOImpl implements IToNotifySMO {
 
         String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_NOTIFY_ADAPT);
         payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_PAY_NOTIFY_ADAPT : payNotifyAdapt;
-        //支付适配器
+        //支付适配器IPayNotifyAdapt
+        logger.debug("适配器：" + payNotifyAdapt);
         IPayNotifyAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPayNotifyAdapt.class);
         String resXml = tPayNotifyAdapt.confirmPayFee(param, wId);
         logger.info("【小程序支付回调响应】 响应内容：\n" + resXml);

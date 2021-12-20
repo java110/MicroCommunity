@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
+import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.po.reportOweFee.ReportOweFeePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "report-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.report-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/reportOweFeeApi")
 public interface IReportOweFeeInnerServiceSMO {
 
@@ -70,4 +71,14 @@ public interface IReportOweFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryReportAllOweFeesByCar", method = RequestMethod.POST)
     List<ReportOweFeeDto> queryReportAllOweFeesByCar(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
+     * 计算总欠费
+     * @param reportOweFeeDto
+     * @return
+     */
+    @RequestMapping(value = "/computeReportOweFeeTotalAmount", method = RequestMethod.POST)
+    double computeReportOweFeeTotalAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
+    @RequestMapping(value = "/computeReportOweFeeItemAmount", method = RequestMethod.POST)
+    List<ReportOweFeeItemDto> computeReportOweFeeItemAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
 }

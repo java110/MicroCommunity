@@ -107,10 +107,14 @@
         where 1 =1
         <if test="byOwnerInfo == true">
             and t.owner_id = bow.owner_id
+            and bow.community_id = #{communityId}
             and bow.status_cd = '0'
         </if>
         <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
-            and bow.name like concat('%',#{ownerName},'%')
+            and bow.name = #{ownerName}
+        </if>
+        <if test="byOwnerInfo == true and ownerNameLike !=null and ownerNameLike != ''">
+            and bow.name like concat('%',#{ownerNameLike},'%')
         </if>
         <if test="byOwnerInfo == true and idCard !=null and idCard != ''">
             and bow.id_card = #{idCard}
@@ -194,10 +198,14 @@
         where 1 =1
         <if test="byOwnerInfo == true">
             and t.owner_id = bow.owner_id
+            and bow.community_id = #{communityId}
             and bow.status_cd = '0'
         </if>
         <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
-            and bow.name like concat('%',#{ownerName},'%')
+            and bow.name = #{ownerName}
+        </if>
+        <if test="byOwnerInfo == true and ownerNameLike !=null and ownerNameLike != ''">
+            and bow.name like concat('%',#{ownerNameLike},'%')
         </if>
         <if test="byOwnerInfo == true and idCard !=null and idCard != ''">
             and bow.id_card = #{idCard}

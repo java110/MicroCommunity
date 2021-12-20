@@ -247,7 +247,6 @@ public class OwnerController extends BaseController {
             return responseEntity;
         }
 
-        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         String appId = request.getHeader("APP_ID");
         if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");

@@ -5,16 +5,17 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.fee.asyn.IUpdateFeeOwnerInfo;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.owner.OwnerPo;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -38,49 +39,65 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+    @Autowired
+    private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
 
 
     @Override
     @Async
     public void doUpdate(Business business, JSONObject businessOwner) {
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
-
-        RoomDto roomDto = new RoomDto();
-        roomDto.setOwnerId(ownerPo.getOwnerId());
-        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
-        List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
-
-        //没有房屋时返回
-        if (rooms == null || rooms.size() < 1) {
-            return;
-        }
-
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(ownerPo.getMemberId());
         ownerDto.setCommunityId(ownerPo.getCommunityId());
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "业主不存在");
+        if (ownerDtos == null) { // 不是业主 不管他
+            return;
+        }
+
+        List<FeeDto> feeDtos = getRoomFee(ownerPo);
+        if (feeDtos != null) {
+            for (FeeDto tmpFeeDto : feeDtos) {
+                doDealFeeDto(tmpFeeDto, ownerDtos.get(0));
+            }
+        }
+
+        feeDtos = getOwnerCarFee(ownerPo);
+        if (feeDtos != null) {
+            for (FeeDto tmpFeeDto : feeDtos) {
+                doDealFeeDto(tmpFeeDto, ownerDtos.get(0));
+            }
+        }
+
+
+    }
+
+    private List<FeeDto> getOwnerCarFee(OwnerPo ownerPo) {
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setOwnerId(ownerPo.getOwnerId());
+        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+        List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        //没有房屋时返回
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            return null;
+        }
+
 
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
 
         List<String> payerObjIds = new ArrayList<>();
-        for (RoomDto tRoomDto : rooms) {
-            payerObjIds.add(tRoomDto.getUnitId());
-            payerObjIds.add(tRoomDto.getRoomId());
-            payerObjIds.add(tRoomDto.getFloorId());
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            payerObjIds.add(tmpOwnerCarDto.getCarId());
         }
-
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(communityId);
         feeDto.setPayerObjIds(payerObjIds.toArray(new String[payerObjIds.size()]));
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        for (FeeDto tmpFeeDto : feeDtos) {
-            doDealFeeDto(tmpFeeDto, ownerDtos.get(0));
-        }
-
+        return feeDtos;
     }
 
     private void doDealFeeDto(FeeDto tmpFeeDto, OwnerDto ownerDto) {
@@ -134,4 +151,35 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
         }
         return null;
     }
+
+
+    public List<FeeDto> getRoomFee(OwnerPo ownerPo) {
+        RoomDto roomDto = new RoomDto();
+        roomDto.setOwnerId(ownerPo.getOwnerId());
+        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+        List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+
+        //没有房屋时返回
+        if (rooms == null || rooms.size() < 1) {
+            return null;
+        }
+
+
+        //拿到小区ID
+        String communityId = ownerPo.getCommunityId();
+
+        List<String> payerObjIds = new ArrayList<>();
+        for (RoomDto tRoomDto : rooms) {
+            payerObjIds.add(tRoomDto.getUnitId());
+            payerObjIds.add(tRoomDto.getRoomId());
+            payerObjIds.add(tRoomDto.getFloorId());
+        }
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(communityId);
+        feeDto.setPayerObjIds(payerObjIds.toArray(new String[payerObjIds.size()]));
+        feeDto.setState(FeeDto.STATE_DOING);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        return feeDtos;
+    }
+
 }

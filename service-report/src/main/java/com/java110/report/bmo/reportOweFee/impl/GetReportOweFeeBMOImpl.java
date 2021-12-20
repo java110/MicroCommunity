@@ -36,6 +36,8 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         if (count > 0) {
             reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
             refreshReportOwe(reportOweFeeDtos, reportOweFeeDto.getConfigIds());
+            //查询大计 合计
+            dealTheOweFeeSumAmount(reportOweFeeDtos, reportOweFeeDto);
         } else {
             reportOweFeeDtos = new ArrayList<>();
         }
@@ -53,6 +55,43 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * 查询大计 总欠费 和 各个费用项总欠费
+     *
+     * @param reportOweFeeDtos
+     * @param reportOweFeeDto
+     */
+    private void dealTheOweFeeSumAmount(List<ReportOweFeeDto> reportOweFeeDtos, ReportOweFeeDto reportOweFeeDto) {
+        if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+            return;
+        }
+        //查询总计
+        double totalAmount = 0.0;
+        if (reportOweFeeDto.getConfigIds() == null || reportOweFeeDto.getConfigIds().length < 1) {
+            totalAmount = reportOweFeeInnerServiceSMOImpl.computeReportOweFeeTotalAmount(reportOweFeeDto);
+            for (ReportOweFeeDto reportOweFeeDto1 : reportOweFeeDtos) {
+                reportOweFeeDto1.setTotalOweAmount(totalAmount);
+            }
+            return;
+        }
+
+        //计算分项的累计值
+        List<ReportOweFeeItemDto> reportOweFeeItemDtos = reportOweFeeInnerServiceSMOImpl.computeReportOweFeeItemAmount(reportOweFeeDto);
+
+        if (reportOweFeeItemDtos == null || reportOweFeeItemDtos.size() < 1) {
+            return;
+        }
+        BigDecimal totalAmountDes = new BigDecimal(totalAmount);
+        for (ReportOweFeeItemDto tmpReportOweFeeItemDto : reportOweFeeItemDtos) {
+            totalAmountDes = totalAmountDes.add(new BigDecimal(tmpReportOweFeeItemDto.getTotalOweAmount())).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+
+        for (ReportOweFeeDto reportOweFeeDto1 : reportOweFeeDtos) {
+            reportOweFeeDto1.setItemTotalOweAmounts(reportOweFeeItemDtos);
+            reportOweFeeDto1.setTotalOweAmount(totalAmountDes.doubleValue());
+        }
     }
 
     /**
@@ -158,6 +197,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
             dealItem(tmpReportOweFeeDto, reportOweFeeDtos);
         }
+
 
         if (configIds == null || configIds.length < 1) {
             return;

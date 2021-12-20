@@ -45,6 +45,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private Date preReadingTime;
     private Date curReadingTime;
     private String ardId;
+    private String[] states;
 
 
     public String getPrimeRate() {
@@ -262,5 +263,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setArdId(String ardId) {
         this.ardId = ardId;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

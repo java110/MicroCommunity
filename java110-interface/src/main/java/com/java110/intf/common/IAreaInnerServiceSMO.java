@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 查询地区信息
  */
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/areaApi")
 public interface IAreaInnerServiceSMO {
 

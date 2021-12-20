@@ -19,6 +19,15 @@ public interface IQueryServiceDAO {
      */
     public List<Map<String,Object>> executeSql(String sql,Object []params);
 
+    /**
+     * 防止sql注入 改造成直接用prepareStatement 预处理sql
+     *
+     * @param sql
+     * @param params
+     * @return
+     */
+    public List<Map<String, Object>> executeSql(String sql, Object[] params, List<String> columns);
+
     public int updateSql(String sql,Object[] params);
 
     /**

@@ -45,17 +45,24 @@ public class StoreStaffApi {
      * @path /app/storeStaff/getPropertyStaffs
      */
     @RequestMapping(value = "/getPropertyStaffs", method = RequestMethod.GET)
-    public ResponseEntity<String> getPropertyStaffs(@RequestParam(value = "page") int page,
-                                                 @RequestParam(value = "row") int row,
-                                                 @RequestParam(value = "storeId", required = false) String storeId,
-                                                 @RequestParam(value = "relCd", required = false) String relCd
+    public ResponseEntity<String> getPropertyStaffs(@RequestParam(value = "name", required = false) String name,
+                                                    @RequestParam(value = "staffName", required = false) String staffName,
+                                                    @RequestParam(value = "shareId", required = false) String tel,
+                                                    @RequestParam(value = "storeTypeCd", required = false) String storeTypeCd,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row,
+                                                    @RequestParam(value = "storeId", required = false) String storeId,
+                                                    @RequestParam(value = "relCd", required = false) String relCd
     ) {
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setPage(page);
         storeUserDto.setRow(row);
-        storeUserDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
+        storeUserDto.setStoreTypeCd(storeTypeCd);//StoreDto.STORE_TYPE_PROPERTY
         storeUserDto.setStoreId(storeId);
         storeUserDto.setRelCd(relCd);
+        storeUserDto.setName(name);
+        storeUserDto.setStaffName(staffName);
+        storeUserDto.setTel(tel);
         return getStoreStaffBMOImpl.getStoreStaffs(storeUserDto);
     }
 

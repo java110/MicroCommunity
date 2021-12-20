@@ -16,11 +16,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -135,6 +131,7 @@ public class ReportFeeMonthStatisticsApi {
                                                         @RequestParam(value = "roomNum", required = false) String roomNum,
                                                         @RequestParam(value = "startTime", required = false) String startTime,
                                                         @RequestParam(value = "endTime", required = false) String endTime,
+                                                        @RequestParam(value = "configIds", required = false) String configIds,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -149,6 +146,9 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
+        if (!StringUtil.isEmpty(configIds)) {
+            reportFeeMonthStatisticsDto.setConfigIds(configIds.split(","));
+        }
         return getReportFeeMonthStatisticsBMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
     }
 
@@ -170,6 +170,7 @@ public class ReportFeeMonthStatisticsApi {
                                                            @RequestParam(value = "roomNum", required = false) String roomNum,
                                                            @RequestParam(value = "startTime", required = false) String startTime,
                                                            @RequestParam(value = "endTime", required = false) String endTime,
+                                                           @RequestParam(value = "configIds", required = false) String configIds,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -184,6 +185,9 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
+        if (!StringUtil.isEmpty(configIds)) {
+            reportFeeMonthStatisticsDto.setConfigIds(configIds.split(","));
+        }
         return getReportFeeMonthStatisticsBMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
     }
 
@@ -207,6 +211,7 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                                    @RequestParam(value = "yearMonth", required = false) String yearMonth,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -221,6 +226,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setRoomNum(roomNum);
         reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
+        reportFeeMonthStatisticsDto.setYearMonth(yearMonth);
         if (!StringUtil.isEmpty(startTime)) {
             reportFeeMonthStatisticsDto.setStartTime(startTime + " 00:00:00");
         }
@@ -648,6 +654,7 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("row", row);
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningPayFee(paramInfo);
     }
+
     /**
      * 查询华宁物业 欠费统计报表
      * 作者： 吴学文
@@ -674,6 +681,7 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("row", row);
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningPayFeeTwo(paramInfo);
     }
+
     /**
      * 查询华宁物业 欠费统计报表
      * 作者： 吴学文

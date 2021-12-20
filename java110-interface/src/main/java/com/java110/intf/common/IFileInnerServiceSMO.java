@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 文件处理，将文件 存在数据库中（只有演示环境可以保存到数据库中，正式环境 应该对接到文件系统）
  */
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/fileApi")
 public interface IFileInnerServiceSMO {
 

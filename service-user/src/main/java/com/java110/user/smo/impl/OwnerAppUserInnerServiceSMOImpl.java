@@ -2,15 +2,16 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.PageDto;
-import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.user.dao.IOwnerAppUserServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,9 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         List<OwnerAppUserDto> ownerAppUsers = BeanConvertUtil.covertBeanList(ownerAppUserServiceDaoImpl.getOwnerAppUserInfo(BeanConvertUtil.beanCovertMap(ownerAppUserDto)), OwnerAppUserDto.class);
         for (OwnerAppUserDto ownerAppUserDto1 : ownerAppUsers) {
+            if (StringUtil.isEmpty(ownerAppUserDto1.getCommunityId()) || "-1".equals(ownerAppUserDto1.getCommunityId())) {
+                continue;
+            }
             CommunityDto communityDto = new CommunityDto();
             communityDto.setCommunityId(ownerAppUserDto1.getCommunityId());
             List<CommunityDto> communityDtoList = iCommunityInnerServiceSMO.queryCommunitys(communityDto);

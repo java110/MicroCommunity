@@ -1,6 +1,7 @@
 package com.java110.report.dao;
 
 
+import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
@@ -77,4 +78,8 @@ public interface IReportOweFeeServiceDao {
      * @return
      */
     List<Map> queryReportAllOweFeesByCar(Map beanCovertMap);
+
+    double computeReportOweFeeTotalAmount(Map beanCovertMap);
+
+    List<Map> computeReportOweFeeItemAmount(Map beanCovertMap);
 }

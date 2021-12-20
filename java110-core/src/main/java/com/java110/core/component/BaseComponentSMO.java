@@ -27,7 +27,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
 
     private static Logger logger = LoggerFactory.getLogger(BaseComponentSMO.class);
 
-    protected static final int MAX_ROW = 50;
+    protected static final int MAX_ROW = 200;
 
 
     /**

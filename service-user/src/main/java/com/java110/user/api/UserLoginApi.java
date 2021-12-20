@@ -124,19 +124,19 @@ public class UserLoginApi {
     @RequestMapping(value = "/getUserInfoByHcCode", method = RequestMethod.GET)
     public ResponseEntity<String> getUserInfoByHcCode(@RequestParam(value = "hcCode") String hcCode) {
         UserDto userDto = null;
-        String env = MappingCache.getValue("HC_ENV");
-        if ("DEV".equals(env) || "TEST".equals(env)) {
-            userDto = new UserDto();
-            userDto.setUserId("1000000020021010001");
-            userDto.setUserName("吴学文");
-            userDto.setAddress("青海省西宁市城中区申宁路");
-            userDto.setAge(30);
-            userDto.setEmail("928255095@qq.com");
-            userDto.setName("吴学文");
-            userDto.setSex("1");
-            userDto.setTel("18909711443");
-            return ResultVo.createResponseEntity(userDto);
-        }
+//        String env = MappingCache.getValue("HC_ENV");
+//        if ("DEV".equals(env) || "TEST".equals(env)) {
+//            userDto = new UserDto();
+//            userDto.setUserId("1000000020021010001");
+//            userDto.setUserName("吴学文");
+//            userDto.setAddress("青海省西宁市城中区申宁路");
+//            userDto.setAge(30);
+//            userDto.setEmail("928255095@qq.com");
+//            userDto.setName("吴学文");
+//            userDto.setSex("1");
+//            userDto.setTel("18909711443");
+//            return ResultVo.createResponseEntity(userDto);
+//        }
         String userInfoStr = CommonCache.getAndRemoveValue(hcCode);
         userDto = JSONObject.parseObject(userInfoStr, UserDto.class);
         return ResultVo.createResponseEntity(userDto);

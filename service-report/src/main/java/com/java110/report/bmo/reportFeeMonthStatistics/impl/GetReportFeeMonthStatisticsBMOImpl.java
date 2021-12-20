@@ -20,7 +20,6 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -31,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
@@ -39,6 +39,9 @@ import java.util.*;
 public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthStatisticsBMO {
 
     private static final Logger logger = LoggerFactory.getLogger(GetReportFeeMonthStatisticsBMOImpl.class);
+
+
+    private int MAX_ROWS = 500;  // 最大行数
 
     @Autowired
     private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
@@ -88,21 +91,30 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
         if (count > 0) {
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
+            if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
+                reportFeeMonthStatisticsList = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsList, "FeeSummary");
+            }
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsList) {
                 //获取应收金额
                 double receivableAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivableAmount());
                 //获取实收金额
                 double receivedAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivedAmount());
-                double chargeRate = (receivedAmount / receivableAmount) * 100.0;
-                reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
+                if (receivableAmount != 0) {
+                    double chargeRate = (receivedAmount / receivableAmount) * 100.0;
+                    reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
+                } else {
+                    reportFeeMonthStatistics.setChargeRate("0%");
+
+                }
                 reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
+
             }
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryMajor(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
-                    reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
+                    reportFeeMonthStatisticsDto1.setAllHisOweReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllHisOweReceivedAmount());
                 }
             }
         } else {
@@ -116,6 +128,107 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         return responseEntity;
     }
 
+    /**
+     * 将configId group by 后数据 合并处理
+     *
+     * @param reportFeeMonthStatisticsList
+     * @return
+     */
+    private List<ReportFeeMonthStatisticsDto> dealConfigReportFeeMonthStatisticsList(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList, String flag) {
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
+        BigDecimal hisOweAmountDec = null;
+        BigDecimal curReceivableAmountDec = null;
+        BigDecimal curReceivedAmountDec = null;
+        BigDecimal hisOweReceivedAmountDec = null;
+        BigDecimal preReceivedAmountDec = null;
+        BigDecimal receivableAmountDec = null;
+        BigDecimal receivedAmountDec = null;
+        List<FeeConfigDto> feeConfigDtos = null;
+        FeeConfigDto feeConfigDto = null;
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsList) {
+            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = hasReportFeeMonthStatisticsDto(reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsDto, flag);
+            if (tmpReportFeeMonthStatisticsDto == null) {
+                feeConfigDtos = new ArrayList<>();
+                feeConfigDto = new FeeConfigDto();
+                feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
+                feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
+                feeConfigDtos.add(feeConfigDto);
+                reportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
+                reportFeeMonthStatisticsDtos.add(reportFeeMonthStatisticsDto);
+                continue;
+            }
+            feeConfigDtos = tmpReportFeeMonthStatisticsDto.getFeeConfigDtos();
+            feeConfigDto = new FeeConfigDto();
+            feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
+            feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
+            feeConfigDtos.add(feeConfigDto);
+            tmpReportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
+
+            //历史欠费
+            hisOweAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweAmount());
+            hisOweAmountDec = hisOweAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setHisOweAmount(hisOweAmountDec.doubleValue());
+
+
+            //当月应收
+            curReceivableAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivableAmount());
+            curReceivableAmountDec = curReceivableAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivableAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setCurReceivableAmount(curReceivableAmountDec.doubleValue());
+
+            //当月实收
+            curReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivedAmount());
+            curReceivedAmountDec = curReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setCurReceivedAmount(curReceivedAmountDec.doubleValue());
+
+            //欠费追回
+            hisOweReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweReceivedAmount());
+            hisOweReceivedAmountDec = hisOweReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setHisOweReceivedAmount(hisOweReceivedAmountDec.doubleValue());
+
+            //预交费
+            preReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getPreReceivedAmount());
+            preReceivedAmountDec = preReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getPreReceivedAmount()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setPreReceivedAmount(preReceivedAmountDec.doubleValue());
+
+            //总费用
+            receivableAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivableAmount()));
+            receivableAmountDec = receivableAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivableAmount())))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setReceivableAmount(receivableAmountDec.doubleValue() + "");
+
+            //实收
+            receivedAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivedAmount()));
+            receivedAmountDec = receivedAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount())))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+            tmpReportFeeMonthStatisticsDto.setReceivedAmount(receivedAmountDec.doubleValue() + "");
+        }
+
+        return reportFeeMonthStatisticsDtos;
+    }
+
+    private ReportFeeMonthStatisticsDto hasReportFeeMonthStatisticsDto(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto, String flag) {
+        for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            if ("FeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
+                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())) {
+                return tmpReportFeeMonthStatisticsDto;
+            }
+            if ("FloorUnitFeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
+                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())
+                    && tmpReportFeeMonthStatisticsDto.getFloorNum().equals(reportFeeMonthStatisticsDto.getFloorNum())
+                    && tmpReportFeeMonthStatisticsDto.getUnitNum().equals(reportFeeMonthStatisticsDto.getUnitNum())
+            ) {
+                return tmpReportFeeMonthStatisticsDto;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public ResponseEntity<String> queryReportFloorUnitFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummaryCount(reportFeeMonthStatisticsDto);
@@ -123,12 +236,16 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummary(reportFeeMonthStatisticsDto);
+            if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
+                reportFeeMonthStatisticsDtos = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsDtos, "FloorUnitFeeSummary");
+            }
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummaryMajor(reportFeeMonthStatisticsDto);
             if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
                     reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
+                    reportFeeMonthStatisticsDto1.setAllHisOweReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllHisOweReceivedAmount());
                 }
             }
         } else {
@@ -161,18 +278,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
 
-        //查询该小区下的费用项目
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
-        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-
-        List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
-        for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
-            reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
-            reportList.add(reportFeeMonthStatistics);
-        }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
@@ -287,17 +393,21 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
-        int size = 0;
+
+
+        //吴学文 注释 感觉和上面的369 功能重复
+        //int size = 0;
         if (count > 0) {
             //查询缴费明细
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
-            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
-                //查询所有缴费明细记录
-                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
-                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
-                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
-                size = reportFeeMonthStatisticsDtos1.size();
-            }
+            //吴学文 注释 感觉和上面的369 功能重复
+//            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+//                //查询所有缴费明细记录
+//                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
+//                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
+//                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
+//                size = reportFeeMonthStatisticsDtos1.size();
+//            }
             //查询应收、实收总金额(大计)
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPayFeeDetail(reportFeeMonthStatisticsDto);
             //查询(优惠、减免、滞纳金、空置房打折、空置房减免金额等)大计总金额
@@ -342,6 +452,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             Double totalVacantHousingReduction = 0.0;
             //滞纳金(小计)
             Double totalLateFee = 0.0;
+            List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
@@ -349,6 +460,18 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 Double receivedAmount = Double.valueOf(reportFeeMonthStatistics.getReceivedAmount());
                 totalReceivableAmount = totalReceivableAmount + receivableAmount;
                 totalReceivedAmount = totalReceivedAmount + receivedAmount;
+
+                if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatistics.getPayerObjType())) {
+                    ownerIds.add(reportFeeMonthStatistics.getOwnerId());
+                }
+
+                // 最大记录时 就去刷新
+                //如果是车位刷房屋信息
+                if (ownerIds.size() == MAX_ROWS) {
+                    refreshReportFeeMonthStatistics(ownerIds, reportFeeMonthStatisticsDtos);
+                    ownerIds = new ArrayList<>();
+                }
+
                 //优惠金额
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("1")) {
                     //获取优惠金额
@@ -472,8 +595,16 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                         }
                     }
                 }
-                reportList.add(reportFeeMonthStatistics);
+                if (!hasInReportListAndMerge(reportList, reportFeeMonthStatistics)) {
+                    reportList.add(reportFeeMonthStatistics);
+                }
             }
+
+            //如果是车位刷房屋信息
+            if (ownerIds.size() > 0) {
+                refreshReportFeeMonthStatistics(ownerIds, reportFeeMonthStatisticsDtos);
+            }
+
             //应收总金额(小计)
             reportFeeMonthStatisticsTotalDto.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount));
             //实收金额(小计)
@@ -508,11 +639,71 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             reportFeeMonthStatisticsTotalDto = new ReportFeeMonthStatisticsTotalDto();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) size / (double) reportFeeMonthStatisticsDto.getRow()), size, reportList, reportFeeMonthStatisticsTotalDto);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList, reportFeeMonthStatisticsTotalDto);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    /**
+     * @param ownerIds
+     * @param reportFeeMonthStatisticsDtos
+     */
+    private void refreshReportFeeMonthStatistics(List<String> ownerIds, List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
+
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        List<OwnerDto> ownerDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRoomAndParkingSpace(ownerDto);
+        String objName = "";
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatisticsDto.getPayerObjType())) {
+                continue;
+            }
+            for (OwnerDto ownerDto1 : ownerDtos) {
+                if (!reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
+                    continue;
+                }
+                objName = reportFeeMonthStatisticsDto.getObjName() + "(" + ownerDto1.getFloorNum() + "栋" + ownerDto1.getUnitNum() + "单元" + ownerDto1.getRoomNum() + "室)";
+                reportFeeMonthStatisticsDto.setObjName(objName);
+            }
+        }
+    }
+
+    private boolean hasInReportListAndMerge(List<ReportFeeMonthStatisticsDto> reportList, ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportList) {
+            if (reportFeeMonthStatisticsDto.getDetailId().equals(reportFeeMonthStatistics.getDetailId())) {
+                combineSydwCore(reportFeeMonthStatistics, reportFeeMonthStatisticsDto);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //针对所用对象
+    private static ReportFeeMonthStatisticsDto combineSydwCore(ReportFeeMonthStatisticsDto sourceBean, ReportFeeMonthStatisticsDto targetBean) {
+        Class sourceBeanClass = sourceBean.getClass();
+        Class targetBeanClass = targetBean.getClass();
+        Field[] sourceFields = sourceBeanClass.getDeclaredFields();
+        Field[] targetFields = sourceBeanClass.getDeclaredFields();
+        for (int i = 0; i < sourceFields.length; i++) {
+            Field sourceField = sourceFields[i];
+            Field targetField = targetFields[i];
+            sourceField.setAccessible(true);
+            targetField.setAccessible(true);
+            try {
+                if (!(sourceField.get(sourceBean) == null)) {
+                    targetField.set(targetBean, sourceField.get(sourceBean));
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return targetBean;
     }
 
     @Override

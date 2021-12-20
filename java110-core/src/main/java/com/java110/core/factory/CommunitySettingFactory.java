@@ -53,6 +53,37 @@ public class CommunitySettingFactory extends BaseCache {
         return communitySettingDto.getSettingValue();
     }
 
+    /**
+     * 查询设置值
+     *
+     * @param communityId
+     * @param key
+     * @return
+     */
+    public static String getRemark(String communityId, String key) {
+        Jedis redis = null;
+        CommunitySettingDto communitySettingDto = null;
+        try {
+            redis = getJedis();
+            Object object = SerializeUtil.unserialize(redis.get((communityId + "_" + key + "_community_setting").getBytes()));
+            if (object == null) {//这里存在并发问题，但是 等于查询了多次 然后多次写缓存，作者认为 这种应该比加全局锁效率高些
+                communitySettingDto = getCommunitySettingFromDb(communityId, key, redis);
+            } else {
+                communitySettingDto = (CommunitySettingDto) object;
+            }
+        } finally {
+            if (redis != null) {
+                redis.close();
+            }
+        }
+
+        if (communitySettingDto == null) {
+            return null;
+        }
+
+        return communitySettingDto.getRemark();
+    }
+
     public static CommunitySettingDto getCommunitySettingFromDb(String communityId, String key) {
         Jedis redis = null;
         try {

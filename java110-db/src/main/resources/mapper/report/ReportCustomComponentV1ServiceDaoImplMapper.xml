@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomComponentV1ServiceDaoImpl">
+
+
+    <!-- 保存报表组件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomComponentInfo" parameterType="Map">
+        insert into report_custom_component(
+        component_type,component_id,java_script,name,component_group,remark,query_model,component_sql
+        ) values (
+        #{componentType},#{componentId},#{javaScript},#{name},#{componentGroup},#{remark},#{queryModel},#{componentSql}
+        )
+    </insert>
+
+
+    <!-- 查询报表组件信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomComponentInfo" parameterType="Map" resultType="Map">
+        select t.component_type,t.component_type componentType,t.component_id,t.component_id
+        componentId,t.java_script,t.java_script javaScript,t.name,t.component_group,t.component_group
+        componentGroup,t.remark,t.status_cd,t.status_cd statusCd,t.query_model,t.query_model queryModel,t.component_sql componentSql
+        from report_custom_component t
+        where 1 =1
+        <if test="componentType !=null and componentType != ''">
+            and t.component_type= #{componentType}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="javaScript !=null and javaScript != ''">
+            and t.java_script= #{javaScript}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="componentGroup !=null and componentGroup != ''">
+            and t.component_group= #{componentGroup}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            and t.query_model= #{queryModel}
+        </if>
+        <if test="componentSql !=null and componentSql != ''">
+            and t.component_sql= #{componentSql}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报表组件信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomComponentInfo" parameterType="Map">
+        update report_custom_component t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="componentType !=null and componentType != ''">
+            , t.component_type= #{componentType}
+        </if>
+        <if test="javaScript !=null and javaScript != ''">
+            , t.java_script= #{javaScript}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="componentGroup !=null and componentGroup != ''">
+            , t.component_group= #{componentGroup}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            , t.query_model= #{queryModel}
+        </if>
+        <if test="componentSql !=null and componentSql != ''">
+            , t.component_sql= #{componentSql}
+        </if>
+        where 1=1
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+
+    </update>
+
+    <!-- 查询报表组件数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportCustomComponentsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from report_custom_component t
+        where 1 =1
+        <if test="componentType !=null and componentType != ''">
+            and t.component_type= #{componentType}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="javaScript !=null and javaScript != ''">
+            and t.java_script= #{javaScript}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="componentGroup !=null and componentGroup != ''">
+            and t.component_group= #{componentGroup}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            and t.query_model= #{queryModel}
+        </if>
+        <if test="componentSql !=null and componentSql != ''">
+            and t.component_sql= #{componentSql}
+        </if>
+    </select>
+
+</mapper>

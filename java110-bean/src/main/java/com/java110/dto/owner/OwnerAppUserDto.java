@@ -40,6 +40,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String[] userIds;
     private String oldAppUserId;
     private String sCommunityTel;
+    private String defaultCommunityId;
 
 
     private String[] states;
@@ -282,5 +283,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setOwnerTypeCd(String ownerTypeCd) {
         this.ownerTypeCd = ownerTypeCd;
+    }
+
+    public String getDefaultCommunityId() {
+        return defaultCommunityId;
+    }
+
+    public void setDefaultCommunityId(String defaultCommunityId) {
+        this.defaultCommunityId = defaultCommunityId;
     }
 }

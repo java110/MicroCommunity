@@ -25,6 +25,10 @@ server:
     uri-encoding: UTF-8
 
 spring:
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
   http:
     encoding:
       charset: UTF-8
@@ -43,6 +47,18 @@ spring:
       max-idle: 100
       min-idle: 0
       timeout: 0
+
+java110:
+  community-service: community-service
+  acct-service: acct-service
+  user-service: user-service
+  store-service: store-service
+  common-service: common-service
+  job-service: job-service
+  fee-service: fee-service
+  report-service: report-service
+  dev-service: dev-service
+  oa-service: oa-service
 
 feign:
   client:

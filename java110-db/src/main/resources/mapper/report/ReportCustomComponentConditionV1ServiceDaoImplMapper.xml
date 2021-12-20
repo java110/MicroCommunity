@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomComponentConditionV1ServiceDaoImpl">
+
+
+    <!-- 保存报表组件条件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomComponentConditionInfo" parameterType="Map">
+        insert into report_custom_component_condition(
+        component_id,condition_id,param,name,remark,holdpace,type,seq
+        ) values (
+        #{componentId},#{conditionId},#{param},#{name},#{remark},#{holdpace},#{type},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询报表组件条件信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomComponentConditionInfo" parameterType="Map" resultType="Map">
+        select t.component_id,t.component_id componentId,t.condition_id,t.condition_id
+        conditionId,t.param,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.holdpace,t.type,t.seq
+        from report_custom_component_condition t
+        where 1 =1
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="conditionId !=null and conditionId != ''">
+            and t.condition_id= #{conditionId}
+        </if>
+        <if test="param !=null and param != ''">
+            and t.param= #{param}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="holdpace !=null and holdpace != ''">
+            and t.holdpace= #{holdpace}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        order by t.seq
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报表组件条件信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomComponentConditionInfo" parameterType="Map">
+        update report_custom_component_condition t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            , t.component_id= #{componentId}
+        </if>
+        <if test="param !=null and param != ''">
+            , t.param= #{param}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="holdpace !=null and holdpace != ''">
+            , t.holdpace= #{holdpace}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="conditionId !=null and conditionId != ''">
+            and t.condition_id= #{conditionId}
+        </if>
+
+    </update>
+
+    <!-- 查询报表组件条件数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportCustomComponentConditionsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from report_custom_component_condition t
+        where 1 =1
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="conditionId !=null and conditionId != ''">
+            and t.condition_id= #{conditionId}
+        </if>
+        <if test="param !=null and param != ''">
+            and t.param= #{param}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="holdpace !=null and holdpace != ''">
+            and t.holdpace= #{holdpace}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+
+
+    </select>
+
+</mapper>

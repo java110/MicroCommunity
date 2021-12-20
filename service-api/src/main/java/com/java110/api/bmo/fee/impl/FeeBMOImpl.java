@@ -733,6 +733,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
+        if (paramInJson.containsKey("amount") && !StringUtil.isEmpty(paramInJson.getString("amount"))) {
+            businessUnit.put("amount", paramInJson.getString("amount"));
+        }
         businessUnit.put("startTime", time);
         businessUnit.put("endTime", time);
         businessUnit.put("communityId", paramInJson.getString("communityId"));

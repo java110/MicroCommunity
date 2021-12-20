@@ -1,20 +1,16 @@
 package com.java110.db.dao.impl;
 
-import com.java110.utils.util.StringUtil;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
-import com.java110.db.dao.IQueryServiceDAO;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +35,18 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
      */
     @Override
     public List<Map<String, Object>> executeSql(String sql, Object[] params) {
+        return executeSql(sql, params, null);
+    }
+
+    /**
+     * 防止sql注入 改造成直接用prepareStatement 预处理sql
+     *
+     * @param sql
+     * @param params
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> executeSql(String sql, Object[] params, List<String> columns) {
         logger.debug("----【queryServiceDAOImpl.executeSql】入参 : " + sql + " params= " + params);
         Connection conn = null;
         ResultSet rs = null;
@@ -55,6 +63,11 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
             rs = ps.executeQuery();
             //精髓的地方就在这里，类ResultSet有getMetaData()会返回数据的列和对应的值的信息，然后我们将列名和对应的值作为map的键值存入map对象之中...
             ResultSetMetaData rsmd = rs.getMetaData();
+            if (columns != null) {
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    columns.add(rsmd.getColumnLabel(i+1));
+                }
+            }
             while (rs.next()) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {

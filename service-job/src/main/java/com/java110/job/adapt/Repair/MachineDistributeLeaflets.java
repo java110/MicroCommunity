@@ -20,7 +20,9 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.*;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.StringUtil;
@@ -132,7 +134,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 sendMsg(paramIn, communityDtos.get(0));
                 //派单成功给业主推送信息
                 publishMsg(paramIn, communityDtos.get(0));
-            } else if (repairState.equals("1100") && repairWay.equals("100")) {
+            } else if (repairState.equals("1100") && (repairWay.equals("100") || repairWay.equals("300"))) {
                 String staffId = "";
                 if (repairUserDtos.size() > 1) {
                     staffId = repairUserDtos.get(1).getStaffId();
@@ -156,7 +158,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 if (repairUserDtos.size() > 1) {
                     //给维修师傅推送信息
                     sendMsg(paramIn, communityDtos.get(0));
-                }else {
+                } else {
                     //抢单成功给维修师傅推送信息
                     publishMessage(paramIn, communityDtos.get(0));
                 }
@@ -389,8 +391,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void
-    publishMessage(JSONObject paramIn, CommunityDto communityDto) {
+    private void publishMessage(JSONObject paramIn, CommunityDto communityDto) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");

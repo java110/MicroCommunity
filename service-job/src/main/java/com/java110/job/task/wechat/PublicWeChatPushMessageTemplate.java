@@ -99,7 +99,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
 
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            logger.info("未配置微信公众号信息,定时任务执行结束");
+            logger.error("未配置微信公众号信息,定时任务执行结束");
             return;
         }
         SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
@@ -112,7 +112,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
 
         if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.info("未配置微信公众号消息模板");
+            logger.error("未配置微信公众号消息模板");
             return;
         }
 
@@ -121,7 +121,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
 
         if (StringUtil.isEmpty(accessToken)) {
-            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
+            logger.error("推送微信模板,获取accessToken失败:{}", accessToken);
             return;
         }
 
@@ -132,7 +132,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
         if (ownerAppUserDtos.size() <= 0 || ownerAppUserDtos == null) {
-            logger.info("未查询到业主与微信公众号绑定关系");
+            logger.error("未查询到业主与微信公众号绑定关系");
             return;
         }
 

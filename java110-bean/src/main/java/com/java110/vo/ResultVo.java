@@ -42,6 +42,8 @@ public class ResultVo implements Serializable {
     public static final int DEFAULT_RECORD = 1;
     public static final int DEFAULT_TOTAL = 1;
 
+    public static final int CODE_WAIT_PAY = 41;// 支付未完成
+
     // 分页页数
     private int page;
     // 行数
@@ -248,8 +250,30 @@ public class ResultVo implements Serializable {
      *
      * @return
      */
+    public static ResponseEntity<String> error(String msg,HttpStatus status) {
+        ResultVo resultVo = new ResultVo(CODE_ERROR, msg);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), status);
+        return responseEntity;
+    }
+
+    /**
+     * 成功通用回复
+     *
+     * @return
+     */
     public static ResponseEntity<String> error(String msg) {
         ResultVo resultVo = new ResultVo(CODE_ERROR, msg);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 成功通用回复
+     *
+     * @return
+     */
+    public static ResponseEntity<String> error(String msg,Object data) {
+        ResultVo resultVo = new ResultVo(CODE_ERROR, msg,data);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         return responseEntity;
     }

@@ -5,10 +5,13 @@ import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.fee.FeeDetailDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -40,6 +43,9 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_FEE;
@@ -67,6 +73,23 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
 //        if ("T".equals(feeDtos.get(0).getIsDefault())) {
 //            throw new IllegalArgumentException("当前费用为默认费用不能做删除");
 //        }
+
+        String feeValidate = MappingCache.getValue("DELETE_FEE_VALIDATE");
+        if ("ON".equals(feeValidate)) {
+            return;
+        }
+
+        //判断是否已经存在 缴费记录
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setCommunityId(reqJson.getString("communityId"));
+        feeDetailDto.setFeeId(reqJson.getString("feeId"));
+        feeDetailDto.setStates(new String[]{"1400", "1000"});
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+        //Assert.listOnlyOne(feeDetailDtos, "存在缴费记录，不能取消，如果需要取消，请先退费");
+
+        if (feeDetailDtos != null && feeDetailDtos.size() > 0) {
+            throw new IllegalArgumentException("存在缴费记录，不能取消，如果需要取消，请先退费");
+        }
 
     }
 

@@ -5,11 +5,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
-import com.java110.dto.fee.BillDto;
-import com.java110.dto.fee.BillOweFeeDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -44,12 +40,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 费用计算 服务类
@@ -1531,6 +1522,21 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return resMonth;
     }
 
+    /**
+     * 　　 *字符串的日期格式的计算
+     */
+    public long daysBetween(Date smdate, Date bdate) {
+        long between_days = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(smdate);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(bdate);
+        long time2 = cal.getTimeInMillis();
+        between_days = (time2 - time1) / (1000 * 3600 * 24);
+
+        return between_days;
+    }
+
     @Override
     public Date getTargetEndTime(double month, Date startDate) {
         Calendar endDate = Calendar.getInstance();
@@ -1580,10 +1586,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();
         try {
             double month = computeFeeSMO.dayCompare(
-                    DateUtil.getDateFromString("2021-6-1 00:00:00", DateUtil.DATE_FORMATE_STRING_A),
-                    DateUtil.getDateFromString("2021-8-5 18:00:00", DateUtil.DATE_FORMATE_STRING_A)
+                    DateUtil.getDateFromString("2021-09-30 14:20:02", DateUtil.DATE_FORMATE_STRING_A),
+                    DateUtil.getDateFromString("2021-11-03 14:20:02", DateUtil.DATE_FORMATE_STRING_A)
             );
-            System.out.println(month);
+            System.out.println(Math.ceil(month));
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -368,6 +368,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setByOwnerInfo(true);
         ownerRoomRelDto.setRoomId(tmpRoomDto.getRoomId());
+        ownerRoomRelDto.setCommunityId(feeDto.getCommunityId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {

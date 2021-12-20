@@ -16,7 +16,7 @@ import java.util.List;
  * 商户 服务内部交互接口类
  * add by wuxw 2019-09-19
  */
-@FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.store-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/storeApi")
 public interface IStoreInnerServiceSMO {
 

@@ -87,6 +87,25 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         }
     }
 
+    @Override
+    public double getReceivedAmountByMonth(Map info) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivedAmountByMonth", info);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("total").toString());
+    }
+
+    @Override
+    public List<Map> queryRoomAndParkingSpace(Map info) {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRoomAndParkingSpace", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
     /**
      * 修改费用月统计信息
      *
@@ -201,6 +220,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return businessReportFeeMonthStatisticsInfos;
     }
+
     @Override
     public Map queryFeeBreakdownMajor(Map info) {
         logger.debug("查询费用queryFeeBreakdownMajor 入参 info : {}", info);
@@ -209,6 +229,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return businessReportFeeMonthStatisticsInfos.get(0);
     }
+
     @Override
     public int queryFeeDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
@@ -231,7 +252,6 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
 
-
     @Override
     public int queryOweFeeDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
@@ -252,6 +272,7 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return businessReportFeeMonthStatisticsInfos;
     }
+
     @Override
     public Map queryOweFeeDetailMajor(Map info) {
         logger.debug("查询费用queryOweFeeDetailMajor 入参 info : {}", info);
@@ -575,8 +596,6 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
         return deposits;
     }
-
-
 
 
 }

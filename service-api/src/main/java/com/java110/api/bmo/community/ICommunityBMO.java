@@ -50,7 +50,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param paramInJson 接口请求数据封装
      * @return 封装好的 data数据
      */
-    public JSONObject updateComplaint(JSONObject paramInJson);
+    public JSONObject updateWorkflow(JSONObject paramInJson,String flowType);
 
     /**
      * 添加小区成员

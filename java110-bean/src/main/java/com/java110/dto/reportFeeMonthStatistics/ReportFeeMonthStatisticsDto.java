@@ -43,10 +43,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String roomId;
     private String roomNum;
     private String carNum;
+    private String psName;
     private String contractCode;
     private String payerObjType;
     private String ownerName;
+    private String ownerId;
     private String detailId;
+    private String builtUpArea;
 
     private String objCount;
     private String normalCount;
@@ -68,6 +71,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     //支付方式
     private String primeRate;
+
+    private double configReceivedAmount = 0;
 
     //应收总金额(小计)
     private String totalReceivableAmount;
@@ -123,6 +128,17 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String stateName;
 
     private String repairId;
+
+    private double hisOweAmount;
+    private double curReceivableAmount;
+    private double curReceivedAmount;
+    private double hisOweReceivedAmount;
+    private double preReceivedAmount;
+    private double allHisOweReceivedAmount;
+
+    private String[] configIds;
+
+    private String yearMonth;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -587,6 +603,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     public void setRepairId(String repairId) {
         this.repairId = repairId;
     }
+
     public String getAllOweAmount() {
         return allOweAmount;
     }
@@ -609,5 +626,102 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setDetailId(String detailId) {
         this.detailId = detailId;
+    }
+
+    public String getBuiltUpArea() {
+        return builtUpArea;
+    }
+
+    public void setBuiltUpArea(String builtUpArea) {
+        this.builtUpArea = builtUpArea;
+    }
+
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
+    }
+
+    public double getConfigReceivedAmount() {
+        return configReceivedAmount;
+    }
+
+    public void setConfigReceivedAmount(double configReceivedAmount) {
+        this.configReceivedAmount = configReceivedAmount;
+    }
+
+    public double getHisOweAmount() {
+        return hisOweAmount;
+    }
+
+    public void setHisOweAmount(double hisOweAmount) {
+        this.hisOweAmount = hisOweAmount;
+    }
+
+    public double getCurReceivableAmount() {
+        return curReceivableAmount;
+    }
+
+    public void setCurReceivableAmount(double curReceivableAmount) {
+        this.curReceivableAmount = curReceivableAmount;
+    }
+
+    public double getCurReceivedAmount() {
+        return curReceivedAmount;
+    }
+
+    public void setCurReceivedAmount(double curReceivedAmount) {
+        this.curReceivedAmount = curReceivedAmount;
+    }
+
+    public double getHisOweReceivedAmount() {
+        return hisOweReceivedAmount;
+    }
+
+    public void setHisOweReceivedAmount(double hisOweReceivedAmount) {
+        this.hisOweReceivedAmount = hisOweReceivedAmount;
+    }
+
+    public double getPreReceivedAmount() {
+        return preReceivedAmount;
+    }
+
+    public void setPreReceivedAmount(double preReceivedAmount) {
+        this.preReceivedAmount = preReceivedAmount;
+    }
+
+    public String getYearMonth() {
+        return yearMonth;
+    }
+
+    public void setYearMonth(String yearMonth) {
+        this.yearMonth = yearMonth;
+    }
+
+    public double getAllHisOweReceivedAmount() {
+        return allHisOweReceivedAmount;
+    }
+
+    public void setAllHisOweReceivedAmount(double allHisOweReceivedAmount) {
+        this.allHisOweReceivedAmount = allHisOweReceivedAmount;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getPsName() {
+        return psName;
+    }
+
+    public void setPsName(String psName) {
+        this.psName = psName;
     }
 }

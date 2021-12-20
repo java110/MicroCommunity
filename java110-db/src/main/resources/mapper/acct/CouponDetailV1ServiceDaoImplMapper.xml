@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存商家购买记录表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponDetailInfo" parameterType="Map">
+        insert into coupon_detail(
+        buy_price,coupon_name,amount,buy_count,actual_price,validity_day,pool_id,detail_id,shop_id,order_id,shop_name
+        ) values (
+        #{buyPrice},#{couponName},#{amount},#{buyCount},#{actualPrice},#{validityDay},#{poolId},#{detailId},#{shopId},#{orderId},#{shopName}
+        )
+    </insert>
+
+
+    <!-- 查询商家购买记录表信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponDetailInfo" parameterType="Map" resultType="Map">
+        select t.buy_price,t.buy_price buyPrice,t.coupon_name,t.coupon_name couponName,t.amount,t.buy_count,t.buy_count
+        buyCount,t.actual_price,t.actual_price actualPrice,t.validity_day,t.validity_day validityDay,t.pool_id,t.pool_id
+        poolId,t.detail_id,t.detail_id detailId,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id
+        shopId,t.order_id orderId,t.create_time createTime,t.shop_name shopName
+        from coupon_detail t
+        where 1 =1
+        <if test="buyPrice !=null and buyPrice != ''">
+            and t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            and t.buy_count= #{buyCount}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            and t.shop_name= #{shopName}
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and t.shop_name like concat('%',#{shopNameLike},'%')
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商家购买记录表信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponDetailInfo" parameterType="Map">
+        update coupon_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="buyPrice !=null and buyPrice != ''">
+            , t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            , t.shop_name= #{shopName}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            , t.buy_count= #{buyCount}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            , t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            , t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            , t.pool_id= #{poolId}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            , t.shop_id= #{shopId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询商家购买记录表数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_detail t
+        where 1 =1
+        <if test="buyPrice !=null and buyPrice != ''">
+            and t.buy_price= #{buyPrice}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            and t.shop_name= #{shopName}
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and t.shop_name like concat('%',#{shopNameLike},'%')
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="buyCount !=null and buyCount != ''">
+            and t.buy_count= #{buyCount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="actualPrice !=null and actualPrice != ''">
+            and t.actual_price= #{actualPrice}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="poolId !=null and poolId != ''">
+            and t.pool_id= #{poolId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d') = #{createTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -35,7 +35,13 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
     private String payerObjId;
     private String[] payerObjIds;
     private String hasOweFee;
+    private String floorId;
+    private String unitId;
+    private String roomSubType;
+    private String roomNum;
+    private double totalOweAmount;
     List<ReportOweFeeItemDto> items;
+    List<ReportOweFeeItemDto> itemTotalOweAmounts;
 
 
     private Date createTime;
@@ -218,5 +224,53 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
 
     public void setHasOweFee(String hasOweFee) {
         this.hasOweFee = hasOweFee;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getRoomSubType() {
+        return roomSubType;
+    }
+
+    public void setRoomSubType(String roomSubType) {
+        this.roomSubType = roomSubType;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
+    }
+
+    public double getTotalOweAmount() {
+        return totalOweAmount;
+    }
+
+    public void setTotalOweAmount(double totalOweAmount) {
+        this.totalOweAmount = totalOweAmount;
+    }
+
+    public List<ReportOweFeeItemDto> getItemTotalOweAmounts() {
+        return itemTotalOweAmounts;
+    }
+
+    public void setItemTotalOweAmounts(List<ReportOweFeeItemDto> itemTotalOweAmounts) {
+        this.itemTotalOweAmounts = itemTotalOweAmounts;
     }
 }

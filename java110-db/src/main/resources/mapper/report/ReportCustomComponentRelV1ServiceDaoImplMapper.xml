@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportCustomComponentRelV1ServiceDaoImpl">
+
+
+    <!-- 保存报表组件关系信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReportCustomComponentRelInfo" parameterType="Map">
+        insert into report_custom_component_rel(
+        rel_id,component_id,custom_id,seq
+        ) values (
+        #{relId},#{componentId},#{customId},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询报表组件关系信息 add by wuxw 2018-07-03 -->
+    <select id="getReportCustomComponentRelInfo" parameterType="Map" resultType="Map">
+        select t.rel_id,t.rel_id relId,t.component_id,t.component_id componentId,t.status_cd,t.status_cd
+        statusCd,t.custom_id,t.custom_id customId,t.seq,cc.`name` componentName,t.create_time createTime,
+        cc.component_type componentType,cc.component_group
+        componentGroup,cc.query_model queryModel
+        from report_custom_component_rel t
+        left join report_custom_component cc on t.component_id = cc.component_id and cc.status_cd = '0'
+        where 1 =1
+        <if test="relId !=null and relId != ''">
+            and t.rel_id= #{relId}
+        </if>
+        <if test="componentType !=null and componentType != ''">
+            and cc.component_type= #{componentType}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="customId !=null and customId != ''">
+            and t.custom_id= #{customId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报表组件关系信息 add by wuxw 2018-07-03 -->
+    <update id="updateReportCustomComponentRelInfo" parameterType="Map">
+        update report_custom_component_rel t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            , t.component_id= #{componentId}
+        </if>
+        <if test="customId !=null and customId != ''">
+            , t.custom_id= #{customId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="relId !=null and relId != ''">
+            and t.rel_id= #{relId}
+        </if>
+
+    </update>
+
+    <!-- 查询报表组件关系数量 add by wuxw 2018-07-03 -->
+    <select id="queryReportCustomComponentRelsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from report_custom_component_rel t
+        left join report_custom_component cc on t.component_id = cc.component_id and cc.status_cd = '0'
+        where 1 =1
+        <if test="relId !=null and relId != ''">
+            and t.rel_id= #{relId}
+        </if>
+        <if test="componentType !=null and componentType != ''">
+            and cc.component_type= #{componentType}
+        </if>
+        <if test="componentId !=null and componentId != ''">
+            and t.component_id= #{componentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="customId !=null and customId != ''">
+            and t.custom_id= #{customId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

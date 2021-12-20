@@ -75,7 +75,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //根据 业主来定位房屋信息
-        if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard")) {
+        if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard") || reqJson.containsKey("ownerNameLike")) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, context);
             return;
         }
@@ -114,6 +114,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
 
         OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(reqJson, OwnerRoomRelDto.class);
         ownerRoomRelDto.setByOwnerInfo(true);
+        ownerRoomRelDto.setCommunityId(reqJson.getString("communityId"));
         int total = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRelsCount(ownerRoomRelDto);
 
         apiRoomVo.setTotal(total);
@@ -126,7 +127,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         }
         int row = reqJson.getInteger("row");
-        apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
+        apiRoomVo.setRecords((int) Math.ceil((double) apiRoomVo.getRooms().size() / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);

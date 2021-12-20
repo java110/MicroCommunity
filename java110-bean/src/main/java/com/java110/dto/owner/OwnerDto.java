@@ -30,6 +30,7 @@ public class OwnerDto extends PageDto implements Serializable {
 
 
     private String communityId;
+    private String communityName;
 
     private String roomId;
     private String[] roomIds;
@@ -51,10 +52,13 @@ public class OwnerDto extends PageDto implements Serializable {
     private String num;
     private String idCard;
     private String floorId;
+    private String floorNum;
     private String unitId;
+    private String unitNum;
     private String state;
     private String startTime;
     private String endTime;
+    private String appUserName;
 
     private String bId;
 
@@ -327,5 +331,37 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOwnerFlag(String ownerFlag) {
         this.ownerFlag = ownerFlag;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getAppUserName() {
+        return appUserName;
+    }
+
+    public void setAppUserName(String appUserName) {
+        this.appUserName = appUserName;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
     }
 }

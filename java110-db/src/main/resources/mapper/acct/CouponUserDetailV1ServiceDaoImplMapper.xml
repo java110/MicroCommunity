@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponUserDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存用户抵消记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponUserDetailInfo" parameterType="Map">
+        insert into coupon_user_detail(
+        coupon_name,uo_id,obj_id,coupon_id,user_name,user_id,obj_type,order_id
+        ) values (
+        #{couponName},#{uoId},#{objId},#{couponId},#{userName},#{userId},#{objType},#{orderId}
+        )
+    </insert>
+
+
+    <!-- 查询用户抵消记录信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponUserDetailInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.uo_id,t.uo_id uoId,t.obj_id,t.obj_id
+        objId,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.user_name,t.user_name
+        userName,t.user_id,t.user_id userId,t.obj_type,t.obj_type objType,t.order_id orderId
+        from coupon_user_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户抵消记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponUserDetailInfo" parameterType="Map">
+        update coupon_user_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            , t.coupon_id= #{couponId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        where 1=1
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+
+    </update>
+
+    <!-- 查询用户抵消记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponUserDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_user_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+
+
+    </select>
+
+</mapper>

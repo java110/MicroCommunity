@@ -5,16 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.api.properties.WechatAuthProperties;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.utils.util.UrlParamToJsonUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +21,7 @@ import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
 
@@ -51,7 +47,79 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
 
+    /**
+     * 调用中心服务
+     *
+     * @return
+     */
+    protected ResponseEntity<String> callCenterService(Map<String, String> headers, String param, String url, HttpMethod httpMethod) {
 
+        ResponseEntity<String> responseEntity = null;
+        if (StringUtil.isEmpty(param)) {
+            param = UrlParamToJsonUtil.getJson(url).toJSONString();
+        }
+
+        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
+            headers.put(CommonConstant.HTTP_USER_ID, "-1");
+        }
+
+        headers.put(CommonConstant.USER_ID, "-1");
+
+        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
+            headers.put(CommonConstant.HTTP_USER_ID, "-1");
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
+            headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_REQ_TIME)) {
+            headers.put(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
+        }
+        if (!headers.containsKey(CommonConstant.HTTP_SIGN)) {
+            headers.put(CommonConstant.HTTP_SIGN, "");
+        }
+
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        headers.put(CommonConstant.HTTP_SERVICE, url);
+        headers.put(CommonConstant.HTTP_METHOD, CommonConstant.getHttpMethodStr(httpMethod));
+
+        if (HttpMethod.GET == httpMethod) {
+            initUrlParam(JSONObject.parseObject(param), headers);
+        }
+        if (HttpMethod.GET == httpMethod) {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        }
+        try {
+            responseEntity = apiServiceSMOImpl.service(param, headers);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, param, responseEntity);
+        }
+        return responseEntity;
+    }
+
+    /**
+     * 将url参数写到header map中
+     *
+     * @param paramIn
+     */
+    protected void initUrlParam(Map paramIn, Map headers) {
+        /*put real ip address*/
+
+        if (paramIn != null && !paramIn.isEmpty()) {
+            Set<String> keys = paramIn.keySet();
+            for (Iterator it = keys.iterator(); it.hasNext(); ) {
+                String key = (String) it.next();
+                headers.put(key, paramIn.get(key));
+            }
+        }
+
+
+    }
     /**
      * 调用中心服务
      *

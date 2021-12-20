@@ -2,27 +2,45 @@ package com.java110.code;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.RestTemplate;
+import com.java110.db.dao.IQueryServiceDAO;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.http.converter.StringHttpMessageConverter;
+
+import java.nio.charset.Charset;
 
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `fee_receipt_print` (\n" +
-            "  `print_id` varchar(30) NOT NULL COMMENT '打印ID',\n" +
+    public static final String createTableSql = "CREATE TABLE `r_repair_user` (\n" +
+            "  `ru_id` varchar(30) NOT NULL COMMENT '报修派单ID',\n" +
+            "  `repair_id` varchar(30) NOT NULL COMMENT '报修ID',\n" +
+            "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
             "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
-            "  `receipt_id` varchar(30) NOT NULL COMMENT '收据ID',\n" +
-            "  `print_pre` varchar(12) NOT NULL COMMENT '打印前缀,一般为日期 例如：20211025',\n" +
-            "  `num` BIGINT NOT NULL default 0 COMMENT '序号',\n" +
-            "   print_num varchar(30) not null comment '打印编号',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(12) NOT NULL DEFAULT '0' COMMENT '数据状态',\n" +
-            "  `remark` varchar(200) DEFAULT NULL COMMENT '备注'\n" +
+            "  `state` varchar(8) NOT NULL COMMENT '员工处理状态，请查看t_dict 表',\n" +
+            "  `context` longtext COMMENT '报修内容',\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
+            "  `staff_id` varchar(30) NOT NULL COMMENT '当前处理员工',\n" +
+            "  `staff_name` varchar(64) NOT NULL COMMENT '当前处理员工名称',\n" +
+            "  `pre_staff_id` varchar(30) NOT NULL COMMENT '上一节点处理员工',\n" +
+            "  `pre_staff_name` varchar(64) NOT NULL COMMENT '上一节点处理员工名称',\n" +
+            "  `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',\n" +
+            "  `end_time` timestamp NULL DEFAULT NULL COMMENT '结束时间',\n" +
+            "  `repair_event` varchar(12) NOT NULL COMMENT '事件，startUser 开始用户 auditUser 审核处理员工',\n" +
+            "  `pre_ru_id` varchar(30) NOT NULL COMMENT '上一节点处理ID'\n" +
             ")";
 
     public static void main(String[] args) {
-        String desc = "收据打印编号";
-        String id = "printId";
-        String name = "feeReceiptPrint";
+        String desc = "费用明细";
+        String id = "ruId";
+        String name = "repairUserNew";
         String shareName = "fee"; //生成到那个服务下
         String shareColumn = "community_id";
         String shareParam = "communityId";
@@ -56,6 +74,9 @@ public class TableToJson {
             if ("KEY".equals(key)) {
                 continue;
             }
+            if ("PRIMARY".equals(key)) {
+                continue;
+            }
             if ("b_id".equals(key)) {
                 continue;
             }
@@ -82,5 +103,4 @@ public class TableToJson {
         param.put("required", requireds);
         System.out.println(param.toJSONString());
     }
-
 }

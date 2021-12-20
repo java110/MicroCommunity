@@ -32,6 +32,7 @@ import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,17 +106,16 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             responseEntity = dataFlow.getResponseEntity();
 
         } catch (DecryptException e) { //解密异常
-            responseEntity = new ResponseEntity<String>("解密异常：" + e.getMessage(), HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            responseEntity = ResultVo.error("解密异常：" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BusinessException e) {
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            responseEntity = ResultVo.error(e.getMessage(),HttpStatus.BAD_REQUEST);
         } catch (NoAuthorityException e) {
-            responseEntity = new ResponseEntity<String>("鉴权失败：" + e.getMessage(), HttpStatus.UNAUTHORIZED);
+            responseEntity = ResultVo.error("鉴权失败：" + e.getMessage(),HttpStatus.UNAUTHORIZED);
         } catch (InitConfigDataException e) {
-            responseEntity = new ResponseEntity<String>("初始化失败：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+            responseEntity = ResultVo.error("初始化失败：" + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             logger.error("内部异常：", e);
-            responseEntity = new ResponseEntity<String>("内部异常：" + e.getMessage() + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-
+            responseEntity = ResultVo.error("内部异常：" + e.getMessage() + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             Date endDate = DateUtil.getCurrentDate();
             if (dataFlow != null) {

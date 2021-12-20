@@ -1,12 +1,16 @@
 package com.java110.acct.bmo.account.impl;
 
 import com.java110.acct.bmo.account.IGetAccountBMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.po.account.AccountPo;
+import com.java110.utils.lock.DistributedLock;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,12 +111,46 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
             }
         }
 
+        if (accountDtos == null || accountDtos.size() < 1) {
+            //添加 账户
+            accountDtos = addAccountDto(accountDto, ownerDto);
+
+        }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) accountDto.getRow()), count, accountDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+
+    private List<AccountDto> addAccountDto(AccountDto accountDto, OwnerDto ownerDto) {
+        //开始锁代码
+        String requestId = DistributedLock.getLockUUID();
+        String key = this.getClass().getSimpleName() + "AddCountDto" + ownerDto.getOwnerId();
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+
+            AccountPo accountPo = new AccountPo();
+            accountPo.setAmount("0");
+            accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+            accountPo.setObjId(ownerDto.getOwnerId());
+            accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
+            accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+            OwnerDto tmpOwnerDto = new OwnerDto();
+            tmpOwnerDto.setMemberId(ownerDto.getOwnerId());
+            tmpOwnerDto.setCommunityId(ownerDto.getCommunityId());
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            accountPo.setAcctName(ownerDtos.get(0).getName());
+            accountPo.setPartId(ownerDto.getCommunityId());
+            accountInnerServiceSMOImpl.saveAccount(accountPo);
+            List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+            return accountDtos;
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
     }
 
 }

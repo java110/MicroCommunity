@@ -98,6 +98,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
         logger.debug("ServiceDataFlowEvent : {}", event);
+        String userId = context.getRequestHeaders().get("user-id");
+        reqJson.put("userId", userId);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
@@ -165,7 +167,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
             throw new IllegalArgumentException("收费范围错误");
         }
         if (roomDtos == null || roomDtos.size() < 1) {
-            throw new IllegalArgumentException("未查到需要付费的房屋");
+            throw new IllegalArgumentException("未查到需要付费的房屋或未绑定业主");
         }
         dealRoomFee(roomDtos, context, reqJson, event);
     }

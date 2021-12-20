@@ -4,6 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
+import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.po.reportOweFee.ReportOweFeePo;
 import com.java110.report.dao.IReportOweFeeServiceDao;
@@ -100,6 +101,18 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public List<ReportOweFeeDto> queryReportAllOweFeesByCar(@RequestBody ReportOweFeeDto reportOweFeeDto) {
         List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFeesByCar(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
+        return reportOweFees;
+    }
+
+    @Override
+    public double computeReportOweFeeTotalAmount(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        return reportOweFeeServiceDaoImpl.computeReportOweFeeTotalAmount(BeanConvertUtil.beanCovertMap(reportOweFeeDto));
+    }
+
+    @Override
+    public List<ReportOweFeeItemDto> computeReportOweFeeItemAmount(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        List<ReportOweFeeItemDto> reportOweFees = BeanConvertUtil.covertBeanList(
+                reportOweFeeServiceDaoImpl.computeReportOweFeeItemAmount(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeItemDto.class);
         return reportOweFees;
     }
 

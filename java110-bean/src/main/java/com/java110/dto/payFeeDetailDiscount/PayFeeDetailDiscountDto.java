@@ -26,6 +26,7 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
     private String discountName;
     private String discountType;
     private String feeId;
+    private String bId;
 
     private List<FeeDiscountSpecDto> feeDiscountSpecs;
 
@@ -130,5 +131,13 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
 
     public void setDiscountType(String discountType) {
         this.discountType = discountType;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

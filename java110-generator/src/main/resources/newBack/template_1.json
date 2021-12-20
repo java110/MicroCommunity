@@ -1,34 +1,72 @@
 {
   "param": {
-    "printNum": "print_num",
-    "printId": "print_id",
-    "num": "num",
+    "repairEvent": "repair_event",
+    "preStaffName": "pre_staff_name",
+    "repairId": "repair_id",
     "statusCd": "status_cd",
-    "remark": "remark",
+    "ruId": "ru_id",
+    "preStaffId": "pre_staff_id",
+    "context": "context",
+    "staffName": "staff_name",
+    "preRuId": "pre_ru_id",
+    "startTime": "start_time",
+    "state": "state",
+    "endTime": "end_time",
     "communityId": "community_id",
-    "printPre": "print_pre",
-    "receiptId": "receipt_id"
+    "staffId": "staff_id"
   },
-  "name": "feeReceiptPrint",
+  "name": "repairUserNew",
   "shareColumn": "community_id",
-  "id": "printId",
+  "id": "ruId",
   "shareName": "fee",
   "autoMove": true,
   "required": [
+    {
+      "msg": "报修派单ID不能为空",
+      "code": "ruId"
+    },
+    {
+      "msg": "报修ID不能为空",
+      "code": "repairId"
+    },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "收据ID不能为空",
-      "code": "receiptId"
+      "msg": "员工处理状态不能为空",
+      "code": "state"
     },
     {
-      "msg": "序号不能为空",
-      "code": "num"
+      "msg": "当前处理员工不能为空",
+      "code": "staffId"
+    },
+    {
+      "msg": "当前处理员工名称不能为空",
+      "code": "staffName"
+    },
+    {
+      "msg": "上一节点处理员工不能为空",
+      "code": "preStaffId"
+    },
+    {
+      "msg": "上一节点处理员工名称不能为空",
+      "code": "preStaffName"
+    },
+    {
+      "msg": "开始时间不能为空",
+      "code": "startTime"
+    },
+    {
+      "msg": "事件不能为空",
+      "code": "repairEvent"
+    },
+    {
+      "msg": "上一节点处理ID'不能为空",
+      "code": "preRuId"
     }
   ],
-  "desc": "收据打印编号",
+  "desc": "费用明细",
   "shareParam": "communityId",
-  "tableName": "fee_receipt_print"
+  "tableName": "r_repair_user"
 }

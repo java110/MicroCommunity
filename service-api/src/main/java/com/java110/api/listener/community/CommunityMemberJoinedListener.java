@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.utils.constant.*;
@@ -63,22 +64,23 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         //添加商户
         businesses.add(communityBMOImpl.addCommunityMember(paramObj));
 
-        //修改投诉流程
-        JSONObject data = communityBMOImpl.updateComplaint(paramObj);
+
+        JSONObject data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COMPLAINT);
+
         if (data != null) {
             businesses.add(data);
         }
 
-        //修改物品领用
-        JSONObject data2 = communityBMOImpl.updateComplaint2(paramObj);
-        if (data2 != null) {
-            businesses.add(data2);
+        data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COLLECTION);
+
+        if (data != null) {
+            businesses.add(data);
         }
 
-        //修改物品被调拨
-        JSONObject data3 = communityBMOImpl.updateComplaint3(paramObj);
-        if (data3 != null) {
-            businesses.add(data3);
+        data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
+
+        if (data != null) {
+            businesses.add(data);
         }
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
