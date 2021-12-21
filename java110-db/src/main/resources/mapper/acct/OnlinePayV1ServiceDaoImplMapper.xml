@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="onlinePayV1ServiceDaoImpl">
+
+
+    <!-- 保存线上支付信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOnlinePayInfo" parameterType="Map">
+        insert into online_pay(
+        refund_fee,mch_id,order_id,total_fee,open_id,app_id,pay_id,state,message,pay_name,transaction_id
+        ) values (
+        #{refundFee},#{mchId},#{orderId},#{totalFee},#{openId},#{appId},#{payId},#{state},#{message},#{payName},#{transactionId}
+        )
+    </insert>
+
+
+    <!-- 查询线上支付信息 add by wuxw 2018-07-03 -->
+    <select id="getOnlinePayInfo" parameterType="Map" resultType="Map">
+        select t.refund_fee,t.refund_fee refundFee,t.mch_id,t.mch_id mchId,t.order_id,t.order_id
+        orderId,t.total_fee,t.total_fee totalFee,t.open_id,t.open_id openId,t.app_id,t.app_id
+        appId,t.status_cd,t.status_cd statusCd,t.pay_id,t.pay_id payId,t.state,t.message,t.pay_name,t.pay_name
+        payName,t.transaction_id,t.transaction_id transactionId
+        from online_pay t
+        where 1 =1
+        <if test="refundFee !=null and refundFee != ''">
+            and t.refund_fee= #{refundFee}
+        </if>
+        <if test="mchId !=null and mchId != ''">
+            and t.mch_id= #{mchId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="totalFee !=null and totalFee != ''">
+            and t.total_fee= #{totalFee}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="payId !=null and payId != ''">
+            and t.pay_id= #{payId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="payName !=null and payName != ''">
+            and t.pay_name= #{payName}
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+            and t.transaction_id= #{transactionId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改线上支付信息 add by wuxw 2018-07-03 -->
+    <update id="updateOnlinePayInfo" parameterType="Map">
+        update online_pay t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="refundFee !=null and refundFee != ''">
+            , t.refund_fee= #{refundFee}
+        </if>
+        <if test="mchId !=null and mchId != ''">
+            , t.mch_id= #{mchId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="totalFee !=null and totalFee != ''">
+            , t.total_fee= #{totalFee}
+        </if>
+        <if test="openId !=null and openId != ''">
+            , t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            , t.app_id= #{appId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            , t.message= #{message}
+        </if>
+        <if test="payName !=null and payName != ''">
+            , t.pay_name= #{payName}
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+            , t.transaction_id= #{transactionId}
+        </if>
+        where 1=1
+        <if test="payId !=null and payId != ''">
+            and t.pay_id= #{payId}
+        </if>
+
+    </update>
+
+    <!-- 查询线上支付数量 add by wuxw 2018-07-03 -->
+    <select id="queryOnlinePaysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from online_pay t
+        where 1 =1
+        <if test="refundFee !=null and refundFee != ''">
+            and t.refund_fee= #{refundFee}
+        </if>
+        <if test="mchId !=null and mchId != ''">
+            and t.mch_id= #{mchId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="totalFee !=null and totalFee != ''">
+            and t.total_fee= #{totalFee}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="payId !=null and payId != ''">
+            and t.pay_id= #{payId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="payName !=null and payName != ''">
+            and t.pay_name= #{payName}
+        </if>
+        <if test="transactionId !=null and transactionId != ''">
+            and t.transaction_id= #{transactionId}
+        </if>
+
+
+    </select>
+
+</mapper>
