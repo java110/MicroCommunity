@@ -81,8 +81,6 @@ public class DeleteOwnerListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        ;
-
         JSONArray businesses = new JSONArray();
         ownerBMOImpl.deleteOwner(reqJson, context);
         if ("1001".equals(reqJson.getString("ownerTypeCd"))) {

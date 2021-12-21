@@ -86,7 +86,9 @@
         rs.sh_id shId,
         td4.name unitCodeName,
         td5.name miniUnitCodeName,
-        sh.sh_name shName
+        sh.sh_name shName,
+        rs.is_fixed isFixed,
+        td6.name isFixedName
         from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.status_cd = '0'
         left join resource_store rs on rs.res_id = t.res_id and rs.status_cd = '0'
@@ -103,6 +105,7 @@
         LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
         LEFT JOIN resource_store_type rst1 on rs.parent_rst_id=rst1.rst_id and rst1.status_cd = '0'
         LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
+        left join t_dict td6 on rs.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns = 'is_fixed'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}

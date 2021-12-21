@@ -19,8 +19,10 @@ public class AccountBankApi {
 
     @Autowired
     private ISaveAccountBankBMO saveAccountBankBMOImpl;
+
     @Autowired
     private IUpdateAccountBankBMO updateAccountBankBMOImpl;
+
     @Autowired
     private IDeleteAccountBankBMO deleteAccountBankBMOImpl;
 
@@ -29,80 +31,75 @@ public class AccountBankApi {
 
     /**
      * 微信保存消息模板
-     * @serviceCode /accountBank/saveAccountBank
-     * @path /app/accountBank/saveAccountBank
+     *
      * @param reqJson
      * @return
+     * @serviceCode /accountBank/saveAccountBank
+     * @path /app/accountBank/saveAccountBank
      */
     @RequestMapping(value = "/saveAccountBank", method = RequestMethod.POST)
     public ResponseEntity<String> saveAccountBank(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "bankCode", "请求报文中未包含bankCode");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "bankName", "请求报文中未包含bankName");
         Assert.hasKeyAndValue(reqJson, "shopId", "请求报文中未包含shopId");
-
-
         AccountBankPo accountBankPo = BeanConvertUtil.covertBean(reqJson, AccountBankPo.class);
         return saveAccountBankBMOImpl.save(accountBankPo);
     }
 
     /**
      * 微信修改消息模板
-     * @serviceCode /accountBank/updateAccountBank
-     * @path /app/accountBank/updateAccountBank
+     *
      * @param reqJson
      * @return
+     * @serviceCode /accountBank/updateAccountBank
+     * @path /app/accountBank/updateAccountBank
      */
     @RequestMapping(value = "/updateAccountBank", method = RequestMethod.POST)
     public ResponseEntity<String> updateAccountBank(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "bankCode", "请求报文中未包含bankCode");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "bankName", "请求报文中未包含bankName");
         Assert.hasKeyAndValue(reqJson, "shopId", "请求报文中未包含shopId");
         Assert.hasKeyAndValue(reqJson, "bankId", "bankId不能为空");
-
-
         AccountBankPo accountBankPo = BeanConvertUtil.covertBean(reqJson, AccountBankPo.class);
         return updateAccountBankBMOImpl.update(accountBankPo);
     }
 
     /**
      * 微信删除消息模板
-     * @serviceCode /accountBank/deleteAccountBank
-     * @path /app/accountBank/deleteAccountBank
+     *
      * @param reqJson
      * @return
+     * @serviceCode /accountBank/deleteAccountBank
+     * @path /app/accountBank/deleteAccountBank
      */
     @RequestMapping(value = "/deleteAccountBank", method = RequestMethod.POST)
     public ResponseEntity<String> deleteAccountBank(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "shopId", "商铺ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "bankId", "bankId不能为空");
-
-
         AccountBankPo accountBankPo = BeanConvertUtil.covertBean(reqJson, AccountBankPo.class);
         return deleteAccountBankBMOImpl.delete(accountBankPo);
     }
 
     /**
      * 微信删除消息模板
-     * @serviceCode /accountBank/queryAccountBank
-     * @path /app/accountBank/queryAccountBank
+     *
      * @param shopId 小区ID
      * @return
+     * @serviceCode /accountBank/queryAccountBank
+     * @path /app/accountBank/queryAccountBank
      */
     @RequestMapping(value = "/queryAccountBank", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAccountBank(@RequestParam(value = "shopId",required = false) String shopId,
-                                                   @RequestParam(value = "bankId",required = false) String bankId,
-                                                      @RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "row") int row) {
+    public ResponseEntity<String> queryAccountBank(@RequestParam(value = "shopId", required = false) String shopId,
+                                                   @RequestParam(value = "bankId", required = false) String bankId,
+                                                   @RequestParam(value = "page") int page,
+                                                   @RequestParam(value = "row") int row) {
         AccountBankDto accountBankDto = new AccountBankDto();
         accountBankDto.setPage(page);
         accountBankDto.setRow(row);
         accountBankDto.setShopId(shopId);
-        accountBankDto.setBankId( bankId );
+        accountBankDto.setBankId(bankId);
         return getAccountBankBMOImpl.get(accountBankDto);
     }
 }

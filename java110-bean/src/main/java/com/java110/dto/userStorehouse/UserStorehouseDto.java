@@ -41,6 +41,10 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private Date createTime;
     private String statusCd = "0";
 
+    private String isFixed;
+    private String isFixedName;
+    private String lagerStockZero = "0";
+
     public String getResName() {
         return resName;
     }
@@ -231,5 +235,29 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setParentRstId(String parentRstId) {
         this.parentRstId = parentRstId;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
+    }
+
+    public String getLagerStockZero() {
+        return lagerStockZero;
+    }
+
+    public void setLagerStockZero(String lagerStockZero) {
+        this.lagerStockZero = lagerStockZero;
     }
 }

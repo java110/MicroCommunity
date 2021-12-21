@@ -6,12 +6,12 @@
 
     <!-- 保存物品供应商信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceSupplierInfo" parameterType="Map">
-           insert into business_resource_supplier(
-            supplier_name,create_user_id,address,contact_name,rs_id,create_user_name,remark,store_id,account_bank,operate,tel,bank_account_number,b_id
-            ) values (
-            #{supplierName},#{createUserId},#{address},#{contactName},#{rsId},#{createUserName},#{remark},#{storeId},#{accountBank},#{operate},#{tel},#{bankAccountNumber},#{bId}
-            )
-        </insert>
+        insert into business_resource_supplier(supplier_name, create_user_id, address, contact_name, rs_id,
+                                               create_user_name, remark, store_id, account_bank, operate, tel,
+                                               bank_account_number, b_id)
+        values (#{supplierName}, #{createUserId}, #{address}, #{contactName}, #{rsId}, #{createUserName}, #{remark},
+                #{storeId}, #{accountBank}, #{operate}, #{tel}, #{bankAccountNumber}, #{bId})
+    </insert>
 
 
     <!-- 查询物品供应商信息（Business） add by wuxw 2018-07-03 -->

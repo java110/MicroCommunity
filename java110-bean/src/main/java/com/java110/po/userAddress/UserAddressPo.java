@@ -12,6 +12,8 @@ public class UserAddressPo implements Serializable {
     private String userId;
     private String addressId;
     private String username;
+    private String bId;
+    private String postalCode;
 
     public String getAreaCode() {
         return areaCode;
@@ -75,5 +77,21 @@ public class UserAddressPo implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 }

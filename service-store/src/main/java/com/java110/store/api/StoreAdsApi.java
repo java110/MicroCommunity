@@ -70,7 +70,6 @@ public class StoreAdsApi {
         Assert.hasKeyAndValue(reqJson, "url", "请求报文中未包含url");
         Assert.hasKeyAndValue(reqJson, "adsId", "adsId不能为空");
 
-
         StoreAdsPo storeAdsPo = BeanConvertUtil.covertBean(reqJson, StoreAdsPo.class);
         return updateStoreAdsBMOImpl.update(storeAdsPo);
     }
@@ -85,11 +84,8 @@ public class StoreAdsApi {
      */
     @RequestMapping(value = "/deleteStoreAds", method = RequestMethod.POST)
     public ResponseEntity<String> deleteStoreAds(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
+//        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
         Assert.hasKeyAndValue(reqJson, "adsId", "adsId不能为空");
-
-
         StoreAdsPo storeAdsPo = BeanConvertUtil.covertBean(reqJson, StoreAdsPo.class);
         return deleteStoreAdsBMOImpl.delete(storeAdsPo);
     }
@@ -103,13 +99,19 @@ public class StoreAdsApi {
      * @path /app/storeAds/queryStoreAds
      */
     @RequestMapping(value = "/queryStoreAds", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStoreAds(@RequestParam(value = "shareId") String shareId,
+    public ResponseEntity<String> queryStoreAds(@RequestParam(value = "shareId", required = false) String shareId,
+                                                @RequestParam(value = "adName", required = false) String adName,
+                                                @RequestParam(value = "adType", required = false) String adType,
+                                                @RequestParam(value = "advertType", required = false) String advertType,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         StoreAdsDto storeAdsDto = new StoreAdsDto();
         storeAdsDto.setPage(page);
         storeAdsDto.setRow(row);
         storeAdsDto.setShareId(shareId);
+        storeAdsDto.setAdName(adName);
+        storeAdsDto.setAdType(adType);
+        storeAdsDto.setAdvertType(advertType);
         return getStoreAdsBMOImpl.get(storeAdsDto);
     }
 }

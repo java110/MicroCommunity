@@ -67,22 +67,21 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
 
         JSONObject data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COMPLAINT);
 
-        if(data != null){
+        if (data != null) {
             businesses.add(data);
         }
 
-         data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COLLECTION);
+        data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_COLLECTION);
 
-        if(data != null){
+        if (data != null) {
             businesses.add(data);
         }
 
-         data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
+        data = communityBMOImpl.updateWorkflow(paramObj, WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO);
 
-        if(data != null){
+        if (data != null) {
             businesses.add(data);
         }
-
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
@@ -102,8 +101,8 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         Assert.jsonObjectHaveKey(paramIn, "memberTypeCd", "请求报文中未包含memberTypeCd");
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
-        if(!CommunityMemberTypeConstant.PROPERTY.equals(paramObj.getString("memberTypeCd"))){
-            return ;
+        if (!CommunityMemberTypeConstant.PROPERTY.equals(paramObj.getString("memberTypeCd"))) {
+            return;
         }
 
         //当 memberTypeCd 为物业时 小区只要有入驻 则 不能再次入驻优化

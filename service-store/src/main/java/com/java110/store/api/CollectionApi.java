@@ -123,7 +123,7 @@ public class CollectionApi {
     }
 
     /**
-     * 物品发放
+     * 物品发放(物品发放之后直接到个人手中)
      * {"resourceOuts":[],"applyOrderId":"152020071665420001","taskId":"237506","resOrderType":"20000",
      * "purchaseApplyDetailVo":[{"applyOrderId":"152020071665420001","id":"152020071690120002","price":"","quantity":"1",
      * "resCode":"002","resId":"852020070239060001","resName":"水性笔","stock":"2","purchaseQuantity":"2","purchaseRemark":""}]}
@@ -204,7 +204,7 @@ public class CollectionApi {
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
-                continue;
+                throw new IllegalArgumentException("未查询到物品资源信息！");
             }
             //获取物品单位
             String unitCode = resourceStoreDtos.get(0).getUnitCode();
@@ -219,12 +219,14 @@ public class CollectionApi {
             userStorehousePo.setResName(resourceStoreDtos.get(0).getResName());
             userStorehousePo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             userStorehousePo.setUserId(purchaseApplyPo.getUserId());
-            //查询物品 是否已经存在
+
+            //查询个人物品仓库中 是否已经存在商品
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
-            userStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
+            userStorehouseDto.setResCode(resourceStoreDtos.get(0).getResCode());
             userStorehouseDto.setUserId(purchaseApplyPo.getUserId());
             userStorehouseDto.setStoreId(resourceStoreDtos.get(0).getStoreId());
             List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
+            userStorehousePo.setResCode(resourceStoreDtos.get(0).getResCode());
             if (userStorehouseDtos == null || userStorehouseDtos.size() < 1) {
                 userStorehousePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
                 if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
