@@ -1,0 +1,33 @@
+dataSources:
+  ds0: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: TT
+    password: ${mysqlpwd}
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+
+shardingRule:
+  tables:
+    business_xxx:
+      actualDataNodes: ds0.business_community
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+
+  bindingTables:
+    - business_xxx
+
+  defaultDataSourceName: ds0
+  defaultDatabaseStrategy:
+    none:
+  defaultTableStrategy:
+    none:
+
+props:
+  sql.show: true

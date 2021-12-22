@@ -4,10 +4,10 @@ jedis:
       maxTotal: 100
       maxIdle: 20
       maxWaitMillis: 20000
-    host: prod.redis.java110.com
+    host: dev.redis.java110.com
     port: 6379
     timeout: 3000
-    password:
+    password: ${redispwd}
 
 eureka:
   instance:
@@ -17,12 +17,24 @@ eureka:
     instanceId: ${spring.cloud.client.ip-address}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://prod.java110.com:8761/eureka/
+      defaultZone: http://dev.java110.com:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
-  port: 8002
+  port: 8006
   tomcat:
     uri-encoding: UTF-8
+
+java110:
+  community-service: community-service
+  acct-service: acct-service
+  user-service: user-service
+  store-service: store-service
+  common-service: common-service
+  job-service: job-service
+  fee-service: fee-service
+  report-service: report-service
+  dev-service: dev-service
+  oa-service: oa-service
 
 spring:
   http:
@@ -31,11 +43,12 @@ spring:
       enabled: true
       force: true
   application:
-    name: user-service
+    name: store-service
   redis:
     database: 0
-    host: prod.redis.java110.com
+    host: dev.redis.java110.com
     port: 6379
+    password: ${redispwd}
     pool:
       max-active: 300
       max-wait: 10000
@@ -51,7 +64,7 @@ spring:
     filters: stat,wall,log4j
     poolPreparedStatements: true
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://prod.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
     maxPoolPreparedStatementPerConnectionSize: 20
     password: TT@12345678
     testOnBorrow: false
@@ -63,12 +76,19 @@ spring:
     maxActive: 20
     username: TT
 
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 20000
+
 #============== kafka ===================
 kafka:
   consumer:
     zookeeper:
-      connect: prod.zk.java110.com:2181
-    servers: prod.kafka.java110.com:9092
+      connect: dev.zk.java110.com:2181
+    servers: dev.kafka.java110.com:9092
     enable:
       auto:
         commit: true
@@ -81,13 +101,13 @@ kafka:
         reset: latest
     topic: test
     group:
-      id: notifyBusinessStatus
+      id: storeBusinessStatus
     concurrency: 10
 
   producer:
     zookeeper:
-      connect: prod.zk.java110.com:2181
-    servers: prod.kafka.java110.com:9092
+      connect: dev.zk.java110.com:2181
+    servers: dev.kafka.java110.com:9092
     retries: 0
     batch:
       size: 4096

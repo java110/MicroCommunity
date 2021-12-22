@@ -1,6 +1,7 @@
 package com.java110.dto.onlinePay;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,16 +16,16 @@ import java.util.Date;
 public class OnlinePayDto extends PageDto implements Serializable {
 
     private String refundFee;
-private String mchId;
-private String orderId;
-private String totalFee;
-private String openId;
-private String appId;
-private String payId;
-private String state;
-private String message;
-private String payName;
-private String transactionId;
+    private String mchId;
+    private String orderId;
+    private String totalFee;
+    private String openId;
+    private String appId;
+    private String payId;
+    private String state;
+    private String message;
+    private String payName;
+    private String transactionId;
 
 
     private Date createTime;
@@ -35,67 +36,88 @@ private String transactionId;
     public String getRefundFee() {
         return refundFee;
     }
-public void setRefundFee(String refundFee) {
+
+    public void setRefundFee(String refundFee) {
         this.refundFee = refundFee;
     }
-public String getMchId() {
+
+    public String getMchId() {
         return mchId;
     }
-public void setMchId(String mchId) {
+
+    public void setMchId(String mchId) {
         this.mchId = mchId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getTotalFee() {
+
+    public String getTotalFee() {
         return totalFee;
     }
-public void setTotalFee(String totalFee) {
+
+    public void setTotalFee(String totalFee) {
         this.totalFee = totalFee;
     }
-public String getOpenId() {
+
+    public String getOpenId() {
         return openId;
     }
-public void setOpenId(String openId) {
+
+    public void setOpenId(String openId) {
         this.openId = openId;
     }
-public String getAppId() {
+
+    public String getAppId() {
         return appId;
     }
-public void setAppId(String appId) {
+
+    public void setAppId(String appId) {
         this.appId = appId;
     }
-public String getPayId() {
+
+    public String getPayId() {
         return payId;
     }
-public void setPayId(String payId) {
+
+    public void setPayId(String payId) {
         this.payId = payId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getMessage() {
+
+    public String getMessage() {
         return message;
     }
-public void setMessage(String message) {
+
+    public void setMessage(String message) {
         this.message = message;
     }
-public String getPayName() {
+
+    public String getPayName() {
         return payName;
     }
-public void setPayName(String payName) {
+
+    public void setPayName(String payName) {
         this.payName = payName;
     }
-public String getTransactionId() {
+
+    public String getTransactionId() {
         return transactionId;
     }
-public void setTransactionId(String transactionId) {
+
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 

@@ -1,0 +1,125 @@
+dataSources:
+  ds0: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dev.db.java110.com:3306/hc_community?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: hc_community
+    password: ${mysqlpwd}
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+#  ds0_slave0: !!com.alibaba.druid.pool.DruidDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
+#    username: TT
+#    password: TT@12345678
+#    connectionTimeoutMilliseconds: 30000
+#    idleTimeoutMilliseconds: 60000
+#    maxPoolSize: 50
+#    minPoolSize: 1
+#    maintenanceIntervalMilliseconds: 30000
+  ds1: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: TT
+    password: ${mysqlpwd}
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+#  ds1_slave0: !!com.alibaba.druid.pool.DruidDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
+#    username: TT
+#    password: TT@12345678
+#    connectionTimeoutMilliseconds: 30000
+#    idleTimeoutMilliseconds: 60000
+#    maxPoolSize: 50
+#    minPoolSize: 1
+#    maintenanceIntervalMilliseconds: 30000
+
+shardingRule:
+  tables:
+    business_community:
+      actualDataNodes: ds${0..1}.business_community
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    s_community:
+      actualDataNodes: ds${0..1}.s_community
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    business_community_attr:
+      actualDataNodes: ds${0..1}.business_community_attr
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    s_community_attr:
+      actualDataNodes: ds${0..1}.s_community_attr
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    business_community_member:
+      actualDataNodes: ds${0..1}.business_community_member
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    business_community_photo:
+      actualDataNodes: ds${0..1}.business_community_photo
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    s_community_member:
+      actualDataNodes: ds${0..1}.s_community_member
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+    s_community_photo:
+      actualDataNodes: ds${0..1}.s_community_photo
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+  bindingTables:
+    - business_community
+    - s_community
+    - business_community_member
+    - business_community_photo
+    - s_community_member
+    - s_community_photo
+    - business_community_attr
+    - s_community_attr
+
+  defaultDataSourceName: ds1
+  defaultDatabaseStrategy:
+    inline:
+      shardingColumn: community_id
+      algorithmExpression: ds${Long.parseLong(community_id) % 2}
+  defaultTableStrategy:
+    none:
+
+#  masterSlaveRules:
+#    ms_ds0:
+#     masterDataSourceName: ds0
+#     slaveDataSourceNames:
+#       - ds0_slave0
+#     loadBalanceAlgorithmType: ROUND_ROBIN
+#   ms_ds1:
+#     masterDataSourceName: ds1
+#     slaveDataSourceNames:
+#       - ds1_slave0
+#     loadBalanceAlgorithmType: ROUND_ROBIN
+props:
+  sql.show: true
