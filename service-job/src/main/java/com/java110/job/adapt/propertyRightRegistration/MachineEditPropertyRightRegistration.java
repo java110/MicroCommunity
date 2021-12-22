@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.propertyRightRegistration.PropertyRightRegistrationDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
@@ -15,14 +14,12 @@ import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IPropertyRightRegistrationV1InnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,9 +57,6 @@ public class MachineEditPropertyRightRegistration extends DatabusAdaptImpl {
     @Autowired
     private RestTemplate outRestTemplate;
 
-    @Autowired
-    private IPropertyRightRegistrationV1InnerServiceSMO propertyRightRegistrationV1InnerServiceSMOImpl;
-
     private static Logger logger = LoggerFactory.getLogger(MachineEditPropertyRightRegistration.class);
 
     //模板信息推送地址
@@ -71,27 +65,19 @@ public class MachineEditPropertyRightRegistration extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        //获取产权登记id
-        String[] split = data.getString("prrId").split("'");
-        String prrId = split[1];
-        PropertyRightRegistrationDto propertyRightRegistrationDto = new PropertyRightRegistrationDto();
-        propertyRightRegistrationDto.setPrrId(prrId);
-        List<PropertyRightRegistrationDto> propertyRightRegistrationDtos = propertyRightRegistrationV1InnerServiceSMOImpl.queryPropertyRightRegistrations(propertyRightRegistrationDto);
-        Assert.listOnlyOne(propertyRightRegistrationDtos, "查询产权登记表错误！");
         //查询小区信息
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(propertyRightRegistrationDtos.get(0).getCommunityId());
+        communityDto.setCommunityId(data.getString("communityId"));
         List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
-        //获取创建时间
-        String[] createTimes = data.getString("createTime").split("'");
-        String createTime = createTimes[1];
+        //获取是否在用状态
+        String statusCd = data.getString("statusCd");
         JSONObject paramIn = new JSONObject();
-        paramIn.put("prrId", prrId);
-        paramIn.put("name", propertyRightRegistrationDtos.get(0).getName());
-        paramIn.put("createTime", createTime);
+        paramIn.put("prrId", data.getString("prrId"));
+        paramIn.put("name", data.getString("name"));
+        paramIn.put("createTime", data.getString("createTime"));
         //获取状态标识
-        String state = propertyRightRegistrationDtos.get(0).getState();
-        if (!StringUtil.isEmpty(state) && state.equals("0")) {
+        String state = data.getString("state");
+        if (!StringUtil.isEmpty(state) && state.equals("0") && !statusCd.equals("1")) {
             //给员工推送消息
             publishMsg(paramIn, communityDtos.get(0));
         }

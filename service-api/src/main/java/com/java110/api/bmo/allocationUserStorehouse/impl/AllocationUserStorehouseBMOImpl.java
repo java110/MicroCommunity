@@ -50,6 +50,8 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 String giveQuantity = paramIn.getString("giveQuantity");
                 //获取物品id
                 String resId = paramIn.getString("resId");
+                //获取物品id
+                String resCode = paramIn.getString("resCode");
                 //获取物品名称
                 String resName = paramIn.getString("resName");
                 //获取当前用户id
@@ -63,6 +65,7 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 JSONObject allocationUserStorehouseJson = new JSONObject();
                 allocationUserStorehouseJson.put("ausId", "-1");
                 allocationUserStorehouseJson.put("resId", resId);
+                allocationUserStorehouseJson.put("resCode", resCode);
                 allocationUserStorehouseJson.put("resName", resName);
                 allocationUserStorehouseJson.put("storeId", storeId);
                 allocationUserStorehouseJson.put("stock", stock);
@@ -118,7 +121,7 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                 super.update(dataFlowContext, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
                 UserStorehouseDto userStorehouse = new UserStorehouseDto();
                 userStorehouse.setUserId(acceptUserId);
-                userStorehouse.setResId(resId);
+                userStorehouse.setResCode(resCode);
                 //查询接受转赠人的个人物品信息
                 List<UserStorehouseDto> userStorehouses = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouse);
                 if (userStorehouses != null && userStorehouses.size() == 1) {
@@ -164,6 +167,7 @@ public class AllocationUserStorehouseBMOImpl extends ApiBaseBMO implements IAllo
                     userStorePo.setResId(resId);
                     userStorePo.setResName(resName);
                     userStorePo.setStoreId(storeId);
+                    userStorePo.setResCode(resCode);
                     if (unitCode.equals(miniUnitCode)) { //如果物品单位与物品最小计量单位相同，就不向上取整
                         userStorePo.setStock(String.valueOf(num7));
                     } else { //如果物品单位与物品最小计量单位不同，就向上取整

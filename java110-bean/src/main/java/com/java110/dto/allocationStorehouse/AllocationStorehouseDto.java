@@ -63,6 +63,9 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String unitCodeName;
     private String miniUnitCodeName;
 
+    private String isFixed;
+    private String isFixedName;
+
     public String getAsId() {
         return asId;
     }
@@ -383,5 +386,21 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setParentRstId(String parentRstId) {
         this.parentRstId = parentRstId;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

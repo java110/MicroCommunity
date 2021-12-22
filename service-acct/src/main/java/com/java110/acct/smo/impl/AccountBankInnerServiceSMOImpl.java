@@ -36,15 +36,15 @@ public class AccountBankInnerServiceSMOImpl extends BaseServiceSMO implements IA
         return saveFlag;
     }
 
-     @Override
-    public int updateAccountBank(@RequestBody  AccountBankPo accountBankPo) {
+    @Override
+    public int updateAccountBank(@RequestBody AccountBankPo accountBankPo) {
         int saveFlag = 1;
-         accountBankServiceDaoImpl.updateAccountBankInfo(BeanConvertUtil.beanCovertMap(accountBankPo));
+        accountBankServiceDaoImpl.updateAccountBankInfo(BeanConvertUtil.beanCovertMap(accountBankPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteAccountBank(@RequestBody  AccountBankPo accountBankPo) {
+    @Override
+    public int deleteAccountBank(@RequestBody AccountBankPo accountBankPo) {
         int saveFlag = 1;
         accountBankPo.setStatusCd("1");
         accountBankServiceDaoImpl.updateAccountBankInfo(BeanConvertUtil.beanCovertMap(accountBankPo));
@@ -52,7 +52,7 @@ public class AccountBankInnerServiceSMOImpl extends BaseServiceSMO implements IA
     }
 
     @Override
-    public List<AccountBankDto> queryAccountBanks(@RequestBody  AccountBankDto accountBankDto) {
+    public List<AccountBankDto> queryAccountBanks(@RequestBody AccountBankDto accountBankDto) {
 
         //校验是否传了 分页信息
 
@@ -70,7 +70,8 @@ public class AccountBankInnerServiceSMOImpl extends BaseServiceSMO implements IA
 
     @Override
     public int queryAccountBanksCount(@RequestBody AccountBankDto accountBankDto) {
-        return accountBankServiceDaoImpl.queryAccountBanksCount(BeanConvertUtil.beanCovertMap(accountBankDto));    }
+        return accountBankServiceDaoImpl.queryAccountBanksCount(BeanConvertUtil.beanCovertMap(accountBankDto));
+    }
 
     public IAccountBankServiceDao getAccountBankServiceDaoImpl() {
         return accountBankServiceDaoImpl;

@@ -11,6 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -50,6 +51,9 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;

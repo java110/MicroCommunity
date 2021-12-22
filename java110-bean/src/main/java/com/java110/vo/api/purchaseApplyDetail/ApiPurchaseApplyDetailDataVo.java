@@ -39,6 +39,8 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
     private String shName;
     private String unitCodeName;
     private String miniUnitCodeName;
+    private String isFixed;
+    private String isFixedName;
 
     public String getOperate() {
         return operate;
@@ -326,5 +328,21 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     public void setParentRstName(String parentRstName) {
         this.parentRstName = parentRstName;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

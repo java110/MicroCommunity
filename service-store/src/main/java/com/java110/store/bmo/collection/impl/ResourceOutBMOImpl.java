@@ -96,12 +96,13 @@ public class ResourceOutBMOImpl implements IResourceOutBMO {
             UserStorehousePo userStorehousePo = new UserStorehousePo();
             userStorehousePo.setUsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
             userStorehousePo.setResId(resourceStoreDtos.get(0).getResId());
+            userStorehousePo.setResCode(resourceStoreDtos.get(0).getResCode());
             userStorehousePo.setResName(resourceStoreDtos.get(0).getResName());
             userStorehousePo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             userStorehousePo.setUserId(purchaseApplyDtos.get(0).getUserId());
             //查询物品 是否已经存在
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
-            userStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
+            userStorehouseDto.setResCode(resourceStoreDtos.get(0).getResCode());
             userStorehouseDto.setUserId(purchaseApplyDtos.get(0).getUserId());
             userStorehouseDto.setStoreId(resourceStoreDtos.get(0).getStoreId());
             List<UserStorehouseDto> userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);

@@ -79,10 +79,9 @@ public class StoreMsgApi {
      */
     @RequestMapping(value = "/deleteStoreMsg", method = RequestMethod.POST)
     public ResponseEntity<String> deleteStoreMsg(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+//        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "msgId", "msgId不能为空");
-
 
         StoreMsgPo storeMsgPo = BeanConvertUtil.covertBean(reqJson, StoreMsgPo.class);
         return deleteStoreMsgBMOImpl.delete(storeMsgPo);
@@ -91,19 +90,25 @@ public class StoreMsgApi {
     /**
      * 微信删除消息模板
      *
-     * @param shareId  分片ID
+     * @param shareId 分片ID
      * @return
      * @serviceCode /storeMsg/queryStoreMsg
      * @path /app/storeMsg/queryStoreMsg
      */
     @RequestMapping(value = "/queryStoreMsg", method = RequestMethod.GET)
-    public ResponseEntity<String> queryStoreMsg(@RequestParam(value = "shareId") String shareId,
+    public ResponseEntity<String> queryStoreMsg(@RequestParam(value = "shareId", required = false) String shareId,
+                                                @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "msgFlag", required = false) String msgFlag,
+                                                @RequestParam(value = "msgId", required = false) String msgId,
                                                 @RequestParam(value = "page") int page,
                                                 @RequestParam(value = "row") int row) {
         StoreMsgDto storeMsgDto = new StoreMsgDto();
         storeMsgDto.setPage(page);
         storeMsgDto.setRow(row);
         storeMsgDto.setShareId(shareId);
+        storeMsgDto.setTitle(title);
+        storeMsgDto.setMsgFlag(msgFlag);
+        storeMsgDto.setMsgId(msgId);
         return getStoreMsgBMOImpl.get(storeMsgDto);
     }
 }
