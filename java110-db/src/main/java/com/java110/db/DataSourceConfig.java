@@ -41,7 +41,7 @@ public class DataSourceConfig {
         String path = SHARDING_YML_PATH;
 
         String[] actives = env.getActiveProfiles();
-        if (actives != null && actives.length > 0) {
+        if (actives != null && actives.length > 0 && !"dev".equals(actives[0])) {
             path = "dataSource-" + actives[0] + ".yml";
         }
 
