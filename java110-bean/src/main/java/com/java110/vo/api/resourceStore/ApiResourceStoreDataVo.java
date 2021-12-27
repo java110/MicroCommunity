@@ -54,6 +54,9 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String miniStock;
     private String parentRstId;
     private String parentRstName;
+    //是否是固定物品
+    private String isFixed;
+    private String isFixedName;
 
     public String getResId() {
         return resId;
@@ -309,5 +312,21 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setParentRstName(String parentRstName) {
         this.parentRstName = parentRstName;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

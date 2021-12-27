@@ -302,7 +302,9 @@ public class SaveAllocationStorehouseListener extends AbstractServiceApiPlusList
                     resourceStorePo.setWarningStock(resourceStoreList.get(0).getWarningStock());
                     resourceStorePo.setAveragePrice(resourceStoreList.get(0).getAveragePrice());
                     resourceStorePo.setRstId(resourceStoreList.get(0).getRstId());
+                    resourceStorePo.setParentRstId(resourceStoreList.get(0).getParentRstId());
                     resourceStorePo.setRssId(resourceStoreList.get(0).getRssId());
+                    resourceStorePo.setIsFixed(resourceStoreList.get(0).getIsFixed());
                     if (StringUtil.isEmpty(resourceStoreList.get(0).getMiniUnitStock())) {
                         throw new IllegalArgumentException("最小计量单位数量不能为空！");
                     }

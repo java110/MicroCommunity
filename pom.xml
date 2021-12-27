@@ -29,7 +29,6 @@
         <module>service-acct</module>
         <module>service-oa</module>
         <module>service-dev</module>
-        <module>service-busi-merge</module>
 
     </modules>
 
@@ -51,7 +50,7 @@
 
         <apache.common.lang3.version>3.4</apache.common.lang3.version>
         <mybatis.version>3.4.1</mybatis.version>
-        <log4j.version>2.16.0</log4j.version>
+        <log4j.version>2.17.0</log4j.version>
         <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
         <druid.version>1.1.10</druid.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
@@ -101,7 +100,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.69</version>
+                <version>1.2.79</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>

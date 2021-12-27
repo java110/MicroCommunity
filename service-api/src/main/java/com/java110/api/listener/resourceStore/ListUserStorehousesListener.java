@@ -83,17 +83,31 @@ public class ListUserStorehousesListener extends AbstractServiceApiListener {
             userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
         }
         //转增只查询自己的物品
-        if(!StringUtil.isEmpty(reqJson.getString("giveType")) && "1".equals(reqJson.getString("giveType"))){
+        if (!StringUtil.isEmpty(reqJson.getString("giveType")) && "1".equals(reqJson.getString("giveType"))) {
             userStorehouseDto.setUserId(reqJson.getString("userId"));
             userStorehouseDto.setUserName(reqJson.getString("userName"));
         }
+        userStorehouseDto.setLagerStockZero("1");
 
         int count = userStorehouseInnerServiceSMOImpl.queryUserStorehousesCount(userStorehouseDto);
 
-        List<UserStorehouseDto> userStorehouseDtos = null;
+        List<UserStorehouseDto> userStorehouseDtos = new ArrayList<>();
 
         if (count > 0) {
-            userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
+            if (!StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+                List<UserStorehouseDto> userStorehouses = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
+                for (UserStorehouseDto userStorehouse : userStorehouses) {
+                    //获取物品是否是固定物品
+                    String isFixed = userStorehouse.getIsFixed();
+                    if (!StringUtil.isEmpty(isFixed) && isFixed.equals("Y")) { //Y表示是固定物品;N表示不是固定物品;T表示是通用物品
+                        continue;
+                    } else {
+                        userStorehouseDtos.add(userStorehouse);
+                    }
+                }
+            } else {
+                userStorehouseDtos = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
+            }
         } else {
             Object chooseType = reqJson.get("chooseType");
             if (chooseType != null && !StringUtil.isEmpty(chooseType.toString()) && reqJson.get("chooseType").equals("repair")) {

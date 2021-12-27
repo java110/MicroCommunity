@@ -1,19 +1,16 @@
 package com.java110.db;
 
 import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlShardingDataSourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.Filter;
 import javax.sql.DataSource;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.sql.SQLException;
 
 /**
@@ -25,6 +22,8 @@ public class DataSourceConfig {
     //@Autowired
     private Filter statFilter;
 
+    @Autowired
+    private Environment env;
     private static final String SHARDING_YML_PATH = "dataSource.yml";
 
     /**
@@ -39,16 +38,17 @@ public class DataSourceConfig {
      */
     @Bean
     public DataSource dataSource() throws SQLException, IOException {
-//        YamlShardingConfiguration config = parse();
-//        YamlShardingRuleConfiguration rule = config.getShardingRule();
-//        for (String key : config.getDataSources().keySet()) {
-//            DruidDataSource d = (DruidDataSource) config.getDataSources().get(key);
-//            d.setProxyFilters(Lists.newArrayList(statFilter));
-//        }
-//        return ShardingDataSourceFactory.createDataSource(config.getDataSources(),
-//                rule.getShardingRuleConfiguration(), config.getConfigMap(), config.getProps());
+        String path = SHARDING_YML_PATH;
 
-        return YamlShardingDataSourceFactory.createDataSource(getYmlFile());
+        String[] actives = env.getActiveProfiles();
+        if (actives != null && actives.length > 0 && !"dev".equals(actives[0])) {
+            path = "dataSource-" + actives[0] + ".yml";
+        }
+
+        String configString = new String(getYmlFile(path), "UTF-8");
+        configString = configString.replaceAll("\\$\\{mysqlpwd\\}", env.getProperty("mysqlpwd"));
+
+        return YamlShardingDataSourceFactory.createDataSource(configString.getBytes("UTF-8"));
     }
 
     /**
@@ -59,12 +59,12 @@ public class DataSourceConfig {
      * @throws FileNotFoundException        文件未发现异常
      * @throws UnsupportedEncodingException 不支持编码异常
      */
-    private byte[] getYmlFile() throws IOException {
+    private byte[] getYmlFile(String path) throws IOException {
         Reader reader = null;
         InputStream inputStream = null;
         ByteArrayOutputStream swapStream = null;
         try {
-            Resource resource = new ClassPathResource(SHARDING_YML_PATH);
+            Resource resource = new ClassPathResource(path);
 
             inputStream = resource.getInputStream();
             swapStream = new ByteArrayOutputStream();

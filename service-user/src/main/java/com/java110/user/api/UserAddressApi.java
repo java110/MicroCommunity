@@ -45,12 +45,13 @@ public class UserAddressApi {
 
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
         Assert.hasKeyAndValue(reqJson, "areaCode", "请求报文中未包含areaCode");
+        Assert.hasKeyAndValue(reqJson, "postalCode", "请求报文中未包含postalCode");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
         Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
         Assert.hasKeyAndValue(reqJson, "isDefault", "请求报文中未包含isDefault");
 
-
         UserAddressPo userAddressPo = BeanConvertUtil.covertBean(reqJson, UserAddressPo.class);
+        userAddressPo.setbId("-1");
         return saveUserAddressBMOImpl.save(userAddressPo);
     }
 
@@ -107,7 +108,7 @@ public class UserAddressApi {
     @RequestMapping(value = "/queryUserAddress", method = RequestMethod.GET)
     public ResponseEntity<String> queryUserAddress(@RequestParam(value = "userId") String userId,
                                                    @RequestParam(value = "addressId", required = false) String addressId,
-                                                   @RequestParam(value="isDefault",required = false) String isDefault,
+                                                   @RequestParam(value = "isDefault", required = false) String isDefault,
                                                    @RequestParam(value = "page") int page,
                                                    @RequestParam(value = "row") int row) {
         UserAddressDto userAddressDto = new UserAddressDto();

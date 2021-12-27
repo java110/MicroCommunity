@@ -31,7 +31,8 @@ public class PurchaseApplyDetailVo {
     private String shName;
     private String unitCodeName;
     private String miniUnitCodeName;
-
+    private String isFixed;
+    private String isFixedName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -247,6 +248,22 @@ public class PurchaseApplyDetailVo {
 
     public void setParentRstName(String parentRstName) {
         this.parentRstName = parentRstName;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }
 

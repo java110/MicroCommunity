@@ -16,9 +16,11 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -38,15 +40,30 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单号不能为空");
-        PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
-        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
-        if (!"1000".equals(purchaseApplyDtos.get(0).getState())) {
-            throw new IllegalArgumentException("只能取消未审核的订单");
-        }
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        //获取采购订单号
+        String applyOrderId = reqJson.getString("applyOrderId");
+        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+        purchaseApplyDto.setApplyOrderId(applyOrderId);
+        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
+        if(purchaseApplyDtos.size()!= 1){
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "采购申请单出现多条或者未找到采购申请单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        if (!"1000".equals(purchaseApplyDtos.get(0).getState()) && PurchaseApplyDto.RES_ORDER_TYPE_OUT.equals(purchaseApplyDtos.get(0).getResOrderType()) ) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的物品领用订单已经状态已改变，无法进行取消操作！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        if (!"1000".equals(purchaseApplyDtos.get(0).getState()) && PurchaseApplyDto.RES_ORDER_TYPE_ENTER.equals(purchaseApplyDtos.get(0).getResOrderType())) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的采购申请订单已经状态已改变，无法进行取消操作！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         deletePurchaseApply(reqJson, context);
@@ -83,16 +100,16 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener 
         PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
         purchaseApplyDetailDto.setApplyOrderId(paramInJson.getString("applyOrderId"));
         List<PurchaseApplyDetailDto> purchaseApplyDetailDtos = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto);
-        if(purchaseApplyDetailDtos.size() > 0) {
-            for(PurchaseApplyDetailDto purchaseApplyDetail : purchaseApplyDetailDtos) {
+        if (purchaseApplyDetailDtos.size() > 0) {
+            for (PurchaseApplyDetailDto purchaseApplyDetail : purchaseApplyDetailDtos) {
                 PurchaseApplyDetailPo purchaseApplyPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
                 super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
                 //取消流程审批
                 //查询任务
                 PurchaseApplyDto purchaseDto = new PurchaseApplyDto();
                 purchaseDto.setBusinessKey(purchaseApplyDetail.getApplyOrderId());
-                List<PurchaseApplyDto>  purchaseApplyDtoList=purchaseApplyInnerServiceSMOImpl.getActRuTaskId(purchaseDto);
-                if(purchaseApplyDtoList!=null && purchaseApplyDtoList.size()>0){
+                List<PurchaseApplyDto> purchaseApplyDtoList = purchaseApplyInnerServiceSMOImpl.getActRuTaskId(purchaseDto);
+                if (purchaseApplyDtoList != null && purchaseApplyDtoList.size() > 0) {
                     PurchaseApplyDto purchaseDto1 = new PurchaseApplyDto();
                     purchaseDto1.setActRuTaskId(purchaseApplyDtoList.get(0).getActRuTaskId());
                     purchaseDto1.setAssigneeUser("999999");

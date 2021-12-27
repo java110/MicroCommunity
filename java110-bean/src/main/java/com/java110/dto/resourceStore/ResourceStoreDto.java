@@ -15,7 +15,6 @@ import java.util.List;
  * add by wuxw 2019/4/24
  **/
 public class ResourceStoreDto extends PageDto implements Serializable {
-
     //物品名称(用来做模糊查询)
     private String resName;
     //物品名称(用来做精确查询)
@@ -70,6 +69,9 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String parentRstName;
     //仓库是否对外开放 true是 false否
     private String isShow;
+    //是否是固定物品
+    private String isFixed;
+    private String isFixedName;
 
     public String getResName() {
         return resName;
@@ -126,7 +128,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     public void setResId(String resId) {
         this.resId = resId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -374,5 +375,21 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

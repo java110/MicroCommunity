@@ -12,7 +12,6 @@ import java.util.List;
  * add by wuxw 2020/5/29
  **/
 public class ResourceStorePo implements Serializable {
-
     private String resId;
     private String storeId;
     private String resName;
@@ -47,6 +46,9 @@ public class ResourceStorePo implements Serializable {
     //最小计量总数
     private String miniStock;
     private String operationType;
+    //是否是固定物品
+    private String isFixed;
+    private String isFixedName;
 
     public String getResId() {
         return resId;
@@ -294,5 +296,21 @@ public class ResourceStorePo implements Serializable {
 
     public void setParentRstId(String parentRstId) {
         this.parentRstId = parentRstId;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }

@@ -16,6 +16,7 @@ public class AllocationUserStorehousePo implements Serializable {
     private String stock;
     private String createTime;
     private String giveQuantity;
+    private String resCode;
 
     public String getAcceptUserId() {
         return acceptUserId;
@@ -111,5 +112,13 @@ public class AllocationUserStorehousePo implements Serializable {
 
     public void setGiveQuantity(String giveQuantity) {
         this.giveQuantity = giveQuantity;
+    }
+
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
 }

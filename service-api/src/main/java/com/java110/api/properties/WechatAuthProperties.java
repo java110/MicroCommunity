@@ -1,6 +1,9 @@
 package com.java110.api.properties;
 
 
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.StringUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -96,6 +99,10 @@ public class WechatAuthProperties {
     }
 
     public String getWxNotifyUrl() {
+        String wxNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wxNotifyUrl");
+        if (!StringUtil.isEmpty(wxNotifyUrlCache)) {
+            return wxNotifyUrlCache;
+        }
         return wxNotifyUrl;
     }
 
@@ -128,6 +135,10 @@ public class WechatAuthProperties {
     }
 
     public String getRentingNotifyUrl() {
+        String rentingNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "rentingNotifyUrl");
+        if (!StringUtil.isEmpty(rentingNotifyUrlCache)) {
+            return rentingNotifyUrlCache;
+        }
         return rentingNotifyUrl;
     }
 
@@ -136,6 +147,10 @@ public class WechatAuthProperties {
     }
 
     public String getOweFeeNotifyUrl() {
+        String oweFeeNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "oweFeeNotifyUrl");
+        if (!StringUtil.isEmpty(oweFeeNotifyUrlCache)) {
+            return oweFeeNotifyUrlCache;
+        }
         return oweFeeNotifyUrl;
     }
 
@@ -144,6 +159,10 @@ public class WechatAuthProperties {
     }
 
     public String getGoodsNotifyUrl() {
+        String goodsNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "goodsNotifyUrl");
+        if (!StringUtil.isEmpty(goodsNotifyUrlCache)) {
+            return goodsNotifyUrlCache;
+        }
         return goodsNotifyUrl;
     }
 
@@ -152,6 +171,10 @@ public class WechatAuthProperties {
     }
 
     public String getTempCarFeeNotifyUrl() {
+        String tempCarFeeNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "tempCarFeeNotifyUrl");
+        if (!StringUtil.isEmpty(tempCarFeeNotifyUrlCache)) {
+            return tempCarFeeNotifyUrlCache;
+        }
         return tempCarFeeNotifyUrl;
     }
 

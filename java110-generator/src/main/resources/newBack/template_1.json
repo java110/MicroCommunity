@@ -1,72 +1,42 @@
 {
   "param": {
-    "repairEvent": "repair_event",
-    "preStaffName": "pre_staff_name",
-    "repairId": "repair_id",
+    "refundFee": "refund_fee",
+    "mchId": "mch_id",
+    "orderId": "order_id",
+    "totalFee": "total_fee",
+    "openId": "open_id",
+    "appId": "app_id",
     "statusCd": "status_cd",
-    "ruId": "ru_id",
-    "preStaffId": "pre_staff_id",
-    "context": "context",
-    "staffName": "staff_name",
-    "preRuId": "pre_ru_id",
-    "startTime": "start_time",
+    "payId": "pay_id",
     "state": "state",
-    "endTime": "end_time",
-    "communityId": "community_id",
-    "staffId": "staff_id"
+    "message": "message",
+    "payName": "pay_name",
+    "transactionId": "transaction_id"
   },
-  "name": "repairUserNew",
-  "shareColumn": "community_id",
-  "id": "ruId",
-  "shareName": "fee",
+  "name": "onlinePay",
+  "shareColumn": "order_id",
+  "id": "payId",
+  "shareName": "acct",
   "autoMove": true,
   "required": [
     {
-      "msg": "报修派单ID不能为空",
-      "code": "ruId"
+      "msg": "订单ID不能为空",
+      "code": "orderId"
     },
     {
-      "msg": "报修ID不能为空",
-      "code": "repairId"
+      "msg": "商户ID不能为空",
+      "code": "mchId"
     },
     {
-      "msg": "小区ID不能为空",
-      "code": "communityId"
+      "msg": "付款总金额不能为空",
+      "code": "totalFee"
     },
     {
-      "msg": "员工处理状态不能为空",
-      "code": "state"
-    },
-    {
-      "msg": "当前处理员工不能为空",
-      "code": "staffId"
-    },
-    {
-      "msg": "当前处理员工名称不能为空",
-      "code": "staffName"
-    },
-    {
-      "msg": "上一节点处理员工不能为空",
-      "code": "preStaffId"
-    },
-    {
-      "msg": "上一节点处理员工名称不能为空",
-      "code": "preStaffName"
-    },
-    {
-      "msg": "开始时间不能为空",
-      "code": "startTime"
-    },
-    {
-      "msg": "事件不能为空",
-      "code": "repairEvent"
-    },
-    {
-      "msg": "上一节点处理ID'不能为空",
-      "code": "preRuId"
+      "msg": "退款金额不能为空",
+      "code": "refundFee"
     }
   ],
-  "desc": "费用明细",
-  "shareParam": "communityId",
-  "tableName": "r_repair_user"
+  "desc": "线上支付",
+  "shareParam": "orderId",
+  "tableName": "online_pay"
 }
