@@ -8,6 +8,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
@@ -149,7 +150,10 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
                 return;
             }
         }
-
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(storeUserDtos.get(0).getStoreId());
+        List<StoreDto> storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
+        userInfo.put("storeType",storeDtos.get(0).getStoreTypeCd());
 
         try {
             Map userMap = new HashMap();
