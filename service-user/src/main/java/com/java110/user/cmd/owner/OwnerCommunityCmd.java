@@ -71,6 +71,10 @@ public class OwnerCommunityCmd extends AbstractServiceCmdListener {
         communityDto.setState("1100");
         communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(communityDtos == null || communityDtos.size()<1){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             for (CommunityDto tmpCommunityDto : communityDtos) {
                 if (!tmpCommunityDto.getCommunityId().equals(tmpOwnerDto.getCommunityId())) {
