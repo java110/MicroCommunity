@@ -87,6 +87,13 @@
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
         </if>
+        <if test="appIds !=null ">
+            and t.app_id in
+            <foreach collection="appIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="blackListIp !=null and blackListIp != ''">
             and t.black_list_ip= #{blackListIp}
         </if>
@@ -146,6 +153,12 @@
         where 1 =1
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
+        </if>
+        <if test="appIds !=null ">
+            and t.app_id in
+            <foreach collection="appIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="blackListIp !=null and blackListIp != ''">
             and t.black_list_ip= #{blackListIp}

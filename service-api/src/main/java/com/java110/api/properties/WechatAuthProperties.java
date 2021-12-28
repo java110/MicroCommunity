@@ -51,6 +51,10 @@ public class WechatAuthProperties {
     }
 
     public String getAppId() {
+        String appIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId");
+        if (!StringUtil.isEmpty(appIdCache)) {
+            return appIdCache;
+        }
         return appId;
     }
 
@@ -59,6 +63,11 @@ public class WechatAuthProperties {
     }
 
     public String getSecret() {
+
+        String appSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret");
+        if (!StringUtil.isEmpty(appSecretCache)) {
+            return appSecretCache;
+        }
         return secret;
     }
 
@@ -75,14 +84,23 @@ public class WechatAuthProperties {
     }
 
     public String getKey() {
+        String keyCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
+        if (!StringUtil.isEmpty(keyCache)) {
+            return keyCache;
+        }
         return key;
     }
 
     public void setKey(String key) {
+
         this.key = key;
     }
 
     public String getMchId() {
+        String mchIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
+        if (!StringUtil.isEmpty(mchIdCache)) {
+            return mchIdCache;
+        }
         return mchId;
     }
 

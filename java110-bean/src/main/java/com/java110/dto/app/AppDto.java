@@ -26,6 +26,7 @@ public class AppDto extends PageDto implements Serializable {
 
 
     private String appId;
+    private String[] appIds;
     private String blackListIp;
     private String name;
     private String securityCode;
@@ -110,5 +111,13 @@ public class AppDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getAppIds() {
+        return appIds;
+    }
+
+    public void setAppIds(String[] appIds) {
+        this.appIds = appIds;
     }
 }

@@ -3,18 +3,19 @@ package com.java110.api.listener.advert;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.po.advert.AdvertItemPo;
 import com.java110.po.advert.AdvertPo;
 import com.java110.po.file.FileRelPo;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.ServiceCodeAdvertConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.annotation.Java110Listener;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
-//        reqJson.put("communityId", "9999");
+        reqJson.put("communityId", "9999");
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
         super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
@@ -97,7 +98,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         paramInJson.put("fileSaveName", fileName);
         paramInJson.put("advertPhotoId", fileDto.getFileId());
         itemTypeCd = "8888";
-/*        url = fileDto.getFileId();*/
+        /*        url = fileDto.getFileId();*/
         AdvertItemPo advertItemPo = new AdvertItemPo();
         advertItemPo.setAdvertId(paramInJson.getString("advertId"));
         advertItemPo.setAdvertItemId("-1");
