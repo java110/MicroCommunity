@@ -301,6 +301,7 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 resourceStoreUseRecordPo.setCreateUserName(reqJson.getString("userName"));
                 resourceStoreUseRecordPo.setRemark(reqJson.getString("context"));
                 resourceStoreUseRecordPo.setQuantity(useNumber);
+                resourceStoreUseRecordPo.setState("2002"); //1001 报废回收   2002 工单损耗   3003 公用损耗
                 //有偿服务
                 if (maintenanceType.equals("1001")) {
                     resourceStoreUseRecordPo.setUnitPrice(paramIn.getString("price"));

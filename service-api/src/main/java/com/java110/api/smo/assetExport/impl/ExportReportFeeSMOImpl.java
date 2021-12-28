@@ -887,12 +887,13 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(4).setCellValue("物品名称");
         row.createCell(5).setCellValue("物品规格");
         row.createCell(6).setCellValue("是否是固定物品");
-        row.createCell(7).setCellValue("物品使用数量");
-        row.createCell(8).setCellValue("物品价格");
-        row.createCell(9).setCellValue("使用人ID");
-        row.createCell(10).setCellValue("使用人");
-        row.createCell(11).setCellValue("创建时间");
-        row.createCell(12).setCellValue("备注");
+        row.createCell(7).setCellValue("物品使用类型");
+        row.createCell(8).setCellValue("物品使用数量");
+        row.createCell(9).setCellValue("物品价格");
+        row.createCell(10).setCellValue("使用人ID");
+        row.createCell(11).setCellValue("使用人");
+        row.createCell(12).setCellValue("创建时间");
+        row.createCell(13).setCellValue("备注");
         JSONArray resourceStoreUseRecords = this.getResourceStoreUseRecordManage(pd, result);
         if (resourceStoreUseRecords == null || resourceStoreUseRecords.size() == 0) {
             return;
@@ -908,12 +909,13 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(4).setCellValue(dataObj.getString("resourceStoreName"));
             row.createCell(5).setCellValue(dataObj.getString("specName"));
             row.createCell(6).setCellValue(dataObj.getString("isFixedName"));
-            row.createCell(7).setCellValue(dataObj.getString("quantity") + dataObj.getString("miniUnitCodeName"));
-            row.createCell(8).setCellValue(dataObj.getString("unitPrice"));
-            row.createCell(9).setCellValue(dataObj.getString("createUserId"));
-            row.createCell(10).setCellValue(dataObj.getString("createUserName"));
-            row.createCell(11).setCellValue(dataObj.getString("createTime"));
-            row.createCell(12).setCellValue(dataObj.getString("remark"));
+            row.createCell(7).setCellValue(dataObj.getString("stateName"));
+            row.createCell(8).setCellValue(dataObj.getString("quantity") + dataObj.getString("miniUnitCodeName"));
+            row.createCell(9).setCellValue(dataObj.getString("unitPrice"));
+            row.createCell(10).setCellValue(dataObj.getString("createUserId"));
+            row.createCell(11).setCellValue(dataObj.getString("createUserName"));
+            row.createCell(12).setCellValue(dataObj.getString("createTime"));
+            row.createCell(13).setCellValue(dataObj.getString("remark"));
         }
     }
 

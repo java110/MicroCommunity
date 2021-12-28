@@ -27,7 +27,7 @@ public class SaveAllocationUserStorehouseListener extends AbstractServiceApiPlus
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-        Assert.hasKeyAndValue(reqJson, "acceptUserId", "请求报文中未包含acceptUserId");
+        //Assert.hasKeyAndValue(reqJson, "acceptUserId", "请求报文中未包含acceptUserId");
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
     }
 

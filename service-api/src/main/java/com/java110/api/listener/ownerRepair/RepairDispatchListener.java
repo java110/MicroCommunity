@@ -237,10 +237,10 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     private void transferRepair(DataFlowContext context, JSONObject reqJson) {
         //获取接受转单的员工
         String staffId = reqJson.getString("staffId");
-        RepairUserDto repairUser = new RepairUserDto();
-        repairUser.setStaffId(staffId);
-        repairUser.setState("10001"); //处理中
-        int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+        RepairDto repair = new RepairDto();
+        repair.setStaffId(staffId);
+        repair.setState("10001"); //处理中
+        int i = repairInnerServiceSMOImpl.queryStaffRepairsCount(repair);
         //取出开关映射的值(维修师傅未处理最大单数)
         String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
         if (i >= Integer.parseInt(repairNumber)) {
@@ -300,10 +300,10 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     private void dispacthRepair(DataFlowContext context, JSONObject reqJson) {
         //获取接受派单的员工
         String staffId = reqJson.getString("staffId");
-        RepairUserDto repairUser = new RepairUserDto();
-        repairUser.setStaffId(staffId);
-        repairUser.setState("10001"); //处理中
-        int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+        RepairDto repair = new RepairDto();
+        repair.setStaffId(staffId);
+        repair.setState("10001"); //处理中
+        int i = repairInnerServiceSMOImpl.queryStaffRepairsCount(repair);
         //取出开关映射的值(维修师傅未处理最大单数)
         String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
         if (i >= Integer.parseInt(repairNumber)) {

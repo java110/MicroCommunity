@@ -542,6 +542,9 @@ public class RoomRenovationApi {
                                                       @RequestParam(value = "personTel", required = false) String personTel,
                                                       @RequestParam(value = "state", required = false) String state,
                                                       @RequestParam(value = "isPostpone", required = false) String isPostpone,
+                                                      @RequestParam(value = "renovationTime", required = false) String renovationTime,
+                                                      @RequestParam(value = "renovationStartTime", required = false) String renovationStartTime,
+                                                      @RequestParam(value = "renovationEndTime", required = false) String renovationEndTime,
                                                       @RequestHeader(value = "user-id") String userId,
                                                       @RequestParam(value = "page", required = false) int page,
                                                       @RequestParam(value = "row", required = false) int row) {
@@ -556,6 +559,9 @@ public class RoomRenovationApi {
         roomRenovationDto.setState(state);
         roomRenovationDto.setUserId(userId);
         roomRenovationDto.setIsPostpone(isPostpone);
+        roomRenovationDto.setRenovationTime(renovationTime);
+        roomRenovationDto.setRenovationStartTime(renovationStartTime);
+        roomRenovationDto.setRenovationEndTime(renovationEndTime);
         return getRoomRenovationBMOImpl.get(roomRenovationDto);
     }
 

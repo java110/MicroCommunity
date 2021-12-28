@@ -25,7 +25,7 @@ public class ApiComplaintDataVo implements Serializable {
     private String unitNum;
     private String floorNum;
     private String communityId;
-    //
+
     private String auditCode;
 
     private List<PhotoVo> photos;

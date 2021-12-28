@@ -139,15 +139,15 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
         t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score
         appraiseScore, a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore,
-        t.pay_type,t.pay_type payType
+        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,d1.name repairSettingTypeName
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
-        left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and
-        rrv.status_cd = '0'
+        left join t_dict d1 on rs.repair_setting_type = d1.status_cd and d1.table_name = 'r_repair_setting' and d1.table_columns = 'repair_setting_type'
+        left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and rrv.status_cd = '0'
         left join appraise a on a.obj_id = t.repair_id and a.status_cd = '0'
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
@@ -164,6 +164,9 @@
         </if>
         <if test="repairWay !=null and repairWay != ''">
             and rs.repair_way= #{repairWay}
+        </if>
+        <if test="repairSettingType !=null and repairSettingType != ''">
+            and rs.repair_setting_type= #{repairSettingType}
         </if>
         <if test="returnVisitFlag != null and returnVisitFlag != '' and returnVisitFlag != '003'">
             and rs.return_visit_flag in ('001','002')
@@ -324,6 +327,9 @@
         <if test="repairType !=null and repairType != ''">
             and t.repair_type= #{repairType}
         </if>
+        <if test="repairSettingType !=null and repairSettingType != ''">
+            and rs.repair_setting_type= #{repairSettingType}
+        </if>
         <if test="payType !=null and payType != ''">
             and t.pay_type= #{payType}
         </if>
@@ -395,7 +401,7 @@
         td.table_columns='return_visit_flag'
         where 1 =1
         and ru.state in ('10001','10009','11000')
-        and t.state in('1000','1100','1200','1300','1400','1700','1800')
+        and t.state in('1000','1100','1200','1300','1400','1700','1800','2001')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
@@ -462,7 +468,7 @@
         td.table_columns='return_visit_flag'
         where 1 =1
         and ru.state in ('10001','10009','11000')
-        and t.state in('1000','1100','1200','1300','1400','1700','1800')
+        and t.state in('1000','1100','1200','1300','1400','1700','1800','2001')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
