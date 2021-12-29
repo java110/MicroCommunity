@@ -148,7 +148,9 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             receivedAmount = 0.0;
         }
         paramOut.put("receivedAmount", receivedAmount);
+
         ResponseEntity<String> responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
+        reqJson.putAll(paramOut);
         CommonCache.setValue("payFeePre" + paramOut.getString("oId"), reqJson.toJSONString(), 24 * 60 * 60);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
@@ -232,7 +234,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         for (CouponUserDto couponUser : couponUserDtos) {
             //不计算已过期购物券金额
             if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
-                couponPrice.add(new BigDecimal(Double.parseDouble(couponUser.getActualPrice())));
+                couponPrice = couponPrice.add(new BigDecimal(Double.parseDouble(couponUser.getActualPrice())));
             }
         }
         paramObj.put("couponPrice", couponPrice.doubleValue());
