@@ -94,7 +94,6 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
         //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
         if (money <= 0) {
-
             JSONObject paramOut = new JSONObject();
             paramOut.put("oId", orderId);
             String urlOut = "fee.payFeeConfirm";

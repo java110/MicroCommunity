@@ -46,7 +46,7 @@ import java.util.Map;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "fee.payFeePreNew")
+@Java110Cmd(serviceCode = "fee.payFeePre")
 public class PayFeePreCmd extends AbstractServiceCmdListener {
     private static Logger logger = LoggerFactory.getLogger(PayFeePreCmd.class);
 
@@ -102,13 +102,14 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         logger.debug("ServiceDataFlowEvent : {}", event);
 
-        JSONObject paramObj = reqJson;
 
-        JSONArray businesses = new JSONArray();
         //判断是否有折扣情况
-        judgeDiscount(paramObj);
+        judgeDiscount(reqJson);
+        //2.0 考虑账户抵消
+        judgeAccount(reqJson);
         //3.0 考虑优惠卷
-        checkCouponUser(paramObj);
+        checkCouponUser(reqJson);
+
 
         String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
         reqJson.put("appId", appId);
@@ -146,6 +147,14 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
+    /**
+     *  考虑账户抵消
+     * @param reqJson
+     */
+    private void judgeAccount(JSONObject reqJson) {
+
+    }
+
     private void checkCouponUser(JSONObject paramObj) {
         JSONArray couponList = paramObj.getJSONArray("couponList");
         BigDecimal couponPrice = new BigDecimal(0.0);
@@ -153,6 +162,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
 
         if (couponList == null || couponList.size() < 1) {
             paramObj.put("couponPrice", couponPrice);
+            paramObj.put("couponUserDtos", new ArrayList<CouponUserDto>()); //这里考虑空
             return;
         }
         for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
