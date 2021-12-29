@@ -8,10 +8,12 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -83,6 +85,9 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
@@ -102,17 +107,9 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         logger.debug("ServiceDataFlowEvent : {}", event);
 
-
-        //判断是否有折扣情况
-        judgeDiscount(reqJson);
-        //2.0 考虑账户抵消
-        judgeAccount(reqJson);
-        //3.0 考虑优惠卷
-        checkCouponUser(reqJson);
-
-
         String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
         reqJson.put("appId", appId);
+
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(reqJson.getString("feeId"));
         feeDto.setCommunityId(reqJson.getString("communityId"));
@@ -123,20 +120,29 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         feeDto = feeDtos.get(0);
 
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
-
         BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(reqJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        double discountPrice = reqJson.getDouble("discountPrice");
-        double couponPrice = reqJson.getDouble("couponPrice");
         JSONObject paramOut = new JSONObject();
         paramOut.put("receivableAmount", tmpReceivableAmount);
         paramOut.put("oId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oId));
-        //1.0 考虑优惠金额
+
+        //实收金额
+        BigDecimal tmpReceivedAmout = new BigDecimal(tmpReceivableAmount);
+
+        //判断是否有折扣情况
+        double discountPrice = judgeDiscount(reqJson);
+        tmpReceivedAmout = tmpReceivedAmout.subtract(new BigDecimal(discountPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
         //2.0 考虑账户抵消
+        double accountPrice = judgeAccount(reqJson);
+        tmpReceivedAmout = tmpReceivedAmout.subtract(new BigDecimal(accountPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
         //3.0 考虑优惠卷
-        BigDecimal tmpReceivedAmout = new BigDecimal(tmpReceivableAmount).subtract(new BigDecimal(discountPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        double receivedAmount = tmpReceivedAmout.subtract(new BigDecimal(couponPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        double couponPrice = checkCouponUser(reqJson);
+        tmpReceivedAmout = tmpReceivedAmout.subtract(new BigDecimal(couponPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
+
+        double receivedAmount = tmpReceivedAmout.doubleValue();
         //所有 优惠折扣计算完后，如果总金额小于等于0，则返回总扣款为0
         if (receivedAmount <= 0) {
             receivedAmount = 0.0;
@@ -151,19 +157,67 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
      *  考虑账户抵消
      * @param reqJson
      */
-    private void judgeAccount(JSONObject reqJson) {
+    private double judgeAccount(JSONObject reqJson) {
+        if(!reqJson.containsKey("deductionAmount")){
+            reqJson.put("deductionAmount",0.0);
+            return 0.0;
+        }
 
+        double deductionAmount = reqJson.getDouble("deductionAmount");
+        if(deductionAmount <= 0){
+            reqJson.put("deductionAmount",0.0);
+            return 0.0;
+        }
+
+        if(!reqJson.containsKey("selectUserAccount")){
+            reqJson.put("deductionAmount",0.0);
+            return 0.0;
+        }
+
+        JSONArray selectUserAccount = reqJson.getJSONArray("selectUserAccount");
+        if(selectUserAccount == null || selectUserAccount.size() <1){
+            reqJson.put("deductionAmount",0.0);
+            return 0.0;
+        }
+        List<String> acctIds = new ArrayList<>();
+        for(int userAccountIndex = 0 ;userAccountIndex < selectUserAccount.size(); userAccountIndex++){
+            acctIds.add(selectUserAccount.getJSONObject(userAccountIndex).getString("acctId"));
+        }
+
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctIds(acctIds.toArray(new String[acctIds.size()]));
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+
+        if(accountDtos == null || accountDtos.size() < 1){
+            reqJson.put("deductionAmount",0.0);
+            return 0.0;
+        }
+
+        BigDecimal totalAccountAmount = new BigDecimal(0);
+        for(AccountDto tmpAccountDto: accountDtos){
+            totalAccountAmount = totalAccountAmount.add(new BigDecimal(tmpAccountDto.getAmount()));
+        }
+
+        deductionAmount = totalAccountAmount.subtract(new BigDecimal(deductionAmount)).doubleValue();
+        if(deductionAmount < 0){
+            reqJson.put("deductionAmount",totalAccountAmount.doubleValue());
+            reqJson.put("selectUserAccount",accountDtos);
+            return totalAccountAmount.doubleValue();
+        }
+        reqJson.put("deductionAmount",deductionAmount);
+        reqJson.put("selectUserAccount",accountDtos);
+        return deductionAmount;
     }
 
-    private void checkCouponUser(JSONObject paramObj) {
+    private double checkCouponUser(JSONObject paramObj) {
         JSONArray couponList = paramObj.getJSONArray("couponList");
         BigDecimal couponPrice = new BigDecimal(0.0);
         List<String> couponIds = new ArrayList<String>();
 
         if (couponList == null || couponList.size() < 1) {
-            paramObj.put("couponPrice", couponPrice);
+            paramObj.put("couponPrice", couponPrice.doubleValue());
             paramObj.put("couponUserDtos", new ArrayList<CouponUserDto>()); //这里考虑空
-            return;
+            return couponPrice.doubleValue();
         }
         for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
             couponIds.add(couponList.getJSONObject(couponIndex).getString("couponId"));
@@ -172,8 +226,8 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         couponUserDto.setCouponIds(couponIds.toArray(new String[couponIds.size()]));
         List<CouponUserDto> couponUserDtos = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
         if (couponUserDtos == null || couponUserDtos.size() < 1) {
-            paramObj.put("couponPrice", couponPrice);
-            return;
+            paramObj.put("couponPrice", couponPrice.doubleValue());
+            return couponPrice.doubleValue();
         }
         for (CouponUserDto couponUser : couponUserDtos) {
             //不计算已过期购物券金额
@@ -181,12 +235,13 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
                 couponPrice.add(new BigDecimal(Double.parseDouble(couponUser.getActualPrice())));
             }
         }
-        paramObj.put("couponPrice", couponPrice);
+        paramObj.put("couponPrice", couponPrice.doubleValue());
         paramObj.put("couponUserDtos", couponUserDtos);
+        return couponPrice.doubleValue();
     }
 
 
-    private void judgeDiscount(JSONObject paramObj) {
+    private double judgeDiscount(JSONObject paramObj) {
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setCommunityId(paramObj.getString("communityId"));
         feeDetailDto.setFeeId(paramObj.getString("feeId"));
@@ -206,14 +261,15 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
 
         if (computeDiscountDtos == null || computeDiscountDtos.size() < 1) {
-            paramObj.put("discountPrice", 0.0);
-            return;
+            paramObj.put("discountPrice",0.0);
+            return 0.0;
         }
         BigDecimal discountPrice = new BigDecimal(0);
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
         }
-        paramObj.put("discountPrice", discountPrice);
+        paramObj.put("discountPrice",discountPrice.doubleValue());
         paramObj.put("computeDiscountDtos", computeDiscountDtos);
+        return discountPrice.doubleValue();
     }
 }

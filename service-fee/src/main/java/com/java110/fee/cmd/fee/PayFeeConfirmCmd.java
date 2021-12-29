@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -20,12 +21,14 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.order.Orders;
 import com.java110.fee.bmo.fee.IFeeBMO;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.couponUser.CouponUserPo;
@@ -99,6 +102,9 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICouponUserDetailV1InnerServiceSMO couponUserDetailV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
     //默认序列
     protected static final int DEFAULT_SEQ = 1;
 
@@ -125,19 +131,20 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             paramObj.put("remark", "线上小程序支付");
         }
 
+        //处理现金账户
+        dealAccount(paramObj);
+
+        //处理 优惠折扣
+        addDiscount(paramObj);
+
+        //修改已使用优惠卷信息
+        modifyCouponUser(paramObj);
+
         //添加单元信息
         feeBMOImpl.addFeePreDetail(paramObj);
         feeBMOImpl.modifyPreFee(paramObj);
 
-        double discountPrice = paramObj.getDouble("discountPrice");
-        if (discountPrice > 0) {
-            addDiscount(paramObj);
-        }
-
         dealOwnerCartEndTime(paramObj);
-
-        //修改已使用优惠卷信息
-        modifyCouponUser(paramObj);
 
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
@@ -228,10 +235,57 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
+    private void dealAccount(JSONObject paramObj) {
+
+        if(!paramObj.containsKey("deductionAmount") || paramObj.getDouble("deductionAmount") <=0){
+            return ;
+        }
+
+        BigDecimal deductionAmount = new BigDecimal(paramObj.getDouble("deductionAmount"));
+
+        List<AccountDto> accountDtos = (List<AccountDto>) paramObj.get("selectUserAccount");
+        BigDecimal amount = null;
+        for(AccountDto accountDto : accountDtos){
+
+            amount = new BigDecimal(Double.parseDouble(accountDto.getAmount()));
+            AccountDetailPo accountDetailPo = new AccountDetailPo();
+            accountDetailPo.setAcctId(accountDto.getAcctId());
+            accountDetailPo.setObjId(accountDto.getObjId());
+            if(amount.doubleValue()< deductionAmount.doubleValue()){
+                accountDetailPo.setAmount(amount.doubleValue()+"");
+                deductionAmount = deductionAmount.subtract(amount).setScale(2,BigDecimal.ROUND_HALF_UP);
+            }else{
+                accountDetailPo.setAmount(deductionAmount.doubleValue()+"");
+                deductionAmount = deductionAmount.subtract(deductionAmount).setScale(2,BigDecimal.ROUND_HALF_UP);
+            }
+            int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+
+            if(flag < 1){
+                throw  new CmdException("扣款失败");
+            }
+        }
+
+        if(deductionAmount.doubleValue()>0){
+            throw new CmdException("账户金额不足");
+        }
+
+    }
+
     private void modifyCouponUser(JSONObject paramObj) {
+        if(!paramObj.containsKey("couponPrice") || paramObj.getDouble("couponPrice")<=0){
+            return ;
+        }
         FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
         List<CouponUserDto> couponUserDtos = (List<CouponUserDto>) paramObj.get("couponUserDtos");
+        CouponUserDto couponUserDto = null;
         for (CouponUserDto couponUser : couponUserDtos) {
+            couponUserDto = new CouponUserDto();
+            couponUserDto.setCouponId(couponUser.getCouponId());
+            couponUserDto.setState(CouponUserDto.COUPON_STATE_RUN);
+            List<CouponUserDto> couponUserDtos1 = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
+            if(couponUserDtos1==null || couponUserDtos1.size()<1){
+                throw new CmdException("优惠券被使用");
+            }
             CouponUserPo couponUserPo = new CouponUserPo();
             couponUserPo.setState(CouponUserDto.COUPON_STATE_STOP);
             couponUserPo.setCouponId(couponUser.getCouponId());
@@ -257,6 +311,10 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
     }
 
     private void addDiscount(JSONObject paramObj) {
+
+        if (!paramObj.containsKey("discountPrice") || paramObj.getDouble("discountPrice") <=0) {
+            return ;
+        }
         List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             if (computeDiscountDto.getDiscountPrice() <= 0) {

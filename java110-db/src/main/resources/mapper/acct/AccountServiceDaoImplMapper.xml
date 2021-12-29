@@ -119,6 +119,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test="acctIds !=null ">
+            and t.acct_id in
+            <foreach collection="acctIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
         </if>
@@ -195,6 +201,12 @@
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="acctIds !=null ">
+            and t.acct_id in
+            <foreach collection="acctIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
