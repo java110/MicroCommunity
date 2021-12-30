@@ -3,10 +3,8 @@ package com.java110.utils.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.beans.BeanMap;
@@ -14,12 +12,7 @@ import org.springframework.cglib.beans.BeanMap;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @ClassName BeanConvertUtil
@@ -37,7 +30,7 @@ public final class BeanConvertUtil {
     static {
         ConvertUtils.register(new Converter() { //注册一个日期转换器
 
-        	public <T> T convert(Class<T> type, Object value) {
+            public <T> T convert(Class<T> type, Object value) {
                 Date date1 = null;
                 if (value instanceof String && type.getClass().equals(Date.class)) {
                     String date = (String) value;
@@ -93,7 +86,7 @@ public final class BeanConvertUtil {
         return dstBean;
     }
 
-    private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map<String,Object> orgMap) {
+    private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map<String, Object> orgMap) {
         //Field[] fields = dstBean.getClass().getDeclaredFields();
         Field[] fields = FieldUtils.getAllFields(dstBean.getClass());
         for (Field field : fields) {
@@ -192,7 +185,7 @@ public final class BeanConvertUtil {
      */
     public static JSONArray beanCovertJSONArray(Object orgBean) {
 
-        return JSONArray.parseArray(JSONArray.toJSONString(orgBean));
+        return JSONArray.parseArray(JSONArray.toJSONStringWithDateFormat(orgBean, "yyyy-MM-dd HH:mm:ss"));
     }
 
 
