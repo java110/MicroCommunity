@@ -14,7 +14,6 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
-
     private String repairId;
     private String unitPrice;
     private String createUserId;
@@ -38,6 +37,9 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
     private String endTime;
     private String unitCodeName;
     private String miniUnitCodeName;
+    //1001 报废回收   2002 工单损耗   3003 公用损耗
+    private String state;
+    private String stateName;
 
     private String statusCd = "0";
 
@@ -250,5 +252,21 @@ public class ResourceStoreUseRecordDto extends PageDto implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

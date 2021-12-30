@@ -39,7 +39,8 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         businessRepairSettingInfo.put("newBId", businessRepairSettingInfo.get("b_id"));
         businessRepairSettingInfo.put("operate", businessRepairSettingInfo.get("operate"));
         businessRepairSettingInfo.put("repairTypeName", businessRepairSettingInfo.get("repair_type_name"));
-        businessRepairSettingInfo.put("repairType", businessRepairSettingInfo.get("repair_type"));
+        businessRepairSettingInfo.put("repairSettingType", businessRepairSettingInfo.get("repair_setting_type"));
+        businessRepairSettingInfo.put("settingType", businessRepairSettingInfo.get("setting_type"));
         businessRepairSettingInfo.put("remark", businessRepairSettingInfo.get("remark"));
         businessRepairSettingInfo.put("communityId", businessRepairSettingInfo.get("community_id"));
         businessRepairSettingInfo.put("repairWay", businessRepairSettingInfo.get("repair_way"));
@@ -76,6 +77,7 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         currentRepairSettingInfo.put("operate", currentRepairSettingInfo.get("operate"));
         currentRepairSettingInfo.put("repairTypeName", currentRepairSettingInfo.get("repair_type_name"));
         currentRepairSettingInfo.put("repairType", currentRepairSettingInfo.get("repair_type"));
+        currentRepairSettingInfo.put("repairSettingType", currentRepairSettingInfo.get("repair_setting_type"));
         currentRepairSettingInfo.put("remark", currentRepairSettingInfo.get("remark"));
         currentRepairSettingInfo.put("communityId", currentRepairSettingInfo.get("community_id"));
         currentRepairSettingInfo.put("repairWay", currentRepairSettingInfo.get("repair_way"));

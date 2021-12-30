@@ -15,6 +15,7 @@ public class RepairSettingPo implements Serializable {
     private String payFeeFlag;
     private String priceScope;
     private String returnVisitFlag;
+    private String repairSettingType;
 
 
     public String getRepairTypeName() {
@@ -96,5 +97,13 @@ public class RepairSettingPo implements Serializable {
 
     public void setReturnVisitFlag(String returnVisitFlag) {
         this.returnVisitFlag = returnVisitFlag;
+    }
+
+    public String getRepairSettingType() {
+        return repairSettingType;
+    }
+
+    public void setRepairSettingType(String repairSettingType) {
+        this.repairSettingType = repairSettingType;
     }
 }

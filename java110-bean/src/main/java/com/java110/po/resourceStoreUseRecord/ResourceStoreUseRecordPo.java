@@ -1,7 +1,6 @@
 package com.java110.po.resourceStoreUseRecord;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ResourceStoreUseRecordPo implements Serializable {
 
@@ -17,6 +16,8 @@ public class ResourceStoreUseRecordPo implements Serializable {
     private String communityId;
     private String resName;
     private String resourceStoreName;
+    //1001 报废回收   2002 工单损耗   3003 公用损耗
+    private String state;
 
     public String getRepairId() {
         return repairId;
@@ -112,5 +113,13 @@ public class ResourceStoreUseRecordPo implements Serializable {
 
     public void setResourceStoreName(String resourceStoreName) {
         this.resourceStoreName = resourceStoreName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

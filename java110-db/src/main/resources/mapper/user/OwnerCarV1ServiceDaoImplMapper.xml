@@ -7,11 +7,10 @@
 
     <!-- 保存车辆信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarInfo" parameterType="Map">
-        insert into owner_car(
-        car_brand,car_num,ps_id,remark,owner_id,car_type_cd,user_id,car_id,car_color,car_type,start_time,end_time,state,community_id,member_id,b_id
-        ) values (
-        #{carBrand},#{carNum},#{psId},#{remark},#{ownerId},#{carTypeCd},#{userId},#{carId},#{carColor},#{carType},#{startTime},#{endTime},#{state},#{communityId},#{memberId},'-1'
-        )
+        insert into owner_car(car_brand, car_num, ps_id, remark, owner_id, car_type_cd, user_id, car_id, car_color,
+                              car_type, start_time, end_time, state, community_id, member_id, b_id)
+        values (#{carBrand}, #{carNum}, #{psId}, #{remark}, #{ownerId}, #{carTypeCd}, #{userId}, #{carId}, #{carColor},
+                #{carType}, #{startTime}, #{endTime}, #{state}, #{communityId}, #{memberId}, '-1')
     </insert>
 
 

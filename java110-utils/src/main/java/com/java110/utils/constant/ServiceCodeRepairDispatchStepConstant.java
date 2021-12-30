@@ -16,6 +16,15 @@ public class ServiceCodeRepairDispatchStepConstant {
      */
     public static final String BINDING_REPAIR_DISPATCH = "ownerRepair.repairDispatch";
 
+    /**
+     * 暂停报修单
+     */
+    public static final String BINDING_REPAIR_STOP = "ownerRepair.repairStop";
+
+    /**
+     * 启动报修单
+     */
+    public static final String BINDING_REPAIR_START = "ownerRepair.repairStart";
 
     /**
      * 报修结单

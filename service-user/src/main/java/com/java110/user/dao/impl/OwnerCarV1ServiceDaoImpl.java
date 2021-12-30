@@ -15,16 +15,12 @@
  */
 package com.java110.user.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.user.dao.IOwnerCarV1ServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -42,20 +38,17 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
 
     private static Logger logger = LoggerFactory.getLogger(OwnerCarV1ServiceDaoImpl.class);
 
-
-
-
-
     /**
      * 保存车辆信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public int saveOwnerCarInfo(Map info) throws DAOException {
-        logger.debug("保存 saveOwnerCarInfo 入参 info : {}",info);
+        logger.debug("保存 saveOwnerCarInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("ownerCarV1ServiceDaoImpl.saveOwnerCarInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("ownerCarV1ServiceDaoImpl.saveOwnerCarInfo", info);
 
         return saveFlag;
     }
@@ -63,15 +56,16 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
 
     /**
      * 查询车辆信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getOwnerCarInfo(Map info) throws DAOException {
-        logger.debug("查询 getOwnerCarInfo 入参 info : {}",info);
+        logger.debug("查询 getOwnerCarInfo 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.getOwnerCarInfo",info);
+        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.getOwnerCarInfo", info);
 
         return businessOwnerCarInfos;
     }
@@ -79,26 +73,28 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
 
     /**
      * 修改车辆信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public int updateOwnerCarInfo(Map info) throws DAOException {
-        logger.debug("修改 updateOwnerCarInfo 入参 info : {}",info);
+        logger.debug("修改 updateOwnerCarInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("ownerCarV1ServiceDaoImpl.updateOwnerCarInfo",info);
+        int saveFlag = sqlSessionTemplate.update("ownerCarV1ServiceDaoImpl.updateOwnerCarInfo", info);
 
         return saveFlag;
     }
 
-     /**
+    /**
      * 查询车辆数量
+     *
      * @param info 车辆信息
      * @return 车辆数量
      */
     @Override
     public int queryOwnerCarsCount(Map info) {
-        logger.debug("查询 queryOwnerCarsCount 入参 info : {}",info);
+        logger.debug("查询 queryOwnerCarsCount 入参 info : {}", info);
 
         List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.queryOwnerCarsCount", info);
         if (businessOwnerCarInfos.size() < 1) {
