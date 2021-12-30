@@ -1,6 +1,7 @@
 package com.java110.utils.util;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -181,6 +182,17 @@ public final class BeanConvertUtil {
     public static JSONObject beanCovertJson(Object orgBean) {
 
         return JSONObject.parseObject(JSONObject.toJSONString(orgBean));
+    }
+
+    /**
+     * bean转换为map对象
+     *
+     * @param orgBean 原始bean
+     * @return map对象
+     */
+    public static JSONArray beanCovertJSONArray(Object orgBean) {
+
+        return JSONArray.parseArray(JSONArray.toJSONString(orgBean));
     }
 
 

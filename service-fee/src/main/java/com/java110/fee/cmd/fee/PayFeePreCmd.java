@@ -24,6 +24,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,11 +204,11 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         deductionAmount = totalAccountAmount.subtract(new BigDecimal(deductionAmount)).doubleValue();
         if(deductionAmount < 0){
             reqJson.put("deductionAmount",totalAccountAmount.doubleValue());
-            reqJson.put("selectUserAccount",accountDtos);
+            reqJson.put("selectUserAccount",BeanConvertUtil.beanCovertJSONArray(accountDtos));
             return totalAccountAmount.doubleValue();
         }
         reqJson.put("deductionAmount",deductionAmount);
-        reqJson.put("selectUserAccount",accountDtos);
+        reqJson.put("selectUserAccount",BeanConvertUtil.beanCovertJSONArray(accountDtos));
         return deductionAmount;
     }
 
@@ -218,7 +219,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
 
         if (couponList == null || couponList.size() < 1) {
             paramObj.put("couponPrice", couponPrice.doubleValue());
-            paramObj.put("couponUserDtos", new ArrayList<CouponUserDto>()); //这里考虑空
+            paramObj.put("couponUserDtos", new JSONArray()); //这里考虑空
             return couponPrice.doubleValue();
         }
         for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
@@ -238,7 +239,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             }
         }
         paramObj.put("couponPrice", couponPrice.doubleValue());
-        paramObj.put("couponUserDtos", couponUserDtos);
+        paramObj.put("couponUserDtos", BeanConvertUtil.beanCovertJSONArray(couponUserDtos) );
         return couponPrice.doubleValue();
     }
 
@@ -271,7 +272,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
         }
         paramObj.put("discountPrice",discountPrice.doubleValue());
-        paramObj.put("computeDiscountDtos", computeDiscountDtos);
+        paramObj.put("computeDiscountDtos", BeanConvertUtil.beanCovertJSONArray(computeDiscountDtos));
         return discountPrice.doubleValue();
     }
 }
