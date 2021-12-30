@@ -119,7 +119,8 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
         feeDto = feeDtos.get(0);
-
+        reqJson.put("feeTypeCd", feeDto.getFeeTypeCd());
+        reqJson.put("feeId", feeDto.getFeeId());
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(reqJson.getString("cycles")));
@@ -157,33 +158,34 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
     }
 
     /**
-     *  考虑账户抵消
+     * 考虑账户抵消
+     *
      * @param reqJson
      */
     private double judgeAccount(JSONObject reqJson) {
-        if(!reqJson.containsKey("deductionAmount")){
-            reqJson.put("deductionAmount",0.0);
+        if (!reqJson.containsKey("deductionAmount")) {
+            reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
 
         double deductionAmount = reqJson.getDouble("deductionAmount");
-        if(deductionAmount <= 0){
-            reqJson.put("deductionAmount",0.0);
+        if (deductionAmount <= 0) {
+            reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
 
-        if(!reqJson.containsKey("selectUserAccount")){
-            reqJson.put("deductionAmount",0.0);
+        if (!reqJson.containsKey("selectUserAccount")) {
+            reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
 
         JSONArray selectUserAccount = reqJson.getJSONArray("selectUserAccount");
-        if(selectUserAccount == null || selectUserAccount.size() <1){
-            reqJson.put("deductionAmount",0.0);
+        if (selectUserAccount == null || selectUserAccount.size() < 1) {
+            reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
         List<String> acctIds = new ArrayList<>();
-        for(int userAccountIndex = 0 ;userAccountIndex < selectUserAccount.size(); userAccountIndex++){
+        for (int userAccountIndex = 0; userAccountIndex < selectUserAccount.size(); userAccountIndex++) {
             acctIds.add(selectUserAccount.getJSONObject(userAccountIndex).getString("acctId"));
         }
 
@@ -191,24 +193,24 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         accountDto.setAcctIds(acctIds.toArray(new String[acctIds.size()]));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
-        if(accountDtos == null || accountDtos.size() < 1){
-            reqJson.put("deductionAmount",0.0);
+        if (accountDtos == null || accountDtos.size() < 1) {
+            reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
 
         BigDecimal totalAccountAmount = new BigDecimal(0);
-        for(AccountDto tmpAccountDto: accountDtos){
+        for (AccountDto tmpAccountDto : accountDtos) {
             totalAccountAmount = totalAccountAmount.add(new BigDecimal(tmpAccountDto.getAmount()));
         }
 
         deductionAmount = totalAccountAmount.subtract(new BigDecimal(deductionAmount)).doubleValue();
-        if(deductionAmount < 0){
-            reqJson.put("deductionAmount",totalAccountAmount.doubleValue());
-            reqJson.put("selectUserAccount",BeanConvertUtil.beanCovertJSONArray(accountDtos));
+        if (deductionAmount < 0) {
+            reqJson.put("deductionAmount", totalAccountAmount.doubleValue());
+            reqJson.put("selectUserAccount", BeanConvertUtil.beanCovertJSONArray(accountDtos));
             return totalAccountAmount.doubleValue();
         }
-        reqJson.put("deductionAmount",deductionAmount);
-        reqJson.put("selectUserAccount",BeanConvertUtil.beanCovertJSONArray(accountDtos));
+        reqJson.put("deductionAmount", deductionAmount);
+        reqJson.put("selectUserAccount", BeanConvertUtil.beanCovertJSONArray(accountDtos));
         return deductionAmount;
     }
 
@@ -239,7 +241,7 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             }
         }
         paramObj.put("couponPrice", couponPrice.doubleValue());
-        paramObj.put("couponUserDtos", BeanConvertUtil.beanCovertJSONArray(couponUserDtos) );
+        paramObj.put("couponUserDtos", BeanConvertUtil.beanCovertJSONArray(couponUserDtos));
         return couponPrice.doubleValue();
     }
 
@@ -264,14 +266,14 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         List<ComputeDiscountDto> computeDiscountDtos = feeDiscountInnerServiceSMOImpl.computeDiscount(feeDetailDto);
 
         if (computeDiscountDtos == null || computeDiscountDtos.size() < 1) {
-            paramObj.put("discountPrice",0.0);
+            paramObj.put("discountPrice", 0.0);
             return 0.0;
         }
         BigDecimal discountPrice = new BigDecimal(0);
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             discountPrice = discountPrice.add(new BigDecimal(computeDiscountDto.getDiscountPrice()));
         }
-        paramObj.put("discountPrice",discountPrice.doubleValue());
+        paramObj.put("discountPrice", discountPrice.doubleValue());
         paramObj.put("computeDiscountDtos", BeanConvertUtil.beanCovertJSONArray(computeDiscountDtos));
         return discountPrice.doubleValue();
     }

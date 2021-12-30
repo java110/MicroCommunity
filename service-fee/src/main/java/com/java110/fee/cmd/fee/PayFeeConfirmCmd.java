@@ -272,7 +272,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
         if (!paramObj.containsKey("couponPrice") || paramObj.getDouble("couponPrice") <= 0) {
             return;
         }
-        FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
+        //FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
         CouponUserDto couponUserDto = null;
         JSONArray couponUserDtos = paramObj.getJSONArray("couponUserDtos");
         CouponUserDto couponUser = null;
@@ -298,8 +298,8 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             couponUserDetailPo.setUserId(couponUser.getUserId());
             couponUserDetailPo.setCouponName(couponUser.getCouponName());
             couponUserDetailPo.setUserName(couponUser.getUserName());
-            couponUserDetailPo.setObjId(feeInfo.getFeeId());
-            couponUserDetailPo.setObjType(feeInfo.getFeeTypeCd());
+            couponUserDetailPo.setObjId(paramObj.getString("feeId"));
+            couponUserDetailPo.setObjType(paramObj.getString("feeTypeCd"));
             couponUserDetailPo.setOrderId(paramObj.getString("oId"));
             fage = couponUserDetailV1InnerServiceSMOImpl.saveCouponUserDetail(couponUserDetailPo);
             if (fage < 1) {
