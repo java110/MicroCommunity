@@ -337,7 +337,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
                 templateMessage.setData(data);
-                templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
+                templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId()+"&communityId="+noticeDto.getCommunityId());
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
@@ -412,9 +412,9 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 templateMessage.setData(data);
                 if (!StringUtil.isEmpty(wechatUrl)) {
                     if (miniprogram == null) {
-                        templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
+                        templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId()+"&communityId="+noticeDto.getCommunityId());
                     } else {
-                        miniprogram.setPagepath("/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId());
+                        miniprogram.setPagepath("/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId()+"&communityId="+noticeDto.getCommunityId());
                         templateMessage.setMiniprogram(miniprogram);
                     }
                 }
