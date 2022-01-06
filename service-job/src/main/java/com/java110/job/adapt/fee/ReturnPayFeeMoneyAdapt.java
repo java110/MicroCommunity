@@ -40,7 +40,7 @@ import java.security.KeyStore;
 import java.util.*;
 
 /**
- * 退费审核通过后 通知 银联支付平台退款处理
+ * 退费审核通过后 通知 微信支付平台退款处理
  *
  * @author fqz
  * @Date 2021-08-19 10:12
