@@ -129,6 +129,10 @@ public class WechatAuthProperties {
     }
 
     public String getWechatAppId() {
+        String wechatAppIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppId");
+        if (!StringUtil.isEmpty(wechatAppIdCache)) {
+            return wechatAppIdCache;
+        }
         return wechatAppId;
     }
 
@@ -137,6 +141,10 @@ public class WechatAuthProperties {
     }
 
     public String getWechatAppSecret() {
+        String wechatAppSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppSecret");
+        if (!StringUtil.isEmpty(wechatAppSecretCache)) {
+            return wechatAppSecretCache;
+        }
         return wechatAppSecret;
     }
 
