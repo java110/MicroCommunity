@@ -75,9 +75,13 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         String context = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
-            context = ftpUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
-                    java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword());
+            String ftpServer = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+            context = ftpUploadTemplate.download(ftpPath, fileName, ftpServer,
+                    ftpPort, ftpUserName,
+                    ftpUserPassword);
         }else{
             context = ossUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
