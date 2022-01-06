@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class FeeDetailDto extends PageDto implements Serializable {
 
+    public static final String PRIME_REATE_WECHAT = "5";
+
     private String primeRate;
     private String detailId;
     private String receivableAmount;
