@@ -5,12 +5,13 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -86,7 +87,7 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         }
         //pc电话报修模块 只返回PC员工登记和手机端员工登记的数据
         if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("pc_mobile")) {
-            String[] repair_channel={RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
+            String[] repair_channel = {RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
             ownerRepairDto.setRepairChannels(Arrays.asList(repair_channel));
         }
 
@@ -95,7 +96,7 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         List<RepairDto> ownerRepairs = new ArrayList<>();
         if (count > 0) {
             List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
-            for(RepairDto repairDto : repairDtos){
+            for (RepairDto repairDto : repairDtos) {
                 //获取综合评价得分
                 String appraiseScoreNumber = repairDto.getAppraiseScore();
                 Double appraiseScoreNum = 0.0;
@@ -164,6 +165,8 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         List<PhotoVo> beforePhotos = null;  //维修前图片
         List<PhotoVo> afterPhotos = null;  //维修后图片
         PhotoVo photoVo = null;
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for (RepairDto repairDto : ownerRepairs) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(repairDto.getRepairId());
@@ -174,22 +177,26 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
             afterPhotos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
-                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                //photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
                 photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                 photoVos.add(photoVo);
                 if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.REL_TYPE_CD_REPAIR)) {  //维修图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                   // photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                    photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     repairPhotos.add(photoVo);  //维修图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.BEFORE_REPAIR_PHOTOS)) {  //维修前图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                    //photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                    photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     beforePhotos.add(photoVo);  //维修前图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.AFTER_REPAIR_PHOTOS)) {  //维修后图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                    //photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairDto.getCommunityId());
+                    photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     afterPhotos.add(photoVo);
                 }
