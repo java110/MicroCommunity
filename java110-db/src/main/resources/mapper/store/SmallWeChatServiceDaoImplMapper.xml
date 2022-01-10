@@ -173,6 +173,9 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+        <if test="mchId !=null and mchId != ''">
+            and t.mch_id= #{mchId}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

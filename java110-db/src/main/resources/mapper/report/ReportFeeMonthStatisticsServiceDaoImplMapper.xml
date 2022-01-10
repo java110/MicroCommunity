@@ -1856,6 +1856,7 @@
 
     <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
         SELECT r.staff_id staffId,r.staff_name staffName,r.state FROM r_repair_user r
+        inner join u_user u on u.user_id = r.staff_id and u.status_cd = '0'
         WHERE r.state!='10005' AND r.state!='10009' AND r.state!='11000' AND
         r.state!='12000' AND r.state != '10007' AND r.status_cd = '0' AND
         r.repair_event != 'payUser' AND r.repair_event != 'startUser' AND r.staff_id != '-1'

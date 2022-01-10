@@ -17,6 +17,7 @@ public class MappingDto extends PageDto implements Serializable {
 
     private String domain;
     private String name;
+    private String nameLike;
     private String remark;
     private String id;
     private String value;
@@ -91,5 +92,13 @@ public class MappingDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
     }
 }

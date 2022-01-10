@@ -79,10 +79,9 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
 
-        String roomId=reqJson.getString("roomId");
+        String roomId = reqJson.getString("roomId");
         if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
             String[] values = roomId.split("-");
             if (values.length == 3) {

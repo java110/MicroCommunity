@@ -37,6 +37,8 @@ public class RepairDto extends PageDto implements Serializable {
     public static final String STATE_COMPLATE = "1900";
     //未处理主动结单
     public static final String STATE_UNPROCESSED = "2000";
+    //暂停报修单
+    public static final String STATE_STOP = "2001";
 
     public static final String REPAIR_WAY_GRABBING = "100"; //抢单模式
     public static final String REPAIR_WAY_ASSIGN = "200"; //指派模式
@@ -118,6 +120,8 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairmanServiceScore;
     //平均分
     private String average;
+    private String repairSettingType;
+    private String repairSettingTypeName;
 
     public String getRepairName() {
         return repairName;
@@ -518,5 +522,21 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getRepairSettingType() {
+        return repairSettingType;
+    }
+
+    public void setRepairSettingType(String repairSettingType) {
+        this.repairSettingType = repairSettingType;
+    }
+
+    public String getRepairSettingTypeName() {
+        return repairSettingTypeName;
+    }
+
+    public void setRepairSettingTypeName(String repairSettingTypeName) {
+        this.repairSettingTypeName = repairSettingTypeName;
     }
 }

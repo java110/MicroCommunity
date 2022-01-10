@@ -46,6 +46,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String idCard;
     private String link;
     private String parkingType;
+    //停车场类型
+    private String typeCd;
+    private String spaceSate;
 
     private String roomName;
 
@@ -57,7 +60,6 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String areaNum;
 
     private String num;
-
 
     private Date createTime;
 
@@ -342,5 +344,21 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCarTypeCds(String[] carTypeCds) {
         this.carTypeCds = carTypeCds;
+    }
+
+    public String getTypeCd() {
+        return typeCd;
+    }
+
+    public void setTypeCd(String typeCd) {
+        this.typeCd = typeCd;
+    }
+
+    public String getSpaceSate() {
+        return spaceSate;
+    }
+
+    public void setSpaceSate(String spaceSate) {
+        this.spaceSate = spaceSate;
     }
 }

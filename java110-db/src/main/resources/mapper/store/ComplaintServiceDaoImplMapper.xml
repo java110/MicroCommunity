@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="complaintServiceDaoImpl">
 
     <!-- 保存投诉建议信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessComplaintInfo" parameterType="Map">
-        insert into business_complaint(
-        operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id,community_id,start_user_id
-        ) values (
-        #{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId},#{communityId},
-        #{startUserId}
-        )
+        insert into business_complaint(operate, complaint_id, type_cd, context, complaint_name, tel, state, store_id,
+                                       b_id, room_id, community_id, start_user_id)
+        values (#{operate}, #{complaintId}, #{typeCd}, #{context}, #{complaintName}, #{tel}, #{state}, #{storeId},
+                #{bId}, #{roomId}, #{communityId},
+                #{startUserId})
     </insert>
-
 
     <!-- 查询投诉建议信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessComplaintInfo" parameterType="Map" resultType="Map">
@@ -56,9 +53,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </select>
-
 
     <!-- 保存投诉建议信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveComplaintInfoInstance" parameterType="Map">
@@ -97,9 +92,7 @@
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
-
     </insert>
-
 
     <!-- 查询投诉建议信息 add by wuxw 2018-07-03 -->
     <select id="getComplaintInfo" parameterType="Map" resultType="Map">
@@ -165,14 +158,17 @@
         <if test="startUserId !=null and startUserId != ''">
             and t.start_user_id= #{startUserId}
         </if>
-
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改投诉建议信息 add by wuxw 2018-07-03 -->
     <update id="updateComplaintInfoInstance" parameterType="Map">
@@ -211,7 +207,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询投诉建议数量 add by wuxw 2018-07-03 -->
@@ -273,8 +268,11 @@
         <if test="startUserId !=null and startUserId != ''">
             and t.start_user_id= #{startUserId}
         </if>
-
-
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
     </select>
-
 </mapper>

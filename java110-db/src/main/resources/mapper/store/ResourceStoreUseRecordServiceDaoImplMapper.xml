@@ -6,11 +6,11 @@
 
     <!-- 保存物品使用记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreUseRecordInfo" parameterType="Map">
-           insert into business_resource_store_use_record(
-            unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,remark,store_id,res_id,resource_store_name,operate,b_id,community_id
-            ) values (
-            #{unitPrice},#{createUserId},#{quantity},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{resourceStoreName},#{operate},#{bId},#{communityId}
-            )
+        insert into business_resource_store_use_record(unit_price, create_user_id, quantity, rsur_id, repair_id,
+                                                       create_user_name, remark, store_id, res_id, resource_store_name,
+                                                       operate, b_id, community_id, state)
+        values (#{unitPrice}, #{createUserId}, #{quantity}, #{rsurId}, #{repairId}, #{createUserName}, #{remark},
+                #{storeId}, #{resId}, #{resourceStoreName}, #{operate}, #{bId}, #{communityId}, #{state})
     </insert>
 
     <!-- 查询物品使用记录信息（Business） add by wuxw 2018-07-03 -->
@@ -19,7 +19,7 @@
         createUserId,t.quantity,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id
         repairId,t.create_user_name,t.create_user_name createUserName,t.remark,t.store_id,t.store_id
         storeId,t.res_id,t.res_id resId,t.resource_store_name,t.resource_store_name
-        resourceStoreName,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId
+        resourceStoreName,t.operate,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.state
         from business_resource_store_use_record t
         where 1 =1
         <if test="unitPrice !=null and unitPrice != ''">
@@ -52,6 +52,9 @@
         <if test="resourceStoreName !=null and resourceStoreName != ''">
             and t.resource_store_name= #{resourceStoreName}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
@@ -66,9 +69,9 @@
     <!-- 保存物品使用记录信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreUseRecordInfoInstance" parameterType="Map">
         insert into resource_store_use_record(
-        unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,status_cd,remark,store_id,res_id,resource_store_name,b_id,community_id
+        unit_price,create_user_id,quantity,rsur_id,repair_id,create_user_name,status_cd,remark,store_id,res_id,resource_store_name,b_id,community_id,state
         ) select
-        t.unit_price,t.create_user_id,t.quantity,t.rsur_id,t.repair_id,t.create_user_name,'0',t.remark,t.store_id,t.res_id,t.resource_store_name,t.b_id,t.community_id
+        t.unit_price,t.create_user_id,t.quantity,t.rsur_id,t.repair_id,t.create_user_name,'0',t.remark,t.store_id,t.res_id,t.resource_store_name,t.b_id,t.community_id,t.state
         from business_resource_store_use_record t where 1=1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
@@ -97,6 +100,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="resourceStoreName !=null and resourceStoreName != ''">
             and t.resource_store_name= #{resourceStoreName}
         </if>
@@ -118,15 +124,20 @@
         resId,t.resource_store_name,t.resource_store_name resourceStoreName,rs.res_name resName,
         t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.create_time createTime, rst.name
         rstName,rst1.name parentRstName,rss.spec_name specName,td1.name unitCodeName,td2.name miniUnitCodeName,
-        rs.is_fixed isFixed,td3.name isFixedName
+        rs.is_fixed isFixed,td3.name isFixedName,t.state,td4.name stateName
         from resource_store_use_record t
         left join resource_store rs on rs.res_id = t.res_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
-        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
-        left join t_dict td3 on rs.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns = 'is_fixed'
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
+        left join t_dict td3 on rs.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns
+        = 'is_fixed'
+        left join t_dict td4 on t.state = td4.status_cd and td4.table_name = 'resource_store_use_record' and
+        td4.table_columns = 'state'
         where 1 = 1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
@@ -176,6 +187,9 @@
         <if test="isFixed !=null and isFixed != ''">
             and rs.is_fixed= #{isFixed}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -224,6 +238,9 @@
         <if test="resId !=null and resId != ''">
             , t.res_id= #{resId}
         </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
         <if test="resourceStoreName !=null and resourceStoreName != ''">
             , t.resource_store_name= #{resourceStoreName}
         </if>
@@ -246,9 +263,15 @@
         left join resource_store rs on rs.res_id = t.res_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
-        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
-        where 1 =1
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
+        left join t_dict td3 on rs.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns
+        = 'is_fixed'
+        left join t_dict td4 on t.state = td4.status_cd and td4.table_name = 'resource_store_use_record' and
+        td4.table_columns = 'state'
+        where 1 = 1
         <if test="unitPrice !=null and unitPrice != ''">
             and t.unit_price= #{unitPrice}
         </if>
@@ -296,6 +319,9 @@
         </if>
         <if test="isFixed !=null and isFixed != ''">
             and rs.is_fixed= #{isFixed}
+        </if>
+        <if test="state !=null and state != ''">
+            and rs.state= #{state}
         </if>
         <if test="parentRstId !=null and parentRstId != ''">
             and rs.parent_rst_id= #{parentRstId}

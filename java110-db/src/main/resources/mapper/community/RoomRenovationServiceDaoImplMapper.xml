@@ -6,11 +6,12 @@
 
     <!-- 保存装修申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveRoomRenovationInfo" parameterType="Map">
-        insert into room_renovation(
-        remark,is_violation,r_id,room_id,room_name,person_name,violation_desc,start_time,end_time,state,community_id,person_tel,is_postpone,postpone_time,renovation_company,person_main,person_main_tel
-        ) values (
-        #{remark},#{isViolation},#{rId},#{roomId},#{roomName},#{personName},#{violationDesc},#{startTime},#{endTime},#{state},#{communityId},#{personTel},#{isPostpone},#{postponeTime},#{renovationCompany},#{personMain},#{personMainTel}
-        )
+        insert into room_renovation(remark, is_violation, r_id, room_id, room_name, person_name, violation_desc,
+                                    start_time, end_time, state, community_id, person_tel, is_postpone, postpone_time,
+                                    renovation_company, person_main, person_main_tel)
+        values (#{remark}, #{isViolation}, #{rId}, #{roomId}, #{roomName}, #{personName}, #{violationDesc},
+                #{startTime}, #{endTime}, #{state}, #{communityId}, #{personTel}, #{isPostpone}, #{postponeTime},
+                #{renovationCompany}, #{personMain}, #{personMainTel})
     </insert>
 
     <!-- 查询装修申请信息 add by wuxw 2018-07-03 -->
@@ -19,8 +20,10 @@
         rId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.person_name,t.person_name
         personName,t.violation_desc,t.violation_desc violationDesc,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.state,td.name stateName,t.community_id,t.community_id
-        communityId,t.person_tel,t.person_tel personTel,t.create_time createTime,t.is_postpone,t.is_postpone isPostpone,t.postpone_time,t.postpone_time postponeTime,
-        t.renovation_company,t.renovation_company renovationCompany,t.person_main,t.person_main personMain,t.person_main_tel,t.person_main_tel personMainTel
+        communityId,t.person_tel,t.person_tel personTel,t.create_time createTime,t.is_postpone,t.is_postpone
+        isPostpone,t.postpone_time,t.postpone_time postponeTime,
+        t.renovation_company,t.renovation_company renovationCompany,t.person_main,t.person_main
+        personMain,t.person_main_tel,t.person_main_tel personMainTel
         from room_renovation t
         left join t_dict td on td.table_name='room_renovation' and td.table_columns='state'
         and t.state=td.status_cd
@@ -57,6 +60,16 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
+        </if>
+        <if test="renovationTime !=null and renovationTime != ''">
+            and t.start_time &lt;= #{renovationTime}
+            and t.end_time &gt;= #{renovationTime}
+        </if>
+        <if test="renovationStartTime !=null and renovationStartTime != ''">
+            and t.create_time &gt;= #{renovationStartTime}
+        </if>
+        <if test="renovationEndTime !=null and renovationEndTime != ''">
+            and t.create_time &lt;= #{renovationEndTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -183,6 +196,16 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
+        </if>
+        <if test="renovationTime !=null and renovationTime != ''">
+            and t.start_time &lt;= #{renovationTime}
+            and t.end_time &gt;= #{renovationTime}
+        </if>
+        <if test="renovationStartTime !=null and renovationStartTime != ''">
+            and t.create_time &gt;= #{renovationStartTime}
+        </if>
+        <if test="renovationEndTime !=null and renovationEndTime != ''">
+            and t.create_time &lt;= #{renovationEndTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

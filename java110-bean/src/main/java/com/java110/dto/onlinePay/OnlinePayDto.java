@@ -15,6 +15,15 @@ import java.util.Date;
  **/
 public class OnlinePayDto extends PageDto implements Serializable {
 
+    //状态 W待支付 C 支付完成 F 通知失败 WT 待退费 CT退费完成
+    public static final String STATE_WAIT = "W";
+    public static final String STATE_PAY_FAIL = "PF"; // 支付失败
+    public static final String STATE_COMPILE = "C";
+    public static final String STATE_FAIL = "F";
+    public static final String STATE_WT = "WT"; // 待退费
+    public static final String STATE_CT = "CT"; // 退费完成
+    public static final String STATE_FT = "FT"; // 退费失败
+
     private String refundFee;
     private String mchId;
     private String orderId;

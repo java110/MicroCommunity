@@ -35,12 +35,13 @@ public class RoomRenovationDto extends PageDto implements Serializable {
     private String renovationCompany;
     private String personMain;
     private String personMainTel;
-
+    private String renovationTime;
+    private String renovationStartTime;
+    private String renovationEndTime;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getRemark() {
         return remark;
@@ -138,7 +139,6 @@ public class RoomRenovationDto extends PageDto implements Serializable {
         this.personTel = personTel;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -209,5 +209,29 @@ public class RoomRenovationDto extends PageDto implements Serializable {
 
     public void setPersonMainTel(String personMainTel) {
         this.personMainTel = personMainTel;
+    }
+
+    public String getRenovationTime() {
+        return renovationTime;
+    }
+
+    public void setRenovationTime(String renovationTime) {
+        this.renovationTime = renovationTime;
+    }
+
+    public String getRenovationStartTime() {
+        return renovationStartTime;
+    }
+
+    public void setRenovationStartTime(String renovationStartTime) {
+        this.renovationStartTime = renovationStartTime;
+    }
+
+    public String getRenovationEndTime() {
+        return renovationEndTime;
+    }
+
+    public void setRenovationEndTime(String renovationEndTime) {
+        this.renovationEndTime = renovationEndTime;
     }
 }

@@ -75,10 +75,14 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
             DistributedLock.waitGetDistributedLock(key, requestId);
             //获取当前处理员工id
             String staffId = reqJson.getString("userId");
-            RepairUserDto repairUser = new RepairUserDto();
+            /*RepairUserDto repairUser = new RepairUserDto();
             repairUser.setStaffId(staffId);
             repairUser.setState("10001"); //处理中
-            int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);
+            int i = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUser);*/
+            RepairDto repair = new RepairDto();
+            repair.setStaffId(staffId);
+            repair.setCommunityId(reqJson.getString("communityId"));
+            int i = repairInnerServiceSMOImpl.queryStaffRepairsCount(repair);
             //取出开关映射的值(维修师傅未处理最大单数)
             String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
             if (i >= Integer.parseInt(repairNumber)) {
