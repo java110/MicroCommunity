@@ -51,6 +51,7 @@ public class PlutusPayAdapt implements IPayAdapt {
 
     //微信支付
     public static final String PAY_UNIFIED_ORDER_URL = "https://api.plutuspay.com/open/v2/jsPay";
+    public static final String PAY_UNIFIED_ORDER_NATIVE_URL = "https://api.plutuspay.com/open/v2/preCreate";
 
 
     private static final String VERSION = "1.0";
@@ -162,10 +163,14 @@ public class PlutusPayAdapt implements IPayAdapt {
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PRIVATE_KEY");
         String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword(),devId);
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword(), devId);
         System.out.println(param);
-
-        String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
+        String str = "";
+        if (WechatAuthProperties.TRADE_TYPE_NATIVE.equals(tradeType)) {
+            str = PlutusFactory.post(PAY_UNIFIED_ORDER_NATIVE_URL, param);
+        } else {
+            str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
+        }
         System.out.println(str);
 
         JSONObject json = JSON.parseObject(str);
@@ -192,7 +197,12 @@ public class PlutusPayAdapt implements IPayAdapt {
             throw new IllegalArgumentException("支付失败" + paramObj.getString("error"));
         }
 
-        return paramObj.getJSONObject("payInfo");
+        if (WechatAuthProperties.TRADE_TYPE_NATIVE.equals(tradeType)) {
+            paramObj.put("code", 0);
+            return paramObj;
+        } else {
+            return paramObj.getJSONObject("payInfo");
+        }
     }
 
 
