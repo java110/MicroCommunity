@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -28,7 +29,6 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,8 +85,15 @@ public class PlutusPayNotifyAdapt extends DefaultAbstractComponentSMO implements
 
         String signature = json.getString("signature");
         String content = json.getString("content");
+
+        String appId = WechatFactory.getAppId(wId);
+        SmallWeChatDto smallWeChatDto = getSmallWechat(appId);
+        if (smallWeChatDto == null) {
+            throw new IllegalArgumentException("未配置公众号或者小程序信息");
+        }
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature));
+        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
@@ -94,7 +101,7 @@ public class PlutusPayNotifyAdapt extends DefaultAbstractComponentSMO implements
         //解密
         byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
         //服务器返回内容
-        String paramOut =  new String(bb);
+        String paramOut = new String(bb);
         try {
             JSONObject map = JSONObject.parseObject(paramOut);
             logger.info("【银联支付回调】 回调数据： \n" + map);

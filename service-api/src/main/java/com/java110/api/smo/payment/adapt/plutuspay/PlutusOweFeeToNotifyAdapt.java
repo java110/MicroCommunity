@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
@@ -86,8 +87,14 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
 
         String signature = json.getString("signature");
         String content = json.getString("content");
+        String appId = WechatFactory.getAppId(wId);
+        SmallWeChatDto smallWeChatDto = getSmallWechat(appId);
+        if (smallWeChatDto == null) {
+            throw new IllegalArgumentException("未配置公众号或者小程序信息");
+        }
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature));
+        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");

@@ -19,21 +19,19 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
-import com.java110.core.factory.ChinaUmsFactory;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -103,24 +101,24 @@ public class PlutusPayAdapt implements IPayAdapt {
             resMap = this.java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openId, smallWeChatDto, notifyUrl);
         }
 
-            if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
-                resultMap.putAll(JSONObject.toJavaObject(resMap, Map.class));
-                resultMap.put("sign",resultMap.get("paySign"));
-            } else if (WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)) {
-                resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-                resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("partnerid", smallWeChatDto.getMchId());
-                resultMap.put("prepayid", resMap.getString("session_id"));
-                //resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
-            } else if (WechatAuthProperties.TRADE_TYPE_NATIVE.equals(tradeType)) {
-                resultMap.put("prepayId", resMap.getString("session_id"));
-                resultMap.put("codeUrl", resMap.getString("qr_code"));
-            }
-            resultMap.put("code", "0");
-            resultMap.put("msg", "下单成功");
-            logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
+        if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
+            resultMap.putAll(JSONObject.toJavaObject(resMap, Map.class));
+            resultMap.put("sign", resultMap.get("paySign"));
+        } else if (WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)) {
+            resultMap.put("appId", smallWeChatDto.getAppId());
+            resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
+            resultMap.put("nonceStr", PayUtil.makeUUID(32));
+            resultMap.put("partnerid", smallWeChatDto.getMchId());
+            resultMap.put("prepayid", resMap.getString("session_id"));
+            //resultMap.put("signType", "MD5");
+            resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+        } else if (WechatAuthProperties.TRADE_TYPE_NATIVE.equals(tradeType)) {
+            resultMap.put("prepayId", resMap.getString("session_id"));
+            resultMap.put("codeUrl", resMap.getString("qr_code"));
+        }
+        resultMap.put("code", "0");
+        resultMap.put("msg", "下单成功");
+        logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
 //        } else {
 //            resultMap.put("code", resMap.getString("errCode"));
 //            resultMap.put("msg", resMap.getString("errMsg"));
@@ -153,7 +151,7 @@ public class PlutusPayAdapt implements IPayAdapt {
         paramMap.put("openId", openid);
         paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
-        if(OwnerAppUserDto.APP_TYPE_WECHAT_MINA.equals(tradeType)){
+        if (OwnerAppUserDto.APP_TYPE_WECHAT_MINA.equals(tradeType)) {
             paramMap.put("isMiniProgram", true);
         }
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
@@ -161,8 +159,8 @@ public class PlutusPayAdapt implements IPayAdapt {
         paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
 
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
-
-        String param = PlutusFactory.Encryption(paramMap.toJSONString());
+        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PRIVATE_KEY");
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword());
         System.out.println(param);
 
         String str = PlutusFactory.post(wechatAuthProperties.getWxPayUnifiedOrder(), param);
@@ -172,23 +170,24 @@ public class PlutusPayAdapt implements IPayAdapt {
 
         String signature = json.getString("signature");
         String content = json.getString("content");
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PUBLIC_KEY");
 
         //验签
-        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature));
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
-            //解密
-            byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
-            //服务器返回内容
-            String paramOut =  new String(bb);
+        //解密
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        //服务器返回内容
+        String paramOut = new String(bb);
 
-          JSONObject paramObj =   JSONObject.parseObject(paramOut);
+        JSONObject paramObj = JSONObject.parseObject(paramOut);
         logger.debug("统一下单返回" + paramOut);
 
         if (paramObj.getString("paramObj") != "00") {
-            throw new IllegalArgumentException("支付失败"+paramObj.getString("error"));
+            throw new IllegalArgumentException("支付失败" + paramObj.getString("error"));
         }
 
         return paramObj.getJSONObject("payInfo");

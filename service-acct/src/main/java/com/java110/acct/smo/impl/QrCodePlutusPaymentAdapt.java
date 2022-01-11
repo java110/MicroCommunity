@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
@@ -83,8 +84,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         paramMap.put("authCode", authCode);
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("payTypeId", "0");
+        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString());
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword());
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
@@ -96,7 +98,8 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         String content = json.getString("content");
 
         //验签
-        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature));
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
@@ -136,8 +139,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         JSONObject paramMap = new JSONObject();
         paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
+        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString());
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword());
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
@@ -149,7 +153,8 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         String content = json.getString("content");
 
         //验签
-        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature));
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");

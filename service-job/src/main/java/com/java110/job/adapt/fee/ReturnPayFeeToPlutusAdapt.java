@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.entity.order.Business;
@@ -15,12 +15,8 @@ import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.PayUtil;
-import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -116,14 +111,11 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setMchId(onlinePayDtos.get(0).getMchId());
         smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
-//        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-//        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-//            payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
-//            certData = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "cert");
-//        } else {
-//            payPassword = smallWeChatDtos.get(0).getPayPassword();
-//            certData = smallWeChatDtos.get(0).getRemarks();
-//        }
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+            throw new IllegalArgumentException("未配置公众号或者小程序信息");
+        }
+
 
         JSONObject parameters = new JSONObject();
         parameters.put("sn", onlinePayDtos.get(0).getMchId());//商户号
@@ -131,7 +123,12 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         parameters.put("outRefundId", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
         parameters.put("refundAmount", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getTotalFee())));//订单金额 单位为分！！！这里稍微注意一下
 
-        String param = PlutusFactory.Encryption(parameters.toJSONString());
+        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+            throw new IllegalArgumentException("未配置公众号或者小程序信息");
+        }
+        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
+
+        String param = PlutusFactory.Encryption(parameters.toJSONString(),privateKey,smallWeChatDtos.get(0).getPayPassword());
         System.out.println(param);
 
         String str = PlutusFactory.post(wechatReturnUrl, param);
@@ -142,8 +139,10 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         String signature = json.getString("signature");
         String content = json.getString("content");
 
+
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature));
+        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");

@@ -45,34 +45,34 @@ public class PlutusFactory {
      *
      * @return
      */
-    private static PrivateKey getPrivateKey() {
+    private static PrivateKey getPrivateKey(String priKey) {
         PrivateKey privateKey = null;
-        String priKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDKO3fVJVtKuBlj\n" +
-                "T2HkhjQykS/jKiNuQ4o0IItGJwTv4IX7m+vlKwqPQFylr1POdRX0z4lwFWRWvxCv\n" +
-                "fpORW83W6a6J6LSKfDc5g5h0mhnYdYMdzLawVEM1YqJD5EVRQZHKleMvwkZbLWt0\n" +
-                "bFJ2o4uVDO7bs/ABv6UdAmOlP6K2fUcw14r5nF+sUpXw9v2wCQys3k3djGOQJQFX\n" +
-                "7/aADXsROp0xPFhHVgu18Rtjp7y5ib8bQ1obMmlf+4yThjlAMJQN9sBTOByUXLQw\n" +
-                "VCCL5oYsSs318mnJnTSmkK88pxDYp1Y2K7WQDbZtFiDbNA4bqCecQGbX+6c7NWSr\n" +
-                "dWMn0BsfAgMBAAECggEBAJXh1UKH2U1bfJV59Bemz3Da4h7+0BucuwU/SXnI2YPf\n" +
-                "Z+2+9ep3J/Bbx06UzwwpAwjZ+Aa2FBOmr/shWMVWwQwTTWSwr34j6doaiheBTr56\n" +
-                "+Z5QZuXwzY73d0PSHv3GFwOKa0KuPe69jvJOhh+fvofNegojJjJlkz4Y0zlaHIIa\n" +
-                "ri5iuKM2b5sSeoohCwJF9vmkje9UUpzYgIQhiiLe7jHIj6PP+ILA/+J0IqlqZg7Z\n" +
-                "nZIClUfy1Bn533yxCHvvM2V1gkT4zsmLtgIsJrGP3FHKW0yGj2JKaxI8T4JtjYCX\n" +
-                "QhXoYkzjr+111udD8oe0Tg/8PquFvqi5Cq0rkDqNwsECgYEA5ENMeAuENaG1TKov\n" +
-                "rpXUhmrB1tOcp/BvOLq4KIsgY6/4k2q4MbpK3qXeY90YlLaEsggD8eiEG3RNmGNR\n" +
-                "IbmnqyQBQyk+KYCMTGBTRGqwwjJjTDBkV0hOeLV8CBBcAFGKXLf15HyhuG4xRhvu\n" +
-                "Sq8YcIbvA9fSLkaaYY/pyuoQA3kCgYEA4s5r20Na9WQ5M3QLRY5HMlUb0E0SMSEd\n" +
-                "4UF6mgzpdafDWSsvcOSnJguahZ25DJk12ptKKaJPXxPEa2+u0FN/Jv9KDPkXggXS\n" +
-                "z6yS9E1HfFSbRK6An1Q+34vDahrU5lTJQ7eKYDzb2Xm1gI1VxrxdAN5+Bk3IvH1T\n" +
-                "FUowLOFGFVcCgYAYwqgX2X/05V6qO0fC02PjVM9EA15Z5T3bVH3HgBf6WEtJimkC\n" +
-                "k+etMSbnhEM3Vnkcarwq0IMMC1ijcBqL4vyqFtTAOUgR7mzJmCVQJZaY6ihVSmaI\n" +
-                "BULl2yHiKgwgyLeOiTH2IALW47UamssFdOrcwfZJX27gMC5s6NR+e1dTWQKBgFMu\n" +
-                "qdgM5/s/+sqoMMod2HbZSA4pdhaWssK+pRyCx8zi7n5xnECnW7ZUYyPGKOw59Mps\n" +
-                "UdLbOIkCUvOkTlURinze/GWtpbWGNT79aBg5j5JF5XxXE81btIOAWvc7SAIB7p7r\n" +
-                "XdDWATvNq4euTltJEkMTVt0xAgI/ZI1WXDzZkj6ZAoGBANTu3Ko+x8OgH3WdMSxD\n" +
-                "YTersdTb4j2bj3IkZF8xJemyO7qerEK6H9mkGjSZlR17bQeE3b0RF97GgIw/fIZX\n" +
-                "o6oE7re3EaCp6/PIXTzTPRlLTPNlBvFqDrNurM0YndjAgANa1tDDQ12W8Vtjvv8g\n" +
-                "mX7PvHOnfws522nLZHBz+SzT";
+//        String priKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDKO3fVJVtKuBlj\n" +
+//                "T2HkhjQykS/jKiNuQ4o0IItGJwTv4IX7m+vlKwqPQFylr1POdRX0z4lwFWRWvxCv\n" +
+//                "fpORW83W6a6J6LSKfDc5g5h0mhnYdYMdzLawVEM1YqJD5EVRQZHKleMvwkZbLWt0\n" +
+//                "bFJ2o4uVDO7bs/ABv6UdAmOlP6K2fUcw14r5nF+sUpXw9v2wCQys3k3djGOQJQFX\n" +
+//                "7/aADXsROp0xPFhHVgu18Rtjp7y5ib8bQ1obMmlf+4yThjlAMJQN9sBTOByUXLQw\n" +
+//                "VCCL5oYsSs318mnJnTSmkK88pxDYp1Y2K7WQDbZtFiDbNA4bqCecQGbX+6c7NWSr\n" +
+//                "dWMn0BsfAgMBAAECggEBAJXh1UKH2U1bfJV59Bemz3Da4h7+0BucuwU/SXnI2YPf\n" +
+//                "Z+2+9ep3J/Bbx06UzwwpAwjZ+Aa2FBOmr/shWMVWwQwTTWSwr34j6doaiheBTr56\n" +
+//                "+Z5QZuXwzY73d0PSHv3GFwOKa0KuPe69jvJOhh+fvofNegojJjJlkz4Y0zlaHIIa\n" +
+//                "ri5iuKM2b5sSeoohCwJF9vmkje9UUpzYgIQhiiLe7jHIj6PP+ILA/+J0IqlqZg7Z\n" +
+//                "nZIClUfy1Bn533yxCHvvM2V1gkT4zsmLtgIsJrGP3FHKW0yGj2JKaxI8T4JtjYCX\n" +
+//                "QhXoYkzjr+111udD8oe0Tg/8PquFvqi5Cq0rkDqNwsECgYEA5ENMeAuENaG1TKov\n" +
+//                "rpXUhmrB1tOcp/BvOLq4KIsgY6/4k2q4MbpK3qXeY90YlLaEsggD8eiEG3RNmGNR\n" +
+//                "IbmnqyQBQyk+KYCMTGBTRGqwwjJjTDBkV0hOeLV8CBBcAFGKXLf15HyhuG4xRhvu\n" +
+//                "Sq8YcIbvA9fSLkaaYY/pyuoQA3kCgYEA4s5r20Na9WQ5M3QLRY5HMlUb0E0SMSEd\n" +
+//                "4UF6mgzpdafDWSsvcOSnJguahZ25DJk12ptKKaJPXxPEa2+u0FN/Jv9KDPkXggXS\n" +
+//                "z6yS9E1HfFSbRK6An1Q+34vDahrU5lTJQ7eKYDzb2Xm1gI1VxrxdAN5+Bk3IvH1T\n" +
+//                "FUowLOFGFVcCgYAYwqgX2X/05V6qO0fC02PjVM9EA15Z5T3bVH3HgBf6WEtJimkC\n" +
+//                "k+etMSbnhEM3Vnkcarwq0IMMC1ijcBqL4vyqFtTAOUgR7mzJmCVQJZaY6ihVSmaI\n" +
+//                "BULl2yHiKgwgyLeOiTH2IALW47UamssFdOrcwfZJX27gMC5s6NR+e1dTWQKBgFMu\n" +
+//                "qdgM5/s/+sqoMMod2HbZSA4pdhaWssK+pRyCx8zi7n5xnECnW7ZUYyPGKOw59Mps\n" +
+//                "UdLbOIkCUvOkTlURinze/GWtpbWGNT79aBg5j5JF5XxXE81btIOAWvc7SAIB7p7r\n" +
+//                "XdDWATvNq4euTltJEkMTVt0xAgI/ZI1WXDzZkj6ZAoGBANTu3Ko+x8OgH3WdMSxD\n" +
+//                "YTersdTb4j2bj3IkZF8xJemyO7qerEK6H9mkGjSZlR17bQeE3b0RF97GgIw/fIZX\n" +
+//                "o6oE7re3EaCp6/PIXTzTPRlLTPNlBvFqDrNurM0YndjAgANa1tDDQ12W8Vtjvv8g\n" +
+//                "mX7PvHOnfws522nLZHBz+SzT";
 
         try {
 
@@ -87,15 +87,15 @@ public class PlutusFactory {
 
 
     //实例化公钥
-    public static PublicKey getPublicKey() {
+    public static PublicKey getPublicKey(String pubKey) {
         PublicKey publicKey = null;
-        String pubKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsIvJ1y1G7/BaWqcq/qVc\n" +
-                "6u7nQb7nuH9vI2MoJc2H9ZGVD27oOIPkEDy7kIiteIaq5lrj6Z8VpG4n84MycsC7\n" +
-                "/7AVScV238pdBkQM/vtm6j3jJsh7dcAU/ngMTzusUgFKlUhClR4uztQM+/obIcAl\n" +
-                "wDlGnY/Nw5XbmzE6igcLgAZLkYq54hfJSG7EyctonL8Q8SPn51eEy9TMh3jju/RH\n" +
-                "KeZzpJ5mYTFzqGU798rzv6r9uBKC/lZvuQcQwK7li4ctINA3EPmRbiLwzLZnTZBf\n" +
-                "h7AmtTMqM2NYrn6Co23NQYLdg0WPSPv1Sxj69BSJ1q62boT2gOO3rsxaK8FN3EJb\n" +
-                "sQIDAQAB";
+//        String pubKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsIvJ1y1G7/BaWqcq/qVc\n" +
+//                "6u7nQb7nuH9vI2MoJc2H9ZGVD27oOIPkEDy7kIiteIaq5lrj6Z8VpG4n84MycsC7\n" +
+//                "/7AVScV238pdBkQM/vtm6j3jJsh7dcAU/ngMTzusUgFKlUhClR4uztQM+/obIcAl\n" +
+//                "wDlGnY/Nw5XbmzE6igcLgAZLkYq54hfJSG7EyctonL8Q8SPn51eEy9TMh3jju/RH\n" +
+//                "KeZzpJ5mYTFzqGU798rzv6r9uBKC/lZvuQcQwK7li4ctINA3EPmRbiLwzLZnTZBf\n" +
+//                "h7AmtTMqM2NYrn6Co23NQYLdg0WPSPv1Sxj69BSJ1q62boT2gOO3rsxaK8FN3EJb\n" +
+//                "sQIDAQAB";
 
         try {
             X509EncodedKeySpec PubKeySpec = new X509EncodedKeySpec(
@@ -150,16 +150,16 @@ public class PlutusFactory {
         return null;
     }
 
-    public static String Encryption(String url) {
+    public static String Encryption(String url,String priKey,String secretKey) {
         JSONObject object = new JSONObject();
         try {
             byte[] b = url.getBytes("UTF-8");
             //AES加密
-            byte[] text = PlutusFactory.encrypt(b, SECRET_KEY);
+            byte[] text = PlutusFactory.encrypt(b, secretKey);
             String content = Base64.toBase64String(text);
 
             //签名
-            byte[] sign = PlutusFactory.sign256(text, getPrivateKey());
+            byte[] sign = PlutusFactory.sign256(text, getPrivateKey(priKey));
             String signature = Base64.toBase64String(sign);
 
             object.put("devId", "xqHQzM5n");
@@ -201,13 +201,13 @@ public class PlutusFactory {
 
 
     //SHA256withRSA验签
-    public static boolean verify256(String data, byte[] sign) {
+    public static boolean verify256(String data, byte[] sign,String pubKey) {
         if (data == null || sign == null) {
             return false;
         }
         try {
             Signature signetcheck = Signature.getInstance(SIGNATURE_ALGORITHM);
-            signetcheck.initVerify(getPublicKey());
+            signetcheck.initVerify(getPublicKey(pubKey));
             signetcheck.update(Base64.decode(data));
             return signetcheck.verify(sign);
         } catch (Exception e) {
