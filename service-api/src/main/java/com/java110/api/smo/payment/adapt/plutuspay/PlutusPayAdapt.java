@@ -160,10 +160,12 @@ public class PlutusPayAdapt implements IPayAdapt {
 
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PRIVATE_KEY");
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword());
+        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
+
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword(),devId);
         System.out.println(param);
 
-        String str = PlutusFactory.post(wechatAuthProperties.getWxPayUnifiedOrder(), param);
+        String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
         System.out.println(str);
 
         JSONObject json = JSON.parseObject(str);

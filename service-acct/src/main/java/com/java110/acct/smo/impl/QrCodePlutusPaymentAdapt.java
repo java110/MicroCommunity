@@ -85,8 +85,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("payTypeId", "0");
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
+        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword());
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword(),devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
@@ -140,8 +141,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
+        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword());
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword(),devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);

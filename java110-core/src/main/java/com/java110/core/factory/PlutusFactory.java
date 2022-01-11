@@ -150,7 +150,7 @@ public class PlutusFactory {
         return null;
     }
 
-    public static String Encryption(String url,String priKey,String secretKey) {
+    public static String Encryption(String url,String priKey,String secretKey,String devId) {
         JSONObject object = new JSONObject();
         try {
             byte[] b = url.getBytes("UTF-8");
@@ -162,7 +162,7 @@ public class PlutusFactory {
             byte[] sign = PlutusFactory.sign256(text, getPrivateKey(priKey));
             String signature = Base64.toBase64String(sign);
 
-            object.put("devId", "xqHQzM5n");
+            object.put("devId", devId);
             object.put("content", content);
             object.put("signature", signature);
 

@@ -127,8 +127,9 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
         }
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
+        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(parameters.toJSONString(),privateKey,smallWeChatDtos.get(0).getPayPassword());
+        String param = PlutusFactory.Encryption(parameters.toJSONString(),privateKey,smallWeChatDtos.get(0).getPayPassword(),devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(wechatReturnUrl, param);
