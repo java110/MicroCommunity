@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,6 +47,7 @@ public class GetTempCarFeeOrderCmd extends AbstractServiceCmdListener {
 
         Assert.hasKeyAndValue(reqJson, "paId", "paId不能为空");
         Assert.hasKeyAndValue(reqJson, "carNum", "carNum不能为空");
+        Assert.hasKeyAndValue(reqJson, "couponIds", "couponIds不能为空");
 
     }
 
@@ -87,20 +89,18 @@ public class GetTempCarFeeOrderCmd extends AbstractServiceCmdListener {
     }
 
     private double checkCouponUser(JSONObject paramObj) {
-        JSONArray couponList = paramObj.getJSONArray("couponList");
-        BigDecimal couponPrice = new BigDecimal(0.0);
-        List<String> couponIds = new ArrayList<String>();
 
-        if (couponList == null || couponList.size() < 1) {
+        BigDecimal couponPrice = new BigDecimal(0.0);
+        String couponIds = paramObj.getString("couponIds");
+        if (couponIds == null || "".equals(couponIds)) {
             paramObj.put("couponPrice", couponPrice.doubleValue());
             paramObj.put("couponUserDtos", new JSONArray()); //这里考虑空
             return couponPrice.doubleValue();
         }
-        for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
-            couponIds.add(couponList.getJSONObject(couponIndex).getString("couponId"));
-        }
+
+        List<String> result = Arrays.asList(couponIds.split(","));
         CouponUserDto couponUserDto = new CouponUserDto();
-        couponUserDto.setCouponIds(couponIds.toArray(new String[couponIds.size()]));
+        couponUserDto.setCouponIds(result.toArray(new String[result.size()]));
         List<CouponUserDto> couponUserDtos = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
         if (couponUserDtos == null || couponUserDtos.size() < 1) {
             paramObj.put("couponPrice", couponPrice.doubleValue());

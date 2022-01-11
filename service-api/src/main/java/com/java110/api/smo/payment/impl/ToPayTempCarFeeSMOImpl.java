@@ -23,6 +23,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service("toPayTempCarFeeSMOImpl")
 public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements IToPayTempCarFeeSMO {
@@ -69,6 +67,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         Assert.jsonObjectHaveKey(paramIn, "openId", "请求报文中未包含openId节点");
         Assert.jsonObjectHaveKey(paramIn, "paId", "请求报文中未包含paId节点");
         Assert.jsonObjectHaveKey(paramIn, "inoutId", "请求报文中未包含inoutId节点");
+        Assert.jsonObjectHaveKey(paramIn, "couponList", "请求报文中未包含couponList节点");
 
     }
 
@@ -86,13 +85,17 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
-
-
+        JSONArray couponList = paramIn.getJSONArray("couponList");
+        List<String> couponIds = new ArrayList<String>();
+        if (couponList != null && couponList.size() > 0) {
+            for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
+                couponIds.add(couponList.getJSONObject(couponIndex).getString("couponId"));
+            }
+        }
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = "tempCarFee.getTempCarFeeOrder";
-       // responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
-        responseEntity = super.callCenterService(restTemplate, pd, paramIn.toJSONString(), url, HttpMethod.POST);
+        String url = "tempCarFee.getTempCarFeeOrder?paId=" + paramIn.getString("paId") + "&carNum=" + paramIn.getString("carNum")+"&couponIds="+StringUtils.join(couponIds,",");
+        responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
