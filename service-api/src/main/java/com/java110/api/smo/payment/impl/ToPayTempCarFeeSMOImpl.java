@@ -16,6 +16,7 @@ import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -31,7 +32,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service("toPayTempCarFeeSMOImpl")
 public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements IToPayTempCarFeeSMO {
@@ -98,8 +102,25 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         }
         JSONObject fee = orderInfo.getJSONObject("data");
 
-        double money = fee.getDouble("payCharge");
-        String orderId = GenerateCodeFactory.getOId();
+        double money = fee.getDouble("receivedAmount");
+
+        String orderId = fee.getString("oId");
+        //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
+        if (money <= 0) {
+            JSONObject paramOut = new JSONObject();
+            paramOut.put("oId", orderId);
+            String urlOut = "tempCarFee.notifyTempCarFeeOrder";
+            responseEntity = this.callCenterService(getHeaders("-1", pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
+            JSONObject param = new JSONObject();
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                param.put("code", "101");
+                param.put("msg", "扣费为0回调失败");
+                return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
+            }
+            param.put("code", "100");
+            param.put("msg", "扣费为0回调成功");
+            return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
+        }
         String openId = paramIn.getString("openId");
         String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
         payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
@@ -111,15 +132,14 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         if (!"0".equals(result.get("code"))) {
             return responseEntity;
         }
-        JSONObject saveFees = new JSONObject();
-        saveFees.put("orderId", paramIn.getString("inoutId"));
-        saveFees.put("carNum", paramIn.getString("carNum"));
-        saveFees.put("amount", money);
-        saveFees.put("paId", paramIn.getString("paId"));
-        saveFees.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        saveFees.put("payType", "2");
-        CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
-
+//        JSONObject saveFees = new JSONObject();
+//        saveFees.put("orderId", paramIn.getString("inoutId"));
+//        saveFees.put("carNum", paramIn.getString("carNum"));
+//        saveFees.put("amount", money);
+//        saveFees.put("paId", paramIn.getString("paId"));
+//        saveFees.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        saveFees.put("payType", "2");
+//        CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         //记录openId 和车辆关系 以免每次 输入 车牌号麻烦
         OwnerCarOpenUserPo ownerCarOpenUserPo = new OwnerCarOpenUserPo();
         ownerCarOpenUserPo.setCarNum(paramIn.getString("carNum"));
@@ -132,7 +152,15 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         return responseEntity;
     }
 
-
+    private Map<String, String> getHeaders(String userId,String APP_ID) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(CommonConstant.HTTP_APP_ID.toLowerCase(), APP_ID);
+        headers.put(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
+        headers.put(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+        headers.put(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+        headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        return headers;
+    }
     private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
 
         ResponseEntity responseEntity = null;
