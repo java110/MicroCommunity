@@ -126,7 +126,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         parameters.put("appid", onlinePayDtos.get(0).getAppId());//appid
         parameters.put("mch_id", onlinePayDtos.get(0).getMchId());//商户号
         parameters.put("nonce_str", PayUtil.makeUUID(32));//随机数
-        parameters.put("out_trade_no", onlinePayDtos.get(0).getMchId());//商户订单号
+        parameters.put("out_trade_no", onlinePayDtos.get(0).getOrderId());//商户订单号
         parameters.put("out_refund_no", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
         parameters.put("total_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getTotalFee())));//订单金额 单位为分！！！这里稍微注意一下
         parameters.put("refund_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getRefundFee())));//退款金额 单位为分！！！

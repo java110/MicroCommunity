@@ -20,7 +20,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.core.factory.ChinaUmsFactory;
+import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
@@ -151,16 +153,19 @@ public class PlutusPayAdapt implements IPayAdapt {
         paramMap.put("openId", openid);
         paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
+        if(OwnerAppUserDto.APP_TYPE_WECHAT_MINA.equals(tradeType)){
+            paramMap.put("isMiniProgram", true);
+        }
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("payTypeId", "1003");
         paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
 
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
 
-        String param = PlutusUtil.Encryption(paramMap.toJSONString());
+        String param = PlutusFactory.Encryption(paramMap.toJSONString());
         System.out.println(param);
 
-        String str = PlutusUtil.post(wechatAuthProperties.getWxPayUnifiedOrder(), param);
+        String str = PlutusFactory.post(wechatAuthProperties.getWxPayUnifiedOrder(), param);
         System.out.println(str);
 
         JSONObject json = JSON.parseObject(str);
@@ -169,13 +174,13 @@ public class PlutusPayAdapt implements IPayAdapt {
         String content = json.getString("content");
 
         //验签
-        Boolean verify = PlutusUtil.verify256(content, Base64.decode(signature));
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature));
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
             //解密
-            byte[] bb = PlutusUtil.decrypt(Base64.decode(content), PlutusUtil.SECRET_KEY);
+            byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
             //服务器返回内容
             String paramOut =  new String(bb);
 

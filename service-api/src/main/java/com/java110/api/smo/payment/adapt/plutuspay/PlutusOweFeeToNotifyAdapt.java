@@ -15,11 +15,13 @@
  */
 package com.java110.api.smo.payment.adapt.plutuspay;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
+import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -29,7 +31,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,30 +82,40 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
      * @throws Exception
      */
     public String confirmPayFee(String param, String wId) {
-        JSONObject resJson = new JSONObject();
-        resJson.put("errCode", "INTERNAL_ERROR");
-        resJson.put("errMsg", "失败");
+        JSONObject json = JSON.parseObject(param);
+
+        String signature = json.getString("signature");
+        String content = json.getString("content");
+        //验签
+        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature));
+        //验签成功
+        if (!verify) {
+            throw new IllegalArgumentException("支付失败签名失败");
+        }
+        //解密
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        //服务器返回内容
+        String paramOut = new String(bb);
         try {
-            JSONObject map = JSONObject.parseObject(param);
+            JSONObject map = JSONObject.parseObject(paramOut);
             logger.info("【银联支付回调】 回调数据： \n" + map);
             //更新数据
             int result = confirmPayFee(map, wId);
             if (result > 0) {
                 //支付成功
-                resJson.put("errCode", "SUCCESS");
-                resJson.put("errMsg", "成功");
+                return "SUCCESS";
             }
         } catch (Exception e) {
             logger.error("通知失败", e);
-            resJson.put("result_msg", "鉴权失败");
+            return "ERROR";
         }
-
-        return resJson.toJSONString();
+        return "ERROR";
     }
 
 
     public int confirmPayFee(JSONObject map, String wId) {
         wId = wId.replace(" ", "+");
+
         ResponseEntity<String> responseEntity = null;
 
         String appId = WechatFactory.getAppId(wId);
@@ -116,25 +128,18 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
-        SortedMap<String, String> paramMap = new TreeMap<String, String>();
+        TreeMap<String, String> paramMap = new TreeMap<String, String>();
         for (String key : map.keySet()) {
-            if ("wId".equals(key)) {
-                continue;
-            }
+//            if ("wId".equals(key)) {
+//                continue;
+//            }
             paramMap.put(key, map.get(key).toString());
         }
-        String preSign = map.getString("preSign");
-        String text = preSign + smallWeChatDto.getPayPassword();
-        System.out.println("待签名字符串：" + text);
-        String sign = DigestUtils.sha256Hex(getContentBytes(text)).toUpperCase();
+        //String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
+        //JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
+        String outTradeNo = map.get("outTransId").toString();
 
-        if (!sign.equals(map.get("sign"))) {
-            throw new IllegalArgumentException("鉴权失败");
-        }
-//        JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-//        String orderId = billPayment.get("merOrderId").toString().substring(4);
-        String outTradeNo = map.get("merOrderId").toString();
-        String orderId = outTradeNo.substring(4);
+        String orderId = outTradeNo;
         String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + orderId);
 
         if (StringUtil.isEmpty(order)) {
