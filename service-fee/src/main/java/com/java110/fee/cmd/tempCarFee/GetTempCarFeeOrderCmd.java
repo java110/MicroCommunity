@@ -56,63 +56,6 @@ public class GetTempCarFeeOrderCmd extends AbstractServiceCmdListener {
         tempCarPayOrderDto.setPaId(reqJson.getString("paId"));
         tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
         ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.getTempCarFeeOrder(tempCarPayOrderDto);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            cmdDataFlowContext.setResponseEntity(responseEntity);
-            return;
-        }
-        JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-        if (orderInfo.getIntValue("code") != 0) {
-            cmdDataFlowContext.setResponseEntity(responseEntity);
-            return;
-        }
-
-        JSONObject fee = orderInfo.getJSONObject("data");
-        //double money = fee.getDouble("payCharge");
-        BigDecimal money = new BigDecimal(fee.getDouble("payCharge"));
-        //3.0 考虑优惠卷
-        double couponPrice = checkCouponUser(reqJson);
-        money = money.subtract(new BigDecimal(couponPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-
-        double receivedAmount = money.doubleValue();
-        //所有 优惠折扣计算完后，如果总金额小于等于0，则返回总扣款为0
-        if (receivedAmount <= 0) {
-            receivedAmount = 0.0;
-        }
-        fee.put("receivedAmount", receivedAmount);
-        fee.put("oId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oId));
-        ResponseEntity<String> responseEntitys = new ResponseEntity<>(fee.toJSONString(), HttpStatus.OK);
-        fee.putAll(reqJson);
-        CommonCache.setValue("getTempCarFeeOrder" + fee.getString("oId"), fee.toJSONString(), 24 * 60 * 60);
-        cmdDataFlowContext.setResponseEntity(responseEntitys);
-    }
-
-    private double checkCouponUser(JSONObject paramObj) {
-
-        BigDecimal couponPrice = new BigDecimal(0.0);
-        String couponIds = paramObj.getString("couponIds");
-        if (couponIds == null || "".equals(couponIds)) {
-            paramObj.put("couponPrice", couponPrice.doubleValue());
-            paramObj.put("couponUserDtos", new JSONArray()); //这里考虑空
-            return couponPrice.doubleValue();
-        }
-
-        List<String> result = Arrays.asList(couponIds.split(","));
-        CouponUserDto couponUserDto = new CouponUserDto();
-        couponUserDto.setCouponIds(result.toArray(new String[result.size()]));
-        List<CouponUserDto> couponUserDtos = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
-        if (couponUserDtos == null || couponUserDtos.size() < 1) {
-            paramObj.put("couponPrice", couponPrice.doubleValue());
-            return couponPrice.doubleValue();
-        }
-        for (CouponUserDto couponUser : couponUserDtos) {
-            //不计算已过期购物券金额
-            if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
-                couponPrice = couponPrice.add(new BigDecimal(Double.parseDouble(couponUser.getActualPrice())));
-            }
-        }
-        paramObj.put("couponPrice", couponPrice.doubleValue());
-        paramObj.put("couponUserDtos", BeanConvertUtil.beanCovertJSONArray(couponUserDtos));
-        return couponPrice.doubleValue();
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
