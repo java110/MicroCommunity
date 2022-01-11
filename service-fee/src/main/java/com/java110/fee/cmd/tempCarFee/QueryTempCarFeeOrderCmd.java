@@ -80,10 +80,9 @@ public class QueryTempCarFeeOrderCmd extends AbstractServiceCmdListener {
         }
         fee.put("receivedAmount", receivedAmount);
         fee.put("oId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oId));
-        ResponseEntity<String> responseEntitys = new ResponseEntity<>(fee.toJSONString(), HttpStatus.OK);
         fee.putAll(reqJson);
         CommonCache.setValue("getTempCarFeeOrder" + fee.getString("oId"), fee.toJSONString(), 24 * 60 * 60);
-        cmdDataFlowContext.setResponseEntity(responseEntitys);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private double checkCouponUser(JSONObject paramObj) {
