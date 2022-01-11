@@ -8,7 +8,9 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -39,14 +41,18 @@ public class CheckPayFinishCmd extends AbstractServiceCmdListener {
         if (StringUtil.isEmpty(authCode) || authCode.length() < 2) {
             throw new IllegalArgumentException("授权码错误");
         }
+        String payQrAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_QR_ADAPT);
 
-        int pre = Integer.parseInt(authCode.substring(0, 2));
-        if (pre > 24 && pre < 31) { // 支付宝
-            qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
+        if (StringUtil.isEmpty(payQrAdapt)) {
+            int pre = Integer.parseInt(authCode.substring(0, 2));
+            if (pre > 24 && pre < 31) { // 支付宝
+                qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
+            } else {
+                qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
+            }
         } else {
-            qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
+            qrCodePaymentSMOImpl = ApplicationContextFactory.getBean(payQrAdapt, IQrCodePaymentSMO.class);
         }
-
         ResultVo resultVo = null;
         try {
             resultVo = qrCodePaymentSMOImpl.checkPayFinish(reqJson.getString("communityId"), orderId);
