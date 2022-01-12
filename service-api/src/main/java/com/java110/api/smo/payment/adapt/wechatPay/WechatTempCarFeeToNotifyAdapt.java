@@ -132,14 +132,14 @@ public class WechatTempCarFeeToNotifyAdapt extends DefaultAbstractComponentSMO i
         }
 
         String orderId = map.get("out_trade_no").toString();
-        String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId);
-
-        if (StringUtil.isEmpty(order)) {
-            return 1;// 说明已经处理过了 再不处理
-        }
+//        String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId);
+//
+//        if (StringUtil.isEmpty(order)) {
+//            return 1;// 说明已经处理过了 再不处理
+//        }
 
         //查询用户ID
-        JSONObject paramIn = JSONObject.parseObject(order);
+        JSONObject paramIn = new JSONObject();
         paramIn.put("oId", orderId);
         String url = "tempCarFee.notifyTempCarFeeOrder";
         /**

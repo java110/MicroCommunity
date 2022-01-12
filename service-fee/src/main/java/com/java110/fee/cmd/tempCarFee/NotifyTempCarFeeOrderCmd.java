@@ -17,6 +17,7 @@ import com.java110.po.couponUserDetail.CouponUserDetailPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -50,7 +51,10 @@ public class NotifyTempCarFeeOrderCmd extends AbstractServiceCmdListener {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String paramIn = CommonCache.getAndRemoveValue("getTempCarFeeOrder" + reqJson.getString("oId"));
+        String paramIn = CommonCache.getAndRemoveValue("queryTempCarFeeOrder" + reqJson.getString("oId"));
+        if (StringUtil.isEmpty(paramIn)) {
+            throw new CmdException("已经处理过了 再不处理");
+        }
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         System.out.println("获取到内存中的数据了++++++++++++==》"+paramObj.toJSONString());
         modifyCouponUser(paramObj);
