@@ -93,8 +93,8 @@ public class NotifyTempCarFeeOrderCmd extends AbstractServiceCmdListener {
             couponUserDetailPo.setUserId(couponUser.getUserId());
             couponUserDetailPo.setCouponName(couponUser.getCouponName());
             couponUserDetailPo.setUserName(couponUser.getUserName());
-            couponUserDetailPo.setObjId(paramObj.getString("feeId"));
-            couponUserDetailPo.setObjType(paramObj.getString("feeTypeCd"));
+            couponUserDetailPo.setObjId(paramObj.getString("carNum"));
+            couponUserDetailPo.setObjType("车辆");
             couponUserDetailPo.setOrderId(paramObj.getString("oId"));
             fage = couponUserDetailV1InnerServiceSMOImpl.saveCouponUserDetail(couponUserDetailPo);
             if (fage < 1) {
