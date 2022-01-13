@@ -76,7 +76,7 @@ public class UnlicensedCarMachineQrCodeUrl extends AbstractServiceCmdListener {
         smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-        ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?communityId=" +
+        ownerUrl += ("/#/pages/unlicensedCarIn/unlicensedCarIn?communityId=" +
                 reqJson.getString("communityId") + "$machineId=" +
                 reqJson.getString("machineId"));
         if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
