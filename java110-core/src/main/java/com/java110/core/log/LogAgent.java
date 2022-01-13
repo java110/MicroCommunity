@@ -25,6 +25,9 @@ public class LogAgent extends LoggerEngine{
     public static final String LOG_STATUS_S = "S";
     public static final String LOG_STATUS_F = "F";
 
+    private static String logSwatch = "logSwatch";
+    private static String LOG_SWATCH_ON = "ON";
+
 
     /**
      * 发送日志
@@ -136,4 +139,11 @@ public class LogAgent extends LoggerEngine{
         return message;
     }
 
+    public static boolean getLogSwatch() {
+        return logSwatch == LogAgent.LOG_SWATCH_ON?true:false;
+    }
+
+    public static void setLogSwatch(String logSwatch) {
+        LogAgent.logSwatch = logSwatch;
+    }
 }
