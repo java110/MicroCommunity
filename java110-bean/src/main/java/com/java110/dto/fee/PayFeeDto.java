@@ -1,4 +1,4 @@
-package com.java110.po.fee;
+package com.java110.dto.fee;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @Version 1.0
  * add by wuxw 2020/5/27
  **/
-public class PayFeePo implements Serializable {
+public class PayFeeDto implements Serializable {
 
     private String feeId;
     private String feeTypeCd;
@@ -21,7 +21,6 @@ public class PayFeePo implements Serializable {
     private String endTime;
     private String amount;
     private String userId;
-    private String bId;
 
     private String feeFlag;
     private String state;
@@ -30,6 +29,9 @@ public class PayFeePo implements Serializable {
     private String statusCd = "0";
     private String createTime;
     private String batchId;
+
+    private int page;
+    private int row;
 
     public String getFeeId() {
         return feeId;
@@ -159,11 +161,19 @@ public class PayFeePo implements Serializable {
         this.batchId = batchId;
     }
 
-    public String getbId() {
-        return bId;
+    public int getPage() {
+        return page;
     }
 
-    public void setbId(String bId) {
-        this.bId = bId;
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 }

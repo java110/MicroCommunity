@@ -16,6 +16,7 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.dto.fee.PayFeeDto;
 import com.java110.fee.dao.IPayFeeNewV1ServiceDao;
 import com.java110.intf.fee.IPayFeeNewV1InnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
@@ -64,25 +65,25 @@ public class PayFeeNewV1InnerServiceSMOImpl extends BaseServiceSMO implements IP
        return saveFlag;
     }
 
-//    @Override
-//    public List<PayFeeNewDto> queryPayFeeNews(@RequestBody  PayFeeNewDto payFeeNewDto) {
-//
-//        //校验是否传了 分页信息
-//
-//        int page = payFeeNewDto.getPage();
-//
-//        if (page != PageDto.DEFAULT_PAGE) {
-//            payFeeNewDto.setPage((page - 1) * payFeeNewDto.getRow());
-//        }
-//
-//        List<PayFeeNewDto> payFeeNews = BeanConvertUtil.covertBeanList(payFeeNewV1ServiceDaoImpl.getPayFeeNewInfo(BeanConvertUtil.beanCovertMap(payFeeNewDto)), PayFeeNewDto.class);
-//
-//        return payFeeNews;
-//    }
-//
-//
-//    @Override
-//    public int queryPayFeeNewsCount(@RequestBody PayFeeNewDto payFeeNewDto) {
-//        return payFeeNewV1ServiceDaoImpl.queryPayFeeNewsCount(BeanConvertUtil.beanCovertMap(payFeeNewDto));    }
+    @Override
+    public List<PayFeeDto> queryPayFeeNews(@RequestBody  PayFeeDto payFeeNewDto) {
+
+        //校验是否传了 分页信息
+
+        int page = payFeeNewDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeNewDto.setPage((page - 1) * payFeeNewDto.getRow());
+        }
+
+        List<PayFeeDto> payFeeNews = BeanConvertUtil.covertBeanList(payFeeNewV1ServiceDaoImpl.getPayFeeNewInfo(BeanConvertUtil.beanCovertMap(payFeeNewDto)), PayFeeDto.class);
+
+        return payFeeNews;
+    }
+
+
+    @Override
+    public int queryPayFeeNewsCount(@RequestBody PayFeeDto payFeeNewDto) {
+        return payFeeNewV1ServiceDaoImpl.queryPayFeeNewsCount(BeanConvertUtil.beanCovertMap(payFeeNewDto));    }
 
 }
