@@ -62,35 +62,35 @@ public class LoggerFactory implements Logger {
         return this.logger.isDebugEnabled(marker);
     }
     public void trace(String message) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(this.logPrefix + message);
         }
 
     }
 
     public void trace(String message, Object arg) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(this.logPrefix + message, arg);
         }
 
     }
 
     public void trace(String message, Object arg1, Object arg2) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(this.logPrefix + message, arg1, arg2);
         }
 
     }
 
     public void trace(String message, Object... args) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(this.logPrefix + message, args);
         }
 
     }
 
     public void trace(String msg, Throwable t) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(this.logPrefix + msg, t);
         }
 
@@ -102,35 +102,35 @@ public class LoggerFactory implements Logger {
     }
 
     public void trace(Marker marker, String msg) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(marker, this.logPrefix + msg);
         }
 
     }
 
     public void trace(Marker marker, String format, Object arg) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(marker, this.logPrefix + format, arg);
         }
 
     }
 
     public void trace(Marker marker, String format, Object arg1, Object arg2) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(marker, this.logPrefix + format, arg1, arg2);
         }
 
     }
 
     public void trace(Marker marker, String format, Object... argArray) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(marker, this.logPrefix + format, argArray);
         }
 
     }
 
     public void trace(Marker marker, String msg, Throwable t) {
-        if (this.logger.isTraceEnabled()) {
+        if (this.isTraceEnabled()) {
             this.logger.trace(marker, this.logPrefix + msg, t);
         }
 
@@ -138,35 +138,35 @@ public class LoggerFactory implements Logger {
 
 
     public void debug(String message) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(this.logPrefix + message);
         }
 
     }
 
     public void debug(String message, Object arg) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(this.logPrefix + message, arg);
         }
 
     }
 
     public void debug(String message, Object arg1, Object arg2) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(this.logPrefix + message, arg1, arg2);
         }
 
     }
 
     public void debug(String message, Object... args) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(this.logPrefix + message, args);
         }
 
     }
 
     public void debug(String msg, Throwable t) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(this.logPrefix + msg, t);
         }
 
@@ -174,35 +174,35 @@ public class LoggerFactory implements Logger {
 
 
     public void debug(Marker marker, String msg) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(marker, this.logPrefix + msg);
         }
 
     }
 
     public void debug(Marker marker, String format, Object arg) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(marker, this.logPrefix + format, arg);
         }
 
     }
 
     public void debug(Marker marker, String format, Object arg1, Object arg2) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(marker, this.logPrefix + format, arg1, arg2);
         }
 
     }
 
     public void debug(Marker marker, String format, Object... arguments) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(marker, this.logPrefix + format, arguments);
         }
 
     }
 
     public void debug(Marker marker, String msg, Throwable t) {
-        if (this.logger.isDebugEnabled()) {
+        if (this.isDebugEnabled()) {
             this.logger.debug(marker, this.logPrefix + msg, t);
         }
 
@@ -273,7 +273,7 @@ public class LoggerFactory implements Logger {
     }
 
     public void error(String message, Object... args) {
-        if (this.logger.isErrorEnabled()) {
+        if (this.isErrorEnabled()) {
             this.logger.error(this.logPrefix + message, args);
         }
     }
@@ -305,7 +305,7 @@ public class LoggerFactory implements Logger {
     }
 
     public void info(String message) {
-        if (this.logger.isInfoEnabled()) {
+        if (this.isInfoEnabled()) {
             this.logger.info(this.logPrefix + message);
         }
     }
@@ -319,7 +319,7 @@ public class LoggerFactory implements Logger {
     }
 
     public void info(String message, Object... args) {
-        if (this.logger.isInfoEnabled()) {
+        if (this.isInfoEnabled()) {
             this.logger.info(this.logPrefix + message, args);
         }
     }
