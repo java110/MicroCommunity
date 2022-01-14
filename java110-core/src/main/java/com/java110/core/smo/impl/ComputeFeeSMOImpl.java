@@ -305,6 +305,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeReceiptDetailPo.setArea(sub.doubleValue() + "");
                     feeReceiptDetailPo.setSquarePrice(feeDto.getMwPrice() + "/" + feeDto.getAdditionalAmount());
                 }
+            } else if ("1101".equals(computingFormula)) { //租金
+                feeReceiptDetailPo.setArea(roomDtos.get(0).getBuiltUpArea());
+                feeReceiptDetailPo.setSquarePrice(roomDtos.get(0).getRoomRent());
             } else {
             }
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关

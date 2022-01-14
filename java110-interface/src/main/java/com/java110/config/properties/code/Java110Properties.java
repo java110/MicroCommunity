@@ -99,4 +99,5 @@ public class Java110Properties {
     public void setFtpPath(String ftpPath) {
         this.ftpPath = ftpPath;
     }
+
 }
