@@ -89,6 +89,7 @@ public class OaServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
         ApplicationContext context = SpringApplication.run(OaServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 

@@ -79,6 +79,7 @@ public class JobServiceApplication {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
         ApplicationContext context = SpringApplication.run(JobServiceApplication.class, args);
         ServiceStartInit.initSystemConfig(context);
         //加载业务侦听

@@ -77,6 +77,7 @@ public class DevServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
         ApplicationContext context = SpringApplication.run(DevServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 

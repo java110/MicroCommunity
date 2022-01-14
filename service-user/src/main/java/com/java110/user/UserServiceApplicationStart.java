@@ -49,6 +49,7 @@ public class UserServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
             ApplicationContext context = SpringApplication.run(UserServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
             //加载业务侦听

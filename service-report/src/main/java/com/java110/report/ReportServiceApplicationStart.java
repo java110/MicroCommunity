@@ -77,6 +77,8 @@ public class ReportServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
+
         ApplicationContext context = SpringApplication.run(ReportServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 

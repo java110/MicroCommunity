@@ -103,6 +103,7 @@ public class CommonServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
         ApplicationContext context = SpringApplication.run(CommonServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 

@@ -1,5 +1,6 @@
 package com.java110.core.log;
 
+import com.java110.dto.system.SystemLogDto;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
@@ -25,23 +26,23 @@ public class LoggerFactory implements Logger {
 
     @Override
     public boolean isTraceEnabled() {
-        return LogAgent.getLogSwatch();
+        return SystemLogDto.getLogSwatch();
     }
 
 
     @Override
     public boolean isDebugEnabled() {
-        return LogAgent.getLogSwatch();
+        return SystemLogDto.getLogSwatch();
     }
 
     @Override
     public boolean isInfoEnabled() {
-        return LogAgent.getLogSwatch();
+        return SystemLogDto.getLogSwatch();
     }
 
     @Override
     public boolean isErrorEnabled() {
-        return LogAgent.getLogSwatch();
+        return SystemLogDto.getLogSwatch();
     }
 
 
