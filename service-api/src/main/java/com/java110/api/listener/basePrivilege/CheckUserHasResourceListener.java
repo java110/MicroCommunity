@@ -10,7 +10,7 @@ import com.java110.entity.center.AppService;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

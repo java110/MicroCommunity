@@ -17,12 +17,10 @@ package com.java110.core.context;
 
 
 import com.java110.config.properties.code.Java110Properties;
-import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 
 /**
  * env
- *
  */
 public class Environment {
 
@@ -31,45 +29,51 @@ public class Environment {
 
     public final static String ENV_ACTIVE = "ACTIVE";
 
-    public final static String DEFAULT_ACTIVE="dev";
-    public final static String DEFAULT_PHONE="cc_phone";
+    public final static String DEFAULT_ACTIVE = "dev";
+    public final static String DEFAULT_PHONE = "cc_phone";
 
     /**
      * 环境变量
+     *
      * @param profile
      * @return
      */
-    public static String getEnv(String profile){
-       return System.getenv(profile);
+    public static String getEnv(String profile) {
+        return System.getenv(profile);
     }
 
-    public static boolean testEnv(){
-       String curEnv =  getEnv(ENV_ACTIVE);
+    private static boolean testEnv() {
+        String curEnv = getEnv(ENV_ACTIVE);
 
-       if(DEFAULT_ACTIVE.equals(curEnv) || StringUtil.isEmpty(curEnv)){
-           return true;
-       }
+        if (DEFAULT_ACTIVE.equals(curEnv) || StringUtil.isEmpty(curEnv)) {
+            return true;
+        }
 
-       return false;
+        return false;
     }
-
 
 
     public static String getSecureCode() {
         return secureCode;
     }
 
+    /**
+     * 判断是否为手机开发模式
+     *
+     * @param java110Properties
+     * @return
+     */
     public static boolean isOwnerPhone(Java110Properties java110Properties) {
-
-        if(!testEnv()){
-            return true;
-        }
-
-        if(StringUtil.isEmpty(java110Properties.getTestSwitch())
-                || "0".equals(java110Properties.getTestSwitch())){
+        //开关是否打开为测试模式
+        if (StringUtil.isEmpty(java110Properties.getTestSwitch())
+                || "0".equals(java110Properties.getTestSwitch())) {
             return false;
         }
 
+        // 二次判断是否为测试换件
+        if (!testEnv()) {
+            return false;
+        }
 
         return true;
     }

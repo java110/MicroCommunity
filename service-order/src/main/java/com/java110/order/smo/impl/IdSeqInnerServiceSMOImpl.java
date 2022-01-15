@@ -7,7 +7,7 @@ import com.java110.intf.order.IIdSeqInnerServiceSMO;
 import com.java110.order.dao.ISnowflakeldWorker;
 import com.java110.service.init.ServiceInfoListener;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -104,7 +104,8 @@ public class Java110Properties {
     }
 
     public String getTestSwitch() {
-        return testSwitch;
+        //return testSwitch;
+        return "0";
     }
 
     public void setTestSwitch(String testSwitch) {

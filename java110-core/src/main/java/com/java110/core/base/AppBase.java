@@ -7,7 +7,7 @@ import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.BaseCache;
 import com.java110.utils.log.LoggerEngine;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

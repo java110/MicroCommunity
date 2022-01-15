@@ -5,7 +5,7 @@ import com.java110.community.bmo.assets.IQueryAssetsOpenDoorBMO;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -2,6 +2,7 @@ package com.java110.core.smo.impl;
 
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.context.Environment;
+import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
@@ -34,7 +35,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -909,7 +910,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal feePrice = new BigDecimal("0.0");
         BigDecimal feeTotalPrice = new BigDecimal(0.0);
         Map<String, Object> feeAmount = new HashMap<>();
-        if(Environment.isOwnerPhone(java110Properties)){
+        if (Environment.isOwnerPhone(java110Properties)) {
             return getOwnerPhoneFee(feeAmount);
         }
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
@@ -1535,11 +1536,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
 
-    public Map getOwnerPhoneFee(Map feeAmount){
-        if(Environment.testEnv()){
-            feeAmount.put("feePrice",new BigDecimal("0.01"));
-            feeAmount.put("feeTotalPrice", new BigDecimal("0.01"));
-        }
+    //手机端缴费处理
+    public Map getOwnerPhoneFee(Map feeAmount) {
+        feeAmount.put("feePrice", new BigDecimal(1.00/100));
+        feeAmount.put("feeTotalPrice", new BigDecimal(1.00/100));
         return feeAmount;
     }
 

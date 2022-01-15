@@ -13,7 +13,8 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
+
 import sun.misc.ProxyGenerator;
 
 import java.io.File;
