@@ -103,6 +103,9 @@ order by t.create_time desc
 <if test="psId !=null and psId != ''">
 , t.ps_id= #{psId}
 </if> 
+<if test="feeId !=null and feeId != ''">
+, t.fee_id= #{feeId}
+</if>
 <if test="remark !=null and remark != ''">
 , t.remark= #{remark}
 </if> 

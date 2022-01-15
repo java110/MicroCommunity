@@ -86,6 +86,7 @@ public class CommunityServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
             ApplicationContext context = SpringApplication.run(CommunityServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
         } catch (Throwable e) {

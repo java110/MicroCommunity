@@ -1,5 +1,6 @@
 package com.java110.config.feign;
 
+import com.java110.dto.system.SystemLogDto;
 import feign.Logger;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,11 @@ public class FeignConfiguration {
     @Bean
     Logger.Level feignLoggerLevel() {
         //这里记录所有，根据实际情况选择合适的日志level
-        return Logger.Level.FULL;
+        if (SystemLogDto.getLogSwatch()) {
+            return Logger.Level.FULL;
+        } else {
+            return Logger.Level.NONE;
+        }
     }
 
 

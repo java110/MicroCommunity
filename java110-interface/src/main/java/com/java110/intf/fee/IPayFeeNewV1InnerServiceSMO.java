@@ -16,6 +16,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.PayFeeDto;
 import com.java110.po.fee.PayFeePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,22 +47,22 @@ public interface IPayFeeNewV1InnerServiceSMO {
     @RequestMapping(value = "/deletePayFeeNew", method = RequestMethod.POST)
     public int deletePayFeeNew(@RequestBody  PayFeePo PayFeePo);
 
-//    /**
-//     * <p>查询小区楼信息</p>
-//     *
-//     *
-//     * @param PayFeeDto 数据对象分享
-//     * @return PayFeeDto 对象数据
-//     */
-//    @RequestMapping(value = "/queryPayFeeNews", method = RequestMethod.POST)
-//    List<PayFeeDto> queryPayFeeNews(@RequestBody PayFeeDto PayFeeDto);
-//
-//    /**
-//     * 查询<p>小区楼</p>总记录数
-//     *
-//     * @param PayFeeDto 数据对象分享
-//     * @return 小区下的小区楼记录数
-//     */
-//    @RequestMapping(value = "/queryPayFeeNewsCount", method = RequestMethod.POST)
-//    int queryPayFeeNewsCount(@RequestBody PayFeeDto PayFeeDto);
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param payFeeDto 数据对象分享
+     * @return PayFeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryPayFeeNews", method = RequestMethod.POST)
+    List<PayFeeDto> queryPayFeeNews(@RequestBody PayFeeDto payFeeDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param payFeeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryPayFeeNewsCount", method = RequestMethod.POST)
+    int queryPayFeeNewsCount(@RequestBody PayFeeDto payFeeDto);
 }

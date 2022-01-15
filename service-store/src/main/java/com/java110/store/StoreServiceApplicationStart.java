@@ -77,6 +77,8 @@ public class StoreServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
+
             ApplicationContext context = SpringApplication.run(StoreServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
             //加载业务侦听

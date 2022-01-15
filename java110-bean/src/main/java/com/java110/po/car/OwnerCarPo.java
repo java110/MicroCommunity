@@ -28,6 +28,7 @@ public class OwnerCarPo implements Serializable {
     private String endTime;
 
     private String state;
+    private String bId;
 
     private String communityId;
     private String carTypeCd;
@@ -161,5 +162,13 @@ public class OwnerCarPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

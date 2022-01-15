@@ -104,6 +104,8 @@ public class OrderServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
+
             ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
 
             //服务启动加载
