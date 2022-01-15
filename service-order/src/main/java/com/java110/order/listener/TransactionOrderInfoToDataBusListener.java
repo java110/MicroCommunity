@@ -17,6 +17,7 @@ package com.java110.order.listener;
 
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.SecureInvocation;
 import com.java110.core.event.app.order.Ordered;
 import com.java110.core.event.center.event.InvokeFinishBusinessSystemEvent;
 import com.java110.core.event.center.listener.DataFlowListener;
@@ -51,8 +52,9 @@ public class TransactionOrderInfoToDataBusListener implements DataFlowListener<I
 
     @Override
     public void soService(InvokeFinishBusinessSystemEvent event) {
+
         IOrderDataFlowContext dataFlow = event.getDataFlow();
-        if (dataFlow == null
+        if (!SecureInvocation.secure(this.getClass()) || dataFlow == null
                 || dataFlow.getBusinessList() == null
                 || dataFlow.getBusinessList().size() == 0) {
             return;

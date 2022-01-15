@@ -3,6 +3,7 @@ package com.java110.order.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.context.SecureInvocation;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
@@ -75,7 +76,8 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         }
 
         //保存订单信息
-        centerServiceDAOImpl.saveOrder(BeanConvertUtil.beanCovertMap(orderDto));
+            centerServiceDAOImpl.saveOrder(BeanConvertUtil.beanCovertMap(orderDto));
+
         return new ResponseEntity<String>(JSONObject.toJSONString(orderDto), HttpStatus.OK);
     }
 

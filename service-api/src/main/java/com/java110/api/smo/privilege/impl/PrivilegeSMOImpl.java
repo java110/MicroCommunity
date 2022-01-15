@@ -8,8 +8,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class PrivilegeSMOImpl extends DefaultAbstractComponentSMO implements IPrivilegeSMO {
+
+
+
     @Override
     public void hasPrivilege(RestTemplate restTemplate, IPageData pd, String resource) {
+
+
         super.hasPrivilege(restTemplate, pd, resource);
     }
 }

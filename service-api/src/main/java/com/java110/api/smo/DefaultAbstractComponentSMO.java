@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.SecureInvocation;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.user.UserDto;
@@ -346,7 +347,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
         ResultVo resultVo = getCommunityStoreInfoSMOImpl.checkUserHasResourceListener(restTemplate, pd, paramIn, pd.getUserId());
-        if (resultVo == null || resultVo.getCode() != ResultVo.CODE_OK) {
+        if (resultVo == null ||
+                resultVo.getCode() != ResultVo.CODE_OK) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
         JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
