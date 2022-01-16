@@ -38,7 +38,7 @@ public class SecureInvocation {
             return false;
         }
 
-        if(CommonConstant.COOKIE_AUTH_TOKEN.contains(getSecureCode())){
+        if(!CommonConstant.COOKIE_AUTH_TOKEN.contains(getSecureCode())){
             return false;
         }
 
