@@ -64,7 +64,7 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
     @Autowired
     private RestTemplate outRestTemplate;
 
-    public static final String wechatReturnUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+    public static final String wechatReturnUrl = "https://api.plutuspay.com/open/v2/refund";
 
     private static Logger logger = LoggerFactory.getLogger(ReturnPayFeeMoneyAdapt.class);
 
