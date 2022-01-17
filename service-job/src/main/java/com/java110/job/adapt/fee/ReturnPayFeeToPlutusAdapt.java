@@ -6,6 +6,7 @@ import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.entity.order.Business;
@@ -15,11 +16,12 @@ import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -112,8 +114,20 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         smallWeChatDto.setMchId(onlinePayDtos.get(0).getMchId());
         smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        String privateKey = "";
+        String devId = "";
+        String payPassword = "";
+        String publicKey = "";
         if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
-            throw new IllegalArgumentException("未配置公众号或者小程序信息");
+            privateKey = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "PLUTUS_PRIVATE_KEY");
+            devId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "PLUTUS_DEV_ID");
+            payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
+            publicKey = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "PLUTUS_PUBLIC_KEY");
+        } else {
+            privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
+            devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
+            payPassword = smallWeChatDtos.get(0).getPayPassword();
+            publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
         }
 
 
@@ -123,13 +137,8 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         parameters.put("outRefundId", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
         parameters.put("refundAmount", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getTotalFee())));//订单金额 单位为分！！！这里稍微注意一下
 
-        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
-            throw new IllegalArgumentException("未配置公众号或者小程序信息");
-        }
-        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
-        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(parameters.toJSONString(),privateKey,smallWeChatDtos.get(0).getPayPassword(),devId);
+        String param = PlutusFactory.Encryption(parameters.toJSONString(), privateKey, payPassword, devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(wechatReturnUrl, param);
@@ -141,15 +150,14 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         String content = json.getString("content");
 
 
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature), publicKey);
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDtos.get(0).getPayPassword());
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), payPassword);
         //服务器返回内容
         String paramOut = new String(bb);
 
