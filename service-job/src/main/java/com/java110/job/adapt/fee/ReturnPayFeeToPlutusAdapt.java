@@ -149,7 +149,7 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDtos.get(0).getPayPassword());
         //服务器返回内容
         String paramOut = new String(bb);
 
