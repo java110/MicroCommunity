@@ -15,6 +15,8 @@
  */
 package com.java110.utils.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +41,28 @@ public class ImageUtils {
             ImageIO.write(biOut, suffix, baos);
             String base64Str = Base64Convert.byteToBase64(baos.toByteArray());
             return base64Str;
+        } catch (Exception e) {
+            return "";
+        }finally {
+            try {
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static String getMd5ByImgUrl(String url) {
+        String suffix = url.substring(url.lastIndexOf(".") + 1);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            URL urls = new URL(url);
+
+            Image image = Toolkit.getDefaultToolkit().getImage(urls);
+            BufferedImage biOut = toBufferedImage(image);
+            ImageIO.write(biOut, suffix, baos);
+           return DigestUtils.md5Hex(baos.toByteArray());
         } catch (Exception e) {
             return "";
         }finally {

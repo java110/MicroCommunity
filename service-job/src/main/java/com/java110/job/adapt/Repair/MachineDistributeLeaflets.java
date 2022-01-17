@@ -2,8 +2,11 @@ package com.java110.job.adapt.Repair;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -15,6 +18,7 @@ import com.java110.entity.order.Business;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
@@ -25,10 +29,11 @@ import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -73,6 +78,9 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -130,10 +138,13 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 paramIn.put("staffId", staffId);
                 paramIn.put("repairObjId", repairObjId);
                 paramIn.put("preStaffId", preStaffId);
+                paramIn.put("repairId", repairId);
                 //给维修师傅推送信息
                 sendMsg(paramIn, communityDtos.get(0));
                 //派单成功给业主推送信息
                 publishMsg(paramIn, communityDtos.get(0));
+                //为企业微信群发消息
+                sendMsgToWechatGroup(paramIn, communityDtos.get(0));
             } else if (repairState.equals("1100") && (repairWay.equals("100") || repairWay.equals("300"))) {
                 String staffId = "";
                 if (repairUserDtos.size() > 1) {
@@ -309,6 +320,91 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             logger.info("微信模板返回内容:{}", responseEntity);
         }
     }
+
+
+    private void sendMsgToWechatGroup(JSONObject paramIn, CommunityDto communityDto) {
+
+        //查询公众号配置
+        String url = CommunitySettingFactory.getRemark(communityDto.getCommunityId(), "WECHAT_SEND_REPAIR_URL");
+        if (StringUtil.isEmpty(url)) {
+            return;
+        }
+
+        JSONObject rebootParam = new JSONObject();
+        rebootParam.put("msgtype", "markdown");
+        JSONObject rebootMarkdown = new JSONObject();
+        rebootParam.put("markdown", rebootMarkdown);
+
+
+        //获取具体位置
+        String address = "";
+        if (communityDto.getName().equals(paramIn.getString("repairObjName"))) {
+            address = paramIn.getString("repairObjName");
+        } else {
+            address = communityDto.getName() + paramIn.getString("repairObjName");
+        }
+
+        //根据 userId 查询到openId
+        UserDto userDto = new UserDto();
+        userDto.setUserId(paramIn.getString("staffId"));
+        List<UserDto> userDtos = userInnerServiceSMO.getUsers(userDto);
+        String staffName = "";
+        if (userDtos != null && userDtos.size() > 0) {
+            staffName = userDtos.get(0).getName();
+        }
+        String content = staffName + " 您有新的维修任务，维修信息如下：\n";
+
+        content += ("> 标题：<front color=\"comment\">" + paramIn.getString("repairName") + "</font>");
+        content += ("> 电话：<front color=\"comment\">" + paramIn.getString("tel") + "</font>");
+        content += ("> 时间：<front color=\"comment\">" + paramIn.getString("time") + "</font>");
+        content += ("> 内容：<front color=\"comment\">" + paramIn.getString("context") + "</font>");
+        content += ("> 位置：<front color=\"comment\">" + address + "</font>");
+        content += ("> 单号：<front color=\"comment\">" + paramIn.getString("repairId") + "</font>");
+
+        rebootMarkdown.put("content", content);
+        logger.info("发送消息内容:{}", content);
+        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, rebootMarkdown.toJSONString(), String.class);
+        logger.info("企业微信返回内容:{}", responseEntity);
+
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return;
+        }
+
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(paramIn.getString("repairId"));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if (fileRelDtos == null || fileRelDtos.size() < 1) {
+            return;
+        }
+
+        rebootParam = JSONObject.parseObject(" {\n" +
+                "            \"msgtype\":\"image\",\n" +
+                "            \"image\":{\n" +
+                "              }\n" +
+                "        }");
+
+
+        JSONObject image = rebootParam.getJSONObject("image");
+
+        String imageUrl = "";
+        for (FileRelDto tmpFileRelDto : fileRelDtos) {
+
+            if (!tmpFileRelDto.getRelTypeCd().equals(FileRelDto.REL_TYPE_CD_REPAIR)) {  //维修图片
+                continue;
+            }
+            imageUrl = imgUrl + tmpFileRelDto.getFileRealName();
+            image.put("base64", ImageUtils.getBase64ByImgUrl(imageUrl));
+            image.put("md5", ImageUtils.getMd5ByImgUrl(imageUrl));
+            responseEntity = outRestTemplate.postForEntity(url, rebootParam.toJSONString(), String.class);
+            logger.debug("返回信息："+responseEntity);
+        }
+
+    }
+
 
     /**
      * 派单(抢单)成功后给业主推送信息
