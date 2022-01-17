@@ -165,10 +165,10 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
 
-        if (paramObj.getIntValue("status") == 1) {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
-        } else {
+        if (paramObj.getIntValue("status") != 2) {
             doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, paramObj.getString("remark"));
+        } else {
+            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
         }
 
     }
