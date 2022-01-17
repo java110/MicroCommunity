@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.fee.PayFeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
@@ -162,8 +163,8 @@ public class UpdateParkingSpaceApplyCmd extends AbstractServiceCmdListener {
         payFeePo.setEndTime(parkingSpaceApply.getEndTime());
         payFeePo.setAmount("0");
         payFeePo.setFeeFlag(feeConfig.getFeeFlag());
-        payFeePo.setState("2009001");
-        payFeePo.setPayerObjType("6666");
+        payFeePo.setState(FeeDto.STATE_DOING);
+        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_PARKING_SPACE);
         payFeePo.setBatchId("-1");
         payFeePo.setbId("-1");
         payFeePo.setUserId(userId);
