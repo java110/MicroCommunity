@@ -354,12 +354,12 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         }
         String content = staffName + " 您有新的维修任务，维修信息如下：\n";
 
-        content += ("> 标题：<front color=\"comment\">" + paramIn.getString("repairName") + "</font>");
-        content += ("> 电话：<front color=\"comment\">" + paramIn.getString("tel") + "</font>");
-        content += ("> 时间：<front color=\"comment\">" + paramIn.getString("time") + "</font>");
-        content += ("> 内容：<front color=\"comment\">" + paramIn.getString("context") + "</font>");
-        content += ("> 位置：<front color=\"comment\">" + address + "</font>");
-        content += ("> 单号：<front color=\"comment\">" + paramIn.getString("repairId") + "</font>");
+        content += ("> 标题：<front color=\"comment\">" + paramIn.getString("repairName") + "</front>");
+        content += ("> 电话：<front color=\"comment\">" + paramIn.getString("tel") + "</front>");
+        content += ("> 时间：<front color=\"comment\">" + paramIn.getString("time") + "</front>");
+        content += ("> 内容：<front color=\"comment\">" + paramIn.getString("context") + "</front>");
+        content += ("> 位置：<front color=\"comment\">" + address + "</front>");
+        content += ("> 单号：<front color=\"comment\">" + paramIn.getString("repairId") + "</front>");
 
         rebootMarkdown.put("content", content);
         logger.info("发送消息内容:{}", content);
