@@ -161,7 +161,7 @@ public class UpdateParkingSpaceApplyCmd extends AbstractServiceCmdListener {
         payFeePo.setStartTime(parkingSpaceApply.getStartTime());
         payFeePo.setEndTime(parkingSpaceApply.getEndTime());
         payFeePo.setAmount("0");
-        payFeePo.setFeeFlag("1003006");
+        payFeePo.setFeeFlag(feeConfig.getFeeFlag());
         payFeePo.setState("2009001");
         payFeePo.setPayerObjType("6666");
         payFeePo.setBatchId("-1");
