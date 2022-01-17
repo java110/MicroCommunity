@@ -20,6 +20,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
+import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,6 +161,7 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         byte[] bb = PlutusFactory.decrypt(Base64.decode(content), payPassword);
         //服务器返回内容
         String paramOut = new String(bb);
+        System.out.println(paramOut);
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
 
@@ -173,7 +175,7 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
 
     private void doUpdateOnlinePay(String orderId, String state, String message) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
-        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setMessage(!StringUtil.isEmpty(message) && message.length() > 1000 ? message.substring(0, 1000) : message);
         onlinePayPo.setOrderId(orderId);
         onlinePayPo.setState(state);
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
