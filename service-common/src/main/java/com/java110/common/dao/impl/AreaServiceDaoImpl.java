@@ -5,7 +5,7 @@ import com.java110.common.dao.IFileServiceDao;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.utils.exception.DAOException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

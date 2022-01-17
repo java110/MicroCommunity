@@ -6,7 +6,7 @@ import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.OSSUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -19,7 +19,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

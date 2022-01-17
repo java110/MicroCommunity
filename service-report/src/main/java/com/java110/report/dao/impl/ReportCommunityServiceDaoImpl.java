@@ -7,7 +7,7 @@ import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

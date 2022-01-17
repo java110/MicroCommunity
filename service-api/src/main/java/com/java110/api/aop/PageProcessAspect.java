@@ -3,6 +3,8 @@ package com.java110.api.aop;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.core.context.SecureInvocation;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.FilterException;
 import com.java110.utils.util.StringUtil;
@@ -10,7 +12,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -193,7 +194,7 @@ public class PageProcessAspect {
             return token;
         }
         for (Cookie cookie : request.getCookies()) {
-            if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
+            if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName()) ) {
                 token = cookie.getValue();
             }
         }

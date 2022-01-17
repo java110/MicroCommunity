@@ -1,7 +1,7 @@
 package com.java110.core.base.smo.front;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 
 /**
  * @ClassName AbstrateBaseFrontServcieSMO

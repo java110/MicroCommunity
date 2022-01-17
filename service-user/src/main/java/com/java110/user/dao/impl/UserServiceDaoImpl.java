@@ -11,7 +11,7 @@ import com.java110.entity.user.Cust;
 import com.java110.entity.user.CustAttr;
 import com.java110.user.dao.IUserServiceDao;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

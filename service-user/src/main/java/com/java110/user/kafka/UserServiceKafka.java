@@ -13,7 +13,7 @@ import com.java110.core.factory.DataTransactionFactory;
 import com.java110.user.smo.IUserServiceSMO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 

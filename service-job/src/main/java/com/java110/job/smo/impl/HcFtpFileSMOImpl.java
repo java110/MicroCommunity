@@ -6,7 +6,7 @@ import com.java110.job.model.FtpTaskLogDetail;
 import com.java110.job.smo.IHcFtpFileBMO;
 import com.java110.job.smo.IHcFtpFileSMO;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

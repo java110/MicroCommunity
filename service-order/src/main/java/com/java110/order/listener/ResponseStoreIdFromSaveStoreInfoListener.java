@@ -8,7 +8,7 @@ import com.java110.core.event.app.order.Ordered;
 import com.java110.core.event.center.event.InvokeBusinessBSuccessEvent;
 import com.java110.core.event.center.listener.DataFlowListener;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 
 /**
  *

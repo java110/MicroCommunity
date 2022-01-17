@@ -14,7 +14,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
 import com.java110.store.dao.IAllocationStorehouseApplyServiceDao;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

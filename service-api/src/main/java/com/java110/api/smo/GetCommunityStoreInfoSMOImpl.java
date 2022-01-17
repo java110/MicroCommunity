@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.cache.Java110RedisConfig;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.SecureInvocation;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -80,6 +81,10 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
         JSONObject data = JSONObject.parseObject(responseEntity.getBody());
 
         JSONArray privileges = data.getJSONArray("privileges");
+
+        if(!SecureInvocation.secure(this.getClass())){
+            return new ResultVo(ResultVo.CODE_OK,privileges.toJSONString(),ResultVo.EMPTY_ARRAY);
+        }
 
         return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, privileges.toJSONString());
 

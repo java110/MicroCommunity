@@ -8,7 +8,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

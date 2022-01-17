@@ -21,7 +21,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -131,8 +131,8 @@ public class ApiApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
             ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
-
             //服务启动加载
             ServiceStartInit.initSystemConfig(context);
         } catch (Throwable e) {

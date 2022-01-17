@@ -3,7 +3,7 @@ package com.java110.job.myquartz;
 import com.alibaba.fastjson.JSONObject;
 import org.quartz.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

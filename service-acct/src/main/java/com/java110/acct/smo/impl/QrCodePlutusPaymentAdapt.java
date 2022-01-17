@@ -14,7 +14,7 @@ import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

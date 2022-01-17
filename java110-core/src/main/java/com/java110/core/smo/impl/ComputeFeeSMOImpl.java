@@ -1,5 +1,8 @@
 package com.java110.core.smo.impl;
 
+import com.java110.config.properties.code.Java110Properties;
+import com.java110.core.context.Environment;
+import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
@@ -32,7 +35,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +87,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private ITempCarFeeConfigAttrInnerServiceSMO tempCarFeeConfigAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private Java110Properties java110Properties;
 
     @Override
     public Date getFeeEndTime() {
@@ -904,6 +910,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal feePrice = new BigDecimal("0.0");
         BigDecimal feeTotalPrice = new BigDecimal(0.0);
         Map<String, Object> feeAmount = new HashMap<>();
+        if (Environment.isOwnerPhone(java110Properties)) {
+            return getOwnerPhoneFee(feeAmount);
+        }
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
             if (roomDto == null) {
@@ -1235,6 +1244,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
+
         feePrice.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         feeAmount.put("feePrice", feePrice);
         feeAmount.put("feeTotalPrice", feeTotalPrice);
@@ -1524,6 +1534,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         resMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
         return resMonth;
     }
+
+
+    //手机端缴费处理
+    public Map getOwnerPhoneFee(Map feeAmount) {
+        feeAmount.put("feePrice", new BigDecimal(1.00/100));
+        feeAmount.put("feeTotalPrice", new BigDecimal(1.00/100));
+        return feeAmount;
+    }
+
 
     /**
      * 　　 *字符串的日期格式的计算

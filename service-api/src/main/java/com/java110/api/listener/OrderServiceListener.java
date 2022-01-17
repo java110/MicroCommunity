@@ -9,7 +9,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
