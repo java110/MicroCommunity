@@ -363,7 +363,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
 
         rebootMarkdown.put("content", content);
         logger.info("发送消息内容:{}", content);
-        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, rebootMarkdown.toJSONString(), String.class);
+        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, rebootParam.toJSONString(), String.class);
         logger.info("企业微信返回内容:{}", responseEntity);
 
 
