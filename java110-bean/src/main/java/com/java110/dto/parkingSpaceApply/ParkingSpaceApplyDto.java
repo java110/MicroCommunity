@@ -30,8 +30,11 @@ private String endTime;
 private String state;
 private String communityId;
 private String feeId;
-
-
+private String num;
+private String paId;
+private String parkingTypeName;
+private String stateName;
+private String carId;
     private Date createTime;
 
     private String statusCd = "0";
@@ -151,5 +154,45 @@ public void setCommunityId(String communityId) {
 
     public void setFeeId(String feeId) {
         this.feeId = feeId;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String getParkingTypeName() {
+        return parkingTypeName;
+    }
+
+    public void setParkingTypeName(String parkingTypeName) {
+        this.parkingTypeName = parkingTypeName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 }
