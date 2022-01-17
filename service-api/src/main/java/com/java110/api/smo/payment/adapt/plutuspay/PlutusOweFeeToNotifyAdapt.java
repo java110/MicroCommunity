@@ -24,6 +24,7 @@ import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.CommonCache;
@@ -34,7 +35,6 @@ import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 富友 支付 通知实现
@@ -92,15 +95,15 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
         if (smallWeChatDto == null) {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
         }
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
+        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
+        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
         //服务器返回内容
         String paramOut = new String(bb);
         try {
@@ -135,16 +138,9 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
-        TreeMap<String, String> paramMap = new TreeMap<String, String>();
-        for (String key : map.keySet()) {
-//            if ("wId".equals(key)) {
-//                continue;
-//            }
-            paramMap.put(key, map.get(key).toString());
-        }
         //String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
         //JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-        String outTradeNo = map.get("outTransId").toString();
+        String outTradeNo = map.getString("outTransId");
 
         String orderId = outTradeNo;
         String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + orderId);

@@ -22,6 +22,7 @@ import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
@@ -30,7 +31,6 @@ import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -186,14 +186,14 @@ public class PlutusPayAdapt implements IPayAdapt {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
         //服务器返回内容
         String paramOut = new String(bb);
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
         logger.debug("统一下单返回" + paramOut);
 
-        if (paramObj.getString("paramObj") != "00") {
+        if (!"00".equals(paramObj.getString("status"))) {
             throw new IllegalArgumentException("支付失败" + paramObj.getString("error"));
         }
 

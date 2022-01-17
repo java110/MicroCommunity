@@ -17,6 +17,7 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.IOnlinePayV1ServiceDao;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.po.onlinePay.OnlinePayPo;
@@ -53,6 +54,7 @@ public class OnlinePayV1InnerServiceSMOImpl extends BaseServiceSMO implements IO
     }
 
      @Override
+     @Java110Transactional
     public int updateOnlinePay(@RequestBody  OnlinePayPo onlinePayPo) {
         int saveFlag = onlinePayV1ServiceDaoImpl.updateOnlinePayInfo(BeanConvertUtil.beanCovertMap(onlinePayPo));
         return saveFlag;

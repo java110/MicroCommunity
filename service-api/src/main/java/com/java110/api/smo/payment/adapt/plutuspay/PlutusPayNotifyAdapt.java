@@ -93,13 +93,13 @@ public class PlutusPayNotifyAdapt extends DefaultAbstractComponentSMO implements
         }
         String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(param, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
+        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), PlutusFactory.SECRET_KEY);
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
         //服务器返回内容
         String paramOut = new String(bb);
         try {
@@ -134,16 +134,10 @@ public class PlutusPayNotifyAdapt extends DefaultAbstractComponentSMO implements
             smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
             smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
         }
-        TreeMap<String, String> paramMap = new TreeMap<String, String>();
-        for (String key : map.keySet()) {
-//            if ("wId".equals(key)) {
-//                continue;
-//            }
-            paramMap.put(key, map.get(key).toString());
-        }
+
         //String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
         //JSONObject billPayment = JSONObject.parseObject(map.getString("billPayment"));
-        String outTradeNo = map.get("outTransId").toString();
+        String outTradeNo = map.getString("outTransId");
 
         //查询用户ID
         JSONObject paramIn = new JSONObject();
