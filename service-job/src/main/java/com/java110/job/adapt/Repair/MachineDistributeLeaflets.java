@@ -358,7 +358,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         content += ("> 电话：<font color=\"comment\">" + paramIn.getString("tel") + "</font> \n");
         content += ("> 时间：<font color=\"comment\">" + paramIn.getString("time") + "</font> \n");
         content += ("> 内容：<font color=\"comment\">" + paramIn.getString("context") + "</font> \n");
-        content += ("> 位置：<font color=\"comment\">" + address + "</front> \n");
+        content += ("> 位置：<font color=\"comment\">" + address + "</font> \n");
         content += ("> 单号：<font color=\"comment\">" + paramIn.getString("repairId") + "</font> \n");
 
         rebootMarkdown.put("content", content);
