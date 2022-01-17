@@ -29,6 +29,7 @@ private String applyPersonId;
 private String endTime;
 private String state;
 private String communityId;
+private String feeId;
 
 
     private Date createTime;
@@ -142,5 +143,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(String feeId) {
+        this.feeId = feeId;
     }
 }

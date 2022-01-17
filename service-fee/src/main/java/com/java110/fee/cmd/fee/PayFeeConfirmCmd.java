@@ -15,12 +15,14 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -30,8 +32,10 @@ import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
@@ -94,7 +98,8 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
     private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
     @Autowired
     private ICouponUserDetailV1InnerServiceSMO couponUserDetailV1InnerServiceSMOImpl;
-
+    @Autowired
+    private IParkingSpaceApplyV1InnerServiceSMO parkingSpaceApplyV1InnerServiceSMOImpl;
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
@@ -223,6 +228,21 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
                 }
             }
 
+        }
+        //回调判断 车位申请表是否有数据，有数据则刷新申请表状态为 3003 完成状态即可
+        //判断车辆是否已经有申请单
+        ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
+        parkingSpaceApplyDto.setFeeId(paramObj.getString("feeId"));
+        parkingSpaceApplyDto.setState("2002");//审核中
+        List<ParkingSpaceApplyDto> parkingSpaceApplyDtos = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplys(parkingSpaceApplyDto);
+        if (parkingSpaceApplyDtos != null && parkingSpaceApplyDtos.size() > 0) {
+            ParkingSpaceApplyPo parkingSpaceApplyPo = new ParkingSpaceApplyPo();
+            parkingSpaceApplyPo.setApplyId(parkingSpaceApplyDtos.get(0).getApplyId());
+            parkingSpaceApplyPo.setState("3003");
+            int flag = parkingSpaceApplyV1InnerServiceSMOImpl.updateParkingSpaceApply(parkingSpaceApplyPo);
+            if (flag < 1) {
+                throw new CmdException("更新车位申请表状态失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

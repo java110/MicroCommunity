@@ -5,204 +5,211 @@
 <mapper namespace="parkingSpaceApplyV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存车位申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveParkingSpaceApplyInfo" parameterType="Map">
         insert into parking_space_apply(
-car_brand,apply_person_name,car_num,ps_id,remark,apply_id,car_color,car_type,config_id,apply_person_link,start_time,apply_person_id,end_time,state,community_id
-) values (
-#{carBrand},#{applyPersonName},#{carNum},#{psId},#{remark},#{applyId},#{carColor},#{carType},#{configId},#{applyPersonLink},#{startTime},#{applyPersonId},#{endTime},#{state},#{communityId}
-)
+        car_brand,apply_person_name,car_num,ps_id,remark,apply_id,car_color,car_type,config_id,apply_person_link,start_time,apply_person_id,end_time,state,community_id
+        ) values (
+        #{carBrand},#{applyPersonName},#{carNum},#{psId},#{remark},#{applyId},#{carColor},#{carType},#{configId},#{applyPersonLink},#{startTime},#{applyPersonId},#{endTime},#{state},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询车位申请信息 add by wuxw 2018-07-03 -->
     <select id="getParkingSpaceApplyInfo" parameterType="Map" resultType="Map">
-        select  t.car_brand,t.car_brand carBrand,t.apply_person_name,t.apply_person_name applyPersonName,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.apply_id,t.apply_id applyId,t.car_color,t.car_color carColor,t.car_type,t.car_type carType,t.create_time,t.create_time createTime,t.config_id,t.config_id configId,t.apply_person_link,t.apply_person_link applyPersonLink,t.start_time,t.start_time startTime,t.apply_person_id,t.apply_person_id applyPersonId,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId 
-from parking_space_apply t 
-where 1 =1 
-<if test="carBrand !=null and carBrand != ''">
-   and t.car_brand= #{carBrand}
-</if> 
-<if test="applyPersonName !=null and applyPersonName != ''">
-   and t.apply_person_name= #{applyPersonName}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="psId !=null and psId != ''">
-   and t.ps_id= #{psId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="applyId !=null and applyId != ''">
-   and t.apply_id= #{applyId}
-</if> 
-<if test="carColor !=null and carColor != ''">
-   and t.car_color= #{carColor}
-</if> 
-<if test="carType !=null and carType != ''">
-   and t.car_type= #{carType}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="applyPersonLink !=null and applyPersonLink != ''">
-   and t.apply_person_link= #{applyPersonLink}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="applyPersonId !=null and applyPersonId != ''">
-   and t.apply_person_id= #{applyPersonId}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.car_brand,t.car_brand carBrand,t.apply_person_name,t.apply_person_name
+        applyPersonName,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd
+        statusCd,t.apply_id,t.apply_id applyId,t.car_color,t.car_color carColor,t.car_type,t.car_type
+        carType,t.create_time,t.create_time createTime,t.config_id,t.config_id
+        configId,t.apply_person_link,t.apply_person_link applyPersonLink,t.start_time,t.start_time
+        startTime,t.apply_person_id,t.apply_person_id applyPersonId,t.end_time,t.end_time
+        endTime,t.state,t.community_id,t.community_id communityId
+        from parking_space_apply t
+        where 1 =1
+        <if test="carBrand !=null and carBrand != ''">
+            and t.car_brand= #{carBrand}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name= #{applyPersonName}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="carColor !=null and carColor != ''">
+            and t.car_color= #{carColor}
+        </if>
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="applyPersonLink !=null and applyPersonLink != ''">
+            and t.apply_person_link= #{applyPersonLink}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改车位申请信息 add by wuxw 2018-07-03 -->
     <update id="updateParkingSpaceApplyInfo" parameterType="Map">
-        update  parking_space_apply t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="carBrand !=null and carBrand != ''">
-, t.car_brand= #{carBrand}
-</if> 
-<if test="applyPersonName !=null and applyPersonName != ''">
-, t.apply_person_name= #{applyPersonName}
-</if> 
-<if test="carNum !=null and carNum != ''">
-, t.car_num= #{carNum}
-</if> 
-<if test="psId !=null and psId != ''">
-, t.ps_id= #{psId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-, t.fee_id= #{feeId}
-</if>
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="carColor !=null and carColor != ''">
-, t.car_color= #{carColor}
-</if> 
-<if test="carType !=null and carType != ''">
-, t.car_type= #{carType}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="configId !=null and configId != ''">
-, t.config_id= #{configId}
-</if> 
-<if test="applyPersonLink !=null and applyPersonLink != ''">
-, t.apply_person_link= #{applyPersonLink}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="applyPersonId !=null and applyPersonId != ''">
-, t.apply_person_id= #{applyPersonId}
-</if> 
-<if test="endTime !=null and endTime != ''">
-, t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="applyId !=null and applyId != ''">
-and t.apply_id= #{applyId}
-</if> 
+        update parking_space_apply t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="carBrand !=null and carBrand != ''">
+            , t.car_brand= #{carBrand}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            , t.apply_person_name= #{applyPersonName}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="psId !=null and psId != ''">
+            , t.ps_id= #{psId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="carColor !=null and carColor != ''">
+            , t.car_color= #{carColor}
+        </if>
+        <if test="carType !=null and carType != ''">
+            , t.car_type= #{carType}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="applyPersonLink !=null and applyPersonLink != ''">
+            , t.apply_person_link= #{applyPersonLink}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            , t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
 
     </update>
 
     <!-- 查询车位申请数量 add by wuxw 2018-07-03 -->
-     <select id="queryParkingSpaceApplysCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from parking_space_apply t 
-where 1 =1 
-<if test="carBrand !=null and carBrand != ''">
-   and t.car_brand= #{carBrand}
-</if> 
-<if test="applyPersonName !=null and applyPersonName != ''">
-   and t.apply_person_name= #{applyPersonName}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="psId !=null and psId != ''">
-   and t.ps_id= #{psId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="applyId !=null and applyId != ''">
-   and t.apply_id= #{applyId}
-</if> 
-<if test="carColor !=null and carColor != ''">
-   and t.car_color= #{carColor}
-</if> 
-<if test="carType !=null and carType != ''">
-   and t.car_type= #{carType}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="applyPersonLink !=null and applyPersonLink != ''">
-   and t.apply_person_link= #{applyPersonLink}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="applyPersonId !=null and applyPersonId != ''">
-   and t.apply_person_id= #{applyPersonId}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryParkingSpaceApplysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_space_apply t
+        where 1 =1
+        <if test="carBrand !=null and carBrand != ''">
+            and t.car_brand= #{carBrand}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name= #{applyPersonName}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="carColor !=null and carColor != ''">
+            and t.car_color= #{carColor}
+        </if>
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="applyPersonLink !=null and applyPersonLink != ''">
+            and t.apply_person_link= #{applyPersonLink}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
