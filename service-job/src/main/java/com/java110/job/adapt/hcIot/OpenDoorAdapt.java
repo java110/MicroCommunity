@@ -172,4 +172,23 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
 
     }
 
+    @Override
+    public ResultVo payVideo(MachineDto machineDto) {
+
+//        JSONObject postParameters = new JSONObject();
+//        postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+//        postParameters.put("extMachineId", paramIn.getString("machineId"));
+//        postParameters.put("carNum", paramIn.getString("carNum"));
+//        postParameters.put("type", paramIn.getString("type"));
+//        postParameters.put("amount", paramIn.getString("amount"));
+//        postParameters.put("payCharge", paramIn.getString("payCharge"));
+//        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
+//        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.CUSTOM_CAR_INOUT), HttpMethod.POST, httpEntity, String.class);
+//        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+//            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+//        }
+//        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        JSONObject paramOut = new JSONObject();
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+    }
 }

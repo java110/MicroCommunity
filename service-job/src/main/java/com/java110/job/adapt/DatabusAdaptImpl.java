@@ -18,6 +18,7 @@ package com.java110.job.adapt;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.job.adapt.hcIot.GetToken;
@@ -65,6 +66,12 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     public ResultVo customCarInOut(JSONObject reqJson) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+
+    @Override
+    public ResultVo payVideo(MachineDto machineDto) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
 
     /**
      * 重启设备
