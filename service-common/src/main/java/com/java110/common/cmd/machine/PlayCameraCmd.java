@@ -69,8 +69,8 @@ public class PlayCameraCmd extends AbstractServiceCmdListener {
 
         Assert.listOnlyOne(machineDtos, "未包含 摄像头");
 
-        JSONObject data = dataBusInnerServiceSMOImpl.payVideo(machineDtos.get(0));
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.payVideo(machineDtos.get(0));
 
-        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
 }
