@@ -2,11 +2,9 @@ package com.java110.api.smo.activities.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.AbstractComponentSMO;
+import com.java110.api.smo.activities.IAddActivitiesSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.api.smo.activities.IAddActivitiesSMO;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -47,6 +45,7 @@ public class AddActivitiesSMOImpl extends DefaultAbstractComponentSMO implements
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("userId", result.getUserId());
         paramIn.put("userName", result.getUserName());
+        paramIn.put("storeId", result.getStoreId());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 "activities.saveActivities",
