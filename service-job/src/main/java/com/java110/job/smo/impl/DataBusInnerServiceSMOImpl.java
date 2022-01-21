@@ -77,6 +77,12 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     }
 
     @Override
+    public ResultVo heartbeatVideo(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.heartbeatVideo(reqJson);
+    }
+
+    @Override
     public ResultVo restartMachine(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_START_MACHINE_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.restartMachine(reqJson);

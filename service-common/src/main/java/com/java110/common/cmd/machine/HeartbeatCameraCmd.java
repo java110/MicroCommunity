@@ -21,17 +21,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.machine.MachineDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * 类表述：摄像头播放
@@ -43,10 +39,10 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "machine.playCamera")
-public class PlayCameraCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "machine.heartbeatCamera")
+public class HeartbeatCameraCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(PlayCameraCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(HeartbeatCameraCmd.class);
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -64,12 +60,9 @@ public class PlayCameraCmd extends AbstractServiceCmdListener {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        MachineDto machineDto = BeanConvertUtil.covertBean(reqJson, MachineDto.class);
-        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+        Assert.hasKeyAndValue(reqJson, "callIds", "未包含callIds");
 
-        Assert.listOnlyOne(machineDtos, "未包含 摄像头");
-
-        ResultVo resultVo = dataBusInnerServiceSMOImpl.payVideo(machineDtos.get(0));
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.heartbeatVideo(reqJson);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }

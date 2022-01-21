@@ -93,4 +93,7 @@ public interface IDataBusInnerServiceSMO {
 
     @RequestMapping(value = "/payVideo", method = RequestMethod.POST)
     ResultVo payVideo(@RequestBody MachineDto machineDto);
+
+    @RequestMapping(value = "/heartbeatVideo", method = RequestMethod.POST)
+    ResultVo heartbeatVideo(@RequestBody JSONObject reqJson);
 }

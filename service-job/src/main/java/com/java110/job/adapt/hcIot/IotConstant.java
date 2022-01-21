@@ -87,6 +87,15 @@ public class IotConstant {
     //手动进出场
     public static final String CUSTOM_CAR_INOUT = "/extApi/machine/customCarInOut";
 
+    //播放视频
+    public static final String PLAY_VIDEO = "/extApi/machine/playVideo";
+
+    //结束视频
+    public static final String BYE_VIDEO = "/extApi/machine/byeVideo";
+
+    //心跳视频
+    public static final String HEARTBEAT_VIDEO = "/extApi/machine/heartbeatVideo";
+
     //获取二维码
     public static final String GET_QRCODE = "/extApi/machine/getQRcode";
     //重启接口

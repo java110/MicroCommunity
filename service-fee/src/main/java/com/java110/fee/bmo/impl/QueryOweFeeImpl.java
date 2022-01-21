@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
@@ -164,7 +165,11 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
         //应收款取值
-        String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        //先取单小区的如果没有配置 取 全局的
+        String val = CommunitySettingFactory.getValue(feeDto.getCommunityId(),TOTAL_FEE_PRICE);
+        if(StringUtil.isEmpty(val)){
+            val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        }
         feeDto.setVal(val);
         String received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
         if (StringUtil.isEmpty(received_amount_switch)) {

@@ -22,7 +22,6 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.job.adapt.hcIot.GetToken;
-import com.java110.po.machine.MachineRecordPo;
 import com.java110.vo.ResultVo;
 import org.springframework.http.HttpHeaders;
 
@@ -69,6 +68,11 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
 
     @Override
     public ResultVo payVideo(MachineDto machineDto) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    @Override
+    public ResultVo heartbeatVideo(JSONObject reqJson) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
@@ -128,11 +132,13 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     public void execute(Business business, List<Business> businesses) throws Exception {
 
     }
+
     /**
      * 手工 送数据
+     *
      * @param customBusinessDatabusDto
      */
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto){
+    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
 
     }
 }

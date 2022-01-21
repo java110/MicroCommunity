@@ -74,4 +74,6 @@ public interface IDatabusAdapt {
     ResultVo customCarInOut(JSONObject reqJson);
 
     ResultVo payVideo(MachineDto machineDto);
+
+    ResultVo heartbeatVideo(JSONObject reqJson);
 }
