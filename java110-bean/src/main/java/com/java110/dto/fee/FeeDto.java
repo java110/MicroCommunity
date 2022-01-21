@@ -130,6 +130,8 @@ public class FeeDto extends PageDto implements Serializable {
     private double feeTotalPrice;
     private String batchId;
 
+    private String offlinePayFeeSwitch;
+
     public String getAmount() {
         return amount;
     }
@@ -625,5 +627,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getOfflinePayFeeSwitch() {
+        return offlinePayFeeSwitch;
+    }
+
+    public void setOfflinePayFeeSwitch(String offlinePayFeeSwitch) {
+        this.offlinePayFeeSwitch = offlinePayFeeSwitch;
     }
 }
