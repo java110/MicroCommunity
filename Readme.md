@@ -28,13 +28,12 @@
 
 ### 如何安装（how to install）
 
-方案一、centos7.6一键式自动安装
+方案一、梓豪方式
 
-> yum install -y wget && wget http://cdn.homecommunity.cn/hcInstall.sh && sh hcInstall.sh 您的私网IP
+> http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022012655760522
 
-注意：您的私网IP为服务器内网ip 如果服务器只有一个私网ip时可以省略不填写，如果有多个时需要指定
 
-[参考视频](https://www.bilibili.com/video/BV1Dk4y19728/)
+[参考视频](https://www.bilibili.com/video/BV1Zq4y1c7Ph?spm_id_from=333.999.0.0)
 
 方案二、根据需求自助部署
 
@@ -42,7 +41,7 @@
 
 方案三、宝塔方式安装
 
-[宝塔方式安装](http://bbs.homecommunity.cn/topic/80-linuxbao-ta-huan-jing-xia-kuai-su-bu-shu-mian-bian-yi-hui-yong-bao-ta-jiu-hui-yong-hc)
+[宝塔方式安装](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110831560082)
 
 ### 操作文档
 
