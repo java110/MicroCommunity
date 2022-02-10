@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -114,5 +115,16 @@ public class LateFeeByDayRule implements IComputeDiscount {
         computeDiscountDto.setDiscountPrice(discountPrice * -1);
         computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
         return computeDiscountDto;
+    }
+
+    public static void main(String[] args) throws Exception {
+        int day = 316;
+        double money = 0.0;
+        for (int i = 1; i< day+1;i++){
+            money += ((124.51/30 * (i-1) +money)  * 0.003);
+            System.out.println("第"+i+"天 违约金 = "+money + ",计算公式为：(124.51/30 * ("+i+"-1) + " + money +") * 0.003");
+        }
+
+        System.out.println(money);
     }
 }
