@@ -958,6 +958,7 @@ public class ContractApi {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
         contractChangePlanDto.setTaskId(reqJson.getString("taskId"));
         contractChangePlanDto.setPlanId(reqJson.getString("planId"));
+        contractChangePlanDto.setContractId(reqJson.getString("contractId"));
         contractChangePlanDto.setStoreId(storeId);
         contractChangePlanDto.setAuditCode(reqJson.getString("state"));
         contractChangePlanDto.setAuditMessage(reqJson.getString("remark"));
