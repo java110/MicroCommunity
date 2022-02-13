@@ -108,8 +108,15 @@ public class WechatPayNotifyAdapt extends DefaultAbstractComponentSMO implements
 
 
     public int confirmPayFee(Map<String, Object> map) {
-        String wId = map.get("wId").toString();
-        wId = wId.replace(" ", "+");
+        String appId;
+        //兼容 港币交易时 或者微信有时不会掉参数的问题
+        if (map.containsKey("wId")) {
+            String wId = map.get("wId").toString();
+            wId = wId.replace(" ", "+");
+            appId = WechatFactory.getAppId(wId);
+        } else {
+            appId = map.get("appid").toString();
+        }
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
@@ -118,7 +125,7 @@ public class WechatPayNotifyAdapt extends DefaultAbstractComponentSMO implements
             }
             paramMap.put(key, map.get(key).toString());
         }
-        String appId = WechatFactory.getAppId(wId);
+        //String appId = WechatFactory.getAppId(wId);
         SmallWeChatDto smallWeChatDto = getSmallWechat(appId);
 
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
