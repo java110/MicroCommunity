@@ -10,7 +10,7 @@ public class TraceDto implements Serializable {
     private String name;
     private long timestamp;
 
-    private List<TraceAnnotationsDto> traceAnnotations;
+    private List<TraceAnnotationsDto> annotations;
 
 
     public String getId() {
@@ -53,11 +53,11 @@ public class TraceDto implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public List<TraceAnnotationsDto> getTraceAnnotations() {
-        return traceAnnotations;
+    public List<TraceAnnotationsDto> getAnnotations() {
+        return annotations;
     }
 
-    public void setTraceAnnotations(List<TraceAnnotationsDto> traceAnnotations) {
-        this.traceAnnotations = traceAnnotations;
+    public void setAnnotations(List<TraceAnnotationsDto> annotations) {
+        this.annotations = annotations;
     }
 }

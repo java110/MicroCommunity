@@ -136,13 +136,13 @@ public class Java110TraceFactory {
             ip = "127.0.0.1";
         }
         traceEndpointDto.setIpv4(ip);
-        traceAnnotationsDto.setTraceEndpoint(traceEndpointDto);
+        traceAnnotationsDto.setEndpoint(traceEndpointDto);
         traceAnnotationsDto.setTimestamp(DateUtil.getCurrentDate().getTime());
         traceAnnotationsDto.setValue(event);
 
         List<TraceAnnotationsDto> traceAnnotationsDtos = new ArrayList<>();
         traceAnnotationsDtos.add(traceAnnotationsDto);
-        traceDto.setTraceAnnotations(traceAnnotationsDtos);
+        traceDto.setAnnotations(traceAnnotationsDtos);
         traceDto.setTraceId(traceId);
         put(traceDto.getId(), traceDto);
         putSpanId(SPAN_ID, traceDto.getId());
@@ -176,13 +176,13 @@ public class Java110TraceFactory {
             ip = "127.0.0.1";
         }
         traceEndpointDto.setIpv4(ip);
-        traceAnnotationsDto.setTraceEndpoint(traceEndpointDto);
+        traceAnnotationsDto.setEndpoint(traceEndpointDto);
         traceAnnotationsDto.setTimestamp(DateUtil.getCurrentDate().getTime());
         traceAnnotationsDto.setValue(event);
 
-        List<TraceAnnotationsDto> traceAnnotationsDtos = traceDto.getTraceAnnotations();
+        List<TraceAnnotationsDto> traceAnnotationsDtos = traceDto.getAnnotations();
         traceAnnotationsDtos.add(traceAnnotationsDto);
-        traceDto.setTraceAnnotations(traceAnnotationsDtos);
+        traceDto.setAnnotations(traceAnnotationsDtos);
         put(getSpanId(SPAN_ID), traceDto);
         //判断是否为cr
         if (!TraceAnnotationsDto.VALUE_CLIENT_RECEIVE.equals(traceAnnotationsDto.getValue())) {

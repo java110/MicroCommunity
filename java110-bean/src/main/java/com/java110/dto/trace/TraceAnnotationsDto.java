@@ -11,7 +11,7 @@ public class TraceAnnotationsDto implements Serializable {
     private String value;
 
 
-    private TraceEndpointDto traceEndpoint;
+    private TraceEndpointDto endpoint;
 
 
     public long getTimestamp() {
@@ -30,11 +30,11 @@ public class TraceAnnotationsDto implements Serializable {
         this.value = value;
     }
 
-    public TraceEndpointDto getTraceEndpoint() {
-        return traceEndpoint;
+    public TraceEndpointDto getEndpoint() {
+        return endpoint;
     }
 
-    public void setTraceEndpoint(TraceEndpointDto traceEndpoint) {
-        this.traceEndpoint = traceEndpoint;
+    public void setEndpoint(TraceEndpointDto endpoint) {
+        this.endpoint = endpoint;
     }
 }
