@@ -6,6 +6,7 @@ import com.java110.dto.trace.TraceAnnotationsDto;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by wuxw on 2018/5/2.
  */
 @Component
-public class Java110TraceHandlerInterceptor implements HandlerInterceptor {
+public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(Java110TraceHandlerInterceptor.class);
 

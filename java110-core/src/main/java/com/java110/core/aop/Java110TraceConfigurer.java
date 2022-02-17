@@ -5,9 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class Java110TraceConfigurer implements WebMvcConfigurer {
+public class Java110TraceConfigurer extends WebMvcConfigurerAdapter {
     @Autowired
     private Java110TraceHandlerInterceptor java110TraceHandlerInterceptor;
 
@@ -18,5 +19,6 @@ public class Java110TraceConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(java110TraceHandlerInterceptor).addPathPatterns("/**");
+        super.addInterceptors(registry);
     }
 }
