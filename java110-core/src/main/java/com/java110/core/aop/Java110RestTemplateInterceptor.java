@@ -24,7 +24,7 @@ public class Java110RestTemplateInterceptor implements ClientHttpRequestIntercep
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        logger.error("进入连接器" + new String(body));
+        logger.error("进入拦截器" + new String(body));
         TraceDto traceDto = Java110TraceFactory.getTraceDto();
         if (traceDto != null) {
             HttpHeaders httpHeaders = request.getHeaders();
