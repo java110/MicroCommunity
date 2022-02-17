@@ -27,7 +27,7 @@ public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.debug("进入拦截器Java110TraceHandlerInterceptor>>preHandle");
         // 获取组件名称 和方法名称
-        String url = request.getRequestURL() != null ? request.getRequestURL().toString() : "";
+        String url = request.getRequestURI() != null ? request.getRequestURI() : "";
         Map<String, Object> headers = new HashMap<>();
         Enumeration reqHeaderEnum = request.getHeaderNames();
         while (reqHeaderEnum.hasMoreElements()) {
