@@ -1,6 +1,7 @@
 package com.java110.job;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.aop.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
@@ -18,6 +19,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 
 @SpringBootApplication(
@@ -50,10 +52,14 @@ public class JobServiceApplication {
 
     private static final String LISTENER_PATH = "java110.job.listeners";
 
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
+
     @Bean
     public RestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
         return restTemplate;
     }
 

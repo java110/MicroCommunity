@@ -1,0 +1,63 @@
+package com.java110.dto.trace;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class TraceDto implements Serializable {
+    private String id;
+    private String traceId;
+    private String parentSpanId;
+    private String name;
+    private long timestamp;
+
+    private List<TraceAnnotationsDto> traceAnnotations;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
+    }
+
+    public String getParentSpanId() {
+        return parentSpanId;
+    }
+
+    public void setParentSpanId(String parentSpanId) {
+        this.parentSpanId = parentSpanId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public List<TraceAnnotationsDto> getTraceAnnotations() {
+        return traceAnnotations;
+    }
+
+    public void setTraceAnnotations(List<TraceAnnotationsDto> traceAnnotations) {
+        this.traceAnnotations = traceAnnotations;
+    }
+}

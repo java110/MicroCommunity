@@ -2,6 +2,7 @@ package com.java110.report;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.aop.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 
 
@@ -50,7 +52,8 @@ public class ReportServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ReportServiceApplicationStart.class);
 
-
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -61,6 +64,7 @@ public class ReportServiceApplicationStart {
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
         return restTemplate;
     }
 
