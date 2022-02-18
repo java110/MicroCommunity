@@ -9,7 +9,7 @@ public class SystemLogDto {
     private static String LOG_SWATCH_ON = "ON";
 
     public static boolean getLogSwatch() {
-        return logSwatch == LOG_SWATCH_ON ? true : false;
+        return logSwatch.equals(LOG_SWATCH_ON) ? true : false;
     }
 
     public static void setLogSwatch(String logSwatch) {
