@@ -34,7 +34,7 @@ public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
             String headerName = (String) reqHeaderEnum.nextElement();
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
-        //调用链
+        //调用链logSwatch
         Java110TraceFactory.createTrace(url, headers);
         return true;
     }

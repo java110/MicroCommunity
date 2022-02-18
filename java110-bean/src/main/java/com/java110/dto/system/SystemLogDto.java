@@ -5,7 +5,7 @@ package com.java110.dto.system;
  */
 public class SystemLogDto {
 
-    private static String logSwatch = "logSwatch";
+    private static String logSwatch = "OFF";
     private static String LOG_SWATCH_ON = "ON";
 
     public static boolean getLogSwatch() {
@@ -13,6 +13,6 @@ public class SystemLogDto {
     }
 
     public static void setLogSwatch(String logSwatch) {
-        logSwatch = logSwatch;
+        SystemLogDto.logSwatch = logSwatch;
     }
 }
