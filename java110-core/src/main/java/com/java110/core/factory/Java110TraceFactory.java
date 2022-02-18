@@ -31,14 +31,12 @@ public class Java110TraceFactory {
 
     private static Logger logger = LoggerFactory.getLogger(Java110TraceFactory.class);
 
-    // trace-id
-    public static final String TRACE_ID = "TRACE-ID";
 
     //SPAN-ID
     public static final String SPAN_ID = "SPAN-ID";
 
     //SPAN-ID
-    public static final String PARENT_SPAN_ID = "PARENT-SPAN-ID";
+    public static final String PARENT_SPAN_ID = "parent-span-id";
 
     public static final String LOG_TRACE_TOPIC = "logTrace";
 

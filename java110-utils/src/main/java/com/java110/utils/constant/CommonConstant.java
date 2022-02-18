@@ -215,13 +215,13 @@ public class CommonConstant {
 
      */
     // trace-id
-    public static final String TRACE_ID = "TRACE-ID";
+    public static final String TRACE_ID = "trace-id";
 
     //SPAN-ID
-    public static final String SPAN_ID = "SPAN-ID";
+    public static final String SPAN_ID = "span-id";
 
     //SPAN-ID
-    public static final String PARENT_SPAN_ID = "PARENT-SPAN-ID";
+    public static final String PARENT_SPAN_ID = "parent-span-id";
 
 
     public static String getHttpMethodStr(HttpMethod httpMethod) {
