@@ -1,6 +1,7 @@
-package com.java110.core.factory;
+package com.java110.core.trace;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import com.java110.dto.trace.TraceDto;

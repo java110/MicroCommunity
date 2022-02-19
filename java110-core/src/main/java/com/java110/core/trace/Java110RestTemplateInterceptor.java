@@ -1,6 +1,5 @@
 package com.java110.core.trace;
 
-import com.java110.core.factory.Java110TraceFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import com.java110.dto.trace.TraceDto;

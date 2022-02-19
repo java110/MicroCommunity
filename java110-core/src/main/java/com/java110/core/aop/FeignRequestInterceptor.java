@@ -1,6 +1,6 @@
 package com.java110.core.aop;
 
-import com.java110.core.factory.Java110TraceFactory;
+import com.java110.core.trace.Java110TraceFactory;
 import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.dto.trace.TraceDto;
 import com.java110.utils.constant.CommonConstant;
@@ -20,7 +20,6 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class FeignRequestInterceptor implements RequestInterceptor {
 
-
     /**
      * 传入事务ID
      *
@@ -31,12 +30,6 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         String oId = Java110TransactionalFactory.getOId();
         if (!StringUtils.isEmpty(oId)) {
             requestTemplate.header(Java110TransactionalFactory.O_ID, oId);
-        }
-        //调用链头信息
-        TraceDto traceDto = Java110TraceFactory.getTraceDto();
-        if (traceDto != null) {
-            requestTemplate.header(CommonConstant.TRACE_ID, traceDto.getTraceId());
-            requestTemplate.header(CommonConstant.PARENT_SPAN_ID, traceDto.getId());
         }
     }
 }
