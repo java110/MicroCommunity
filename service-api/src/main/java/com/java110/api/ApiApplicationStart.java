@@ -16,8 +16,8 @@
 package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.core.aop.Java110FeignClientAop;
-import com.java110.core.aop.Java110RestTemplateInterceptor;
+import com.java110.core.trace.Java110FeignClientInterceptor;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.log.LoggerFactory;
@@ -125,9 +125,9 @@ public class ApiApplicationStart {
 
 
     @Bean
-    @ConditionalOnBean(Java110FeignClientAop.class)
+    @ConditionalOnBean(Java110FeignClientInterceptor.class)
     public okhttp3.OkHttpClient okHttpClient(@Autowired
-                                                     Java110FeignClientAop okHttpLoggingInterceptor){
+                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor){
         okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS) //读取超时
                 .connectTimeout(10, TimeUnit.SECONDS) //连接超时

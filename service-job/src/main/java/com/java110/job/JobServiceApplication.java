@@ -1,7 +1,7 @@
 package com.java110.job;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.core.aop.Java110RestTemplateInterceptor;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;

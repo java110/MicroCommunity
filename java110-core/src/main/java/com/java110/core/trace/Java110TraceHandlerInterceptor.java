@@ -1,11 +1,10 @@
-package com.java110.core.aop;
+package com.java110.core.trace;
 
 import com.java110.core.factory.Java110TraceFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;

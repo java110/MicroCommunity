@@ -1,4 +1,4 @@
-package com.java110.core.aop;
+package com.java110.core.trace;
 
 import com.java110.core.factory.Java110TraceFactory;
 import com.java110.core.log.LoggerFactory;

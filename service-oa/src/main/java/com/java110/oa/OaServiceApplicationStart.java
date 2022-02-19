@@ -17,7 +17,7 @@ package com.java110.oa;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.core.aop.Java110RestTemplateInterceptor;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;

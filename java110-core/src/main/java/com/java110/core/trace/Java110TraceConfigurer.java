@@ -1,4 +1,4 @@
-package com.java110.core.aop;
+package com.java110.core.trace;
 
 import okhttp3.ConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.concurrent.TimeUnit;
@@ -28,9 +27,9 @@ public class Java110TraceConfigurer extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnBean(Java110FeignClientAop.class)
+    @ConditionalOnBean(Java110FeignClientInterceptor.class)
     public okhttp3.OkHttpClient okHttpClient(@Autowired
-                                                         Java110FeignClientAop okHttpLoggingInterceptor){
+                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor){
         okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS) //读取超时
                 .connectTimeout(10, TimeUnit.SECONDS) //连接超时
