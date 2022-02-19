@@ -97,7 +97,9 @@ public class Java110TraceFactory {
     public static String createTrace(String name, Map<String, Object> headers) {
         String traceId = "";
         String parentId = "";
-        if (headers.containsKey(CommonConstant.TRANSACTION_ID)) {
+        if (headers.containsKey(CommonConstant.TRACE_ID)) { //先取trace Id
+            traceId = headers.get(CommonConstant.TRACE_ID).toString();
+        }else if (headers.containsKey(CommonConstant.TRANSACTION_ID)) {
             traceId = headers.get(CommonConstant.TRANSACTION_ID).toString();
         } else {
             traceId = GenerateCodeFactory.getUUID();
