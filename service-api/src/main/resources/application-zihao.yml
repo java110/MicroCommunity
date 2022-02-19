@@ -66,6 +66,10 @@ feign:
       default:
         connect-timeout: 10000
         read-timeout: 20000
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
 
 
 #============== kafka ===================

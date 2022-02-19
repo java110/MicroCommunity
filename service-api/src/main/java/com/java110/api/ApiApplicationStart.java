@@ -16,16 +16,20 @@
 package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.aop.Java110FeignClientAop;
 import com.java110.core.aop.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.log.LoggerFactory;
 import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
+import okhttp3.ConnectionPool;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -45,6 +49,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -116,6 +121,20 @@ public class ApiApplicationStart {
                 .select()
                 .paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)).build();
+    }
+
+
+    @Bean
+    @ConditionalOnBean(Java110FeignClientAop.class)
+    public okhttp3.OkHttpClient okHttpClient(@Autowired
+                                                     Java110FeignClientAop okHttpLoggingInterceptor){
+        okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS) //读取超时
+                .connectTimeout(10, TimeUnit.SECONDS) //连接超时
+                .writeTimeout(60, TimeUnit.SECONDS) //写入超时
+                .connectionPool(new ConnectionPool(10 /*maxIdleConnections*/, 3, TimeUnit.MINUTES))
+                .addInterceptor(okHttpLoggingInterceptor);
+        return ClientBuilder.build();
     }
 
     /**
