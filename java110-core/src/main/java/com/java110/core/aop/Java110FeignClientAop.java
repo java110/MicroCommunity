@@ -7,13 +7,17 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 @Aspect
+@Component
 public class Java110FeignClientAop {
     private static Logger logger = LoggerFactory.getLogger(Java110FeignClientAop.class);
 
     @Around("execution (* feign.Client.*(..)) && !within(is(FinalType))")
     public Object feignClientWasCalled(final ProceedingJoinPoint pjp) throws Throwable {
+
+        logger.debug("feign 进入 Java110FeignClientAop>> feignClientWasCalled");
 
         Java110TraceFactory.putAnnotations(TraceAnnotationsDto.VALUE_SERVER_SEND);
         Object clientHttpResponse = pjp.proceed();
