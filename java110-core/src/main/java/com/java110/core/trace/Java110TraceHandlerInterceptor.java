@@ -37,7 +37,7 @@ public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
         //调用链logSwatch
-        Java110TraceFactory.createTrace(url, headers,getReqData(request));
+        Java110TraceFactory.createTrace(url, headers,"");
         return true;
     }
 
@@ -51,39 +51,39 @@ public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
 
     }
 
-    public String getReqData(HttpServletRequest request) throws Exception{
-        String reqData = "";
-        if ("POST,PUT".contains(request.getMethod())) {
-            InputStream in = request.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            //reader.
-            StringBuffer sb = new StringBuffer();
-            String str = "";
-            while ((str = reader.readLine()) != null) {
-                sb.append(str);
-            }
-            reqData = sb.toString();
-        } else {
-            Map<String, String[]> params = request.getParameterMap();
-            if (params != null && !params.isEmpty()) {
-                JSONObject paramObj = new JSONObject();
-                for (String key : params.keySet()) {
-                    if (params.get(key).length > 0) {
-                        String value = "";
-                        for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
-                            value += (params.get(key)[paramIndex] + ",");
-                        }
-                        value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
-                        paramObj.put(key, value);
-                    }
-                    continue;
-                }
-                reqData = paramObj.toJSONString();
-            }
-        }
-
-        return reqData;
-    }
+//    public String getReqData(HttpServletRequest request) throws Exception{
+//        String reqData = "";
+//        if ("POST,PUT".contains(request.getMethod())) {
+//            InputStream in = request.getInputStream();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+//            //reader.
+//            StringBuffer sb = new StringBuffer();
+//            String str = "";
+//            while ((str = reader.readLine()) != null) {
+//                sb.append(str);
+//            }
+//            reqData = sb.toString();
+//        } else {
+//            Map<String, String[]> params = request.getParameterMap();
+//            if (params != null && !params.isEmpty()) {
+//                JSONObject paramObj = new JSONObject();
+//                for (String key : params.keySet()) {
+//                    if (params.get(key).length > 0) {
+//                        String value = "";
+//                        for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
+//                            value += (params.get(key)[paramIndex] + ",");
+//                        }
+//                        value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
+//                        paramObj.put(key, value);
+//                    }
+//                    continue;
+//                }
+//                reqData = paramObj.toJSONString();
+//            }
+//        }
+//
+//        return reqData;
+//    }
 
 
 }
