@@ -6,6 +6,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import com.java110.dto.trace.TraceDto;
 import com.java110.dto.trace.TraceEndpointDto;
+import com.java110.dto.trace.TraceParamDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.kafka.KafkaFactory;
@@ -95,12 +96,12 @@ public class Java110TraceFactory {
         return threadLocal.get();
     }
 
-    public static String createTrace(String name, Map<String, Object> headers) {
+    public static String createTrace(String name, Map<String, Object> headers, String reqData) {
         String traceId = "";
         String parentId = "";
         if (headers.containsKey(CommonConstant.TRACE_ID)) { //先取trace Id
             traceId = headers.get(CommonConstant.TRACE_ID).toString();
-        }else if (headers.containsKey(CommonConstant.TRANSACTION_ID)) {
+        } else if (headers.containsKey(CommonConstant.TRANSACTION_ID)) {
             traceId = headers.get(CommonConstant.TRANSACTION_ID).toString();
         } else {
             traceId = GenerateCodeFactory.getUUID();
@@ -110,11 +111,11 @@ public class Java110TraceFactory {
         } else {
             parentId = "0";
         }
-        return createTrace(name, traceId, parentId, TraceAnnotationsDto.VALUE_CLIENT_SEND);
+        return createTrace(name, traceId, parentId, TraceAnnotationsDto.VALUE_CLIENT_SEND, JSONObject.toJSONString(headers), reqData);
     }
 
 
-    public static String createTrace(String name, String traceId, String parentId, String event) {
+    public static String createTrace(String name, String traceId, String parentId, String event, String reqHeader, String reqData) {
         //全局事务开启者
         TraceDto traceDto = new TraceDto();
         traceDto.setId(GenerateCodeFactory.getUUID());
@@ -145,6 +146,11 @@ public class Java110TraceFactory {
         traceAnnotationsDtos.add(traceAnnotationsDto);
         traceDto.setAnnotations(traceAnnotationsDtos);
         traceDto.setTraceId(traceId);
+
+        TraceParamDto traceParamDto = new TraceParamDto();
+        traceParamDto.setReqHeader(reqHeader);
+        traceParamDto.setReqParam(reqData);
+
         put(traceDto.getId(), traceDto);
         putSpanId(SPAN_ID, traceDto.getId());
         return traceDto.getId();
