@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.trace.TraceParamDto;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 /**
  * trace log  api aop
  */
+@Component
+@Aspect
 public class Java110TraceLogApiAop {
-    //@Pointcut("execution(public * com.java110.api.smo.impl..*.ApiServiceSMOImpl.service(..))")
 
     @Pointcut("@annotation(com.java110.core.trace.Java110TraceLog)")
     public void dataProcess() {
