@@ -12,6 +12,8 @@ public class TraceDto implements Serializable {
 
     private List<TraceAnnotationsDto> annotations;
 
+    private TraceParamDto param;
+
 
     public String getId() {
         return id;
@@ -59,5 +61,13 @@ public class TraceDto implements Serializable {
 
     public void setAnnotations(List<TraceAnnotationsDto> annotations) {
         this.annotations = annotations;
+    }
+
+    public TraceParamDto getParam() {
+        return param;
+    }
+
+    public void setParam(TraceParamDto param) {
+        this.param = param;
     }
 }

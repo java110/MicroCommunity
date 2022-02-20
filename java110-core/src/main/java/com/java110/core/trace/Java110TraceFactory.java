@@ -6,6 +6,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import com.java110.dto.trace.TraceDto;
 import com.java110.dto.trace.TraceEndpointDto;
+import com.java110.dto.trace.TraceParamDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.EnvironmentConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -154,6 +155,23 @@ public class Java110TraceFactory {
         put(traceDto.getId(), traceDto);
         putSpanId(SPAN_ID, traceDto.getId());
         return traceDto.getId();
+    }
+
+    /**
+     * 添加参数
+     *
+     * @param traceParamDto
+     */
+    public static void putParams(TraceParamDto traceParamDto) {
+        TraceDto traceDto = getTraceDto();
+
+        if (traceDto == null) {
+            return;
+        }
+
+        traceDto.setParam(traceParamDto);
+        put(getSpanId(SPAN_ID), traceDto);
+
     }
 
     /**

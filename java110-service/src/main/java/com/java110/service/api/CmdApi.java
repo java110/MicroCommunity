@@ -2,6 +2,7 @@ package com.java110.service.api;
 
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.trace.Java110TraceLog;
 import com.java110.service.context.DataQuery;
 import com.java110.service.context.DataQueryFactory;
 import com.java110.service.smo.ICmdServiceSMO;
@@ -43,6 +44,7 @@ public class CmdApi extends BaseController {
 
 
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.POST)
+    @Java110TraceLog
     public ResponseEntity<String> service(@PathVariable String service,
                                           @RequestBody String postInfo,
                                           HttpServletRequest request) {
@@ -74,6 +76,7 @@ public class CmdApi extends BaseController {
     @RequestMapping(path = "/{resource}/{action}", method = RequestMethod.POST)
     @ApiOperation(value = "资源post请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "subServicePost", value = "用户编号", required = true, dataType = "String")
+    @Java110TraceLog
     public ResponseEntity<String> subServicePost(
             @PathVariable String resource,
             @PathVariable String action,
