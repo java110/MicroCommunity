@@ -1,6 +1,5 @@
 package com.java110.core.trace;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import org.slf4j.Logger;
@@ -9,9 +8,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +33,7 @@ public class Java110TraceHandlerInterceptor extends HandlerInterceptorAdapter {
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
         //调用链logSwatch
-        Java110TraceFactory.createTrace(url, headers,"");
+        Java110TraceFactory.createTrace(url, headers);
         return true;
     }
 

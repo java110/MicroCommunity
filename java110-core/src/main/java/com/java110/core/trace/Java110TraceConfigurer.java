@@ -26,16 +26,16 @@ public class Java110TraceConfigurer extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
     }
 
-    @Bean
-    @ConditionalOnBean(Java110FeignClientInterceptor.class)
-    public okhttp3.OkHttpClient okHttpClient(@Autowired
-                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor){
-        okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS) //读取超时
-                .connectTimeout(10, TimeUnit.SECONDS) //连接超时
-                .writeTimeout(60, TimeUnit.SECONDS) //写入超时
-                .connectionPool(new ConnectionPool(10 /*maxIdleConnections*/, 3, TimeUnit.MINUTES))
-                .addInterceptor(okHttpLoggingInterceptor);
-        return ClientBuilder.build();
-    }
+//    @Bean
+//    @ConditionalOnBean(Java110FeignClientInterceptor.class)
+//    public okhttp3.OkHttpClient okHttpClient(@Autowired
+//                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor){
+//        okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
+//                .readTimeout(30, TimeUnit.SECONDS) //读取超时
+//                .connectTimeout(10, TimeUnit.SECONDS) //连接超时
+//                .writeTimeout(60, TimeUnit.SECONDS) //写入超时
+//                .connectionPool(new ConnectionPool(10 /*maxIdleConnections*/, 3, TimeUnit.MINUTES))
+//                .addInterceptor(okHttpLoggingInterceptor);
+//        return ClientBuilder.build();
+//    }
 }
