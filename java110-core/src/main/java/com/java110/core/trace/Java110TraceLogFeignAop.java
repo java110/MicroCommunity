@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 /**
  * trace log  api aop
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class Java110TraceLogFeignAop {
 
     @Pointcut("execution(public * com.java110..*.*InnerServiceSMOImpl.*(..)) ")
