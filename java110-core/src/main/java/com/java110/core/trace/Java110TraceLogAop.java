@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
-public class Java110TraceLogApiAop {
+public class Java110TraceLogAop {
 
     @Pointcut("@annotation(com.java110.core.trace.Java110TraceLog)")
     public void dataProcess() {
