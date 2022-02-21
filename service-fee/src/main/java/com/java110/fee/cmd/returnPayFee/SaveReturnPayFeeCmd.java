@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
@@ -104,6 +105,7 @@ public class SaveReturnPayFeeCmd extends AbstractServiceCmdListener {
 
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(reqJson, ReturnPayFeePo.class);
         returnPayFeePo.setReturnFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        returnPayFeePo.setState(ReturnPayFeeDto.STATE_WAIT);
         int flag = returnPayFeeV1InnerServiceSMOImpl.saveReturnPayFee(returnPayFeePo);
 
         if (flag < 1) {

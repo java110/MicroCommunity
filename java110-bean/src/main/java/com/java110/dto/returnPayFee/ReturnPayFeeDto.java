@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class ReturnPayFeeDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT = "1000";
+
     private String reason;
     private String primeRate;
     private String feeTypeCd;
