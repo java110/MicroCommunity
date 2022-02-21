@@ -169,6 +169,11 @@ public class Java110TraceFactory {
             return;
         }
 
+        //如果存在 则跳过
+        if (traceDto.getParam() != null) {
+            return;
+        }
+
         traceDto.setParam(traceParamDto);
         put(getSpanId(SPAN_ID), traceDto);
 
