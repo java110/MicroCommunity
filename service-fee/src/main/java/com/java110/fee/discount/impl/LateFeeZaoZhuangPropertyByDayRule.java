@@ -32,9 +32,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 枣庄 需求
+ * select * from fee_discount_rule t where t.rule_id = '102020003';
+ * 这里的实现类修改为 lateFeeZaoZhuangPropertyByDayRule
  * @desc add by 吴学文 12:43
  */
-@Component(value = "lateFeeByDayRule")
+@Component(value = "lateFeeZaoZhuangPropertyByDayRule")
 public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
     /**
      * 89002020980001	102020001	月份
