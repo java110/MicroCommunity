@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
-import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeReturnPayFeeConstant;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
@@ -67,30 +66,38 @@ public class ListReturnPayFeesListener extends AbstractServiceApiListener {
 
         int count = returnPayFeeInnerServiceSMOImpl.queryReturnPayFeesCount(returnPayFeeDto);
 
-        List<ApiReturnPayFeeDataVo> returnPayFees = new ArrayList<>();
+        List<ReturnPayFeeDto> returnPayFeeDtos = null;
+
+        List<ApiReturnPayFeeDataVo> returnPayFees;
 
         if (count > 0) {
             //注意这里处理 记得测试退费逻辑
-            List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
-            List<ReturnPayFeeDto> returnPayFeeDtoList = new ArrayList<>();
+            returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+            //List<ReturnPayFeeDto> returnPayFeeDtoList = new ArrayList<>();
             for (ReturnPayFeeDto returnPayFee : returnPayFeeDtos) {
                 //获取付款方标识
                 String payerObjType = returnPayFee.getPayerObjType();
                 if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("3333")) { //房屋
                     returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
                     List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryRoomReturnPayFees(returnPayFeeDto);
-                    Assert.listOnlyOne(returnPayFeeList, "查询退费信息错误！");
-                    returnPayFeeDtoList.add(returnPayFeeList.get(0));
+                    if (returnPayFeeList == null || returnPayFeeList.size() < 1) {
+                        continue;
+                    }
+                    //returnPayFeeDtoList.add(returnPayFeeList.get(0));
+                    BeanConvertUtil.covertBean(returnPayFeeList.get(0), returnPayFee);
                 } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) { //车辆
                     returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
                     List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryCarReturnPayFees(returnPayFeeDto);
-                    Assert.listOnlyOne(returnPayFeeList, "查询退费信息错误！");
-                    returnPayFeeDtoList.add(returnPayFeeList.get(0));
+                    if (returnPayFeeList == null || returnPayFeeList.size() < 1) {
+                        continue;
+                    }
+                    BeanConvertUtil.covertBean(returnPayFeeList.get(0), returnPayFee);
+                    //returnPayFeeDtoList.add(returnPayFeeList.get(0));
                 } else {
                     continue;
                 }
             }
-            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeDtoList, ApiReturnPayFeeDataVo.class);
+            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeDtos, ApiReturnPayFeeDataVo.class);
         } else {
             returnPayFees = new ArrayList<>();
         }

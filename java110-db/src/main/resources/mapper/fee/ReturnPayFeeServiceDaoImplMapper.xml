@@ -302,7 +302,7 @@
             and t.fee_id= #{feeId}
         </if>
         <if test="returnFeeId !=null and returnFeeId != ''">
-            and t.return_fee_id= #{returnFeeId}
+            and t.return_fee_id = #{returnFeeId}
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
