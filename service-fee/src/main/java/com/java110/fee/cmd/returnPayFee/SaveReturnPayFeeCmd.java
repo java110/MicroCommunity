@@ -102,6 +102,9 @@ public class SaveReturnPayFeeCmd extends AbstractServiceCmdListener {
 
         reqJson.put("configId", feeDtos.get(0).getConfigId());
         reqJson.put("feeTypeCd", feeDtos.get(0).getFeeTypeCd());
+        reqJson.put("cycles",(reqJson.getDouble("cycles") * -1)+"");
+        reqJson.put("receivableAmount",(reqJson.getDouble("receivableAmount") * -1)+"");
+        reqJson.put("receivedAmount",(reqJson.getDouble("receivedAmount") * -1)+"");
 
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(reqJson, ReturnPayFeePo.class);
         returnPayFeePo.setReturnFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
