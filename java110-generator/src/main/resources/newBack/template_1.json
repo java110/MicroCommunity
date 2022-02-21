@@ -1,42 +1,45 @@
 {
   "param": {
-    "refundFee": "refund_fee",
-    "mchId": "mch_id",
-    "orderId": "order_id",
-    "totalFee": "total_fee",
-    "openId": "open_id",
-    "appId": "app_id",
+    "reason": "reason",
+    "primeRate": "prime_rate",
+    "feeTypeCd": "fee_type_cd",
+    "payTime": "pay_time",
+    "detailId": "detail_id",
+    "receivableAmount": "receivable_amount",
+    "cycles": "cycles",
+    "remark": "remark",
     "statusCd": "status_cd",
-    "payId": "pay_id",
+    "receivedAmount": "received_amount",
+    "feeId": "fee_id",
+    "returnFeeId": "return_fee_id",
+    "configId": "config_id",
     "state": "state",
-    "message": "message",
-    "payName": "pay_name",
-    "transactionId": "transaction_id"
+    "communityId": "community_id"
   },
-  "name": "onlinePay",
-  "shareColumn": "order_id",
-  "id": "payId",
-  "shareName": "acct",
+  "name": "returnPayFee",
+  "shareColumn": "community_id",
+  "id": "returnFeeId",
+  "shareName": "fee",
   "autoMove": true,
   "required": [
     {
-      "msg": "订单ID不能为空",
-      "code": "orderId"
+      "msg": "小区id不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "商户ID不能为空",
-      "code": "mchId"
+      "msg": "费用项id不能为空",
+      "code": "configId"
     },
     {
-      "msg": "付款总金额不能为空",
-      "code": "totalFee"
+      "msg": "费用id不能为空",
+      "code": "feeId"
     },
     {
-      "msg": "退款金额不能为空",
-      "code": "refundFee"
+      "msg": "费用类型不能为空",
+      "code": "feeTypeCd"
     }
   ],
-  "desc": "线上支付",
-  "shareParam": "orderId",
-  "tableName": "online_pay"
+  "desc": "退费表",
+  "shareParam": "communityId",
+  "tableName": "return_pay_fee"
 }

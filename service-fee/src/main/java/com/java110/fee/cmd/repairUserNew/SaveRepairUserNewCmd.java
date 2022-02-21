@@ -22,15 +22,15 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.intf.fee.IRepairUserNewV1InnerServiceSMO;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,16 +55,16 @@ public class SaveRepairUserNewCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruId", "请求报文中未包含ruId");
-Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
-Assert.hasKeyAndValue(reqJson, "preStaffId", "请求报文中未包含preStaffId");
-Assert.hasKeyAndValue(reqJson, "preStaffName", "请求报文中未包含preStaffName");
-Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-Assert.hasKeyAndValue(reqJson, "repairEvent", "请求报文中未包含repairEvent");
-Assert.hasKeyAndValue(reqJson, "preRuId", "请求报文中未包含preRuId");
+        Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
+        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+        Assert.hasKeyAndValue(reqJson, "preStaffId", "请求报文中未包含preStaffId");
+        Assert.hasKeyAndValue(reqJson, "preStaffName", "请求报文中未包含preStaffName");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
+        Assert.hasKeyAndValue(reqJson, "repairEvent", "请求报文中未包含repairEvent");
+        Assert.hasKeyAndValue(reqJson, "preRuId", "请求报文中未包含preRuId");
 
     }
 
@@ -72,7 +72,7 @@ Assert.hasKeyAndValue(reqJson, "preRuId", "请求报文中未包含preRuId");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       RepairUserPo repairUserNewPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
+        RepairUserPo repairUserNewPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
         repairUserNewPo.setRuId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = repairUserNewV1InnerServiceSMOImpl.saveRepairUserNew(repairUserNewPo);
 
