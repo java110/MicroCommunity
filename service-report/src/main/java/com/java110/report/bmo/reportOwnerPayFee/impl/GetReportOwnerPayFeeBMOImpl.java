@@ -33,7 +33,7 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
         List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos = null;
         if (count > 0) {
             reportOwnerPayFeeDtos = reportOwnerPayFeeInnerServiceSMOImpl.queryReportOwnerPayFees(reportOwnerPayFeeDto);
-            refreshOwnerPayFeeDto(reportOwnerPayFeeDtos,reportOwnerPayFeeDto);
+            refreshOwnerPayFeeDto(reportOwnerPayFeeDtos, reportOwnerPayFeeDto);
         } else {
             reportOwnerPayFeeDtos = new ArrayList<>();
         }
@@ -48,7 +48,7 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
     /**
      * @param reportOwnerPayFeeDtos
      */
-    private void refreshOwnerPayFeeDto(List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos,ReportOwnerPayFeeDto tmpReportOwnerPayFeeDto) {
+    private void refreshOwnerPayFeeDto(List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos, ReportOwnerPayFeeDto tmpReportOwnerPayFeeDto) {
         if (reportOwnerPayFeeDtos == null || reportOwnerPayFeeDtos.size() < 1) {
             return;
         }
@@ -72,19 +72,19 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
         reportOwnerPayFeeDto.setPfYear(tmpReportOwnerPayFeeDto.getPfYear());
         reportOwnerPayFeeDto.setConfigId(tmpReportOwnerPayFeeDto.getConfigId());
 
-        if(StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())){
-            reportOwnerPayFeeDto.setPfYear(DateUtil.getYear()+"");
+        if (StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())) {
+            reportOwnerPayFeeDto.setPfYear(DateUtil.getYear() + "");
         }
         List<ReportOwnerPayFeeDto> tmpReportOwnerPayFeeDtos
                 = reportOwnerPayFeeInnerServiceSMOImpl.queryReportOwnerMonthPayFees(reportOwnerPayFeeDto);
 
 
+        List<ReportOwnerPayFeeDto> tmoNewReportOwnerPayFeeDtos = null;
 
-        List<ReportOwnerPayFeeDto> tmoNewReportOwnerPayFeeDtos = new ArrayList<>();
-
-        for(ReportOwnerPayFeeDto oldReportOwnerPayFeeDto : reportOwnerPayFeeDtos){
-            for(ReportOwnerPayFeeDto newReportOwnerPayFeeDto : tmpReportOwnerPayFeeDtos){
-                if(oldReportOwnerPayFeeDto.getFeeId().equals(newReportOwnerPayFeeDto.getFeeId())){
+        for (ReportOwnerPayFeeDto oldReportOwnerPayFeeDto : reportOwnerPayFeeDtos) {
+            tmoNewReportOwnerPayFeeDtos = new ArrayList<>();
+            for (ReportOwnerPayFeeDto newReportOwnerPayFeeDto : tmpReportOwnerPayFeeDtos) {
+                if (oldReportOwnerPayFeeDto.getFeeId().equals(newReportOwnerPayFeeDto.getFeeId())) {
                     tmoNewReportOwnerPayFeeDtos.add(newReportOwnerPayFeeDto);
                 }
             }
