@@ -10,6 +10,8 @@ import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
+import com.java110.po.contract.ContractPo;
+import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
@@ -280,6 +282,29 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
             return true;
         }
         return false;
+    }
+
+
+    //删除任务
+    public boolean deleteTask(@RequestBody ContractChangePlanPo contractChangePlanPo) {
+        TaskService taskService = processEngine.getTaskService();
+
+        TaskQuery query = taskService.createTaskQuery().processInstanceBusinessKey(contractChangePlanPo.getPlanId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = query.list();
+
+        if (list == null || list.size() < 1) {
+            return true;
+        }
+
+        for (Task task : list) {
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            runtimeService.deleteProcessInstance(processInstanceId, "取消合同");
+
+        }
+
+        return true;
     }
 
 }

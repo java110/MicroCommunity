@@ -60,10 +60,9 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        //删除流程信息
-        contractApplyUserInnerServiceSMOImpl.deleteTask(contractPo);
         deleteContractRoomRel(contractPo);
-
+//删除流程信息
+        contractApplyUserInnerServiceSMOImpl.deleteTask(contractPo);
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
     }
