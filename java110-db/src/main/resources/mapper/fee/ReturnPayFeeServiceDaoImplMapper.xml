@@ -171,12 +171,15 @@
         t.create_time,t.create_time createTime,
         d.name feeTypeCdName,
         c.name stateName,
-        pf.payer_obj_type payerObjType
+        pf.payer_obj_type payerObjType,
+        pfa.value payerObjName
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390012' and pfa.status_cd = '0'
         inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         where 1 = 1
+
         <if test="reason !=null and reason != ''">
             and t.reason= #{reason}
         </if>
