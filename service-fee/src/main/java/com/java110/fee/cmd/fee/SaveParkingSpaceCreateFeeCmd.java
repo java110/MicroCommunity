@@ -220,6 +220,9 @@ public class SaveParkingSpaceCreateFeeCmd extends AbstractServiceCmdListener {
         int curFailRoomCount = 0;
         //添加单元信息
         int saveFlag = 0;
+        List<ParkingSpaceDto> parkingSpaceDtos = null;
+        ParkingSpaceDto parkingSpaceDto = null;
+        String carName = "";
         for (int ownerCarIndex = 0; ownerCarIndex < ownerCarDtos.size(); ownerCarIndex++) {
             curFailRoomCount++;
             feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addFee(ownerCarDtos.get(ownerCarIndex), reqJson, context), PayFeePo.class));
@@ -233,9 +236,20 @@ public class SaveParkingSpaceCreateFeeCmd extends AbstractServiceCmdListener {
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, ownerCarDtos.get(ownerCarIndex).getOwnerName()));
             }
 
+            parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setCarNum(ownerCarDtos.get(ownerCarIndex).getCarNum());
+            parkingSpaceDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
+            parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+            if (parkingSpaceDtos != null && parkingSpaceDtos.size() > 0) {
+                carName = parkingSpaceDtos.get(0).getAreaNum() + parkingSpaceDtos.get(0).getNum() + "(" + ownerCarDtos.get(ownerCarIndex).getCarNum() + ")";
+            } else {
+                carName = ownerCarDtos.get(ownerCarIndex).getCarNum();
+            }
+
             //付费对象名称
             feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
-                    ownerCarDtos.get(ownerCarIndex).getAreaNum() + ownerCarDtos.get(ownerCarIndex).getNum() + "(" + ownerCarDtos.get(ownerCarIndex).getCarNum() + ")"));
+                    carName));
 
             if (ownerCarIndex % DEFAULT_ADD_FEE_COUNT == 0 && ownerCarIndex != 0) {
                 saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
