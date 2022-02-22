@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.ISaveTransactionLogSMO;
+import com.java110.core.trace.Java110TraceFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.community.CommunityDto;
@@ -58,6 +60,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
 
     private static Logger logger = LoggerFactory.getLogger(WeChatPushMessageTemplate.class);
 
+    public static final int DEFAULT_THREAD_NUM = 20;
+
     @Autowired
     private INoticeInnerServiceSMO noticeInnerServiceSMOImpl;
 
@@ -89,10 +93,15 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
     private static String getUser = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
 
+    private Java110ThreadPoolFactory<PublicWeChatPushMessageTemplate> publicWeChatPushMessageTemplateJava110ThreadPoolFactory = null;
+
 
     @Override
     protected void process(TaskDto taskDto) {
         logger.debug("开始执行微信模板信息推送" + taskDto.toString());
+
+        //创建连接池
+        publicWeChatPushMessageTemplateJava110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(DEFAULT_THREAD_NUM);
 
         // 获取小区
         List<CommunityDto> communityDtos = getAllCommunity();
@@ -109,6 +118,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 logger.error("推送消息失败", e);
             }
         }
+
+        publicWeChatPushMessageTemplateJava110ThreadPoolFactory.stop();
     }
 
     private void publishMsg(TaskDto taskDto, CommunityDto communityDto) throws Exception {
@@ -339,7 +350,9 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 templateMessage.setData(data);
                 templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId()+"&communityId="+noticeDto.getCommunityId());
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
+                //responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
+                PushWechatTemplateMessageThread pushWechatTemplateMessageThread = new PushWechatTemplateMessageThread(outRestTemplate,sendTemplate + accessToken, JSON.toJSONString(templateMessage));
+                publicWeChatPushMessageTemplateJava110ThreadPoolFactory.submit(pushWechatTemplateMessageThread);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
@@ -419,7 +432,10 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                     }
                 }
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
+
+                PushWechatTemplateMessageThread pushWechatTemplateMessageThread = new PushWechatTemplateMessageThread(outRestTemplate,sendTemplate + accessToken, JSON.toJSONString(templateMessage));
+                publicWeChatPushMessageTemplateJava110ThreadPoolFactory.submit(pushWechatTemplateMessageThread);
+                //responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);
                 logger.info("微信模板返回内容:{}", responseEntity);
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
