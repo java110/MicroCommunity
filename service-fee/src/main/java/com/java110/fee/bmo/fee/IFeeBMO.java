@@ -183,7 +183,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addContractFee(ContractDto contractDto, JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addContractFee(ContractDto contractDto, JSONObject paramInJson, ICmdDataFlowContext dataFlowContext);
 
     /**
      * 添加费用项信息

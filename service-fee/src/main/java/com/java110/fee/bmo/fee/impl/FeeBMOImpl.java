@@ -592,8 +592,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     /**
      * 添加物业费用
      *
-     * @param paramInJson     接口调用放传入入参
-     * @param context 数据上下文
+     * @param paramInJson 接口调用放传入入参
+     * @param context     数据上下文
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, ICmdDataFlowContext context) {
@@ -702,17 +702,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addContractFee(ContractDto contractDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public JSONObject addContractFee(ContractDto contractDto, JSONObject paramInJson, ICmdDataFlowContext dataFlowContext) {
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
         if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
         } else if (paramInJson.containsKey("startTime")) {
             time = paramInJson.getString("startTime");
         }
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
@@ -727,10 +723,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("batchId", paramInJson.getString("batchId"));
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        businessUnit.put("userId", paramInJson.getString("userId"));
         paramInJson.put("feeId", businessUnit.getString("feeId"));
-        return business;
+        return businessUnit;
     }
 
     /**
