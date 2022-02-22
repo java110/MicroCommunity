@@ -144,10 +144,10 @@ public interface IFeeBMO extends IApiBaseBMO {
      * 添加物业费用
      *
      * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
+     * @param context 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addFee(OwnerCarDto ownerCarDto, JSONObject paramInJson, ICmdDataFlowContext context);
 
 
     /**

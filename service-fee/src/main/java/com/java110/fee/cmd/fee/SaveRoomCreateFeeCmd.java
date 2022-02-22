@@ -212,8 +212,6 @@ public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
         int saveFlag = 0;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             curFailRoomCount++;
-            //businesses.add();
-
             //加入 房屋费用
             feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context), PayFeePo.class));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
@@ -224,11 +222,11 @@ public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
-                //付费对象名称
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
-                        roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum()));
-
             }
+            //付费对象名称
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
+                    roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(roomIndex).getUnitNum() + "-" + roomDtos.get(roomIndex).getRoomNum()));
+
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
                 feePos = new ArrayList<>();
