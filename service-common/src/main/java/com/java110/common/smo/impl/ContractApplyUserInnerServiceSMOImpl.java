@@ -4,12 +4,12 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
+import com.java110.po.contract.ContractPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
@@ -65,7 +65,7 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("userId", contractDto.getCurrentUserId());
         variables.put("startUserId", contractDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractDto.getStoreId()),contractDto.getContractId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractDto.getStoreId()), contractDto.getContractId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -283,5 +283,28 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         }
         return false;
     }
+
+    //删除任务
+    public boolean deleteTask(@RequestBody ContractPo contractDto) {
+        TaskService taskService = processEngine.getTaskService();
+
+        TaskQuery query = taskService.createTaskQuery().processInstanceBusinessKey(contractDto.getContractId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = query.list();
+
+        if (list == null || list.size() < 1) {
+            return true;
+        }
+
+        for (Task task : list) {
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            runtimeService.deleteProcessInstance(processInstanceId, "取消合同");
+
+        }
+
+        return true;
+    }
+
 
 }

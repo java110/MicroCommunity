@@ -5,6 +5,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.contractRoom.ContractRoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
@@ -43,6 +44,9 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IContractApplyUserInnerServiceSMO contractApplyUserInnerServiceSMOImpl;
+
     /**
      * @param contractPo 数据
      * @return 订单服务能够接受的报文
@@ -56,6 +60,8 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
+        //删除流程信息
+        contractApplyUserInnerServiceSMOImpl.deleteTask(contractPo);
         deleteContractRoomRel(contractPo);
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");

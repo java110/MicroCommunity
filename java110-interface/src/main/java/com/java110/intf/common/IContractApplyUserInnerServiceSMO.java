@@ -5,6 +5,7 @@ import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.po.contract.ContractPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +90,11 @@ public interface IContractApplyUserInnerServiceSMO {
      */
     @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
     public boolean completeTask(@RequestBody ContractDto contractDto);
-
+    /**
+     * 处理任务
+     * @return true 为流程结束 false 为流程没有结束
+     */
+    @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
+    public boolean deleteTask(@RequestBody ContractPo contractDto);
 
 }
