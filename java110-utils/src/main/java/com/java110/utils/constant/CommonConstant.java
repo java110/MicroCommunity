@@ -157,6 +157,7 @@ public class CommonConstant {
     public static final String TRANSACTION_ID = "transaction-id";
     public static final String REQUEST_TIME = "req-time";
     public static final String USER_ID = "user-id";
+    public static final String STORE_ID = "store-id";
 
     public final static String HTTP_SERVICE_API = "API";
     public final static String HTTP_SERVICE = "SERVICE";

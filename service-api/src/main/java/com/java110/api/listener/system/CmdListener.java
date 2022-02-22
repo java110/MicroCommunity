@@ -6,14 +6,15 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.order.OrderDto;
 import com.java110.entity.center.AppService;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -48,6 +49,12 @@ public class CmdListener extends AbstractServiceApiListener {
         HttpHeaders header = new HttpHeaders();
         for (String key : context.getRequestCurrentHeaders().keySet()) {
             header.add(key, reqHeader.get(key));
+        }
+        if (reqHeader.containsKey(CommonConstant.USER_ID)) {
+            reqJson.put("userId", reqHeader.get(CommonConstant.USER_ID));
+        }
+        if (reqHeader.containsKey(CommonConstant.STORE_ID)) {
+            reqJson.put("storeId", reqHeader.get(CommonConstant.STORE_ID));
         }
         HttpEntity<String> httpEntity = new HttpEntity<String>(reqJson.toJSONString(), header);
         String orgRequestUrl = context.getRequestHeaders().get("REQUEST_URL");
