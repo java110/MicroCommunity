@@ -233,7 +233,7 @@ public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
                 saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
                 feePos = new ArrayList<>();
                 feeAttrsPos = new ArrayList<>();
-                if (saveFlag == 0) {
+                if (saveFlag < 1) {
                     failRooms += curFailRoomCount;
                 } else {
                     curFailRoomCount = 0;
@@ -242,7 +242,7 @@ public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
         }
         if (feePos != null && feePos.size() > 0) {
             saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
-            if (saveFlag > 0) {
+            if (saveFlag < 1) {
                 failRooms += curFailRoomCount;
             }
         }
