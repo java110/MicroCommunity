@@ -1,10 +1,11 @@
 package com.java110.service.init;
 
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.system.SystemLogDto;
+import com.java110.utils.constant.EnvironmentConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -23,7 +24,7 @@ public class ServiceStartInit {
             ApplicationContextFactory.setApplicationContext(context);
             env = context.getEnvironment();
 
-            String logSwitch = env.getProperty("LogSwitch");
+            String logSwitch = env.getProperty(EnvironmentConstant.LOG_SWITCH);
             if (!StringUtil.isEmpty(logSwitch)) {
                 //设置日志级别
                 SystemLogDto.setLogSwatch(logSwitch);
@@ -36,7 +37,7 @@ public class ServiceStartInit {
 
     public static void preInitSystemConfig() {
         //加载配置文件，注册订单处理侦听
-        String logSwitch = System.getenv("LogSwitch");
+        String logSwitch = System.getenv(EnvironmentConstant.LOG_SWITCH);
         if (!StringUtil.isEmpty(logSwitch)) {
             //设置日志级别
             SystemLogDto.setLogSwatch(logSwitch);

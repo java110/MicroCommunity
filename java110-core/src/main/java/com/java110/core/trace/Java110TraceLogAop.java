@@ -26,24 +26,20 @@ public class Java110TraceLogAop {
         TraceParamDto traceParamDto = new TraceParamDto();
         JSONObject paramIn = new JSONObject();
         JSONObject paramOut = new JSONObject();
-        try {
-            Object[] args = pjp.getArgs();
-            for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
-                paramIn.put("param" + paramIndex, args[paramIndex]);
-            }
-            traceParamDto.setReqParam(paramIn.toJSONString());
-            out = pjp.proceed();
-            if (paramOut != null) {
-                paramOut.put("param", out);
-            } else {
-                paramOut.put("param", new JSONObject());
-            }
-            traceParamDto.setResParam(paramOut.toJSONString());
-            Java110TraceFactory.putParams(traceParamDto);
-        } catch (Throwable e) {
-            throw e;
-        } finally {
-            return out;
+
+        Object[] args = pjp.getArgs();
+        for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
+            paramIn.put("param" + paramIndex, args[paramIndex]);
         }
+        traceParamDto.setReqParam(paramIn.toJSONString());
+        out = pjp.proceed();
+        if (paramOut != null) {
+            paramOut.put("param", out);
+        } else {
+            paramOut.put("param", new JSONObject());
+        }
+        traceParamDto.setResParam(paramOut.toJSONString());
+        Java110TraceFactory.putParams(traceParamDto);
+        return out;
     }
 }

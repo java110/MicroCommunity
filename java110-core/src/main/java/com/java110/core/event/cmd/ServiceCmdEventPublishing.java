@@ -3,6 +3,7 @@ package com.java110.core.event.cmd;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.center.DataFlowListenerOrderComparator;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.CmdListenerDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -13,8 +14,6 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
-
 import sun.misc.ProxyGenerator;
 
 import java.io.File;
@@ -198,32 +197,32 @@ public class ServiceCmdEventPublishing {
     protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) {
         try {
             //        //这里处理业务逻辑数据
-        ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
-        //获取请求数据
-        JSONObject reqJson = dataFlowContext.getReqJson();
+            ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
+            //获取请求数据
+            JSONObject reqJson = dataFlowContext.getReqJson();
 
-        logger.debug("API服务 --- 请求参数为：{}", reqJson.toJSONString());
+            logger.debug("API服务 --- 请求参数为：{}", reqJson.toJSONString());
 
             listener.validate(event, dataFlowContext, reqJson);
 
             listener.doCmd(event, dataFlowContext, reqJson);
 
-        //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
-         //   listener.cmd(event);
+            //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
+            //   listener.cmd(event);
         } catch (CmdException e) {
             LoggerEngine.error("发布侦听失败", e);
             throw e;
         }
     }
 
-    public static void testPoxy(Class clazz){
+    public static void testPoxy(Class clazz) {
         byte[] bytes = ProxyGenerator.generateProxyClass("$Proxy", new Class[]{clazz});
-        try(
-                FileOutputStream fos =new FileOutputStream(new File("D:/$Proxy.class"))
-        ){
+        try (
+                FileOutputStream fos = new FileOutputStream(new File("D:/$Proxy.class"))
+        ) {
             fos.write(bytes);
             fos.flush();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

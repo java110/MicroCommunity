@@ -24,6 +24,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -82,7 +83,7 @@ public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String userId = cmdDataFlowContext.getResHeaders().get("user-id");
+        String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         reqJson.put("userId", userId);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();

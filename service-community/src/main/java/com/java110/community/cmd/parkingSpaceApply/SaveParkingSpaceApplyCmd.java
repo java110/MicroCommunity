@@ -63,7 +63,7 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
     @Autowired
     private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
     @Autowired
-    private IPayFeeV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
     @Autowired
     private IBuildingOwnerV1InnerServiceSMO buildingOwnerV1InnerServiceSMOImpl;
 
@@ -121,7 +121,7 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
             PayFeeDto payFeeDto = new PayFeeDto();
             payFeeDto.setPayerObjId(ownerCarDtos.get(0).getCarId());
             payFeeDto.setState("2008001");
-            List<PayFeeDto> payFeeDtos = payFeeNewV1InnerServiceSMOImpl.queryPayFeeNews(payFeeDto);
+            List<PayFeeDto> payFeeDtos = payFeeV1InnerServiceSMOImpl.queryPayFees(payFeeDto);
             if (payFeeDtos != null && payFeeDtos.size() > 0) {
                 throw new CmdException("该车辆已经有相关费用，请到停车费中续费。或者联系管理员");
             }

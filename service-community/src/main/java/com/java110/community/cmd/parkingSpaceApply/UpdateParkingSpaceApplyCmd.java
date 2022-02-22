@@ -166,7 +166,7 @@ public class UpdateParkingSpaceApplyCmd extends AbstractServiceCmdListener {
         payFeePo.setBatchId("-1");
         payFeePo.setbId("-1");
         payFeePo.setUserId(userId);
-        flag = payFeeNewV1InnerServiceSMOImpl.savePayFeeNew(payFeePo);
+        flag = payFeeNewV1InnerServiceSMOImpl.savePayFee(payFeePo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
