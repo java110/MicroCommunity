@@ -51,9 +51,6 @@
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
@@ -105,9 +102,6 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
@@ -206,9 +200,6 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
@@ -353,9 +344,6 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
@@ -663,9 +651,6 @@
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
@@ -749,9 +734,6 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
