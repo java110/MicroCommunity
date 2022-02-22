@@ -8,6 +8,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * trace log  api aop
  */
@@ -29,6 +32,14 @@ public class Java110TraceLogAop {
 
         Object[] args = pjp.getArgs();
         for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
+            if (args[paramIndex] instanceof HttpServletRequest) {
+                HttpServletRequest request = (HttpServletRequest) args[paramIndex];
+                paramIn.put("param" + paramIndex, request.getParameterMap());
+                continue;
+            }
+            if (args[paramIndex] instanceof HttpServletResponse) {
+                continue;
+            }
             paramIn.put("param" + paramIndex, args[paramIndex]);
         }
         traceParamDto.setReqParam(paramIn.toJSONString());
