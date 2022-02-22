@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wechatSubscribeV1ServiceDaoImpl">
+
+
+    <!-- 保存微信关注信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWechatSubscribeInfo" parameterType="Map">
+        insert into wechat_subscribe(
+        sub_id,open_id,app_id,nickname,headimgurl,user_id,open_type
+        ) values (
+        #{subId},#{openId},#{appId},#{nickname},#{headimgurl},#{userId},#{openType}
+        )
+    </insert>
+    <insert id="saveWechatSubscribeInfos" parameterType="Map">
+        insert into wechat_subscribe(
+        sub_id,open_id,app_id,nickname,headimgurl,user_id,open_type
+        ) values
+        <foreach collection="wechatSubscribes" item="item" separator=",">
+            (#{item.subId},#{item.openId},#{item.appId},#{item.nickname},#{item.headimgurl},#{item.userId},#{item.openType})
+        </foreach>
+    </insert>
+
+    <insert id="insertFees" parameterType="Map">
+        insert into pay_fee (amount,status_cd,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,
+        user_id,payer_obj_id,fee_flag,state,config_id,payer_obj_type,batch_id)
+        VALUES
+        <foreach collection="payFeePos" item="item" separator=",">
+            (#{item.amount},'0',#{item.incomeObjId},#{item.feeTypeCd},#{item.startTime},#{item.endTime},#{item.communityId},
+            '-1',#{item.feeId},#{item.userId},#{item.payerObjId},#{item.feeFlag},#{item.state},#{item.configId},#{item.payerObjType},#{item.batchId})
+        </foreach>
+    </insert>
+
+
+    <!-- 查询微信关注信息 add by wuxw 2018-07-03 -->
+    <select id="getWechatSubscribeInfo" parameterType="Map" resultType="Map">
+        select t.sub_id,t.sub_id subId,t.open_id,t.open_id openId,t.app_id,t.app_id
+        appId,t.nickname,t.headimgurl,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id
+        userId,t.open_type,t.open_type openType
+        from wechat_subscribe t
+        where 1 =1
+        <if test="subId !=null and subId != ''">
+            and t.sub_id= #{subId}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="nickname !=null and nickname != ''">
+            and t.nickname= #{nickname}
+        </if>
+        <if test="headimgurl !=null and headimgurl != ''">
+            and t.headimgurl= #{headimgurl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="openType !=null and openType != ''">
+            and t.open_type= #{openType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改微信关注信息 add by wuxw 2018-07-03 -->
+    <update id="updateWechatSubscribeInfo" parameterType="Map">
+        update wechat_subscribe t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="openId !=null and openId != ''">
+            , t.open_id= #{openId}
+        </if>
+
+        <if test="nickname !=null and nickname != ''">
+            , t.nickname= #{nickname}
+        </if>
+        <if test="headimgurl !=null and headimgurl != ''">
+            , t.headimgurl= #{headimgurl}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="openType !=null and openType != ''">
+            , t.open_type= #{openType}
+        </if>
+        where 1=1
+        <if test="subId !=null and subId != ''">
+            and t.sub_id= #{subId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+
+    </update>
+
+    <!-- 查询微信关注数量 add by wuxw 2018-07-03 -->
+    <select id="queryWechatSubscribesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from wechat_subscribe t
+        where 1 =1
+        <if test="subId !=null and subId != ''">
+            and t.sub_id= #{subId}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="nickname !=null and nickname != ''">
+            and t.nickname= #{nickname}
+        </if>
+        <if test="headimgurl !=null and headimgurl != ''">
+            and t.headimgurl= #{headimgurl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="openType !=null and openType != ''">
+            and t.open_type= #{openType}
+        </if>
+
+
+    </select>
+
+</mapper>

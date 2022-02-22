@@ -1,45 +1,34 @@
 {
   "param": {
-    "reason": "reason",
-    "primeRate": "prime_rate",
-    "feeTypeCd": "fee_type_cd",
-    "payTime": "pay_time",
-    "detailId": "detail_id",
-    "receivableAmount": "receivable_amount",
-    "cycles": "cycles",
-    "remark": "remark",
+    "subId": "sub_id",
+    "openId": "open_id",
+    "appId": "app_id",
+    "nickname": "nickname",
+    "headimgurl": "headimgurl",
     "statusCd": "status_cd",
-    "receivedAmount": "received_amount",
-    "feeId": "fee_id",
-    "returnFeeId": "return_fee_id",
-    "configId": "config_id",
-    "state": "state",
-    "communityId": "community_id"
+    "userId": "user_id",
+    "openType": "open_type"
   },
-  "name": "returnPayFee",
-  "shareColumn": "community_id",
-  "id": "returnFeeId",
-  "shareName": "fee",
+  "name": "wechatSubscribe",
+  "shareColumn": "app_id",
+  "id": "subId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "小区id不能为空",
-      "code": "communityId"
+      "msg": "微信ID不能为空",
+      "code": "openId"
     },
     {
-      "msg": "费用项id不能为空",
-      "code": "configId"
+      "msg": "公众号ID不能为空",
+      "code": "appId"
     },
     {
-      "msg": "费用id不能为空",
-      "code": "feeId"
-    },
-    {
-      "msg": "费用类型不能为空",
-      "code": "feeTypeCd"
+      "msg": "开放类型不能为空",
+      "code": "openType"
     }
   ],
-  "desc": "退费表",
-  "shareParam": "communityId",
-  "tableName": "return_pay_fee"
+  "desc": "微信关注",
+  "shareParam": "appId",
+  "tableName": "wechat_subscribe"
 }

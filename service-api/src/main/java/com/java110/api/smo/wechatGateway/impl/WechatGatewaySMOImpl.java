@@ -2,32 +2,33 @@ package com.java110.api.smo.wechatGateway.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
+import com.java110.api.smo.wechatGateway.IWechatGatewaySMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.wechatGateway.IWechatGatewaySMO;
+import com.java110.dto.wechatSubscribe.WechatSubscribeDto;
+import com.java110.intf.user.IWechatSubscribeV1InnerServiceSMO;
+import com.java110.po.wechatSubscribe.WechatSubscribePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceCodeSmallWechatAttrConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 import java.util.List;
 
@@ -47,6 +48,9 @@ public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
+
+    @Autowired
+    private IWechatSubscribeV1InnerServiceSMO wechatSubscribeV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> gateway(IPageData pd, String wId) throws Exception {
@@ -89,6 +93,8 @@ public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements
             responseStr = WechatFactory.formatText(toUserName, fromUserName, noBindOwnerResponseMessage);
             return new ResponseEntity<String>(responseStr, HttpStatus.OK);
         }
+        //保存到关注表
+        saveWechatSubscribe(WechatFactory.getAppId(wId), fromUserName);
 
         if (WechatConstant.MSG_TYPE_TEXT.equals(msgType)) {
             responseStr = textResponseHandler(fromUserName, toUserName, keyword);
@@ -99,6 +105,7 @@ public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements
         }
         return new ResponseEntity<>(responseStr, HttpStatus.OK);
     }
+
 
     @Override
     public SmallWeChatDto getSmallWechat(IPageData pd, SmallWeChatDto smallWeChatDto) {
@@ -226,6 +233,29 @@ public class WechatGatewaySMOImpl extends DefaultAbstractComponentSMO implements
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * 校验是否在关注表里
+     *
+     * @param appId
+     * @param fromUserName
+     */
+    private void saveWechatSubscribe(String appId, String fromUserName) {
+        WechatSubscribeDto wechatSubscribeDto = new WechatSubscribeDto();
+        wechatSubscribeDto.setOpenId(fromUserName);
+        wechatSubscribeDto.setOpenId(appId);
+        List<WechatSubscribeDto> wechatSubscribeDtos = wechatSubscribeV1InnerServiceSMOImpl.queryWechatSubscribes(wechatSubscribeDto);
+        if (wechatSubscribeDtos != null && wechatSubscribeDtos.size() > 0) {
+            return;
+        }
+        WechatSubscribePo wechatSubscribePo = new WechatSubscribePo();
+        wechatSubscribePo.setAppId(appId);
+        wechatSubscribePo.setOpenId(fromUserName);
+        wechatSubscribePo.setSubId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+        wechatSubscribePo.setOpenType(WechatSubscribeDto.OPEN_TYPE_WECHAT);
+        wechatSubscribeV1InnerServiceSMOImpl.saveWechatSubscribe(wechatSubscribePo);
     }
 
 }
