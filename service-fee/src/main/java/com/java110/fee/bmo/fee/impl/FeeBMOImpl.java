@@ -2,10 +2,10 @@ package com.java110.fee.bmo.fee.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -20,7 +20,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
@@ -80,7 +80,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     private IPayFeeDetailNewV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
 
     @Autowired
-    private IPayFeeNewV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -363,7 +363,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     /**
      * 添加费用明细信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @param
      * @return 订单服务能够接受的报文
      */
@@ -411,12 +411,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         }
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
-        businessFeeDetail.put("receivedAmount",paramInJson.getString("receivedAmount"));
+        businessFeeDetail.put("receivedAmount", paramInJson.getString("receivedAmount"));
 
-        PayFeeDetailPo payFeeDetail = BeanConvertUtil.covertBean(businessFeeDetail,PayFeeDetailPo.class);
+        PayFeeDetailPo payFeeDetail = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
         payFeeDetail.setbId("-1");
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetail);
-        if(flag < 1){
+        if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
         }
 
@@ -426,7 +426,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     /**
      * 修改费用信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @param
      * @return 订单服务能够接受的报文
      */
@@ -447,10 +447,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFee.putAll(feeMap);
-       // business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-        PayFeePo payFee = BeanConvertUtil.covertBean(businessFee,PayFeePo.class);
-        int flag = payFeeNewV1InnerServiceSMOImpl.updatePayFeeNew(payFee);
-        if(flag < 1){
+        // business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
+        PayFeePo payFee = BeanConvertUtil.covertBean(businessFee, PayFeePo.class);
+        int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFee);
+        if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
         }
         //为停车费单独处理
@@ -626,20 +626,14 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
     }
 
     @Override
-    public JSONObject addFeeAttr(JSONObject paramInJson, DataFlowContext dataFlowContext, String specCd, String value) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+    public FeeAttrPo addFeeAttr(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext, String specCd, String value) {
         FeeAttrPo feeAttrPo = new FeeAttrPo();
         feeAttrPo.setCommunityId(paramInJson.getString("communityId"));
         feeAttrPo.setSpecCd(specCd);
         feeAttrPo.setValue(value);
         feeAttrPo.setFeeId(paramInJson.getString("feeId"));
-        feeAttrPo.setAttrId("-1");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(FeeAttrPo.class.getSimpleName(), JSONObject.parseObject(JSONObject.toJSONString(feeAttrPo)));
-        return business;
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        return feeAttrPo;
 
     }
 
@@ -669,7 +663,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) throws ParseException {
+    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, ICmdDataFlowContext dataFlowContext)  {
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
         if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
@@ -683,10 +677,6 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeConfigDto.setConfigId(paramInJson.getString("configId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "查询费用项错误！");
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
@@ -704,10 +694,10 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("batchId", paramInJson.getString("batchId"));
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
+        businessUnit.put("userId", dataFlowContext.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
+
         paramInJson.put("feeId", businessUnit.getString("feeId"));
-        return business;
+        return businessUnit;
     }
 
     /**

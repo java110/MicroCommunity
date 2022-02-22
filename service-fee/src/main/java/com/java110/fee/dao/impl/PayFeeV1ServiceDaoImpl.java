@@ -15,16 +15,12 @@
  */
 package com.java110.fee.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.fee.dao.IPayFeeNewV1ServiceDao;
+import com.java110.fee.dao.IPayFeeV1ServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -37,10 +33,10 @@ import java.util.Map;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Service("payFeeNewV1ServiceDaoImpl")
-public class PayFeeNewV1ServiceDaoImpl extends BaseServiceDao implements IPayFeeNewV1ServiceDao {
+@Service("payFeeV1ServiceDaoImpl")
+public class PayFeeV1ServiceDaoImpl extends BaseServiceDao implements IPayFeeV1ServiceDao {
 
-    private static Logger logger = LoggerFactory.getLogger(PayFeeNewV1ServiceDaoImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(PayFeeV1ServiceDaoImpl.class);
 
 
 
@@ -52,10 +48,10 @@ public class PayFeeNewV1ServiceDaoImpl extends BaseServiceDao implements IPayFee
      * @throws DAOException DAO异常
      */
     @Override
-    public int savePayFeeNewInfo(Map info) throws DAOException {
-        logger.debug("保存 savePayFeeNewInfo 入参 info : {}",info);
+    public int savePayFeeInfo(Map info) throws DAOException {
+        logger.debug("保存 savePayFeeInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("payFeeNewV1ServiceDaoImpl.savePayFeeNewInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("payFeeV1ServiceDaoImpl.savePayFeeInfo",info);
 
         return saveFlag;
     }
@@ -68,12 +64,12 @@ public class PayFeeNewV1ServiceDaoImpl extends BaseServiceDao implements IPayFee
      * @throws DAOException DAO异常
      */
     @Override
-    public List<Map> getPayFeeNewInfo(Map info) throws DAOException {
-        logger.debug("查询 getPayFeeNewInfo 入参 info : {}",info);
+    public List<Map> getPayFeeInfo(Map info) throws DAOException {
+        logger.debug("查询 getPayFeeInfo 入参 info : {}",info);
 
-        List<Map> businessPayFeeNewInfos = sqlSessionTemplate.selectList("payFeeNewV1ServiceDaoImpl.getPayFeeNewInfo",info);
+        List<Map> businessPayFeeInfos = sqlSessionTemplate.selectList("payFeeV1ServiceDaoImpl.getPayFeeInfo",info);
 
-        return businessPayFeeNewInfos;
+        return businessPayFeeInfos;
     }
 
 
@@ -83,10 +79,10 @@ public class PayFeeNewV1ServiceDaoImpl extends BaseServiceDao implements IPayFee
      * @throws DAOException DAO异常
      */
     @Override
-    public int updatePayFeeNewInfo(Map info) throws DAOException {
-        logger.debug("修改 updatePayFeeNewInfo 入参 info : {}",info);
+    public int updatePayFeeInfo(Map info) throws DAOException {
+        logger.debug("修改 updatePayFeeInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("payFeeNewV1ServiceDaoImpl.updatePayFeeNewInfo",info);
+        int saveFlag = sqlSessionTemplate.update("payFeeV1ServiceDaoImpl.updatePayFeeInfo",info);
 
         return saveFlag;
     }
@@ -97,15 +93,15 @@ public class PayFeeNewV1ServiceDaoImpl extends BaseServiceDao implements IPayFee
      * @return 费用明细数量
      */
     @Override
-    public int queryPayFeeNewsCount(Map info) {
-        logger.debug("查询 queryPayFeeNewsCount 入参 info : {}",info);
+    public int queryPayFeesCount(Map info) {
+        logger.debug("查询 queryPayFeesCount 入参 info : {}",info);
 
-        List<Map> businessPayFeeNewInfos = sqlSessionTemplate.selectList("payFeeNewV1ServiceDaoImpl.queryPayFeeNewsCount", info);
-        if (businessPayFeeNewInfos.size() < 1) {
+        List<Map> businessPayFeeInfos = sqlSessionTemplate.selectList("payFeeV1ServiceDaoImpl.queryPayFeesCount", info);
+        if (businessPayFeeInfos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessPayFeeNewInfos.get(0).get("count").toString());
+        return Integer.parseInt(businessPayFeeInfos.get(0).get("count").toString());
     }
 
 

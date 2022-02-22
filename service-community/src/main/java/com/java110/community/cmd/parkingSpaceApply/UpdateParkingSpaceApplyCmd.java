@@ -25,13 +25,12 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.PayFeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeePo;
@@ -40,7 +39,6 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -70,7 +68,7 @@ public class UpdateParkingSpaceApplyCmd extends AbstractServiceCmdListener {
     @Autowired
     private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
     @Autowired
-    private IPayFeeNewV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
+    private IPayFeeV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
     @Autowired

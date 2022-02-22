@@ -17,18 +17,16 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.dto.fee.PayFeeDto;
-import com.java110.fee.dao.IPayFeeNewV1ServiceDao;
-import com.java110.intf.fee.IPayFeeNewV1InnerServiceSMO;
+import com.java110.fee.dao.IPayFeeV1ServiceDao;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,50 +38,50 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @RestController
-public class PayFeeNewV1InnerServiceSMOImpl extends BaseServiceSMO implements IPayFeeNewV1InnerServiceSMO {
+public class PayFeeV1InnerServiceSMOImpl extends BaseServiceSMO implements IPayFeeV1InnerServiceSMO {
 
     @Autowired
-    private IPayFeeNewV1ServiceDao payFeeNewV1ServiceDaoImpl;
+    private IPayFeeV1ServiceDao payFeeV1ServiceDaoImpl;
 
 
     @Override
-    public int savePayFeeNew(@RequestBody  PayFeePo PayFeePo) {
-        int saveFlag = payFeeNewV1ServiceDaoImpl.savePayFeeNewInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
+    public int savePayFee(@RequestBody  PayFeePo PayFeePo) {
+        int saveFlag = payFeeV1ServiceDaoImpl.savePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
         return saveFlag;
     }
 
      @Override
-    public int updatePayFeeNew(@RequestBody PayFeePo PayFeePo) {
-        int saveFlag = payFeeNewV1ServiceDaoImpl.updatePayFeeNewInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
+    public int updatePayFee(@RequestBody PayFeePo PayFeePo) {
+        int saveFlag = payFeeV1ServiceDaoImpl.updatePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
         return saveFlag;
     }
 
      @Override
-    public int deletePayFeeNew(@RequestBody  PayFeePo PayFeePo) {
+    public int deletePayFee(@RequestBody  PayFeePo PayFeePo) {
        PayFeePo.setStatusCd("1");
-       int saveFlag = payFeeNewV1ServiceDaoImpl.updatePayFeeNewInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
+       int saveFlag = payFeeV1ServiceDaoImpl.updatePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
        return saveFlag;
     }
 
     @Override
-    public List<PayFeeDto> queryPayFeeNews(@RequestBody  PayFeeDto payFeeNewDto) {
+    public List<PayFeeDto> queryPayFees(@RequestBody  PayFeeDto payFeeDto) {
 
         //校验是否传了 分页信息
 
-        int page = payFeeNewDto.getPage();
+        int page = payFeeDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
-            payFeeNewDto.setPage((page - 1) * payFeeNewDto.getRow());
+            payFeeDto.setPage((page - 1) * payFeeDto.getRow());
         }
 
-        List<PayFeeDto> payFeeNews = BeanConvertUtil.covertBeanList(payFeeNewV1ServiceDaoImpl.getPayFeeNewInfo(BeanConvertUtil.beanCovertMap(payFeeNewDto)), PayFeeDto.class);
+        List<PayFeeDto> payFees = BeanConvertUtil.covertBeanList(payFeeV1ServiceDaoImpl.getPayFeeInfo(BeanConvertUtil.beanCovertMap(payFeeDto)), PayFeeDto.class);
 
-        return payFeeNews;
+        return payFees;
     }
 
 
     @Override
-    public int queryPayFeeNewsCount(@RequestBody PayFeeDto payFeeNewDto) {
-        return payFeeNewV1ServiceDaoImpl.queryPayFeeNewsCount(BeanConvertUtil.beanCovertMap(payFeeNewDto));    }
+    public int queryPayFeesCount(@RequestBody PayFeeDto payFeeDto) {
+        return payFeeV1ServiceDaoImpl.queryPayFeesCount(BeanConvertUtil.beanCovertMap(payFeeDto));    }
 
 }

@@ -34,18 +34,18 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/payFeeNewV1Api")
-public interface IPayFeeNewV1InnerServiceSMO {
+@RequestMapping("/payFeeV1Api")
+public interface IPayFeeV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/savePayFeeNew", method = RequestMethod.POST)
-    public int savePayFeeNew(@RequestBody PayFeePo PayFeePo);
+    @RequestMapping(value = "/savePayFee", method = RequestMethod.POST)
+    public int savePayFee(@RequestBody PayFeePo PayFeePo);
 
-    @RequestMapping(value = "/updatePayFeeNew", method = RequestMethod.POST)
-    public int updatePayFeeNew(@RequestBody  PayFeePo PayFeePo);
+    @RequestMapping(value = "/updatePayFee", method = RequestMethod.POST)
+    public int updatePayFee(@RequestBody  PayFeePo PayFeePo);
 
-    @RequestMapping(value = "/deletePayFeeNew", method = RequestMethod.POST)
-    public int deletePayFeeNew(@RequestBody  PayFeePo PayFeePo);
+    @RequestMapping(value = "/deletePayFee", method = RequestMethod.POST)
+    public int deletePayFee(@RequestBody  PayFeePo PayFeePo);
 
     /**
      * <p>查询小区楼信息</p>
@@ -54,8 +54,8 @@ public interface IPayFeeNewV1InnerServiceSMO {
      * @param payFeeDto 数据对象分享
      * @return PayFeeDto 对象数据
      */
-    @RequestMapping(value = "/queryPayFeeNews", method = RequestMethod.POST)
-    List<PayFeeDto> queryPayFeeNews(@RequestBody PayFeeDto payFeeDto);
+    @RequestMapping(value = "/queryPayFees", method = RequestMethod.POST)
+    List<PayFeeDto> queryPayFees(@RequestBody PayFeeDto payFeeDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
@@ -63,6 +63,6 @@ public interface IPayFeeNewV1InnerServiceSMO {
      * @param payFeeDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryPayFeeNewsCount", method = RequestMethod.POST)
-    int queryPayFeeNewsCount(@RequestBody PayFeeDto payFeeDto);
+    @RequestMapping(value = "/queryPayFeesCount", method = RequestMethod.POST)
+    int queryPayFeesCount(@RequestBody PayFeeDto payFeeDto);
 }

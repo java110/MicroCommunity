@@ -34,7 +34,7 @@ import java.util.Map;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IPayFeeNewV1ServiceDao {
+public interface IPayFeeV1ServiceDao {
 
 
     /**
@@ -42,7 +42,7 @@ public interface IPayFeeNewV1ServiceDao {
      * @param info
      * @throws DAOException DAO异常
      */
-    int savePayFeeNewInfo(Map info) throws DAOException;
+    int savePayFeeInfo(Map info) throws DAOException;
 
 
 
@@ -54,7 +54,7 @@ public interface IPayFeeNewV1ServiceDao {
      * @return 费用明细信息
      * @throws DAOException DAO异常
      */
-    List<Map> getPayFeeNewInfo(Map info) throws DAOException;
+    List<Map> getPayFeeInfo(Map info) throws DAOException;
 
 
 
@@ -63,7 +63,7 @@ public interface IPayFeeNewV1ServiceDao {
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updatePayFeeNewInfo(Map info) throws DAOException;
+    int updatePayFeeInfo(Map info) throws DAOException;
 
 
     /**
@@ -72,6 +72,6 @@ public interface IPayFeeNewV1ServiceDao {
      * @param info 费用明细信息
      * @return 费用明细数量
      */
-    int queryPayFeeNewsCount(Map info);
+    int queryPayFeesCount(Map info);
 
 }

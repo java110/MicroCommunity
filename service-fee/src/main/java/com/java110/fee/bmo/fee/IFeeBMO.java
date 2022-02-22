@@ -2,10 +2,12 @@ package com.java110.fee.bmo.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.fee.bmo.IApiBaseBMO;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -155,7 +157,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeAttr( JSONObject paramInJson, DataFlowContext dataFlowContext,String specCd,String value);
+    public FeeAttrPo addFeeAttr(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext, String specCd, String value);
 
 
     /**
@@ -174,7 +176,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) throws ParseException;   /**
+    public JSONObject addRoomFee(RoomDto roomDto, JSONObject paramInJson, ICmdDataFlowContext dataFlowContext) ;   /**
      * 添加物业费用
      *
      * @param paramInJson     接口调用放传入入参

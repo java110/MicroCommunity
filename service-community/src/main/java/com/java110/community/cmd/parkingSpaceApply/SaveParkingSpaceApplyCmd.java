@@ -27,7 +27,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
@@ -38,8 +38,6 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -65,7 +63,7 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
     @Autowired
     private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
     @Autowired
-    private IPayFeeNewV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
+    private IPayFeeV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
     @Autowired
     private IBuildingOwnerV1InnerServiceSMO buildingOwnerV1InnerServiceSMOImpl;
 

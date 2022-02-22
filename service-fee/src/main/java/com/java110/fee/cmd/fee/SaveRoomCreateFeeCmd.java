@@ -1,12 +1,10 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.fee.IFeeBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -15,23 +13,23 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
-import com.java110.entity.center.AppService;
+import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.fee.FeeAttrPo;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -40,21 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @ClassName SaveRoomCreateFeeListener
- * @Description TODO
- * @Author wuxw
- * @Date 2020/1/31 15:57
- * @Version 1.0
- * add by wuxw 2020/1/31
- **/
-@Java110Listener("saveRoomCreateFeeListener")
-public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
-
-    private static Logger logger = LoggerFactory.getLogger(SaveRoomCreateFeeListener.class);
-
-    @Autowired
-    private IFeeBMO feeBMOImpl;
+@Java110Cmd(serviceCode = "fee.saveRoomCreateFee")
+public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
 
     private static final int DEFAULT_ADD_FEE_COUNT = 200;
 
@@ -73,18 +58,18 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_ROOM_CREATE_FEE;
-    }
+    @Autowired
+    private IFeeBMO feeBMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         // super.validatePageInfo(pd);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "未包含收费范围");
@@ -96,9 +81,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
-        logger.debug("ServiceDataFlowEvent : {}", event);
-        String userId = context.getRequestHeaders().get("user-id");
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = cmdDataFlowContext.getResHeaders().get("user-id");
         reqJson.put("userId", userId);
         List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -169,7 +153,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         if (roomDtos == null || roomDtos.size() < 1) {
             throw new IllegalArgumentException("未查到需要付费的房屋或未绑定业主");
         }
-        dealRoomFee(roomDtos, context, reqJson, event);
+        dealRoomFee(roomDtos, cmdDataFlowContext, reqJson, event);
     }
 
     /**
@@ -199,8 +183,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 
-    private void dealRoomFee(List<RoomDto> roomDtos, DataFlowContext context, JSONObject reqJson, ServiceDataFlowEvent event) throws ParseException {
-        AppService service = event.getAppService();
+    private void dealRoomFee(List<RoomDto> roomDtos, ICmdDataFlowContext context, JSONObject reqJson, CmdEvent event) {
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
             roomIds.add(roomDto.getRoomId());
@@ -219,40 +202,47 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
                 }
             }
         }
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-        JSONObject paramInObj = null;
+        List<PayFeePo> feePos = new ArrayList<>();
+        List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
         ResponseEntity<String> responseEntity = null;
         int failRooms = 0;
         //添加单元信息
         int curFailRoomCount = 0;
+        int saveFlag = 0;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             curFailRoomCount++;
-            businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
+            //businesses.add();
+
+            //加入 房屋费用
+            feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context), PayFeePo.class));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
                 if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
-                    businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                    feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                             reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
                 }
-                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
-                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
-                businesses.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
+                //付费对象名称
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
+                        roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum()));
+
             }
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-                responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-                if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
+                feePos = new ArrayList<>();
+                feeAttrsPos = new ArrayList<>();
+                if (saveFlag > 0) {
                     failRooms += curFailRoomCount;
                 } else {
                     curFailRoomCount = 0;
                 }
-                businesses = new JSONArray();
             }
         }
-        if (businesses != null && businesses.size() > 0) {
-            responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                failRooms += businesses.size();
+        if (feePos != null && feePos.size() > 0) {
+            saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
+            if (saveFlag > 0) {
+                failRooms += curFailRoomCount;
             }
         }
         JSONObject paramOut = new JSONObject();
@@ -263,16 +253,14 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         context.setResponseEntity(responseEntity);
     }
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
+    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+        int flag = feeInnerServiceSMOImpl.saveFee(feePos);
+        if (flag < 1) {
+            return flag;
+        }
 
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
+        flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
 
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
+        return flag;
     }
 }
