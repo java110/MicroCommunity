@@ -240,9 +240,9 @@ public class Java110TraceFactory {
         }
         List<TraceDbDto> dbs = traceDto.getDbs();
         TraceDbDto traceDbDto = new TraceDbDto();
-        traceDbDto.setSql(sql);
-        traceDbDto.setParams(param);
-        traceDbDto.setDuration(duration);
+        traceDbDto.setDbSql(sql);
+        traceDbDto.setParam(param);
+        traceDbDto.setDuration(duration+"");
         dbs.add(traceDbDto);
         traceDto.setDbs(dbs);
     }
