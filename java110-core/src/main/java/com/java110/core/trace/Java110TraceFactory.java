@@ -3,10 +3,7 @@ package com.java110.core.trace;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.trace.TraceAnnotationsDto;
-import com.java110.dto.trace.TraceDto;
-import com.java110.dto.trace.TraceEndpointDto;
-import com.java110.dto.trace.TraceParamDto;
+import com.java110.dto.trace.*;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.EnvironmentConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -152,6 +149,8 @@ public class Java110TraceFactory {
         traceDto.setAnnotations(traceAnnotationsDtos);
         traceDto.setTraceId(traceId);
 
+        traceDto.setDbs(new ArrayList<>());
+
         put(traceDto.getId(), traceDto);
         putSpanId(SPAN_ID, traceDto.getId());
         return traceDto.getId();
@@ -226,6 +225,25 @@ public class Java110TraceFactory {
         }
         clearTrace(getSpanId(SPAN_ID));
         clearSpanId();
+    }
+
+    /**
+     * 添加db
+     *
+     * @param sql
+     */
+    public static void putDbs(String sql, String param, long duration) {
+        TraceDto traceDto = getTraceDto();
+
+        if (traceDto == null) {
+            return;
+        }
+        List<TraceDbDto> dbs = traceDto.getDbs();
+        TraceDbDto traceDbDto = new TraceDbDto();
+        traceDbDto.setSql(sql);
+        traceDbDto.setParams(param);
+        traceDbDto.setDuration(duration);
+        dbs.add(traceDbDto);
     }
 
     /**

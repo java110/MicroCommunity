@@ -1,6 +1,7 @@
 package com.java110.db;
 
 import com.java110.config.properties.code.Java110Properties;
+import com.java110.core.trace.Java110TraceSqlInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -50,7 +51,8 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setTypeAliasesPackage("tk.mybatis.springboot.model");
-        bean.setPlugins(new Interceptor[]{new Java110MybatisInterceptor()});
+        //bean.setPlugins(new Interceptor[]{new Java110MybatisInterceptor()});
+        bean.setPlugins(new Interceptor[]{new Java110MybatisInterceptor(),new Java110TraceSqlInterceptor()});
 
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

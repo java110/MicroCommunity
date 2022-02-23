@@ -11,6 +11,7 @@ public class TraceDto implements Serializable {
     private long timestamp;
 
     private List<TraceAnnotationsDto> annotations;
+    private List<TraceDbDto> dbs;
 
     private TraceParamDto param;
 
@@ -69,5 +70,13 @@ public class TraceDto implements Serializable {
 
     public void setParam(TraceParamDto param) {
         this.param = param;
+    }
+
+    public List<TraceDbDto> getDbs() {
+        return dbs;
+    }
+
+    public void setDbs(List<TraceDbDto> dbs) {
+        this.dbs = dbs;
     }
 }
