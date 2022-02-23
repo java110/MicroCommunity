@@ -9,10 +9,10 @@ import org.apache.ibatis.mapping.ParameterMode;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
-import sun.plugin2.main.server.ResultHandler;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
