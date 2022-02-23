@@ -244,6 +244,7 @@ public class Java110TraceFactory {
         traceDbDto.setParams(param);
         traceDbDto.setDuration(duration);
         dbs.add(traceDbDto);
+        traceDto.setDbs(dbs);
     }
 
     /**
