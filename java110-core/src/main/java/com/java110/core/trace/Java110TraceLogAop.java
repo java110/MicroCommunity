@@ -33,8 +33,8 @@ public class Java110TraceLogAop {
         Object[] args = pjp.getArgs();
         for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
             if (args[paramIndex] instanceof HttpServletRequest) {
-                HttpServletRequest request = (HttpServletRequest) args[paramIndex];
-                paramIn.put("param" + paramIndex, request.getParameterMap());
+//                HttpServletRequest request = (HttpServletRequest) args[paramIndex];
+//                paramIn.put("param" + paramIndex, request.getParameterMap());
                 continue;
             }
             if (args[paramIndex] instanceof HttpServletResponse) {
