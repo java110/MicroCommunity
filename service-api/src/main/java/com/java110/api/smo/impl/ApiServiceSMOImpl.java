@@ -3,7 +3,6 @@ package com.java110.api.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
-import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
@@ -11,23 +10,17 @@ import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.core.smo.ISaveTransactionLogSMO;
+import com.java110.core.trace.Java110TraceLog;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.KafkaConstant;
-import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.exception.BusinessException;
-import com.java110.utils.exception.DecryptException;
-import com.java110.utils.exception.InitConfigDataException;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.exception.NoAuthorityException;
-import com.java110.utils.exception.SMOException;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.*;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.DateUtil;
@@ -35,7 +28,6 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +67,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
      * @throws SMOException
      */
     @Override
+    @Java110TraceLog
     public ResponseEntity<String> service(String reqJson, Map<String, String> headers) throws SMOException {
 
         ApiDataFlow dataFlow = null;
@@ -106,11 +99,11 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             responseEntity = dataFlow.getResponseEntity();
 
         } catch (DecryptException e) { //解密异常
-            responseEntity = ResultVo.error("解密异常：" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("解密异常：" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BusinessException e) {
-            responseEntity = ResultVo.error(e.getMessage(),HttpStatus.BAD_REQUEST);
+            responseEntity = ResultVo.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NoAuthorityException e) {
-            responseEntity = ResultVo.error("鉴权失败：" + e.getMessage(),HttpStatus.UNAUTHORIZED);
+            responseEntity = ResultVo.error("鉴权失败：" + e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (InitConfigDataException e) {
             responseEntity = ResultVo.error("初始化失败：" + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -163,7 +156,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             return;
         }
 
-        if (StringUtil.isEmpty(logServiceCode)) {
+        if (StringUtil.isEmpty(logServiceCode) || "OFF".equals(logServiceCode.toUpperCase())) {
             return;
         }
         if (logServiceCode.contains("|")) {

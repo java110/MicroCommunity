@@ -9,6 +9,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.smo.ISaveTransactionLogSMO;
+import com.java110.core.trace.Java110TraceLog;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.service.smo.ICmdServiceSMO;
 import com.java110.utils.cache.MappingCache;
@@ -21,7 +22,8 @@ import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,7 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
      * @throws SMOException
      */
     @Override
+    @Java110TraceLog
     public ResponseEntity<String> cmd(String reqJson, Map<String, String> headers) throws Exception {
 
         ICmdDataFlowContext cmdDataFlowContext = null;

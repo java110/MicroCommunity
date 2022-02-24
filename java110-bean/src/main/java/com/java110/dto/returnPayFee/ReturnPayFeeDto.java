@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class ReturnPayFeeDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT = "1000";
+
     private String reason;
     private String primeRate;
     private String feeTypeCd;
@@ -52,6 +54,7 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
     private String paNum;
 
     private String payerObjType;
+    private String payerObjName;
 
     public String getReason() {
         return reason;
@@ -300,5 +303,13 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
 
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }

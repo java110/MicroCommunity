@@ -11,9 +11,9 @@
     <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeDetailDiscountNewInfo" parameterType="Map">
         insert into pay_fee_detail_discount(
-detail_discount_id,discount_price,detail_id,remark,community_id,discount_id,fee_id
+detail_discount_id,discount_price,detail_id,remark,community_id,discount_id,fee_id,b_id
 ) values (
-#{detailDiscountId},#{discountPrice},#{detailId},#{remark},#{communityId},#{discountId},#{feeId}
+#{detailDiscountId},#{discountPrice},#{detailId},#{remark},#{communityId},#{discountId},#{feeId},#{bId}
 )
     </insert>
 

@@ -3,8 +3,10 @@ package com.java110.api.listener.ownerRepair;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
+import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.Environment;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
@@ -26,7 +28,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +70,9 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private Java110Properties java110Properties;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -90,6 +95,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
 
         String action = reqJson.getString("action");
+
 
         switch (action) {
             case ACTION_DISPATCH:
@@ -309,6 +315,12 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         if (i >= Integer.parseInt(repairNumber)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该员工有超过" + Integer.parseInt(repairNumber) + "条未处理的订单急需处理，请安排其他维修人员处理！");
             context.setResponseEntity(responseEntity);
+            return;
+        }
+
+        //手机端处理
+        if (Environment.isOwnerPhone(java110Properties)) {
+            ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
             return;
         }
         //获取报修id

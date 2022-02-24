@@ -16,15 +16,20 @@
 package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.trace.Java110FeignClientInterceptor;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
+import com.java110.core.log.LoggerFactory;
 import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
+import okhttp3.ConnectionPool;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -42,7 +47,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -73,6 +80,9 @@ public class ApiApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
 
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
+
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -83,6 +93,7 @@ public class ApiApplicationStart {
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
         return restTemplate;
     }
 
@@ -112,6 +123,20 @@ public class ApiApplicationStart {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)).build();
     }
 
+
+    @Bean
+    @ConditionalOnBean(Java110FeignClientInterceptor.class)
+    public okhttp3.OkHttpClient okHttpClient(@Autowired
+                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor){
+        okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS) //读取超时
+                .connectTimeout(10, TimeUnit.SECONDS) //连接超时
+                .writeTimeout(60, TimeUnit.SECONDS) //写入超时
+                .connectionPool(new ConnectionPool(10 /*maxIdleConnections*/, 3, TimeUnit.MINUTES))
+                .addInterceptor(okHttpLoggingInterceptor);
+        return ClientBuilder.build();
+    }
+
     /**
      * 创建该API的基本信息（这些基本信息会展现在文档页面中）
      * 访问地址：http://项目实际地址/swagger-ui.html
@@ -131,8 +156,8 @@ public class ApiApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
             ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
-
             //服务启动加载
             ServiceStartInit.initSystemConfig(context);
         } catch (Throwable e) {

@@ -172,4 +172,35 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
 
     }
 
+    @Override
+    public ResultVo payVideo(MachineDto machineDto) {
+
+        JSONObject postParameters = new JSONObject();
+        postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        postParameters.put("deviceId", machineDto.getMachineCode());
+        postParameters.put("channelId", machineDto.getMachineVersion());
+        postParameters.put("mediaProtocol", "UDP");
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.PLAY_VIDEO), HttpMethod.POST, httpEntity, String.class);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+    }
+
+    @Override
+    public ResultVo heartbeatVideo(JSONObject reqJson) {
+        JSONObject postParameters = new JSONObject();
+        postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        postParameters.put("callIds", reqJson.getString("callIds"));
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.HEARTBEAT_VIDEO), HttpMethod.POST, httpEntity, String.class);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+    }
+
 }

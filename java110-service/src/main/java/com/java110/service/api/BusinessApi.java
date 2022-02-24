@@ -2,6 +2,7 @@ package com.java110.service.api;
 
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.trace.Java110TraceLog;
 import com.java110.service.context.DataQuery;
 import com.java110.service.context.DataQueryFactory;
 import com.java110.service.smo.IQueryServiceSMO;
@@ -12,7 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class BusinessApi extends BaseController {
     @ApiOperation(value = "业务查询get请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "method", value = "用户编号", required = true, dataType = "String")
     @Deprecated
+    @Java110TraceLog
     public ResponseEntity<String> service(HttpServletRequest request) {
         try {
             Map<String, Object> headers = new HashMap<String, Object>();
@@ -87,6 +89,7 @@ public class BusinessApi extends BaseController {
     @ApiOperation(value = "业务查询post请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "method", value = "用户编号", required = true, dataType = "String")
     @Deprecated
+    @Java110TraceLog
     public ResponseEntity<String> queryPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
@@ -103,6 +106,7 @@ public class BusinessApi extends BaseController {
 
     @Deprecated
     @RequestMapping(path = "/businessApi/do", method = RequestMethod.GET)
+    @Java110TraceLog
     public String doGet(HttpServletRequest request) {
         return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR, "不支持Get方法请求").toJSONString();
     }
@@ -126,6 +130,7 @@ public class BusinessApi extends BaseController {
      */
     @Deprecated
     @RequestMapping(path = "/businessApi/do", method = RequestMethod.POST)
+    @Java110TraceLog
     public String doPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
@@ -168,6 +173,7 @@ public class BusinessApi extends BaseController {
 
 
     @RequestMapping(path = "/businessApi/fallBack", method = RequestMethod.POST)
+    @Java110TraceLog
     public ResponseEntity<String> fallBack(@RequestBody String fallBackInfo) {
         try {
             return queryServiceSMOImpl.fallBack(fallBackInfo);

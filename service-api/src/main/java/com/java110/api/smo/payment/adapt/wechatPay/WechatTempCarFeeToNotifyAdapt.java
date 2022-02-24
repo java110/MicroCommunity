@@ -31,7 +31,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -132,14 +132,14 @@ public class WechatTempCarFeeToNotifyAdapt extends DefaultAbstractComponentSMO i
         }
 
         String orderId = map.get("out_trade_no").toString();
-        String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId);
-
-        if (StringUtil.isEmpty(order)) {
-            return 1;// 说明已经处理过了 再不处理
-        }
+//        String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId);
+//
+//        if (StringUtil.isEmpty(order)) {
+//            return 1;// 说明已经处理过了 再不处理
+//        }
 
         //查询用户ID
-        JSONObject paramIn = JSONObject.parseObject(order);
+        JSONObject paramIn = new JSONObject();
         paramIn.put("oId", orderId);
         String url = "tempCarFee.notifyTempCarFeeOrder";
         /**

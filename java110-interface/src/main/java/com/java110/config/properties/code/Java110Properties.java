@@ -27,6 +27,9 @@ public class Java110Properties {
 
     private String ftpPath;
 
+    private String testSwitch;
+
+
     public String getMappingPath() {
         return mappingPath;
     }
@@ -98,5 +101,14 @@ public class Java110Properties {
 
     public void setFtpPath(String ftpPath) {
         this.ftpPath = ftpPath;
+    }
+
+    public String getTestSwitch() {
+        //return testSwitch;
+        return "0";
+    }
+
+    public void setTestSwitch(String testSwitch) {
+        this.testSwitch = testSwitch;
     }
 }

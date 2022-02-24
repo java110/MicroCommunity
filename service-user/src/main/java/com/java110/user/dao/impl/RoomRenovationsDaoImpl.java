@@ -3,7 +3,7 @@ package com.java110.user.dao.impl;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.user.dao.IRoomRenovationsServiceDao;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -26,6 +26,8 @@ public class LogAgent extends LoggerEngine{
     public static final String LOG_STATUS_F = "F";
 
 
+
+
     /**
      * 发送日志
      * @param transactionLog
@@ -135,5 +137,6 @@ public class LogAgent extends LoggerEngine{
         message.put("body",dataInfo);
         return message;
     }
+
 
 }

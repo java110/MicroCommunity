@@ -13,7 +13,7 @@ import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.dto.FloorDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 

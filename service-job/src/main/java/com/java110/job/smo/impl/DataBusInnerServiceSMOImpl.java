@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
@@ -13,7 +14,7 @@ import com.java110.utils.cache.DatabusCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,6 +68,18 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public ResultVo customCarInOut(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.customCarInOut(reqJson);
+    }
+
+    @Override
+    public ResultVo payVideo(@RequestBody MachineDto machineDto) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.payVideo(machineDto);
+    }
+
+    @Override
+    public ResultVo heartbeatVideo(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.heartbeatVideo(reqJson);
     }
 
     @Override

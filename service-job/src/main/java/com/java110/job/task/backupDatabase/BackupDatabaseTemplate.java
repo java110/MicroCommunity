@@ -5,7 +5,7 @@ import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;

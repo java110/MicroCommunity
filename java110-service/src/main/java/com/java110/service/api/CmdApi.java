@@ -2,6 +2,7 @@ package com.java110.service.api;
 
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.trace.Java110TraceLog;
 import com.java110.service.context.DataQuery;
 import com.java110.service.context.DataQueryFactory;
 import com.java110.service.smo.ICmdServiceSMO;
@@ -14,7 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

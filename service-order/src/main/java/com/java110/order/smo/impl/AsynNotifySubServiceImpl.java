@@ -3,6 +3,7 @@ package com.java110.order.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.context.SecureInvocation;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
@@ -17,7 +18,7 @@ import com.java110.utils.constant.DomainContant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -89,7 +90,7 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
         }
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
 
-        if (!hasTypeCd(databusDtos, businesses)) {
+        if (!hasTypeCd(databusDtos, businesses) || !SecureInvocation.secure(this.getClass())) {
             return ;
         }
 

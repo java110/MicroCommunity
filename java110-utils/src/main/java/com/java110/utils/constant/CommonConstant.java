@@ -60,7 +60,7 @@ public class CommonConstant {
     /**
      * 默认过期时间
      */
-    public final static String DEFAULT_JWT_EXPIRE_TIME = 2*60*60 + "";
+    public final static String DEFAULT_JWT_EXPIRE_TIME = 2 * 60 * 60 + "";
 
     /**
      * 登录时的用户ID
@@ -134,7 +134,6 @@ public class CommonConstant {
     public final static String CACHE_BUSINESS_TABLE_HIS = "BUSINESS_TABLE_HIS";
 
 
-
     /**
      * 映射 缓存常量
      */
@@ -158,6 +157,7 @@ public class CommonConstant {
     public static final String TRANSACTION_ID = "transaction-id";
     public static final String REQUEST_TIME = "req-time";
     public static final String USER_ID = "user-id";
+    public static final String STORE_ID = "store-id";
 
     public final static String HTTP_SERVICE_API = "API";
     public final static String HTTP_SERVICE = "SERVICE";
@@ -210,6 +210,19 @@ public class CommonConstant {
      */
     public final static String HC_APP_FRONT_APP_ID = "8000418004";
 
+
+    /**
+     * 调用链相关
+
+     */
+    // trace-id
+    public static final String TRACE_ID = "trace-id";
+
+    //SPAN-ID
+    public static final String SPAN_ID = "span-id";
+
+    //SPAN-ID
+    public static final String PARENT_SPAN_ID = "parent-span-id";
 
 
     public static String getHttpMethodStr(HttpMethod httpMethod) {

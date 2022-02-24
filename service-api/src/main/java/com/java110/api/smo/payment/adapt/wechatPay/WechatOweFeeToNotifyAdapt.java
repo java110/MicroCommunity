@@ -17,25 +17,25 @@ package com.java110.api.smo.payment.adapt.wechatPay;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -67,7 +67,7 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
      * @return
      * @throws Exception
      */
-    public String confirmPayFee(String param,String wId) {
+    public String confirmPayFee(String param, String wId) {
         String resXml = "";
         try {
             Map<String, Object> map = PayUtil.getMapFromXML(param);
@@ -104,8 +104,16 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
 
 
     public int confirmPayFee(Map<String, Object> map) {
-        String wId = map.get("wId").toString();
-        wId = wId.replace(" ", "+");
+        String appId;
+        //兼容 港币交易时 或者微信有时不会掉参数的问题
+        if (map.containsKey("wId")) {
+            String wId = map.get("wId").toString();
+            wId = wId.replace(" ", "+");
+            appId = WechatFactory.getAppId(wId);
+        } else {
+            appId = map.get("appid").toString();
+        }
+
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {
@@ -114,7 +122,7 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
             }
             paramMap.put(key, map.get(key).toString());
         }
-        String appId = WechatFactory.getAppId(wId);
+
         SmallWeChatDto smallWeChatDto = getSmallWechat(appId);
 
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
@@ -157,17 +165,16 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
 
         JSONArray fees = paramIn.getJSONArray("fees");
         JSONObject fee = null;
-        for(int feeIndex = 0; feeIndex < fees.size();feeIndex ++){
+        for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             fee = fees.getJSONObject(feeIndex);
-            if(fee.containsKey("deadlineTime")){
-                fee.put("startTime",fee.getString("endTime"));
-                fee.put("endTime",fee.getString("deadlineTime"));
-                fee.put("receivedAmount",fee.getString("feePrice"));
-                fee.put("state","");
+            if (fee.containsKey("deadlineTime")) {
+                fee.put("startTime", fee.getString("endTime"));
+                fee.put("endTime", fee.getString("deadlineTime"));
+                fee.put("receivedAmount", fee.getString("feePrice"));
+                fee.put("state", "");
             }
         }
     }
-
 
 
     private Map<String, String> getHeaders(String userId) {

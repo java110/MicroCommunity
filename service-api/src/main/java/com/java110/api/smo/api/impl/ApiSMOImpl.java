@@ -10,7 +10,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +86,11 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             if (!StringUtil.isEmpty(result.getUserName())) {
                 headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
             }
+        }
+
+        if (!StringUtil.isEmpty(result.getStoreId())) {
+            headers.remove("store-id");
+            headers.put("store-id", result.getStoreId());
         }
 
         if (!headers.containsKey("user_id")) {

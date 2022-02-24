@@ -10,6 +10,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -18,11 +19,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
@@ -36,7 +33,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -181,7 +178,10 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         }
         String appId = dataFlowContext.getAppId();
         logger.info("======支付方式======：" + appId + "+======+" + paramObj.containsKey("primeRate") + "======:" + JSONArray.toJSONString(dataFlowContext));
-        if (AppDto.OWNER_WECHAT_PAY.equals(appId)) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
+        if (AppDto.OWNER_WECHAT_PAY.equals(appId)
+                && FeeDetailDto.PRIME_REATE_WECHAT.equals(paramObj.getString("primeRate"))) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
+            paramObj.put("remark", "线上公众号支付");
+        } else {
             paramObj.put("remark", "微信支付");
         }
         paramObj.put("state", "1400");

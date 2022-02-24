@@ -17,6 +17,7 @@ package com.java110.job.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
 import com.java110.po.machine.MachineRecordPo;
@@ -71,4 +72,8 @@ public interface IDatabusAdapt {
     void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto);
 
     ResultVo customCarInOut(JSONObject reqJson);
+
+    ResultVo payVideo(MachineDto machineDto);
+
+    ResultVo heartbeatVideo(JSONObject reqJson);
 }

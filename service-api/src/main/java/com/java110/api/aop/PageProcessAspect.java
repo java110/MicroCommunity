@@ -3,6 +3,7 @@ package com.java110.api.aop;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.FilterException;
 import com.java110.utils.util.StringUtil;
@@ -10,7 +11,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -112,7 +112,6 @@ public class PageProcessAspect {
         String componentMethod = "";
         if (url.contains("callComponent")) { //组件处理
             String[] urls = url.split("/");
-
             if (urls.length == 6) {
                 componentCode = urls[4];
                 componentMethod = urls[5];
@@ -138,7 +137,10 @@ public class PageProcessAspect {
 
         logger.debug("切面 获取到的pd=" + JSONObject.toJSONString(pd));
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
+        //调用链
+        //Java110TraceFactory.createTrace(componentCode + "/" + componentMethod, headers);
     }
+
 
     @AfterReturning(returning = "ret", pointcut = "dataProcess()")
     public void doAfterReturning(Object ret) throws Throwable {
@@ -155,14 +157,15 @@ public class PageProcessAspect {
     public void after(JoinPoint jp) throws IOException {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
         HttpServletRequest request = attributes.getRequest();
+        //记录调用链
+        //Java110TraceFactory.putAnnotations(TraceAnnotationsDto.VALUE_CLIENT_RECEIVE);
+
         PageData pd = request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) != null ? (PageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) : null;
         //保存日志处理
         if (pd == null) {
             return;
         }
-
         //写cookies信息
         writeCookieInfo(pd, attributes);
 

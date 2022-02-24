@@ -6,6 +6,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.assetExport.IExportReportFeeSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.cache.MappingCache;
@@ -17,7 +18,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -1302,7 +1302,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         }
         JSONObject savedResourceStores = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
         //获取限制条数的值
-        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
+        String exportNumber = MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER);
+        if (!StringUtil.isNumber(exportNumber)) {
+            exportNumber = "10000";
+        }
+        int number = Integer.parseInt(exportNumber);
         if (savedResourceStores.getJSONArray("resourceStores").size() > number) {
             throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
         }

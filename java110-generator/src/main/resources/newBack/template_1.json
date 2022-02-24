@@ -1,42 +1,34 @@
 {
   "param": {
-    "refundFee": "refund_fee",
-    "mchId": "mch_id",
-    "orderId": "order_id",
-    "totalFee": "total_fee",
+    "subId": "sub_id",
     "openId": "open_id",
     "appId": "app_id",
+    "nickname": "nickname",
+    "headimgurl": "headimgurl",
     "statusCd": "status_cd",
-    "payId": "pay_id",
-    "state": "state",
-    "message": "message",
-    "payName": "pay_name",
-    "transactionId": "transaction_id"
+    "userId": "user_id",
+    "openType": "open_type"
   },
-  "name": "onlinePay",
-  "shareColumn": "order_id",
-  "id": "payId",
-  "shareName": "acct",
+  "name": "wechatSubscribe",
+  "shareColumn": "app_id",
+  "id": "subId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "订单ID不能为空",
-      "code": "orderId"
+      "msg": "微信ID不能为空",
+      "code": "openId"
     },
     {
-      "msg": "商户ID不能为空",
-      "code": "mchId"
+      "msg": "公众号ID不能为空",
+      "code": "appId"
     },
     {
-      "msg": "付款总金额不能为空",
-      "code": "totalFee"
-    },
-    {
-      "msg": "退款金额不能为空",
-      "code": "refundFee"
+      "msg": "开放类型不能为空",
+      "code": "openType"
     }
   ],
-  "desc": "线上支付",
-  "shareParam": "orderId",
-  "tableName": "online_pay"
+  "desc": "微信关注",
+  "shareParam": "appId",
+  "tableName": "wechat_subscribe"
 }

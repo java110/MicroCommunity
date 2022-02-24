@@ -31,7 +31,7 @@
         objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
         stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId,tt.contract_code parentContractCode,
         tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id objPersonId,
-        t.start_user_id startUserId
+        t.start_user_id startUserId,t.create_time createTime
         from contract t
         LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
         t.store_id
@@ -264,6 +264,9 @@
         </if>
         <if test="contractName !=null and contractName != ''">
             and t.contract_name= #{contractName}
+        </if>
+        <if test="contractNameLike !=null and contractNameLike != ''">
+            and t.contract_name like  concat('%',#{contractNameLike},'%')
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}

@@ -22,8 +22,14 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.PayFeeDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,7 +37,9 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +60,12 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IParkingSpaceApplyV1InnerServiceSMO parkingSpaceApplyV1InnerServiceSMOImpl;
+    @Autowired
+    private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+    @Autowired
+    private IBuildingOwnerV1InnerServiceSMO buildingOwnerV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -65,21 +79,54 @@ public class SaveParkingSpaceApplyCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "applyPersonName", "请求报文中未包含applyPersonName");
         Assert.hasKeyAndValue(reqJson, "applyPersonLink", "请求报文中未包含applyPersonLink");
         Assert.hasKeyAndValue(reqJson, "applyPersonId", "请求报文中未包含applyPersonId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+        /**
+         * 1、車位申請判斷車輛是否存在owner_car，如果存在判断是否有2008001的费用，
+         * car_id是费用表中的payer_obj_id。申请的时候判断下owner_id是否为-1，还需到owner表中校验在不在，
+         * 2、审核的时，判断车辆是否在owner_car中有，有就跳过。  没有的话写入owner_car，--都要写入pay_fee。
+         * 3、支付成功后，回调方法中刷新申请表状态。
+         */
+        //申请的时候判断下owner_id是否为-1
+        if ("-1".equals(parkingSpaceApplyPo.getApplyPersonId())) {
+            throw new CmdException("游客身份不能申请车位！");
+        }
+        //还需到owner表中校验在不在,不是业主则不能申请
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(parkingSpaceApplyPo.getApplyPersonId());
+        List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            throw new CmdException("不是本小区业主不能申请车位！");
+        }
+        //判断车辆是否已经有申请单
         ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
-        parkingSpaceApplyDto.setCarNum(parkingSpaceApplyDto.getCarNum());
+        parkingSpaceApplyDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         parkingSpaceApplyDto.setState("1001");//审核中
         int count = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplysCount(parkingSpaceApplyDto);
         if (count > 1) {
             throw new CmdException("当前车辆申请处理审核中，不能重复申请。");
         }
+        //車位申請判斷車輛是否存在owner_car，如果存在判断是否有2008001的费用
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
+        ownerCarDto.setCommunityId(parkingSpaceApplyPo.getCommunityId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
+            PayFeeDto payFeeDto = new PayFeeDto();
+            payFeeDto.setPayerObjId(ownerCarDtos.get(0).getCarId());
+            payFeeDto.setState("2008001");
+            List<PayFeeDto> payFeeDtos = payFeeV1InnerServiceSMOImpl.queryPayFees(payFeeDto);
+            if (payFeeDtos != null && payFeeDtos.size() > 0) {
+                throw new CmdException("该车辆已经有相关费用，请到停车费中续费。或者联系管理员");
+            }
+        }
+
         parkingSpaceApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.saveParkingSpaceApply(parkingSpaceApplyPo);
         if (flag < 1) {

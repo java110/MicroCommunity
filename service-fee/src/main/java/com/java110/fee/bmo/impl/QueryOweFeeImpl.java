@@ -1,6 +1,7 @@
 package com.java110.fee.bmo.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
@@ -24,7 +25,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
     //键
     public static final String RECEIVED_AMOUNT_SWITCH = "RECEIVED_AMOUNT_SWITCH";
+
+    //禁用电脑端提交收费按钮
+    public static final String OFFLINE_PAY_FEE_SWITCH = "OFFLINE_PAY_FEE_SWITCH";
 
     @Override
     public ResponseEntity<String> query(FeeDto feeDto) {
@@ -164,14 +168,29 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
         //应收款取值
-        String val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        //先取单小区的如果没有配置 取 全局的
+        String val = CommunitySettingFactory.getValue(feeDto.getCommunityId(),TOTAL_FEE_PRICE);
+        if(StringUtil.isEmpty(val)){
+            val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        }
         feeDto.setVal(val);
-        String received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
+        //先取单小区的如果没有配置 取 全局的
+        String received_amount_switch = CommunitySettingFactory.getValue(feeDto.getCommunityId(),RECEIVED_AMOUNT_SWITCH);
+        if(StringUtil.isEmpty(received_amount_switch)){
+             received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
+        }
+        //关闭 线下收银功能
         if (StringUtil.isEmpty(received_amount_switch)) {
             feeDto.setReceivedAmountSwitch("1");//默认启用实收款输入框
         } else {
             feeDto.setReceivedAmountSwitch(received_amount_switch);
         }
+        //先取单小区的如果没有配置 取 全局的
+        String offlinePayFeeSwitch = CommunitySettingFactory.getValue(feeDto.getCommunityId(),OFFLINE_PAY_FEE_SWITCH);
+        if(StringUtil.isEmpty(offlinePayFeeSwitch)){
+            offlinePayFeeSwitch = MappingCache.getValue(DOMAIN_COMMON, OFFLINE_PAY_FEE_SWITCH);
+        }
+        feeDto.setOfflinePayFeeSwitch(offlinePayFeeSwitch);
         return ResultVo.createResponseEntity(feeDto);
     }
 

@@ -2,12 +2,13 @@ package com.java110.acct;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -18,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 
 
@@ -47,10 +49,15 @@ public class AcctServiceApplicationStart {
 
     private static final String LISTENER_PATH = "java110.UserService.listeners";
 
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
+
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
             ApplicationContext context = SpringApplication.run(AcctServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
+
             //加载业务侦听
             // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
         } catch (Throwable e) {
@@ -68,6 +75,7 @@ public class AcctServiceApplicationStart {
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
         return restTemplate;
     }
 

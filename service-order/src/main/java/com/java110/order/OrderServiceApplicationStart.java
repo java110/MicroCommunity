@@ -17,6 +17,7 @@ package com.java110.order;
 
 import com.java110.config.properties.code.ZookeeperProperties;
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.center.DataFlowEventPublishing;
 import com.java110.service.init.ServiceInfoListener;
@@ -31,7 +32,7 @@ import com.java110.utils.util.StringUtil;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -43,6 +44,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -77,6 +79,9 @@ public class OrderServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
 
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
+
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -87,6 +92,7 @@ public class OrderServiceApplicationStart {
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
         return restTemplate;
     }
 
@@ -104,6 +110,8 @@ public class OrderServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
+            ServiceStartInit.preInitSystemConfig();
+
             ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
 
             //服务启动加载

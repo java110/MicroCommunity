@@ -1,11 +1,11 @@
 package com.java110.service.configuration;
 
 
-import brave.internal.Nullable;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
+import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestHeader;
 

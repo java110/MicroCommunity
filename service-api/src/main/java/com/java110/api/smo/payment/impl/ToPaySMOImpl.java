@@ -21,7 +21,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -94,7 +94,6 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
         //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
         if (money <= 0) {
-
             JSONObject paramOut = new JSONObject();
             paramOut.put("oId", orderId);
             String urlOut = "fee.payFeeConfirm";

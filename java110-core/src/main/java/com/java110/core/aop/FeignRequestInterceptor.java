@@ -1,6 +1,9 @@
 package com.java110.core.aop;
 
+import com.java110.core.trace.Java110TraceFactory;
 import com.java110.core.factory.Java110TransactionalFactory;
+import com.java110.dto.trace.TraceDto;
+import com.java110.utils.constant.CommonConstant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +18,7 @@ import org.springframework.util.StringUtils;
  * add by wuxw 2020/7/5
  **/
 @Configuration
-public class  FeignRequestInterceptor implements RequestInterceptor {
-
+public class FeignRequestInterceptor implements RequestInterceptor {
 
     /**
      * 传入事务ID

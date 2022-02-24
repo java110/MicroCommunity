@@ -21,6 +21,7 @@ public class PayFeePo implements Serializable {
     private String endTime;
     private String amount;
     private String userId;
+    private String bId;
 
     private String feeFlag;
     private String state;
@@ -156,5 +157,13 @@ public class PayFeePo implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

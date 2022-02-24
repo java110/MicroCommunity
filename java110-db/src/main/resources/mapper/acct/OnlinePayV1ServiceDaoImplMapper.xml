@@ -79,9 +79,7 @@
         <if test="mchId !=null and mchId != ''">
             , t.mch_id= #{mchId}
         </if>
-        <if test="orderId !=null and orderId != ''">
-            , t.order_id= #{orderId}
-        </if>
+
         <if test="totalFee !=null and totalFee != ''">
             , t.total_fee= #{totalFee}
         </if>
@@ -106,6 +104,9 @@
         where 1=1
         <if test="payId !=null and payId != ''">
             and t.pay_id= #{payId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
         </if>
 
     </update>

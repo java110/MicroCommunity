@@ -68,6 +68,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/shop/queryShopCommunity,");
         exclusions.append("/app/shopType/queryShopType,");
         exclusions.append("/app/housekeepingType/queryHousekeepingType,");
+        exclusions.append("/app/couponUser.listCouponUser,");
+        exclusions.append("/app/machine.customCarInOutCmd,");
         exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration");
 
 

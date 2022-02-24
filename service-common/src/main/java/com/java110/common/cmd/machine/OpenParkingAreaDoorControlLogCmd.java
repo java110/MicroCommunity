@@ -25,7 +25,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 
 /**
  * 类表述：保存

@@ -1,6 +1,7 @@
 package com.java110.store.bmo.contractChangePlan.impl;
 
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.store.bmo.contractChangePlan.IDeleteContractChangePlanBMO;
@@ -15,6 +16,9 @@ public class DeleteContractChangePlanBMOImpl implements IDeleteContractChangePla
     @Autowired
     private IContractChangePlanInnerServiceSMO contractChangePlanInnerServiceSMOImpl;
 
+    @Autowired
+    private IContractChangeUserInnerServiceSMO contractChangeUserInnerServiceSMO;
+
     /**
      * @param contractChangePlanPo 数据
      * @return 订单服务能够接受的报文
@@ -24,11 +28,13 @@ public class DeleteContractChangePlanBMOImpl implements IDeleteContractChangePla
 
         int flag = contractChangePlanInnerServiceSMOImpl.deleteContractChangePlan(contractChangePlanPo);
 
-        if (flag > 0) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        contractChangeUserInnerServiceSMO.deleteTask(contractChangePlanPo);
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+
     }
 
 }

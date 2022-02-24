@@ -12,7 +12,7 @@ import com.java110.po.community.CommunityAttrPo;
 import com.java110.po.community.CommunityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

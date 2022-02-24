@@ -4,6 +4,8 @@ import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contractChangePlan.ContractChangePlanDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.po.contract.ContractPo;
+import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,5 +92,12 @@ public interface IContractChangeUserInnerServiceSMO {
 
     @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
     public boolean completeTask(@RequestBody ContractChangePlanDto contractChangePlanDto);
+
+    /**
+     * 删除任务
+     * @return true 为流程结束 false 为流程没有结束
+     */
+    @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
+    public boolean deleteTask(@RequestBody ContractChangePlanPo contractDto);
 
 }

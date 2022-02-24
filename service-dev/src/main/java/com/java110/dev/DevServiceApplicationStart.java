@@ -1,15 +1,16 @@
 package com.java110.dev;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
+import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dev.smo.IDevServiceCacheSMO;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
@@ -19,9 +20,9 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 
 
@@ -50,6 +51,8 @@ public class DevServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(DevServiceApplicationStart.class);
 
+    @Resource
+    private Java110RestTemplateInterceptor java110RestTemplateInterceptor;
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
@@ -61,6 +64,8 @@ public class DevServiceApplicationStart {
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
+
         return restTemplate;
     }
 
@@ -77,6 +82,7 @@ public class DevServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
+        ServiceStartInit.preInitSystemConfig();
         ApplicationContext context = SpringApplication.run(DevServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 
@@ -104,7 +110,7 @@ public class DevServiceApplicationStart {
         logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
 
         //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
-       String mapping = MappingCache.getValue("java110_hc_version");
+        String mapping = MappingCache.getValue("java110_hc_version");
         //String mapping = "";
         if (StringUtil.isEmpty(mapping)) {
             IDevServiceCacheSMO devServiceCacheSMOImpl = (IDevServiceCacheSMO) ApplicationContextFactory.getBean("devServiceCacheSMOImpl");

@@ -5,7 +5,7 @@ import com.java110.dto.WsDataDto;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
