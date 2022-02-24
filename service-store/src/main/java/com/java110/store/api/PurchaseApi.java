@@ -252,7 +252,6 @@ public class PurchaseApi {
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
         purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
-
         //获取采购物品信息
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
