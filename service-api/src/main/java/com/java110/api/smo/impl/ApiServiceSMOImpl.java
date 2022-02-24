@@ -156,7 +156,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             return;
         }
 
-        if (StringUtil.isEmpty(logServiceCode)) {
+        if (StringUtil.isEmpty(logServiceCode) || "OFF".equals(logServiceCode.toUpperCase())) {
             return;
         }
         if (logServiceCode.contains("|")) {
