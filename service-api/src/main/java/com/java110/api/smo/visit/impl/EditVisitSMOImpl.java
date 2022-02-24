@@ -26,19 +26,14 @@ public class EditVisitSMOImpl extends DefaultAbstractComponentSMO implements IEd
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-
         //super.validatePageInfo(pd);
-
         Assert.hasKeyAndValue(paramIn, "vId", "访客记录ID不能为空");
-        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写访客姓名");
-        Assert.hasKeyAndValue(paramIn, "visitGender", "必填，请填写访客姓名");
-        Assert.hasKeyAndValue(paramIn, "visitGender", "必填，请填写访客姓名");
+        Assert.hasKeyAndValue(paramIn, "vName", "必填，请填写访客姓名");
+        Assert.hasKeyAndValue(paramIn, "visitGender", "必填，请填写访客性别");
         Assert.hasKeyAndValue(paramIn, "phoneNumber", "必填，请填写访客联系方式");
-        Assert.hasKeyAndValue(paramIn, "visitTime", "必填，请填写访客拜访时间");
-
-
+        Assert.hasKeyAndValue(paramIn, "visitTime", "必填，请填写访客来访时间");
+        Assert.hasKeyAndValue(paramIn, "visitTime", "必填，请填写访客离开时间");
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_VISIT);
-
     }
 
     @Override

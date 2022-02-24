@@ -1,7 +1,6 @@
 package com.java110.api.listener.activities;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.activities.IActivitiesBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -44,9 +43,6 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
-    private IActivitiesBMO activitiesBMOImpl;
-
-    @Autowired
     private IActivitiesTypeInnerServiceSMO activitiesTypeInnerServiceSMOImpl;
 
     @Autowired
@@ -72,7 +68,6 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
         Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写用户名称");
-
     }
 
     @Override
@@ -110,7 +105,6 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
     }
 
     public List<ApiCommunityDataVo> getCommunitys(JSONObject reqJson) {
-
         //1.0 先查询 员工对应的部门
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
@@ -168,7 +162,6 @@ public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
             fileRelPo.setSaveWay("table");
             fileRelPo.setRelTypeCd("70000");
             super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-
         }
         ActivitiesPo activitiesPo = BeanConvertUtil.covertBean(reqJson, ActivitiesPo.class);
         activitiesPo.setReadCount("0");

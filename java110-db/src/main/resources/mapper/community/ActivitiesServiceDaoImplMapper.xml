@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="activitiesServiceDaoImpl">
 
     <!-- 保存活动信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessActivitiesInfo" parameterType="Map">
-        insert into business_activities(
-        collect_count,like_count,title,read_count,user_name,user_id,activities_id,operate,type_cd,context,start_time,end_time,community_id,b_id,header_img,state
-        ) values (
-        #{collectCount},#{likeCount},#{title},#{readCount},#{userName},#{userId},#{activitiesId},#{operate},#{typeCd},#{context},#{startTime},#{endTime},
-        #{communityId},#{bId},#{headerImg},#{state}
-        )
+        insert into business_activities(collect_count, like_count, title, read_count, user_name, user_id, activities_id,
+                                        operate, type_cd, context, start_time, end_time, community_id, b_id, header_img,
+                                        state)
+        values (#{collectCount}, #{likeCount}, #{title}, #{readCount}, #{userName}, #{userId}, #{activitiesId},
+                #{operate}, #{typeCd}, #{context}, #{startTime}, #{endTime},
+                #{communityId}, #{bId}, #{headerImg}, #{state})
     </insert>
-
 
     <!-- 查询活动信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessActivitiesInfo" parameterType="Map" resultType="Map">
@@ -72,9 +70,7 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-
     </select>
-
 
     <!-- 保存活动信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveActivitiesInfoInstance" parameterType="Map">
@@ -128,9 +124,7 @@
         <if test="headerImg !=null and headerImg != ''">
             and t.header_img= #{headerImg}
         </if>
-
     </insert>
-
 
     <!-- 查询活动信息 add by wuxw 2018-07-03 -->
     <select id="getActivitiesInfo" parameterType="Map" resultType="Map">
@@ -138,7 +132,8 @@
         statusCd,t.title,t.read_count,t.read_count readCount,t.user_name,t.user_name userName,t.user_id,t.user_id
         userId,t.activities_id,t.activities_id activitiesId,t.type_cd,t.type_cd
         typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,act.type_name typeCdName,t.create_time createTime
+        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,act.type_name typeCdName,t.create_time
+        createTime
         from activities t
         left join activities_type act on t.type_cd = act.type_cd and t.community_id = act.community_id
         where 1 =1
@@ -150,7 +145,7 @@
             and t.like_count= #{likeCount}
         </if>
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like '%${title}%'
         </if>
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
@@ -190,9 +185,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改活动信息 add by wuxw 2018-07-03 -->
     <update id="updateActivitiesInfoInstance" parameterType="Map">
@@ -246,7 +239,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询活动数量 add by wuxw 2018-07-03 -->
@@ -261,9 +253,8 @@
         <if test="likeCount !=null and likeCount != ''">
             and t.like_count= #{likeCount}
         </if>
-
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like '%${title}%'
         </if>
         <if test="readCount !=null and readCount != ''">
             and t.read_count= #{readCount}
@@ -298,8 +289,5 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-
-
     </select>
-
 </mapper>

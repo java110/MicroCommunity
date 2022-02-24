@@ -32,15 +32,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping(value = "/questionAnswer")
 public class QuestionAnswerApi {
 
     @Autowired
     private ISaveQuestionAnswerBMO saveQuestionAnswerBMOImpl;
+
     @Autowired
     private IUpdateQuestionAnswerBMO updateQuestionAnswerBMOImpl;
+
     @Autowired
     private IDeleteQuestionAnswerBMO deleteQuestionAnswerBMOImpl;
 
@@ -49,8 +50,10 @@ public class QuestionAnswerApi {
 
     @Autowired
     private ISaveQuestionAnswerTitleBMO saveQuestionAnswerTitleBMOImpl;
+
     @Autowired
     private IUpdateQuestionAnswerTitleBMO updateQuestionAnswerTitleBMOImpl;
+
     @Autowired
     private IDeleteQuestionAnswerTitleBMO deleteQuestionAnswerTitleBMOImpl;
 
@@ -59,14 +62,15 @@ public class QuestionAnswerApi {
 
     @Autowired
     private ISaveQuestionAnswerTitleValueBMO saveQuestionAnswerTitleValueBMOImpl;
+
     @Autowired
     private IUpdateQuestionAnswerTitleValueBMO updateQuestionAnswerTitleValueBMOImpl;
+
     @Autowired
     private IDeleteQuestionAnswerTitleValueBMO deleteQuestionAnswerTitleValueBMOImpl;
 
     @Autowired
     private IGetQuestionAnswerTitleValueBMO getQuestionAnswerTitleValueBMOImpl;
-
 
     /**
      * 微信保存消息模板
@@ -79,7 +83,6 @@ public class QuestionAnswerApi {
     @RequestMapping(value = "/saveQuestionAnswer", method = RequestMethod.POST)
     public ResponseEntity<String> saveQuestionAnswer(@RequestHeader(value = "store-id", required = false) String storeId,
                                                      @RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "qaType", "请求报文中未包含qaType");
         Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含qaName");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
@@ -105,14 +108,11 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/updateQuestionAnswer", method = RequestMethod.POST)
     public ResponseEntity<String> updateQuestionAnswer(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "qaType", "请求报文中未包含qaType");
         Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含qaName");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "qaId", "qaId不能为空");
-
-
         QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
         return updateQuestionAnswerBMOImpl.update(questionAnswerPo);
     }
@@ -130,7 +130,6 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "qaId", "qaId不能为空");
-
 
         QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
         return deleteQuestionAnswerBMOImpl.delete(questionAnswerPo);
@@ -197,8 +196,6 @@ public class QuestionAnswerApi {
                 throw new IllegalArgumentException("未包含选项");
             }
         }
-
-
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
         return saveQuestionAnswerTitleBMOImpl.save(questionAnswerTitlePo, titleValues);
     }
@@ -213,7 +210,6 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/updateQuestionAnswerTitle", method = RequestMethod.POST)
     public ResponseEntity<String> updateQuestionAnswerTitle(@RequestBody JSONObject reqJson) {
-
 //        Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含qaId");
         Assert.hasKeyAndValue(reqJson, "qaTitle", "请求报文中未包含qaTitle");
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
@@ -228,7 +224,6 @@ public class QuestionAnswerApi {
                 throw new IllegalArgumentException("未包含选项");
             }
         }
-
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
         return updateQuestionAnswerTitleBMOImpl.update(questionAnswerTitlePo, titleValues);
     }
@@ -247,7 +242,6 @@ public class QuestionAnswerApi {
 
         Assert.hasKeyAndValue(reqJson, "titleId", "titleId不能为空");
 
-
         QuestionAnswerTitlePo questionAnswerTitlePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitlePo.class);
         return deleteQuestionAnswerTitleBMOImpl.delete(questionAnswerTitlePo);
     }
@@ -262,7 +256,7 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/queryQuestionAnswerTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswerTitle(@RequestHeader(value = "store-id", required = false) String storeId,
-                                                          // @RequestHeader(value = "user-id", required = false) String userId,
+                                                           // @RequestHeader(value = "user-id", required = false) String userId,
                                                            @RequestParam(value = "communityId", required = false) String communityId,
                                                            @RequestParam(value = "objType") String objType,
                                                            @RequestParam(value = "qaId") String qaId,
@@ -279,7 +273,6 @@ public class QuestionAnswerApi {
         } else {
             questionAnswerTitleDto.setObjIds(new String[]{storeId, communityId});
         }
-
         return getQuestionAnswerTitleBMOImpl.get(questionAnswerTitleDto);
     }
 
@@ -293,13 +286,10 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/saveQuestionAnswerTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> saveQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
         Assert.hasKeyAndValue(reqJson, "qaValue", "请求报文中未包含qaValue");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
-
-
         QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
         return saveQuestionAnswerTitleValueBMOImpl.save(questionAnswerTitleValuePo);
     }
@@ -314,14 +304,11 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/updateQuestionAnswerTitleValue", method = RequestMethod.POST)
     public ResponseEntity<String> updateQuestionAnswerTitleValue(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "titleId", "请求报文中未包含titleId");
         Assert.hasKeyAndValue(reqJson, "qaValue", "请求报文中未包含qaValue");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
         Assert.hasKeyAndValue(reqJson, "valueId", "valueId不能为空");
-
-
         QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
         return updateQuestionAnswerTitleValueBMOImpl.update(questionAnswerTitleValuePo);
     }
@@ -339,7 +326,6 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         Assert.hasKeyAndValue(reqJson, "valueId", "valueId不能为空");
-
 
         QuestionAnswerTitleValuePo questionAnswerTitleValuePo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerTitleValuePo.class);
         return deleteQuestionAnswerTitleValueBMOImpl.delete(questionAnswerTitleValuePo);
@@ -378,11 +364,11 @@ public class QuestionAnswerApi {
      */
     @RequestMapping(value = "/queryTitleValueResult", method = RequestMethod.GET)
     public ResponseEntity<String> queryTitleValueResult(@RequestHeader(value = "store-id") String storeId,
-                                                                @RequestParam(value = "communityId", required = false) String communityId,
-                                                                @RequestParam(value = "objType") String objType,
-                                                                @RequestParam(value = "titleId",required = false) String titleId,
-                                                                @RequestParam(value = "page") int page,
-                                                                @RequestParam(value = "row") int row) {
+                                                        @RequestParam(value = "communityId", required = false) String communityId,
+                                                        @RequestParam(value = "objType") String objType,
+                                                        @RequestParam(value = "titleId", required = false) String titleId,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
         QuestionAnswerTitleValueDto questionAnswerTitleValueDto = new QuestionAnswerTitleValueDto();
         questionAnswerTitleValueDto.setPage(page);
         questionAnswerTitleValueDto.setRow(row);

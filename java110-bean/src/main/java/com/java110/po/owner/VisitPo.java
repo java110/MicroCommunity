@@ -21,6 +21,7 @@ public class VisitPo implements Serializable {
     private String visitCase;
     private String visitTime;
     private String departureTime;
+    private String statusCd;
 
     public String getvId() {
         return vId;
@@ -100,5 +101,13 @@ public class VisitPo implements Serializable {
 
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

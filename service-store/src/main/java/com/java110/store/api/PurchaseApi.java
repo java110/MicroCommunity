@@ -255,13 +255,6 @@ public class PurchaseApi {
         //获取采购物品信息
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-        //查询当前小区的小区仓库
-        StorehouseDto storehouseDto = new StorehouseDto();
-        storehouseDto.setShObjId(reqJson.getString("communityId"));
-        storehouseDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);//小区仓库
-        //获取当前小区的小区仓库
-        List<StorehouseDto> storehouseDtos = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
-        //Assert.listOnlyOne(storehouseDtos, "没有查询到当前小区仓库或查询出多个小区仓库！");
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
@@ -274,7 +267,7 @@ public class PurchaseApi {
             //查询当前小区仓库下该物品信息
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResCode(resourceStore.getString("resCode"));
-            resourceStoreDto.setShId(storehouseDtos.get(0).getShId());
+            resourceStoreDto.setShId(resourceStore.getString("shzId"));//小区目标仓库
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             //调整集团仓库物品信息
             ResourceStorePo resourceStorePo = new ResourceStorePo();
@@ -290,7 +283,7 @@ public class PurchaseApi {
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
                 allocationStorehouseDto.setbId("-1");
                 allocationStorehouseDto.setShIda(resourceStore.getString("shId"));
-                allocationStorehouseDto.setShIdz(storehouseDtos.get(0).getShId());
+                allocationStorehouseDto.setShIdz(resourceStore.getString("shzId"));//小区仓库
                 allocationStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
                 allocationStorehouseDto.setResName(resourceStoreDtos.get(0).getResName());
                 allocationStorehouseDto.setStoreId(storeId);
@@ -358,7 +351,7 @@ public class PurchaseApi {
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
                 allocationStorehouseDto.setbId("-1");
                 allocationStorehouseDto.setShIda(resourceStore.getString("shId"));
-                allocationStorehouseDto.setShIdz(storehouseDtos.get(0).getShId());
+                allocationStorehouseDto.setShIdz(resourceStore.getString("shzId"));//小区目标仓库
                 allocationStorehouseDto.setResId(resourceStore.getString("resId"));
                 allocationStorehouseDto.setResName(resourceStore.getString("resName"));
                 allocationStorehouseDto.setStoreId(storeId);
@@ -393,7 +386,7 @@ public class PurchaseApi {
                 List<ResourceStoreDto> resourceStoreDtoList = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto2);
                 ResourceStoreDto resourceStoreDto1 = BeanConvertUtil.covertBean(resourceStoreDtoList.get(0), ResourceStoreDto.class);
                 resourceStoreDto1.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
-                resourceStoreDto1.setShId(storehouseDtos.get(0).getShId());
+                resourceStoreDto1.setShId(resourceStore.getString("shzId"));
                 resourceStoreDto1.setbId("-1");
                 resourceStoreDto1.setStock(purchaseApplyDetailPo.getQuantity());
                 resourceStoreDto1.setCreateTime(new Date());

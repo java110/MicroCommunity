@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * 公告组件管理类
- *
+ * <p>
  * add by wuxw
- *
+ * <p>
  * 2019-06-29
  */
 @Component("noticeManage")
@@ -23,10 +23,11 @@ public class NoticeManageComponent {
 
     /**
      * 查询公告列表
+     *
      * @param pd 页面数据封装
      * @return 返回 ResponseEntity 对象
      */
-    public ResponseEntity<String> list(IPageData pd){
+    public ResponseEntity<String> list(IPageData pd) {
         return listNoticesSMOImpl.listNotices(pd);
     }
 

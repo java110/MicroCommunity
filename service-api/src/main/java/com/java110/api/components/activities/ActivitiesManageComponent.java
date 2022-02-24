@@ -1,12 +1,10 @@
 package com.java110.api.components.activities;
 
-
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.common.ICommonGetSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 
 /**
  * 活动组件管理类
@@ -31,6 +29,4 @@ public class ActivitiesManageComponent {
         pd.setApiUrl("activities.listActivitiess");
         return commonGetSMOImpl.doService(pd);
     }
-
-
 }

@@ -18,8 +18,6 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     public static final String QA_TYPE_COMMUNITY = "3306";//小区
     public static final String QA_TYPE_STORE = "3307";//商户ID
 
-
-
     private String qaName;
     private String qaType;
     private String qaTypeName;
@@ -31,12 +29,11 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String[] objIds;
     private String qaId;
     private String userId;
-
+    private String remark;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getQaName() {
         return qaName;
@@ -102,7 +99,6 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
         this.qaId = qaId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -141,5 +137,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

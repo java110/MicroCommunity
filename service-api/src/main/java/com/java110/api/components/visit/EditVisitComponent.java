@@ -17,10 +17,11 @@ public class EditVisitComponent {
 
     /**
      * 添加小区数据
+     *
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    public ResponseEntity<String> update(IPageData pd){
+    public ResponseEntity<String> update(IPageData pd) {
         return editVisitSMOImpl.updateVisit(pd);
     }
 

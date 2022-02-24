@@ -563,13 +563,13 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
         ResponseEntity<String> responseEntity = callCenterService(restTemplate, pd, JSONObject.toJSONString(param), url, HttpMethod.POST);
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException("调用" + serviceCode + "失败，" + responseEntity.getBody());
-        }
-
         JSONObject resultVo = JSONObject.parseObject(responseEntity.getBody());
 
         if (ResultVo.CODE_MACHINE_OK != resultVo.getInteger("code")) {
+            throw new SMOException(resultVo.getString("msg"));
+        }
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new SMOException(resultVo.getString("msg"));
         }
 

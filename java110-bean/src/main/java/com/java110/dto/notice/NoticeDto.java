@@ -41,13 +41,11 @@ public class NoticeDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
 
-
     private Date createTime;
 
     private String noticeTypeCdName;
 
     private String statusCd = "0";
-
 
     public String getNoticeTypeCd() {
         return noticeTypeCd;

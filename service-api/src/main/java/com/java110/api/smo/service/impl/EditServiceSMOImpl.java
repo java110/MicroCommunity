@@ -30,16 +30,15 @@ public class EditServiceSMOImpl extends DefaultAbstractComponentSMO implements I
         //super.validatePageInfo(pd);
 
         Assert.hasKeyAndValue(paramIn, "serviceId", "服务ID不能为空");
-Assert.hasKeyAndValue(paramIn, "name", "必填，请填写服务名称");
-Assert.hasKeyAndValue(paramIn, "serviceCode", "必填，请填写服务编码如 service.saveService");
-Assert.hasKeyAndValue(paramIn, "businessTypeCd", "可填，请填写秘钥，如果填写了需要加密传输");
-Assert.hasKeyAndValue(paramIn, "seq", "必填，请填写序列");
-Assert.hasKeyAndValue(paramIn, "isInstance", "可填，请填写实例 Y 或N");
-Assert.hasKeyAndValue(paramIn, "method", "必填，请填写调用方式");
-Assert.hasKeyAndValue(paramIn, "timeout", "必填，请填写超时时间");
-Assert.hasKeyAndValue(paramIn, "retryCount", "必填，请填写重试次数");
-Assert.hasKeyAndValue(paramIn, "provideAppId", "必填，请填写提供服务");
-
+        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写服务名称");
+        Assert.hasKeyAndValue(paramIn, "serviceCode", "必填，请填写服务编码如 service.saveService");
+        Assert.hasKeyAndValue(paramIn, "businessTypeCd", "可填，请填写秘钥，如果填写了需要加密传输");
+        Assert.hasKeyAndValue(paramIn, "seq", "必填，请填写序列");
+        Assert.hasKeyAndValue(paramIn, "isInstance", "可填，请填写实例 Y 或N");
+        Assert.hasKeyAndValue(paramIn, "method", "必填，请填写调用方式");
+        Assert.hasKeyAndValue(paramIn, "timeout", "必填，请填写超时时间");
+        Assert.hasKeyAndValue(paramIn, "retryCount", "必填，请填写重试次数");
+        Assert.hasKeyAndValue(paramIn, "provideAppId", "必填，请填写提供服务");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_SERVICE);

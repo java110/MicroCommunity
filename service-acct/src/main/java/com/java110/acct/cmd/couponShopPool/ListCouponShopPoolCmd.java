@@ -17,21 +17,19 @@ package com.java110.acct.cmd.couponShopPool;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.acct.ICouponShopPoolV1InnerServiceSMO;
-import com.java110.po.couponShopPool.CouponShopPoolPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.couponShopPool.CouponShopPoolDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,7 +49,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "couponShopPool.listCouponShopPool")
 public class ListCouponShopPoolCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListCouponShopPoolCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListCouponShopPoolCmd.class);
     @Autowired
     private ICouponShopPoolV1InnerServiceSMO couponShopPoolV1InnerServiceSMOImpl;
 
@@ -63,22 +61,22 @@ public class ListCouponShopPoolCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           CouponShopPoolDto couponShopPoolDto = BeanConvertUtil.covertBean(reqJson, CouponShopPoolDto.class);
+        CouponShopPoolDto couponShopPoolDto = BeanConvertUtil.covertBean(reqJson, CouponShopPoolDto.class);
 
-           int count = couponShopPoolV1InnerServiceSMOImpl.queryCouponShopPoolsCount(couponShopPoolDto);
+        int count = couponShopPoolV1InnerServiceSMOImpl.queryCouponShopPoolsCount(couponShopPoolDto);
 
-           List<CouponShopPoolDto> couponShopPoolDtos = null;
+        List<CouponShopPoolDto> couponShopPoolDtos = null;
 
-           if (count > 0) {
-               couponShopPoolDtos = couponShopPoolV1InnerServiceSMOImpl.queryCouponShopPools(couponShopPoolDto);
-           } else {
-               couponShopPoolDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            couponShopPoolDtos = couponShopPoolV1InnerServiceSMOImpl.queryCouponShopPools(couponShopPoolDto);
+        } else {
+            couponShopPoolDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, couponShopPoolDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, couponShopPoolDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
