@@ -106,7 +106,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         communityDto.setCommunityId(paramInJson.getString("communityId"));
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
-        Assert.listOnlyOne(communityDtos, "小区不存");
+        Assert.listOnlyOne(communityDtos, "小区不存在");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
