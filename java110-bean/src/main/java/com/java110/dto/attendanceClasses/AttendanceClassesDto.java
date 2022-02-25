@@ -23,6 +23,7 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
     private String classesObjType;
     private String storeId;
     private String clockType;
+    private String clockTypeName;
     private String classesObjId;
     private String classesName;
     private String classesId;
@@ -32,11 +33,9 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
     private String classesObjName;
     private List<AttendanceClassesAttrDto> attrs;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getTimeOffset() {
         return timeOffset;
@@ -126,7 +125,6 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
         this.clockTypeValue = clockTypeValue;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -157,5 +155,13 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
 
     public void setAttrs(List<AttendanceClassesAttrDto> attrs) {
         this.attrs = attrs;
+    }
+
+    public String getClockTypeName() {
+        return clockTypeName;
+    }
+
+    public void setClockTypeName(String clockTypeName) {
+        this.clockTypeName = clockTypeName;
     }
 }

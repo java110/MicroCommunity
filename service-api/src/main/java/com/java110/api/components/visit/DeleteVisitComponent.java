@@ -12,23 +12,24 @@ import org.springframework.stereotype.Component;
 @Component("deleteVisit")
 public class DeleteVisitComponent {
 
-@Autowired
-private IDeleteVisitSMO deleteVisitSMOImpl;
+    @Autowired
+    private IDeleteVisitSMO deleteVisitSMOImpl;
 
-/**
- * 添加访客登记数据
- * @param pd 页面数据封装
- * @return ResponseEntity 对象
- */
-public ResponseEntity<String> delete(IPageData pd){
+    /**
+     * 添加访客登记数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<String> delete(IPageData pd) {
         return deleteVisitSMOImpl.deleteVisit(pd);
     }
 
-public IDeleteVisitSMO getDeleteVisitSMOImpl() {
+    public IDeleteVisitSMO getDeleteVisitSMOImpl() {
         return deleteVisitSMOImpl;
     }
 
-public void setDeleteVisitSMOImpl(IDeleteVisitSMO deleteVisitSMOImpl) {
+    public void setDeleteVisitSMOImpl(IDeleteVisitSMO deleteVisitSMOImpl) {
         this.deleteVisitSMOImpl = deleteVisitSMOImpl;
     }
-            }
+}

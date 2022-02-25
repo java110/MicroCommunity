@@ -152,6 +152,8 @@ public class OaWorkflowApi {
     public ResponseEntity<String> queryOaWorkflow(@RequestHeader(value = "store-id") String storeId,
                                                   @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "flowId", required = false) String flowId,
+                                                  @RequestParam(value = "flowName", required = false) String flowName,
+                                                  @RequestParam(value = "flowType", required = false) String flowType,
                                                   @RequestParam(value = "state", required = false) String state,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row) {
@@ -160,6 +162,8 @@ public class OaWorkflowApi {
         oaWorkflowDto.setRow(row);
         oaWorkflowDto.setStoreId(storeId);
         oaWorkflowDto.setFlowId(flowId);
+        oaWorkflowDto.setFlowName(flowName);
+        oaWorkflowDto.setFlowType(flowType);
         oaWorkflowDto.setState(state);
         oaWorkflowDto.setUserId(userId);
         return getOaWorkflowBMOImpl.get(oaWorkflowDto);
@@ -381,11 +385,11 @@ public class OaWorkflowApi {
             if ("flowId".equals(key)) {
                 continue;
             }
-            if("fileName".equals(key)){
+            if ("fileName".equals(key)) {
                 continue;
             }
 
-            if("realFileName".equals(key)){
+            if ("realFileName".equals(key)) {
                 continue;
             }
 
@@ -467,11 +471,11 @@ public class OaWorkflowApi {
      */
     @RequestMapping(value = "/queryOaWorkflowUser", method = RequestMethod.GET)
     public ResponseEntity<String> queryOaWorkflowUser(@RequestHeader(value = "store-id") String storeId,
-                                                                     @RequestHeader(value = "user-id") String userId,
-                                                                     @RequestParam(value = "flowId", required = false) String flowId,
-                                                                     @RequestParam(value = "id", required = false) String id,
-                                                                     @RequestParam(value = "page") int page,
-                                                                     @RequestParam(value = "row") int row) {
+                                                      @RequestHeader(value = "user-id") String userId,
+                                                      @RequestParam(value = "flowId", required = false) String flowId,
+                                                      @RequestParam(value = "id", required = false) String id,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
         JSONObject paramIn = new JSONObject();
         paramIn.put("page", page);
         paramIn.put("row", row);

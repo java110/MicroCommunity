@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="attendanceClassesServiceDaoImpl">
 
     <!-- 保存考勤班次信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAttendanceClassesInfo" parameterType="Map">
-        insert into business_attendance_classes(
-        time_offset,clock_count,classes_obj_type,store_id,clock_type,classes_obj_id,classes_name,classes_id,operate,
-        leave_offset,late_offset,b_id,clock_type_value,classes_obj_name
-        ) values (
-        #{timeOffset},#{clockCount},#{classesObjType},#{storeId},#{clockType},#{classesObjId},#{classesName},#{classesId},#{operate},
-        #{leaveOffset},#{lateOffset},#{bId},#{clockTypeValue},#{classesObjName}
-        )
+        insert into business_attendance_classes(time_offset, clock_count, classes_obj_type, store_id, clock_type,
+                                                classes_obj_id, classes_name, classes_id, operate,
+                                                leave_offset, late_offset, b_id, clock_type_value, classes_obj_name)
+        values (#{timeOffset}, #{clockCount}, #{classesObjType}, #{storeId}, #{clockType}, #{classesObjId},
+                #{classesName}, #{classesId}, #{operate},
+                #{leaveOffset}, #{lateOffset}, #{bId}, #{clockTypeValue}, #{classesObjName})
     </insert>
-
 
     <!-- 查询考勤班次信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAttendanceClassesInfo" parameterType="Map" resultType="Map">
@@ -66,9 +63,7 @@
         <if test="clockTypeValue !=null and clockTypeValue != ''">
             and t.clock_type_value= #{clockTypeValue}
         </if>
-
     </select>
-
 
     <!-- 保存考勤班次信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAttendanceClassesInfoInstance" parameterType="Map">
@@ -116,9 +111,7 @@
         <if test="clockTypeValue !=null and clockTypeValue != ''">
             and t.clock_type_value= #{clockTypeValue}
         </if>
-
     </insert>
-
 
     <!-- 查询考勤班次信息 add by wuxw 2018-07-03 -->
     <select id="getAttendanceClassesInfo" parameterType="Map" resultType="Map">
@@ -128,9 +121,11 @@
         classesObjId,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
         classesId,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset lateOffset,t.b_id,t.b_id
         bId,t.clock_type_value,t.clock_type_value clockTypeValue,
-        t.classes_obj_name,t.classes_obj_name classesObjName
+        t.classes_obj_name,t.classes_obj_name classesObjName,td.name clockTypeName
         from attendance_classes t
-        where 1 =1
+        left join t_dict td on t.clock_type = td.status_cd and td.table_name = 'attendance_classes'
+        and td.table_columns = 'clock_type'
+        where 1 = 1
         <if test="timeOffset !=null and timeOffset != ''">
             and t.time_offset= #{timeOffset}
         </if>
@@ -174,9 +169,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改考勤班次信息 add by wuxw 2018-07-03 -->
     <update id="updateAttendanceClassesInfoInstance" parameterType="Map">
@@ -221,7 +214,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询考勤班次数量 add by wuxw 2018-07-03 -->
@@ -268,8 +260,6 @@
         <if test="clockTypeValue !=null and clockTypeValue != ''">
             and t.clock_type_value= #{clockTypeValue}
         </if>
-
-
     </select>
 
 </mapper>

@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
  */
 @Java110Listener("updateVisitListener")
 public class UpdateVisitListener extends AbstractServiceApiPlusListener {
+
     @Autowired
     private IVisitBMO visitBMOImpl;
 
@@ -24,7 +25,7 @@ public class UpdateVisitListener extends AbstractServiceApiPlusListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "vId", "访客记录ID不能为空");
-        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写访客姓名");
+        Assert.hasKeyAndValue(reqJson, "vName", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "visitGender", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "phoneNumber", "必填，请填写访客联系方式");
         Assert.hasKeyAndValue(reqJson, "visitTime", "必填，请填写访客拜访时间");

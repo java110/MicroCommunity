@@ -31,6 +31,7 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
     public void deleteVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         VisitPo visitPo = BeanConvertUtil.covertBean(paramInJson, VisitPo.class);
+        visitPo.setStatusCd("1");
         super.delete(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_VISIT);
 
     }
@@ -59,8 +60,6 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
      * @return 订单服务能够接受的报文
      */
     public void updateVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         VisitPo visitPo = BeanConvertUtil.covertBean(paramInJson, VisitPo.class);
         super.update(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_VISIT);
     }

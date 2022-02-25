@@ -7,18 +7,9 @@ import com.java110.common.bmo.workflow.IQueryWorkFlowFirstStaffBMO;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.vo.ResultVo;
-import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.ActivitiException;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -33,13 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowApi {
+
     private static final Logger logger = LoggerFactory.getLogger(WorkflowApi.class);
 
     @Autowired
@@ -48,14 +36,10 @@ public class WorkflowApi {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-
     String MODEL_ID = "modelId";
     String MODEL_NAME = "name";
     String MODEL_REVISION = "revision";
     String MODEL_DESCRIPTION = "description";
-
-
 
     @Autowired
     private IQueryWorkFlowFirstStaffBMO queryWorkFlowFirstStaffBMOImpl;
@@ -71,7 +55,6 @@ public class WorkflowApi {
         return queryWorkFlowFirstStaffBMOImpl.query(workflowDto);
     }
 
-
     /**
      * 更新流程
      *
@@ -80,14 +63,11 @@ public class WorkflowApi {
      */
     @RequestMapping(value = "/saveModel", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<String> saveModel(
-                                            @RequestBody String reqString) {
+    public ResponseEntity<String> saveModel(@RequestBody String reqString) {
         JSONObject reqJson = JSONObject.parseObject(reqString);
         WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
-
         //部署model
         return queryWorkFlowFirstStaffBMOImpl.saveModel(workflowModelDto);
-
     }
 
     /**
@@ -98,14 +78,11 @@ public class WorkflowApi {
      */
     @RequestMapping(value = "/deployModel", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<String> deployModel(
-            @RequestBody String reqString) {
+    public ResponseEntity<String> deployModel(@RequestBody String reqString) {
         JSONObject reqJson = JSONObject.parseObject(reqString);
         WorkflowModelDto workflowModelDto = BeanConvertUtil.covertBean(reqJson, WorkflowModelDto.class);
-
         //部署model
         return queryWorkFlowFirstStaffBMOImpl.deployModel(workflowModelDto);
-
     }
 
 
@@ -140,6 +117,4 @@ public class WorkflowApi {
         }
         return new ResponseEntity(modelNode.toString(), HttpStatus.OK);
     }
-
-
 }

@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="visitServiceDaoImpl">
 
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessVisitInfo" parameterType="Map">
-        insert into business_visit_info(
-        departure_time,v_name,visit_gender,owner_id,user_id,v_id,phone_number,operate,visit_case,community_id,b_id,visit_time
-        ) values (
-        #{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId},#{visitTime}
-        )
+        insert into business_visit_info(departure_time, v_name, visit_gender, owner_id, user_id, v_id, phone_number,
+                                        operate, visit_case, community_id, b_id, visit_time)
+        values (#{departureTime}, #{vName}, #{visitGender}, #{ownerId}, #{userId}, #{vId}, #{phoneNumber}, #{operate},
+                #{visitCase}, #{communityId}, #{bId}, #{visitTime})
     </insert>
-
 
     <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessVisitInfo" parameterType="Map" resultType="Map">
@@ -58,9 +55,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </select>
-
 
     <!-- 保存访客信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfoInstance" parameterType="Map">
@@ -103,9 +98,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </insert>
-
 
     <!-- 查询访客信息信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
@@ -163,7 +156,6 @@
         </if>
     </select>
 
-
     <!-- 修改访客信息信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitInfoInstance" parameterType="Map">
         update s_visit_info t set t.status_cd = #{statusCd}
@@ -204,7 +196,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询访客信息数量 add by wuxw 2018-07-03 -->
@@ -254,8 +245,6 @@
         <if test="visitEndTime !=null and visitEndTime !='' ">
             and t.visit_time &lt;= #{visitEndTime}
         </if>
-
-
     </select>
 
 </mapper>

@@ -13,6 +13,7 @@ public class QuestionAnswerPo implements Serializable {
     private String objType;
     private String objId;
     private String qaId;
+    private String remark;
 
     public String getQaName() {
         return qaName;
@@ -86,5 +87,11 @@ public class QuestionAnswerPo implements Serializable {
         this.qaId = qaId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
 
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

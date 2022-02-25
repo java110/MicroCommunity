@@ -43,12 +43,10 @@ public class ListActivitiessListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
     public IActivitiesInnerServiceSMO getActivitiesInnerServiceSMOImpl() {
         return activitiesInnerServiceSMOImpl;
@@ -68,8 +66,8 @@ public class ListActivitiessListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         ActivitiesDto activitiesDto = BeanConvertUtil.covertBean(reqJson, ActivitiesDto.class);
-        if(!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))){
-            Date day=new Date();
+        if (!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))) {
+            Date day = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             activitiesDto.setStartTime(df.format(day));
             activitiesDto.setEndTime(df.format(day));
@@ -94,6 +92,5 @@ public class ListActivitiessListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiActivitiesVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }

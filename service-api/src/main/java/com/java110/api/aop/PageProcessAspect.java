@@ -179,7 +179,7 @@ public class PageProcessAspect {
             return o;
         } catch (Throwable e) {
             logger.error("执行方法异常", e);
-            return new ResponseEntity("内部异常" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
