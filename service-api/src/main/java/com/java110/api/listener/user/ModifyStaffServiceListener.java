@@ -152,6 +152,7 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
         OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
         orgStaffRelPo.setRelCd(paramObj.getString("relCd"));
         orgStaffRelPo.setRelId(orgStaffRelDtoList.get(0).getRelId());
+        orgStaffRelPo.setOrgId(paramObj.getString("orgId"));
         super.update(dataFlowContext, orgStaffRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_STAFF_REL);
     }
 
