@@ -287,16 +287,6 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             return;
         }
 
-        //根据明细ID 查询收据信息
-        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
-        feeReceiptDetailDto.setDetailId(paramObj.getString("detailId"));
-        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
-        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
-
-        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
-            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
-            return;
-        }
         //修改折扣申请状态，空置房折扣只能用一次
         String selectDiscount = paramObj.getString("selectDiscount");
         JSONArray params = JSONArray.parseArray(selectDiscount);
@@ -310,6 +300,18 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                 applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
             }
         }
+
+        //根据明细ID 查询收据信息
+        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
+        feeReceiptDetailDto.setDetailId(paramObj.getString("detailId"));
+        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
+        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
+
+        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
+            dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
+            return;
+        }
+
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
 
     }
