@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class MenuGroupDto extends PageDto implements Serializable {
 
+    public static final String GROUP_TYPE_PC = "P_WEB";
+
     private String gId;
     private String name;
     private String icon;
@@ -15,6 +17,9 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String statusCd;
     private String groupType;
     private String storeType;
+    private String userId;
+    private String domain;
+    private String caId;
 
     public String getGId() {
         return gId;
@@ -95,5 +100,29 @@ public class MenuGroupDto extends PageDto implements Serializable {
 
     public void setStoreType(String storeType) {
         this.storeType = storeType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getCaId() {
+        return caId;
+    }
+
+    public void setCaId(String caId) {
+        this.caId = caId;
     }
 }

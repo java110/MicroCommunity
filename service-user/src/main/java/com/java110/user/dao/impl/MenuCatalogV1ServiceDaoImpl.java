@@ -108,5 +108,14 @@ public class MenuCatalogV1ServiceDaoImpl extends BaseServiceDao implements IMenu
         return Integer.parseInt(businessMenuCatalogInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryMenus(Map info) {
+        logger.debug("查询 queryMenus 入参 info : {}",info);
+
+        List<Map> businessMenuCatalogInfos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.queryMenus",info);
+
+        return businessMenuCatalogInfos;
+    }
+
 
 }

@@ -17,6 +17,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
+import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.po.menuCatalog.MenuCatalogPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
@@ -65,4 +67,7 @@ public interface IMenuCatalogV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMenuCatalogsCount", method = RequestMethod.POST)
     int queryMenuCatalogsCount(@RequestBody MenuCatalogDto menuCatalogDto);
+
+    @RequestMapping(value = "/queryMenus", method = RequestMethod.POST)
+    List<Map> queryMenus(@RequestBody MenuGroupDto menuCatalogDto);
 }

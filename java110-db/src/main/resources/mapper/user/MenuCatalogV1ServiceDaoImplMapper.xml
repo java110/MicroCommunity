@@ -117,4 +117,39 @@
 
     </select>
 
+    <!-- 查询菜单目录数量 add by wuxw 2018-07-03 -->
+    <select id="queryMenus" parameterType="Map" resultType="Map">
+        SELECT mm.`m_id` `mId`,mm.name menuName,mm.`g_id` gId,mm.`url`,mm.seq menuSeq,mm.`p_id` pId,
+        mm.`description` menuDescription, mmg.name menuGroupName,mmg.`icon`,mmg.`label`,mmg.`seq` menuGroupSeq,
+        mmg.`description` menuGroupDescription,mm.is_show isShow,mm.description
+        FROM m_menu mm
+        inner join m_menu_group mmg on mm.`g_id` = mmg.`g_id` AND mmg.`status_cd` = '0'
+        inner join m_menu_group_catalog mgc on mmg.g_id = mgc.g_id and mgc.status_cd = '0'
+        WHERE
+         mmg.group_type = #{groupType}
+        and mmg.store_type= #{domain}
+        and mgc.ca_id = #{caId}
+        AND mm.`status_cd` = '0'
+        AND mm.`m_id` IN (
+        SELECT pp.`m_id` FROM p_privilege_user ppu,p_privilege pp
+        WHERE ppu.`p_id` = pp.`p_id`
+        and pp.domain in (#{domain},'9999')
+        AND ppu.`privilege_flag` = '0'
+        AND ppu.`user_id` = #{userId}
+        AND ppu.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
+        UNION
+        SELECT pp.`m_id` FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege pp,p_privilege_rel ppr
+        WHERE ppu.`p_id` = ppr.pg_id
+        AND ppr.pg_id = ppg.pg_id
+        AND ppr.p_id = pp.`p_id`
+        and pp.domain in (#{domain},'9999')
+        AND ppu.`privilege_flag` = '1'
+        AND ppu.`user_id` = #{userId}
+        AND ppu.`status_cd` = '0'
+        AND pp.`status_cd` = '0'
+        AND ppg.status_cd = '0'
+        AND ppr.status_cd = '0'
+        )
+    </select>
 </mapper>

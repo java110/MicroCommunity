@@ -74,4 +74,10 @@ public interface IMenuCatalogV1ServiceDao {
      */
     int queryMenuCatalogsCount(Map info);
 
+    /**
+     * 查询菜单
+     * @param info
+     * @return
+     */
+    List<Map> queryMenus(Map info);
 }
