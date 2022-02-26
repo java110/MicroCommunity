@@ -21,8 +21,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
+import com.java110.dto.store.StoreDto;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -48,9 +51,12 @@ import java.util.List;
 @Java110Cmd(serviceCode = "menu.listCatalog")
 public class ListCatalogCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListCatalogCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListCatalogCmd.class);
     @Autowired
     private IMenuCatalogV1InnerServiceSMO menuCatalogV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -60,22 +66,31 @@ public class ListCatalogCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           MenuCatalogDto menuCatalogDto = BeanConvertUtil.covertBean(reqJson, MenuCatalogDto.class);
+        MenuCatalogDto menuCatalogDto = BeanConvertUtil.covertBean(reqJson, MenuCatalogDto.class);
 
-           int count = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogsCount(menuCatalogDto);
+        //查询store 信息
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(reqJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
 
-           List<MenuCatalogDto> menuCatalogDtos = null;
+        Assert.listOnlyOne(storeDtos, "商户不存在");
 
-           if (count > 0) {
-               menuCatalogDtos = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogs(menuCatalogDto);
-           } else {
-               menuCatalogDtos = new ArrayList<>();
-           }
+        menuCatalogDto.setStoreType(storeDtos.get(0).getStoreTypeCd());
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, menuCatalogDtos);
+        int count = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogsCount(menuCatalogDto);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        List<MenuCatalogDto> menuCatalogDtos = null;
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        if (count > 0) {
+            menuCatalogDtos = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogs(menuCatalogDto);
+        } else {
+            menuCatalogDtos = new ArrayList<>();
+        }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, menuCatalogDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
