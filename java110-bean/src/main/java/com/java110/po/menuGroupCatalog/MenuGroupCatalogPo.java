@@ -16,7 +16,7 @@
 package com.java110.po.menuGroupCatalog;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-02-26 10:18:54 mail: 928255095@qq.com
@@ -28,41 +28,51 @@ import java.util.Date;
 public class MenuGroupCatalogPo implements Serializable {
 
     private String storeType;
-private String gId;
-private String gcId;
-private String caId;
-private String statusCd = "0";
-public String getStoreType() {
+    private String gId;
+    private String gcId;
+    private String caId;
+    private String statusCd = "0";
+
+    public String getStoreType() {
         return storeType;
     }
-public void setStoreType(String storeType) {
+
+    public void setStoreType(String storeType) {
         this.storeType = storeType;
     }
-public String getGId() {
-        return gId;
-    }
-public void setGId(String gId) {
-        this.gId = gId;
-    }
-public String getGcId() {
-        return gcId;
-    }
-public void setGcId(String gcId) {
-        this.gcId = gcId;
-    }
-public String getCaId() {
+
+
+
+    public String getCaId() {
         return caId;
     }
-public void setCaId(String caId) {
+
+    public void setCaId(String caId) {
         this.caId = caId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
 
 
+    public String getgId() {
+        return gId;
+    }
 
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
+
+    public String getGcId() {
+        return gcId;
+    }
+
+    public void setGcId(String gcId) {
+        this.gcId = gcId;
+    }
 }
