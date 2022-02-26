@@ -18,25 +18,22 @@ import java.nio.charset.Charset;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `wechat_subscribe` (\n" +
-            "  `sub_id` varchar(30) NOT NULL PRIMARY key  COMMENT '主键ID',\n" +
-            "  `open_id` varchar(128) NOT NULL COMMENT '微信ID',\n" +
-            "  `app_id` varchar(30) not null COMMENT '公众号ID',\n" +
-            "  `open_type` varchar(12) NOT NULL default 'WECHAT' COMMENT '开放类型 WECHAT 微信',\n" +
+    public static final String createTableSql = "CREATE TABLE `m_menu_group_catalog` (\n" +
+            "  `gc_id` varchar(30) NOT NULL COMMENT '目录名称',\n" +
+            "  `ca_id` varchar(30) NOT NULL COMMENT '目录ID',\n" +
+            "  `g_id` varchar(30) NOT NULL COMMENT '菜单组ID',\n" +
+            "  `store_type` varchar(12) DEFAULT NULL COMMENT '商户类型',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',\n" +
-            "  `user_id` varchar(30) DEFAULT NULL COMMENT '用户ID',\n" +
-            "  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',\n" +
-            "  `headimgurl` varchar(255) DEFAULT NULL COMMENT '微信头像'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'\n" +
             ")";
 
     public static void main(String[] args) {
-        String desc = "微信关注";
-        String id = "subId";
-        String name = "wechatSubscribe";
+        String desc = "菜单目录组";
+        String id = "gcId";
+        String name = "menuGroupCatalog";
         String shareName = "user"; //生成到那个服务下
-        String shareColumn = "app_id";
-        String shareParam = "appId";
+        String shareColumn = "store_type";
+        String shareParam = "storeType";
         //业务名称 desc 业务编码名称生成后类名 name 主键 id  需要放到那个服务 shareName
         String newSql = createTableSql.substring(createTableSql.indexOf("(") + 1, createTableSql.lastIndexOf(")"));
         String tableName = createTableSql.substring(createTableSql.indexOf("TABLE") + 5, createTableSql.indexOf("("));

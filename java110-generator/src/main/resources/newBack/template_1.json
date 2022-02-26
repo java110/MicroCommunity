@@ -1,34 +1,27 @@
 {
   "param": {
-    "subId": "sub_id",
-    "openId": "open_id",
-    "appId": "app_id",
-    "nickname": "nickname",
-    "headimgurl": "headimgurl",
-    "statusCd": "status_cd",
-    "userId": "user_id",
-    "openType": "open_type"
+    "storeType": "store_type",
+    "gId": "g_id",
+    "gcId": "gc_id",
+    "caId": "ca_id",
+    "statusCd": "status_cd"
   },
-  "name": "wechatSubscribe",
-  "shareColumn": "app_id",
-  "id": "subId",
+  "name": "menuGroupCatalog",
+  "shareColumn": "store_type",
+  "id": "gcId",
   "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "微信ID不能为空",
-      "code": "openId"
+      "msg": "目录ID不能为空",
+      "code": "caId"
     },
     {
-      "msg": "公众号ID不能为空",
-      "code": "appId"
-    },
-    {
-      "msg": "开放类型不能为空",
-      "code": "openType"
+      "msg": "菜单组ID不能为空",
+      "code": "gId"
     }
   ],
-  "desc": "微信关注",
-  "shareParam": "appId",
-  "tableName": "wechat_subscribe"
+  "desc": "菜单目录组",
+  "shareParam": "storeType",
+  "tableName": "m_menu_group_catalog"
 }

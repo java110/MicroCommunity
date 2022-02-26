@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuGroupCatalogV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存菜单目录组信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMenuGroupCatalogInfo" parameterType="Map">
+        insert into m_menu_group_catalog(
+store_type,g_id,gc_id,ca_id
+) values (
+#{storeType},#{gId},#{gcId},#{caId}
+)
+    </insert>
+
+
+
+    <!-- 查询菜单目录组信息 add by wuxw 2018-07-03 -->
+    <select id="getMenuGroupCatalogInfo" parameterType="Map" resultType="Map">
+        select  t.store_type,t.store_type storeType,t.g_id,t.g_id gId,t.gc_id,t.gc_id gcId,t.ca_id,t.ca_id caId,t.status_cd,t.status_cd statusCd 
+from m_menu_group_catalog t 
+where 1 =1 
+<if test="storeType !=null and storeType != ''">
+   and t.store_type= #{storeType}
+</if> 
+<if test="gId !=null and gId != ''">
+   and t.g_id= #{gId}
+</if> 
+<if test="gcId !=null and gcId != ''">
+   and t.gc_id= #{gcId}
+</if> 
+<if test="caId !=null and caId != ''">
+   and t.ca_id= #{caId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改菜单目录组信息 add by wuxw 2018-07-03 -->
+    <update id="updateMenuGroupCatalogInfo" parameterType="Map">
+        update  m_menu_group_catalog t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="storeType !=null and storeType != ''">
+, t.store_type= #{storeType}
+</if> 
+<if test="gId !=null and gId != ''">
+, t.g_id= #{gId}
+</if> 
+<if test="caId !=null and caId != ''">
+, t.ca_id= #{caId}
+</if> 
+ where 1=1 <if test="gcId !=null and gcId != ''">
+and t.gc_id= #{gcId}
+</if> 
+
+    </update>
+
+    <!-- 查询菜单目录组数量 add by wuxw 2018-07-03 -->
+     <select id="queryMenuGroupCatalogsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from m_menu_group_catalog t 
+where 1 =1 
+<if test="storeType !=null and storeType != ''">
+   and t.store_type= #{storeType}
+</if> 
+<if test="gId !=null and gId != ''">
+   and t.g_id= #{gId}
+</if> 
+<if test="gcId !=null and gcId != ''">
+   and t.gc_id= #{gcId}
+</if> 
+<if test="caId !=null and caId != ''">
+   and t.ca_id= #{caId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+
+
+     </select>
+
+</mapper>
