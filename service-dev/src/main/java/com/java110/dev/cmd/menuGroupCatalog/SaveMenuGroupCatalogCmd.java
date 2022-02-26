@@ -22,6 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.menuCatalog.MenuCatalogDto;
+import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
 import com.java110.intf.user.IMenuGroupCatalogV1InnerServiceSMO;
 import com.java110.po.menuGroupCatalog.MenuGroupCatalogPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +56,9 @@ public class SaveMenuGroupCatalogCmd extends AbstractServiceCmdListener {
     @Autowired
     private IMenuGroupCatalogV1InnerServiceSMO menuGroupCatalogV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMenuCatalogV1InnerServiceSMO menuCatalogV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "caId", "请求报文中未包含caId");
@@ -63,8 +70,16 @@ public class SaveMenuGroupCatalogCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        //查询 catalog
+        MenuCatalogDto menuCatalogDto = new MenuCatalogDto();
+        menuCatalogDto.setCaId(reqJson.getString("caId"));
+        List<MenuCatalogDto> menuCatalogDtos = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogs(menuCatalogDto);
+
+        Assert.listOnlyOne(menuCatalogDtos, "菜单目录不存在");
+
         MenuGroupCatalogPo menuGroupCatalogPo = BeanConvertUtil.covertBean(reqJson, MenuGroupCatalogPo.class);
         menuGroupCatalogPo.setGcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        menuGroupCatalogPo.setStoreType(menuCatalogDtos.get(0).getStoreType());
         int flag = menuGroupCatalogV1InnerServiceSMOImpl.saveMenuGroupCatalog(menuGroupCatalogPo);
 
         if (flag < 1) {

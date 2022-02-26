@@ -5,120 +5,116 @@
 <mapper namespace="menuCatalogV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存菜单目录信息 add by wuxw 2018-07-03 -->
     <insert id="saveMenuCatalogInfo" parameterType="Map">
         insert into m_menu_catalog(
-store_type,ca_id,name,icon,seq,url,is_show
-) values (
-#{storeType},#{caId},#{name},#{icon},#{seq},#{url},#{isShow}
-)
+        store_type,ca_id,name,icon,seq,url,is_show
+        ) values (
+        #{storeType},#{caId},#{name},#{icon},#{seq},#{url},#{isShow}
+        )
     </insert>
-
 
 
     <!-- 查询菜单目录信息 add by wuxw 2018-07-03 -->
     <select id="getMenuCatalogInfo" parameterType="Map" resultType="Map">
-        select  t.store_type,t.store_type storeType,t.ca_id,t.ca_id caId,t.name,t.icon,t.status_cd,t.status_cd statusCd,t.seq,t.url,t.is_show,t.is_show isShow 
-from m_menu_catalog t 
-where 1 =1 
-<if test="storeType !=null and storeType != ''">
-   and t.store_type= #{storeType}
-</if> 
-<if test="caId !=null and caId != ''">
-   and t.ca_id= #{caId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="icon !=null and icon != ''">
-   and t.icon= #{icon}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="url !=null and url != ''">
-   and t.url= #{url}
-</if> 
-<if test="isShow !=null and isShow != ''">
-   and t.is_show= #{isShow}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.store_type,t.store_type storeType,t.ca_id,t.ca_id caId,t.name,t.icon,t.status_cd,t.status_cd
+        statusCd,t.seq,t.url,t.is_show,t.is_show isShow
+        from m_menu_catalog t
+        where 1 =1
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
+        </if>
+        <if test="caId !=null and caId != ''">
+            and t.ca_id= #{caId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="icon !=null and icon != ''">
+            and t.icon= #{icon}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        order by t.seq
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改菜单目录信息 add by wuxw 2018-07-03 -->
     <update id="updateMenuCatalogInfo" parameterType="Map">
-        update  m_menu_catalog t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="storeType !=null and storeType != ''">
-, t.store_type= #{storeType}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="icon !=null and icon != ''">
-, t.icon= #{icon}
-</if> 
-<if test="seq !=null and seq != ''">
-, t.seq= #{seq}
-</if> 
-<if test="url !=null and url != ''">
-, t.url= #{url}
-</if> 
-<if test="isShow !=null and isShow != ''">
-, t.is_show= #{isShow}
-</if> 
- where 1=1 <if test="caId !=null and caId != ''">
-and t.ca_id= #{caId}
-</if> 
+        update m_menu_catalog t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="storeType !=null and storeType != ''">
+            , t.store_type= #{storeType}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="icon !=null and icon != ''">
+            , t.icon= #{icon}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            , t.url= #{url}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
+        </if>
+        where 1=1
+        <if test="caId !=null and caId != ''">
+            and t.ca_id= #{caId}
+        </if>
 
     </update>
 
     <!-- 查询菜单目录数量 add by wuxw 2018-07-03 -->
-     <select id="queryMenuCatalogsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from m_menu_catalog t 
-where 1 =1 
-<if test="storeType !=null and storeType != ''">
-   and t.store_type= #{storeType}
-</if> 
-<if test="caId !=null and caId != ''">
-   and t.ca_id= #{caId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="icon !=null and icon != ''">
-   and t.icon= #{icon}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="url !=null and url != ''">
-   and t.url= #{url}
-</if> 
-<if test="isShow !=null and isShow != ''">
-   and t.is_show= #{isShow}
-</if> 
+    <select id="queryMenuCatalogsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from m_menu_catalog t
+        where 1 =1
+        <if test="storeType !=null and storeType != ''">
+            and t.store_type= #{storeType}
+        </if>
+        <if test="caId !=null and caId != ''">
+            and t.ca_id= #{caId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="icon !=null and icon != ''">
+            and t.icon= #{icon}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url= #{url}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

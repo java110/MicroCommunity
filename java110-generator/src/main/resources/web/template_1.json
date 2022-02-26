@@ -1,85 +1,37 @@
 {
   "templateKeyName": "编号",
-  "templateName": "镜像",
+  "templateName": "目录组",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "name",
-      "limitErrInfo": "镜像名称不能超过64",
-      "cnCode": "镜像名称",
+      "limitParam": "30",
+      "code": "gId",
+      "limitErrInfo": "菜单组ID不能超过30",
+      "cnCode": "菜单组ID",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，name"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "imagesType",
-      "limitErrInfo": "镜像类型不能超过12",
-      "cnCode": "镜像类型",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，imagesType"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "typeUrl",
-      "limitErrInfo": "类型地址不能超过512",
-      "cnCode": "类型地址",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，typeUrl"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "12",
-      "code": "imagesFlag",
-      "limitErrInfo": "镜像标识不能超过12",
-      "cnCode": "镜像标识",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，imagesFlag"
+      "desc": "必填，菜单组ID"
     }
   ],
   "searchName": "编号",
-  "directories": "admin",
-  "searchCode": "id",
-  "templateCode": "businessImages",
+  "directories": "dev",
+  "searchCode": "gcId",
+  "templateCode": "menuGroupCatalog",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "id",
-      "name": "id",
+      "code": "caId",
+      "name": "目录ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "name",
-      "name": "name",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "imagesType",
-      "name": "imagesType",
-      "inputType": "input"
-    },
-    {
-      "whereCondition": "equal",
-      "code": "imagesFlag",
-      "name": "imagesFlag",
+      "code": "gId",
+      "name": "菜单组编号",
       "inputType": "input"
     }
   ],
-  "templateKey": "id"
+  "templateKey": "gcId"
 }

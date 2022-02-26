@@ -1,6 +1,7 @@
 package com.java110.dto.menuGroupCatalog;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,18 @@ import java.util.Date;
 public class MenuGroupCatalogDto extends PageDto implements Serializable {
 
     private String storeType;
-private String gId;
-private String gcId;
-private String caId;
+    private String gId;
+    private String gcId;
+    private String caId;
+    private String mgName;
 
+    public String getGcId() {
+        return gcId;
+    }
+
+    public void setGcId(String gcId) {
+        this.gcId = gcId;
+    }
 
     private Date createTime;
 
@@ -28,25 +37,16 @@ private String caId;
     public String getStoreType() {
         return storeType;
     }
-public void setStoreType(String storeType) {
+
+    public void setStoreType(String storeType) {
         this.storeType = storeType;
     }
-public String getGId() {
-        return gId;
-    }
-public void setGId(String gId) {
-        this.gId = gId;
-    }
-public String getGcId() {
-        return gcId;
-    }
-public void setGcId(String gcId) {
-        this.gcId = gcId;
-    }
-public String getCaId() {
+
+    public String getCaId() {
         return caId;
     }
-public void setCaId(String caId) {
+
+    public void setCaId(String caId) {
         this.caId = caId;
     }
 
@@ -65,5 +65,21 @@ public void setCaId(String caId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getgId() {
+        return gId;
+    }
+
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
+
+    public String getMgName() {
+        return mgName;
+    }
+
+    public void setMgName(String mgName) {
+        this.mgName = mgName;
     }
 }
