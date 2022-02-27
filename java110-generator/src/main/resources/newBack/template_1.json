@@ -1,27 +1,46 @@
 {
   "param": {
-    "storeType": "store_type",
-    "gId": "g_id",
-    "gcId": "gc_id",
-    "caId": "ca_id",
-    "statusCd": "status_cd"
+    "muId": "mu_id",
+    "name": "name",
+    "icon": "icon",
+    "mId": "m_id",
+    "statusCd": "status_cd",
+    "staffId": "staff_id",
+    "url": "url",
+    "seq": "seq"
   },
-  "name": "menuGroupCatalog",
-  "shareColumn": "store_type",
-  "id": "gcId",
+  "name": "menuUser",
+  "shareColumn": "m_id",
+  "id": "muId",
   "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "目录ID不能为空",
-      "code": "caId"
+      "msg": "菜单ID不能为空",
+      "code": "mId"
+    },
+    {
+      "msg": "员工ID不能为空",
+      "code": "staffId"
+    },
+    {
+      "msg": "菜单名称不能为空",
+      "code": "name"
     },
     {
       "msg": "菜单组ID不能为空",
-      "code": "gId"
+      "code": "icon"
+    },
+    {
+      "msg": "打开地址不能为空",
+      "code": "url"
+    },
+    {
+      "msg": "列顺序不能为空",
+      "code": "seq"
     }
   ],
-  "desc": "菜单目录组",
-  "shareParam": "storeType",
-  "tableName": "m_menu_group_catalog"
+  "desc": "自定义菜单",
+  "shareParam": "mId",
+  "tableName": "m_menu_user"
 }
