@@ -64,6 +64,7 @@ public class ListMenuUserCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            MenuUserDto menuUserDto = BeanConvertUtil.covertBean(reqJson, MenuUserDto.class);
+           menuUserDto.setStaffId(reqJson.getString("userId"));
 
            int count = menuUserV1InnerServiceSMOImpl.queryMenuUsersCount(menuUserDto);
 
