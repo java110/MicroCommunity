@@ -63,9 +63,7 @@ public class SaveMenuUserCmd extends AbstractServiceCmdListener {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "mId", "请求报文中未包含mId");
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
-        Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "icon", "请求报文中未包含icon");
-        Assert.hasKeyAndValue(reqJson, "url", "请求报文中未包含url");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
 
     }
