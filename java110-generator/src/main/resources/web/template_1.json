@@ -1,37 +1,71 @@
 {
   "templateKeyName": "编号",
-  "templateName": "目录组",
+  "templateName": "常用菜单",
   "columns": [
     {
       "hasDefaultValue": false,
       "limitParam": "30",
-      "code": "gId",
-      "limitErrInfo": "菜单组ID不能超过30",
-      "cnCode": "菜单组ID",
+      "code": "mId",
+      "limitErrInfo": "菜单不能超过30",
+      "cnCode": "菜单",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "select",
+      "selectValue":"10001,10002",
+      "selectValueName":"小区文化,其他",
+      "required": true,
+      "desc": "必填，菜单"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "128",
+      "code": "icon",
+      "limitErrInfo": "图标不能超过128",
+      "cnCode": "图标",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "select",
+      "selectValue":"10001,10002",
+      "selectValueName":"小区文化,其他",
+      "required": true,
+      "desc": "必填，图标"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "11",
+      "code": "seq",
+      "limitErrInfo": "列顺序'不能超过11",
+      "cnCode": "列顺序'",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，菜单组ID"
+      "desc": "必填，列顺序'"
     }
   ],
   "searchName": "编号",
-  "directories": "dev",
-  "searchCode": "gcId",
-  "templateCode": "menuGroupCatalog",
+  "directories": "frame",
+  "searchCode": "muId",
+  "templateCode": "menuUser",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "caId",
-      "name": "目录ID",
+      "code": "muId",
+      "name": "编号",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "gId",
-      "name": "菜单组编号",
+      "code": "mId",
+      "name": "菜单",
+      "inputType": "input"
+    },
+    {
+      "whereCondition": "equal",
+      "code": "seq",
+      "name": "列顺序'",
       "inputType": "input"
     }
   ],
-  "templateKey": "gcId"
+  "templateKey": "muId"
 }

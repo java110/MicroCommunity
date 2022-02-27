@@ -65,7 +65,7 @@ public class ListCatalogMenusCmd extends AbstractServiceCmdListener {
 
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户信息");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户信息");
-        Assert.hasKeyAndValue(reqJson, "caId", "未包含目录信息");
+        //Assert.hasKeyAndValue(reqJson, "caId", "未包含目录信息");
     }
 
     @Override
@@ -109,6 +109,7 @@ public class ListCatalogMenusCmd extends AbstractServiceCmdListener {
             //获取孩子菜单
             JSONArray childs = tempMenu.getJSONArray("childs");
             JSONObject childMenu = new JSONObject();
+            childMenu.put("mId", tMenu.getString("mId"));
             childMenu.put("name", tMenu.getString("menuName"));
             childMenu.put("href", tMenu.getString("url"));
             childMenu.put("seq", tMenu.getString("menuSeq"));

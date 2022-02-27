@@ -22,6 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.menu.MenuDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IMenuUserV1InnerServiceSMO;
 import com.java110.po.menuUser.MenuUserPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,10 +56,13 @@ public class SaveMenuUserCmd extends AbstractServiceCmdListener {
     @Autowired
     private IMenuUserV1InnerServiceSMO menuUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "mId", "请求报文中未包含mId");
-        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "icon", "请求报文中未包含icon");
         Assert.hasKeyAndValue(reqJson, "url", "请求报文中未包含url");
@@ -69,6 +76,19 @@ public class SaveMenuUserCmd extends AbstractServiceCmdListener {
 
         MenuUserPo menuUserPo = BeanConvertUtil.covertBean(reqJson, MenuUserPo.class);
         menuUserPo.setMuId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+
+        //
+        MenuDto menuDto = new MenuDto();
+        menuDto.setmId(reqJson.getString("mId"));
+        List<MenuDto> menuDtos = menuInnerServiceSMOImpl.queryMenus(menuDto);
+
+        Assert.listOnlyOne(menuDtos, "菜单不存在");
+
+        menuUserPo.setmId(menuDtos.get(0).getmId());
+        menuUserPo.setUrl(menuDtos.get(0).getUrl());
+        menuUserPo.setName(menuDtos.get(0).getName());
+        menuUserPo.setStaffId(reqJson.getString("userId"));
+
         int flag = menuUserV1InnerServiceSMOImpl.saveMenuUser(menuUserPo);
 
         if (flag < 1) {

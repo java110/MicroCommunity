@@ -16,7 +16,7 @@
 package com.java110.po.menuUser;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-02-27 12:21:33 mail: 928255095@qq.com
@@ -28,62 +28,75 @@ import java.util.Date;
 public class MenuUserPo implements Serializable {
 
     private String muId;
-private String name;
-private String icon;
-private String mId;
-private String statusCd = "0";
-private String staffId;
-private String url;
-private String seq;
-public String getMuId() {
+    private String name;
+    private String icon;
+    private String mId;
+    private String statusCd = "0";
+    private String staffId;
+    private String url;
+    private String seq;
+
+    public String getMuId() {
         return muId;
     }
-public void setMuId(String muId) {
+
+    public void setMuId(String muId) {
         this.muId = muId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getIcon() {
+
+    public String getIcon() {
         return icon;
     }
-public void setIcon(String icon) {
+
+    public void setIcon(String icon) {
         this.icon = icon;
     }
-public String getMId() {
+
+    public String getmId() {
         return mId;
     }
-public void setMId(String mId) {
+
+    public void setmId(String mId) {
         this.mId = mId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getUrl() {
+
+    public String getUrl() {
         return url;
     }
-public void setUrl(String url) {
+
+    public void setUrl(String url) {
         this.url = url;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-
-
-
 }

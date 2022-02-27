@@ -7,20 +7,20 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `m_menu_group_catalog` (\n" +
-            "  `gc_id` varchar(30) NOT NULL COMMENT '目录名称',\n" +
-            "  `ca_id` varchar(30) NOT NULL COMMENT '目录ID',\n" +
-            "  `g_id` varchar(30) NOT NULL COMMENT '菜单组ID',\n" +
-            "  `store_type` varchar(12) DEFAULT NULL COMMENT '商户类型'\n" +
+    public static final String createTableSql = "CREATE TABLE `m_menu_user` (\n" +
+            "  `mu_id` varchar(30) NOT NULL COMMENT '编号',\n" +
+            "  `m_id` varchar(30) NOT NULL COMMENT '菜单',\n" +
+            "  `icon` varchar(128) NOT NULL COMMENT '图标',\n" +
+            "  `seq` int(11) NOT NULL COMMENT '列顺序'\n" +
             ")";
     public static void main(String[] args) {
-        String templateName = "目录组"; //业务名称
-        String templateCode = "menuGroupCatalog"; //表名大写
-        String templateKey = "gcId"; //表主键
+        String templateName = "常用菜单"; //业务名称
+        String templateCode = "menuUser"; //表名大写
+        String templateKey = "muId"; //表主键
         String templateKeyName = "编号";//主键说明
-        String searchCode = "gcId"; //分片字段
+        String searchCode = "muId"; //分片字段
         String searchName = "编号"; //分片字段说明
-        String directories = "dev"; //前端生成到那个目录下
+        String directories = "frame"; //前端生成到那个目录下
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
         // directories 放在前端那个目录下

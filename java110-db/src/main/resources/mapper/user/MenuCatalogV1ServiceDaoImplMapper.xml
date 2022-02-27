@@ -124,11 +124,15 @@
         mmg.`description` menuGroupDescription,mm.is_show isShow,mm.description
         FROM m_menu mm
         inner join m_menu_group mmg on mm.`g_id` = mmg.`g_id` AND mmg.`status_cd` = '0'
+        <if test="caId !=null and caId != ''">
         inner join m_menu_group_catalog mgc on mmg.g_id = mgc.g_id and mgc.status_cd = '0'
+        </if>
         WHERE
          mmg.group_type = #{groupType}
         and mmg.store_type= #{domain}
-        and mgc.ca_id = #{caId}
+        <if test="caId !=null and caId != ''">
+            and mgc.ca_id = #{caId}
+        </if>
         AND mm.`status_cd` = '0'
         AND mm.`m_id` IN (
         SELECT pp.`m_id` FROM p_privilege_user ppu,p_privilege pp

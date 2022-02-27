@@ -23,11 +23,11 @@ public class MenuDto extends PageDto implements Serializable {
     private String menuGroupName;
     private String storeTypeName;
 
-    public String getMId() {
+    public String getmId() {
         return mId;
     }
 
-    public void setMId(String mId) {
+    public void setmId(String mId) {
         this.mId = mId;
     }
 
@@ -71,13 +71,7 @@ public class MenuDto extends PageDto implements Serializable {
         this.description = description;
     }
 
-    public String getmId() {
-        return mId;
-    }
 
-    public void setmId(String mId) {
-        this.mId = mId;
-    }
 
     public String getStatusCd() {
         return statusCd;
