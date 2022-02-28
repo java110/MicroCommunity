@@ -12,7 +12,7 @@ public class WorkflowPo implements Serializable {
     private String flowName;
     private String flowType;
     private String processDefinitionKey;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getSkipLevel() {
         return skipLevel;

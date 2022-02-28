@@ -16,6 +16,8 @@ import java.util.List;
  **/
 public class CommunityDto extends PageDto implements Serializable {
 
+    public static final String STATE_NORMAL = "1100";
+
     private String address;
     private String nearbyLandmarks;
     private String cityCode;

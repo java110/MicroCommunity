@@ -1,18 +1,15 @@
 {
   "param": {
-    "groupType": "group_type",
-    "storeType": "store_type",
     "gId": "g_id",
+    "gcId": "gc_id",
     "name": "name",
-    "icon": "icon",
-    "description": "description",
+    "communityName": "community_name",
     "statusCd": "status_cd",
-    "label": "label",
-    "seq": "seq"
+    "communityId": "community_id"
   },
-  "name": "menuGroup",
-  "shareColumn": "store_type",
-  "id": "gId",
+  "name": "menuGroupCommunity",
+  "shareColumn": "community_id",
+  "id": "gcId",
   "shareName": "user",
   "autoMove": true,
   "required": [
@@ -21,15 +18,11 @@
       "code": "gId"
     },
     {
-      "msg": "菜单组名称不能为空",
-      "code": "name"
-    },
-    {
-      "msg": "菜单类型不能为空",
-      "code": "groupType"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     }
   ],
-  "desc": "商户信息",
-  "shareParam": "storeType",
-  "tableName": "m_menu_group"
+  "desc": "小区功能",
+  "shareParam": "communityId",
+  "tableName": "m_menu_group_community"
 }

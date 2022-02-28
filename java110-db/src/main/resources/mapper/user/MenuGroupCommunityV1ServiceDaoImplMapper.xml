@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuGroupCommunityV1ServiceDaoImpl">
+
+
+    <!-- 保存小区功能信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMenuGroupCommunityInfo" parameterType="Map">
+        insert into m_menu_group_community(
+        g_id,gc_id,name,community_name,community_id
+        ) values (
+        #{gId},#{gcId},#{name},#{communityName},#{communityId}
+        )
+    </insert>
+    <insert id="saveMenuGroupCommunitys" parameterType="Map">
+        insert into m_menu_group_community(
+        g_id,gc_id,name,community_name,community_id
+        )
+        <foreach collection="menuGroupCommunityPos" item="item" separator=",">
+            (#{item.gId},'0',#{item.gcId},#{item.name},#{item.communityName},#{item.communityId})
+        </foreach>
+    </insert>
+
+
+
+    <!-- 查询小区功能信息 add by wuxw 2018-07-03 -->
+    <select id="getMenuGroupCommunityInfo" parameterType="Map" resultType="Map">
+        select t.g_id,t.g_id gId,t.gc_id,t.gc_id gcId,t.name,t.community_name,t.community_name
+        communityName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        from m_menu_group_community t
+        where 1 =1
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="gcId !=null and gcId != ''">
+            and t.gc_id= #{gcId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改小区功能信息 add by wuxw 2018-07-03 -->
+    <update id="updateMenuGroupCommunityInfo" parameterType="Map">
+        update m_menu_group_community t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="gId !=null and gId != ''">
+            , t.g_id= #{gId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="gcId !=null and gcId != ''">
+            and t.gc_id= #{gcId}
+        </if>
+
+    </update>
+
+    <!-- 查询小区功能数量 add by wuxw 2018-07-03 -->
+    <select id="queryMenuGroupCommunitysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from m_menu_group_community t
+        where 1 =1
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="gcId !=null and gcId != ''">
+            and t.gc_id= #{gcId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

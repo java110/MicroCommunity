@@ -11,6 +11,7 @@ public class MenuGroupDto extends PageDto implements Serializable {
     public static final String STORE_TYPE_PROPERTY = "800900000003"; // 物业
 
     private String gId;
+    private String[] gIds;
     private String name;
     private String icon;
     private String label;
@@ -23,11 +24,11 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String domain;
     private String caId;
 
-    public String getGId() {
+    public String getgId() {
         return gId;
     }
 
-    public void setGId(String gId) {
+    public void setgId(String gId) {
         this.gId = gId;
     }
 
@@ -79,14 +80,6 @@ public class MenuGroupDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getgId() {
-        return gId;
-    }
-
-    public void setgId(String gId) {
-        this.gId = gId;
-    }
-
     public String getGroupType() {
         return groupType;
     }
@@ -94,7 +87,6 @@ public class MenuGroupDto extends PageDto implements Serializable {
     public void setGroupType(String groupType) {
         this.groupType = groupType;
     }
-
 
     public String getStoreType() {
         return storeType;
@@ -126,5 +118,13 @@ public class MenuGroupDto extends PageDto implements Serializable {
 
     public void setCaId(String caId) {
         this.caId = caId;
+    }
+
+    public String[] getgIds() {
+        return gIds;
+    }
+
+    public void setgIds(String[] gIds) {
+        this.gIds = gIds;
     }
 }

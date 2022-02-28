@@ -559,6 +559,7 @@ public class CommunityBMOImpl implements ICommunityBMO {
         paramInJson.put("state", "1000");
         paramInJson.put("communityArea", "0");
         CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
+        communityPo.setState(CommunityDto.STATE_NORMAL);
 
         int flag = communityV1InnerServiceSMOImpl.saveCommunity(communityPo);
         if (flag < 1) {

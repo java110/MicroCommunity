@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class StoreAttrDto extends PageDto implements Serializable {
 
+    //法人
+    public static final String SPEC_CD_CORPORATION = "100201903001";
+    public static final String SPEC_CD_FOUNDINGTIME = "100201903003";
+
 
     private String storeId;
     private String[] storeIds;
