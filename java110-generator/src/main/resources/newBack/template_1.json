@@ -1,46 +1,36 @@
 {
   "param": {
-    "muId": "mu_id",
+    "address": "address",
+    "storeTypeCd": "store_type_cd",
     "name": "name",
-    "icon": "icon",
-    "mId": "m_id",
+    "tel": "tel",
     "statusCd": "status_cd",
-    "staffId": "staff_id",
-    "url": "url",
-    "seq": "seq"
+    "state": "state",
+    "storeId": "store_id",
+    "userId": "user_id",
+    "mapY": "map_y",
+    "mapX": "map_x"
   },
-  "name": "menuUser",
-  "shareColumn": "m_id",
-  "id": "muId",
-  "shareName": "user",
+  "name": "store",
+  "shareColumn": "store_type_cd",
+  "id": "storeId",
+  "shareName": "store",
   "autoMove": true,
   "required": [
     {
-      "msg": "菜单ID不能为空",
-      "code": "mId"
-    },
-    {
-      "msg": "员工ID不能为空",
-      "code": "staffId"
-    },
-    {
-      "msg": "菜单名称不能为空",
+      "msg": "店铺名称不能为空",
       "code": "name"
     },
     {
-      "msg": "菜单组ID不能为空",
-      "code": "icon"
+      "msg": "店铺地址不能为空",
+      "code": "address"
     },
     {
-      "msg": "打开地址不能为空",
-      "code": "url"
-    },
-    {
-      "msg": "列顺序不能为空",
-      "code": "seq"
+      "msg": "电话不能为空",
+      "code": "tel"
     }
   ],
-  "desc": "自定义菜单",
-  "shareParam": "mId",
-  "tableName": "m_menu_user"
+  "desc": "商户信息",
+  "shareParam": "storeTypeCd",
+  "tableName": "s_store"
 }

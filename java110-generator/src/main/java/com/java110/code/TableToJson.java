@@ -18,25 +18,29 @@ import java.nio.charset.Charset;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `m_menu_user` (\n" +
-            "  `mu_id` varchar(30) NOT NULL COMMENT '编号',\n" +
-            "  `m_id` varchar(30) NOT NULL COMMENT '菜单ID',\n" +
-            "  `staff_id` varchar(30) NOT NULL COMMENT '员工ID',\n" +
-            "  `name` varchar(64) NOT NULL COMMENT '菜单名称',\n" +
-            "  `icon` varchar(128) NOT NULL COMMENT '菜单组ID',\n" +
-            "  `url` varchar(200) NOT NULL COMMENT '打开地址',\n" +
-            "  `seq` int(11) NOT NULL COMMENT '列顺序',\n" +
+    public static final String createTableSql = "CREATE TABLE `s_store` (\n" +
+            "  `store_id` varchar(30) NOT NULL COMMENT '商店ID',\n" +
+            "  `b_id` varchar(30) NOT NULL COMMENT '业务Id',\n" +
+            "  `user_id` varchar(30) NOT NULL COMMENT '用户ID',\n" +
+            "  `name` varchar(100) NOT NULL COMMENT '店铺名称',\n" +
+            "  `address` varchar(200) NOT NULL COMMENT '店铺地址',\n" +
+            "  `tel` varchar(11) NOT NULL COMMENT '电话',\n" +
+            "  `store_type_cd` varchar(12) DEFAULT NULL,\n" +
+            "  `nearby_landmarks` varchar(200) DEFAULT NULL COMMENT '地标，如王府井北60米',\n" +
+            "  `map_x` varchar(20) NOT NULL COMMENT '地区 x坐标',\n" +
+            "  `map_y` varchar(20) NOT NULL COMMENT '地区 y坐标',\n" +
             "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',\n" +
+            "  `state` varchar(12) NOT NULL DEFAULT '48001' COMMENT '48001 商户正常状态 48002 限制商户登录'\n" +
             ") ";
 
     public static void main(String[] args) {
-        String desc = "自定义菜单";
-        String id = "muId";
-        String name = "menuUser";
-        String shareName = "user"; //生成到那个服务下
-        String shareColumn = "m_id";
-        String shareParam = "mId";
+        String desc = "商户信息";
+        String id = "storeId";
+        String name = "store";
+        String shareName = "store"; //生成到那个服务下
+        String shareColumn = "store_type_cd";
+        String shareParam = "storeTypeCd";
         //业务名称 desc 业务编码名称生成后类名 name 主键 id  需要放到那个服务 shareName
         String newSql = createTableSql.substring(createTableSql.indexOf("(") + 1, createTableSql.lastIndexOf(")"));
         String tableName = createTableSql.substring(createTableSql.indexOf("TABLE") + 5, createTableSql.indexOf("("));
