@@ -1,71 +1,103 @@
 {
   "templateKeyName": "编号",
-  "templateName": "常用菜单",
+  "templateName": "物业公司",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "30",
-      "code": "mId",
-      "limitErrInfo": "菜单不能超过30",
-      "cnCode": "菜单",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "select",
-      "selectValue":"10001,10002",
-      "selectValueName":"小区文化,其他",
-      "required": true,
-      "desc": "必填，菜单"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "128",
-      "code": "icon",
-      "limitErrInfo": "图标不能超过128",
-      "cnCode": "图标",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "select",
-      "selectValue":"10001,10002",
-      "selectValueName":"小区文化,其他",
-      "required": true,
-      "desc": "必填，图标"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "seq",
-      "limitErrInfo": "列顺序'不能超过11",
-      "cnCode": "列顺序'",
+      "limitParam": "100",
+      "code": "name",
+      "limitErrInfo": "名称不能超过100",
+      "cnCode": "名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，列顺序'"
+      "desc": "必填，名称"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "200",
+      "code": "address",
+      "limitErrInfo": "地址不能超过200",
+      "cnCode": "地址",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，地址"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "11",
+      "code": "tel",
+      "limitErrInfo": "电话不能超过11",
+      "cnCode": "电话",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，电话"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "64",
+      "code": "corporation",
+      "limitErrInfo": "公司法人不能空",
+      "cnCode": "公司法人",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，公司法人"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "64",
+      "code": "foundingTime",
+      "limitErrInfo": "成立日期不能空",
+      "cnCode": "成立日期",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "必填，成立日期"
+    },
+    {
+      "hasDefaultValue": false,
+      "limitParam": "200",
+      "code": "nearbyLandmarks",
+      "limitErrInfo": "地标不能超过200",
+      "cnCode": "地标",
+      "limit": "maxLength",
+      "show": true,
+      "inputType": "input",
+      "required": true,
+      "desc": "地标"
     }
   ],
   "searchName": "编号",
-  "directories": "frame",
-  "searchCode": "muId",
-  "templateCode": "menuUser",
+  "directories": "admin",
+  "searchCode": "storeId",
+  "templateCode": "propertyCompany",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "muId",
-      "name": "编号",
+      "code": "storeId",
+      "name": "物业编号",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "mId",
-      "name": "菜单",
+      "code": "name",
+      "name": "名称",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "seq",
-      "name": "列顺序'",
+      "code": "tel",
+      "name": "电话",
       "inputType": "input"
     }
   ],
-  "templateKey": "muId"
+  "templateKey": "storeId"
 }
