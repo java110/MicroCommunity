@@ -21,7 +21,11 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.store.StoreAttrDto;
+import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.po.store.StorePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -30,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 /**
@@ -51,10 +57,13 @@ public class UpdatePropertyCmd extends AbstractServiceCmdListener {
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IStoreAttrV1InnerServiceSMO storeAttrV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
-        Assert.hasKeyAndValue(reqJson, "storeTypeCd", "storeTypeCd不能为空");
 
     }
 
@@ -69,6 +78,52 @@ public class UpdatePropertyCmd extends AbstractServiceCmdListener {
             throw new CmdException("更新数据失败");
         }
 
+        if (reqJson.containsKey("corporation")) {
+
+            StoreAttrDto storeAttrDto = new StoreAttrDto();
+            storeAttrDto.setStoreId(reqJson.getString("storeId"));
+            storeAttrDto.setSpecCd(StoreAttrDto.SPEC_CD_CORPORATION);
+            List<StoreAttrDto> storeAttrDtos = storeAttrV1InnerServiceSMOImpl.queryStoreAttrs(storeAttrDto);
+            if (storeAttrDtos == null || storeAttrDtos.size() < 1) {
+                StoreAttrPo storeAttrPo = new StoreAttrPo();
+                storeAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+                storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_CORPORATION);
+                storeAttrPo.setValue(reqJson.getString("corporation"));
+                flag = storeAttrV1InnerServiceSMOImpl.saveStoreAttr(storeAttrPo);
+            } else {
+                StoreAttrPo storeAttrPo = new StoreAttrPo();
+                storeAttrPo.setAttrId(storeAttrDtos.get(0).getAttrId());
+                storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_CORPORATION);
+                storeAttrPo.setValue(reqJson.getString("corporation"));
+                flag = storeAttrV1InnerServiceSMOImpl.updateStoreAttr(storeAttrPo);
+            }
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+        }
+        if (reqJson.containsKey("foundingTime")) {
+            StoreAttrDto storeAttrDto = new StoreAttrDto();
+            storeAttrDto.setStoreId(reqJson.getString("storeId"));
+            storeAttrDto.setSpecCd(StoreAttrDto.SPEC_CD_FOUNDINGTIME);
+            List<StoreAttrDto> storeAttrDtos = storeAttrV1InnerServiceSMOImpl.queryStoreAttrs(storeAttrDto);
+            if (storeAttrDtos == null || storeAttrDtos.size() < 1) {
+                StoreAttrPo storeAttrPo = new StoreAttrPo();
+                storeAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+                storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_FOUNDINGTIME);
+                storeAttrPo.setValue(reqJson.getString("foundingTime"));
+                flag = storeAttrV1InnerServiceSMOImpl.saveStoreAttr(storeAttrPo);
+            } else {
+                StoreAttrPo storeAttrPo = new StoreAttrPo();
+                storeAttrPo.setAttrId(storeAttrDtos.get(0).getAttrId());
+                storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_FOUNDINGTIME);
+                storeAttrPo.setValue(reqJson.getString("foundingTime"));
+                flag = storeAttrV1InnerServiceSMOImpl.updateStoreAttr(storeAttrPo);
+            }
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

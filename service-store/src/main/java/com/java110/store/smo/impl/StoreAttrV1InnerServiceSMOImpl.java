@@ -16,19 +16,17 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.store.dao.IStoreAttrV1ServiceDao;
-import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
-import com.java110.dto.storeAttr.StoreAttrDto;
-import com.java110.po.storeAttr.StoreAttrPo;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.store.StoreAttrDto;
+import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
+import com.java110.po.store.StoreAttrPo;
+import com.java110.store.dao.IStoreAttrV1ServiceDao;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,26 +45,26 @@ public class StoreAttrV1InnerServiceSMOImpl extends BaseServiceSMO implements IS
 
 
     @Override
-    public int saveStoreAttr(@RequestBody  StoreAttrPo storeAttrPo) {
+    public int saveStoreAttr(@RequestBody StoreAttrPo storeAttrPo) {
         int saveFlag = storeAttrV1ServiceDaoImpl.saveStoreAttrInfo(BeanConvertUtil.beanCovertMap(storeAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateStoreAttr(@RequestBody  StoreAttrPo storeAttrPo) {
+    @Override
+    public int updateStoreAttr(@RequestBody StoreAttrPo storeAttrPo) {
         int saveFlag = storeAttrV1ServiceDaoImpl.updateStoreAttrInfo(BeanConvertUtil.beanCovertMap(storeAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteStoreAttr(@RequestBody  StoreAttrPo storeAttrPo) {
-       storeAttrPo.setStatusCd("1");
-       int saveFlag = storeAttrV1ServiceDaoImpl.updateStoreAttrInfo(BeanConvertUtil.beanCovertMap(storeAttrPo));
-       return saveFlag;
+    @Override
+    public int deleteStoreAttr(@RequestBody StoreAttrPo storeAttrPo) {
+        storeAttrPo.setStatusCd("1");
+        int saveFlag = storeAttrV1ServiceDaoImpl.updateStoreAttrInfo(BeanConvertUtil.beanCovertMap(storeAttrPo));
+        return saveFlag;
     }
 
     @Override
-    public List<StoreAttrDto> queryStoreAttrs(@RequestBody  StoreAttrDto storeAttrDto) {
+    public List<StoreAttrDto> queryStoreAttrs(@RequestBody StoreAttrDto storeAttrDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +82,7 @@ public class StoreAttrV1InnerServiceSMOImpl extends BaseServiceSMO implements IS
 
     @Override
     public int queryStoreAttrsCount(@RequestBody StoreAttrDto storeAttrDto) {
-        return storeAttrV1ServiceDaoImpl.queryStoreAttrsCount(BeanConvertUtil.beanCovertMap(storeAttrDto));    }
+        return storeAttrV1ServiceDaoImpl.queryStoreAttrsCount(BeanConvertUtil.beanCovertMap(storeAttrDto));
+    }
 
 }

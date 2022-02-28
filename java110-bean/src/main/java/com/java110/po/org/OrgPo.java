@@ -21,6 +21,7 @@ public class OrgPo implements Serializable {
 
     private String belongCommunityId;
     private String allowOperation;
+    private String statusCd = "0";
 
     public String getOrgId() {
         return orgId;
@@ -84,5 +85,13 @@ public class OrgPo implements Serializable {
 
     public void setAllowOperation(String allowOperation) {
         this.allowOperation = allowOperation;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

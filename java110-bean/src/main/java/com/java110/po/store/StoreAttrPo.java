@@ -16,6 +16,7 @@ public class StoreAttrPo implements Serializable {
     private String storeId;
     private String specCd;
     private String value;
+    private String statusCd = "0";
 
 
     public String getAttrId() {
@@ -48,5 +49,13 @@ public class StoreAttrPo implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

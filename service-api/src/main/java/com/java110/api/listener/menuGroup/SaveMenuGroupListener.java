@@ -61,11 +61,11 @@ public class SaveMenuGroupListener extends AbstractServiceApiListener {
      */
     private void freshGId(MenuGroupDto menuGroupDto) {
 
-        if(!StringUtils.isEmpty(menuGroupDto.getGId())){
+        if(!StringUtils.isEmpty(menuGroupDto.getgId())){
             return ;
         }
         //生成流水
-        menuGroupDto.setGId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU_GROUP));
+        menuGroupDto.setgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU_GROUP));
     }
 
     @Override

@@ -60,6 +60,7 @@ public class ListPropertyCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
+           storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
 
            int count = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
 
