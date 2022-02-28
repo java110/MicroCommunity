@@ -1,14 +1,6 @@
-package com.java110.dto.menuGroup;
+package com.java110.po.menuGroup;
 
-import com.java110.dto.PageDto;
-
-import java.io.Serializable;
-
-public class MenuGroupDto extends PageDto implements Serializable {
-
-    public static final String GROUP_TYPE_PC = "P_WEB";
-
-    public static final String STORE_TYPE_PROPERTY = "800900000003"; // 物业
+public class MenuGroupPo {
 
     private String gId;
     private String name;
@@ -23,11 +15,11 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String domain;
     private String caId;
 
-    public String getGId() {
+    public String getgId() {
         return gId;
     }
 
-    public void setGId(String gId) {
+    public void setgId(String gId) {
         this.gId = gId;
     }
 
@@ -79,14 +71,6 @@ public class MenuGroupDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getgId() {
-        return gId;
-    }
-
-    public void setgId(String gId) {
-        this.gId = gId;
-    }
-
     public String getGroupType() {
         return groupType;
     }
@@ -94,7 +78,6 @@ public class MenuGroupDto extends PageDto implements Serializable {
     public void setGroupType(String groupType) {
         this.groupType = groupType;
     }
-
 
     public String getStoreType() {
         return storeType;

@@ -1,36 +1,35 @@
 {
   "param": {
-    "address": "address",
-    "storeTypeCd": "store_type_cd",
+    "groupType": "group_type",
+    "storeType": "store_type",
+    "gId": "g_id",
     "name": "name",
-    "tel": "tel",
+    "icon": "icon",
+    "description": "description",
     "statusCd": "status_cd",
-    "state": "state",
-    "storeId": "store_id",
-    "userId": "user_id",
-    "mapY": "map_y",
-    "mapX": "map_x"
+    "label": "label",
+    "seq": "seq"
   },
-  "name": "store",
-  "shareColumn": "store_type_cd",
-  "id": "storeId",
-  "shareName": "store",
+  "name": "menuGroup",
+  "shareColumn": "store_type",
+  "id": "gId",
+  "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "店铺名称不能为空",
+      "msg": "菜单组ID不能为空",
+      "code": "gId"
+    },
+    {
+      "msg": "菜单组名称不能为空",
       "code": "name"
     },
     {
-      "msg": "店铺地址不能为空",
-      "code": "address"
-    },
-    {
-      "msg": "电话不能为空",
-      "code": "tel"
+      "msg": "菜单类型不能为空",
+      "code": "groupType"
     }
   ],
   "desc": "商户信息",
-  "shareParam": "storeTypeCd",
-  "tableName": "s_store"
+  "shareParam": "storeType",
+  "tableName": "m_menu_group"
 }

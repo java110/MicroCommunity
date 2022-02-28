@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuGroupV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存商户信息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMenuGroupInfo" parameterType="Map">
+        insert into m_menu_group(
+group_type,store_type,g_id,name,icon,description,label,seq
+) values (
+#{groupType},#{storeType},#{gId},#{name},#{icon},#{description},#{label},#{seq}
+)
+    </insert>
+
+
+
+    <!-- 查询商户信息信息 add by wuxw 2018-07-03 -->
+    <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
+        select  t.group_type,t.group_type groupType,t.store_type,t.store_type storeType,t.g_id,t.g_id gId,t.name,t.icon,t.description,t.status_cd,t.status_cd statusCd,t.label,t.seq 
+from m_menu_group t 
+where 1 =1 
+<if test="groupType !=null and groupType != ''">
+   and t.group_type= #{groupType}
+</if> 
+<if test="storeType !=null and storeType != ''">
+   and t.store_type= #{storeType}
+</if> 
+<if test="gId !=null and gId != ''">
+   and t.g_id= #{gId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="icon !=null and icon != ''">
+   and t.icon= #{icon}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="label !=null and label != ''">
+   and t.label= #{label}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改商户信息信息 add by wuxw 2018-07-03 -->
+    <update id="updateMenuGroupInfo" parameterType="Map">
+        update  m_menu_group t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="groupType !=null and groupType != ''">
+, t.group_type= #{groupType}
+</if> 
+<if test="storeType !=null and storeType != ''">
+, t.store_type= #{storeType}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="icon !=null and icon != ''">
+, t.icon= #{icon}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="label !=null and label != ''">
+, t.label= #{label}
+</if> 
+<if test="seq !=null and seq != ''">
+, t.seq= #{seq}
+</if> 
+ where 1=1 <if test="gId !=null and gId != ''">
+and t.g_id= #{gId}
+</if> 
+
+    </update>
+
+    <!-- 查询商户信息数量 add by wuxw 2018-07-03 -->
+     <select id="queryMenuGroupsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from m_menu_group t 
+where 1 =1 
+<if test="groupType !=null and groupType != ''">
+   and t.group_type= #{groupType}
+</if> 
+<if test="storeType !=null and storeType != ''">
+   and t.store_type= #{storeType}
+</if> 
+<if test="gId !=null and gId != ''">
+   and t.g_id= #{gId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="icon !=null and icon != ''">
+   and t.icon= #{icon}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="label !=null and label != ''">
+   and t.label= #{label}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+
+
+     </select>
+
+</mapper>
