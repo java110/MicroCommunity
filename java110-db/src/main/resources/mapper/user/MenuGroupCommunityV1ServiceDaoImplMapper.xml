@@ -18,7 +18,7 @@
         g_id,gc_id,name,community_name,community_id
         ) values
         <foreach collection="menuGroupCommunityPos" item="item" separator=",">
-            (#{item.gId},'0',#{item.gcId},#{item.name},#{item.communityName},#{item.communityId})
+            (#{item.gId},#{item.gcId},#{item.name},#{item.communityName},#{item.communityId})
         </foreach>
     </insert>
 
