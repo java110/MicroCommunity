@@ -148,6 +148,12 @@ public class SavePropertyCmd extends AbstractServiceCmdListener {
         storePo.setStoreId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         storePo.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
         storePo.setState(StoreDto.STATE_NORMAL);
+        if(!reqJson.containsKey("mapY")){
+            storePo.setMapY("1");
+        }
+        if(!reqJson.containsKey("mapX")){
+            storePo.setMapX("1");
+        }
         int flag = storeV1InnerServiceSMOImpl.saveStore(storePo);
 
         if (flag < 1) {
