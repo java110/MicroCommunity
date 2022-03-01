@@ -71,12 +71,13 @@
         <if test="communityName !=null and communityName != ''">
             , t.community_name= #{communityName}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         where 1=1
         <if test="gcId !=null and gcId != ''">
             and t.gc_id= #{gcId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

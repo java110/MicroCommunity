@@ -21,9 +21,12 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IMenuGroupCommunityV1InnerServiceSMO;
 import com.java110.po.community.CommunityMemberPo;
+import com.java110.po.menuGroupCommunity.MenuGroupCommunityPo;
 import com.java110.po.store.StorePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -32,6 +35,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -53,6 +58,9 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
     @Autowired
     private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMenuGroupCommunityV1InnerServiceSMO menuGroupCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
@@ -71,12 +79,31 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
             throw new CmdException("删除数据失败");
         }
 
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setMemberId(storePo.getStoreId());
+        List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
+
+        if (communityMemberDtos == null && communityMemberDtos.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
+
         //释放小区
         CommunityMemberPo communityMemberPo = new CommunityMemberPo();
         communityMemberPo.setMemberId(storePo.getStoreId());
         flag = communityMemberV1InnerServiceSMOImpl.deleteCommunityMember(communityMemberPo);
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        //小区权限也踢掉
+        for (CommunityMemberDto tmpCommunityMemberDto : communityMemberDtos) {
+            MenuGroupCommunityPo menuGroupCommunityPo = new MenuGroupCommunityPo();
+            menuGroupCommunityPo.setCommunityId(tmpCommunityMemberDto.getCommunityId());
+            flag = menuGroupCommunityV1InnerServiceSMOImpl.deleteMenuGroupCommunity(menuGroupCommunityPo);
+            if (flag < 1) {
+                throw new CmdException("删除数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
