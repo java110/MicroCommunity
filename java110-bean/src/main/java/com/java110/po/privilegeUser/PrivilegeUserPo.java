@@ -16,7 +16,7 @@
 package com.java110.po.privilegeUser;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-02-28 17:59:22 mail: 928255095@qq.com
@@ -28,48 +28,57 @@ import java.util.Date;
 public class PrivilegeUserPo implements Serializable {
 
     private String privilegeFlag;
-private String puId;
-private String pId;
-private String statusCd = "0";
-private String storeId;
-private String userId;
-public String getPrivilegeFlag() {
+    private String puId;
+    private String pId;
+    private String statusCd = "0";
+    private String storeId;
+    private String userId;
+
+    public String getPrivilegeFlag() {
         return privilegeFlag;
     }
-public void setPrivilegeFlag(String privilegeFlag) {
+
+    public void setPrivilegeFlag(String privilegeFlag) {
         this.privilegeFlag = privilegeFlag;
     }
-public String getPuId() {
+
+    public String getPuId() {
         return puId;
     }
-public void setPuId(String puId) {
+
+    public void setPuId(String puId) {
         this.puId = puId;
     }
-public String getPId() {
+
+    public String getpId() {
         return pId;
     }
-public void setPId(String pId) {
+
+    public void setpId(String pId) {
         this.pId = pId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-
-
-
 }

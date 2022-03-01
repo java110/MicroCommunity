@@ -326,7 +326,7 @@ public class SavePropertyCmd extends AbstractServiceCmdListener {
         privilegeUserPo.setPrivilegeFlag("1");
         privilegeUserPo.setStoreId(storePo.getStoreId());
         privilegeUserPo.setUserId(userPo.getUserId());
-        privilegeUserPo.setPId(defaultPrivilege);
+        privilegeUserPo.setpId(defaultPrivilege);
 
         flag = privilegeUserV1InnerServiceSMOImpl.savePrivilegeUser(privilegeUserPo);
         if (flag < 1) {
