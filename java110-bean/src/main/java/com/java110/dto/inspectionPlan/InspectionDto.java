@@ -36,6 +36,8 @@ public class InspectionDto extends PageDto implements Serializable {
     private String pointObjId;
     private String pointObjName;
 
+    private String pointStartTime;
+    private String pointEndTime;
     private Date createTime;
 
     private String statusCd = "0";
@@ -203,4 +205,16 @@ public class InspectionDto extends PageDto implements Serializable {
         this.pointTypeName = pointTypeName;
     }
 
+    public String getPointStartTime() {
+        return pointStartTime;
+    }
+    public void setPointStartTime(String pointStartTime) {
+        this.pointStartTime = pointStartTime;
+    }
+    public String getPointEndTime() {
+        return pointEndTime;
+    }
+    public void setPointEndTime(String pointEndTime) {
+        this.pointEndTime = pointEndTime;
+    }
 }
