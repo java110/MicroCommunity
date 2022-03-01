@@ -175,6 +175,7 @@ public class SavePropertyCmd extends AbstractServiceCmdListener {
         storeAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
         storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_FOUNDINGTIME);
         storeAttrPo.setValue(reqJson.getString("foundingTime"));
+        storeAttrPo.setStoreId(storePo.getStoreId());
         flag = storeAttrV1InnerServiceSMOImpl.saveStoreAttr(storeAttrPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");
