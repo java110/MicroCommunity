@@ -6,9 +6,9 @@
     <!-- 保存小区成员信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityMemberInfo" parameterType="Map">
         insert into s_community_member(
-        member_type_cd,start_time,end_time,community_id,community_member_id,member_id
+        member_type_cd,start_time,end_time,community_id,community_member_id,member_id,audit_status_cd
         ) values (
-        #{memberTypeCd},#{startTime},#{endTime},#{communityId},#{communityMemberId},#{memberId}
+        #{memberTypeCd},#{startTime},#{endTime},#{communityId},#{communityMemberId},#{memberId},#{auditStatusCd}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <select id="getCommunityMemberInfo" parameterType="Map" resultType="Map">
         select t.member_type_cd,t.member_type_cd memberTypeCd,t.status_cd,t.status_cd statusCd,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.community_member_id,t.community_member_id communityMemberId,t.member_id,t.member_id memberId
+        communityId,t.community_member_id,t.community_member_id communityMemberId,t.member_id,t.member_id memberId,t.audit_status_cd auditStatusCd
         from s_community_member t
         where 1 =1
         <if test="memberTypeCd !=null and memberTypeCd != ''">
@@ -37,6 +37,9 @@
         </if>
         <if test="communityMemberId !=null and communityMemberId != ''">
             and t.community_member_id= #{communityMemberId}
+        </if>
+        <if test="auditStatusCd !=null and auditStatusCd != ''">
+            and t.audit_status_cd= #{auditStatusCd}
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
@@ -70,6 +73,9 @@
         <if test="communityMemberId !=null and communityMemberId != ''">
             , t.community_member_id= #{communityMemberId}
         </if>
+        <if test="auditStatusCd !=null and auditStatusCd != ''">
+            , t.audit_status_cd= #{auditStatusCd}
+        </if>
         where 1=1
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
@@ -99,6 +105,9 @@
         </if>
         <if test="communityMemberId !=null and communityMemberId != ''">
             and t.community_member_id= #{communityMemberId}
+        </if>
+        <if test="auditStatusCd !=null and auditStatusCd != ''">
+            and t.audit_status_cd= #{auditStatusCd}
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
