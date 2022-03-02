@@ -50,10 +50,12 @@ public class CmdListener extends AbstractServiceApiListener {
         for (String key : context.getRequestCurrentHeaders().keySet()) {
             header.add(key, reqHeader.get(key));
         }
-        if (reqHeader.containsKey(CommonConstant.USER_ID) && !reqJson.containsKey("userId")) {
+        if (reqHeader.containsKey(CommonConstant.USER_ID)
+                && (!reqJson.containsKey("userId") || StringUtil.isEmpty(reqJson.getString("userId")))) {
             reqJson.put("userId", reqHeader.get(CommonConstant.USER_ID));
         }
-        if (reqHeader.containsKey(CommonConstant.STORE_ID) && !reqJson.containsKey("storeId")) {
+        if (reqHeader.containsKey(CommonConstant.STORE_ID)
+                && (!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId")))) {
             reqJson.put("storeId", reqHeader.get(CommonConstant.STORE_ID));
         }
         HttpEntity<String> httpEntity = new HttpEntity<String>(reqJson.toJSONString(), header);

@@ -20,18 +20,20 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.store.StoreDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -47,35 +49,45 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "property.listProperty")
 public class ListPropertyCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListPropertyCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListPropertyCmd.class);
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(reqJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos, "非法操作");
+
+        if (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd())) {
+            reqJson.remove("storeId");
+        }
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
-           storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
+        StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
+        storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
 
-           int count = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
+        int count = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
 
-           List<StoreDto> storeDtos = null;
+        List<StoreDto> storeDtos = null;
 
-           if (count > 0) {
-               storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
-           } else {
-               storeDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+        } else {
+            storeDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, storeDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, storeDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

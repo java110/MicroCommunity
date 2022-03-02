@@ -10,6 +10,7 @@ import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.store.ApiStoreDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,16 @@ public class ListStoresCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(reqJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos, "非法操作");
+
+        //只有运营可以看所有 商户信息
+        if (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd())) {
+            reqJson.remove("storeId");
+        }
     }
 
     @Override
@@ -55,7 +66,7 @@ public class ListStoresCmd extends AbstractServiceCmdListener {
             List<StoreAttrDto> storeAttrs = new ArrayList<StoreAttrDto>();
             for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
 
-                if(storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())){
+                if (storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())) {
                     storeAttrs.add(tmpStoreAttrDto);
                 }
 
