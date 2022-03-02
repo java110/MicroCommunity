@@ -1,6 +1,7 @@
 package com.java110.dto.menuGroupCommunity;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,48 +16,55 @@ import java.util.Date;
 public class MenuGroupCommunityDto extends PageDto implements Serializable {
 
     private String gId;
-private String gcId;
-private String name;
-private String communityName;
-private String communityId;
+    private String gcId;
+    private String name;
+    private String communityName;
+    private String communityId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
-    public String getGId() {
+    public String getgId() {
         return gId;
     }
-public void setGId(String gId) {
+
+    public void setgId(String gId) {
         this.gId = gId;
     }
-public String getGcId() {
+
+    public String getGcId() {
         return gcId;
     }
-public void setGcId(String gcId) {
+
+    public void setGcId(String gcId) {
         this.gcId = gcId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getCommunityName() {
+
+    public String getCommunityName() {
         return communityName;
     }
-public void setCommunityName(String communityName) {
+
+    public void setCommunityName(String communityName) {
         this.communityName = communityName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
