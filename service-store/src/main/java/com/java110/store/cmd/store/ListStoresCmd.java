@@ -1,80 +1,56 @@
-package com.java110.api.listener.store;
+package com.java110.store.cmd.store;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.*;
+import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.store.ApiStoreDataVo;
-import com.java110.vo.api.store.ApiStoreVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 保存商户信息
- * Created by Administrator on 2019/3/29.
- */
-@Java110Listener("listStoresListener")
-public class ListStoresListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "store.listStores")
+public class ListStoresCmd extends AbstractServiceCmdListener {
 
     @Autowired
-    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
+    @Autowired
+    private IStoreAttrV1InnerServiceSMO storeAttrV1InnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_STORES;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
-        int storeCount = storeInnerServiceSMOImpl.getStoreCount(storeDto);
+        int storeCount = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
         List<StoreDto> storeDtos = null;
         List<ApiStoreDataVo> stores = null;
         if (storeCount > 0) {
-            storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
+            storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
             stores = BeanConvertUtil.covertBeanList(storeDtos, ApiStoreDataVo.class);
             refreshStoreAttr(stores);
         } else {
             stores = new ArrayList<>();
         }
-        ApiStoreVo apiStoreVo = new ApiStoreVo();
-        apiStoreVo.setTotal(storeCount);
-        apiStoreVo.setRecords((int) Math.ceil((double) storeCount / (double) reqJson.getInteger("row")));
-        apiStoreVo.setStores(stores);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStoreVo), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
-
     }
+
 
     private void refreshStoreAttr(List<ApiStoreDataVo> stores) {
         StoreAttrDto storeAttrDto = new StoreAttrDto();
         storeAttrDto.setStoreIds(getStoreIds(stores));
-        List<StoreAttrDto> storeAttrDtos = storeInnerServiceSMOImpl.getStoreAttrs(storeAttrDto);
+        List<StoreAttrDto> storeAttrDtos = storeAttrV1InnerServiceSMOImpl.queryStoreAttrs(storeAttrDto);
         for (ApiStoreDataVo storeDataVo : stores) {
             List<StoreAttrDto> storeAttrs = new ArrayList<StoreAttrDto>();
             for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
@@ -112,6 +88,4 @@ public class ListStoresListener extends AbstractServiceApiListener {
 
         return storeIds.toArray(new String[storeIds.size()]);
     }
-
-
 }

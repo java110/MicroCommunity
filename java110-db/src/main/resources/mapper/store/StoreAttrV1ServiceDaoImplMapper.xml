@@ -5,93 +5,103 @@
 <mapper namespace="storeAttrV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存商户属性信息 add by wuxw 2018-07-03 -->
     <insert id="saveStoreAttrInfo" parameterType="Map">
         insert into s_store_attr(
-attr_id,spec_cd,store_id,value
-) values (
-#{attrId},#{specCd},#{storeId},#{value}
-)
+        attr_id,spec_cd,store_id,value
+        ) values (
+        #{attrId},#{specCd},#{storeId},#{value}
+        )
     </insert>
-
 
 
     <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
     <select id="getStoreAttrInfo" parameterType="Map" resultType="Map">
-        select  t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.value 
-from s_store_attr t 
-where 1 =1 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.value
+        from s_store_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="storeIds != null">
+            and sa.store_id in
+            <foreach collection="storeIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreAttrInfo" parameterType="Map">
-        update  s_store_attr t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-, t.spec_cd= #{specCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-, t.value= #{value}
-</if> 
- where 1=1 <if test="attrId !=null and attrId != ''">
-and t.attr_id= #{attrId}
-</if> 
+        update s_store_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
 
     </update>
 
     <!-- 查询商户属性数量 add by wuxw 2018-07-03 -->
-     <select id="queryStoreAttrsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from s_store_attr t 
-where 1 =1 
-<if test="attrId !=null and attrId != ''">
-   and t.attr_id= #{attrId}
-</if> 
-<if test="specCd !=null and specCd != ''">
-   and t.spec_cd= #{specCd}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
+    <select id="queryStoreAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_store_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="storeIds != null">
+            and sa.store_id in
+            <foreach collection="storeIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
