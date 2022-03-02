@@ -399,6 +399,9 @@ public class SavePropertyCmd extends AbstractServiceCmdListener {
             }
         }
 
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+
 
     }
 
