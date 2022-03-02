@@ -12,8 +12,11 @@ import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.store.ApiStoreDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +49,22 @@ public class ListStoresCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
         storeDto.setUserId("");
-        int storeCount = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
+        int count = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
         List<StoreDto> storeDtos = null;
         List<ApiStoreDataVo> stores = null;
-        if (storeCount > 0) {
+        if (count > 0) {
             storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
             stores = BeanConvertUtil.covertBeanList(storeDtos, ApiStoreDataVo.class);
             refreshStoreAttr(stores);
         } else {
             stores = new ArrayList<>();
         }
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, stores);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
 
