@@ -45,6 +45,7 @@ public class ListStoresCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
+        storeDto.setUserId("");
         int storeCount = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
         List<StoreDto> storeDtos = null;
         List<ApiStoreDataVo> stores = null;
