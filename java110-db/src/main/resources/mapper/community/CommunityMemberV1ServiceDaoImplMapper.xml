@@ -67,9 +67,7 @@
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="communityMemberId !=null and communityMemberId != ''">
             , t.community_member_id= #{communityMemberId}
         </if>
@@ -79,6 +77,9 @@
         where 1=1
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

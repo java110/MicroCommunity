@@ -124,6 +124,7 @@ public class MemberQuitCommunityCmd extends AbstractServiceCmdListener {
         //释放小区
         CommunityMemberPo communityMemberPo = new CommunityMemberPo();
         communityMemberPo.setMemberId(storeDto.getStoreId());
+        communityMemberPo.setCommunityId(communityId);
         int flag = communityMemberV1InnerServiceSMOImpl.deleteCommunityMember(communityMemberPo);
         if (flag < 1) {
             throw new CmdException("删除数据失败");
