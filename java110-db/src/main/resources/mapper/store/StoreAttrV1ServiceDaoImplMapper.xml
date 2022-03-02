@@ -34,7 +34,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="storeIds != null">
-            and sa.store_id in
+            and t.store_id in
             <foreach collection="storeIds" open="(" close=")"
                      separator="," item="item">
                 #{item}
@@ -91,7 +91,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="storeIds != null">
-            and sa.store_id in
+            and t.store_id in
             <foreach collection="storeIds" open="(" close=")"
                      separator="," item="item">
                 #{item}
