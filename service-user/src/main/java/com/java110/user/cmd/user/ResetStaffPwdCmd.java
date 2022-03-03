@@ -86,7 +86,7 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         UserDto userDto = new UserDto();
         userDto.setStatusCd("0");
-        userDto.setUserId(paramObj.getString("userId"));
+        userDto.setUserId(paramObj.getString("staffId"));
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUserHasPwd(userDto);
 
         Assert.listOnlyOne(userDtos, "数据错误查询到多条用户信息或单条");
