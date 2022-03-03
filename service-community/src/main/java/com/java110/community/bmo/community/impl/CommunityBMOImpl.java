@@ -7,6 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.community.ICommunityAttrV1InnerServiceSMO;
@@ -520,7 +521,7 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_communityMemberId));
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", "400000000000000001");
+        businessCommunityMember.put("memberId", StoreDto.STORE_ADMIN);
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OPT);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
@@ -534,7 +535,7 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_communityMemberId));
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", "400000000000000002");
+        businessCommunityMember.put("memberId", StoreDto.STORE_DEV);
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.DEV);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
