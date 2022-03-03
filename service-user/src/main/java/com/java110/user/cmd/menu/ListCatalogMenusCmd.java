@@ -32,7 +32,6 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -73,6 +72,7 @@ public class ListCatalogMenusCmd extends AbstractServiceCmdListener {
 
         MenuGroupDto menuCatalogDto = BeanConvertUtil.covertBean(reqJson, MenuGroupDto.class);
         menuCatalogDto.setGroupType(MenuGroupDto.GROUP_TYPE_PC);
+        //判断是否 为 开发或者运营，如果是开发或者运营时 取消 小区ID
 
         //查询store 信息
         StoreDto storeDto = new StoreDto();
@@ -80,6 +80,10 @@ public class ListCatalogMenusCmd extends AbstractServiceCmdListener {
         List<StoreDto> storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
 
         Assert.listOnlyOne(storeDtos, "商户不存在");
+
+        if (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd()) || StoreDto.STORE_TYPE_DEV.equals(storeDtos.get(0).getStoreTypeCd())) {
+            menuCatalogDto.setCommunityId("");
+        }
 
         menuCatalogDto.setDomain(storeDtos.get(0).getStoreTypeCd());
         menuCatalogDto.setStoreType(storeDtos.get(0).getStoreTypeCd());

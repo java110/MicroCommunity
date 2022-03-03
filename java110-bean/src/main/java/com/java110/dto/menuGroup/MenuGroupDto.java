@@ -23,6 +23,8 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String userId;
     private String domain;
     private String caId;
+    private String communityId;
+
 
     public String getgId() {
         return gId;
@@ -126,5 +128,13 @@ public class MenuGroupDto extends PageDto implements Serializable {
 
     public void setgIds(String[] gIds) {
         this.gIds = gIds;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

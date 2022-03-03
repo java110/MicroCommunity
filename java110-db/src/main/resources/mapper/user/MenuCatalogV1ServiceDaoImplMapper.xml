@@ -125,13 +125,19 @@
         FROM m_menu mm
         inner join m_menu_group mmg on mm.`g_id` = mmg.`g_id` AND mmg.`status_cd` = '0'
         <if test="caId !=null and caId != ''">
-        inner join m_menu_group_catalog mgc on mmg.g_id = mgc.g_id and mgc.status_cd = '0'
+            inner join m_menu_group_catalog mgc on mmg.g_id = mgc.g_id and mgc.status_cd = '0'
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            inner join m_menu_group_community mgcy on mgcy.g_id = mmg.g_id and mgcy.status_cd = '0'
         </if>
         WHERE
-         mmg.group_type = #{groupType}
+        mmg.group_type = #{groupType}
         and mmg.store_type= #{domain}
         <if test="caId !=null and caId != ''">
             and mgc.ca_id = #{caId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and mgcy.community_id = #{communityId}
         </if>
         AND mm.`status_cd` = '0'
         AND mm.`m_id` IN (
