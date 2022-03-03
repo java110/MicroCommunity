@@ -64,7 +64,9 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
         String communityId = "";
-        if (paramIn != null && paramIn.containsKey("communityId") && !StringUtil.isEmpty(paramIn.getString("communityId"))) {
+        if (paramIn != null && paramIn.containsKey("communityId")
+                && !StringUtil.isEmpty(paramIn.getString("communityId"))
+                && !"-1".equals(paramIn.getString("communityId"))) {
             communityId = paramIn.getString("communityId");
             checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         }
