@@ -93,7 +93,7 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         JSONObject userInfo = JSONObject.parseObject(JSONObject.toJSONString(userDtos.get(0)));
         String pwd = GenerateCodeFactory.getRandomCode(6);
-        userInfo.putAll(paramObj);
+        //userInfo.putAll(paramObj);
         userInfo.put("password", AuthenticationFactory.passwdMd5(pwd));
         paramObj.put("pwd", pwd);
 
