@@ -96,7 +96,7 @@ public class UpdateMenuGroupCommunityCmd extends AbstractServiceCmdListener {
         menuGroupCommunityPo.setCommunityId(reqJson.getString("communityId"));
         int flag = menuGroupCommunityV1InnerServiceSMOImpl.deleteMenuGroupCommunity(menuGroupCommunityPo);
         if (flag < 1) {
-            throw new CmdException("删除数据失败");
+            //throw new CmdException("删除数据失败"); //有可能 已经上线的客户 没有 这个数据 所以不需判断
         }
 
         List<MenuGroupDto> menuGroupDtos = null;

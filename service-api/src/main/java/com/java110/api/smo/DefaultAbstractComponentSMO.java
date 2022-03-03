@@ -8,6 +8,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.SecureInvocation;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -470,6 +471,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
             if (paramIn.containsKey("communityId")
                     && !StringUtil.isEmpty(paramIn.getString("communityId"))
                     && !"-1".equals(paramIn.getString("communityId"))
+                    && !StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd)
+                    && !StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)
             ) {
                 communityId = paramIn.getString("communityId");
                 checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
