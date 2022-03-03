@@ -219,9 +219,10 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         String storeTypeCd = storeInfoObj.getString("storeTypeCd");
         String pgId = privilegeInfoObj.getString("pgId");
         String pName = privilegeInfoObj.getString("pName");
+        String communityId = privilegeInfoObj.getString("communityId");
 
         ResponseEntity<String> privileges = super.callCenterService(restTemplate, pd, "",
-                "query.privilegeGroup.noAddPrivilege?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd + "&pgId=" + pgId + "&pName=" + pName, HttpMethod.GET);
+                "query.privilegeGroup.noAddPrivilege?storeId=" + storeId + "&storeTypeCd=" + storeTypeCd + "&pgId=" + pgId + "&pName=" + pName+"&communityId="+communityId, HttpMethod.GET);
 
         if (privileges.getStatusCode() != HttpStatus.OK) {
             return privileges;
