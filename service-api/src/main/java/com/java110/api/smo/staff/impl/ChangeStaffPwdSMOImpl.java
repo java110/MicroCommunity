@@ -3,6 +3,7 @@ package com.java110.api.smo.staff.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.component.AbstractComponentSMO;
+import com.java110.core.context.Environment;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.staff.IChangeStaffPwdServiceSMO;
@@ -39,10 +40,7 @@ public class ChangeStaffPwdSMOImpl extends DefaultAbstractComponentSMO implement
         Assert.hasKeyAndValue(paramIn, "oldPwd", "必填，请填写原始密码");
         Assert.hasKeyAndValue(paramIn, "newPwd", "必填，请填写新密码");
 
-        String env = MappingCache.getValue("HC_ENV");
-        if (!"PROD".equals(env)) {
-            throw new IllegalArgumentException("演示环境，不允许操作");
-        }
+        Environment.isDevEnv();
     }
 
     @Override

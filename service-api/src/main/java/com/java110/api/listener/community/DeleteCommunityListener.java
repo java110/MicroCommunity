@@ -5,6 +5,7 @@ import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.Environment;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -29,6 +30,7 @@ public class DeleteCommunityListener extends AbstractServiceApiPlusListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        Environment.isDevEnv();
 
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 

@@ -2,6 +2,7 @@ package com.java110.user.cmd.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -41,6 +42,8 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+
+        Environment.isDevEnv();
 
         if (!reqJson.containsKey("staffId")) {
             reqJson.put("staffId", reqJson.getString("userId"));

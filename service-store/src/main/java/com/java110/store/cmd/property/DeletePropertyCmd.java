@@ -18,6 +18,7 @@ package com.java110.store.cmd.property;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -63,6 +64,7 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+        Environment.isDevEnv();
         Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
         Assert.hasKeyAndValue(reqJson, "storeTypeCd", "storeTypeCd不能为空");
 

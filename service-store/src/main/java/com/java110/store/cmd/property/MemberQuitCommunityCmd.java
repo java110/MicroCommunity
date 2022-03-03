@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -103,6 +104,7 @@ public class MemberQuitCommunityCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+        Environment.isDevEnv();
         Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含商户");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区");
 
