@@ -93,16 +93,12 @@
     <select id="getUnitInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id
         unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId,t.unit_area,t.unit_area unitArea
+        bId,t.user_id,t.user_id userId,t.unit_area,t.unit_area unitArea,ff.floor_num floorNum
         from building_unit t
-        <if test="communityId!=null and communityId != ''">
-            ,f_floor ff
-        </if>
+        left join f_floor ff on t.`floor_id` = ff.`floor_id` and ff.status_cd = '0'
         where 1 =1
         <if test="communityId!=null and communityId != ''">
-            and t.`floor_id` = ff.`floor_id`
             AND ff.community_id = #{communityId}
-            and ff.status_cd = '0'
         </if>
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}

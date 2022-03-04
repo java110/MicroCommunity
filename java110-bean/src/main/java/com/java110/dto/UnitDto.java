@@ -34,6 +34,7 @@ public class UnitDto extends PageDto implements Serializable {
      * 名称
      */
     private String floorId;
+    private String floorNum;
 
     private String remark;
     private String layerCount;
@@ -150,5 +151,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setUnitArea(String unitArea) {
         this.unitArea = unitArea;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
     }
 }
