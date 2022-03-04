@@ -5,7 +5,6 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.FloorDto;
 import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
@@ -32,16 +31,17 @@ public class QueryUnitsCmd extends AbstractServiceCmdListener {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         //Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含floorId信息");
         //校验小区楼ID和小区是否有对应关系
-        int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
-
-        if (total < 1) {
-            throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
-        }
+//        int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
+//
+//        if (total < 1) {
+//            throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
+//        }
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         UnitDto unitDto = BeanConvertUtil.covertBean(reqJson, UnitDto.class);
+        unitDto.setUserId("");
 
         List<UnitDto> unitDtoList = unitInnerServiceSMOImpl.queryUnits(unitDto);
 
