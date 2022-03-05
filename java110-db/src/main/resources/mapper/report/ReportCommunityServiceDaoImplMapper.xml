@@ -60,6 +60,7 @@
         where t.status_cd = '0'
         and t.community_id = #{communityId}
         and bu.unit_id = #{unitId}
+        order by t.room_num
     </select>
 
 
