@@ -1,6 +1,5 @@
 package com.java110.report.dao;
 
-import com.java110.dto.community.CommunityDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportRoomDto;
 
@@ -54,4 +53,12 @@ public interface IReportCommunityServiceDao {
      * @return
      */
     List<Map> getCommunitys(Map communityDto);
+
+    /**
+     * 查询房屋结构化数据
+     *
+     * @param info
+     * @return
+     */
+    List<Map> queryRoomStructures(Map info);
 }

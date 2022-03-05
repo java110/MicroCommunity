@@ -59,6 +59,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String roomSubTypeName;
     private String roomRent;
     private String roomArea;
+    private String oweAmount;
 
     private String state;
     private String[] states;
@@ -380,5 +381,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getOweAmount() {
+        return oweAmount;
+    }
+
+    public void setOweAmount(String oweAmount) {
+        this.oweAmount = oweAmount;
     }
 }
