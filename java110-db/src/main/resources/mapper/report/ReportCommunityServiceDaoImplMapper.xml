@@ -47,7 +47,7 @@
         t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
         t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
         bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,t.room_type roomType,
-        t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
+        t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,td.name stateName,
         (
         select if (SUM(rof.amount_owed)!='',SUM(rof.amount_owed),0) from report_owe_fee rof where rof.payer_obj_id = t.room_id and rof.payer_obj_type = '3333'
         ) oweAmount
@@ -56,6 +56,7 @@
         inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
         LEFT JOIN building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
         left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         where t.status_cd = '0'
         and t.community_id = #{communityId}
         and bu.unit_id = #{unitId}
