@@ -7,14 +7,15 @@ import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.entity.assetImport.ImportOwnerRoomDto;
-import com.java110.intf.community.IFloorV1InnerServiceSMO;
-import com.java110.intf.community.IImportOwnerRoomInnerServiceSMO;
-import com.java110.intf.community.IRoomV1InnerServiceSMO;
-import com.java110.intf.community.IUnitV1InnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.po.floor.FloorPo;
+import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomPo;
 import com.java110.po.unit.UnitPo;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
     @Autowired
     public int saveOwnerRooms(@RequestBody List<ImportOwnerRoomDto> importOwnerRoomDtos) {
@@ -78,8 +85,180 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         //3.0 保存 房屋
         String roomId = doSaveRoom(importOwnerRoomDto, unitId);
 
+        //没有业主
+        if (StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
+            return 1;
+        }
+
+        //4.0 保存业主
+        if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+            doSaveOwner(importOwnerRoomDto, roomId);
+        } else {
+            doSaveOwnerMember(importOwnerRoomDto, roomId);
+        }
+
         return 1;
 
+    }
+
+    /**
+     * 保存业主成员
+     *
+     * @param importOwnerRoomDto
+     * @param roomId
+     */
+    private void doSaveOwnerMember(ImportOwnerRoomDto importOwnerRoomDto, String roomId) {
+
+        // 查询房屋和业主是否有关系
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setCommunityId(importOwnerRoomDto.getCommunityId());
+        ownerRoomRelDto.setRoomId(roomId);
+        List<OwnerRoomRelDto> roomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (roomRelDtos == null || roomRelDtos.size() < 1) {
+            throw new IllegalArgumentException(importOwnerRoomDto.getOwnerName() + "成员未找到对应业主信息");
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(importOwnerRoomDto.getCommunityId());
+        ownerDto.setName(importOwnerRoomDto.getOwnerName());
+        ownerDto.setLink(importOwnerRoomDto.getTel());
+        ownerDto.setOwnerId(roomRelDtos.get(0).getOwnerId());
+        ownerDto.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+        OwnerPo ownerPo = null;
+
+        int flag = 0;
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            ownerPo = new OwnerPo();
+            ownerPo.setState(OwnerDto.STATE_FINISH);
+            ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setbId("-1");
+            ownerPo.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+            ownerPo.setCommunityId(importOwnerRoomDto.getCommunityId());
+            ownerPo.setOwnerId(roomRelDtos.get(0).getOwnerId());
+            ownerPo.setName(importOwnerRoomDto.getOwnerName());
+            ownerPo.setIdCard(importOwnerRoomDto.getIdCard());
+            ownerPo.setAge(importOwnerRoomDto.getAge());
+            ownerPo.setSex(importOwnerRoomDto.getSex());
+            ownerPo.setLink(importOwnerRoomDto.getTel());
+            ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            ownerPo.setRemark("房产导入");
+            ownerPo.setUserId("-1");
+            flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
+
+            if (flag < 1) {
+                throw new IllegalArgumentException("导入业主失败");
+            }
+        } else {
+            ownerPo = new OwnerPo();
+            ownerPo.setState(OwnerDto.STATE_FINISH);
+            ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setbId("-1");
+            ownerPo.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+            ownerPo.setCommunityId(importOwnerRoomDto.getCommunityId());
+            ownerPo.setOwnerId(ownerDtos.get(0).getOwnerId());
+            ownerPo.setName(importOwnerRoomDto.getOwnerName());
+            ownerPo.setIdCard(importOwnerRoomDto.getIdCard());
+            ownerPo.setAge(importOwnerRoomDto.getAge());
+            ownerPo.setSex(importOwnerRoomDto.getSex());
+            ownerPo.setLink(importOwnerRoomDto.getTel());
+            ownerPo.setMemberId(ownerDtos.get(0).getMemberId());
+            ownerPo.setRemark("房产导入");
+            ownerPo.setUserId("-1");
+            flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
+            if (flag < 1) {
+                throw new IllegalArgumentException("导入业主失败");
+            }
+        }
+    }
+
+    /**
+     * 保存业主
+     *
+     * @param importOwnerRoomDto
+     * @param roomId
+     */
+    private void doSaveOwner(ImportOwnerRoomDto importOwnerRoomDto, String roomId) {
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(importOwnerRoomDto.getCommunityId());
+        ownerDto.setName(importOwnerRoomDto.getOwnerName());
+        ownerDto.setLink(importOwnerRoomDto.getTel());
+        ownerDto.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+        OwnerPo ownerPo = null;
+        String ownerId = "";
+
+        int flag = 0;
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            ownerPo = new OwnerPo();
+            ownerPo.setState(OwnerDto.STATE_FINISH);
+            ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setbId("-1");
+            ownerPo.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+            ownerPo.setCommunityId(importOwnerRoomDto.getCommunityId());
+            ownerPo.setOwnerId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            ownerPo.setName(importOwnerRoomDto.getOwnerName());
+            ownerPo.setIdCard(importOwnerRoomDto.getIdCard());
+            ownerPo.setAge(importOwnerRoomDto.getAge());
+            ownerPo.setSex(importOwnerRoomDto.getSex());
+            ownerPo.setLink(importOwnerRoomDto.getTel());
+            ownerPo.setMemberId(ownerPo.getOwnerId());
+            ownerPo.setRemark("房产导入");
+            ownerPo.setUserId("-1");
+            flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
+
+            if (flag < 1) {
+                throw new IllegalArgumentException("导入业主失败");
+            }
+
+            ownerId = ownerPo.getOwnerId();
+        } else {
+            ownerId = ownerDtos.get(0).getOwnerId();
+            ownerPo = new OwnerPo();
+            ownerPo.setState(OwnerDto.STATE_FINISH);
+            ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setbId("-1");
+            ownerPo.setOwnerTypeCd(importOwnerRoomDto.getOwnerTypeCd());
+            ownerPo.setCommunityId(importOwnerRoomDto.getCommunityId());
+            ownerPo.setOwnerId(ownerId);
+            ownerPo.setName(importOwnerRoomDto.getOwnerName());
+            ownerPo.setIdCard(importOwnerRoomDto.getIdCard());
+            ownerPo.setAge(importOwnerRoomDto.getAge());
+            ownerPo.setSex(importOwnerRoomDto.getSex());
+            ownerPo.setLink(importOwnerRoomDto.getTel());
+            ownerPo.setMemberId(ownerPo.getOwnerId());
+            ownerPo.setRemark("房产导入");
+            ownerPo.setUserId("-1");
+            flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
+            if (flag < 1) {
+                throw new IllegalArgumentException("导入业主失败");
+            }
+        }
+        // 查询房屋和业主是否有关系
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setCommunityId(importOwnerRoomDto.getCommunityId());
+        ownerRoomRelDto.setRoomId(roomId);
+        ownerRoomRelDto.setOwnerId(ownerId);
+        List<OwnerRoomRelDto> roomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (roomRelDtos != null && roomRelDtos.size() > 0) {
+            return;
+        }
+
+        OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+        ownerRoomRelPo.setUserId("-1");
+        ownerRoomRelPo.setbId("-1");
+        ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+        ownerRoomRelPo.setState("2001");
+        ownerRoomRelPo.setRoomId(roomId);
+        ownerRoomRelPo.setOwnerId(ownerId);
+        ownerRoomRelPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        ownerRoomRelPo.setEndTime(DateUtil.LAST_TIME);
+
+        flag = ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("导入业主房屋关系失败");
+        }
     }
 
     private String doSaveRoom(ImportOwnerRoomDto importOwnerRoomDto, String unitId) {
@@ -119,7 +298,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             roomId = roomPo.getRoomId();
         } else {
             roomId = roomDtos.get(0).getRoomId();
-            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 roomPo = new RoomPo();
                 roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
                 roomPo.setRoomId(roomId);
@@ -183,7 +362,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             unitId = unitPo.getFloorId();
         } else {
             unitId = unitDtos.get(0).getUnitId();
-            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 unitPo = new UnitPo();
                 unitPo.setFloorId(floorId);
                 unitPo.setLayerCount(importOwnerRoomDto.getLayerCount());
@@ -234,7 +413,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorId = floorPo.getFloorId();
         } else {
             floorId = floorDtos.get(0).getFloorId();
-            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 floorPo = new FloorPo();
                 floorPo.setbId("-1");
                 floorPo.setCommunityId(importOwnerRoomDto.getCommunityId());

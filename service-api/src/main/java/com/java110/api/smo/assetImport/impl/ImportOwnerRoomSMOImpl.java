@@ -12,6 +12,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.CommonUtil;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -248,6 +249,8 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
 
         List<ImportOwnerRoomDto> tmpImportOwnerRoomDtos = new ArrayList<>();
         int flag = 0;
+
+        int successCount = 0;
         try {
             for (int roomIndex = 0; roomIndex < ownerRoomDtos.size(); roomIndex++) {
                 tmpImportOwnerRoomDtos.add(ownerRoomDtos.get(roomIndex));
@@ -257,6 +260,8 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                         throw new IllegalArgumentException("保存失败");
                     }
                     tmpImportOwnerRoomDtos = new ArrayList<>();
+
+                    successCount += flag;
                 }
             }
 
@@ -265,6 +270,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 if (flag < 1) {
                     throw new IllegalArgumentException("保存失败");
                 }
+                successCount += flag;
             }
         } catch (Exception e) {
             logger.error("导入失败", e);
@@ -272,7 +278,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             throw e;
         }
 
-        return responseEntity;
+        return ResultVo.createResponseEntity("总共导入:" + ownerRoomDtos.size() + ";成功导入：" + successCount + ";导入失败：" + (ownerRoomDtos.size() - successCount));
     }
 
     //解析Excel日期格式
