@@ -48,7 +48,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
-    @Autowired
+    @Override
     public int saveOwnerRooms(@RequestBody List<ImportOwnerRoomDto> importOwnerRoomDtos) {
 
         int successCount = 0;
