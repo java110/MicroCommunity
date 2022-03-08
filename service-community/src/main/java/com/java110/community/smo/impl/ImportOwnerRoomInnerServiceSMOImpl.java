@@ -351,6 +351,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             unitPo.setLift(importOwnerRoomDto.getLift());
             unitPo.setUnitId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
             unitPo.setUnitArea("1");
+            unitPo.setUnitNum(importOwnerRoomDto.getUnitNum());
             unitPo.setRemark("房产导入");
             unitPo.setUserId("-1");
             flag = unitV1InnerServiceSMOImpl.saveUnit(unitPo);
@@ -369,6 +370,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 unitPo.setLift(importOwnerRoomDto.getLift());
                 unitPo.setUnitId(unitId);
                 unitPo.setUnitArea("1");
+                unitPo.setUnitNum(importOwnerRoomDto.getUnitNum());
                 unitPo.setRemark("房产导入");
                 unitPo.setUserId("-1");
                 flag = unitV1InnerServiceSMOImpl.updateUnit(unitPo);
@@ -421,6 +423,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 floorPo.setFloorArea("1");
                 floorPo.setFloorId(floorId);
                 floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
+                floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
                 floorPo.setRemark("房产导入");
                 floorPo.setUserId("-1");
                 flag = floorV1InnerServiceSMOImpl.updateFloor(floorPo);
