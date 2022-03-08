@@ -402,6 +402,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorPo.setFloorArea("1");
             floorPo.setFloorId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
+            floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
             floorPo.setRemark("房产导入");
             floorPo.setUserId("-1");
             flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
