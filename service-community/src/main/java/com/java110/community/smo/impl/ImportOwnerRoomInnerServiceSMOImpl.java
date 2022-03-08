@@ -360,7 +360,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 throw new IllegalArgumentException("导入单元失败");
             }
 
-            unitId = unitPo.getFloorId();
+            unitId = unitPo.getUnitId();
         } else {
             unitId = unitDtos.get(0).getUnitId();
             if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
