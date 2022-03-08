@@ -23,7 +23,7 @@
         from f_floor t
         LEFT JOIN f_floor_attr t2 on t.floor_id = t2.floor_id and t2.spec_cd='100201912001' and t2.value='8008'
         LEFT JOIN u_user t3 on t.user_id = t3.user_id and t3.status_cd = 0
-        where  and t.status_cd=0
+        where  t.status_cd=0
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
         </if>
