@@ -20,7 +20,7 @@ public class UnitPo implements Serializable {
     private String userId;
     private String remark;
     private String unitArea;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getUnitId() {
         return unitId;

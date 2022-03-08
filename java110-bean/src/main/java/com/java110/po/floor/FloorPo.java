@@ -23,7 +23,7 @@ public class FloorPo implements Serializable {
     private String bId;
     private String remark;
     private String communityId;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getFloorId() {
         return floorId;

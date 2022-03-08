@@ -20,7 +20,7 @@ public class OwnerRoomRelPo implements Serializable {
     private String remark;
     private String startTime;
     private String endTime;
-    private String statusCd;
+    private String statusCd = "0";
     private String operate;
     private String bId;
 

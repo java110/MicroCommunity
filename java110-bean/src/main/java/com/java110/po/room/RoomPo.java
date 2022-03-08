@@ -26,7 +26,7 @@ public class RoomPo implements Serializable {
     private String state;
     private String communityId;
     private String roomType;
-    private String statusCd;
+    private String statusCd = "0";
     private String roomSubType;
     private String roomRent;
     private String roomArea;
