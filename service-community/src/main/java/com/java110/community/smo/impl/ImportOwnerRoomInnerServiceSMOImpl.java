@@ -143,7 +143,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setLink(importOwnerRoomDto.getTel());
             ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
             ownerPo.setRemark("房产导入");
-            ownerPo.setUserId("-1");
+            ownerPo.setUserId(importOwnerRoomDto.getUserId());
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
 
             if (flag < 1) {
@@ -164,7 +164,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setLink(importOwnerRoomDto.getTel());
             ownerPo.setMemberId(ownerDtos.get(0).getMemberId());
             ownerPo.setRemark("房产导入");
-            ownerPo.setUserId("-1");
+            ownerPo.setUserId(importOwnerRoomDto.getUserId());
             flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("导入业主失败");
@@ -205,7 +205,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setLink(importOwnerRoomDto.getTel());
             ownerPo.setMemberId(ownerPo.getOwnerId());
             ownerPo.setRemark("房产导入");
-            ownerPo.setUserId("-1");
+            ownerPo.setUserId(importOwnerRoomDto.getUserId());
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
 
             if (flag < 1) {
@@ -229,7 +229,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setLink(importOwnerRoomDto.getTel());
             ownerPo.setMemberId(ownerPo.getOwnerId());
             ownerPo.setRemark("房产导入");
-            ownerPo.setUserId("-1");
+            ownerPo.setUserId(importOwnerRoomDto.getUserId());
             flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("导入业主失败");
@@ -246,7 +246,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         }
 
         OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
-        ownerRoomRelPo.setUserId("-1");
+        ownerRoomRelPo.setUserId(importOwnerRoomDto.getUserId());
         ownerRoomRelPo.setbId("-1");
         ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
         ownerRoomRelPo.setState("2001");
@@ -288,7 +288,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             roomPo.setRoomType("0".equals(importOwnerRoomDto.getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_ROOM);
             roomPo.setUnitId(unitId);
             roomPo.setRemark("房产导入");
-            roomPo.setUserId("-1");
+            roomPo.setUserId(importOwnerRoomDto.getUserId());
             flag = roomV1InnerServiceSMOImpl.saveRoom(roomPo);
 
             if (flag < 1) {
@@ -315,7 +315,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 roomPo.setRoomType("0".equals(importOwnerRoomDto.getUnitNum()) ? RoomDto.ROOM_TYPE_SHOPS : RoomDto.ROOM_TYPE_ROOM);
                 roomPo.setUnitId(unitId);
                 roomPo.setRemark("房产导入");
-                roomPo.setUserId("-1");
+                roomPo.setUserId(importOwnerRoomDto.getUserId());
                 flag = roomV1InnerServiceSMOImpl.updateRoom(roomPo);
                 if (flag < 1) {
                     throw new IllegalArgumentException("导入房屋失败");
@@ -353,7 +353,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             unitPo.setUnitArea("1");
             unitPo.setUnitNum(importOwnerRoomDto.getUnitNum());
             unitPo.setRemark("房产导入");
-            unitPo.setUserId("-1");
+            unitPo.setUserId(importOwnerRoomDto.getUserId());
             flag = unitV1InnerServiceSMOImpl.saveUnit(unitPo);
 
             if (flag < 1) {
@@ -372,7 +372,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 unitPo.setUnitArea("1");
                 unitPo.setUnitNum(importOwnerRoomDto.getUnitNum());
                 unitPo.setRemark("房产导入");
-                unitPo.setUserId("-1");
+                unitPo.setUserId(importOwnerRoomDto.getUserId());
                 flag = unitV1InnerServiceSMOImpl.updateUnit(unitPo);
                 if (flag < 1) {
                     throw new IllegalArgumentException("导入单元失败");
@@ -406,7 +406,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
             floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
             floorPo.setRemark("房产导入");
-            floorPo.setUserId("-1");
+            floorPo.setUserId(importOwnerRoomDto.getUserId());
             flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
 
             if (flag < 1) {
@@ -425,7 +425,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
                 floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
                 floorPo.setRemark("房产导入");
-                floorPo.setUserId("-1");
+                floorPo.setUserId(importOwnerRoomDto.getUserId());
                 flag = floorV1InnerServiceSMOImpl.updateFloor(floorPo);
                 if (flag < 1) {
                     throw new IllegalArgumentException("导入楼栋失败");

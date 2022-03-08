@@ -213,6 +213,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
 
             importOwnerRoomDto = new ImportOwnerRoomDto();
             importOwnerRoomDto.setCommunityId(result.getCommunityId());
+            importOwnerRoomDto.setUserId(result.getUserId());
             importOwnerRoomDto.setFloorNum(os[0].toString().trim());
             importOwnerRoomDto.setUnitNum(os[1].toString().trim());
             importOwnerRoomDto.setRoomNum(os[2].toString().trim());
