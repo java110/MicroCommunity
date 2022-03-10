@@ -203,8 +203,8 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
             totalAccountAmount = totalAccountAmount.add(new BigDecimal(tmpAccountDto.getAmount()));
         }
 
-        deductionAmount = totalAccountAmount.subtract(new BigDecimal(deductionAmount)).doubleValue();
-        if (deductionAmount < 0) {
+        double tmpDeductionAmount = totalAccountAmount.subtract(new BigDecimal(deductionAmount)).doubleValue();
+        if (tmpDeductionAmount < 0) {
             reqJson.put("deductionAmount", totalAccountAmount.doubleValue());
             reqJson.put("selectUserAccount", BeanConvertUtil.beanCovertJSONArray(accountDtos));
             return totalAccountAmount.doubleValue();

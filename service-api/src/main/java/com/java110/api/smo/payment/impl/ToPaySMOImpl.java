@@ -2,26 +2,26 @@ package com.java110.api.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-import com.java110.dto.app.AppDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IToPaySMO;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -69,7 +69,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
 
-        ResponseEntity responseEntity = null;
+        ResponseEntity<String> responseEntity = null;
 
         SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
 
@@ -97,15 +97,19 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
             JSONObject paramOut = new JSONObject();
             paramOut.put("oId", orderId);
             String urlOut = "fee.payFeeConfirm";
-            responseEntity = this.callCenterService(getHeaders("-1",pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
+            responseEntity = this.callCenterService(getHeaders("-1", pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
             JSONObject param = new JSONObject();
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                param.put("code","101");
-                param.put("msg","扣费为0回调失败");
+                param.put("code", "101");
+                param.put("msg", "扣费为0回调失败");
                 return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
             }
-            param.put("code","100");
-            param.put("msg","扣费为0回调成功");
+            JSONObject result = JSONObject.parseObject(responseEntity.getBody());
+            if (ResultVo.CODE_OK != result.getInteger("code")) {
+                return responseEntity;
+            }
+            param.put("code", "100");
+            param.put("msg", "扣费为0回调成功");
             return new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK);
         }
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
@@ -144,7 +148,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         return responseEntity;
     }
 
-    private Map<String, String> getHeaders(String userId,String appId) {
+    private Map<String, String> getHeaders(String userId, String appId) {
         Map<String, String> headers = new HashMap<>();
         headers.put(CommonConstant.HTTP_APP_ID.toLowerCase(), appId);
         headers.put(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
@@ -153,6 +157,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         return headers;
     }
+
     private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
 
         ResponseEntity responseEntity = null;

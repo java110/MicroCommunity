@@ -2,11 +2,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="payFeeNewV1ServiceDaoImpl">
+<mapper namespace="payFeeV1ServiceDaoImpl">
 
 
     <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
-    <insert id="savePayFeeNewInfo" parameterType="Map">
+    <insert id="savePayFeeInfo" parameterType="Map">
         insert into pay_fee(
         amount,fee_type_cd,batch_id,fee_id,user_id,income_obj_id,config_id,fee_flag,start_time,
         end_time,state,community_id,payer_obj_type,payer_obj_id,b_id
@@ -18,7 +18,7 @@
 
 
     <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
-    <select id="getPayFeeNewInfo" parameterType="Map" resultType="Map">
+    <select id="getPayFeeInfo" parameterType="Map" resultType="Map">
         select t.amount,t.fee_type_cd,t.fee_type_cd feeTypeCd,t.status_cd,t.status_cd statusCd,t.batch_id,t.batch_id
         batchId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id userId,t.income_obj_id,t.income_obj_id
         incomeObjId,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag feeFlag,t.start_time,t.start_time
@@ -80,7 +80,7 @@
 
 
     <!-- 修改费用明细信息 add by wuxw 2018-07-03 -->
-    <update id="updatePayFeeNewInfo" parameterType="Map">
+    <update id="updatePayFeeInfo" parameterType="Map">
         update pay_fee t set t.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
@@ -132,7 +132,7 @@
     </update>
 
     <!-- 查询费用明细数量 add by wuxw 2018-07-03 -->
-    <select id="queryPayFeeNewsCount" parameterType="Map" resultType="Map">
+    <select id="queryPayFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee t
         where 1 =1

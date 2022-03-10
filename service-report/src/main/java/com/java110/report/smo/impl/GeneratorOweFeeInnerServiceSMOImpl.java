@@ -141,7 +141,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(feeDto);
 
         //没有关联费用
-        if (feeDto == null || feeDtos.size() < 1) {
+        if (feeDtos == null || feeDtos.size() < 1) {
             return;
         }
         for (ReportFeeDto tmpFeeDto : feeDtos) {
