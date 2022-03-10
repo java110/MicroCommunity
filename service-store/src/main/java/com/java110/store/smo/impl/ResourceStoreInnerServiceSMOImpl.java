@@ -145,6 +145,17 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         this.resourceResourceStoreServiceDaoImpl = resourceResourceStoreServiceDaoImpl;
     }
 
+    @Override
+    public String queryResourceStoresTotalPrice(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
+        //校验是否传了 分页信息
+        int page = resourceResourceStoreDto.getPage();
+        if (page != PageDto.DEFAULT_PAGE) {
+            resourceResourceStoreDto.setPage((page - 1) * resourceResourceStoreDto.getRow());
+        }
+        return resourceResourceStoreServiceDaoImpl.queryResourceStoresTotalPrice(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto));
+
+    }
+
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
         return userInnerServiceSMOImpl;
     }

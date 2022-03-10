@@ -78,6 +78,9 @@ public class ListStorehousesListener extends AbstractServiceApiListener {
         if (privileges.size() == 0) {
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId")});
         } else {
+            if (reqJson.containsKey("operationType") && reqJson.getString("operationType").equals("1000")) {
+                storehouseDto.setShType("");
+            }
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
         }
         if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("0")) {//调拨申请查看所有仓库

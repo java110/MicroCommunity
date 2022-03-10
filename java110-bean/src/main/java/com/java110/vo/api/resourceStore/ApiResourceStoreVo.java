@@ -7,6 +7,8 @@ import java.util.List;
 
 public class ApiResourceStoreVo extends MorePageVo implements Serializable {
     List<ApiResourceStoreDataVo> resourceStores;
+    private String subTotal;
+    private String totalPrice;
 
 
     public List<ApiResourceStoreDataVo> getResourceStores() {
@@ -15,5 +17,21 @@ public class ApiResourceStoreVo extends MorePageVo implements Serializable {
 
     public void setResourceStores(List<ApiResourceStoreDataVo> resourceStores) {
         this.resourceStores = resourceStores;
+    }
+
+    public String getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(String subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

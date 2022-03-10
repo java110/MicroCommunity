@@ -51,4 +51,14 @@ public interface IResourceStoreInnerServiceSMO {
     @RequestMapping(value = "/saveResourceStore", method = RequestMethod.POST)
     void saveResourceStore(@RequestBody ResourceStoreDto resourceStoreDto);
 
+    /**
+     * <p>查询物品总价</p>
+     *
+     * @param resourceResourceStoreDto 数据对象分享
+     * @return ResourceStoreDto 对象数据
+     */
+    @RequestMapping(value = "/queryResourceStoresTotalPrice", method = RequestMethod.POST)
+    String queryResourceStoresTotalPrice(@RequestBody ResourceStoreDto resourceResourceStoreDto);
+
+
 }

@@ -5,8 +5,12 @@ import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.IStaffServiceSMO;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -19,6 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 员工服务类
  * Created by Administrator on 2019/4/2.
@@ -29,6 +36,12 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IOrgStaffRelInnerServiceSMO iOrgStaffRelInnerServiceSMO;
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     /**
      * 添加员工信息
@@ -81,12 +94,32 @@ public class StaffServiceSMOImpl extends DefaultAbstractComponentSMO implements 
 
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含rows节点");
+
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("row"), "rows不是数字");
         int page = Integer.parseInt(paramIn.getString("page"));
         int rows = Integer.parseInt(paramIn.getString("row"));
         String staffName = paramIn.getString("staffName");
+        //2级别组织信息
+        if (paramIn.containsKey("orgLevel") && paramIn.getString("orgLevel").equals("2")) {
+            //默认只查看当前归属组织架构
+            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+            basePrivilegeDto.setResource("/viewAllOrganization");
+            basePrivilegeDto.setUserId(pd.getUserId());
+            List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+            if (privileges.size() == 0) {
+                //查询员工所属二级组织架构
+                OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+                orgStaffRelDto.setStaffId(pd.getUserId());
+                List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIds(orgStaffRelDto);
+                if (orgStaffRelDtos.size() > 0) {
+                    paramIn.put("branchOrgId", orgStaffRelDtos.get(0).getCompanyId());//当前人虽归属的二级组织信息
+                    paramIn.put("parentOrgId", orgStaffRelDtos.get(0).getCompanyId());//当前人虽归属的二级组织信息
+                }
+
+            }
+        }
 
         if (rows > 50) {
             return new ResponseEntity<String>("rows 数量不能大于50", HttpStatus.BAD_REQUEST);
