@@ -32,7 +32,6 @@ import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
-import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
@@ -265,6 +264,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             AccountDetailPo accountDetailPo = new AccountDetailPo();
             accountDetailPo.setAcctId(accountDto.getAcctId());
             accountDetailPo.setObjId(accountDto.getObjId());
+            accountDetailPo.setObjType(accountDto.getObjType());
             if (amount.doubleValue() < deductionAmount.doubleValue()) {
                 accountDetailPo.setAmount(amount.doubleValue() + "");
                 deductionAmount = deductionAmount.subtract(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
