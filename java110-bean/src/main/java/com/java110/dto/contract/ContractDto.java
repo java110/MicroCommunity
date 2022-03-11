@@ -181,6 +181,14 @@ public class ContractDto extends PageDto implements Serializable {
         this.contractId = contractId;
     }
 
+    public String[] getContractIds() {
+        return contractIds;
+    }
+
+    public void setContractIds(String[] contractIds) {
+        this.contractIds = contractIds;
+    }
+
     public String getObjId() {
         return objId;
     }
@@ -195,6 +203,14 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setContractName(String contractName) {
         this.contractName = contractName;
+    }
+
+    public String getContractNameLike() {
+        return contractNameLike;
+    }
+
+    public void setContractNameLike(String contractNameLike) {
+        this.contractNameLike = contractNameLike;
     }
 
     public String getStartTime() {
@@ -221,6 +237,30 @@ public class ContractDto extends PageDto implements Serializable {
         this.state = state;
     }
 
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
+    }
+
+    public String[] getNoStates() {
+        return noStates;
+    }
+
+    public void setNoStates(String[] noStates) {
+        this.noStates = noStates;
+    }
+
+    public String getStateDesc() {
+        return stateDesc;
+    }
+
+    public void setStateDesc(String stateDesc) {
+        this.stateDesc = stateDesc;
+    }
+
     public String getContractCode() {
         return contractCode;
     }
@@ -245,6 +285,38 @@ public class ContractDto extends PageDto implements Serializable {
         this.operatorLink = operatorLink;
     }
 
+    public String getContractParentId() {
+        return contractParentId;
+    }
+
+    public void setContractParentId(String contractParentId) {
+        this.contractParentId = contractParentId;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
+
+    public String getObjPersonName() {
+        return objPersonName;
+    }
+
+    public void setObjPersonName(String objPersonName) {
+        this.objPersonName = objPersonName;
+    }
+
+    public String getObjPersonId() {
+        return objPersonId;
+    }
+
+    public void setObjPersonId(String objPersonId) {
+        this.objPersonId = objPersonId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -261,14 +333,6 @@ public class ContractDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public List<ContractAttrDto> getAttrs() {
-        return attrs;
-    }
-
-    public void setAttrs(List<ContractAttrDto> attrs) {
-        this.attrs = attrs;
-    }
-
     public String getContractTypeName() {
         return contractTypeName;
     }
@@ -283,30 +347,6 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
-    }
-
-    public String getStateDesc() {
-        return stateDesc;
-    }
-
-    public void setStateDesc(String stateDesc) {
-        this.stateDesc = stateDesc;
-    }
-
-    public String[] getNoStates() {
-        return noStates;
-    }
-
-    public void setNoStates(String[] noStates) {
-        this.noStates = noStates;
-    }
-
-    public String getContractParentId() {
-        return contractParentId;
-    }
-
-    public void setContractParentId(String contractParentId) {
-        this.contractParentId = contractParentId;
     }
 
     public String getParentContractCode() {
@@ -397,46 +437,6 @@ public class ContractDto extends PageDto implements Serializable {
         this.startUserId = startUserId;
     }
 
-    public String[] getContractIds() {
-        return contractIds;
-    }
-
-    public void setContractIds(String[] contractIds) {
-        this.contractIds = contractIds;
-    }
-
-    public String getObjName() {
-        return objName;
-    }
-
-    public void setObjName(String objName) {
-        this.objName = objName;
-    }
-
-    public String getObjPersonName() {
-        return objPersonName;
-    }
-
-    public void setObjPersonName(String objPersonName) {
-        this.objPersonName = objPersonName;
-    }
-
-    public String getObjPersonId() {
-        return objPersonId;
-    }
-
-    public void setObjPersonId(String objPersonId) {
-        this.objPersonId = objPersonId;
-    }
-
-    public String[] getStates() {
-        return states;
-    }
-
-    public void setStates(String[] states) {
-        this.states = states;
-    }
-
     public String getCommunityId() {
         return communityId;
     }
@@ -445,11 +445,11 @@ public class ContractDto extends PageDto implements Serializable {
         this.communityId = communityId;
     }
 
-    public String getContractNameLike() {
-        return contractNameLike;
+    public List<ContractAttrDto> getAttrs() {
+        return attrs;
     }
 
-    public void setContractNameLike(String contractNameLike) {
-        this.contractNameLike = contractNameLike;
+    public void setAttrs(List<ContractAttrDto> attrs) {
+        this.attrs = attrs;
     }
 }
