@@ -181,6 +181,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -277,6 +280,9 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="startTime !=null ">
             and t.create_time &gt;= #{startTime}
