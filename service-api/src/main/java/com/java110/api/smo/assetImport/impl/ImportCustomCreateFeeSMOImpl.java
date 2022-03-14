@@ -183,6 +183,8 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             if (!ImportCustomCreateFeeDto.TYPE_CAR.equals(importCustomCreateFeeDto.getObjType())) {
                 continue;
             }
+            importCustomCreateFeeDto.setCarNum(importCustomCreateFeeDto.getObjName());
+
             cars.add(importCustomCreateFeeDto);
         }
 
@@ -318,6 +320,10 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
                 feeAttrPos.add(feeAttrPo);
             }
+        }
+
+        if (payFeePos.size() < 1) {
+            return;
         }
 
         feeInnerServiceSMOImpl.saveFee(payFeePos);
