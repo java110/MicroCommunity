@@ -188,7 +188,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
 
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(paramIn.getString("communityId"));
-        parkingSpaceDto.setPsIds(paramIn.getString("psIds").split(","));
+        parkingSpaceDto.setPaIds(paramIn.getString("paIds").split(","));
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {

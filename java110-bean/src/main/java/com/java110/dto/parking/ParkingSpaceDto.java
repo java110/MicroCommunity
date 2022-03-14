@@ -39,6 +39,7 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     private String parkingTypeName;
 
     private String[] psIds;
+    private String[] paIds;
 
     private String[] states;
 
@@ -241,5 +242,13 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public void setParkingTypeName(String parkingTypeName) {
         this.parkingTypeName = parkingTypeName;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }
