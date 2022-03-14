@@ -208,6 +208,9 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
                 roomIndex += 1;
             }
         }
+
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 5);
+        sheet.addMergedRegion(region);
     }
 
     private void getRoomAndConfigs(JSONObject paramIn, Workbook workbook) {
@@ -259,6 +262,8 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
                 roomIndex += 1;
             }
         }
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 5);
+        sheet.addMergedRegion(region);
     }
 
     /**
