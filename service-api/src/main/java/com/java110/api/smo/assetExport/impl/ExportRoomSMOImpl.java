@@ -9,11 +9,13 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.apache.poi.ss.usermodel.*;
@@ -31,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,6 +52,8 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
     public static final String TYPE_PARKSPACE = "2002";
     public static final String TYPE_CONTRACT = "3003"; //合同
 
+    public static final int DEFAULT_ROW = 500;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -60,6 +65,9 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<Object> exportExcelData(IPageData pd) throws Exception {
@@ -186,6 +194,12 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
             return;
         }
+
+        //查询车牌号
+        List<OwnerCarDto> ownerCarDtos = getOwnerCars(parkingSpaceDtos);
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            return;
+        }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setConfigIds(paramIn.getString("configIds").split(","));
         feeConfigDto.setCommunityId(paramIn.getString("communityId"));
@@ -196,10 +210,10 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         }
 
         int roomIndex = 2;
-        for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
             for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
                 row = sheet.createRow(roomIndex);
-                row.createCell(0).setCellValue(tmpParkingSpaceDto.getAreaNum() + "-" + tmpParkingSpaceDto.getNum());
+                row.createCell(0).setCellValue(tmpOwnerCarDto.getCarNum());
                 row.createCell(1).setCellValue("2002");
                 row.createCell(2).setCellValue(tmpFeeConfigDto.getConfigId());
                 row.createCell(3).setCellValue(tmpFeeConfigDto.getFeeName());
@@ -211,6 +225,31 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 5);
         sheet.addMergedRegion(region);
+    }
+
+    private List<OwnerCarDto> getOwnerCars(List<ParkingSpaceDto> parkingSpaceDtos) {
+        List<String> psIds = new ArrayList<>();
+        List<OwnerCarDto> tmpOwnerCarDtos = new ArrayList<>();
+        for (int roomIndex = 0; roomIndex < parkingSpaceDtos.size(); roomIndex++) {
+            psIds.add(parkingSpaceDtos.get(roomIndex).getPsId());
+            if (roomIndex % DEFAULT_ROW == 0 && roomIndex != 0) {
+                // 处理房屋费用
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setPsIds(psIds.toArray(new String[psIds.size()]));
+                ownerCarDto.setCommunityId(parkingSpaceDtos.get(roomIndex).getCommunityId());
+                tmpOwnerCarDtos.addAll(ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto));
+
+                psIds = new ArrayList<>();
+            }
+        }
+        if (psIds != null && psIds.size() > 0) {
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setPsIds(psIds.toArray(new String[psIds.size()]));
+            ownerCarDto.setCommunityId(parkingSpaceDtos.get(0).getCommunityId());
+            tmpOwnerCarDtos.addAll(ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto));
+        }
+        return tmpOwnerCarDtos;
+
     }
 
     private void getRoomAndConfigs(JSONObject paramIn, Workbook workbook) {

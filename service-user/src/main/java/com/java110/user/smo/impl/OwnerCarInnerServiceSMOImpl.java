@@ -5,6 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.user.UserDto;
+import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -110,6 +111,37 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
             for (ImportRoomFee importRoomFee : tmpImportCarFees) {
                 if (ownerCarDto.getCarNum().equals(importRoomFee.getCarNum())) {
                     importRoomFee.setCarId(ownerCarDto.getCarId());
+                    importRoomFee.setOwnerId(ownerCarDto.getOwnerId());
+                    importRoomFee.setOwnerName(ownerCarDto.getOwnerName());
+                    importRoomFee.setOwnerLink(ownerCarDto.getLink());
+                }
+            }
+        }
+        return tmpImportCarFees;
+    }
+
+    public List<ImportCustomCreateFeeDto> freshCarIdsByImportCustomCreateFee(@RequestBody List<ImportCustomCreateFeeDto> tmpImportCarFees){
+        List<String> carNums = new ArrayList<>();
+        for (ImportCustomCreateFeeDto importRoomFee : tmpImportCarFees) {
+            if (StringUtil.isEmpty(importRoomFee.getCarNum())) {
+                continue;
+            }
+            carNums.add(importRoomFee.getCarNum());
+        }
+
+        if (carNums.size() < 1) {
+            return tmpImportCarFees;
+        }
+        Map<String, Object> info = new HashMap<>();
+        info.put("carNums", carNums.toArray(new String[carNums.size()]));
+        info.put("communityId", tmpImportCarFees.get(0).getCommunityId());
+        info.put("statusCd", "0");
+        List<OwnerCarDto> ownerCarDtos = BeanConvertUtil.covertBeanList(ownerCarServiceDaoImpl.getOwnerCarInfo(info), OwnerCarDto.class);
+
+        for (OwnerCarDto ownerCarDto : ownerCarDtos) {
+            for (ImportCustomCreateFeeDto importRoomFee : tmpImportCarFees) {
+                if (ownerCarDto.getCarNum().equals(importRoomFee.getCarNum())) {
+                    importRoomFee.setPayObjId(ownerCarDto.getCarId());
                     importRoomFee.setOwnerId(ownerCarDto.getOwnerId());
                     importRoomFee.setOwnerName(ownerCarDto.getOwnerName());
                     importRoomFee.setOwnerLink(ownerCarDto.getLink());

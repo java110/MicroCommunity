@@ -12,7 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @Version 1.0
  * add by wuxw 2019/9/23
  **/
-public interface IImportRoomFeeSMO {
+public interface IImportCustomCreateFeeSMO {
+
 
     /**
      * 导入excel数据
@@ -20,10 +21,5 @@ public interface IImportRoomFeeSMO {
      * @param uploadFile excel 文件
      * @return ResponseEntity
      */
-    public ResponseEntity<String> importExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
-
-    public ResponseEntity<String> importFile(MultipartFile uploadFile) throws Exception;
-
-    ResponseEntity<String> importTempData(IPageData pd);
-
+    public ResponseEntity<String> importCustomExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
 }

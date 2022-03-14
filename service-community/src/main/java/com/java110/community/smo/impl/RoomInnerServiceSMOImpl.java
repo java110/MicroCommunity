@@ -4,10 +4,12 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IRoomAttrServiceDao;
 import com.java110.community.dao.IRoomServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.user.UserDto;
+import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -17,7 +19,6 @@ import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -311,6 +312,21 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         }
         return importRoomFees;
+    }
+
+    public List<ImportCustomCreateFeeDto> freshRoomIdsByImportCustomCreateFee(@RequestBody List<ImportCustomCreateFeeDto> importCustomCreateFeeDtos) {
+        for (ImportCustomCreateFeeDto importRoomFee : importCustomCreateFeeDtos) {
+            List<Map> infos = null;
+            infos = roomServiceDaoImpl.getRoomInfos(BeanConvertUtil.beanCovertMap(importRoomFee));
+            if (infos == null || infos.size() < 1) {
+                continue;
+            }
+            importRoomFee.setPayObjId(infos.get(0).get("roomId").toString());
+            importRoomFee.setFloorNum(infos.get(0).get("floorNum").toString());
+            importRoomFee.setUnitNum(infos.get(0).get("unitNum").toString());
+            importRoomFee.setRoomNum(infos.get(0).get("roomNum").toString());
+        }
+        return importCustomCreateFeeDtos;
     }
 
     public IRoomServiceDao getRoomServiceDaoImpl() {

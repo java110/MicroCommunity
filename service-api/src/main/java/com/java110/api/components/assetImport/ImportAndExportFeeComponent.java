@@ -1,6 +1,7 @@
 package com.java110.api.components.assetImport;
 
 import com.java110.api.smo.assetExport.IExportRoomSMO;
+import com.java110.api.smo.assetImport.IImportCustomCreateFeeSMO;
 import com.java110.api.smo.assetImport.IImportRoomFeeSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -22,7 +23,7 @@ public class ImportAndExportFeeComponent {
 
 
     @Autowired
-    private IImportRoomFeeSMO importRoomFeeSMOImpl;
+    private IImportCustomCreateFeeSMO importCustomCreateFeeSMOImpl;
 
     @Autowired
     private IExportRoomSMO exportRoomSMOImpl;
@@ -35,7 +36,7 @@ public class ImportAndExportFeeComponent {
      */
     public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
-        return importRoomFeeSMOImpl.importExcelData(pd, uploadFile);
+        return importCustomCreateFeeSMOImpl.importCustomExcelData(pd, uploadFile);
     }
 
 
