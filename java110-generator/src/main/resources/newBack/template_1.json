@@ -1,28 +1,36 @@
 {
   "param": {
-    "gId": "g_id",
-    "gcId": "gc_id",
-    "name": "name",
-    "communityName": "community_name",
+    "valueId": "value_id",
+    "titleId": "title_id",
+    "itemValue": "item_value",
     "statusCd": "status_cd",
-    "communityId": "community_id"
+    "communityId": "community_id",
+    "seq": "seq"
   },
-  "name": "menuGroupCommunity",
+  "name": "inspectionItemTitleValue",
   "shareColumn": "community_id",
-  "id": "gcId",
-  "shareName": "user",
+  "id": "valueId",
+  "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "菜单组ID不能为空",
-      "code": "gId"
+      "msg": "题目ID不能为空",
+      "code": "titleId"
+    },
+    {
+      "msg": "选项说明不能为空",
+      "code": "itemValue"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
+    },
+    {
+      "msg": "显示顺序不能为空",
+      "code": "seq"
     }
   ],
-  "desc": "小区功能",
+  "desc": "题目选项",
   "shareParam": "communityId",
-  "tableName": "m_menu_group_community"
+  "tableName": "inspection_item_title_value"
 }
