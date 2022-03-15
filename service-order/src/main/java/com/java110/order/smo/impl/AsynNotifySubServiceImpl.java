@@ -204,14 +204,19 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
     private JSONArray generateBusinessInsertInsertSql(OrderItemDto orderItemDto, BusinessTableHisDto businessTableHisDto) {
         JSONArray params = new JSONArray();
         JSONObject param = null;
+        JSONObject updateParam = null;
         String sql = "";
+        String updateSql = "";
         String logText = orderItemDto.getLogText();
 
         JSONObject logTextObj = JSONObject.parseObject(logText);
         JSONArray afterValues = logTextObj.getJSONArray("afterValue");
         for (int afterValueIndex = 0; afterValueIndex < afterValues.size(); afterValueIndex++) {
             sql = "insert into " + businessTableHisDto.getActionObjHis() + " ";
+            updateSql = "update " + businessTableHisDto.getActionObj() +" set b_id='"+orderItemDto.getbId()+"' where 1=1 ";
+
             param = new JSONObject();
+            updateParam = new JSONObject();
             JSONObject keyValue = afterValues.getJSONObject(afterValueIndex);
             if (keyValue.isEmpty()) {
                 continue;
@@ -224,6 +229,8 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
                 }
                 keySql += (key + ",");
                 valueSql += (keyValue.getString(key) + ",");
+
+                updateSql += (" and "+key +"=" + keyValue.getString(key));
             }
             keySql += "operate,b_id";
             valueSql += "'ADD','" + orderItemDto.getbId() + "'";
@@ -235,7 +242,9 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             }
             sql = sql + keySql + ") " + valueSql + ") ";
             param.put("fallBackSql", sql);
+            updateParam.put("fallBackSql", updateSql);
             params.add(param);
+            params.add(updateParam);
         }
 
         return params;
