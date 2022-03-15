@@ -28,9 +28,9 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,7 +55,7 @@ public class SaveInspectionItemCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "itemName", "请求报文中未包含itemName");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       InspectionItemPo inspectionItemPo = BeanConvertUtil.covertBean(reqJson, InspectionItemPo.class);
+        InspectionItemPo inspectionItemPo = BeanConvertUtil.covertBean(reqJson, InspectionItemPo.class);
         inspectionItemPo.setItemId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = inspectionItemV1InnerServiceSMOImpl.saveInspectionItem(inspectionItemPo);
 

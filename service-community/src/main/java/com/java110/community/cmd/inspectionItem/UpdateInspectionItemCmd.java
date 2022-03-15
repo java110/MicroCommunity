@@ -21,16 +21,15 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IInspectionItemV1InnerServiceSMO;
 import com.java110.po.inspectionItem.InspectionItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -46,7 +45,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "inspectionItem.updateInspectionItem")
 public class UpdateInspectionItemCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateInspectionItemCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateInspectionItemCmd.class);
 
 
     @Autowired
@@ -55,7 +54,7 @@ public class UpdateInspectionItemCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "itemId", "itemId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,7 +62,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       InspectionItemPo inspectionItemPo = BeanConvertUtil.covertBean(reqJson, InspectionItemPo.class);
+        InspectionItemPo inspectionItemPo = BeanConvertUtil.covertBean(reqJson, InspectionItemPo.class);
         int flag = inspectionItemV1InnerServiceSMOImpl.updateInspectionItem(inspectionItemPo);
 
         if (flag < 1) {

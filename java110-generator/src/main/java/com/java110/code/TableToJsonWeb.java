@@ -7,21 +7,20 @@ import com.java110.utils.util.StringUtil;
 public class TableToJsonWeb {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `s_store` (\n" +
-            "  `store_id` varchar(30) NOT NULL COMMENT '商店ID',\n" +
-            "  `name` varchar(100) NOT NULL COMMENT '名称',\n" +
-            "  `address` varchar(200) NOT NULL COMMENT '地址',\n" +
-            "  `tel` varchar(11) NOT NULL COMMENT '电话',\n" +
-            "  `nearby_landmarks` varchar(200) DEFAULT NULL COMMENT '地标',\n" +
+    public static final String createTableSql = "CREATE TABLE `inspection_item` (\n" +
+            "  `item_id` varchar(30) NOT NULL COMMENT '主键ID',\n" +
+            "  `item_name` varchar(256) NOT NULL COMMENT '巡检项目',\n" +
+            "  `community_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '小区ID',\n" +
+            "  `remark` varchar(512) DEFAULT NULL COMMENT '备注',\n" +
             ")";
     public static void main(String[] args) {
-        String templateName = "物业公司"; //业务名称
-        String templateCode = "propertyCompany"; //表名大写
-        String templateKey = "storeId"; //表主键
+        String templateName = "巡检项目"; //业务名称
+        String templateCode = "inspectionItem"; //表名大写
+        String templateKey = "itemId"; //表主键
         String templateKeyName = "编号";//主键说明
-        String searchCode = "storeId"; //分片字段
+        String searchCode = "itemId"; //分片字段
         String searchName = "编号"; //分片字段说明
-        String directories = "admin"; //前端生成到那个目录下
+        String directories = "property"; //前端生成到那个目录下
         // templateName 业务名称 业务编码名称生成后文件名 templateCode 主键 templateKey
         // 业务主键名称 templateKeyName=templateName+ID 主机驼峰 searchCode 主键名称 searchName
         // directories 放在前端那个目录下
