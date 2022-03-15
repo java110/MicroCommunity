@@ -1,6 +1,7 @@
 package com.java110.dto.inspectionItemTitleValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class InspectionItemTitleValueDto extends PageDto implements Serializable {
 
     private String valueId;
-private String titleId;
-private String itemValue;
-private String communityId;
-private String seq;
+    private String titleId;
+    private String[] titleIds;
+    private String itemValue;
+    private String communityId;
+    private String seq;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String seq;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getItemValue() {
+
+    public String getItemValue() {
         return itemValue;
     }
-public void setItemValue(String itemValue) {
+
+    public void setItemValue(String itemValue) {
         this.itemValue = itemValue;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -72,5 +83,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getTitleIds() {
+        return titleIds;
+    }
+
+    public void setTitleIds(String[] titleIds) {
+        this.titleIds = titleIds;
     }
 }

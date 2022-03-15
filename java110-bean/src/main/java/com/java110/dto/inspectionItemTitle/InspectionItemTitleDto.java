@@ -1,9 +1,11 @@
 package com.java110.dto.inspectionItemTitle;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -30,6 +32,8 @@ public class InspectionItemTitleDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<InspectionItemTitleValueDto> inspectionItemTitleValueDtos;
 
 
     public String getItemId() {
@@ -95,5 +99,13 @@ public class InspectionItemTitleDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<InspectionItemTitleValueDto> getInspectionItemTitleValueDtos() {
+        return inspectionItemTitleValueDtos;
+    }
+
+    public void setInspectionItemTitleValueDtos(List<InspectionItemTitleValueDto> inspectionItemTitleValueDtos) {
+        this.inspectionItemTitleValueDtos = inspectionItemTitleValueDtos;
     }
 }

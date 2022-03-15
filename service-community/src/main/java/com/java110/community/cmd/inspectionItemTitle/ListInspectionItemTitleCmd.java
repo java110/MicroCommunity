@@ -17,25 +17,24 @@ package com.java110.community.cmd.inspectionItemTitle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
 import com.java110.intf.community.IInspectionItemTitleV1InnerServiceSMO;
-import com.java110.po.inspectionItemTitle.InspectionItemTitlePo;
+import com.java110.intf.community.IInspectionItemTitleValueV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -51,9 +50,12 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "inspectionItemTitle.listInspectionItemTitle")
 public class ListInspectionItemTitleCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(ListInspectionItemTitleCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListInspectionItemTitleCmd.class);
     @Autowired
     private IInspectionItemTitleV1InnerServiceSMO inspectionItemTitleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IInspectionItemTitleValueV1InnerServiceSMO inspectionItemTitleValueV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -63,22 +65,54 @@ public class ListInspectionItemTitleCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           InspectionItemTitleDto inspectionItemTitleDto = BeanConvertUtil.covertBean(reqJson, InspectionItemTitleDto.class);
+        InspectionItemTitleDto inspectionItemTitleDto = BeanConvertUtil.covertBean(reqJson, InspectionItemTitleDto.class);
 
-           int count = inspectionItemTitleV1InnerServiceSMOImpl.queryInspectionItemTitlesCount(inspectionItemTitleDto);
+        int count = inspectionItemTitleV1InnerServiceSMOImpl.queryInspectionItemTitlesCount(inspectionItemTitleDto);
 
-           List<InspectionItemTitleDto> inspectionItemTitleDtos = null;
+        List<InspectionItemTitleDto> inspectionItemTitleDtos = null;
 
-           if (count > 0) {
-               inspectionItemTitleDtos = inspectionItemTitleV1InnerServiceSMOImpl.queryInspectionItemTitles(inspectionItemTitleDto);
-           } else {
-               inspectionItemTitleDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            inspectionItemTitleDtos = inspectionItemTitleV1InnerServiceSMOImpl.queryInspectionItemTitles(inspectionItemTitleDto);
+            refreshTitileValues(inspectionItemTitleDtos);
+        } else {
+            inspectionItemTitleDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionItemTitleDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionItemTitleDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshTitileValues(List<InspectionItemTitleDto> inspectionItemTitleDtos) {
+
+        if (inspectionItemTitleDtos == null || inspectionItemTitleDtos.size() < 1) {
+            return;
+        }
+
+        List<String> titleIds = new ArrayList<>();
+        for (InspectionItemTitleDto inspectionItemTitleDto : inspectionItemTitleDtos) {
+            titleIds.add(inspectionItemTitleDto.getTitleId());
+        }
+
+        InspectionItemTitleValueDto inspectionItemTitleValueDto = new InspectionItemTitleValueDto();
+        inspectionItemTitleValueDto.setTitleIds(titleIds.toArray(new String[titleIds.size()]));
+        inspectionItemTitleValueDto.setCommunityId(inspectionItemTitleDtos.get(0).getCommunityId());
+        List<InspectionItemTitleValueDto> inspectionItemTitleValueDtos
+                = inspectionItemTitleValueV1InnerServiceSMOImpl.queryInspectionItemTitleValues(inspectionItemTitleValueDto);
+
+        List<InspectionItemTitleValueDto> tmpInspectionItemTitleValueDtos = null;
+        for (InspectionItemTitleDto tmpInspectionItemTitleDto : inspectionItemTitleDtos) {
+            tmpInspectionItemTitleValueDtos = new ArrayList<>();
+            for (InspectionItemTitleValueDto inspectionItemTitleValueDto1 : inspectionItemTitleValueDtos) {
+                if (tmpInspectionItemTitleDto.getTitleId().equals(inspectionItemTitleValueDto1.getTitleId())) {
+                    tmpInspectionItemTitleValueDtos.add(inspectionItemTitleValueDto1);
+                }
+            }
+            tmpInspectionItemTitleDto.setInspectionItemTitleValueDtos(tmpInspectionItemTitleValueDtos);
+        }
+
+
     }
 }
