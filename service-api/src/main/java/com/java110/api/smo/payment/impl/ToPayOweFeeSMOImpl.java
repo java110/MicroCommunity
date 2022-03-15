@@ -2,20 +2,23 @@ package com.java110.api.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.app.AppDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IToPayOweFeeSMO;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -23,7 +26,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("toPayOweFeeSMOImpl")
@@ -46,6 +49,9 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
@@ -54,7 +60,6 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
     public ResponseEntity<String> toPay(IPageData pd) {
         return super.businessProcess(pd);
     }
-
 
 
     @Override
@@ -82,13 +87,13 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
         }
 
         String payObjType = "3333";
-        if(paramIn.containsKey("payObjType")){
+        if (paramIn.containsKey("payObjType")) {
             payObjType = paramIn.getString("payObjType");
         }
 
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType="+payObjType;
+        String url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType=" + payObjType;
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -108,6 +113,8 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
             feePrice = new BigDecimal(fees.getJSONObject(feeIndex).getDouble("feePrice"));
             tmpMoney = tmpMoney.add(feePrice);
         }
+
+        String feeName = getFeeName(fees.getJSONObject(0));
         money = tmpMoney.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
         if (AppDto.WECHAT_OWNER_APP_ID.equals(pd.getAppId())) {
@@ -140,8 +147,8 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
         payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
         //支付适配器
         IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
-        Map result = tPayAdapt.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"),
-                orderId, money, openId, smallWeChatDto,wechatAuthProperties.getOweFeeNotifyUrl());
+        Map result = tPayAdapt.java110Payment(outRestTemplate, feeName, paramIn.getString("tradeType"),
+                orderId, money, openId, smallWeChatDto, wechatAuthProperties.getOweFeeNotifyUrl());
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
         if (!"0".equals(result.get("code"))) {
             return responseEntity;
@@ -156,7 +163,27 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
         return responseEntity;
     }
 
+    private String getFeeName(JSONObject feeDto) {
+        //查询小区名称
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(feeDto.getString("communityId"));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
 
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+
+        JSONArray feeAttrDtos = feeDto.getJSONArray("feeAttrDtos");
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return communityDtos.get(0).getName() + "-" + feeDto.getString("feeName");
+        }
+
+        for (int attrIndex = 0; attrIndex < feeAttrDtos.size(); attrIndex++) {
+            if (FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDtos.getJSONObject(attrIndex).getString("specCd"))) {
+                return communityDtos.get(0).getName() + "-" + feeAttrDtos.getJSONObject(attrIndex).getString("value") + "-" + feeDto.getString("feeName");
+            }
+        }
+
+        return communityDtos.get(0).getName() + "-" + feeDto.getString("feeName");
+    }
 
 
     private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
@@ -168,7 +195,7 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
                 pd.getAppId());
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 "smallWeChat.listSmallWeChats?appId="
-                        + paramIn.getString("appId") + "&page=1&row=1&communityId="+paramIn.getString("communityId"), HttpMethod.GET);
+                        + paramIn.getString("appId") + "&page=1&row=1&communityId=" + paramIn.getString("communityId"), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return null;

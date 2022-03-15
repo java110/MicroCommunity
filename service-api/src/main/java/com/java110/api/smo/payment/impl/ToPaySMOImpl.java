@@ -91,6 +91,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         String orderId = orderInfo.getString("oId");
+        String feeName = orderInfo.getString("feeName");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
         //需要判断金额是否 == 0 等于0 直接掉缴费通知接口
         if (money <= 0) {
@@ -142,7 +143,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
         //支付适配器
         IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
-        Map result = tPayAdapt.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"), orderId, money, openId, smallWeChatDto);
+        Map result = tPayAdapt.java110Payment(outRestTemplate, feeName, paramIn.getString("tradeType"), orderId, money, openId, smallWeChatDto);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;

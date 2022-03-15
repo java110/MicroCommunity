@@ -13,5 +13,5 @@ public interface IToPayOweFeeSMO {
      * @param pd
      * @return
      */
-    public ResponseEntity<String> toPay(IPageData pd);
+     ResponseEntity<String> toPay(IPageData pd);
 }

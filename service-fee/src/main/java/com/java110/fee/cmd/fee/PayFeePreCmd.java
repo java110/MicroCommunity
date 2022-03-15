@@ -7,14 +7,18 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.couponUser.CouponUserDto;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -27,7 +31,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,6 +91,9 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -151,10 +157,35 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         }
         paramOut.put("receivedAmount", receivedAmount);
 
+        String feeName = getObjName(feeDto);
+        paramOut.put("feeName", feeName);
+
         ResponseEntity<String> responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         reqJson.putAll(paramOut);
         CommonCache.setValue("payFeePre" + paramOut.getString("oId"), reqJson.toJSONString(), 24 * 60 * 60);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private String getObjName(FeeDto feeDto) {
+        //查询小区名称
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(feeDto.getCommunityId());
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+
+        List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
+        }
+
+        for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+            if (FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())) {
+                return communityDtos.get(0).getName() + "-" + feeAttrDto.getValue() + "-" + feeDto.getFeeName();
+            }
+        }
+
+        return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
     }
 
     /**
