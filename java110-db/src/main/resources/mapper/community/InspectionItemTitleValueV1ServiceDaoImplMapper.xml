@@ -27,6 +27,12 @@
         <if test="titleId !=null and titleId != ''">
             and t.title_id= #{titleId}
         </if>
+        <if test="titleIds !=null">
+            and t.title_id in
+            <foreach collection="titleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="itemValue !=null and itemValue != ''">
             and t.item_value= #{itemValue}
         </if>
@@ -39,7 +45,7 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-        order by t.create_time desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

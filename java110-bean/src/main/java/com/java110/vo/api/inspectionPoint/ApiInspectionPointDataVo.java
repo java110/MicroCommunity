@@ -24,6 +24,9 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String pointStartTime;
     private String pointEndTime;
     private String sortNumber;
+    private String itemId;
+    private String itemName;
+    private String nfcCode;
 
     public String getInspectionId() {
         return inspectionId;
@@ -183,5 +186,29 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setIrpRelId(String irpRelId) {
         this.irpRelId = irpRelId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getNfcCode() {
+        return nfcCode;
+    }
+
+    public void setNfcCode(String nfcCode) {
+        this.nfcCode = nfcCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 }

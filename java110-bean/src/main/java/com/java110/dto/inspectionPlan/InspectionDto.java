@@ -42,6 +42,10 @@ public class InspectionDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String itemId;
+    private String itemName;
+    private String nfcCode;
+
 
     public String getInspectionId() {
         return inspectionId;
@@ -208,13 +212,40 @@ public class InspectionDto extends PageDto implements Serializable {
     public String getPointStartTime() {
         return pointStartTime;
     }
+
     public void setPointStartTime(String pointStartTime) {
         this.pointStartTime = pointStartTime;
     }
+
     public String getPointEndTime() {
         return pointEndTime;
     }
+
     public void setPointEndTime(String pointEndTime) {
         this.pointEndTime = pointEndTime;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getNfcCode() {
+        return nfcCode;
+    }
+
+    public void setNfcCode(String nfcCode) {
+        this.nfcCode = nfcCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 }
