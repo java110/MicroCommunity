@@ -21,16 +21,18 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IInspectionItemTitleV1InnerServiceSMO;
+import com.java110.intf.community.IInspectionItemTitleValueV1InnerServiceSMO;
 import com.java110.po.inspectionItemTitle.InspectionItemTitlePo;
+import com.java110.po.inspectionItemTitleValue.InspectionItemTitleValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * 类表述：删除
  * 服务编码：inspectionItemTitle.deleteInspectionItemTitle
@@ -43,15 +45,17 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "inspectionItemTitle.deleteInspectionItemTitle")
 public class DeleteInspectionItemTitleCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteInspectionItemTitleCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteInspectionItemTitleCmd.class);
 
     @Autowired
     private IInspectionItemTitleV1InnerServiceSMO inspectionItemTitleV1InnerServiceSMOImpl;
+    @Autowired
+    private IInspectionItemTitleValueV1InnerServiceSMO inspectionItemTitleValueV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "titleId", "titleId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,11 +63,18 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       InspectionItemTitlePo inspectionItemTitlePo = BeanConvertUtil.covertBean(reqJson, InspectionItemTitlePo.class);
+        InspectionItemTitlePo inspectionItemTitlePo = BeanConvertUtil.covertBean(reqJson, InspectionItemTitlePo.class);
         int flag = inspectionItemTitleV1InnerServiceSMOImpl.deleteInspectionItemTitle(inspectionItemTitlePo);
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        InspectionItemTitleValuePo deleteInspectionItemTitleValuePo = new InspectionItemTitleValuePo();
+        deleteInspectionItemTitleValuePo.setTitleId(inspectionItemTitlePo.getTitleId());
+        flag = inspectionItemTitleValueV1InnerServiceSMOImpl.deleteInspectionItemTitleValue(deleteInspectionItemTitleValuePo);
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
