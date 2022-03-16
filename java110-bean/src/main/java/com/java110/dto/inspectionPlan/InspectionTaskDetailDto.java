@@ -64,6 +64,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String nowTime;
 
     private String statusCd = "0";
+    private String itemId;
 
     public String getInspectionId() {
         return inspectionId;
@@ -351,5 +352,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setInspectionEndTime(String inspectionEndTime) {
         this.inspectionEndTime = inspectionEndTime;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }

@@ -121,8 +121,9 @@
         inspectionStateName,
         ipl.inspection_plan_name,ipl.inspection_plan_name inspectionPlanName,ir.route_name,ir.route_name routeName,
         it.plan_user_name,it.plan_user_name planUserName,it.act_user_name,it.act_user_name actUserName,td4.name,td4.name
-        signTypeName,td5.name taskStateName
+        signTypeName,td5.name taskStateName,ip.item_id itemId
         from inspection_task_detail t
+        LEFT JOIN inspection_point ip on t.inspection_id = ip.inspection_id and ip.status_cd = '0'
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'inspection_task_detail' and
         td1.table_columns = 'state'
         left join t_dict td2 on t.patrol_type = td2.status_cd and td2.table_name = 'inspection_task_detail' and
