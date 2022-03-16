@@ -30,6 +30,7 @@ public class InspectionTaskPo implements Serializable {
     private String taskType;
 
     private String state;
+    private String statusCd;
 
     public String getTaskId() {
         return taskId;
@@ -165,5 +166,13 @@ public class InspectionTaskPo implements Serializable {
 
     public void setTaskType(String taskType) {
         this.taskType = taskType;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

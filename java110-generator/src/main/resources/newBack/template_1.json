@@ -1,36 +1,63 @@
 {
   "param": {
-    "valueId": "value_id",
-    "titleId": "title_id",
-    "itemValue": "item_value",
+    "planUserId": "plan_user_id",
+    "actInsTime": "act_ins_time",
+    "planInsTime": "plan_ins_time",
+    "originalPlanUserName": "original_plan_user_name",
+    "ipStaffId": "ip_staff_id",
+    "transferDesc": "transfer_desc",
     "statusCd": "status_cd",
+    "actUserName": "act_user_name",
+    "originalPlanUserId": "original_plan_user_id",
+    "taskType": "task_type",
+    "signType": "sign_type",
+    "planEndTime": "plan_end_time",
+    "inspectionPlanId": "inspection_plan_id",
+    "planUserName": "plan_user_name",
     "communityId": "community_id",
-    "seq": "seq"
+    "actUserId": "act_user_id",
+    "taskId": "task_id"
   },
-  "name": "inspectionItemTitleValue",
+  "name": "inspectionTask",
   "shareColumn": "community_id",
-  "id": "valueId",
+  "id": "taskId",
   "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "题目ID不能为空",
-      "code": "titleId"
-    },
-    {
-      "msg": "选项说明不能为空",
-      "code": "itemValue"
+      "msg": "任务编码不能为空",
+      "code": "taskId"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
     },
     {
-      "msg": "显示顺序不能为空",
-      "code": "seq"
+      "msg": "计划ID不能为空",
+      "code": "inspectionPlanId"
+    },
+    {
+      "msg": "计划巡检时间不能为空",
+      "code": "planInsTime"
+    },
+    {
+      "msg": "计划巡检人员id不能为空",
+      "code": "planUserId"
+    },
+    {
+      "msg": "实际巡检方式不能为空",
+      "code": "signType"
+    },
+    {
+      "msg": "巡检人ID不能为空",
+      "code": "ipStaffId"
+    },
+    {
+      "msg": "计划巡检结束时间不能为空",
+      "code": "planEndTime"
     }
   ],
-  "desc": "题目选项",
+  "desc": "巡检任务",
   "shareParam": "communityId",
-  "tableName": "inspection_item_title_value"
+  "tableName": "inspection_task"
 }

@@ -18,20 +18,33 @@ import java.nio.charset.Charset;
 public class TableToJson {
 
     //show create table c_orders  用这个语句获取
-    public static final String createTableSql = "CREATE TABLE `inspection_item_title_value` (\n" +
-            "  `value_id` varchar(30) NOT NULL COMMENT '主键ID',\n" +
-            "  `title_id` varchar(30) NOT NULL COMMENT '题目ID',\n" +
-            "  `item_value` varchar(256) NOT NULL COMMENT '选项说明',\n" +
-            "  `community_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '小区ID',\n" +
-            "  `seq` int(11) NOT NULL DEFAULT '1' COMMENT '显示顺序',\n" +
-            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'\n" +
+    public static final String createTableSql = "CREATE TABLE `inspection_task` (\n" +
+            "  `task_id` varchar(30) NOT NULL COMMENT '任务编码',\n" +
+            "  `b_id` varchar(30) NOT NULL COMMENT '业务id',\n" +
+            "  `community_id` varchar(30) NOT NULL COMMENT '小区ID',\n" +
+            "  `inspection_plan_id` varchar(30) NOT NULL COMMENT '计划ID',\n" +
+            "  `plan_ins_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '计划巡检时间',\n" +
+            "  `act_ins_time` datetime DEFAULT NULL COMMENT '实际巡检时间',\n" +
+            "  `plan_user_id` varchar(60) NOT NULL COMMENT '计划巡检人员id',\n" +
+            "  `plan_user_name` varchar(60) DEFAULT NULL COMMENT '计划巡检人员姓名',\n" +
+            "  `act_user_id` varchar(30) DEFAULT NULL COMMENT '实际巡检人员id',\n" +
+            "  `act_user_name` varchar(60) DEFAULT NULL COMMENT '实际巡检人员姓名',\n" +
+            "  `sign_type` varchar(200) NOT NULL COMMENT '实际巡检方式',\n" +
+            "  `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用 1失效',\n" +
+            "  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+            "  `state` varchar(12) NOT NULL DEFAULT '20200405' COMMENT '巡检状态',\n" +
+            "  `ip_staff_id` varchar(30) NOT NULL COMMENT '巡检人ID',\n" +
+            "  `original_plan_user_id` varchar(60) DEFAULT NULL COMMENT '原计划巡检人userId',\n" +
+            "  `original_plan_user_name` varchar(60) DEFAULT NULL COMMENT '原计划巡检人名称',\n" +
+            "  `transfer_desc` varchar(255) DEFAULT NULL COMMENT '转移说明',\n" +
+            "  `task_type` varchar(255) DEFAULT NULL COMMENT '任务类型 1000日常巡检任务 2000流转巡检任务',\n" +
+            "  `plan_end_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '计划巡检结束时间',\n" +
             ") ";
 
     public static void main(String[] args) {
-        String desc = "题目选项";
-        String id = "valueId";
-        String name = "inspectionItemTitleValue";
+        String desc = "巡检任务";
+        String id = "taskId";
+        String name = "inspectionTask";
         String shareName = "community"; //生成到那个服务下
         String shareColumn = "community_id";
         String shareParam = "communityId";
