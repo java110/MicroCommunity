@@ -14,6 +14,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IInspectionInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeInspectionPointConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -105,7 +106,7 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         if (count > 0) {
             inspectionPoints = BeanConvertUtil.covertBeanList(inspectionPointInnerServiceSMOImpl.getInspectionRelationShip(inspectionPointDto), ApiInspectionPointDataVo.class);
             // 刷新 位置信息
-            //refreshMachines(inspectionPoints);
+            refreshInspections(inspectionPoints);
         } else {
             inspectionPoints = new ArrayList<>();
         }
@@ -119,6 +120,17 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionPointVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    private void refreshInspections(List<ApiInspectionPointDataVo> inspectionPoints) {
+        String staffWechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+        for (ApiInspectionPointDataVo apiInspectionPointDataVo : inspectionPoints) {
+            apiInspectionPointDataVo.setUrl(staffWechatUrl
+                    + "pages/excuteOneQrCodeInspection/excuteOneQrCodeInspection?inspectionId="
+                    + apiInspectionPointDataVo.getInspectionId()
+                    + "&inspectionName=" + apiInspectionPointDataVo.getInspectionName()
+                    + "&itemId=" + apiInspectionPointDataVo.getItemId());
+        }
     }
 
     /**

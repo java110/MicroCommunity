@@ -189,6 +189,9 @@
         <if test="planUserName !=null and planUserName != ''">
             and it.plan_user_name= #{planUserName}
         </if>
+        <if test="planUserId !=null and planUserId != ''">
+            and it.plan_user_id= #{planUserId}
+        </if>
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and ipl.inspection_plan_name= #{inspectionPlanName}
         </if>
@@ -335,6 +338,9 @@
         </if>
         <if test="planUserName !=null and planUserName != ''">
             and it.plan_user_name= #{planUserName}
+        </if>
+        <if test="planUserId !=null and planUserId != ''">
+            and it.plan_user_id= #{planUserId}
         </if>
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and ipl.inspection_plan_name= #{inspectionPlanName}

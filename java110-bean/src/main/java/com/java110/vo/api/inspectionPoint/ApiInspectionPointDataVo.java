@@ -28,6 +28,8 @@ public class ApiInspectionPointDataVo implements Serializable {
     private String itemName;
     private String nfcCode;
 
+    private String url;
+
     public String getInspectionId() {
         return inspectionId;
     }
@@ -210,5 +212,13 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

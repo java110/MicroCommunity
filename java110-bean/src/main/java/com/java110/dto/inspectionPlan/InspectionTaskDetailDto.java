@@ -29,6 +29,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String routeName;
     private String actUserName;
     private String planUserName;
+    private String planUserId;
     private String signType;
     private String signTypeName;
     private String inspectionPlanId;
@@ -360,5 +361,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getPlanUserId() {
+        return planUserId;
+    }
+
+    public void setPlanUserId(String planUserId) {
+        this.planUserId = planUserId;
     }
 }
