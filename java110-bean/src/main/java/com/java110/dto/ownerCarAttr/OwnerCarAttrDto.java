@@ -1,12 +1,13 @@
 package com.java110.dto.ownerCarAttr;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @ClassName FloorDto
- * @Description 业主车辆属性数据层封装
+ * @Description 车辆属性数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0
@@ -15,48 +16,55 @@ import java.util.Date;
 public class OwnerCarAttrDto extends PageDto implements Serializable {
 
     private String attrId;
-private String specCd;
-private String communityId;
-private String value;
-private String carId;
-
+    private String specCd;
+    private String communityId;
+    private String value;
+    private String memberId;
+    private String carId;
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
     public String getAttrId() {
         return attrId;
     }
-public void setAttrId(String attrId) {
+
+    public void setAttrId(String attrId) {
         this.attrId = attrId;
     }
-public String getSpecCd() {
+
+    public String getSpecCd() {
         return specCd;
     }
-public void setSpecCd(String specCd) {
+
+    public void setSpecCd(String specCd) {
         this.specCd = specCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-public String getCarId() {
-        return carId;
-    }
-public void setCarId(String carId) {
-        this.carId = carId;
+
+    public String getMemberId() {
+        return memberId;
     }
 
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -72,5 +80,13 @@ public void setCarId(String carId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 }

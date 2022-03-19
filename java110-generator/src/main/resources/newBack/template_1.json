@@ -1,28 +1,36 @@
 {
   "param": {
-    "gId": "g_id",
-    "gcId": "gc_id",
-    "name": "name",
-    "communityName": "community_name",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
     "statusCd": "status_cd",
-    "communityId": "community_id"
+    "communityId": "community_id",
+    "value": "value",
+    "memberId": "member_id"
   },
-  "name": "menuGroupCommunity",
+  "name": "ownerCarAttr",
   "shareColumn": "community_id",
-  "id": "gcId",
+  "id": "attrId",
   "shareName": "user",
   "autoMove": true,
   "required": [
     {
-      "msg": "菜单组ID不能为空",
-      "code": "gId"
+      "msg": "车辆ID不能为空",
+      "code": "memberId"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
+    },
+    {
+      "msg": "规格id,参考spec表不能为空",
+      "code": "specCd"
+    },
+    {
+      "msg": "属性值不能为空",
+      "code": "value"
     }
   ],
-  "desc": "小区功能",
+  "desc": "车辆属性",
   "shareParam": "communityId",
-  "tableName": "m_menu_group_community"
+  "tableName": "owner_car_attr"
 }

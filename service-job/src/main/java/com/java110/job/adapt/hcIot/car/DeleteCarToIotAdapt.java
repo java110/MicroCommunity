@@ -18,9 +18,11 @@ package com.java110.job.adapt.hcIot.car;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
@@ -49,6 +51,10 @@ public class DeleteCarToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -108,6 +114,13 @@ public class DeleteCarToIotAdapt extends DatabusAdaptImpl {
         ownerCarDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
         long parkingSpaceCount = ownerCarInnerServiceSMOImpl.queryOwnerParkingSpaceCount(ownerCarDto);
 
+
+        //查询属性
+        OwnerCarAttrDto ownerCarAttrDto = new OwnerCarAttrDto();
+        ownerCarAttrDto.setCarId(ownerCarDtos.get(0).getCarId());
+        ownerCarAttrDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
+        List<OwnerCarAttrDto> parkingAreaAttrDtos = ownerCarAttrInnerServiceSMOImpl.queryOwnerCarAttrs(ownerCarAttrDto);
+
         JSONObject postParameters = new JSONObject();
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
         postParameters.put("carNum", ownerCarDtos.get(0).getCarNum());
@@ -118,6 +131,7 @@ public class DeleteCarToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
         postParameters.put("parkingNum", parkingSpaceCount);
         postParameters.put("extCommunityId", ownerCarDtos.get(0).getCommunityId());
+        postParameters.put("attrs", parkingAreaAttrDtos);
         hcOwnerCarAsynImpl.deleteOwnerCar(postParameters);
     }
 }
