@@ -104,7 +104,10 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
                 businessPayFeeDetails = (JSONArray) bObj;
             }
         } else {
-            return;
+            if (data instanceof JSONObject) {
+                businessPayFeeDetails = new JSONArray();
+                businessPayFeeDetails.add(data);
+            }
         }
 
         if (businessPayFeeDetails == null) {

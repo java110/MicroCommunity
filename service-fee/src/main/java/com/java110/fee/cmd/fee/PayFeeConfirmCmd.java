@@ -3,6 +3,7 @@ package com.java110.fee.cmd.fee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
@@ -32,7 +33,6 @@ import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
-import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
@@ -112,6 +112,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         String paramIn = CommonCache.getAndRemoveValue("payFeePre" + reqJson.getString("oId"));
         JSONObject paramObj = JSONObject.parseObject(paramIn);
@@ -131,6 +132,8 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
 
         //处理现金账户
         dealAccount(paramObj);
+
+        paramObj.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
 
         //处理 优惠折扣
         addDiscount(paramObj);
@@ -212,9 +215,12 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             //获取bId
             String bId = feeDetailDtoList.get(0).getbId();
             //获取优惠
-            List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
-            if (computeDiscountDtos != null) {
-                for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
+            //List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
+            JSONArray computeDiscountDtos = paramObj.getJSONArray("computeDiscountDtos");
+            ComputeDiscountDto computeDiscountDto = null;
+            if (computeDiscountDtos != null && computeDiscountDtos.size()> 0) {
+                for (int accountIndex = 0; accountIndex < computeDiscountDtos.size(); accountIndex++) {
+                    computeDiscountDto = BeanConvertUtil.covertBean(computeDiscountDtos.getJSONObject(accountIndex), ComputeDiscountDto.class);
                     if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
                         ApplyRoomDiscountPo applyRoomDiscountPo = new ApplyRoomDiscountPo();
                         //将业务id更新到空置房优惠里面
@@ -265,6 +271,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             AccountDetailPo accountDetailPo = new AccountDetailPo();
             accountDetailPo.setAcctId(accountDto.getAcctId());
             accountDetailPo.setObjId(accountDto.getObjId());
+            accountDetailPo.setObjType(accountDto.getObjType());
             if (amount.doubleValue() < deductionAmount.doubleValue()) {
                 accountDetailPo.setAmount(amount.doubleValue() + "");
                 deductionAmount = deductionAmount.subtract(amount).setScale(2, BigDecimal.ROUND_HALF_UP);

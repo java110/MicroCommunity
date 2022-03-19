@@ -15,16 +15,15 @@
  */
 package com.java110.api.smo.payment.adapt.wechatPay;
 
-import com.java110.core.factory.WechatFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
+import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -153,13 +152,17 @@ public class WechatPayAdapt implements IPayAdapt {
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
 
-        String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+        //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+
+        if (feeName.length() > 127) {
+            feeName = feeName.substring(0, 126);
+        }
 
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", smallWeChatDto.getAppId());
         paramMap.put("mch_id", smallWeChatDto.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
-        paramMap.put("body", systemName + feeName);
+        paramMap.put("body", feeName);
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());

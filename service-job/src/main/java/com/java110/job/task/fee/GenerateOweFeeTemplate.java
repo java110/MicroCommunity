@@ -141,7 +141,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
                 feeDto.setRow(new Double(DEFAULT_ROW).intValue());
                 List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
                 //没有关联费用
-                if (feeDto == null || feeDtos.size() < 1) {
+                if (feeDtos == null || feeDtos.size() < 1) {
                     continue;
                 }
                 for (FeeDto tmpFeeDto : feeDtos) {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionItemTitleValueV1ServiceDaoImpl">
+
+
+    <!-- 保存题目选项信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionItemTitleValueInfo" parameterType="Map">
+        insert into inspection_item_title_value(
+        value_id,title_id,item_value,community_id,seq
+        ) values (
+        #{valueId},#{titleId},#{itemValue},#{communityId},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询题目选项信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionItemTitleValueInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.item_value,t.item_value
+        itemValue,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq
+        from inspection_item_title_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="titleIds !=null">
+            and t.title_id in
+            <foreach collection="titleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="itemValue !=null and itemValue != ''">
+            and t.item_value= #{itemValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.seq
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改题目选项信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionItemTitleValueInfo" parameterType="Map">
+        update inspection_item_title_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="itemValue !=null and itemValue != ''">
+            , t.item_value= #{itemValue}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+
+    </update>
+
+    <!-- 查询题目选项数量 add by wuxw 2018-07-03 -->
+    <select id="queryInspectionItemTitleValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_item_title_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="itemValue !=null and itemValue != ''">
+            and t.item_value= #{itemValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

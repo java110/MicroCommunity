@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionItemV1ServiceDaoImpl">
+
+
+    <!-- 保存巡检项目信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionItemInfo" parameterType="Map">
+        insert into inspection_item(
+        item_id,item_name,remark,community_id
+        ) values (
+        #{itemId},#{itemName},#{remark},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询巡检项目信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionItemInfo" parameterType="Map" resultType="Map">
+        select t.item_id,t.item_id itemId,t.item_name,t.item_name itemName,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.create_time createTime
+        from inspection_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            and t.item_name= #{itemName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改巡检项目信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionItemInfo" parameterType="Map">
+        update inspection_item t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            , t.item_name= #{itemName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+
+    </update>
+
+    <!-- 查询巡检项目数量 add by wuxw 2018-07-03 -->
+    <select id="queryInspectionItemsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            and t.item_name= #{itemName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

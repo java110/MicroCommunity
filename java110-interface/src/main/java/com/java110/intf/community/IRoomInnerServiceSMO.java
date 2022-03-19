@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
+import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.po.room.RoomPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -104,4 +105,12 @@ public interface IRoomInnerServiceSMO {
      */
     @RequestMapping(value = "/freshRoomIds", method = RequestMethod.POST)
     List<ImportRoomFee> freshRoomIds(@RequestBody List<ImportRoomFee> importRoomFees);
+
+    /**
+     * <p>根据业主查询房屋信息</p>
+     *
+     * @param importCustomCreateFeeDtos 数据对象分享
+     */
+    @RequestMapping(value = "/freshRoomIdsByImportCustomCreateFee", method = RequestMethod.POST)
+    List<ImportCustomCreateFeeDto> freshRoomIdsByImportCustomCreateFee(@RequestBody List<ImportCustomCreateFeeDto> importCustomCreateFeeDtos);
 }

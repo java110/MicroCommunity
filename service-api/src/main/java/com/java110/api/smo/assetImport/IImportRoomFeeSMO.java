@@ -25,4 +25,5 @@ public interface IImportRoomFeeSMO {
     public ResponseEntity<String> importFile(MultipartFile uploadFile) throws Exception;
 
     ResponseEntity<String> importTempData(IPageData pd);
+
 }

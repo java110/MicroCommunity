@@ -2,6 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +45,8 @@ public interface IOwnerCarInnerServiceSMO {
     @RequestMapping(value = "/freshCarIds", method = RequestMethod.POST)
     List<ImportRoomFee> freshCarIds(@RequestBody List<ImportRoomFee> tmpImportCarFees);
 
-
+    @RequestMapping(value = "/freshCarIdsByImportCustomCreateFee", method = RequestMethod.POST)
+    List<ImportCustomCreateFeeDto> freshCarIdsByImportCustomCreateFee(@RequestBody List<ImportCustomCreateFeeDto> tmpImportCarFees);
     /**
      * <p>查询业主车位数</p>
      *

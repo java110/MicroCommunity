@@ -9,7 +9,9 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
@@ -19,6 +21,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -35,7 +38,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -103,6 +105,9 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
     public HttpMethod getHttpMethod() {
         return HttpMethod.POST;
     }
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public void soService(ServiceDataFlowEvent event) throws ParseException {
@@ -244,8 +249,36 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         //这里调整为实收金额
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
         paramOut.put("receivedAmount", paramObj.getString("receivedAmount"));
+
+        FeeDto feeDto = (FeeDto) paramObj.get("feeInfo");
+        String feeName = getObjName(feeDto);
+        paramOut.put("feeName", feeName);
+
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+
+    private String getObjName(FeeDto feeDto) {
+        //查询小区名称
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(feeDto.getCommunityId());
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+
+        List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
+        }
+
+        for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+            if (FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())) {
+                return communityDtos.get(0).getName() + "-" + feeAttrDto.getValue() + "-" + feeDto.getFeeName();
+            }
+        }
+
+        return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
     }
 
     private void dealOwnerCartEndTime(JSONObject paramObj, JSONArray businesses) {

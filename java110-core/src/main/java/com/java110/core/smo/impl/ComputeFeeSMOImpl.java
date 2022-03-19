@@ -35,7 +35,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -1538,8 +1537,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     //手机端缴费处理
     public Map getOwnerPhoneFee(Map feeAmount) {
-        feeAmount.put("feePrice", new BigDecimal(1.00/100));
-        feeAmount.put("feeTotalPrice", new BigDecimal(1.00/100));
+        feeAmount.put("feePrice", new BigDecimal(1.00 / 100));
+        feeAmount.put("feeTotalPrice", new BigDecimal(1.00 / 100));
         return feeAmount;
     }
 

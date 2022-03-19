@@ -1,103 +1,55 @@
 {
   "templateKeyName": "编号",
-  "templateName": "物业公司",
+  "templateName": "巡检项目",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "100",
-      "code": "name",
-      "limitErrInfo": "名称不能超过100",
-      "cnCode": "名称",
+      "limitParam": "256",
+      "code": "itemName",
+      "limitErrInfo": "巡检项目不能超过256",
+      "cnCode": "巡检项目",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，名称"
+      "desc": "必填，巡检项目"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "200",
-      "code": "address",
-      "limitErrInfo": "地址不能超过200",
-      "cnCode": "地址",
+      "limitParam": "512",
+      "code": "remark",
+      "limitErrInfo": "备注不能超过512",
+      "cnCode": "备注",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，地址"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "11",
-      "code": "tel",
-      "limitErrInfo": "电话不能超过11",
-      "cnCode": "电话",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，电话"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "corporation",
-      "limitErrInfo": "公司法人不能空",
-      "cnCode": "公司法人",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，公司法人"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "foundingTime",
-      "limitErrInfo": "成立日期不能空",
-      "cnCode": "成立日期",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "必填，成立日期"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "200",
-      "code": "nearbyLandmarks",
-      "limitErrInfo": "地标不能超过200",
-      "cnCode": "地标",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "input",
-      "required": true,
-      "desc": "地标"
+      "desc": "备注"
     }
   ],
   "searchName": "编号",
-  "directories": "admin",
-  "searchCode": "storeId",
-  "templateCode": "propertyCompany",
+  "directories": "property",
+  "searchCode": "itemId",
+  "templateCode": "inspectionItem",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "storeId",
-      "name": "物业编号",
+      "code": "itemId",
+      "name": "主键ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "name",
-      "name": "名称",
+      "code": "itemName",
+      "name": "巡检项目",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "tel",
-      "name": "电话",
+      "code": "communityId",
+      "name": "小区ID",
       "inputType": "input"
     }
   ],
-  "templateKey": "storeId"
+  "templateKey": "itemId"
 }

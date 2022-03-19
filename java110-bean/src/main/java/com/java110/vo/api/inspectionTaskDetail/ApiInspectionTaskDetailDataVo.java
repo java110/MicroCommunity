@@ -55,6 +55,7 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
     //签到状态
     private String inspectionState;
     private String inspectionStateName;
+    private String itemId;
 
     public String getInspectionId() {
         return inspectionId;
@@ -326,5 +327,13 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     public void setSortNumber(String sortNumber) {
         this.sortNumber = sortNumber;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }

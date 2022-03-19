@@ -54,6 +54,13 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
+        <if test="configIds !=null">
+            and t.config_id in
+            <foreach collection="configIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}
         </if>
@@ -169,6 +176,13 @@
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
+        </if>
+        <if test="configIds !=null">
+            and t.config_id in
+            <foreach collection="configIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
         </if>
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}

@@ -7,9 +7,9 @@
     <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionInfo" parameterType="Map">
         insert into business_inspection_point
-        (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name)
+        (inspection_id,operate,remark,inspection_name,community_id,b_id,point_obj_type,point_obj_id,point_obj_name,item_id,nfc_code)
         values
-        (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName})
+        (#{inspectionId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId},#{pointObjType},#{pointObjId},#{pointObjName},#{itemId},#{nfcCode})
     </insert>
 
     <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
@@ -17,7 +17,7 @@
         select t.inspection_id,t.inspection_id inspectionId,t.operate,t.remark,t.inspection_name,t.inspection_name
         inspectionName,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.point_obj_type,t.point_obj_id,t.point_obj_name,
-        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName
+        t.point_obj_type pointObjType,t.point_obj_id pointObjId,t.point_obj_name pointObjName,t.item_id ,t.item_id itemId,t.nfc_code,t.nfc_code nfcCode
         from business_inspection_point t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -45,9 +45,9 @@
         insert into
         inspection_point(
         inspection_id,remark,status_cd,inspection_name,community_id,b_id,
-        point_obj_type,point_obj_id,point_obj_name
+        point_obj_type,point_obj_id,point_obj_name,item_id,nfc_code
         ) select t.inspection_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id,
-        t.point_obj_type,t.point_obj_id,t.point_obj_name
+        t.point_obj_type,t.point_obj_id,t.point_obj_name,t.item_id,t.nfc_code
         from business_inspection_point t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -74,8 +74,9 @@
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_type pointObjType,td.name pointTypeName,t.point_obj_id,
-        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName
+        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,t.item_id ,t.item_id itemId,t.nfc_code,t.nfc_code nfcCode,ii.item_name itemName
         from inspection_point t
+        LEFT JOIN inspection_item ii on t.item_id = ii.item_id and ii.status_cd = '0'
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
             and c.status_cd = '0'
@@ -92,6 +93,12 @@
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            and t.nfc_code= #{nfcCode}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -136,6 +143,12 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
+        <if test="itemId !=null and itemId != ''">
+            , t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            , t.nfc_code= #{nfcCode}
+        </if>
         where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -164,6 +177,12 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            and t.nfc_code= #{nfcCode}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -185,8 +204,10 @@
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_type pointObjType,td.name pointTypeName,t.point_obj_id,
-        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName
+        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,
+        t.item_id ,t.item_id itemId,t.nfc_code,t.nfc_code nfcCode,ii.item_name itemName
         from inspection_point t
+        LEFT JOIN inspection_item ii on t.item_id = ii.item_id and ii.status_cd = '0'
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and
         c.inspection_route_id = #{inspectionRouteId}
         left join t_dict td on t.point_obj_type = td.status_cd and td.table_name = 'inspection_point' and
@@ -206,6 +227,12 @@
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            and t.nfc_code= #{nfcCode}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -246,6 +273,12 @@
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            and t.nfc_code= #{nfcCode}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -290,6 +323,12 @@
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="nfcCode !=null and nfcCode != ''">
+            and t.nfc_code= #{nfcCode}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

@@ -5,14 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.account.AccountDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.dto.applyRoomDiscountType.ApplyRoomDiscountTypeDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.fee.bmo.account.ISaveAccountBMO;
 import com.java110.fee.bmo.account.IUpdateAccountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IAuditApplyRoomDiscountBMO;
@@ -34,10 +30,14 @@ import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -49,6 +49,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/applyRoomDiscount")
 public class ApplyRoomDiscountApi {
+
+    private static final String SPEC_RATE = "89002020980013"; // 打折率
 
     @Autowired
     private ISaveApplyRoomDiscountBMO saveApplyRoomDiscountBMOImpl;
@@ -250,7 +252,8 @@ public class ApplyRoomDiscountApi {
                 //获取折扣类型(1: 打折  2:减免  3:滞纳金  4:空置房打折  5:空置房减免)
                 String discountSmallType = feeDiscountRuleDtos.get(0).getDiscountSmallType();
                 //获取规则
-                String specValue = feeDiscountSpecs.getJSONObject(1).getString("specValue");
+                //String specValue = feeDiscountSpecs.getJSONObject(1).getString("specValue");
+                String specValue = getRateSpecValueByFeeDiscountSpecs(feeDiscountSpecs);
                 if (!StringUtil.isEmpty(discountSmallType) && (discountSmallType.equals("1") || discountSmallType.equals("4"))) { //打折
                     for (int index = 0; index < feeDetailIds.size(); index++) {
                         String feeDetailId = String.valueOf(feeDetailIds.get(index));
@@ -291,6 +294,46 @@ public class ApplyRoomDiscountApi {
         reqJson.put("reviewUserId", userId);
         ApplyRoomDiscountPo applyRoomDiscountPo = BeanConvertUtil.covertBean(reqJson, ApplyRoomDiscountPo.class);
         return updateApplyRoomDiscountBMOImpl.update(applyRoomDiscountPo);
+    }
+
+    /**
+     * 89002020980001	102020001	月份
+     * 89002020980002	102020001	打折率
+     * 89002020980003	102020002	月份
+     * 89002020980004	102020002	减免金额
+     * 89002020980005	102020003	滞纳金
+     * 89002020980006	102020004	滞纳金
+     * 89002020980007	102020005	月份
+     * 89002020980008	102020005	打折率
+     * 89002020980009	102020005	欠费时长
+     * 89002020980010	102020006	月份
+     * 89002020980011	102020006	减免金额
+     * 89002020980012	102020007	月份
+     * 89002020980013	102020007	打折率
+     * @param feeDiscountSpecs
+     * @return
+     */
+    private String getRateSpecValueByFeeDiscountSpecs(JSONArray feeDiscountSpecs) {
+
+        for (int specIndex = 0; specIndex < feeDiscountSpecs.size(); specIndex++) {
+            if (SPEC_RATE.equals(feeDiscountSpecs.getJSONObject(specIndex).getString("specId"))) {
+                return feeDiscountSpecs.getJSONObject(specIndex).getString("specValue");
+            }
+            if ("89002020980002".equals(feeDiscountSpecs.getJSONObject(specIndex).getString("specId"))) {
+                return feeDiscountSpecs.getJSONObject(specIndex).getString("specValue");
+            }
+            if ("89002020980004".equals(feeDiscountSpecs.getJSONObject(specIndex).getString("specId"))) {
+                return feeDiscountSpecs.getJSONObject(specIndex).getString("specValue");
+            }
+            if ("89002020980008".equals(feeDiscountSpecs.getJSONObject(specIndex).getString("specId"))) {
+                return feeDiscountSpecs.getJSONObject(specIndex).getString("specValue");
+            }
+            if ("89002020980011".equals(feeDiscountSpecs.getJSONObject(specIndex).getString("specId"))) {
+                return feeDiscountSpecs.getJSONObject(specIndex).getString("specValue");
+            }
+        }
+
+        throw new IllegalArgumentException("未找到 打折系数");
     }
 
     /**
