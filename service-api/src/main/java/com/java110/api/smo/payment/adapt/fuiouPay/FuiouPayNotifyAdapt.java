@@ -18,6 +18,7 @@ package com.java110.api.smo.payment.adapt.fuiouPay;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
@@ -125,10 +126,11 @@ public class FuiouPayNotifyAdapt extends DefaultAbstractComponentSMO implements 
         }
 
         String outTradeNo = map.get("mchnt_order_no").toString();
+        String orderPre = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "FUIOU_ORDER_PRE");
 
         //查询用户ID
         JSONObject paramIn = new JSONObject();
-        paramIn.put("oId", outTradeNo.substring(4));
+        paramIn.put("oId", outTradeNo.substring(orderPre.length()));
         String url = "fee.payFeeConfirm";
         responseEntity = this.callCenterService(getHeaders("-1"), paramIn.toJSONString(), url, HttpMethod.POST);
 

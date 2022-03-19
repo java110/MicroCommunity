@@ -18,6 +18,7 @@ package com.java110.api.smo.payment.adapt.fuiouPay;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -126,11 +127,15 @@ public class FuiouOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO implem
         }
 
         String orderId = map.get("out_trade_no").toString();
+        String orderPre = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "FUIOU_ORDER_PRE");
+        orderId = orderId.substring(orderPre.length());
         String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + orderId);
 
         if (StringUtil.isEmpty(order)) {
             return 1;// 说明已经处理过了 再不处理
         }
+
+
 
         //查询用户ID
         JSONObject paramIn = JSONObject.parseObject(order);
