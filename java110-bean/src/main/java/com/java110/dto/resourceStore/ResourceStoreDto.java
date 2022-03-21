@@ -45,6 +45,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String warningStock;
     private String shType;
     private String shObjId;
+    private String[] shObjIds;
     private String averagePrice;
     private List<String> fileUrls;
     private Date createTime;
@@ -391,5 +392,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String[] getShObjIds() {
+        return shObjIds;
+    }
+
+    public void setShObjIds(String[] shObjIds) {
+        this.shObjIds = shObjIds;
     }
 }

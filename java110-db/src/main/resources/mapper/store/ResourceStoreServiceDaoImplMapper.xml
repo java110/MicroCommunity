@@ -288,6 +288,12 @@
         <if test="shObjId !=null and shObjId != ''">
             and sh.sh_obj_id= #{shObjId}
         </if>
+        <if test="shObjIds !=null">
+            and sh.sh_obj_id in
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="showMobile != null and showMobile != ''">
             and t.show_mobile = #{showMobile}
         </if>
@@ -463,6 +469,12 @@
         <if test="shObjId !=null and shObjId != ''">
             and sh.sh_obj_id= #{shObjId}
         </if>
+        <if test="shObjIds !=null">
+            and sh.sh_obj_id in
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="shType !=null and shType != ''">
             and sh.sh_type= #{shType}
         </if>
@@ -487,5 +499,110 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
+    </select>
+    <!-- 查询资源信息 add by wuxw 2018-07-03 -->
+    <select id="queryResourceStoresTotalPrice" parameterType="Map" resultType="Map">
+        select sum(w.stock*w.average_price) as totalPrice from(
+        select t.stock,t.average_price from resource_store t
+        left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
+        where 1 = 1
+        <if test="resName !=null and resName != ''">
+            and t.res_name like concat('%',#{resName},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and t.res_name = #{name}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="parentRstId !=null and parentRstId != ''">
+            and t.parent_rst_id= #{parentRstId}
+        </if>
+        <if test="rssId !=null and rssId != ''">
+            and t.rss_id= #{rssId}
+        </if>
+        <if test="outLowPrice !=null and outLowPrice != ''">
+            and t.out_low_price = #{outLowPrice}
+        </if>
+        <if test="outHighPrice != null and outHighPrice != ''">
+            and t.out_high_price = #{outHighPrice}
+        </if>
+        <if test="unitCode != null and unitCode != ''">
+            and t.unit_code = #{unitCode}
+        </if>
+        <if test="remark != null and remark != ''">
+            and t.remark = #{remark}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="warningStock !=null and warningStock != ''">
+            and t.warning_stock= #{warningStock}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="shType !=null and shType != ''">
+            and sh.sh_type= #{shType}
+        </if>
+        <if test="shObjId !=null and shObjId != ''">
+            and sh.sh_obj_id= #{shObjId}
+        </if>
+        <if test="shObjIds !=null">
+            and sh.sh_obj_id in
+            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="showMobile != null and showMobile != ''">
+            and t.show_mobile = #{showMobile}
+        </if>
+        <if test="averagePrice != null and averagePrice != ''">
+            and t.average_price = #{averagePrice}
+        </if>
+        <if test="miniUnitCode !=null and miniUnitCode != ''">
+            and t.mini_unit_code= #{miniUnitCode}
+        </if>
+        <if test="miniUnitStock !=null and miniUnitStock != ''">
+            and t.mini_unit_stock= #{miniUnitStock}
+        </if>
+        <if test="miniStock !=null and miniStock != ''">
+            and t.mini_stock= #{miniStock}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and sh.is_show= #{isShow}
+        </if>
+        <if test="isFixed !=null and isFixed != ''">
+            and t.is_fixed= #{isFixed}
+        </if>
+        <if test="resOrderType == '20000'">
+            and t.stock > 0
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+        )w
     </select>
 </mapper>

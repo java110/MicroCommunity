@@ -79,7 +79,10 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         basePrivilegeDto.setResource("/viewGroupResource");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
+        if (reqJson.containsKey("operationType") && reqJson.getString("operationType").equals("1000") && privileges.size() > 0) {
+            resourceStoreDto.setShType("");
+            resourceStoreDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
+        } else if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
             resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
             resourceStoreDto.setShObjId(reqJson.getString("communityId"));
         }
@@ -90,43 +93,11 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         //计算总价(大计)
         BigDecimal totalPrice = BigDecimal.ZERO;
         if (count > 0) {
-            List<ApiResourceStoreDataVo> apiResourceStoreDataVos = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
-            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
-                //获取均价
-                String averagePrice = apiResourceStoreDataVo.getAveragePrice();
-                //获取数量
-                String stock = apiResourceStoreDataVo.getStock();
-                if (!StringUtil.isEmpty(averagePrice) && !StringUtil.isEmpty(stock)) {
-                    //总价
-                    BigDecimal x1 = new BigDecimal(averagePrice);
-                    BigDecimal y1 = new BigDecimal(stock);
-                    BigDecimal price = x1.multiply(y1);
-                    //计算总价(小计)
-                    subTotalPrice = subTotalPrice.add(price);
-                }
-            }
+            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            //查询总价
+            subTotalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
             resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);
-            //查询所有物品信息数据(不分组)
-            List<ResourceStoreDto> resourceStoreList = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-            for (ResourceStoreDto resourceStore : resourceStoreList) {
-                //获取均价
-                String averagePrice = resourceStore.getAveragePrice();
-                //获取数量
-                String stock = resourceStore.getStock();
-                if (!StringUtil.isEmpty(averagePrice) && !StringUtil.isEmpty(stock)) {
-                    //总价
-                    BigDecimal x1 = new BigDecimal(averagePrice);
-                    BigDecimal y1 = new BigDecimal(stock);
-                    BigDecimal price = x1.multiply(y1);
-                    //计算总价(大计)
-                    totalPrice = totalPrice.add(price);
-                }
-            }
-            for (ApiResourceStoreDataVo apiResourceStoreDataVo : apiResourceStoreDataVos) {
-                apiResourceStoreDataVo.setSubTotalPrice(String.format("%.2f", subTotalPrice));
-                apiResourceStoreDataVo.setHighTotalPrice(String.format("%.2f", totalPrice));
-                resourceStores.add(apiResourceStoreDataVo);
-            }
+            totalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
         } else {
             resourceStores = new ArrayList<>();
         }
@@ -134,6 +105,8 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
         apiResourceStoreVo.setTotal(count);
         apiResourceStoreVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiResourceStoreVo.setResourceStores(resourceStores);
+        apiResourceStoreVo.setTotalPrice(String.format("%.2f", totalPrice));
+        apiResourceStoreVo.setSubTotal(String.format("%.2f", subTotalPrice));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiResourceStoreVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }

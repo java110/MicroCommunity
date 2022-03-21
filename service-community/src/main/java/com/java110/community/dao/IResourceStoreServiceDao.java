@@ -21,4 +21,13 @@ public interface IResourceStoreServiceDao {
      */
     int getResourceStoresCount(Map info);
 
+    /**
+     * 查询资源总数
+     *
+     * @param info 资源信息
+     * @return 资源数量
+     */
+    String queryResourceStoresTotalPrice(Map info);
+
+
 }

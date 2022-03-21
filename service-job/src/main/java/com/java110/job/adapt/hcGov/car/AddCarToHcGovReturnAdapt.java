@@ -41,6 +41,7 @@ public class AddCarToHcGovReturnAdapt implements IReportReturnDataAdapt {
 
     @Autowired
     private IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
+
     @Autowired
     private IHcGovTranslateInnerServiceSMO hcGovTranslateInnerServiceSMOImpl;
 
@@ -73,7 +74,5 @@ public class AddCarToHcGovReturnAdapt implements IReportReturnDataAdapt {
                 throw new IllegalArgumentException("保存楼栋属性失败");
             }
         }
-
-
     }
 }
