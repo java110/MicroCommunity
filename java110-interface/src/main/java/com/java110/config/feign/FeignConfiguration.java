@@ -26,7 +26,7 @@ public class FeignConfiguration {
         if (SystemLogDto.getLogSwatch()) {
             return Logger.Level.FULL;
         } else {
-            return Logger.Level.FULL;
+            return Logger.Level.BASIC;
         }
     }
 
