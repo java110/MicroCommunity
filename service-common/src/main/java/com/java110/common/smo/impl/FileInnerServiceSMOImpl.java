@@ -3,12 +3,14 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IFileServiceDao;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.client.CosUploadTemplate;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.JSchFtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.COSUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,8 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
 
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
-
+    @Autowired
+    private CosUploadTemplate cosUploadTemplate;
 
     @Override
     public String saveFile(@RequestBody FileDto fileDto) {
@@ -44,19 +47,23 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         String fileName = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
 
-        if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
-            String ftpServer = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
-            int ftpPort = Integer.parseInt(MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
-            String ftpUserName = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
-            String ftpUserPassword = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-            String ftpPath = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
-            fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
-                    ftpPort, ftpUserName,
-                    ftpUserPassword, ftpPath);
-        } else {
+        if ( OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ossUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                     java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+        } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
+            fileName = cosUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
+                    java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+        } else {
+            String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+            String ftpPath = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
+            fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
+                    ftpPort, ftpUserName,
+                    ftpUserPassword, ftpPath);
         }
         return fileName;
     }
@@ -74,18 +81,22 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         }
         String context = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
-        if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
-            String ftpServer = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
-            int ftpPort = Integer.parseInt(MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
-            String ftpUserName = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
-            String ftpUserPassword = MappingCache.getValue( FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-            context = ftpUploadTemplate.download(ftpPath, fileName, ftpServer,
-                    ftpPort, ftpUserName,
-                    ftpUserPassword);
-        }else{
+        if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             context = ossUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                     java110Properties.getFtpUserPassword());
+        }else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
+            context = cosUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
+                    java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+                    java110Properties.getFtpUserPassword());
+        } else {
+            String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+            context = ftpUploadTemplate.download(ftpPath, fileName, ftpServer,
+                    ftpPort, ftpUserName,
+                    ftpUserPassword);
         }
 
         fileDto.setContext(context);

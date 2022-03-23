@@ -18,6 +18,7 @@ public class OSSUtil {
     public static final String DOMAIN = "OSS";
     public static final String OSS_SWITCH = "OSS_SWITCH";
     public static final String OSS_SWITCH_OSS = "OSS";
+    public static final String OSS_SWITCH_FTP = "FTP";
     public static final String ENDPOINT = "endpoint";
     public static final String ACCESS_KEY_ID = "accessKeyId";
     public static final String ACCESS_KEY_SECRET = "accessKeySecret";
