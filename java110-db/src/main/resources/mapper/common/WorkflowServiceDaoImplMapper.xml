@@ -162,8 +162,11 @@
         <if test="flowType !=null and flowType != ''">
             , t.flow_type= #{flowType}
         </if>
-        <if test="processDefinitionKey !=null and processDefinitionKey != ''">
+        <if test="processDefinitionKey !=null and processDefinitionKey != '' and processDefinitionKey != '-1'">
             , t.process_definition_key= #{processDefinitionKey}
+        </if>
+        <if test="processDefinitionKey !=null and processDefinitionKey == '-1'">
+            , t.process_definition_key= ''
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">

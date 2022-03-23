@@ -21,16 +21,15 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -46,7 +45,7 @@ import com.java110.core.log.LoggerFactory;
 @Java110Cmd(serviceCode = "workflow.updateWorkflow")
 public class UpdateWorkflowCmd extends AbstractServiceCmdListener {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateWorkflowCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateWorkflowCmd.class);
 
 
     @Autowired
@@ -55,7 +54,7 @@ public class UpdateWorkflowCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "flowId", "flowId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,7 +62,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
+        WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
         int flag = workflowV1InnerServiceSMOImpl.updateWorkflow(workflowPo);
 
         if (flag < 1) {

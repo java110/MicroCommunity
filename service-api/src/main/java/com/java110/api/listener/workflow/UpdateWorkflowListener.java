@@ -60,13 +60,14 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户ID");
 
-        if (!reqJson.containsKey("steps")) {
-            Assert.hasKeyAndValue(reqJson, "steps", "请求报文中未包含步骤节点");
-        }
+//        if (!reqJson.containsKey("steps")) {
+//            Assert.hasKeyAndValue(reqJson, "steps", "请求报文中未包含步骤节点");
+//        }
 
         JSONArray steps = reqJson.getJSONArray("steps");
         if (steps == null || steps.size() < 1) {
-            throw new IllegalArgumentException("未包含步骤");
+            //throw new IllegalArgumentException("未包含步骤");
+            return;
         }
         JSONObject step = null;
         JSONObject subStaff = null;
@@ -145,62 +146,68 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
 
         //保存 工作流程步骤
         JSONArray steps = reqJson.getJSONArray("steps");
-        JSONObject step = null;
-        JSONObject subStaff = null;
-        WorkflowStepStaffPo workflowStepStaffPo = null;
-        List<WorkflowStepDto> tmpWorkflowStepDtos = new ArrayList<>();
-        for (int stepIndex = 0; stepIndex < steps.size(); stepIndex++) {
-            step = steps.getJSONObject(stepIndex);
-            WorkflowStepPo workflowStepPo = new WorkflowStepPo();
-            workflowStepPo.setStepId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
-            workflowStepPo.setCommunityId(workflowPo.getCommunityId());
-            workflowStepPo.setFlowId(workflowPo.getFlowId());
-            workflowStepPo.setSeq((stepIndex + 1) + "");
-            workflowStepPo.setType(step.getString("type"));
-            workflowStepPo.setStoreId(reqJson.getString("storeId"));
-            super.insert(context, workflowStepPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP);
-            WorkflowStepDto tmpWorkflowStepDto = BeanConvertUtil.covertBean(workflowStepPo, WorkflowStepDto.class);
-            //正常流程
-            List<WorkflowStepStaffDto> workflowStepStaffDtos = new ArrayList<>();
-            workflowStepStaffPo = new WorkflowStepStaffPo();
-            workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
-            workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
-            workflowStepStaffPo.setStaffId(step.getString("staffId"));
-            workflowStepStaffPo.setStaffName(step.getString("staffName"));
-            workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
-            workflowStepStaffPo.setFlowType(reqJson.getString("flowType"));
-            workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
-            super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
-            workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
-            //会签流程
-            JSONArray subStaffs = step.getJSONArray("subStaff");
-            if (subStaffs != null && subStaffs.size() > 0) {
-                for (int subStaffIndex = 0; subStaffIndex < subStaffs.size(); subStaffIndex++) {
-                    subStaff = subStaffs.getJSONObject(subStaffIndex);
-                    workflowStepStaffPo = new WorkflowStepStaffPo();
-                    workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
-                    workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
-                    workflowStepStaffPo.setStaffId(subStaff.getString("staffId"));
-                    workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
-                    workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
-                    workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(subStaff.getString("staffRole")) ? "1001" : subStaff.getString("staffRole"));
+        String processDefinitionKey = "";
+        if(steps != null && steps.size() > 0) { // 有步骤
+            JSONObject step = null;
+            JSONObject subStaff = null;
+            WorkflowStepStaffPo workflowStepStaffPo = null;
+            List<WorkflowStepDto> tmpWorkflowStepDtos = new ArrayList<>();
+            for (int stepIndex = 0; stepIndex < steps.size(); stepIndex++) {
+                step = steps.getJSONObject(stepIndex);
+                WorkflowStepPo workflowStepPo = new WorkflowStepPo();
+                workflowStepPo.setStepId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+                workflowStepPo.setCommunityId(workflowPo.getCommunityId());
+                workflowStepPo.setFlowId(workflowPo.getFlowId());
+                workflowStepPo.setSeq((stepIndex + 1) + "");
+                workflowStepPo.setType(step.getString("type"));
+                workflowStepPo.setStoreId(reqJson.getString("storeId"));
+                super.insert(context, workflowStepPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP);
+                WorkflowStepDto tmpWorkflowStepDto = BeanConvertUtil.covertBean(workflowStepPo, WorkflowStepDto.class);
+                //正常流程
+                List<WorkflowStepStaffDto> workflowStepStaffDtos = new ArrayList<>();
+                workflowStepStaffPo = new WorkflowStepStaffPo();
+                workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
+                workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
+                workflowStepStaffPo.setStaffId(step.getString("staffId"));
+                workflowStepStaffPo.setStaffName(step.getString("staffName"));
+                workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+                workflowStepStaffPo.setFlowType(reqJson.getString("flowType"));
+                workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
+                super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+                workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+                //会签流程
+                JSONArray subStaffs = step.getJSONArray("subStaff");
+                if (subStaffs != null && subStaffs.size() > 0) {
+                    for (int subStaffIndex = 0; subStaffIndex < subStaffs.size(); subStaffIndex++) {
+                        subStaff = subStaffs.getJSONObject(subStaffIndex);
+                        workflowStepStaffPo = new WorkflowStepStaffPo();
+                        workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
+                        workflowStepStaffPo.setCommunityId(workflowPo.getCommunityId());
+                        workflowStepStaffPo.setStaffId(subStaff.getString("staffId"));
+                        workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
+                        workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
+                        workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(subStaff.getString("staffRole")) ? "1001" : subStaff.getString("staffRole"));
 
-                    super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
-                    workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+                        super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+                        workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
+                    }
                 }
+
+                tmpWorkflowStepDto.setWorkflowStepStaffs(workflowStepStaffDtos);
+
+                tmpWorkflowStepDtos.add(tmpWorkflowStepDto);
             }
 
-            tmpWorkflowStepDto.setWorkflowStepStaffs(workflowStepStaffDtos);
-
-            tmpWorkflowStepDtos.add(tmpWorkflowStepDto);
+            WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
+            workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
+            WorkflowDto tmpWorkflowDto = workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
+            processDefinitionKey = tmpWorkflowDto.getProcessDefinitionKey();
+        }else{
+            processDefinitionKey = "-1";
         }
         //提交
         //commit(context);
-
-        WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
-        workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
-        WorkflowDto tmpWorkflowDto = workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
-        workflowPo.setProcessDefinitionKey(tmpWorkflowDto.getProcessDefinitionKey());
+        workflowPo.setProcessDefinitionKey(processDefinitionKey);
         super.update(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
 
 
