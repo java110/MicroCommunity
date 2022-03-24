@@ -15,6 +15,7 @@
  */
 package com.java110.intf.common;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.po.workflow.WorkflowPo;
@@ -65,4 +66,7 @@ public interface IWorkflowV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryWorkflowsCount", method = RequestMethod.POST)
     int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto);
+
+    @RequestMapping(value = "/getWorkflowNextNode", method = RequestMethod.POST)
+    public List<JSONObject> getWorkflowNextNode(@RequestBody JSONObject reqJson);
 }

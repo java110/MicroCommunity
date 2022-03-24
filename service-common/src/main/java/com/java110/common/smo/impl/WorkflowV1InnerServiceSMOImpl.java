@@ -16,20 +16,28 @@
 package com.java110.common.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IWorkflowV1ServiceDao;
-import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
+import com.java110.utils.util.StringUtil;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -45,28 +53,35 @@ public class WorkflowV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
     @Autowired
     private IWorkflowV1ServiceDao workflowV1ServiceDaoImpl;
 
+    @Autowired
+    private ProcessEngine processEngine;
+
+
+    @Autowired
+    private RepositoryService repositoryService;
+
 
     @Override
-    public int saveWorkflow(@RequestBody  WorkflowPo workflowPo) {
+    public int saveWorkflow(@RequestBody WorkflowPo workflowPo) {
         int saveFlag = workflowV1ServiceDaoImpl.saveWorkflowInfo(BeanConvertUtil.beanCovertMap(workflowPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateWorkflow(@RequestBody  WorkflowPo workflowPo) {
+    @Override
+    public int updateWorkflow(@RequestBody WorkflowPo workflowPo) {
         int saveFlag = workflowV1ServiceDaoImpl.updateWorkflowInfo(BeanConvertUtil.beanCovertMap(workflowPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteWorkflow(@RequestBody  WorkflowPo workflowPo) {
-       workflowPo.setStatusCd("1");
-       int saveFlag = workflowV1ServiceDaoImpl.updateWorkflowInfo(BeanConvertUtil.beanCovertMap(workflowPo));
-       return saveFlag;
+    @Override
+    public int deleteWorkflow(@RequestBody WorkflowPo workflowPo) {
+        workflowPo.setStatusCd("1");
+        int saveFlag = workflowV1ServiceDaoImpl.updateWorkflowInfo(BeanConvertUtil.beanCovertMap(workflowPo));
+        return saveFlag;
     }
 
     @Override
-    public List<WorkflowDto> queryWorkflows(@RequestBody  WorkflowDto workflowDto) {
+    public List<WorkflowDto> queryWorkflows(@RequestBody WorkflowDto workflowDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +99,105 @@ public class WorkflowV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
 
     @Override
     public int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto) {
-        return workflowV1ServiceDaoImpl.queryWorkflowsCount(BeanConvertUtil.beanCovertMap(workflowDto));    }
+        return workflowV1ServiceDaoImpl.queryWorkflowsCount(BeanConvertUtil.beanCovertMap(workflowDto));
+    }
+
+
+    /**
+     * @param reqJson {
+     *                taskId:"",
+     *                startUserId:""
+     *                }
+     * @return
+     */
+    @Override
+    public List<JSONObject> getWorkflowNextNode(@RequestBody JSONObject reqJson) {
+        List<JSONObject> tasks = new ArrayList<>();
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("任务已处理");
+        }
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+        FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
+        //获取当前节点输出连线
+        List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
+        JSONObject taskObj = null;
+        taskObj = new JSONObject();
+        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人 表示结束
+        boolean isReturn = false;
+        //遍历输出连线
+        for (SequenceFlow outgoingFlow : outgoingFlows) {
+            //获取输出节点元素
+            FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+            isReturn = false;
+            //排除非用户任务接点
+            if (targetFlowElement instanceof UserTask) {
+                //判断输出节点的el表达式
+                Map vars = new HashMap();
+                vars.put("flag", "false"); // 1100
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    isReturn = true;
+                }
+                if (!isReturn) {
+                    String assignee = ((UserTask) targetFlowElement).getAssignee();
+                    if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
+                        taskObj.put("assignee", assignee); // 下一节点处理人
+                    }
+                    if ("${startUserId}".equals(assignee)) {
+                        taskObj.put("assignee", reqJson.getString("startUserId")); // 开始人
+                    }
+                    if ("${nextUserId}".equals(assignee)) {
+                        taskObj.put("assignee", "-2"); // 需要前台指定
+                    }
+                }
+            }
+            //如果下一个为 结束节点
+            if (targetFlowElement instanceof EndEvent) {
+                //true 获取输出节点名称
+                taskObj.put("assignee", "-1");
+            }
+        }
+        tasks.add(taskObj);
+        return tasks;
+    }
+
+    /**
+     * el表达式判断
+     *
+     * @param expression
+     * @param vars
+     * @return
+     */
+    private static boolean isCondition(String expression, Map<String, Object> vars) {
+        if (expression == null || expression == "") {
+            return false;
+        }
+
+        //分割表达式
+        String[] exprArr = expression.split("[{}$&]");
+        for (String expr : exprArr) {
+            //是否包含键message
+            if (expr.contains("flag")) {
+                if (!vars.containsKey("flag")) {
+                    continue;
+                }
+                if (expr.contains("==")) {
+                    String[] primes = expr.split("==");
+                    String valExpr = primes[1].trim();
+                    if (valExpr.startsWith("'")) {
+                        valExpr = valExpr.substring(1);
+                    }
+                    if (valExpr.endsWith("'")) {
+                        valExpr = valExpr.substring(0, valExpr.length() - 1);
+                    }
+                    if (primes.length == 2 && valExpr.equals(vars.get("flag"))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }

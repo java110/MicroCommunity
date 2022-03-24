@@ -147,7 +147,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         //保存 工作流程步骤
         JSONArray steps = reqJson.getJSONArray("steps");
         String processDefinitionKey = "";
-        if(steps != null && steps.size() > 0) { // 有步骤
+        if (steps != null && steps.size() > 0) { // 有步骤
             JSONObject step = null;
             JSONObject subStaff = null;
             WorkflowStepStaffPo workflowStepStaffPo = null;
@@ -173,6 +173,10 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
                 workflowStepStaffPo.setFlowType(reqJson.getString("flowType"));
                 workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
+
+                if (!"1001".equals(step.getString("staffRole")) && step.getString("staffId").startsWith("${")) {
+                    throw new IllegalArgumentException("采购人员或者物品领用人员必须指定人，不能是动态指定");
+                }
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
                 workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
                 //会签流程
@@ -202,7 +206,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
             WorkflowDto tmpWorkflowDto = workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
             processDefinitionKey = tmpWorkflowDto.getProcessDefinitionKey();
-        }else{
+        } else {
             processDefinitionKey = "-1";
         }
         //提交
