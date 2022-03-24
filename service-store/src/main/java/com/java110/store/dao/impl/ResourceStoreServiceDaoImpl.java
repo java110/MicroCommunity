@@ -142,7 +142,7 @@ public class ResourceStoreServiceDaoImpl extends BaseServiceDao implements IReso
     public String queryResourceStoresTotalPrice(Map info) {
         logger.debug("查询资源数据 入参 info : {}", info);
         List<Map> businessResourceStoreInfos = sqlSessionTemplate.selectList("resourceResourceStoreServiceDaoImpl.queryResourceStoresTotalPrice", info);
-        if (businessResourceStoreInfos.size() < 1) {
+        if (businessResourceStoreInfos == null || businessResourceStoreInfos.size() < 1) {
             return "0";
         }
         return businessResourceStoreInfos.get(0).get("totalPrice").toString();
