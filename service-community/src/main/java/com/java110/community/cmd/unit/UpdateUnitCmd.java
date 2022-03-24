@@ -1,55 +1,36 @@
-package com.java110.api.listener.unit;
+package com.java110.community.cmd.unit;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.unit.IUnitBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.dto.UnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.IUnitV1InnerServiceSMO;
+import com.java110.po.unit.UnitPo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
-/**
- * @ClassName UpdateUnitListener
- * @Description TODO 修改小区单元信息
- * @Author wuxw
- * @Date 2019/5/3 18:19
- * @Version 1.0
- * add by wuxw 2019/5/3
- **/
-@Java110Listener("updateUnitListener")
-public class UpdateUnitListener extends AbstractServiceApiPlusListener {
-
-    private static Logger logger = LoggerFactory.getLogger(UpdateUnitListener.class);
-    @Autowired
-    private IUnitBMO unitBMOImpl;
+@Java110Cmd(serviceCode = "unit.updateUnit")
+public class UpdateUnitCmd extends AbstractServiceCmdListener {
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_UNIT;
-    }
+    @Autowired
+    private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "floorId", "请求报文中未包含floorId节点");
         Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
@@ -84,30 +65,24 @@ public class UpdateUnitListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        unitBMOImpl.editUpdateUnit(reqJson, context);
-    }
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("floorId", reqJson.getString("floorId"));
+        businessUnit.put("layerCount", reqJson.getString("layerCount"));
+        businessUnit.put("unitId", reqJson.getString("unitId"));
+        businessUnit.put("unitNum", reqJson.getString("unitNum"));
+        businessUnit.put("lift", reqJson.getString("lift"));
+        businessUnit.put("remark", reqJson.getString("remark"));
+        businessUnit.put("unitArea", reqJson.getString("unitArea"));
+        businessUnit.put("userId", reqJson.getString("userId"));
+        UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
+        int flag = unitV1InnerServiceSMOImpl.updateUnit(unitPo);
 
+        if (flag < 1) {
+            throw new CmdException("修改单元失败");
+        }
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IFloorInnerServiceSMO getFloorInnerServiceSMOImpl() {
-        return floorInnerServiceSMOImpl;
-    }
-
-    public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
-        this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
-    public static void setLogger(Logger logger) {
-        UpdateUnitListener.logger = logger;
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }
