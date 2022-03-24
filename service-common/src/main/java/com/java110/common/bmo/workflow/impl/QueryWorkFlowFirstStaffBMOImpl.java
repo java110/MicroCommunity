@@ -130,11 +130,10 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         Map staffInfo = workflowStepStaffs.get(0);
         String staffId = staffInfo.get("staffId") + "";
         OrgDto orgDto = new OrgDto();
-        orgDto.setStaffId(staffId);
         if (staffId.startsWith("${")) {
             return ResultVo.createResponseEntity(orgDto);
         }
-
+        orgDto.setStaffId(staffId);
         List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
         if (orgDtos == null || orgDtos.size() < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "未查询到员工组织信息");
