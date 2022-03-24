@@ -14,7 +14,9 @@ import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.contract.ContractPo;
 import com.java110.po.machine.MachineRecordPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -76,9 +78,11 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
-        variables.put("nextAuditStaffId", purchaseApplyDto.getStaffId());
+        variables.put("nextAuditStaffId", purchaseApplyDto.getNextStaffId());
         variables.put("userId", purchaseApplyDto.getCurrentUserId());
         variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
+        variables.put("nextUserId", purchaseApplyDto.getNextStaffId());
+
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId()), purchaseApplyDto.getApplyOrderId(), variables);
         //获取申请id
@@ -397,6 +401,27 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     }
 
+    //删除任务
+    public boolean deleteTask(@RequestBody PurchaseApplyPo purchaseApplyPo) {
+        TaskService taskService = processEngine.getTaskService();
+
+        TaskQuery query = taskService.createTaskQuery().processInstanceBusinessKey(purchaseApplyPo.getApplyOrderId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = query.list();
+
+        if (list == null || list.size() < 1) {
+            return true;
+        }
+
+        for (Task task : list) {
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            runtimeService.deleteProcessInstance(processInstanceId, "取消申请");
+
+        }
+
+        return true;
+    }
 
     public ProcessEngine getProcessEngine() {
         return processEngine;

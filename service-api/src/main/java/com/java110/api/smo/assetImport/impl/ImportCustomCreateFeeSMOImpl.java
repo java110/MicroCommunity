@@ -278,7 +278,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             payFeePo.setUserId(result.getUserId());
             payFeePo.setIncomeObjId(result.getStoreId());
             payFeePo.setFeeTypeCd(feeConfigDtos.get(0).getFeeTypeCd());
-            payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+            payFeePo.setFeeFlag(feeConfigDtos.get(0).getFeeFlag());
             payFeePo.setAmount("-1");
             payFeePo.setBatchId(batchId);
             payFeePo.setEndTime(importRoomFee.getStartTime());

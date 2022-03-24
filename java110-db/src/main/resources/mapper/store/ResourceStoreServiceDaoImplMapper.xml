@@ -502,7 +502,7 @@
     </select>
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="queryResourceStoresTotalPrice" parameterType="Map" resultType="Map">
-        select sum(w.stock*w.average_price) as totalPrice from(
+        select IFNULL(sum(w.stock*w.average_price),0) as totalPrice from(
         select t.stock,t.average_price from resource_store t
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
         where 1 = 1

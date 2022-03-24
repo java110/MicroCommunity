@@ -85,7 +85,7 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
         communityMemberDto.setMemberId(storePo.getStoreId());
         List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
 
-        if (communityMemberDtos == null && communityMemberDtos.size() < 1) {
+        if (communityMemberDtos == null || communityMemberDtos.size() < 1) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
@@ -95,7 +95,7 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
         communityMemberPo.setMemberId(storePo.getStoreId());
         flag = communityMemberV1InnerServiceSMOImpl.deleteCommunityMember(communityMemberPo);
         if (flag < 1) {
-            throw new CmdException("删除数据失败");
+            throw new CmdException("释放小区失败");
         }
 
         //小区权限也踢掉
@@ -104,7 +104,7 @@ public class DeletePropertyCmd extends AbstractServiceCmdListener {
             menuGroupCommunityPo.setCommunityId(tmpCommunityMemberDto.getCommunityId());
             flag = menuGroupCommunityV1InnerServiceSMOImpl.deleteMenuGroupCommunity(menuGroupCommunityPo);
             if (flag < 1) {
-                throw new CmdException("删除数据失败");
+                throw new CmdException("小区权限踢掉失败");
             }
         }
 

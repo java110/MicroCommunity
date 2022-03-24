@@ -1155,8 +1155,8 @@
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,d.name,d2.name feeTypeCdName,
         pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName
         from pay_fee_detail t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
@@ -1231,8 +1231,8 @@
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
         t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName
         from pay_fee_detail t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
@@ -1312,8 +1312,8 @@
     <select id="queryAllPayFeeDetail" parameterType="Map" resultType="Map">
         select SUM(t.receivable_amount) allReceivableAmount,SUM(t.received_amount) allReceivedAmount
         from pay_fee_detail t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
@@ -1372,8 +1372,8 @@
         ruleName,pfdd.discount_price,
         SUM(pfdd.discount_price) discountPrice
         from pay_fee_detail t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on pf.payer_obj_id = br.room_id and pf.payer_obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'

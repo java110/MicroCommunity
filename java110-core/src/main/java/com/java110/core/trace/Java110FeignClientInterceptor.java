@@ -1,19 +1,17 @@
 package com.java110.core.trace;
 
-import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceAnnotationsDto;
 import com.java110.dto.trace.TraceDto;
 import com.java110.utils.constant.CommonConstant;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 
 //@Component
 public class Java110FeignClientInterceptor implements Interceptor {
-    private static Logger logger = LoggerFactory.getLogger(Java110FeignClientInterceptor.class);
+    // private static Logger logger = LoggerFactory.getLogger(Java110FeignClientInterceptor.class);
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -26,7 +24,7 @@ public class Java110FeignClientInterceptor implements Interceptor {
             builder.header(CommonConstant.TRACE_ID, traceDto.getTraceId());
             builder.header(CommonConstant.PARENT_SPAN_ID, traceDto.getId());
         }
-        logger.debug("feign 进入 Java110FeignClientAop>> intercept");
+        //logger.debug("feign 进入 Java110FeignClientAop>> intercept");
         Java110TraceFactory.putAnnotations(TraceAnnotationsDto.VALUE_SERVER_SEND);
         try {
             Response response = chain.proceed(builder.build());

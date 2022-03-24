@@ -16,6 +16,7 @@
 package com.java110.api.smo.payment.adapt.fuiouPay;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
@@ -162,13 +163,14 @@ public class FuiouPayAdapt implements IPayAdapt {
                                             SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
 
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+        String orderPre = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "FUIOU_ORDER_PRE");
 
         JSONObject paramMap = new JSONObject();
         paramMap.put("version", VERSION);
         paramMap.put("mchnt_cd", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("random_str", PayUtil.makeUUID(32));
         paramMap.put("order_amt", PayUtil.moneyToIntegerStr(payAmount));
-        paramMap.put("mchnt_order_no", "9457" + orderNum);
+        paramMap.put("mchnt_order_no", orderPre + orderNum);
         paramMap.put("txn_begin_ts", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
         paramMap.put("goods_des", systemName + feeName);
         paramMap.put("term_id", "abcdefgh");

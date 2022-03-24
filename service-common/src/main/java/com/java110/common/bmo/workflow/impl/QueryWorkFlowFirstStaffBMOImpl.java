@@ -10,6 +10,7 @@ import com.java110.common.dao.IWorkflowStepServiceDao;
 import com.java110.common.dao.IWorkflowStepStaffServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
@@ -23,7 +24,6 @@ import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -43,7 +43,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -129,16 +128,16 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         }
 
         Map staffInfo = workflowStepStaffs.get(0);
-
+        String staffId = staffInfo.get("staffId") + "";
         OrgDto orgDto = new OrgDto();
-        orgDto.setStaffId(staffInfo.get("staffId") + "");
-
+        if (staffId.startsWith("${")) {
+            return ResultVo.createResponseEntity(orgDto);
+        }
+        orgDto.setStaffId(staffId);
         List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-
         if (orgDtos == null || orgDtos.size() < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "未查询到员工组织信息");
         }
-
         orgDto = orgDtos.get(0);
         orgDto.setStaffName(staffInfo.get("staffName") + "");
 
