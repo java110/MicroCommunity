@@ -101,7 +101,7 @@ public class PurchaseApi {
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return purchaseApplyBMOImpl.apply(purchaseApplyPo);
+        return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
     }
 
     @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
@@ -200,7 +200,7 @@ public class PurchaseApi {
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return purchaseApplyBMOImpl.apply(purchaseApplyPo);
+        return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
     }
 
     /**
@@ -404,6 +404,6 @@ public class PurchaseApi {
             }
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return purchaseApplyBMOImpl.apply(purchaseApplyPo);
+        return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
     }
 }
