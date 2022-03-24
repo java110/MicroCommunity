@@ -1,5 +1,6 @@
 package com.java110.api.bmo.parkingSpace.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
@@ -12,9 +13,11 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -50,6 +53,9 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
 
     /**
      * 添加小区楼信息
@@ -230,6 +236,23 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
         if (!paramInJson.containsKey("carTypeCd") || StringUtil.isEmpty(paramInJson.getString("carTypeCd"))) {
             ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
         }
+        //添加车辆属性
+        OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
+        ownerCarAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
+        ownerCarAttrPo.setCarId(ownerCarPo.getCarId());
+        ownerCarAttrPo.setCommunityId(ownerCarPo.getCommunityId());
+        String carAttrs = paramInJson.getString("carAttrs");
+        if (StringUtil.isEmpty(carAttrs)) {
+            throw new IllegalArgumentException("属性值为空");
+        }
+        JSONArray jsonArray = JSONArray.parseArray(carAttrs);
+        String specCd = "";
+        if (jsonArray.size() > 0) {
+            specCd = jsonArray.getJSONObject(0).getString("specCd");
+        }
+        ownerCarAttrPo.setSpecCd(specCd);
+        ownerCarAttrPo.setValue(paramInJson.getString("value"));
+        ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);
         super.insert(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
     }
 

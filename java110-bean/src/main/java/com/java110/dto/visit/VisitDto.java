@@ -3,7 +3,6 @@ package com.java110.dto.visit;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @ClassName FloorDto
@@ -29,6 +28,9 @@ public class VisitDto extends PageDto implements Serializable {
     private String visitStartTime;
     private String visitEndTime;
     private String statusCd = "0";
+    private String carNum;
+    private String entourage;
+    private String reasonType;
 
     public String getvName() {
         return vName;
@@ -69,7 +71,6 @@ public class VisitDto extends PageDto implements Serializable {
     public void setvId(String vId) {
         this.vId = vId;
     }
-
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -141,5 +142,29 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getEntourage() {
+        return entourage;
+    }
+
+    public void setEntourage(String entourage) {
+        this.entourage = entourage;
+    }
+
+    public String getReasonType() {
+        return reasonType;
+    }
+
+    public void setReasonType(String reasonType) {
+        this.reasonType = reasonType;
     }
 }

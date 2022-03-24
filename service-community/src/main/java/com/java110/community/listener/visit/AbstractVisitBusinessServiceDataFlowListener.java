@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractVisitBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractVisitBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractVisitBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -48,6 +48,8 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         businessVisitInfo.put("operate", businessVisitInfo.get("operate"));
         businessVisitInfo.put("visitCase", businessVisitInfo.get("visit_case"));
         businessVisitInfo.put("communityId", businessVisitInfo.get("community_id"));
+        businessVisitInfo.put("carNum", businessVisitInfo.get("car_num"));
+        businessVisitInfo.put("entourage", businessVisitInfo.get("entourage"));
         businessVisitInfo.remove("bId");
         businessVisitInfo.put("statusCd", statusCd);
     }
@@ -83,7 +85,8 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         currentVisitInfo.put("operate", currentVisitInfo.get("operate"));
         currentVisitInfo.put("visitCase", currentVisitInfo.get("visit_case"));
         currentVisitInfo.put("communityId", currentVisitInfo.get("community_id"));
-
+        currentVisitInfo.put("carNum", currentVisitInfo.get("car_num"));
+        currentVisitInfo.put("entourage", currentVisitInfo.get("entourage"));
 
         currentVisitInfo.put("operate", StatusConstant.OPERATE_DEL);
         getVisitServiceDaoImpl().saveBusinessVisitInfo(currentVisitInfo);
@@ -94,6 +97,5 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
             }
         }
     }
-
 
 }

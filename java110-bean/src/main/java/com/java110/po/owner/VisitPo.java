@@ -22,6 +22,9 @@ public class VisitPo implements Serializable {
     private String visitTime;
     private String departureTime;
     private String statusCd;
+    private String carNum;
+    private String entourage;
+    private String reasonType;
 
     public String getvId() {
         return vId;
@@ -109,5 +112,29 @@ public class VisitPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getEntourage() {
+        return entourage;
+    }
+
+    public void setEntourage(String entourage) {
+        this.entourage = entourage;
+    }
+
+    public String getReasonType() {
+        return reasonType;
+    }
+
+    public void setReasonType(String reasonType) {
+        this.reasonType = reasonType;
     }
 }

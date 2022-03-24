@@ -28,7 +28,6 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IVisitBMO visitBMOImpl;
 
-
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 

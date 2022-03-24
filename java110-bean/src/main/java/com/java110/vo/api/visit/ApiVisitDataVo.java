@@ -1,7 +1,6 @@
 package com.java110.vo.api.visit;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiVisitDataVo implements Serializable {
     private String vId;
@@ -16,6 +15,9 @@ public class ApiVisitDataVo implements Serializable {
     private String departureTime;
     private String createTime;
     private String statusCd = "0";
+    private String carNum;
+    private String entourage;
+    private String reasonType;
 
     public String getvId() {
         return vId;
@@ -111,5 +113,29 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getEntourage() {
+        return entourage;
+    }
+
+    public void setEntourage(String entourage) {
+        this.entourage = entourage;
+    }
+
+    public String getReasonType() {
+        return reasonType;
+    }
+
+    public void setReasonType(String reasonType) {
+        this.reasonType = reasonType;
     }
 }

@@ -1,31 +1,25 @@
 package com.java110.api.listener.owner;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
-import java.util.List;
 
 /**
  * @ClassName SaveParkingSpaceListener
@@ -115,9 +109,6 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
             throw new IllegalArgumentException("车辆已存在");
         }
 
-        /*OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
-        ownerCarAttrPo.setAttrId("");
-        ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);*/
     }
 
     @Override
@@ -125,30 +116,6 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
         //添加小区楼
         parkingSpaceBMOImpl.sellParkingSpace(reqJson, context);
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
-        commit(context);
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setOwnerId(reqJson.getString("ownerId"));
-        ownerCarDto.setCarNum(reqJson.getString("carNum"));
-        //查询业主车辆
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误");
-        OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
-        ownerCarAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
-        ownerCarAttrPo.setCarId(ownerCarDtos.get(0).getCarId());
-        ownerCarAttrPo.setCommunityId(reqJson.getString("communityId"));
-        //获取属性值
-        String carAttrs = reqJson.getString("carAttrs");
-        if (StringUtil.isEmpty(carAttrs)) {
-            throw new IllegalArgumentException("属性值为空");
-        }
-        JSONArray jsonArray = JSONArray.parseArray(carAttrs);
-        String specCd = "";
-        if (jsonArray.size() > 0) {
-            specCd = jsonArray.getJSONObject(0).getString("specCd");
-        }
-        ownerCarAttrPo.setSpecCd(specCd);
-        ownerCarAttrPo.setValue(reqJson.getString("value"));
-        ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);
     }
 
 

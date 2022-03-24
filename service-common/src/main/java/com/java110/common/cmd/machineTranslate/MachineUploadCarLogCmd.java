@@ -123,7 +123,6 @@ public class MachineUploadCarLogCmd extends AbstractServiceCmdListener {
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqJson.getString("machineCode"));
         machineDto.setCommunityId(reqJson.getString("communityId"));
-        machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_CAR);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 
         Assert.listOnlyOne(machineDtos, "设备不存在");

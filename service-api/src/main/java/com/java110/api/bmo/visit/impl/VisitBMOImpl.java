@@ -6,7 +6,6 @@ import com.java110.api.bmo.visit.IVisitBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.po.owner.VisitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
