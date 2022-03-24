@@ -310,6 +310,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("currentUserId", purchaseApplyDto.getCurrentUserId());
         variables.put("flag", "1200".equals(purchaseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", purchaseApplyDto.getStartUserId());
+        variables.put("nextUserId", purchaseApplyDto.getNextStaffId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {

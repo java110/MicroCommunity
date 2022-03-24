@@ -66,6 +66,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         purchaseApplyDto.setAuditMessage(reqJson.getString("remark"));
         purchaseApplyDto.setCurrentUserId(reqJson.getString("userId"));
         purchaseApplyDto.setCommunityId(reqJson.getString("communityId"));
+        purchaseApplyDto.setNextStaffId(reqJson.getString("nextUserId"));
         PurchaseApplyDto tmpPurchaseApplyDto = new PurchaseApplyDto();
         tmpPurchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
         tmpPurchaseApplyDto.setStoreId(reqJson.getString("storeId"));
