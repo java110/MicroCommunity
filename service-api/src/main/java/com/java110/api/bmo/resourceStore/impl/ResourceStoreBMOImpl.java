@@ -111,6 +111,7 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
         businessResourceStore.put("miniStock", "0");
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
+        resourceStorePo.setAveragePrice("0");
         super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
         //将图片插入文件表里
         FileRelPo fileRelPo = new FileRelPo();
