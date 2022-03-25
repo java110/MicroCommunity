@@ -894,8 +894,12 @@
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
         select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
         ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
-        deadlineTime,t.create_time createTime,SUM(t.receivable_amount) receivableAmount,SUM(t.received_amount)
-        receivedAmount,SUM(t.owe_amount) oweAmount,max(t.update_time) updateTime
+        deadlineTime,t.create_time createTime,max(t.update_time) updateTime,SUM(t.his_owe_amount)
+        hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
+        SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
+        hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
+        sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,
+        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -903,7 +907,8 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on pf.fee_id = pfa.fee_id and pfa.spec_cd = '390008' and pfa.status_cd ='0'
-        where t.status_cd = '0' and t.receivable_amount >=0 and t.receivable_amount >= 0
+        where t.status_cd = '0'
+        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -951,8 +956,14 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryAllFeeDetail" parameterType="Map" resultType="Map">
-        select SUM(t.receivable_amount) allReceivableAmount,SUM(t.received_amount) allReceivedAmount,
-        SUM(t.owe_amount) allOweAmount from report_fee_month_statistics t
+        select
+        SUM(t.his_owe_amount + t.cur_receivable_amount) allReceivableAmount,
+        SUM(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) allReceivedAmount,
+        if(SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount) &lt; 0,0,
+        SUM(t.his_owe_amount + t.cur_receivable_amount - t.cur_received_amount - t.his_owe_received_amount))
+        allOweAmount,
+        SUM(t.his_owe_received_amount) allHisOweReceivedAmount
+        from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
