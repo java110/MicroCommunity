@@ -1,53 +1,54 @@
-package com.java110.api.listener.room;
+package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.room.IRoomBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.intf.community.IFloorV1InnerServiceSMO;
+import com.java110.intf.community.IRoomAttrV1InnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.community.IUnitV1InnerServiceSMO;
+import com.java110.po.floor.FloorPo;
+import com.java110.po.room.RoomAttrPo;
+import com.java110.po.room.RoomPo;
+import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("bindingAddRoomBindingListener")
-public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "room.addRoomBinding")
+public class AddRoomBindingCmd extends AbstractServiceCmdListener {
 
     @Autowired
-    private IRoomBMO roomBMOImpl;
+    private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;
 
     @Autowired
-    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+    private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
+
 
     @Autowired
-    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
     @Autowired
-    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
+    private IRoomAttrV1InnerServiceSMO roomAttrV1InnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         JSONArray infos = reqJson.getJSONArray("data");
 
@@ -77,7 +78,8 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         JSONArray infos = reqJson.getJSONArray("data");
         JSONObject viewFloorInfo = getObj(infos, "viewFloorInfo");
         JSONObject viewUnitInfo = getObj(infos, "viewUnitInfo");
@@ -88,6 +90,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
         String unitId = "";
         //房屋编号
         String roomNum = "";
+        int flag = 0;
         if (viewFloorInfo.containsKey("floorId") && StringUtil.isEmpty(viewFloorInfo.getString("floorId"))
                 && viewUnitInfo.containsKey("unitId") && StringUtil.isEmpty(viewUnitInfo.getString("unitId"))
                 && addRoomView.containsKey("roomNum") && StringUtil.isEmpty(addRoomView.getString("roomNum"))) {
@@ -98,12 +101,12 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             UnitDto unitDto = new UnitDto();
             unitDto.setFloorId(floorId);
             unitDto.setUnitId(unitId);
-            List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+            List<UnitDto> unitDtos = unitV1InnerServiceSMOImpl.queryUnits(unitDto);
             Assert.listOnlyOne(unitDtos, "查询单元信息错误！");
             RoomDto roomDto = new RoomDto();
             roomDto.setUnitId(unitDtos.get(0).getUnitId());
             roomDto.setRoomNum(roomNum);
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
             if (roomDtos != null && roomDtos.size() > 0) {
                 throw new IllegalArgumentException("该房屋已经存在！");
             }
@@ -117,14 +120,17 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
             FloorDto floorDto = new FloorDto();
             floorDto.setFloorNum(floorNum);
             floorDto.setCommunityId(communityId);
-            int floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
+            int floorCount = floorV1InnerServiceSMOImpl.queryFloorsCount(floorDto);
             if (floorCount > 0) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋已经存在");
             }
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
-            viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-            roomBMOImpl.addBusinessFloor(viewFloorInfo, context);
-            roomBMOImpl.addCommunityMember(viewFloorInfo, context);
+            viewFloorInfo.put("userId", reqJson.getString("userId"));
+            FloorPo floorPo = BeanConvertUtil.covertBean(viewFloorInfo, FloorPo.class);
+            flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
+            if (flag < 1) {
+                throw new CmdException("保存楼栋失败");
+            }
         }
         if (!hasKey(viewUnitInfo, "unitId")) {
             if (viewFloorInfo.containsKey("floorId") && !StringUtil.isEmpty(viewFloorInfo.getString("floorId"))) { //如果前端选择的楼栋，而不是新增楼栋，就判断该楼栋下单元是否重复
@@ -138,15 +144,20 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
                 unitDto.setFloorId(floorId1);
                 unitDto.setCommunityId(communityId);
                 unitDto.setUnitNum(unitNum);
-                int unitCount = unitInnerServiceSMOImpl.queryUnitsCount(unitDto);
+                int unitCount = unitV1InnerServiceSMOImpl.queryUnitsCount(unitDto);
                 if (unitCount > 0) {
                     throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "单元已经存在");
                 }
             }
             viewUnitInfo.put("unitId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
-            viewUnitInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+            viewUnitInfo.put("userId", reqJson.getString("userId"));
             viewUnitInfo.put("floorId", viewFloorInfo.getString("floorId"));
-            roomBMOImpl.addBusinessUnit(viewUnitInfo, context);
+
+            UnitPo unitPo = BeanConvertUtil.covertBean(viewUnitInfo, UnitPo.class);
+            flag = unitV1InnerServiceSMOImpl.saveUnit(unitPo);
+            if (flag < 1) {
+                throw new CmdException("保存单元失败");
+            }
         }
         if (!hasKey(addRoomView, "roomId")) {
             if (viewUnitInfo.containsKey("unitId") && !StringUtil.isEmpty(viewUnitInfo.getString("unitId"))) { //如果前端选择的单元，而不是添加的，就判断该楼栋单元下房屋是否重复
@@ -156,34 +167,37 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
                 roomDto.setUnitId(unitId1);
                 roomDto.setRoomNum(addRoomView.getString("roomNum"));
                 roomDto.setCommunityId(addRoomView.getString("communityId"));
-                int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
+                int roomCount = roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
                 if (roomCount > 0) {
                     throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "房屋已经存在");
                 }
             }
             addRoomView.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
-            addRoomView.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+            addRoomView.put("userId", reqJson.getString("userId"));
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
             addRoomView.put("roomType", RoomDto.ROOM_TYPE_ROOM);
-            roomBMOImpl.addBusinessRoom(addRoomView, context);
+            RoomPo roomPo = BeanConvertUtil.covertBean(addRoomView, RoomPo.class);
+            flag = roomV1InnerServiceSMOImpl.saveRoom(roomPo);
+            if (flag < 1) {
+                throw new CmdException("保存房屋失败");
+            }
             //处理房屋属性
-            dealRoomAttr(addRoomView, context);
+            dealRoomAttr(addRoomView, cmdDataFlowContext);
         }
-
-        commit(context);
 
         JSONObject paramOutObj = new JSONObject();
         paramOutObj.put("floorId", viewFloorInfo.getString("floorId"));
         paramOutObj.put("unitId", viewUnitInfo.getString("unitId"));
         paramOutObj.put("roomId", addRoomView.getString("roomId"));
         ResponseEntity<String> responseEntity = null;
-        if (context.getResponseEntity().getStatusCode() == HttpStatus.OK) {
-            responseEntity = new ResponseEntity<String>(paramOutObj.toJSONString(), HttpStatus.OK);
-        }
-        context.setResponseEntity(responseEntity);
+
+        responseEntity = new ResponseEntity<String>(paramOutObj.toJSONString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void dealRoomAttr(JSONObject addRoomView, DataFlowContext context) {
+
+    private void dealRoomAttr(JSONObject addRoomView, ICmdDataFlowContext cmdDataFlowContext) {
 
         if (!addRoomView.containsKey("attrs")) {
             return;
@@ -196,28 +210,24 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
 
 
         JSONObject attr = null;
+        int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
             attr.put("roomId", addRoomView.getString("roomId"));
-            roomBMOImpl.addRoomAttr(attr, context);
+            RoomAttrPo roomAttrPo = new RoomAttrPo();
+            roomAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+            roomAttrPo.setRoomId(attr.getString("roomId"));
+            roomAttrPo.setSpecCd(attr.getString("specCd"));
+            roomAttrPo.setValue(attr.getString("value"));
+
+            flag = roomAttrV1InnerServiceSMOImpl.saveRoomAttr(roomAttrPo);
+            if (flag < 1) {
+                throw new CmdException("保存单元失败");
+            }
         }
 
     }
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeAddRoomBindingConstant.BINDING_ADDROOMBINDING;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
 
     private boolean hasKey(JSONObject info, String key) {
         if (!info.containsKey(key)
@@ -246,6 +256,4 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiPlusListene
 
         throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
     }
-
-
 }
