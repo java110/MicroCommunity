@@ -25,6 +25,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -191,7 +192,7 @@ public class AddRoomBindingCmd extends AbstractServiceCmdListener {
         paramOutObj.put("roomId", addRoomView.getString("roomId"));
         ResponseEntity<String> responseEntity = null;
 
-        responseEntity = new ResponseEntity<String>(paramOutObj.toJSONString(), HttpStatus.OK);
+        responseEntity = ResultVo.createResponseEntity(paramOutObj);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
