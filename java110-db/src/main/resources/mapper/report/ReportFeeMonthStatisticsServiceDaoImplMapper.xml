@@ -908,7 +908,6 @@
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on pf.fee_id = pfa.fee_id and pfa.spec_cd = '390008' and pfa.status_cd ='0'
         where t.status_cd = '0'
-        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
