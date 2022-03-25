@@ -159,7 +159,6 @@
     <select id="queryRoomsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from building_room t
-        from building_room t
         left join  building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1 =1
