@@ -17,7 +17,7 @@ public class RoomAttrPo implements Serializable {
     private String roomId;
     private String specCd;
     private String value;
-    private String statusCd;
+    private String statusCd = "0";
     public String getbId() {
         return bId;
     }
