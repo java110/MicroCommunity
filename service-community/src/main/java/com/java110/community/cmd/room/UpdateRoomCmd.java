@@ -22,7 +22,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class UpdateRoomCmd extends AbstractServiceCmdListener {
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Override
-    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws Exception {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomNum", "请求报文中未包含roomNum节点");
@@ -66,9 +65,18 @@ public class UpdateRoomCmd extends AbstractServiceCmdListener {
         String state = reqJson.getString("state");
         if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
             //获取起租时间
-            Date startTime = DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
+            Date startTime = null;
+            Date endTime = null;
+
+            try {
+                startTime = DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
+                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+
+            } catch (Exception e) {
+                throw new CmdException(e.getMessage());
+            }
             //获取截租时间
-            Date endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+
 
             if (startTime.getTime() > endTime.getTime()) {
                 throw new IllegalArgumentException("起租时间不能大于截租时间！");

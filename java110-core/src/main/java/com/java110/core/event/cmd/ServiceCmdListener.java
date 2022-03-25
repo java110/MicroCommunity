@@ -20,7 +20,7 @@ public interface ServiceCmdListener extends EventListener, Ordered {
      * @param event              事件对象
      * @param cmdDataFlowContext 请求报文数据
      */
-    void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws Exception;
+    void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException;
 
 
     /**
@@ -30,5 +30,5 @@ public interface ServiceCmdListener extends EventListener, Ordered {
      * @param cmdDataFlowContext 数据上文对象
      * @param reqJson            请求报文
      */
-    void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws Exception;
+    void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException;
 }

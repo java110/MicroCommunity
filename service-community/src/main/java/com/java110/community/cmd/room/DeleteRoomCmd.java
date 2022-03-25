@@ -46,7 +46,7 @@ public class DeleteRoomCmd extends AbstractServiceCmdListener {
 
 
     @Override
-    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws Exception {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
