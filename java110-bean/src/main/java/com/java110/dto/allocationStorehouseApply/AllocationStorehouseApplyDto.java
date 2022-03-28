@@ -15,6 +15,15 @@ import java.util.Date;
  **/
 public class AllocationStorehouseApplyDto extends PageDto implements Serializable {
 
+    /**
+     * 10000	调拨
+     * 20000	退还
+     * 30000	紧急调拨
+     */
+    public static final String STORE_TYPE_ALLOCATION = "10000"; //调拨
+    public static final String STORE_TYPE_RETURN = "20000";
+    public static final String STORE_TYPE_URGENT_ALLOCATION = "30000"; //紧急调拨
+
     private String applyId;
     private String[] applyIds;
     private String bId;

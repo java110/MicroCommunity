@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceResourceStoreV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存物品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceStoreInfo" parameterType="Map">
+        insert into resource_store(
+sh_id,description,remark,store_id,res_id,parent_rst_id,warning_stock,rss_id,res_name,rst_id,out_low_price,price,mini_unit_stock,unit_code,res_code,mini_unit_code,average_price,stock,out_high_price,show_mobile,is_fixed,mini_stock
+) values (
+#{shId},#{description},#{remark},#{storeId},#{resId},#{parentRstId},#{warningStock},#{rssId},#{resName},#{rstId},#{outLowPrice},#{price},#{miniUnitStock},#{unitCode},#{resCode},#{miniUnitCode},#{averagePrice},#{stock},#{outHighPrice},#{showMobile},#{isFixed},#{miniStock}
+)
+    </insert>
+
+
+
+    <!-- 查询物品信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
+        select  t.sh_id,t.sh_id shId,t.description,t.status_cd,t.status_cd statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.parent_rst_id,t.parent_rst_id parentRstId,t.warning_stock,t.warning_stock warningStock,t.rss_id,t.rss_id rssId,t.res_name,t.res_name resName,t.rst_id,t.rst_id rstId,t.out_low_price,t.out_low_price outLowPrice,t.price,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,t.unit_code,t.unit_code unitCode,t.res_code,t.res_code resCode,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.average_price,t.average_price averagePrice,t.stock,t.out_high_price,t.out_high_price outHighPrice,t.show_mobile,t.show_mobile showMobile,t.is_fixed,t.is_fixed isFixed,t.mini_stock,t.mini_stock miniStock 
+from resource_store t 
+where 1 =1 
+<if test="shId !=null and shId != ''">
+   and t.sh_id= #{shId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+   and t.parent_rst_id= #{parentRstId}
+</if> 
+<if test="warningStock !=null and warningStock != ''">
+   and t.warning_stock= #{warningStock}
+</if> 
+<if test="rssId !=null and rssId != ''">
+   and t.rss_id= #{rssId}
+</if> 
+<if test="resName !=null and resName != ''">
+   and t.res_name= #{resName}
+</if> 
+<if test="rstId !=null and rstId != ''">
+   and t.rst_id= #{rstId}
+</if> 
+<if test="outLowPrice !=null and outLowPrice != ''">
+   and t.out_low_price= #{outLowPrice}
+</if> 
+<if test="price !=null and price != ''">
+   and t.price= #{price}
+</if> 
+<if test="miniUnitStock !=null and miniUnitStock != ''">
+   and t.mini_unit_stock= #{miniUnitStock}
+</if> 
+<if test="unitCode !=null and unitCode != ''">
+   and t.unit_code= #{unitCode}
+</if> 
+<if test="resCode !=null and resCode != ''">
+   and t.res_code= #{resCode}
+</if> 
+<if test="miniUnitCode !=null and miniUnitCode != ''">
+   and t.mini_unit_code= #{miniUnitCode}
+</if> 
+<if test="averagePrice !=null and averagePrice != ''">
+   and t.average_price= #{averagePrice}
+</if> 
+<if test="stock !=null and stock != ''">
+   and t.stock= #{stock}
+</if> 
+<if test="outHighPrice !=null and outHighPrice != ''">
+   and t.out_high_price= #{outHighPrice}
+</if> 
+<if test="showMobile !=null and showMobile != ''">
+   and t.show_mobile= #{showMobile}
+</if> 
+<if test="isFixed !=null and isFixed != ''">
+   and t.is_fixed= #{isFixed}
+</if> 
+<if test="miniStock !=null and miniStock != ''">
+   and t.mini_stock= #{miniStock}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改物品信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceStoreInfo" parameterType="Map">
+        update  resource_store t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="shId !=null and shId != ''">
+, t.sh_id= #{shId}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+, t.parent_rst_id= #{parentRstId}
+</if> 
+<if test="warningStock !=null and warningStock != ''">
+, t.warning_stock= #{warningStock}
+</if> 
+<if test="rssId !=null and rssId != ''">
+, t.rss_id= #{rssId}
+</if> 
+<if test="resName !=null and resName != ''">
+, t.res_name= #{resName}
+</if> 
+<if test="rstId !=null and rstId != ''">
+, t.rst_id= #{rstId}
+</if> 
+<if test="outLowPrice !=null and outLowPrice != ''">
+, t.out_low_price= #{outLowPrice}
+</if> 
+<if test="price !=null and price != ''">
+, t.price= #{price}
+</if> 
+<if test="miniUnitStock !=null and miniUnitStock != ''">
+, t.mini_unit_stock= #{miniUnitStock}
+</if> 
+<if test="unitCode !=null and unitCode != ''">
+, t.unit_code= #{unitCode}
+</if> 
+<if test="resCode !=null and resCode != ''">
+, t.res_code= #{resCode}
+</if> 
+<if test="miniUnitCode !=null and miniUnitCode != ''">
+, t.mini_unit_code= #{miniUnitCode}
+</if> 
+<if test="averagePrice !=null and averagePrice != ''">
+, t.average_price= #{averagePrice}
+</if> 
+<if test="stock !=null and stock != ''">
+, t.stock= #{stock}
+</if> 
+<if test="outHighPrice !=null and outHighPrice != ''">
+, t.out_high_price= #{outHighPrice}
+</if> 
+<if test="showMobile !=null and showMobile != ''">
+, t.show_mobile= #{showMobile}
+</if> 
+<if test="isFixed !=null and isFixed != ''">
+, t.is_fixed= #{isFixed}
+</if> 
+<if test="miniStock !=null and miniStock != ''">
+, t.mini_stock= #{miniStock}
+</if> 
+ where 1=1 <if test="resId !=null and resId != ''">
+and t.res_id= #{resId}
+</if> 
+
+    </update>
+
+    <!-- 查询物品数量 add by wuxw 2018-07-03 -->
+     <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from resource_store t 
+where 1 =1 
+<if test="shId !=null and shId != ''">
+   and t.sh_id= #{shId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+   and t.parent_rst_id= #{parentRstId}
+</if> 
+<if test="warningStock !=null and warningStock != ''">
+   and t.warning_stock= #{warningStock}
+</if> 
+<if test="rssId !=null and rssId != ''">
+   and t.rss_id= #{rssId}
+</if> 
+<if test="resName !=null and resName != ''">
+   and t.res_name= #{resName}
+</if> 
+<if test="rstId !=null and rstId != ''">
+   and t.rst_id= #{rstId}
+</if> 
+<if test="outLowPrice !=null and outLowPrice != ''">
+   and t.out_low_price= #{outLowPrice}
+</if> 
+<if test="price !=null and price != ''">
+   and t.price= #{price}
+</if> 
+<if test="miniUnitStock !=null and miniUnitStock != ''">
+   and t.mini_unit_stock= #{miniUnitStock}
+</if> 
+<if test="unitCode !=null and unitCode != ''">
+   and t.unit_code= #{unitCode}
+</if> 
+<if test="resCode !=null and resCode != ''">
+   and t.res_code= #{resCode}
+</if> 
+<if test="miniUnitCode !=null and miniUnitCode != ''">
+   and t.mini_unit_code= #{miniUnitCode}
+</if> 
+<if test="averagePrice !=null and averagePrice != ''">
+   and t.average_price= #{averagePrice}
+</if> 
+<if test="stock !=null and stock != ''">
+   and t.stock= #{stock}
+</if> 
+<if test="outHighPrice !=null and outHighPrice != ''">
+   and t.out_high_price= #{outHighPrice}
+</if> 
+<if test="showMobile !=null and showMobile != ''">
+   and t.show_mobile= #{showMobile}
+</if> 
+<if test="isFixed !=null and isFixed != ''">
+   and t.is_fixed= #{isFixed}
+</if> 
+<if test="miniStock !=null and miniStock != ''">
+   and t.mini_stock= #{miniStock}
+</if> 
+
+
+     </select>
+
+</mapper>

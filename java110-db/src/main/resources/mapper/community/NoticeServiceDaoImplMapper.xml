@@ -108,10 +108,10 @@
             and t.context= #{context}
         </if>
         <if test="startTime !=null">
-            and t.start_time &gt;= #{startTime}
+            and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.end_time &lt;= #{endTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -185,10 +185,10 @@
             and t.context= #{context}
         </if>
         <if test="startTime !=null">
-            and t.start_time &gt;= #{startTime}
+            and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null">
-            and t.end_time &lt;= #{endTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
