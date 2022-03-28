@@ -202,7 +202,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             Assert.hasValue(os[8], (osIndex + 1) + "行建筑面积不能为空");
             Assert.hasValue(os[9], (osIndex + 1) + "行室内面积不能为空");
             Assert.hasValue(os[10], (osIndex + 1) + "行租金不能为空");
-            if (os.length > 11) {
+            if (os.length > 11 && !StringUtil.isNullOrNone(os[11])) {
                 Assert.hasValue(os[11], (osIndex + 1) + "行业主名称不能为空");
                 Assert.hasValue(os[12], (osIndex + 1) + "行性别不能为空");
                 Assert.hasValue(os[13], (osIndex + 1) + "行年龄不能为空");
@@ -226,7 +226,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             importOwnerRoomDto.setBuiltUpArea(os[8].toString().trim());
             importOwnerRoomDto.setRoomArea(os[9].toString().trim());
             importOwnerRoomDto.setRoomRent(os[10].toString().trim());
-            if (os.length > 11) {
+            if (os.length > 11 && !StringUtil.isNullOrNone(os[11])) {
                 importOwnerRoomDto.setOwnerName(os[11].toString().trim());
                 importOwnerRoomDto.setSex("男".equals(os[12].toString().trim()) ? "0" : "1");
                 String age = StringUtil.isNullOrNone(os[13]) ? CommonUtil.getAgeByCertId(os[15].toString().trim()) : os[13].toString().trim();
