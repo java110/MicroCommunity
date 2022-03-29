@@ -146,9 +146,9 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
         userDto.setUserId(reqJson.getString("userId"));
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
-        if (userDtos != null && userDtos.size() > 0) {
-            reqJson.put("userName", userDtos.get(0).getUserName());
-        }
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        reqJson.put("userName", userDtos.get(0).getName());
+
 
         //封装调拨对象
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = covertAllocationStorehouseApply(reqJson);
