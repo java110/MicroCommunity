@@ -11,9 +11,11 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.allocationStorehouse.AllocationStorehousePo;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -58,6 +60,9 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IUserStorehouseV1InnerServiceSMO userStorehouseV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -135,6 +140,16 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
         int flag = 0;
         //获取调拨返还状态标识
         String applyType = reqJson.getString("apply_type");
+
+        // 查询用户名称
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        if (userDtos != null && userDtos.size() > 0) {
+            reqJson.put("userName", userDtos.get(0).getUserName());
+        }
+
         //封装调拨对象
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = covertAllocationStorehouseApply(reqJson);
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
