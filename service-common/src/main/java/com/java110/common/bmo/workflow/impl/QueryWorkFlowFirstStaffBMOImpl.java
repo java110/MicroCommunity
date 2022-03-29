@@ -97,7 +97,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         List<Map> workflows = workflowServiceDaoImpl.getWorkflowInfo(BeanConvertUtil.beanCovertMap(workflowDto));
 
         if (workflows == null || workflows.size() < 1) {
-            return null;
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "未查询到流程");
         }
 
         WorkflowDto tmpWorkflowDto = BeanConvertUtil.covertBean(workflows.get(0), WorkflowDto.class);

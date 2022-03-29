@@ -3,11 +3,9 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
-import com.java110.dto.area.AreaDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.storehouse.StorehouseDto;
-import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
@@ -16,7 +14,6 @@ import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IStorehouseInnerServiceSMO;
-import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
@@ -82,13 +79,14 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("allocationStorehouseApplyDto", allocationStorehouseApplyDto);
         variables.put("userId", allocationStorehouseApplyDto.getCurrentUserId());
         variables.put("startUserId", allocationStorehouseApplyDto.getCurrentUserId());
+        variables.put("nextUserId", allocationStorehouseApplyDto.getNextUserId());
         //查询调拨源仓库是集团仓库还是小区仓库，小区仓库走被调拨流程审批
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShId(allocationStorehouseApplyDto.getShId());
         List<StorehouseDto> storehouseDtoList = iStorehouseInnerServiceSMO.queryStorehouses(storehouseDto);
         StorehouseDto storehouseDto1 = new StorehouseDto();
         String communityId = null;
-        if (storehouseDtoList != null && storehouseDtoList.size() == 1) {
+        if (storehouseDtoList != null && storehouseDtoList.size() > 0) {
             storehouseDto1 = storehouseDtoList.get(0);
         }
         if (SH_TYPE_GROUP.equals(storehouseDto1.getShType())) {//集团仓库
@@ -252,10 +250,10 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         List<String> flowIdList = new ArrayList<String>();
         for (WorkflowDto workflowDto1 : workflowDtos) {
             if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey()) && WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE.equals(workflowDto1.getFlowType())) {
-                throw new IllegalArgumentException("小区编码="+workflowDto1.getCommunityId()+"的物品调拨流程还未部署");
+                throw new IllegalArgumentException("小区编码=" + workflowDto1.getCommunityId() + "的物品调拨流程还未部署");
             }
             if (StringUtil.isEmpty(workflowDto1.getProcessDefinitionKey()) && WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE_GO.equals(workflowDto1.getFlowType())) {
-                throw new IllegalArgumentException("小区编码="+workflowDto1.getCommunityId()+"的物品被调拨还未部署");
+                throw new IllegalArgumentException("小区编码=" + workflowDto1.getCommunityId() + "的物品被调拨还未部署");
             }
             flowIdList.add(WorkflowDto.DEFAULT_PROCESS + workflowDto1.getFlowId());
         }

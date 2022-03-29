@@ -152,6 +152,7 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
         if (AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) {
             AllocationStorehouseApplyDto allocationStorehouseDto = BeanConvertUtil.covertBean(allocationStorehouseApplyPo, AllocationStorehouseApplyDto.class);
             allocationStorehouseDto.setCurrentUserId(reqJson.getString("userId"));
+            allocationStorehouseDto.setNextUserId(reqJson.getString("staffId"));
             allocationStorehouseUserInnerServiceSMOImpl.startProcess(allocationStorehouseDto);
         }
 
@@ -159,7 +160,6 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
     }
 
     private void doDealResourceStore(JSONObject reqJson, String applyType, AllocationStorehouseApplyPo allocationStorehouseApplyPo, JSONArray resourceStores, JSONObject resObj) {
-        int flag;
         //保存调拨申请的物品调拨记录
         saveAllocationStorehouse(reqJson, applyType, allocationStorehouseApplyPo, resObj);
         if (AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) { //调拨减去库存
@@ -345,7 +345,7 @@ public class SaveAllocationStorehouseCmd extends AbstractServiceCmdListener {
             resourceStorePo.setShId(resObj.getString("shId"));
             BigDecimal stockA = new BigDecimal(resObj.getString("stock"));//现有库存
             BigDecimal stockB = new BigDecimal(resObj.getString("curStock"));//调拨数量
-            if (stockA.compareTo(stockB) == -1) {
+            if (stockA.compareTo(stockB) < 0) {
                 throw new IllegalArgumentException("库存不足！");
             }
             resourceStorePo.setStock((stockA.subtract(stockB)).toString());

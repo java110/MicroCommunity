@@ -45,6 +45,7 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     private String startTime;
     private String endTime;
     private String communityId;
+    private String nextUserId;
 
     private Date createTime;
 
@@ -273,5 +274,13 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getNextUserId() {
+        return nextUserId;
+    }
+
+    public void setNextUserId(String nextUserId) {
+        this.nextUserId = nextUserId;
     }
 }
