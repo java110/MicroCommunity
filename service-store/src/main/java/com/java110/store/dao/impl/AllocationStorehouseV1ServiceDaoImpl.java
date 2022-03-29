@@ -37,7 +37,7 @@ import java.util.Map;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Service("allocationAllocationStorehousehouseV1ServiceDaoImpl")
+@Service("allocationStorehouseV1ServiceDaoImpl")
 public class AllocationStorehouseV1ServiceDaoImpl extends BaseServiceDao implements IAllocationStorehouseV1ServiceDao {
 
     private static Logger logger = LoggerFactory.getLogger(AllocationStorehouseV1ServiceDaoImpl.class);
@@ -55,7 +55,7 @@ public class AllocationStorehouseV1ServiceDaoImpl extends BaseServiceDao impleme
     public int saveAllocationStorehouseInfo(Map info) throws DAOException {
         logger.debug("保存 saveAllocationStorehouseInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("allocationAllocationStorehousehouseV1ServiceDaoImpl.saveAllocationStorehouseInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("allocationStorehouseV1ServiceDaoImpl.saveAllocationStorehouseInfo",info);
 
         return saveFlag;
     }
@@ -71,7 +71,7 @@ public class AllocationStorehouseV1ServiceDaoImpl extends BaseServiceDao impleme
     public List<Map> getAllocationStorehouseInfo(Map info) throws DAOException {
         logger.debug("查询 getAllocationStorehouseInfo 入参 info : {}",info);
 
-        List<Map> businessAllocationStorehouseInfos = sqlSessionTemplate.selectList("allocationAllocationStorehousehouseV1ServiceDaoImpl.getAllocationStorehouseInfo",info);
+        List<Map> businessAllocationStorehouseInfos = sqlSessionTemplate.selectList("allocationStorehouseV1ServiceDaoImpl.getAllocationStorehouseInfo",info);
 
         return businessAllocationStorehouseInfos;
     }
@@ -86,7 +86,7 @@ public class AllocationStorehouseV1ServiceDaoImpl extends BaseServiceDao impleme
     public int updateAllocationStorehouseInfo(Map info) throws DAOException {
         logger.debug("修改 updateAllocationStorehouseInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("allocationAllocationStorehousehouseV1ServiceDaoImpl.updateAllocationStorehouseInfo",info);
+        int saveFlag = sqlSessionTemplate.update("allocationStorehouseV1ServiceDaoImpl.updateAllocationStorehouseInfo",info);
 
         return saveFlag;
     }
@@ -100,7 +100,7 @@ public class AllocationStorehouseV1ServiceDaoImpl extends BaseServiceDao impleme
     public int queryAllocationStorehousesCount(Map info) {
         logger.debug("查询 queryAllocationStorehousesCount 入参 info : {}",info);
 
-        List<Map> businessAllocationStorehouseInfos = sqlSessionTemplate.selectList("allocationAllocationStorehousehouseV1ServiceDaoImpl.queryAllocationStorehousesCount", info);
+        List<Map> businessAllocationStorehouseInfos = sqlSessionTemplate.selectList("allocationStorehouseV1ServiceDaoImpl.queryAllocationStorehousesCount", info);
         if (businessAllocationStorehouseInfos.size() < 1) {
             return 0;
         }

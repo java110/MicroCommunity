@@ -16,19 +16,17 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.intf.store.IAllocationStorehouseApplyV1InnerServiceSMO;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.store.dao.IAllocationStorehouseApplyV1ServiceDao;
-import com.java110.intf.store.IAllocationStorehouseApplyV1InnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,30 +41,30 @@ import java.util.List;
 public class AllocationStorehouseApplyV1InnerServiceSMOImpl extends BaseServiceSMO implements IAllocationStorehouseApplyV1InnerServiceSMO {
 
     @Autowired
-    private IAllocationStorehouseApplyV1ServiceDao allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl;
+    private IAllocationStorehouseApplyV1ServiceDao allocationStorehouseApplyV1ServiceDaoImpl;
 
 
     @Override
     public int saveAllocationStorehouseApply(@RequestBody AllocationStorehouseApplyPo allocationAllocationStorehouseApplyhouseApplyPo) {
-        int saveFlag = allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl.saveAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
+        int saveFlag = allocationStorehouseApplyV1ServiceDaoImpl.saveAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
         return saveFlag;
-    }
-
-     @Override
-    public int updateAllocationStorehouseApply(@RequestBody  AllocationStorehouseApplyPo allocationAllocationStorehouseApplyhouseApplyPo) {
-        int saveFlag = allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl.updateAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
-        return saveFlag;
-    }
-
-     @Override
-    public int deleteAllocationStorehouseApply(@RequestBody  AllocationStorehouseApplyPo allocationAllocationStorehouseApplyhouseApplyPo) {
-       allocationAllocationStorehouseApplyhouseApplyPo.setStatusCd("1");
-       int saveFlag = allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl.updateAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
-       return saveFlag;
     }
 
     @Override
-    public List<AllocationStorehouseApplyDto> queryAllocationStorehouseApplys(@RequestBody  AllocationStorehouseApplyDto allocationAllocationStorehouseApplyhouseApplyDto) {
+    public int updateAllocationStorehouseApply(@RequestBody AllocationStorehouseApplyPo allocationAllocationStorehouseApplyhouseApplyPo) {
+        int saveFlag = allocationStorehouseApplyV1ServiceDaoImpl.updateAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
+        return saveFlag;
+    }
+
+    @Override
+    public int deleteAllocationStorehouseApply(@RequestBody AllocationStorehouseApplyPo allocationAllocationStorehouseApplyhouseApplyPo) {
+        allocationAllocationStorehouseApplyhouseApplyPo.setStatusCd("1");
+        int saveFlag = allocationStorehouseApplyV1ServiceDaoImpl.updateAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyPo));
+        return saveFlag;
+    }
+
+    @Override
+    public List<AllocationStorehouseApplyDto> queryAllocationStorehouseApplys(@RequestBody AllocationStorehouseApplyDto allocationAllocationStorehouseApplyhouseApplyDto) {
 
         //校验是否传了 分页信息
 
@@ -76,14 +74,15 @@ public class AllocationStorehouseApplyV1InnerServiceSMOImpl extends BaseServiceS
             allocationAllocationStorehouseApplyhouseApplyDto.setPage((page - 1) * allocationAllocationStorehouseApplyhouseApplyDto.getRow());
         }
 
-        List<AllocationStorehouseApplyDto> allocationAllocationStorehouseApplyhouseApplys = BeanConvertUtil.covertBeanList(allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl.getAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto)), AllocationStorehouseApplyDto.class);
+        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = BeanConvertUtil.covertBeanList(allocationStorehouseApplyV1ServiceDaoImpl.getAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto)), AllocationStorehouseApplyDto.class);
 
-        return allocationAllocationStorehouseApplyhouseApplys;
+        return allocationStorehouseApplyDtos;
     }
 
 
     @Override
     public int queryAllocationStorehouseApplysCount(@RequestBody AllocationStorehouseApplyDto allocationAllocationStorehouseApplyhouseApplyDto) {
-        return allocationAllocationStorehouseApplyhouseApplyV1ServiceDaoImpl.queryAllocationStorehouseApplysCount(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto));    }
+        return allocationStorehouseApplyV1ServiceDaoImpl.queryAllocationStorehouseApplysCount(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto));
+    }
 
 }

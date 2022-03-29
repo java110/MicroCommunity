@@ -2,168 +2,166 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="allocationAllocationStorehousehouseV1ServiceDaoImpl">
-
-
-
+<mapper namespace="allocationStorehouseV1ServiceDaoImpl">
 
 
     <!-- 保存调拨信息 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseInfo" parameterType="Map">
         insert into allocation_storehouse(
-as_id,original_stock,remark,store_id,res_id,sh_id_z,apply_id,res_name,start_user_id,sh_id_a,start_user_name,stock
-) values (
-#{asId},#{originalStock},#{remark},#{storeId},#{resId},#{shIdZ},#{applyId},#{resName},#{startUserId},#{shIdA},#{startUserName},#{stock}
-)
+        as_id,original_stock,remark,store_id,res_id,sh_id_z,apply_id,res_name,start_user_id,sh_id_a,start_user_name,stock
+        ) values (
+        #{asId},#{originalStock},#{remark},#{storeId},#{resId},#{shIdz},#{applyId},#{resName},#{startUserId},#{shIda},#{startUserName},#{stock}
+        )
     </insert>
-
 
 
     <!-- 查询调拨信息 add by wuxw 2018-07-03 -->
     <select id="getAllocationStorehouseInfo" parameterType="Map" resultType="Map">
-        select  t.as_id,t.as_id asId,t.original_stock,t.original_stock originalStock,t.status_cd,t.status_cd statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z shIdZ,t.apply_id,t.apply_id applyId,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.sh_id_a,t.sh_id_a shIdA,t.start_user_name,t.start_user_name startUserName,t.stock 
-from allocation_storehouse t 
-where 1 =1 
-<if test="asId !=null and asId != ''">
-   and t.as_id= #{asId}
-</if> 
-<if test="originalStock !=null and originalStock != ''">
-   and t.original_stock= #{originalStock}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
-<if test="shIdZ !=null and shIdZ != ''">
-   and t.sh_id_z= #{shIdZ}
-</if> 
-<if test="applyId !=null and applyId != ''">
-   and t.apply_id= #{applyId}
-</if> 
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-<if test="startUserId !=null and startUserId != ''">
-   and t.start_user_id= #{startUserId}
-</if> 
-<if test="shIdA !=null and shIdA != ''">
-   and t.sh_id_a= #{shIdA}
-</if> 
-<if test="startUserName !=null and startUserName != ''">
-   and t.start_user_name= #{startUserName}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.as_id,t.as_id asId,t.original_stock,t.original_stock originalStock,t.status_cd,t.status_cd
+        statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z
+        shIdz,t.apply_id,t.apply_id applyId,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
+        startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,t.stock
+        from allocation_storehouse t
+        where 1 =1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改调拨信息 add by wuxw 2018-07-03 -->
     <update id="updateAllocationStorehouseInfo" parameterType="Map">
-        update  allocation_storehouse t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="originalStock !=null and originalStock != ''">
-, t.original_stock= #{originalStock}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="resId !=null and resId != ''">
-, t.res_id= #{resId}
-</if> 
-<if test="shIdZ !=null and shIdZ != ''">
-, t.sh_id_z= #{shIdZ}
-</if> 
-<if test="applyId !=null and applyId != ''">
-, t.apply_id= #{applyId}
-</if> 
-<if test="resName !=null and resName != ''">
-, t.res_name= #{resName}
-</if> 
-<if test="startUserId !=null and startUserId != ''">
-, t.start_user_id= #{startUserId}
-</if> 
-<if test="shIdA !=null and shIdA != ''">
-, t.sh_id_a= #{shIdA}
-</if> 
-<if test="startUserName !=null and startUserName != ''">
-, t.start_user_name= #{startUserName}
-</if> 
-<if test="stock !=null and stock != ''">
-, t.stock= #{stock}
-</if> 
- where 1=1 <if test="asId !=null and asId != ''">
-and t.as_id= #{asId}
-</if> 
+        update allocation_storehouse t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            , t.original_stock= #{originalStock}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            , t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            , t.sh_id_z= #{shIdz}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            , t.apply_id= #{applyId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            , t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            , t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            , t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            , t.start_user_name= #{startUserName}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        where 1=1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
 
     </update>
 
     <!-- 查询调拨数量 add by wuxw 2018-07-03 -->
-     <select id="queryAllocationStorehousesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from allocation_storehouse t 
-where 1 =1 
-<if test="asId !=null and asId != ''">
-   and t.as_id= #{asId}
-</if> 
-<if test="originalStock !=null and originalStock != ''">
-   and t.original_stock= #{originalStock}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
-<if test="shIdZ !=null and shIdZ != ''">
-   and t.sh_id_z= #{shIdZ}
-</if> 
-<if test="applyId !=null and applyId != ''">
-   and t.apply_id= #{applyId}
-</if> 
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-<if test="startUserId !=null and startUserId != ''">
-   and t.start_user_id= #{startUserId}
-</if> 
-<if test="shIdA !=null and shIdA != ''">
-   and t.sh_id_a= #{shIdA}
-</if> 
-<if test="startUserName !=null and startUserName != ''">
-   and t.start_user_name= #{startUserName}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
+    <select id="queryAllocationStorehousesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from allocation_storehouse t
+        where 1 =1
+        <if test="asId !=null and asId != ''">
+            and t.as_id= #{asId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="shIdz !=null and shIdz != ''">
+            and t.sh_id_z= #{shIdz}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="shIda !=null and shIda != ''">
+            and t.sh_id_a= #{shIda}
+        </if>
+        <if test="startUserName !=null and startUserName != ''">
+            and t.start_user_name= #{startUserName}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
