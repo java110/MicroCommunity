@@ -64,6 +64,7 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("contractDto", contractDto);
         variables.put("userId", contractDto.getCurrentUserId());
         variables.put("startUserId", contractDto.getCurrentUserId());
+        variables.put("nextUserId", contractDto.getNextUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractDto.getStoreId()), contractDto.getContractId(), variables);
         //将得到的实例流程id值赋给之前设置的变量

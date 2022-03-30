@@ -127,6 +127,7 @@ public class SaveContractBMOImpl implements ISaveContractBMO {
             //提交流程
             ContractDto tmpContractDto = BeanConvertUtil.covertBean(contractPo, ContractDto.class);
             tmpContractDto.setCurrentUserId(reqJson.getString("userId"));
+            tmpContractDto.setNextUserId(reqJson.getString("nextUserId"));
             contractApplyUserInnerServiceSMOImpl.startProcess(tmpContractDto);
         }
 

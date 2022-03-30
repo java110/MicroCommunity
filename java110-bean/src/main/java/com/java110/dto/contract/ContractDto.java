@@ -80,6 +80,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String staffName;
     private String staffTel;
     private String startUserId;
+    private String nextUserId;
 
     private String communityId;
 
@@ -451,5 +452,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setAttrs(List<ContractAttrDto> attrs) {
         this.attrs = attrs;
+    }
+
+    public String getNextUserId() {
+        return nextUserId;
+    }
+
+    public void setNextUserId(String nextUserId) {
+        this.nextUserId = nextUserId;
     }
 }
