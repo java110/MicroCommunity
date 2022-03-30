@@ -276,6 +276,7 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("currentUserId", contractDto.getCurrentUserId());
         variables.put("flag", "1200".equals(contractDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", contractDto.getStartUserId());
+        variables.put("nextUserId", contractDto.getNextUserId());
         taskService.complete(contractDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
