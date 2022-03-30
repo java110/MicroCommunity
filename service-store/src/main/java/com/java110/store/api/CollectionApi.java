@@ -95,7 +95,7 @@ public class CollectionApi {
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return goodsCollectionBMOImpl.collection(purchaseApplyPo);
+        return goodsCollectionBMOImpl.collection(purchaseApplyPo,reqJson);
     }
 
     /**
@@ -269,6 +269,6 @@ public class CollectionApi {
             }
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return goodsCollectionBMOImpl.collection(purchaseApplyPo);
+        return goodsCollectionBMOImpl.collection(purchaseApplyPo,reqJson);
     }
 }

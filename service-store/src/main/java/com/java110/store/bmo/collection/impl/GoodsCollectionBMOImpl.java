@@ -1,5 +1,6 @@
 package com.java110.store.bmo.collection.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
@@ -26,7 +27,7 @@ public class GoodsCollectionBMOImpl implements IGoodsCollectionBMO {
 
     @Override
     @Java110Transactional
-    public ResponseEntity<String> collection(PurchaseApplyPo purchaseApplyPo) {
+    public ResponseEntity<String> collection(PurchaseApplyPo purchaseApplyPo, JSONObject reqJson) {
 
         int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
 
@@ -36,10 +37,10 @@ public class GoodsCollectionBMOImpl implements IGoodsCollectionBMO {
 
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);
         purchaseApplyDto.setCurrentUserId(purchaseApplyPo.getUserId());
-        if(!purchaseApplyPo.getWarehousingWay().equals(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT)){
+        purchaseApplyDto.setNextStaffId(reqJson.getString("staffId"));
+        if (!PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT.equals(purchaseApplyPo.getWarehousingWay())) {
             goodCollectionUserInnerServiceSMOImpl.startProcess(purchaseApplyDto);
         }
-
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "物品领用成功");
     }
