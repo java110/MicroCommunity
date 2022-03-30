@@ -174,7 +174,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 workflowStepStaffPo.setFlowType(reqJson.getString("flowType"));
                 workflowStepStaffPo.setStaffRole(StringUtil.isEmpty(step.getString("staffRole")) ? "1001" : step.getString("staffRole"));
 
-                if (!"1001".equals(step.getString("staffRole")) && step.getString("staffId").startsWith("${")) {
+                if (!"1001".equals(workflowStepStaffPo.getStaffRole()) && workflowStepStaffPo.getStaffRole().startsWith("${")) {
                     throw new IllegalArgumentException("采购人员或者物品领用人员必须指定人，不能是动态指定");
                 }
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
