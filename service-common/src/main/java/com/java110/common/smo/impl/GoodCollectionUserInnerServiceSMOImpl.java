@@ -82,7 +82,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("nextAuditStaffId", purchaseApplyDto.getStaffId());
         variables.put("userId", purchaseApplyDto.getCurrentUserId());
         variables.put("startUserId", purchaseApplyDto.getCurrentUserId());
-        variables.put("nextUserId", purchaseApplyDto.getCurrentUserId());
+        variables.put("nextUserId", purchaseApplyDto.getNextStaffId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(purchaseApplyDto.getStoreId(),purchaseApplyDto.getCommunityId()), purchaseApplyDto.getApplyOrderId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
