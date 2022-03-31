@@ -84,6 +84,10 @@ public class ContractDto extends PageDto implements Serializable {
 
     private String communityId;
 
+    private String hasAudit;
+
+    private String hasEnd;
+
     private List<ContractAttrDto> attrs;
 
     public String getaLink() {
@@ -460,5 +464,21 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setNextUserId(String nextUserId) {
         this.nextUserId = nextUserId;
+    }
+
+    public String getHasAudit() {
+        return hasAudit;
+    }
+
+    public void setHasAudit(String hasAudit) {
+        this.hasAudit = hasAudit;
+    }
+
+    public String getHasEnd() {
+        return hasEnd;
+    }
+
+    public void setHasEnd(String hasEnd) {
+        this.hasEnd = hasEnd;
     }
 }

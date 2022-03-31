@@ -11,11 +11,10 @@ import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.FlowUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -51,7 +50,8 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
-
+    @Autowired
+    private RepositoryService repositoryService;
 
     /**
      * 启动流程
@@ -120,6 +120,46 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
             String business_key = pi.getBusinessKey();
             contractIds.add(business_key);
             taskBusinessKeyMap.put(business_key, task.getId());
+
+            //计算是否有 审核按钮
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+            FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
+            //获取当前节点输出连线
+            List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
+            //计算是否有结束按钮
+            boolean isReturn;
+            for (SequenceFlow outgoingFlow : outgoingFlows) {
+                //获取输出节点元素
+                FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+                isReturn = false;
+                //排除非用户任务接点
+                if (targetFlowElement instanceof UserTask) {
+                    //判断输出节点的el表达式
+                    Map vars = new HashMap();
+                    vars.put("flag", "false"); // 1100
+                    if (FlowUtil.isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                        isReturn = true;
+                    }
+                    if (!isReturn) {
+                        String assignee = ((UserTask) targetFlowElement).getAssignee();
+                        if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
+                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                        }
+                        if ("${startUserId}".equals(assignee)) {
+                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                        }
+                        if ("${nextUserId}".equals(assignee)) {
+                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                        }
+                    }
+                }
+                //如果下一个为 结束节点
+                if (targetFlowElement instanceof EndEvent) {
+                    //true 获取输出节点名称
+                    taskBusinessKeyMap.put(business_key+"_hasEnd", task.getId());
+                }
+            }
+
         }
 
         if (contractIds == null || contractIds.size() == 0) {
@@ -134,6 +174,8 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         for (ContractDto tmpContractDto : tmpContractDtos) {
             tmpContractDto.setTaskId(taskBusinessKeyMap.get(tmpContractDto.getContractId()));
+            tmpContractDto.setHasAudit(taskBusinessKeyMap.get(tmpContractDto.getContractId()+"_hasAudit"));
+            tmpContractDto.setHasEnd(taskBusinessKeyMap.get(tmpContractDto.getContractId()+"_hasEnd"));
         }
         return tmpContractDtos;
     }

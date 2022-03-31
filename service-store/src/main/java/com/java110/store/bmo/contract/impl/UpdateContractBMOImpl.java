@@ -24,7 +24,6 @@ import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
-import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.po.contractFile.ContractFilePo;
 import com.java110.po.contractRoom.ContractRoomPo;
 import com.java110.po.owner.OwnerRoomRelPo;
@@ -37,7 +36,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.apache.http.annotation.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -108,7 +106,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         deleteContractFileBMOImpl.delete(contractFilePo);
 
         List<ContractFilePo> filePos = contractPo.getContractFilePo();
-        if(filePos != null) {
+        if (filePos != null) {
             for (ContractFilePo file : filePos) {
                 if (file.getFileRealName().length() > 0 && file.getFileSaveName().length() > 0) {
                     file.setContractId(contractPo.getContractId());
@@ -161,6 +159,9 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = new ContractPo();
             contractPo.setContractId(contractDto.getContractId());
             contractPo.setState(ContractDto.STATE_AUDIT_DOING);
+            if ("1200".equals(reqJson.getString("state"))) {
+                contractPo.setState(ContractDto.STATE_FAIL);
+            }
             contractPo.setStatusCd(StatusConstant.STATUS_CD_VALID);
             contractInnerServiceSMOImpl.updateContract(contractPo);
         }
@@ -204,7 +205,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
-            dealContractChangePlanRoom(contractChangePlanDto,contractDtos.get(0));
+            dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
 
         } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
@@ -390,6 +391,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
 
         return false;
     }
+
     private void updateContractAttr(JSONObject jsonObject, ContractPo contractPo) {
         ContractAttrDto contractAttrDto = new ContractAttrDto();
         contractAttrDto.setContractId(contractPo.getContractId());

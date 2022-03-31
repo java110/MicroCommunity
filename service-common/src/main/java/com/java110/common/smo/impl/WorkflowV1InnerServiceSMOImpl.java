@@ -24,6 +24,7 @@ import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.FlowUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.model.*;
 import org.activiti.engine.ProcessEngine;
@@ -136,7 +137,7 @@ public class WorkflowV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
                 //判断输出节点的el表达式
                 Map vars = new HashMap();
                 vars.put("flag", "false"); // 1100
-                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                if (FlowUtil.isCondition(outgoingFlow.getConditionExpression(), vars)) {
                     isReturn = true;
                 }
                 if (!isReturn) {
@@ -162,42 +163,6 @@ public class WorkflowV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
         return tasks;
     }
 
-    /**
-     * el表达式判断
-     *
-     * @param expression
-     * @param vars
-     * @return
-     */
-    private static boolean isCondition(String expression, Map<String, Object> vars) {
-        if (expression == null || expression == "") {
-            return false;
-        }
 
-        //分割表达式
-        String[] exprArr = expression.split("[{}$&]");
-        for (String expr : exprArr) {
-            //是否包含键message
-            if (expr.contains("flag")) {
-                if (!vars.containsKey("flag")) {
-                    continue;
-                }
-                if (expr.contains("==")) {
-                    String[] primes = expr.split("==");
-                    String valExpr = primes[1].trim();
-                    if (valExpr.startsWith("'")) {
-                        valExpr = valExpr.substring(1);
-                    }
-                    if (valExpr.endsWith("'")) {
-                        valExpr = valExpr.substring(0, valExpr.length() - 1);
-                    }
-                    if (primes.length == 2 && valExpr.equals(vars.get("flag"))) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
 }
