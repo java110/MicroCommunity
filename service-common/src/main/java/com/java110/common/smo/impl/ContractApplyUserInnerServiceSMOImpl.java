@@ -143,20 +143,21 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
                     if (!isReturn) {
                         String assignee = ((UserTask) targetFlowElement).getAssignee();
                         if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
-                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
                         }
                         if ("${startUserId}".equals(assignee)) {
-                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
                         }
                         if ("${nextUserId}".equals(assignee)) {
-                            taskBusinessKeyMap.put(business_key+"_hasAudit", task.getId());
+                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
                         }
                     }
                 }
                 //如果下一个为 结束节点
                 if (targetFlowElement instanceof EndEvent) {
                     //true 获取输出节点名称
-                    taskBusinessKeyMap.put(business_key+"_hasEnd", task.getId());
+                    taskBusinessKeyMap.put(business_key + "_hasAudit", "");
+                    taskBusinessKeyMap.put(business_key + "_hasEnd", "1");
                 }
             }
 
@@ -174,8 +175,8 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         for (ContractDto tmpContractDto : tmpContractDtos) {
             tmpContractDto.setTaskId(taskBusinessKeyMap.get(tmpContractDto.getContractId()));
-            tmpContractDto.setHasAudit(taskBusinessKeyMap.get(tmpContractDto.getContractId()+"_hasAudit"));
-            tmpContractDto.setHasEnd(taskBusinessKeyMap.get(tmpContractDto.getContractId()+"_hasEnd"));
+            tmpContractDto.setHasAudit(taskBusinessKeyMap.get(tmpContractDto.getContractId() + "_hasAudit"));
+            tmpContractDto.setHasEnd(taskBusinessKeyMap.get(tmpContractDto.getContractId() + "_hasEnd"));
         }
         return tmpContractDtos;
     }
