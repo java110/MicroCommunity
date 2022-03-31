@@ -127,9 +127,6 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
             //获取当前节点输出连线
             List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
             //计算是否有结束按钮
-
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>outgoingFlows:" + outgoingFlows.size());
-            ;
             boolean isReturn;
             for (SequenceFlow outgoingFlow : outgoingFlows) {
                 //获取输出节点元素
@@ -143,11 +140,9 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
                     if (FlowUtil.isCondition(outgoingFlow.getConditionExpression(), vars)) {
                         isReturn = true;
                     }
-                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>SequenceFlow-isReturn:" + isReturn);
 
                     if (!isReturn) {
                         String assignee = ((UserTask) targetFlowElement).getAssignee();
-                        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>SequenceFlow-assignee:" + isReturn);
                         if (!StringUtil.isEmpty(assignee)) {
                             taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
                         }
@@ -156,7 +151,6 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
                 //如果下一个为 结束节点
                 if (targetFlowElement instanceof EndEvent) {
                     //true 获取输出节点名称
-                    taskBusinessKeyMap.put(business_key + "_hasAudit", "");
                     taskBusinessKeyMap.put(business_key + "_hasEnd", "1");
                 }
             }
