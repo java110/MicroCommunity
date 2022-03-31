@@ -127,6 +127,9 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
             //获取当前节点输出连线
             List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
             //计算是否有结束按钮
+
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>outgoingFlows:" + outgoingFlows.size());
+            ;
             boolean isReturn;
             for (SequenceFlow outgoingFlow : outgoingFlows) {
                 //获取输出节点元素
@@ -140,15 +143,12 @@ public class ContractApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
                     if (FlowUtil.isCondition(outgoingFlow.getConditionExpression(), vars)) {
                         isReturn = true;
                     }
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>SequenceFlow-isReturn:" + isReturn);
+
                     if (!isReturn) {
                         String assignee = ((UserTask) targetFlowElement).getAssignee();
-                        if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
-                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
-                        }
-                        if ("${startUserId}".equals(assignee)) {
-                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
-                        }
-                        if ("${nextUserId}".equals(assignee)) {
+                        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>SequenceFlow-assignee:" + isReturn);
+                        if (!StringUtil.isEmpty(assignee)) {
                             taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
                         }
                     }
