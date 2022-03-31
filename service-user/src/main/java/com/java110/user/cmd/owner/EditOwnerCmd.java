@@ -1,50 +1,40 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.owner.IOwnerBMO;
-import com.java110.api.bmo.ownerAttr.IOwnerAttrBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.dto.file.FileDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.po.file.FileRelPo;
+import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.po.owner.OwnerAttrPo;
+import com.java110.po.owner.OwnerPo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-/**
- * @ClassName EditOwnerListener
- * @Description TODO 编辑小区楼信息
- * @Author wuxw
- * @Date 2019/4/28 15:19
- * @Version 1.0
- * add by wuxw 2019/4/28
- **/
-@Java110Listener("editOwnerListener")
-public class EditOwnerListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "owner.editOwner")
+public class EditOwnerCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(EditOwnerListener.class);
-
-    @Autowired
-    private IOwnerBMO ownerBMOImpl;
-
-    @Autowired
-    private IOwnerAttrBMO ownerAttrBMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -53,23 +43,22 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
+    private IOwnerAttrInnerServiceSMO ownerAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_EDIT_OWNER;
-    }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含ownerId");
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(reqJson, "userId", "请求报文中未包含userId");
@@ -83,8 +72,9 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        if (!reqJson.containsKey("ownerId") || "1001".equals(reqJson.getString("ownerTypeCd"))) {
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        if (!reqJson.containsKey("ownerId") || OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
             reqJson.put("ownerId", reqJson.getString("memberId"));
         }
         //获取手机号(判断手机号是否重复)
@@ -152,53 +142,105 @@ public class EditOwnerListener extends AbstractServiceApiPlusListener {
             String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             reqJson.put("ownerPhotoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
-            ownerBMOImpl.editOwnerPhoto(reqJson, context);
+            editOwnerPhoto(reqJson);
         }
-        ownerBMOImpl.editOwner(reqJson, context);
+        editOwner(reqJson);
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs.size() < 1) {
             return;
         }
         JSONObject attr = null;
+        int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
             attr.put("memberId", reqJson.getString("memberId"));
             attr.put("communityId", reqJson.getString("communityId"));
             if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
-                ownerAttrBMOImpl.addOwnerAttr(attr, context);
+                attr.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                OwnerAttrPo ownerAttrPo = BeanConvertUtil.covertBean(attr, OwnerAttrPo.class);
+                flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);
+                if (flag < 1) {
+                    throw new CmdException("添加业主属性失败");
+                }
                 continue;
             }
-            ownerAttrBMOImpl.updateOwnerAttr(attr, context);
+            OwnerAttrPo ownerAttrPo = BeanConvertUtil.covertBean(attr, OwnerAttrPo.class);
+            flag = ownerAttrInnerServiceSMOImpl.updateOwnerAttrInfoInstance(ownerAttrPo);
+            if (flag < 1) {
+                throw new CmdException("修改业主属性失败");
+            }
         }
     }
 
+    public void editOwner(JSONObject paramInJson) {
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(paramInJson.getString("memberId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+        Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
+
+        JSONObject businessOwner = new JSONObject();
+        businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
+        businessOwner.putAll(paramInJson);
+
+        if (paramInJson.containsKey("wxPhoto")) {
+            businessOwner.put("link", paramInJson.getString("wxPhoto"));
+        }
+        businessOwner.put("state", ownerDtos.get(0).getState());
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        int flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
+        if (flag < 1) {
+            throw new CmdException("修改业主失败");
+        }
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
+        //查询app用户表
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+            for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
+                OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
+                ownerAppUserPo.setLink(paramInJson.getString("link"));
+                ownerAppUserPo.setIdCard(paramInJson.getString("idCard"));
+                flag = ownerAppUserV1InnerServiceSMOImpl.updateOwnerAppUser(ownerAppUserPo);
+                if (flag < 1) {
+                    throw new CmdException("修改业主失败");
+                }
+            }
+        }
     }
 
-    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
-        return fileInnerServiceSMOImpl;
-    }
+    public void editOwnerPhoto(JSONObject paramInJson) {
 
-    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
-        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
-    }
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setRelTypeCd("10000");
+        fileRelDto.setObjId(paramInJson.getString("memberId"));
+        int flag = 0;
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        if (fileRelDtos == null || fileRelDtos.size() == 0) {
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("relTypeCd", "10000");
+            businessUnit.put("saveWay", "table");
+            businessUnit.put("objId", paramInJson.getString("memberId"));
+            businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
+            businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+            if (flag < 1) {
+                throw new CmdException("保存文件失败");
+            }
+            return;
+        }
 
-    public IFileRelInnerServiceSMO getFileRelInnerServiceSMOImpl() {
-        return fileRelInnerServiceSMOImpl;
-    }
-
-    public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
-        this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
-    }
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
+        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+        flag = fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
+        if (flag < 1) {
+            throw new CmdException("保存文件失败");
+        }
     }
 }

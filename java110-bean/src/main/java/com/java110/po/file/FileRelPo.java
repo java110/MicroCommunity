@@ -20,6 +20,7 @@ public class FileRelPo implements Serializable {
     private String fileRealName;
     private String fileSaveName;
     private Date createTime;
+    private String statusCd = "0";
 
     public String getFileRelId() {
         return fileRelId;
@@ -75,5 +76,13 @@ public class FileRelPo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

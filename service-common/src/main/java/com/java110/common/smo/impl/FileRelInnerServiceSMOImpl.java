@@ -51,6 +51,7 @@ public class FileRelInnerServiceSMOImpl extends BaseServiceSMO implements IFileR
 
     /**
      * 保存文件关系
+     *
      * @param fileRelPo
      * @return
      */
@@ -59,7 +60,13 @@ public class FileRelInnerServiceSMOImpl extends BaseServiceSMO implements IFileR
         return fileRelServiceDaoImpl.saveFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
     }
 
-    public int deleteFileRel(@RequestBody FileRelPo fileRelPo){
+    @Override
+    public int updateFileRel(@RequestBody FileRelPo fileRelPo) {
+        fileRelServiceDaoImpl.updateFileRelInfoInstance(BeanConvertUtil.beanCovertMap(fileRelPo));
+        return 1;
+    }
+
+    public int deleteFileRel(@RequestBody FileRelPo fileRelPo) {
         return fileRelServiceDaoImpl.deleteFileRel(BeanConvertUtil.beanCovertMap(fileRelPo));
     }
 

@@ -35,6 +35,9 @@ public interface IFileRelInnerServiceSMO {
     @RequestMapping(value = "/saveFileRel", method = RequestMethod.POST)
     public int saveFileRel(@RequestBody FileRelPo fileRelPo);
 
+    @RequestMapping(value = "/updateFileRel", method = RequestMethod.POST)
+    public int updateFileRel(@RequestBody FileRelPo fileRelPo);
+
     @RequestMapping(value = "/deleteFileRel", method = RequestMethod.POST)
     public int deleteFileRel(@RequestBody FileRelPo fileRelPo);
 
