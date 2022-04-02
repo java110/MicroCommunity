@@ -1,11 +1,11 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -16,29 +16,20 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName OwnerDto
- * @Description 查询业主车辆
- * @Author wuxw
- * @Date 2019/4/24 8:52
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-@Java110Listener("queryOwnerCarsListener")
-public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
+@Java110Cmd(serviceCode = "owner.queryOwnerCars")
+public class QueryOwnerCarsCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
@@ -49,34 +40,23 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_OWNER_CAR;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
-    /**
-     * 业务层数据处理
-     *
-     * @param event 时间对象
-     */
     @Override
-    public void soService(ServiceDataFlowEvent event) {
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        //获取请求数据
-        JSONObject reqJson = dataFlowContext.getReqJson();
-        validateOwnerCarData(reqJson);
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.isInteger(reqJson.getString("page"), "不是有效数字");
+        Assert.isInteger(reqJson.getString("row"), "不是有效数字");
+    }
 
+    @Override
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         int row = reqJson.getInteger("row");
 
         if (reqJson.containsKey("num") && !StringUtil.isEmpty(reqJson.getString("num"))) {
@@ -87,14 +67,14 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
             if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(1, 1, new JSONArray());
-                dataFlowContext.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
 
             reqJson.put("psId", parkingSpaceDtos.get(0).getPsId());
         }
-        OwnerCarDto ownerCarDto =  BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
-        if(reqJson.containsKey("carTypeCds")){
+        OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
+        if (reqJson.containsKey("carTypeCds")) {
             ownerCarDto.setCarTypeCd("");
             ownerCarDto.setCarTypeCds(reqJson.getString("carTypeCds").split(","));
         }
@@ -119,7 +99,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         List<Map> privileges = null;
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
         basePrivilegeDto.setResource("/roomCreateFee");
-        basePrivilegeDto.setUserId(dataFlowContext.getUserId());
+        basePrivilegeDto.setUserId(reqJson.getString("userId"));
         privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         if (privileges == null || privileges.size() == 0) {
             for (OwnerCarDto tmpOwnerCarDto : ownerCarDtoList) {
@@ -132,7 +112,7 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
         }
 
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerCarDtoList);
-        dataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void freshPs(List<OwnerCarDto> ownerCarDtoList) {
@@ -210,25 +190,5 @@ public class QueryOwnerCarsListener extends AbstractServiceApiDataFlowListener {
 
         roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
         ownerCarDto.setRoomName(roomName);
-    }
-
-
-    /**
-     * 校验查询条件是否满足条件
-     *
-     * @param reqJson 包含查询条件
-     */
-    private void validateOwnerCarData(JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
-        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.isInteger(reqJson.getString("page"), "不是有效数字");
-        Assert.isInteger(reqJson.getString("row"), "不是有效数字");
-
-    }
-
-    @Override
-    public int getOrder() {
-        return super.DEFAULT_ORDER;
     }
 }
