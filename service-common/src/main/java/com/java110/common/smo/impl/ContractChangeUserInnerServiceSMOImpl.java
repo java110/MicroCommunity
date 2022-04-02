@@ -13,11 +13,10 @@ import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.FlowUtil;
 import com.java110.utils.util.StringUtil;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
@@ -53,7 +52,8 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
-
+    @Autowired
+    private RepositoryService repositoryService;
 
     /**
      * 启动流程
@@ -121,6 +121,40 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
             String business_key = pi.getBusinessKey();
             contractIds.add(business_key);
             taskBusinessKeyMap.put(business_key, task.getId());
+
+            //计算是否有 审核按钮
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+            FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
+            //获取当前节点输出连线
+            List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
+            //计算是否有结束按钮
+            boolean isReturn;
+            for (SequenceFlow outgoingFlow : outgoingFlows) {
+                //获取输出节点元素
+                FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+                isReturn = false;
+                //排除非用户任务接点
+                if (targetFlowElement instanceof UserTask) {
+                    //判断输出节点的el表达式
+                    Map vars = new HashMap();
+                    vars.put("flag", "false"); // 1100
+                    if (FlowUtil.isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                        isReturn = true;
+                    }
+
+                    if (!isReturn) {
+                        String assignee = ((UserTask) targetFlowElement).getAssignee();
+                        if (!StringUtil.isEmpty(assignee)) {
+                            taskBusinessKeyMap.put(business_key + "_hasAudit", "1");
+                        }
+                    }
+                }
+                //如果下一个为 结束节点
+                if (targetFlowElement instanceof EndEvent) {
+                    //true 获取输出节点名称
+                    taskBusinessKeyMap.put(business_key + "_hasEnd", "1");
+                }
+            }
         }
 
         if (contractIds == null || contractIds.size() == 0) {
@@ -135,6 +169,8 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
 
         for (ContractChangePlanDto tmpContractChangePlanDto : tmpContractChangePlanDtos) {
             tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId()));
+            tmpContractChangePlanDto.setHasAudit(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId() + "_hasAudit"));
+            tmpContractChangePlanDto.setHasEnd(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId() + "_hasEnd"));
         }
         return tmpContractChangePlanDtos;
     }
@@ -276,6 +312,7 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("currentUserId", contractChangePlanDto.getCurrentUserId());
         variables.put("flag", "1200".equals(contractChangePlanDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", contractChangePlanDto.getStartUserId());
+        variables.put("nextUserId", contractChangePlanDto.getNextUserId());
         taskService.complete(contractChangePlanDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();

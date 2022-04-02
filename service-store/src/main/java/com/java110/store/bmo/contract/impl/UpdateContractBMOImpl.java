@@ -185,6 +185,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         List<ContractChangePlanDto> contractChangePlanDtos = contractChangePlanInnerServiceSMOImpl.queryContractChangePlans(tmpContractChangePlanDto);
         Assert.listOnlyOne(contractChangePlanDtos, "合同计划不存在");
         contractChangePlanDto.setStartUserId(contractChangePlanDtos.get(0).getChangePerson());
+        contractChangePlanDto.setNextUserId(reqJson.getString("nextUserId"));
 
         boolean isLastTask = contractChangeUserInnerServiceSMOImpl.completeTask(contractChangePlanDto);
         if (isLastTask) {
