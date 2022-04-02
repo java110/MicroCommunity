@@ -364,41 +364,41 @@ public class ContractApi {
     }
 
 
-    /**
-     * 微信删除消息模板
-     *
-     * @param storeId    商户ID
-     * @param expiration 到期合同标记 1 到期合同
-     * @return
-     * @serviceCode /contract/queryContract
-     * @path /app/contract/queryContract
-     */
-    @RequestMapping(value = "/queryContract", method = RequestMethod.GET)
-    public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
-                                                @RequestParam(value = "state", required = false) String state,
-                                                @RequestParam(value = "expiration", required = false) String expiration,
-                                                @RequestParam(value = "objId", required = false) String objId,
-                                                @RequestParam(value = "contractId", required = false) String contractId,
-                                                @RequestParam(value = "contractNameLike", required = false) String contractNameLike,
-                                                @RequestParam(value = "contractCode", required = false) String contractCode,
-                                                @RequestParam(value = "page") int page,
-                                                @RequestParam(value = "row") int row) {
-        ContractDto contractDto = new ContractDto();
-        contractDto.setPage(page);
-        contractDto.setRow(row);
-        contractDto.setStoreId(storeId);
-        contractDto.setState(state);
-        contractDto.setObjId(objId);
-        contractDto.setContractId(contractId);
-        contractDto.setContractCode(contractCode);
-        contractDto.setContractNameLike(contractNameLike);
-        //如果是到期合同
-        if ("1".equals(expiration)) {
-            contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
-            contractDto.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        }
-        return getContractBMOImpl.get(contractDto);
-    }
+//    /**
+//     * 微信删除消息模板
+//     *
+//     * @param storeId    商户ID
+//     * @param expiration 到期合同标记 1 到期合同
+//     * @return
+//     * @serviceCode /contract/queryContract
+//     * @path /app/contract/queryContract
+//     */
+//    @RequestMapping(value = "/queryContract", method = RequestMethod.GET)
+//    public ResponseEntity<String> queryContract(@RequestHeader(value = "store-id") String storeId,
+//                                                @RequestParam(value = "state", required = false) String state,
+//                                                @RequestParam(value = "expiration", required = false) String expiration,
+//                                                @RequestParam(value = "objId", required = false) String objId,
+//                                                @RequestParam(value = "contractId", required = false) String contractId,
+//                                                @RequestParam(value = "contractNameLike", required = false) String contractNameLike,
+//                                                @RequestParam(value = "contractCode", required = false) String contractCode,
+//                                                @RequestParam(value = "page") int page,
+//                                                @RequestParam(value = "row") int row) {
+//        ContractDto contractDto = new ContractDto();
+//        contractDto.setPage(page);
+//        contractDto.setRow(row);
+//        contractDto.setStoreId(storeId);
+//        contractDto.setState(state);
+//        contractDto.setObjId(objId);
+//        contractDto.setContractId(contractId);
+//        contractDto.setContractCode(contractCode);
+//        contractDto.setContractNameLike(contractNameLike);
+//        //如果是到期合同
+//        if ("1".equals(expiration)) {
+//            contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});
+//            contractDto.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        }
+//        return getContractBMOImpl.get(contractDto);
+//    }
 
     /**
      * 合同起草待办
