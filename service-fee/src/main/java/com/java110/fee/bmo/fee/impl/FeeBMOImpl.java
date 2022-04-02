@@ -448,7 +448,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             } else {
                 endCalender.setTime(feeInfo.getImportFeeEndTime());
             }
-            businessFee.put("state",FeeDto.STATE_FINISH);
+            //businessFee.put("state",FeeDto.STATE_FINISH);
+            feeInfo.setState(FeeDto.STATE_FINISH);
         }
         feeInfo.setEndTime(endCalender.getTime());
 
