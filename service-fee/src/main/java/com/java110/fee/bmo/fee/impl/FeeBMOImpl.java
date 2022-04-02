@@ -438,7 +438,21 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeInfo.getFeeFlag())) {
+            if (feeInfo.getDeadlineTime() != null) {
+                endCalender.setTime(feeInfo.getDeadlineTime());
+            } else if (!StringUtil.isEmpty(feeInfo.getCurDegrees())) {
+                endCalender.setTime(feeInfo.getCurReadingTime());
+            } else if (feeInfo.getImportFeeEndTime() == null) {
+                endCalender.setTime(feeInfo.getConfigEndTime());
+            } else {
+                endCalender.setTime(feeInfo.getImportFeeEndTime());
+            }
+            businessFee.put("state",FeeDto.STATE_FINISH);
+        }
         feeInfo.setEndTime(endCalender.getTime());
+
+
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
         if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000L) {
             throw new IllegalArgumentException("缴费超过了 费用项结束时间" + JSONObject.toJSONString(feeInfo) + "|||" + paramInJson.getString("cycles"));
