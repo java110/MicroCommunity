@@ -27,7 +27,7 @@ public class RepairPoolPo implements Serializable {
     private String maintenanceType;
     private String repairChannel;
     private String bId;
-    private String statusCd;
+    private String statusCd = "0";
     private String repairMaterials;
     private String repairFee;
     private String payType;
