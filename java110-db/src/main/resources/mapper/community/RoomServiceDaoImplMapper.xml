@@ -36,9 +36,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -97,9 +94,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -157,9 +152,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -280,9 +273,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -420,9 +411,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -486,9 +475,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -557,9 +544,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -631,9 +616,7 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -825,9 +808,7 @@
         <if test="bId !=null and bId != ''">
             and bo.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and bo.user_id= #{userId}
-        </if>
+
         <if test="age !=null and age != ''">
             and bo.age= #{age}
         </if>

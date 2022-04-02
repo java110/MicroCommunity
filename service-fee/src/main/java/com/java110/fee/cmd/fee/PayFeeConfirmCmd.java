@@ -163,10 +163,6 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             if (flag < 1) {
                 throw new CmdException("更新微信派单池信息失败");
             }
-        }
-        //修改报修派单状态
-        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
-
             RepairUserDto repairUserDto = new RepairUserDto();
             repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
             repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
@@ -181,7 +177,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             DecimalFormat df = new DecimalFormat("0.00");
             BigDecimal payment_amount = new BigDecimal(paramObj.getString("receivableAmount"));
             repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
-            int flag = repairUserNewV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
+            flag = repairUserNewV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
             if (flag < 1) {
                 throw new CmdException("更新微信派单池信息失败");
             }
@@ -218,7 +214,7 @@ public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
             //List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
             JSONArray computeDiscountDtos = paramObj.getJSONArray("computeDiscountDtos");
             ComputeDiscountDto computeDiscountDto = null;
-            if (computeDiscountDtos != null && computeDiscountDtos.size()> 0) {
+            if (computeDiscountDtos != null && computeDiscountDtos.size() > 0) {
                 for (int accountIndex = 0; accountIndex < computeDiscountDtos.size(); accountIndex++) {
                     computeDiscountDto = BeanConvertUtil.covertBean(computeDiscountDtos.getJSONObject(accountIndex), ComputeDiscountDto.class);
                     if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
