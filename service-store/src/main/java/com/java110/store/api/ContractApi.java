@@ -871,7 +871,7 @@ public class ContractApi {
 
         ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo,contractChangePlanRoomPos);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo,contractChangePlanRoomPos,reqJson);
     }
 
     /**

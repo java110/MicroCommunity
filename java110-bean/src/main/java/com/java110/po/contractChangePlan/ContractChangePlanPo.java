@@ -14,6 +14,7 @@ public class ContractChangePlanPo implements Serializable {
     private String storeId;
 
 
+
     public String getPlanType() {
         return planType;
     }

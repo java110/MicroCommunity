@@ -29,6 +29,7 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     private String changePersonName;
     private String state;
     private String storeId;
+    private String nextUserId;
 
 
     private Date createTime;
@@ -133,5 +134,15 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
 
     public void setPlanIds(String[] planIds) {
         this.planIds = planIds;
+    }
+
+    @Override
+    public String getNextUserId() {
+        return nextUserId;
+    }
+
+    @Override
+    public void setNextUserId(String nextUserId) {
+        this.nextUserId = nextUserId;
     }
 }

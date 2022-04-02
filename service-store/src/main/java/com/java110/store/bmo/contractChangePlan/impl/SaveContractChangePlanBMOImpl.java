@@ -1,5 +1,6 @@
 package com.java110.store.bmo.contractChangePlan.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
@@ -71,7 +72,8 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
     @Java110Transactional
     public ResponseEntity<String> save(ContractChangePlanPo contractChangePlanPo,
                                        ContractChangePlanDetailPo contractChangePlanDetailPo,
-                                       List<ContractChangePlanRoomPo> contractChangePlanRoomPos) {
+                                       List<ContractChangePlanRoomPo> contractChangePlanRoomPos,
+                                       JSONObject reqJson) {
 
         //查询老的合同信息
         ContractDto contractDto = new ContractDto();
@@ -120,6 +122,7 @@ public class SaveContractChangePlanBMOImpl implements ISaveContractChangePlanBMO
             //提交流程
             ContractChangePlanDto contractChangePlanDto = BeanConvertUtil.covertBean(contractChangePlanPo, ContractChangePlanDto.class);
             contractChangePlanDto.setCurrentUserId(contractChangePlanPo.getChangePerson());
+            contractChangePlanDto.setNextUserId(reqJson.getString("nextUserId"));
             contractChangeUserInnerServiceSMO.startProcess(contractChangePlanDto);
         } else {
             ContractChangePlanPo tmpContractChangePlanPo = new ContractChangePlanPo();

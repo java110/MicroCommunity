@@ -66,6 +66,7 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
         variables.put("contractChangePlanDto", contractChangePlanDto);
         variables.put("userId", contractChangePlanDto.getCurrentUserId());
         variables.put("startUserId", contractChangePlanDto.getCurrentUserId());
+        variables.put("nextUserId", contractChangePlanDto.getNextUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(contractChangePlanDto.getStoreId()),contractChangePlanDto.getPlanId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
