@@ -1,55 +1,59 @@
 {
   "templateKeyName": "编号",
-  "templateName": "巡检项目",
+  "templateName": "黑白名单",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "256",
-      "code": "itemName",
-      "limitErrInfo": "巡检项目不能超过256",
-      "cnCode": "巡检项目",
+      "limitParam": "64",
+      "code": "typeCd",
+      "limitErrInfo": "类型不能超过64",
+      "cnCode": "类型",
       "limit": "maxLength",
       "show": true,
-      "inputType": "input",
+      "inputType": "select",
+      "selectValue":"B,W",
+      "selectValueName":"黑名单,白名单",
       "required": true,
-      "desc": "必填，巡检项目"
+      "desc": "必填，类型"
     },
     {
       "hasDefaultValue": false,
-      "limitParam": "512",
-      "code": "remark",
-      "limitErrInfo": "备注不能超过512",
-      "cnCode": "备注",
+      "limitParam": "64",
+      "code": "ip",
+      "limitErrInfo": "IP'不能超过64",
+      "cnCode": "IP'",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "备注"
+      "desc": "必填，IP"
     }
   ],
   "searchName": "编号",
-  "directories": "property",
-  "searchCode": "itemId",
-  "templateCode": "inspectionItem",
+  "directories": "admin",
+  "searchCode": "id",
+  "templateCode": "wafIpBlackWhite",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "itemId",
-      "name": "主键ID",
+      "code": "id",
+      "name": "编号",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "itemName",
-      "name": "巡检项目",
-      "inputType": "input"
+      "code": "typeCd",
+      "name": "类型",
+      "inputType": "select",
+      "selectValue":"B,W",
+      "selectValueName":"黑名单,白名单"
     },
     {
       "whereCondition": "equal",
-      "code": "communityId",
-      "name": "小区ID",
+      "code": "ip",
+      "name": "IP",
       "inputType": "input"
     }
   ],
-  "templateKey": "itemId"
+  "templateKey": "id"
 }

@@ -1,26 +1,26 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.intf.community.IMenuInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,12 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * 查询需要设置费用的房屋
- */
-@Java110Listener("listRoomsWhereFeeSetListener")
-public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "fee.listRoomsWhereFeeSet")
+public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -48,35 +44,17 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeFeeConfigConstant.LIST_ROOMS_WHERE_FEE_SET;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //根据 业主来定位房屋信息
         if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard") || reqJson.containsKey("ownerNameLike")) {
-            queryRoomByOwnerInfo(apiRoomVo, reqJson, context);
+            queryRoomByOwnerInfo(apiRoomVo, reqJson, cmdDataFlowContext);
             return;
         }
 
@@ -87,10 +65,9 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         apiRoomVo.setTotal(total);
         if (total > 0) {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            String userId = context.getUserId();
             //获取手机号、身份证号加密标识
             String flag = reqJson.getString("flag");
-            refreshRoomOwners(userId, reqJson.getString("communityId"), roomDtoList, flag);
+            refreshRoomOwners(reqJson.getString("userId"), reqJson.getString("communityId"), roomDtoList, flag);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         } else {
@@ -100,9 +77,10 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
 
     }
+
 
     /**
      * 根据业主查询 房屋信息
@@ -110,7 +88,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
      * @param apiRoomVo
      * @param reqJson
      */
-    private void queryRoomByOwnerInfo(ApiRoomVo apiRoomVo, JSONObject reqJson, DataFlowContext context) {
+    private void queryRoomByOwnerInfo(ApiRoomVo apiRoomVo, JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
 
         OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(reqJson, OwnerRoomRelDto.class);
         ownerRoomRelDto.setByOwnerInfo(true);
@@ -130,7 +108,7 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
         apiRoomVo.setRecords((int) Math.ceil((double) apiRoomVo.getRooms().size() / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private List<RoomDto> refreshOwnerRooms(String communityId, List<OwnerRoomRelDto> ownerRoomRelDtos) {
@@ -193,30 +171,6 @@ public class ListRoomsWhereFeeSetListener extends AbstractServiceApiListener {
                 }
             }
         }
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
-    }
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public IOwnerRoomRelInnerServiceSMO getOwnerRoomRelInnerServiceSMOImpl() {
-        return ownerRoomRelInnerServiceSMOImpl;
-    }
-
-    public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
-        this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
     }
 
     /**
