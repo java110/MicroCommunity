@@ -28,7 +28,7 @@
         partyB,t.contract_id,t.contract_id contractId,t.obj_id,t.obj_id objId,t.contract_name,t.contract_name
         contractName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
-        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,td.`name`
+        objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,ct.audit,td.`name`
         stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId,tt.contract_code parentContractCode,
         tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id objPersonId,
         t.start_user_id startUserId,t.create_time createTime

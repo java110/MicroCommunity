@@ -83,6 +83,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String nextUserId;
 
     private String communityId;
+    private String audit;
 
     private String hasAudit;
 
@@ -480,5 +481,13 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setHasEnd(String hasEnd) {
         this.hasEnd = hasEnd;
+    }
+
+    public String getAudit() {
+        return audit;
+    }
+
+    public void setAudit(String audit) {
+        this.audit = audit;
     }
 }
