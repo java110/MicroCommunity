@@ -169,8 +169,8 @@ public class ContractChangeUserInnerServiceSMOImpl extends BaseServiceSMO implem
 
         for (ContractChangePlanDto tmpContractChangePlanDto : tmpContractChangePlanDtos) {
             tmpContractChangePlanDto.setTaskId(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId()));
-            tmpContractChangePlanDto.setHasAudit(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId() + "_hasAudit"));
-            tmpContractChangePlanDto.setHasEnd(taskBusinessKeyMap.get(tmpContractChangePlanDto.getContractId() + "_hasEnd"));
+            tmpContractChangePlanDto.setHasAudit(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId() + "_hasAudit"));
+            tmpContractChangePlanDto.setHasEnd(taskBusinessKeyMap.get(tmpContractChangePlanDto.getPlanId() + "_hasEnd"));
         }
         return tmpContractChangePlanDtos;
     }
