@@ -52,8 +52,12 @@ public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         ApiRoomVo apiRoomVo = new ApiRoomVo();
+
+        String ownerName = reqJson.getString("ownerName");
+        String idCard = reqJson.getString("idCard");
+        String ownerNameLike = reqJson.getString("ownerNameLike");
         //根据 业主来定位房屋信息
-        if (reqJson.containsKey("ownerName") || reqJson.containsKey("idCard") || reqJson.containsKey("ownerNameLike")) {
+        if (!StringUtil.isEmpty(ownerName) || !StringUtil.isEmpty(idCard) || !StringUtil.isEmpty(ownerNameLike)) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, cmdDataFlowContext);
             return;
         }
