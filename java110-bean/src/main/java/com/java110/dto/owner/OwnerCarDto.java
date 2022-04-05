@@ -71,6 +71,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String carTypeCd;
     private String[] carTypeCds;
     private String memberId;
+    private String unitId;
 
 
     public String getCarColor() {
@@ -360,5 +361,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setSpaceSate(String spaceSate) {
         this.spaceSate = spaceSate;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
     }
 }

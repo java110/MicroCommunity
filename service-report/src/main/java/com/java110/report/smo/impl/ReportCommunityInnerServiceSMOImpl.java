@@ -4,6 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
@@ -44,6 +45,14 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         List<RoomDto> roomDtos = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryRoomStructures(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
 
         return roomDtos;
+    }
+
+    @Override
+    public List<OwnerCarDto> queryCarStructures(OwnerCarDto ownerCarDto) {
+        //校验是否传了 分页信息
+        List<OwnerCarDto> ownerCarDtos = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryCarStructures(BeanConvertUtil.beanCovertMap(ownerCarDto)), OwnerCarDto.class);
+
+        return ownerCarDtos;
     }
 
 

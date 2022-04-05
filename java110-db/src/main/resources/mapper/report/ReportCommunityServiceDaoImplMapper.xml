@@ -63,6 +63,30 @@
         order by t.room_num
     </select>
 
+    <select id="queryCarStructures" parameterType="Map" resultType="Map">
+        select pa.num areaNum,ps.num,t.car_num carNum,br.room_id roomId,br.room_num roomNum,br.section,
+        br.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
+        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,
+        (
+        select if (SUM(rof.amount_owed)!='',SUM(rof.amount_owed),0) from report_owe_fee rof where rof.payer_obj_id = t.car_id and rof.payer_obj_type = '6666'
+        ) oweAmount
+        from owner_car t
+        INNER join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
+        INNER JOIN building_owner_room_rel borr on bo.owner_id = borr.owner_id and borr.status_cd = '0'
+        INNER join building_room br on borr.room_id = br.room_id and br.status_cd = '0'
+        INNER JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+        LEFT JOIN parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+        LEFT JOIN parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
+        where t.status_cd = '0'
+        and t.community_id = #{communityId}
+        and bu.unit_id = #{unitId}
+        order by t.car_num
+    </select>
+
+
+
+
 
     <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
     <select id="getCarCount" parameterType="com.java110.dto.report.ReportCarDto" resultType="Map">

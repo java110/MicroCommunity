@@ -61,4 +61,12 @@ public interface IReportCommunityServiceDao {
      * @return
      */
     List<Map> queryRoomStructures(Map info);
+
+    /**
+     * 查询车位 结构化数据
+     *
+     * @param info
+     * @return
+     */
+    List<Map> queryCarStructures(Map info);
 }

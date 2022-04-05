@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerCarDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,15 @@ public interface IReportCommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoomStructures", method = RequestMethod.POST)
     List<RoomDto> queryRoomStructures(@RequestBody RoomDto roomDto);
+
+    /**
+     * <p>查询结构化房屋信息</p>
+     *
+     * @param ownerCarDto 数据对象分享
+     * @return ReportOwnerPayFeeDto 对象数据
+     */
+    @RequestMapping(value = "/queryCarStructures", method = RequestMethod.POST)
+    List<OwnerCarDto> queryCarStructures(@RequestBody OwnerCarDto ownerCarDto);
 
 
 }
