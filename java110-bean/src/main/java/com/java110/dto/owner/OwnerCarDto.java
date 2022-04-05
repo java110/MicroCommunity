@@ -72,6 +72,10 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String[] carTypeCds;
     private String memberId;
     private String unitId;
+    private String floorNum;
+    private String unitNum;
+    private String roomNum;
+    private String oweAmount;
 
 
     public String getCarColor() {
@@ -369,5 +373,37 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setUnitId(String unitId) {
         this.unitId = unitId;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
+    }
+
+    public String getOweAmount() {
+        return oweAmount;
+    }
+
+    public void setOweAmount(String oweAmount) {
+        this.oweAmount = oweAmount;
     }
 }
