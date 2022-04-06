@@ -692,7 +692,7 @@
             and pfc.start_time &lt;= #{endTime}
         </if>
         <if test="yearMonth !=null and yearMonth != ''">
-            and concat(t.fee_year,t.fee_month) = #{yearMonth}
+            and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
 
         group by t.config_id,t.fee_name,pfc.start_time
@@ -762,7 +762,7 @@
             and pfc.start_time &lt;= #{endTime}
         </if>
         <if test="yearMonth !=null and yearMonth != ''">
-            and concat(t.fee_year,t.fee_month) = #{yearMonth}
+            and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
         group by t.config_id,t.fee_name,pfc.start_time
         order by t.create_time desc
@@ -831,7 +831,7 @@
             and pfc.start_time &lt;= #{endTime}
         </if>
         <if test="yearMonth !=null and yearMonth != ''">
-            and concat(t.fee_year,t.fee_month) = #{yearMonth}
+            and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
         order by t.create_time desc
     </select>
