@@ -38,6 +38,7 @@ public class ApiFeeDataVo implements Serializable {
     private String additionalAmount;
 
     private String feePrice;
+    private String feeTotalPrice;
     private String isDefault;
 
     private String paymentCd;
@@ -57,6 +58,14 @@ public class ApiFeeDataVo implements Serializable {
     private String carTypeCd;
 
     private String batchId;
+
+    //映射关系开关值
+    private String val;
+
+    private String offlinePayFeeSwitch;
+
+    //实收金额映射开关值
+    private String receivedAmountSwitch;
 
     private List<FeeAttrDto> feeAttrs;
 
@@ -331,5 +340,37 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getFeeTotalPrice() {
+        return feeTotalPrice;
+    }
+
+    public void setFeeTotalPrice(String feeTotalPrice) {
+        this.feeTotalPrice = feeTotalPrice;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String val) {
+        this.val = val;
+    }
+
+    public String getOfflinePayFeeSwitch() {
+        return offlinePayFeeSwitch;
+    }
+
+    public void setOfflinePayFeeSwitch(String offlinePayFeeSwitch) {
+        this.offlinePayFeeSwitch = offlinePayFeeSwitch;
+    }
+
+    public String getReceivedAmountSwitch() {
+        return receivedAmountSwitch;
+    }
+
+    public void setReceivedAmountSwitch(String receivedAmountSwitch) {
+        this.receivedAmountSwitch = receivedAmountSwitch;
     }
 }

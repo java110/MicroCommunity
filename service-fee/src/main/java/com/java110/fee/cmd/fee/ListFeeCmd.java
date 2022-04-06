@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDto;
@@ -14,6 +15,7 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,6 +53,18 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
+
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键
+    public static final String TOTAL_FEE_PRICE = "TOTAL_FEE_PRICE";
+
+    //键
+    public static final String RECEIVED_AMOUNT_SWITCH = "RECEIVED_AMOUNT_SWITCH";
+
+    //禁用电脑端提交收费按钮
+    public static final String OFFLINE_PAY_FEE_SWITCH = "OFFLINE_PAY_FEE_SWITCH";
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -102,6 +116,27 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
+
+        if(feeDtos == null || feeDtos.size() < 1){
+            return;
+        }
+        String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),TOTAL_FEE_PRICE);
+        if(StringUtil.isEmpty(val)){
+            val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        }
+
+        //先取单小区的如果没有配置 取 全局的
+        String received_amount_switch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),RECEIVED_AMOUNT_SWITCH);
+        if(StringUtil.isEmpty(received_amount_switch)){
+            received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
+        }
+
+        //先取单小区的如果没有配置 取 全局的
+        String offlinePayFeeSwitch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),OFFLINE_PAY_FEE_SWITCH);
+        if(StringUtil.isEmpty(offlinePayFeeSwitch)){
+            offlinePayFeeSwitch = MappingCache.getValue(DOMAIN_COMMON, OFFLINE_PAY_FEE_SWITCH);
+        }
+
         for (FeeDto feeDto : feeDtos) {
             try {
                 // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
@@ -116,6 +151,16 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
                     computeFeePriceByContract(feeDto, oweMonth);
                 }
                 feeDto.setDeadlineTime(targetEndDate);
+
+                feeDto.setVal(val);
+                //关闭 线下收银功能
+                if (StringUtil.isEmpty(received_amount_switch)) {
+                    feeDto.setReceivedAmountSwitch("1");//默认启用实收款输入框
+                } else {
+                    feeDto.setReceivedAmountSwitch(received_amount_switch);
+                }
+                feeDto.setOfflinePayFeeSwitch(offlinePayFeeSwitch);
+
             } catch (Exception e) {
                 logger.error("查询费用信息 ，费用信息错误", e);
             }
@@ -142,6 +187,8 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
         DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
+        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
+
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(df.format(curFeePrice));
@@ -164,6 +211,7 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
         DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
+        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed((df.format(curFeePrice)));
@@ -186,6 +234,7 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
         DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
+        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(df.format(curFeePrice));
