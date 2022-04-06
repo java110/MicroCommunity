@@ -12,6 +12,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -344,9 +345,8 @@ public class PayBatchFeeCmd extends AbstractServiceCmdListener {
         if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
-        if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
-            businessFeeDetail.put("state", "1400");
-        }
+        businessFeeDetail.put("state", FeeDetailDto.STATE_NORMAL);
+
         feeDto = feeDtos.get(0);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         int hours = 0;
@@ -354,23 +354,12 @@ public class PayBatchFeeCmd extends AbstractServiceCmdListener {
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
-        if ("-101".equals(paramInJson.getString("cycles"))) {
-            Date endTime = feeDto.getEndTime();
-            Calendar endCalender = Calendar.getInstance();
-            endCalender.setTime(endTime);
-            BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
-            cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            endCalender = getTargetEndTime(endCalender, cycles.doubleValue());
-            targetEndTime = endCalender.getTime();
-            paramInJson.put("tmpCycles", cycles.doubleValue());
-            businessFeeDetail.put("cycles", cycles.doubleValue());
-            businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
-        } else {
-            targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));
-            cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
-            double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-            businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
-        }
+
+        targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));
+        cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
+        double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
+
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);
         paramInJson.put("detailId", businessFeeDetail.getString("detailId"));

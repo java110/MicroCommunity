@@ -17,6 +17,19 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public static final String PRIME_REATE_WECHAT = "5";
     public static final String PRIME_REATE_WECHAT_APP = "6";
+    public static final String STATE_RETURNING = "1000";
+    public static final String STATE_RETURNED = "1100";
+    public static final String STATE_RETURN_ERROR = "1200";
+    public static final String STATE_RETURN_ORDER = "1300";
+    public static final String STATE_NORMAL = "1400";
+
+    /**
+     * 1000	退费中
+     * 1100	已退费
+     * 1200	退费失败
+     * 1300	退费单
+     * 1400	正常
+     */
 
     private String primeRate;
     private String detailId;
