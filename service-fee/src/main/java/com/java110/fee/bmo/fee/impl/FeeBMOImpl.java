@@ -28,9 +28,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -472,6 +470,20 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
         paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
         paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
+
+        // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
+        if (FeeFlagTypeConstant.CYCLE.equals(feeInfo.getFeeFlag())) {
+            //这里 容错五天时间
+            Date configEndTime = feeInfo.getConfigEndTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(configEndTime);
+            calendar.add(Calendar.DAY_OF_MONTH, -5);
+            configEndTime = calendar.getTime();
+            if (feeInfo.getEndTime().after(configEndTime)) {
+                businessFee.put("state", FeeStateConstant.END);
+                businessFee.put("endTime", feeInfo.getConfigEndTime());
+            }
+        }
         return paramInJson;
     }
 
