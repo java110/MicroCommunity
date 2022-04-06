@@ -187,9 +187,6 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id = #{userId}
-        </if>
         <if test="appType !=null and appType != ''">
             and t.app_type = #{appType}
         </if>
@@ -316,9 +313,6 @@
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="appType !=null and appType != ''">
             and t.app_type = #{appType}

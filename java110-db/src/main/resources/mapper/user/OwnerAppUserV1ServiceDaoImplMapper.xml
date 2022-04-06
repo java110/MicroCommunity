@@ -39,9 +39,6 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="appType !=null and appType != ''">
             and t.app_type= #{appType}
         </if>
@@ -154,9 +151,6 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="appType !=null and appType != ''">
             and t.app_type= #{appType}
