@@ -1,21 +1,20 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,12 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listAuditAppUserBindingOwnersListener")
-public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "owner.listAuditAppUserBindingOwners")
+public class ListAuditAppUserBindingOwnersCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
@@ -37,33 +32,16 @@ public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiLis
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.LIST_AUDIT_APPUSERBINDINGOWNERS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
 
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         //获取当前用户id
-        String userId = context.getUserId();
+        String userId = reqJson.getString("userId");
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
@@ -107,16 +85,7 @@ public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiLis
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiAuditAppUserBindingOwnerVo), HttpStatus.OK);
 
-        context.setResponseEntity(responseEntity);
-
-    }
-
-    public IOwnerAppUserInnerServiceSMO getOwnerAppUserInnerServiceSMOImpl() {
-        return ownerAppUserInnerServiceSMOImpl;
-    }
-
-    public void setOwnerAppUserInnerServiceSMOImpl(IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl) {
-        this.ownerAppUserInnerServiceSMOImpl = ownerAppUserInnerServiceSMOImpl;
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     /**
