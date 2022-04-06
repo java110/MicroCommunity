@@ -2569,13 +2569,13 @@
         and t.create_time &lt; #{endTime}
         and t.fee_id = #{feeId}
         <if test="flag == 1">
-            and concat(t.detail_year,t.detail_month) = #{yearMonth}
+            and concat(t.detail_year,lpad(t.detail_month,2,0)) = #{yearMonth}
         </if>
         <if test="flag == 2">
-            and concat(t.detail_year,t.detail_month) &lt; #{yearMonth}
+            and concat(t.detail_year,lpad(t.detail_month,2,0)) &lt; #{yearMonth}
         </if>
         <if test="flag == 3">
-            and concat(t.detail_year,t.detail_month) &gt; #{yearMonth}
+            and concat(t.detail_year,lpad(t.detail_month,2,0)) &gt; #{yearMonth}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
