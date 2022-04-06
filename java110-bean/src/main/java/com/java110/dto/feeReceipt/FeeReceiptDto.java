@@ -31,6 +31,7 @@ public class FeeReceiptDto extends PageDto implements Serializable {
     private String payObjName;
     private String qstartTime;
     private String qendTime;
+    private String []detailIds;
 
     //商户名称
     private String storeName;
@@ -189,5 +190,13 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setQendTime(String qendTime) {
         this.qendTime = qendTime;
+    }
+
+    public String[] getDetailIds() {
+        return detailIds;
+    }
+
+    public void setDetailIds(String[] detailIds) {
+        this.detailIds = detailIds;
     }
 }

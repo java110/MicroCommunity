@@ -68,6 +68,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test="detailIds !=null">
+            and frd.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
@@ -313,6 +319,12 @@
         <if test="receiptIds !=null">
             and t.receipt_id in
             <foreach collection="receiptIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="detailIds !=null">
+            and frd.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>

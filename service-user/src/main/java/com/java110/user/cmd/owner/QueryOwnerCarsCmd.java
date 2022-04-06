@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Java110Cmd(serviceCode = "/contract/queryContract")
+@Java110Cmd(serviceCode = "/owner.queryOwnerCars")
 public class QueryOwnerCarsCmd extends AbstractServiceCmdListener {
 
     @Autowired

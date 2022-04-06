@@ -39,6 +39,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -150,6 +151,7 @@ public class PayBatchFeeCmd extends AbstractServiceCmdListener {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
+        JSONArray datas = new JSONArray();
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
@@ -158,7 +160,10 @@ public class PayBatchFeeCmd extends AbstractServiceCmdListener {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
             }
+            datas.add(paramInObj.getString("detailId"));
         }
+
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(datas));
     }
 
     private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext) throws Exception {

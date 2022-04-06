@@ -128,6 +128,7 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "payObjId", required = false) String payObjId,
                                                   @RequestParam(value = "receiptId", required = false) String receiptId,
                                                   @RequestParam(value = "receiptIds", required = false) String receiptIds,
+                                                  @RequestParam(value = "detailIds", required = false) String detailIds,
                                                   @RequestParam(value = "qstartTime", required = false) String qstartTime,
                                                   @RequestParam(value = "qendTime", required = false) String qendTime,
                                                   @RequestParam(value = "page") int page,
@@ -148,6 +149,9 @@ public class FeeReceiptApi {
         feeReceiptDto.setReceiptId(receiptId);
         if (!StringUtil.isEmpty(receiptIds)) {
             feeReceiptDto.setReceiptIds(receiptIds.split(","));
+        }
+        if (!StringUtil.isEmpty(detailIds)) {
+            feeReceiptDto.setDetailIds(detailIds.split(","));
         }
         feeReceiptDto.setObjType(objType);
         feeReceiptDto.setObjName(roomId);
