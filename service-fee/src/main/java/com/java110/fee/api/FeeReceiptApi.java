@@ -269,6 +269,7 @@ public class FeeReceiptApi {
     public ResponseEntity<String> queryFeeReceiptDetail(@RequestParam(value = "communityId") String communityId,
                                                         @RequestParam(value = "receiptId", required = false) String receiptId,
                                                         @RequestParam(value = "receiptIds", required = false) String receiptIds,
+                                                        @RequestParam(value = "detailIds", required = false) String detailIds,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
@@ -278,6 +279,9 @@ public class FeeReceiptApi {
         feeReceiptDetailDto.setReceiptId(receiptId);
         if (!StringUtil.isEmpty(receiptIds)) {
             feeReceiptDetailDto.setReceiptIds(receiptIds.split(","));
+        }
+        if (!StringUtil.isEmpty(detailIds)) {
+            feeReceiptDetailDto.setDetailIds(detailIds.split(","));
         }
         return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto);
     }
