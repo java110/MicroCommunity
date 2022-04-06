@@ -140,6 +140,7 @@ public class ListFeeCmd extends AbstractServiceCmdListener {
         for (FeeDto feeDto : feeDtos) {
             try {
                 // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+                feeDto.setCycle(feeDto.getPaymentCycle());
                 Map<String, Object> targetEndDateAndOweMonth = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
                 Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
                 double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
