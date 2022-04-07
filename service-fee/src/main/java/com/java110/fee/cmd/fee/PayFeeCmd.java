@@ -178,7 +178,7 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject paramObj) throws CmdException {
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
+        logger.debug("paramObj : {}", paramObj);
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + paramObj.get("feeId");
@@ -412,7 +412,11 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addFeeDetail(JSONObject paramInJson) {
-
+        String remark = paramInJson.getString("remark");
+        if (!StringUtil.isEmpty(remark)) {
+            remark = "-" + remark;
+        }
+        paramInJson.put("remark", "现场收银台支付" + remark);
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
