@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class OrgDto extends PageDto implements Serializable {
 
+    public static final String ORG_LEVEL_COMPANY = "2";
+    public static final String ORG_LEVEL_DEPARTMENT = "3";
+
     private String orgName;
     private String parentOrgId;
     private String description;
