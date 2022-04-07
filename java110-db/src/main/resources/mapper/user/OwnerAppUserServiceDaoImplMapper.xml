@@ -21,7 +21,8 @@
         openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,t.user_id,
-        t.user_id userId,t.app_type,t.app_type appType,t.nickname,t.nickname nickName,t.headimgurl,t.headimgurl headImgUrl
+        t.user_id userId,t.app_type,t.app_type appType,t.nickname,t.nickname nickName,t.headimgurl,t.headimgurl
+        headImgUrl
         from business_owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
@@ -138,8 +139,10 @@
         td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime,
         bo.owner_id ownerId,bo.owner_type_cd ownerTypeCd
         from owner_app_user t
-        left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owner_app_user' and td1.table_columns = 'state'
-        left join building_owner bo on t.member_id = bo.member_id and t.community_id = bo.community_id and bo.status_cd = '0'
+        left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owner_app_user' and td1.table_columns =
+        'state'
+        left join building_owner bo on t.member_id = bo.member_id and t.community_id = bo.community_id and bo.status_cd
+        = '0'
         where 1 =1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
@@ -193,9 +196,12 @@
         <if test="userIds !=null">
             and t.user_id in
             <foreach collection="userIds" open="(" close=")"
-                     separator=","  item="item">
+                     separator="," item="item">
                 #{item}
             </foreach>
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -320,9 +326,12 @@
         <if test="userIds !=null">
             and t.user_id in
             <foreach collection="userIds" open="(" close=")"
-                     separator=","  item="item">
+                     separator="," item="item">
                 #{item}
             </foreach>
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
         </if>
 
 

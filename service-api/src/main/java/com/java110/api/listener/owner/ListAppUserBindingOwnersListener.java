@@ -75,10 +75,12 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
             reqJson.put("row", 10);
         }
 
-        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        if (headers.containsKey("userid")) {//这里微信小程序
-            ownerAppUserDto.setUserId(headers.get("userid"));
+        if (!reqJson.containsKey("userId") && headers.containsKey("userid")) {
+            reqJson.put("userId", headers.get("userid"));
         }
+
+        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
+
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 
