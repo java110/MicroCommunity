@@ -77,6 +77,8 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
         modifyStaff(reqJson, cmdDataFlowContext);
         JSONObject paramOut = new JSONObject();
         paramOut.put("pwd", reqJson.getString("pwd"));
+        paramOut.put("code",0);
+        paramOut.put("msg","成功");
         ResponseEntity<String> responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
 

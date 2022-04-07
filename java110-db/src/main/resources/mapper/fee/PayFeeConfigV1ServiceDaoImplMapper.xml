@@ -54,7 +54,7 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
-        <if test="configIds !=null">
+        <if test="configIds != null">
             and t.config_id in
             <foreach collection="configIds" open="(" close=")"
                      separator="," item="item">
