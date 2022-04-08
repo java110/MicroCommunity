@@ -43,7 +43,7 @@ public class ListAuditAppUserBindingOwnersCmd extends AbstractServiceCmdListener
         //获取当前用户id
         String userId = reqJson.getString("userId");
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-
+        ownerAppUserDto.setUserId("");
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 
         List<ApiAuditAppUserBindingOwnerDataVo> auditAppUserBindingOwners = null;
