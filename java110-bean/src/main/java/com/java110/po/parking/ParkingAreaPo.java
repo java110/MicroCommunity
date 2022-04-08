@@ -17,6 +17,9 @@ public class ParkingAreaPo implements Serializable {
     private String num;
     private String typeCd;
     private String remark;
+    private String createTime;
+
+    private String statusCd = "0";
 
     public String getPaId() {
         return paId;
@@ -56,5 +59,21 @@ public class ParkingAreaPo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

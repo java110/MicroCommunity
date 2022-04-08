@@ -1,39 +1,44 @@
 {
   "param": {
-    "resName": "res_name",
-    "resCode": "res_code",
+    "attrId": "attr_id",
+    "paId": "pa_id",
+    "specCd": "spec_cd",
     "statusCd": "status_cd",
-    "storeId": "store_id",
-    "stock": "stock",
-    "resId": "res_id",
-    "userId": "user_id",
-    "miniStock": "mini_stock",
-    "usId": "us_id"
+    "communityId": "community_id",
+    "value": "value"
   },
-  "name": "userStorehouse",
+  "name": "parkingAreaAttr",
   "shareColumn": "community_id",
-  "id": "usId",
-  "shareName": "store",
+  "id": "attrId",
+  "shareName": "community",
   "autoMove": true,
   "required": [
     {
-      "msg": "资源ID不能为空",
-      "code": "resId"
+      "msg": "属性id不能为空",
+      "code": "attrId"
     },
     {
-      "msg": "资源名称不能为空",
-      "code": "resName"
+      "msg": "停车场ID不能为空",
+      "code": "paId"
     },
     {
-      "msg": "商户ID不能为空",
-      "code": "storeId"
+      "msg": "小区ID不能为空",
+      "code": "communityId"
     },
     {
-      "msg": "用户ID不能为空",
-      "code": "userId"
+      "msg": "规格id,参考spec表不能为空",
+      "code": "specCd"
+    },
+    {
+      "msg": "属性值不能为空",
+      "code": "value"
+    },
+    {
+      "msg": "数据状态不能为空",
+      "code": "statusCd"
     }
   ],
-  "desc": "用户物品",
+  "desc": "停车场属性",
   "shareParam": "communityId",
-  "tableName": "user_storehouse"
+  "tableName": "parking_area_attr"
 }
