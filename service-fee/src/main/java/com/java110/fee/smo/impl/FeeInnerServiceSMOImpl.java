@@ -90,14 +90,19 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         List<FeeAttrDto> feeAttrDtos = BeanConvertUtil.covertBeanList(attrMaps, FeeAttrDto.class);
         List<FeeAttrDto> tmpFeeAttrDtos = null;
+        String payerObjName = "";
         for (FeeDto tmpFeeDto : fees) {
             tmpFeeAttrDtos = new ArrayList<>();
             for (FeeAttrDto feeAttrDto : feeAttrDtos) {
-
-                if (tmpFeeDto.getFeeId().equals(feeAttrDto.getFeeId())) {
-                    tmpFeeAttrDtos.add(feeAttrDto);
+                if (!tmpFeeDto.getFeeId().equals(feeAttrDto.getFeeId())) {
+                    continue;
+                }
+                tmpFeeAttrDtos.add(feeAttrDto);
+                if(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())){
+                    payerObjName = feeAttrDto.getValue();
                 }
             }
+            tmpFeeDto.setPayerObjName(payerObjName);
             tmpFeeDto.setFeeAttrDtos(tmpFeeAttrDtos);
         }
         return fees;
