@@ -66,8 +66,14 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(paramIn, "roomId", "请求报文中未包含房屋信息节点");
         Assert.jsonObjectHaveKey(paramIn, "appId", "请求报文中未包含appId节点");
+
+        if (!paramIn.containsKey("ownerId") && !paramIn.containsKey("roomId")) {
+            throw new IllegalArgumentException("未包含房屋或者业主");
+        }
+        if (StringUtil.isEmpty(paramIn.getString("ownerId")) && StringUtil.isEmpty(paramIn.getString("roomId"))) {
+            throw new IllegalArgumentException("未包含房屋或者业主");
+        }
 
     }
 
@@ -91,9 +97,15 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
             payObjType = paramIn.getString("payObjType");
         }
 
+        String ownerId = paramIn.getString("ownerId");
+        String roomId = paramIn.getString("roomId");
+
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + paramIn.getString("roomId") + "&payObjType=" + payObjType;
+        String url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&payObjId=" + roomId + "&payObjType=" + payObjType;
+        if(!StringUtil.isEmpty(ownerId)){
+            url = "/feeApi/listOweFees?page=1&row=50&communityId=" + paramIn.getString("communityId") + "&ownerId=" + ownerId;
+        }
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
