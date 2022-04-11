@@ -529,7 +529,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
 
     private void getCustomReportTableData(JSONObject paramIn, Workbook workbook, IPageData pd) {
         Sheet sheet = workbook.createSheet("报表数据");
-        String apiUrl = "reportCustomComponent.listReportCustomComponentData?" + super.mapToUrlParam(paramIn);
+        String apiUrl = "reportCustomComponent.listReportCustomComponentData" + super.mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
