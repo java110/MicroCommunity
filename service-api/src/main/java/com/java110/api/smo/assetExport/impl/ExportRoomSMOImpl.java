@@ -167,6 +167,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
 
+
     private void getParkspaceAndConfigs(JSONObject paramIn, Workbook workbook) {
         Sheet sheet = workbook.createSheet("创建费用");
         Row row = sheet.createRow(0);
@@ -304,6 +305,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 5);
         sheet.addMergedRegion(region);
     }
+
 
     /**
      * 查询车辆
@@ -475,6 +477,91 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
         sheet.addMergedRegion(region);
+    }
+
+
+    /**
+     * 导出报表
+     *
+     * @param pd 前台数据封装
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ResponseEntity<Object> exportCustomReportTableData(IPageData pd) throws Exception {
+        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求中未包含小区");
+        //Assert.hasKeyAndValue(paramIn, "floorIds", "请求中未包含楼栋");
+
+        Workbook workbook = null;  //工作簿
+        //工作表
+        workbook = new XSSFWorkbook();
+
+        //查询资产和费用项
+        getCustomReportTableData(paramIn, workbook, pd);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        MultiValueMap headers = new HttpHeaders();
+        headers.add("content-type", "application/octet-stream;charset=UTF-8");
+        headers.add("Content-Disposition", "attachment;filename=customReportTableImport_" + DateUtil.getyyyyMMddhhmmssDateString() + ".xlsx");
+        headers.add("Pargam", "no-cache");
+        headers.add("Cache-Control", "no-cache");
+        //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
+        headers.add("Accept-Ranges", "bytes");
+        byte[] context = null;
+        try {
+            workbook.write(os);
+            context = os.toByteArray();
+            os.close();
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 保存数据
+            return new ResponseEntity<Object>("导出失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        // 保存数据
+        return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
+    }
+
+
+    private void getCustomReportTableData(JSONObject paramIn, Workbook workbook, IPageData pd) {
+        Sheet sheet = workbook.createSheet("报表数据");
+        String apiUrl = "reportCustomComponent.listReportCustomComponentData?" + super.mapToUrlParam(paramIn);
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return;
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        if (paramOut.getIntValue("code") != 0) {
+            return;
+        }
+        JSONArray th = paramOut.getJSONObject("data").getJSONArray("th");
+
+        if (th == null || th.size() < 1) {
+            return;
+        }
+
+        Row row = sheet.createRow(0);
+        for (int thIndex = 0; thIndex < th.size(); thIndex++) {
+            row.createCell(thIndex).setCellValue(th.getString(thIndex));
+        }
+
+        JSONArray td = paramOut.getJSONObject("data").getJSONArray("td");
+
+        if (td == null || td.size() < 1) {
+            return;
+        }
+        JSONObject tdObj = null;
+        for (int tdIndex = 0; tdIndex < th.size(); tdIndex++) {
+            row = sheet.createRow(tdIndex + 1);
+            tdObj = th.getJSONObject(tdIndex);
+            for (int thIndex = 0; thIndex < th.size(); thIndex++) {
+                row.createCell(thIndex).setCellValue(tdObj.getString(th.getString(thIndex)));
+            }
+        }
     }
 
     public RestTemplate getRestTemplate() {

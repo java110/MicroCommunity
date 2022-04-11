@@ -28,4 +28,5 @@ public interface IExportRoomSMO {
      * @return ResponseEntity
      */
      ResponseEntity<Object> exportRoomExcelData(IPageData pd) throws Exception;
+     ResponseEntity<Object> exportCustomReportTableData(IPageData pd) throws Exception;
 }

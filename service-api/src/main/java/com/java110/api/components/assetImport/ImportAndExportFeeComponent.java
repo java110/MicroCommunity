@@ -53,4 +53,17 @@ public class ImportAndExportFeeComponent {
     }
 
 
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<Object> exportCustomReportTableData(IPageData pd) throws Exception {
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(), "",
+                pd.getSessionId(), AppDto.WEB_APP_ID, pd.getHeaders());
+        return exportRoomSMOImpl.exportCustomReportTableData(newPd);
+    }
+
+
 }
