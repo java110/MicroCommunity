@@ -555,9 +555,9 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
             return;
         }
         JSONObject tdObj = null;
-        for (int tdIndex = 0; tdIndex < th.size(); tdIndex++) {
+        for (int tdIndex = 0; tdIndex < td.size(); tdIndex++) {
             row = sheet.createRow(tdIndex + 1);
-            tdObj = th.getJSONObject(tdIndex);
+            tdObj = td.getJSONObject(tdIndex);
             for (int thIndex = 0; thIndex < th.size(); thIndex++) {
                 row.createCell(thIndex).setCellValue(tdObj.getString(th.getString(thIndex)));
             }
