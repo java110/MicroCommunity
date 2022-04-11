@@ -124,7 +124,8 @@
         td2.NAME parkingTypeName,
         td1.NAME stateName,
         pa.num areaNum,
-        pa.type_cd typeCd
+        pa.type_cd typeCd,
+        t.create_time createTime
         FROM
         parking_space t
         LEFT JOIN t_dict td1 ON t.state = td1.status_cd
