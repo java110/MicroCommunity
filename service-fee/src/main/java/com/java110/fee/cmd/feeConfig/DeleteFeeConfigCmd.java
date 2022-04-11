@@ -16,7 +16,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Java110Cmd(serviceCode = "feeConfig.updateFeeConfig")
+@Java110Cmd(serviceCode = "feeConfig.deleteFeeConfig")
 public class DeleteFeeConfigCmd extends AbstractServiceCmdListener {
 
     @Autowired
