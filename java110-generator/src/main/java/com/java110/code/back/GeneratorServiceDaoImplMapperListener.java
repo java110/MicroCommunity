@@ -15,13 +15,13 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
     //insert into business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
     //        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
     private String dealSaveBusinessInfo(Data data, String fileContext) {
-        String sql = "insert into " + data.getBusinessTableName() + "(\n";
+        String sql = "insert into " + data.getTableName() + "(\n";
         String sqlValue = "\n) values (\n";
 
         Map<String, String> params = data.getParams();
 
         for (String key : params.keySet()) {
-            if ("statusCd".equals(key)) {
+            if ("statusCd".equals(key) ||"createTime".equals(key)) {
                 continue;
             }
             sql += params.get(key) + ",";
@@ -33,111 +33,12 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
 
         sql += (sqlValue + "\n)");
 
-        fileContext = fileContext.replace("$saveBusinessInfo$", sql);
+        fileContext = fileContext.replace("$saveInfo$", sql);
 
         return fileContext;
 
     }
 
-    /**
-     * select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.operate
-     * from business_store s where 1 = 1
-     * <if test="operate != null and operate != ''">
-     * and s.operate = #{operate}
-     * </if>
-     * <if test="bId != null and bId !=''">
-     * and s.b_id = #{bId}
-     * </if>
-     * <if test="storeId != null and storeId != ''">
-     * and s.store_id = #{storeId}
-     * </if>
-     *
-     * @param data
-     * @param fileContext
-     * @return
-     */
-    private String dealGetBusinessInfo(Data data, String fileContext) {
-        String sql = "select  ";
-        String sqlValue = " \nfrom " + data.getBusinessTableName() + " t \nwhere 1 =1 \n";
-
-        Map<String, String> params = data.getParams();
-
-        for (String key : params.keySet()) {
-            if ("statusCd".equals(key)) {
-                continue;
-            }
-            sql += ("t." + params.get(key) + ",");
-            if (!key.equals(params.get(key))) {
-                sql += ("t." + params.get(key) + " " + key + ",");
-            }
-            sqlValue += "<if test=\"" + key + " !=null and " + key + " != ''\">\n";
-            sqlValue += "   and t." + params.get(key) + "= #{" + key + "}\n";
-            sqlValue += "</if> \n";
-
-        }
-
-        sql = sql.endsWith(",") ? sql.substring(0, sql.length() - 1) : sql;
-
-        sql += sqlValue;
-
-        fileContext = fileContext.replace("$getBusinessInfo$", sql);
-
-        return fileContext;
-
-    }
-
-    /**
-     * insert into s_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,status_cd)
-     * select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,'0'
-     * from business_store s where
-     * s.operate = 'ADD' and s.b_id=#{bId}
-     */
-    private String dealSaveInfoInstance(Data data, String fileContext) {
-        String sql = "insert into " + data.getTableName() + "(\n";
-        String sqlValue = "select ";
-        String sqlWhere = " from " + data.getBusinessTableName() + " t where 1=1\n";
-
-        Map<String, String> params = data.getParams();
-
-        for (String key : params.keySet()) {
-            if ("operate".equals(key)) {
-                continue;
-            }
-            sql += params.get(key) + ",";
-
-            if ("statusCd".equals(key)) {
-                sqlValue += "'0',";
-                continue;
-            }
-            sqlValue += "t." + params.get(key) + ",";
-        }
-
-        for (String key : params.keySet()) {
-            if ("statusCd".equals(key)) {
-                continue;
-            }
-
-            if ("operate".equals(key)) {
-                sqlWhere += "   and t." + params.get(key) + "= 'ADD'\n";
-            } else {
-                sqlWhere += "<if test=\"" + key + " !=null and " + key + " != ''\">\n";
-                sqlWhere += "   and t." + params.get(key) + "= #{" + key + "}\n";
-                sqlWhere += "</if> \n";
-
-            }
-
-        }
-
-        sql = sql.endsWith(",") ? sql.substring(0, sql.length() - 1) : sql;
-        sqlValue = sqlValue.endsWith(",") ? sqlValue.substring(0, sqlValue.length() - 1) : sqlValue;
-
-        sql += ("\n) " + sqlValue + sqlWhere);
-
-        fileContext = fileContext.replace("$saveInfoInstance$", sql);
-
-        return fileContext;
-
-    }
 
     /**
      * select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
@@ -313,25 +214,23 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
      * @param data
      */
     public void generator(Data data) throws Exception {
-        StringBuffer sb = readFile(this.getClass().getResource("/template/ServiceDaoImplMapper.txt").getFile());
+        StringBuffer sb = readFile(this.getClass().getResource("/newTemplate/ServiceDaoImplMapper.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc());
         fileContext = dealSaveBusinessInfo(data, fileContext);
-        fileContext = dealGetBusinessInfo(data, fileContext);
-        fileContext = dealSaveInfoInstance(data, fileContext);
         fileContext = dealGetInfo(data, fileContext);
         fileContext = dealUpdateInfoInstance(data, fileContext);
         fileContext = dealGetCount(data, fileContext);
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/mapper/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml";
+                + "out/back/mapper/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImplMapper.xml";
 
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "java110-db\\src\\main\\resources\\mapper\\" + data.getShareName().toString() + "\\" + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml");
+            FileUtilBase.copyfile(writePath, "java110-db\\src\\main\\resources\\mapper\\" + data.getShareName().toString() + "\\" + "/" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImplMapper.xml");
         }
     }
 }

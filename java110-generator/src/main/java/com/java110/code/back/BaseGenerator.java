@@ -1,8 +1,14 @@
 package com.java110.code.back;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.utils.util.DateUtil;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class BaseGenerator {
 
@@ -104,7 +110,8 @@ public class BaseGenerator {
                 .replace("@@templateKeyName@@", data.getId())
                 .replace("@@TEMPLATECODE@@", data.getName().toUpperCase())
                 .replace("@@searchCode@@", data.getId())
-
-                .replace("@@searchName@@", data.getId());
+                .replace("@@shareName@@", data.getShareName())
+                .replace("@@searchName@@", data.getId())
+                .replace("@@date@@", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
     }
 }

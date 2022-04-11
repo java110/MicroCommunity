@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.code.web.GeneratorStart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Hello world!
@@ -42,13 +43,6 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         data.setShareParam(dataJson.getString("shareParam"));
         data.setShareColumn(dataJson.getString("shareColumn"));
         data.setShareName(dataJson.getString("shareName"));
-        data.setNewBusinessTypeCd(dataJson.getString("newBusinessTypeCd"));
-        data.setUpdateBusinessTypeCd(dataJson.getString("updateBusinessTypeCd"));
-        data.setDeleteBusinessTypeCd(dataJson.getString("deleteBusinessTypeCd"));
-        data.setNewBusinessTypeCdValue(dataJson.getString("newBusinessTypeCdValue"));
-        data.setUpdateBusinessTypeCdValue(dataJson.getString("updateBusinessTypeCdValue"));
-        data.setDeleteBusinessTypeCdValue(dataJson.getString("deleteBusinessTypeCdValue"));
-        data.setBusinessTableName(dataJson.getString("businessTableName"));
         data.setTableName(dataJson.getString("tableName"));
         data.setParams(dataJson.getJSONObject("param"));
 
@@ -61,13 +55,6 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         }
         data.setRequiredParam(paramList.toArray(new String[required.size()]));
 
-        GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
-        generatorSaveInfoListener.generator(data);
-
-        GeneratorAbstractBussiness generatorAbstractBussiness = new GeneratorAbstractBussiness();
-        generatorAbstractBussiness.generator(data);
-
-
         GeneratorIServiceDaoListener generatorIServiceDaoListener = new GeneratorIServiceDaoListener();
         generatorIServiceDaoListener.generator(data);
 
@@ -78,17 +65,12 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         generatorServiceDaoImplMapperListener = new GeneratorServiceDaoImplMapperListener();
         generatorServiceDaoImplMapperListener.generator(data);
 
-        GeneratorUpdateInfoListener generatorUpdateInfoListener = new GeneratorUpdateInfoListener();
-        generatorUpdateInfoListener.generator(data);
-
-        GeneratorDeleteInfoListener generatorDeleteInfoListener = new GeneratorDeleteInfoListener();
-        generatorDeleteInfoListener.generator(data);
 
         GeneratorInnerServiceSMOImpl generatorInnerServiceSMOImpl = new GeneratorInnerServiceSMOImpl();
         generatorInnerServiceSMOImpl.generator(data);
 
         GeneratorDtoBean generatorDtoBean = new GeneratorDtoBean();
-        generatorDtoBean.generator(data);
+        //generatorDtoBean.generator(data);
 
         GeneratorIInnerServiceSMO generatorIInnerServiceSMO = new GeneratorIInnerServiceSMO();
         generatorIInnerServiceSMO.generator(data);

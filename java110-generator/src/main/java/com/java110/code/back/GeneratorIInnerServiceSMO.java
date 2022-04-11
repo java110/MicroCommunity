@@ -1,6 +1,7 @@
 package com.java110.code.back;
 
 import com.java110.code.util.FileUtilBase;
+import com.java110.utils.util.DateUtil;
 
 /**
  * 内部服务类实现类
@@ -13,19 +14,20 @@ public class GeneratorIInnerServiceSMO extends BaseGenerator {
      * @param data 数据
      */
     public void generator(Data data) throws Exception {
-        StringBuffer sb = readFile(this.getClass().getResource("/template/IInnerServiceSMO.txt").getFile());
+        StringBuffer sb = readFile(this.getClass().getResource("/newTemplate/IInnerServiceSMO.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("@@shareName@@",data.getShareName())
-                .replace("商户", data.getDesc());
+                .replace("商户", data.getDesc())
+                .replace("@@date@@", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/core/smo/" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java";
+                + "out/back/intf/" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "V1InnerServiceSMO.java";
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "java110-core\\src\\main\\java\\com\\java110\\core\\smo\\" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java");
+            FileUtilBase.copyfile(writePath, "java110-interface\\src\\main\\java\\com\\java110\\intf\\" + data.getShareName() + "/I" + toUpperCaseFirstOne(data.getName()) + "V1InnerServiceSMO.java");
         }
     }
 }

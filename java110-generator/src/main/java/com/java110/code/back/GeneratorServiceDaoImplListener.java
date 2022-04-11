@@ -1,6 +1,7 @@
 package com.java110.code.back;
 
 import com.java110.code.util.FileUtilBase;
+import com.java110.utils.util.DateUtil;
 
 public class GeneratorServiceDaoImplListener extends BaseGenerator {
 
@@ -11,19 +12,20 @@ public class GeneratorServiceDaoImplListener extends BaseGenerator {
      * @param data
      */
     public void generator(Data data) throws Exception {
-        StringBuffer sb = readFile(this.getClass().getResource("/template/ServiceDaoImpl.txt").getFile());
+        StringBuffer sb = readFile(this.getClass().getResource("/newTemplate/ServiceDaoImpl.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("@@shareName@@",data.getShareName())
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
-                .replace("商户", data.getDesc());
+                .replace("商户", data.getDesc())
+                .replace("@@date@@", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/dao/impl/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java";
+                + "out/back/dao/impl/" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImpl.java";
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "service-" + data.getShareName() + "\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\dao\\impl\\" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java");
+            FileUtilBase.copyfile(writePath, "service-" + data.getShareName() + "\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\dao\\impl\\" + toUpperCaseFirstOne(data.getName()) + "V1ServiceDaoImpl.java");
         }
     }
 }
