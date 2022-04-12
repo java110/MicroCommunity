@@ -103,9 +103,11 @@ public class AddCarToHcGovAdapt extends DatabusAdaptImpl {
         CommunityDto tmpCommunityDto = communityDtos.get(0);
         String extCommunityId = "";
         String communityId = tmpCommunityDto.getCommunityId();
-        for (CommunityAttrDto communityAttrDto : tmpCommunityDto.getCommunityAttrDtos()) {
-            if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
-                extCommunityId = communityAttrDto.getValue();
+        if (tmpCommunityDto.getCommunityAttrDtos() != null && tmpCommunityDto.getCommunityAttrDtos().size() > 0) {
+            for (CommunityAttrDto communityAttrDto : tmpCommunityDto.getCommunityAttrDtos()) {
+                if (HcGovConstant.EXT_COMMUNITY_ID.equals(communityAttrDto.getSpecCd())) {
+                    extCommunityId = communityAttrDto.getValue();
+                }
             }
         }
         //查询车辆
@@ -134,7 +136,6 @@ public class AddCarToHcGovAdapt extends DatabusAdaptImpl {
         if (StringUtil.isEmpty(extPaId)) {
             return;
         }
-
 
 
         JSONObject body = new JSONObject();

@@ -19,7 +19,14 @@
     <select id="getStoreInfo" parameterType="Map" resultType="Map">
         select t.address,t.store_type_cd,t.store_type_cd storeTypeCd,t.name,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,t.store_id,t.store_id storeId,t.user_id,t.user_id userId,t.map_y,t.map_y mapY,t.map_x,t.map_x
-        mapX,t.create_time createTime,t.nearby_landmarks nearbyLandmarks,sa.value corporation,sa1.value foundingTime
+        mapX,t.create_time createTime,t.nearby_landmarks nearbyLandmarks,sa.value corporation,sa1.value foundingTime,
+        CASE t.store_type_cd
+        WHEN '800900000000' THEN '开发团队'
+        WHEN '800900000001' THEN '运营团队'
+        WHEN '800900000002' THEN '代理商'
+        WHEN '800900000003' THEN '物业商户'
+        WHEN '800900000005' THEN '商家'
+        ELSE '其他' END as storeTypeName
         from s_store t
         left join s_store_attr sa on t.store_id = sa.store_id and sa.spec_cd = '100201903001' and sa.status_cd='0'
         left join s_store_attr sa1 on t.store_id = sa1.store_id and sa1.spec_cd = '100201903003' and sa1.status_cd='0'

@@ -6,9 +6,11 @@
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessVisitInfo" parameterType="Map">
         insert into business_visit_info(departure_time, v_name, visit_gender, owner_id, user_id, v_id, phone_number,
-                                        operate, visit_case, community_id, b_id, visit_time, car_num, entourage, reason_type)
+                                        operate, visit_case, community_id, b_id, visit_time, car_num, entourage,
+                                        reason_type, state, state_remark)
         values (#{departureTime}, #{vName}, #{visitGender}, #{ownerId}, #{userId}, #{vId}, #{phoneNumber}, #{operate},
-                #{visitCase}, #{communityId}, #{bId}, #{visitTime}, #{carNum}, #{entourage}, #{reasonType})
+                #{visitCase}, #{communityId}, #{bId}, #{visitTime}, #{carNum}, #{entourage}, #{reasonType}, #{state},
+                #{stateRemark})
     </insert>
 
     <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
@@ -16,7 +18,9 @@
         select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.visit_gender,t.visit_gender
         visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time
         visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.visit_case,t.visit_case
-        visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id ,t.car_num,t.car_num carNum,t.entourage,t.reason_type,t.reason_type reasonType
+        visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id ,t.car_num,t.car_num carNum,t.entourage,
+        t.reason_type,t.reason_type reasonType,t.state,t.state_remark,t.state_remark
+        stateRemark,t.create_time,t.create_time createTime
         from business_visit_info t
         where 1 =1
         <if test="departureTime !=null ">
@@ -58,6 +62,12 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="stateRemark !=null and stateRemark != ''">
+            and t.state_remark= #{stateRemark}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -69,10 +79,11 @@
     <!-- 保存访客信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfoInstance" parameterType="Map">
         insert into s_visit_info(
-        departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id,car_num,entourage,reason_type
+        departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id,car_num,
+        entourage,reason_type,state,state_remark
         ) select
         t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id,
-        t.car_num,t.entourage,t.reason_type
+        t.car_num,t.entourage,t.reason_type,t.state,t.state_remark
         from business_visit_info t where 1=1
         <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
@@ -107,6 +118,12 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="stateRemark !=null and stateRemark != ''">
+            and t.state_remark= #{stateRemark}
+        </if>
         and t.operate= 'ADD'
         <if test="visitCase !=null and visitCase != ''">
             and t.visit_case= #{visitCase}
@@ -125,8 +142,11 @@
         statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
         userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
         phoneNumber,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
-        t.car_num,t.car_num carNum,t.entourage,t.reason_type,t.reason_type reasonType
+        t.car_num,t.car_num carNum,t.entourage,t.reason_type,t.reason_type
+        reasonType,t.state,t.state_remark,t.state_remark stateRemark,td.name stateName,t.create_time,
+        t.create_time createTime
         from s_visit_info t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         where 1 =1
         <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
@@ -179,6 +199,18 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="stateRemark !=null and stateRemark != ''">
+            and t.state_remark= #{stateRemark}
+        </if>
+        <if test="carNumNoEmpty !=null and carNumNoEmpty != ''">
+            and t.car_num!= ""
+        </if>
+        <if test="sameDay !=null and sameDay != ''">
+            and TO_DAYS(t.create_time) = TO_DAYS(NOW())
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -226,6 +258,12 @@
         </if>
         <if test="reasonType !=null and reasonType != ''">
             , t.reason_type= #{reasonType}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="stateRemark !=null and stateRemark != ''">
+            , t.state_remark= #{stateRemark}
         </if>
         where 1=1
         <if test="vId !=null and vId != ''">
@@ -291,6 +329,12 @@
         </if>
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="stateRemark !=null and stateRemark != ''">
+            and t.state_remark= #{stateRemark}
         </if>
     </select>
 

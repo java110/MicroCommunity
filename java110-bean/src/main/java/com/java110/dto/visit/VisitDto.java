@@ -31,6 +31,12 @@ public class VisitDto extends PageDto implements Serializable {
     private String carNum;
     private String entourage;
     private String reasonType;
+    private String state;
+    private String stateName;
+    private String stateRemark;
+    private String createTime;
+    private String sameDay;
+    private String carNumNoEmpty;
 
     public String getvName() {
         return vName;
@@ -166,5 +172,53 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setReasonType(String reasonType) {
         this.reasonType = reasonType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getStateRemark() {
+        return stateRemark;
+    }
+
+    public void setStateRemark(String stateRemark) {
+        this.stateRemark = stateRemark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getSameDay() {
+        return sameDay;
+    }
+
+    public void setSameDay(String sameDay) {
+        this.sameDay = sameDay;
+    }
+
+    public String getCarNumNoEmpty() {
+        return carNumNoEmpty;
+    }
+
+    public void setCarNumNoEmpty(String carNumNoEmpty) {
+        this.carNumNoEmpty = carNumNoEmpty;
     }
 }

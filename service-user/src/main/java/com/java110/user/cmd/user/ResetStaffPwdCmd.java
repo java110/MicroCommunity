@@ -51,10 +51,19 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         Assert.jsonObjectHaveKey(reqJson, "staffId", "请求参数中未包含staffId 节点，请确认");
 
+        StoreUserDto storeUserDt = new StoreUserDto();
+        storeUserDt.setUserId(reqJson.getString("userId"));
+        List<StoreUserDto> storeUserDts = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDt);
+        Assert.listOnlyOne(storeUserDts, "查询员工商户错误！");
+
         //首先判断是否为 运营或者开发
         //查询store 信息
         StoreDto storeDto = new StoreDto();
-        storeDto.setStoreId(reqJson.getString("storeId"));
+        if (!reqJson.containsKey("storeId")) {
+            storeDto.setStoreId(storeUserDts.get(0).getStoreId());
+        } else {
+            storeDto.setStoreId(reqJson.getString("storeId"));
+        }
         List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
 
         Assert.listOnlyOne(storeDtos, "商户不存在");

@@ -28,7 +28,7 @@ public class UpdateJunkRequirementListener extends AbstractServiceApiPlusListene
         Assert.hasKeyAndValue(reqJson, "junkRequirementId", "junkRequirementId不能为空");
 //        Assert.hasKeyAndValue(reqJson, "typeCd", "请求报文中未包含typeCd");
 //        Assert.hasKeyAndValue(reqJson, "classification", "请求报文中未包含classification");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+//        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 //        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
 //        Assert.hasKeyAndValue(reqJson, "referencePrice", "请求报文中未包含referencePrice");
 //        Assert.hasKeyAndValue(reqJson, "publishUserId", "请求报文中未包含publishUserId");
@@ -43,7 +43,7 @@ public class UpdateJunkRequirementListener extends AbstractServiceApiPlusListene
 
         JSONObject paramObj = new JSONObject();
         paramObj.put("junkRequirementId",reqJson.getString("junkRequirementId"));
-        paramObj.put("communityId",reqJson.getString("communityId"));
+//        paramObj.put("communityId",reqJson.getString("communityId"));
         paramObj.put("state",reqJson.getString("state"));
 
         junkRequirementBMOImpl.updateJunkRequirement(paramObj, context);
