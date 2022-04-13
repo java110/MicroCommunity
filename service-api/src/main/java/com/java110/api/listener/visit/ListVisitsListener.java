@@ -19,7 +19,6 @@ import com.java110.utils.constant.ServiceCodeVisitConstant;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 查询小区侦听类
  */
@@ -39,12 +38,10 @@ public class ListVisitsListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
     public IVisitInnerServiceSMO getVisitInnerServiceSMOImpl() {
         return visitInnerServiceSMOImpl;

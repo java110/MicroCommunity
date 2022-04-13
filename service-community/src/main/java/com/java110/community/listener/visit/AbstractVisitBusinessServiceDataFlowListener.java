@@ -50,6 +50,9 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         businessVisitInfo.put("communityId", businessVisitInfo.get("community_id"));
         businessVisitInfo.put("carNum", businessVisitInfo.get("car_num"));
         businessVisitInfo.put("entourage", businessVisitInfo.get("entourage"));
+        businessVisitInfo.put("reasonType", businessVisitInfo.get("reason_type"));
+        businessVisitInfo.put("state", businessVisitInfo.get("state"));
+        businessVisitInfo.put("stateRemark", businessVisitInfo.get("state_remark"));
         businessVisitInfo.remove("bId");
         businessVisitInfo.put("statusCd", statusCd);
     }
@@ -87,7 +90,9 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         currentVisitInfo.put("communityId", currentVisitInfo.get("community_id"));
         currentVisitInfo.put("carNum", currentVisitInfo.get("car_num"));
         currentVisitInfo.put("entourage", currentVisitInfo.get("entourage"));
-
+        currentVisitInfo.put("reasonType", currentVisitInfo.get("reason_type"));
+        currentVisitInfo.put("state", currentVisitInfo.get("state"));
+        currentVisitInfo.put("stateRemark", currentVisitInfo.get("state_remark"));
         currentVisitInfo.put("operate", StatusConstant.OPERATE_DEL);
         getVisitServiceDaoImpl().saveBusinessVisitInfo(currentVisitInfo);
 

@@ -37,8 +37,6 @@ public class ListStoresCmd extends AbstractServiceCmdListener {
         storeDto.setStoreId(reqJson.getString("storeId"));
         List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
 
-        Assert.listOnlyOne(storeDtos, "非法操作");
-
         //只有运营可以看所有 商户信息
         if (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd())) {
             reqJson.remove("storeId");

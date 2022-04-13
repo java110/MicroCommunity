@@ -56,7 +56,7 @@ public class JunkRequirementBMOImpl extends ApiBaseBMO implements IJunkRequireme
 
         JunkRequirementDto junkRequirementDto = new JunkRequirementDto();
         junkRequirementDto.setJunkRequirementId(paramInJson.getString("junkRequirementId"));
-        junkRequirementDto.setCommunityId(paramInJson.getString("communityId"));
+//        junkRequirementDto.setCommunityId(paramInJson.getString("communityId"));
         List<JunkRequirementDto> junkRequirementDtos = junkRequirementInnerServiceSMOImpl.queryJunkRequirements(junkRequirementDto);
 
         Assert.listOnlyOne(junkRequirementDtos, "未找到需要修改的活动 或多条数据");

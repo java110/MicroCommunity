@@ -18,6 +18,8 @@ public class ApiVisitDataVo implements Serializable {
     private String carNum;
     private String entourage;
     private String reasonType;
+    private String state;
+    private String stateName;
 
     public String getvId() {
         return vId;
@@ -137,5 +139,21 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setReasonType(String reasonType) {
         this.reasonType = reasonType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
