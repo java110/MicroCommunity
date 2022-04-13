@@ -210,6 +210,9 @@
         <if test="nowTime != null">
             and t.create_time &lt; #{nowTime}
         </if>
+        <if test="qrCodeTime != null">
+            and t.create_time &gt; #{qrCodeTime}
+        </if>
         <if test="inspectionStartTime !=null and inspectionStartTime != ''">
             and t.inspection_time &gt;= #{inspectionStartTime}
         </if>
