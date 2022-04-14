@@ -420,6 +420,7 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
         //支付方式
         businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         //计算 应收金额
