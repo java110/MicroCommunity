@@ -142,7 +142,10 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                 businessPayFeeDetails = (JSONArray) bObj;
             }
         } else {
-            return;
+            if (data instanceof JSONObject) {
+                businessPayFeeDetails = new JSONArray();
+                businessPayFeeDetails.add(data);
+            }
         }
         for (int bPayFeeDetailIndex = 0; bPayFeeDetailIndex < businessPayFeeDetails.size(); bPayFeeDetailIndex++) {
             JSONObject businessPayFeeDetail = businessPayFeeDetails.getJSONObject(bPayFeeDetailIndex);
