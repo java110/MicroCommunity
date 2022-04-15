@@ -257,15 +257,23 @@ public class QuestionAnswerApi {
     @RequestMapping(value = "/queryQuestionAnswerTitle", method = RequestMethod.GET)
     public ResponseEntity<String> queryQuestionAnswerTitle(@RequestHeader(value = "store-id", required = false) String storeId,
                                                            // @RequestHeader(value = "user-id", required = false) String userId,
+                                                           @RequestParam(value = "titleType", required = false) String titleType,
+                                                           @RequestParam(value = "qaTitle", required = false) String qaTitle,
+                                                           @RequestParam(value = "titleId", required = false) String titleId,
                                                            @RequestParam(value = "communityId", required = false) String communityId,
                                                            @RequestParam(value = "objType") String objType,
                                                            @RequestParam(value = "qaId") String qaId,
+                                                           @RequestParam(value = "objId") String objId,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         QuestionAnswerTitleDto questionAnswerTitleDto = new QuestionAnswerTitleDto();
+        questionAnswerTitleDto.setTitleType(titleType);
+        questionAnswerTitleDto.setQaTitle(qaTitle);
+        questionAnswerTitleDto.setTitleId(titleId);
         questionAnswerTitleDto.setPage(page);
         questionAnswerTitleDto.setRow(row);
         questionAnswerTitleDto.setQaId(qaId);
+        questionAnswerTitleDto.setObjId(objId);
         //questionAnswerTitleDto.setUserId(userId);
         if (!StringUtil.isEmpty(objType)) {
             questionAnswerTitleDto.setObjType(objType);
