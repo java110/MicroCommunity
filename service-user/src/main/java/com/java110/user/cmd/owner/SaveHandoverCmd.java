@@ -190,6 +190,7 @@ public class SaveHandoverCmd extends AbstractServiceCmdListener {
                 businessUnit.put("state", "2008001");
                 businessUnit.put("batchId", reqJson.getString("batchId"));
                 businessUnit.put("userId", "-1");
+                businessUnit.put("bId","-1");
 
                 payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
 
