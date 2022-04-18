@@ -11,6 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
@@ -162,9 +163,7 @@ public class SaveHandoverCmd extends AbstractServiceCmdListener {
 
                 String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
 
-                if (paramInJson.containsKey("endTime")) {
-                    time = paramInJson.getString("endTime");
-                } else if (paramInJson.containsKey("startTime")) {
+                if (paramInJson.containsKey("startTime")) {
                     time = paramInJson.getString("startTime");
                 }
 
@@ -222,6 +221,15 @@ public class SaveHandoverCmd extends AbstractServiceCmdListener {
                 flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
                 if (flag < 1) {
                     throw new CmdException("保存费用失败");
+                }
+
+                if (FeeDto.FEE_FLAG_ONCE.equals(businessUnit.getString("feeFlag"))) {
+                    feeAttrPo = addFeeAttr(businessUnit, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                            paramInJson.containsKey("endTime") ? paramInJson.getString("endTime") : feeConfigDtos.get(0).getEndTime());
+                    flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+                    if (flag < 1) {
+                        throw new CmdException("保存费用失败");
+                    }
                 }
             }
         }
