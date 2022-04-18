@@ -19,6 +19,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.community.IOwnerV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -26,6 +27,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -64,6 +66,9 @@ public class SaveHandoverCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -123,6 +128,15 @@ public class SaveHandoverCmd extends AbstractServiceCmdListener {
             ownerRoomRelPo.setState("2001");
             ownerRoomRelPo.setUserId("-1");
             flag = ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
+            if (flag < 1) {
+                throw new CmdException("操作业主失败");
+            }
+
+            RoomPo roomPo = new RoomPo();
+            roomPo.setRoomId(rooms.getJSONObject(roomIndex).getString("roomId"));
+            roomPo.setCommunityId(reqJson.getString("communityId"));
+            roomPo.setState(RoomDto.STATE_SELL);
+            flag = roomV1InnerServiceSMOImpl.updateRoom(roomPo);
             if (flag < 1) {
                 throw new CmdException("操作业主失败");
             }
