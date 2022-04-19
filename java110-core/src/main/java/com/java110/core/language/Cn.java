@@ -11,6 +11,7 @@ import java.util.Map;
  * 繁体
  *
  */
+
 public class Cn extends DefaultLanguage {
 
 

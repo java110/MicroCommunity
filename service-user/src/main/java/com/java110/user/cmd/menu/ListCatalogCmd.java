@@ -20,13 +20,17 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.language.Language;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +89,15 @@ public class ListCatalogCmd extends AbstractServiceCmdListener {
             menuCatalogDtos = menuCatalogV1InnerServiceSMOImpl.queryMenuCatalogs(menuCatalogDto);
         } else {
             menuCatalogDtos = new ArrayList<>();
+        }
+
+        String lang = cmdDataFlowContext.getReqHeaders().get(CommonConstant.JAVA110_LANG);
+        if (!StringUtil.isEmpty(lang)) {
+            Language language = ApplicationContextFactory.getBean(lang, Language.class);
+            if (language != null) {
+                menuCatalogDtos = language.getMenuCatalog(menuCatalogDtos);
+            }
+
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, menuCatalogDtos);

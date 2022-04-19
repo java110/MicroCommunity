@@ -152,7 +152,7 @@ public class CommonConstant {
 
     public final static String INSTANCE_N = "N";
 
-
+    public static final String JAVA110_LANG = "java110-lang";
     public static final String APP_ID = "app-id";
     public static final String TRANSACTION_ID = "transaction-id";
     public static final String REQUEST_TIME = "req-time";
