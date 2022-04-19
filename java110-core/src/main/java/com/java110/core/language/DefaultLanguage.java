@@ -11,9 +11,11 @@ import java.util.Map;
 
 public abstract class DefaultLanguage implements Language {
 
+
     protected static Map<String, String> menuCatalogs = new HashMap<>();
     protected static Map<String, String> menus = new HashMap<>();
     protected static Map<String, String> msgs = new HashMap<>();
+
 
 
     public List<MenuCatalogDto> getMenuCatalog(List<MenuCatalogDto> menuCatalogDtos) {
@@ -56,13 +58,13 @@ public abstract class DefaultLanguage implements Language {
         return resultVo;
     }
 
-   public String getLangMsg(String msg){
-       String msgStr = msgs.get(msg);
-       if (!StringUtil.isEmpty(msg)) {
-           return msgStr;
-       }
+    public String getLangMsg(String msg){
+        String msgStr = msgs.get(msg);
+        if (!StringUtil.isEmpty(msg)) {
+            return msgStr;
+        }
 
-       return msg;
+        return msg;
     }
 
 }
