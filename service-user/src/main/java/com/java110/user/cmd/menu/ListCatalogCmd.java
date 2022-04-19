@@ -92,7 +92,7 @@ public class ListCatalogCmd extends AbstractServiceCmdListener {
         }
 
         String lang = cmdDataFlowContext.getReqHeaders().get(CommonConstant.JAVA110_LANG);
-        if (!StringUtil.isEmpty(lang)) {
+        if (!StringUtil.isEmpty(lang) && !CommonConstant.LANG_ZH_CN.equals(lang)) {
             Language language = ApplicationContextFactory.getBean(lang, Language.class);
             if (language != null) {
                 menuCatalogDtos = language.getMenuCatalog(menuCatalogDtos);
