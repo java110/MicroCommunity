@@ -1,5 +1,8 @@
 package com.java110.core.language;
 
+/**
+ * 英文
+ */
 public class En extends DefaultLanguage{
     static {
         menuCatalogs.put("设备","Machine");
