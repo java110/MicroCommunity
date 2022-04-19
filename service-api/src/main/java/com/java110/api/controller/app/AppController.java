@@ -21,6 +21,7 @@ import com.java110.api.smo.api.IApiSMO;
 import com.java110.api.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.language.Java110Lang;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.vo.ResultVo;
@@ -79,6 +80,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.POST)
     @ApiOperation(value = "资源post请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "service", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> servicePost(@PathVariable String service,
                                               @RequestBody String postInfo,
                                               HttpServletRequest request) {
@@ -112,6 +114,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.GET)
     @ApiOperation(value = "资源get请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "service", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> serviceGet(@PathVariable String service,
                                              HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
@@ -144,6 +147,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{resource}/{action}", method = RequestMethod.GET)
     @ApiOperation(value = "资源get请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "subServiceGet", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> subServiceGet(
             @PathVariable String resource,
             @PathVariable String action,
@@ -181,6 +185,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{resource}/{action}", method = RequestMethod.POST)
     @ApiOperation(value = "资源post请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "subServicePost", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> subServicePost(
             @PathVariable String resource,
             @PathVariable String action,
@@ -220,6 +225,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.PUT)
     @ApiOperation(value = "资源put请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "service", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> servicePut(@PathVariable String service,
                                              @RequestBody String postInfo,
                                              HttpServletRequest request) {
@@ -253,6 +259,7 @@ public class AppController extends BaseController {
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.DELETE)
     @ApiOperation(value = "资源delete请求", notes = "test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType = "query", name = "service", value = "用户编号", required = true, dataType = "String")
+    @Java110Lang
     public ResponseEntity<String> serviceDelete(@PathVariable String service,
                                                 HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;

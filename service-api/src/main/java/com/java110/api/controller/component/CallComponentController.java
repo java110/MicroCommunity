@@ -20,6 +20,7 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.core.language.Java110Lang;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -68,6 +69,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
      */
 
     @RequestMapping(path = "/callComponent/{api}")
+    @Java110Lang
     public ResponseEntity<String> callApi(
             @PathVariable String api,
             //@RequestBody String info,
@@ -138,6 +140,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
      */
 
     @RequestMapping(path = "/callComponent/{componentCode}/{componentMethod}")
+    @Java110Lang
     public ResponseEntity<String> callComponent(
             @PathVariable String componentCode,
             @PathVariable String componentMethod,
@@ -210,6 +213,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
      */
 
     @RequestMapping(path = "/callComponent/upload/{componentCode}/{componentMethod}")
+    @Java110Lang
     public ResponseEntity<String> callComponentUploadFile(
             @PathVariable String componentCode,
             @PathVariable String componentMethod,
@@ -279,6 +283,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
      */
 
     @RequestMapping(path = "/callComponent/download/{componentCode}/{componentMethod}")
+    @Java110Lang
     public ResponseEntity<Object> callComponentDownloadFile(
             @PathVariable String componentCode,
             @PathVariable String componentMethod,
