@@ -2,6 +2,7 @@ package com.java110.core.language;
 
 import com.java110.dto.menu.MenuDto;
 import com.java110.vo.ResultVo;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
  * 繁体
  *
  */
-
+@Component
 public class Cn extends DefaultLanguage {
 
 

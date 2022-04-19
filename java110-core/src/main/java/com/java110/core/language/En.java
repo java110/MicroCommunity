@@ -1,8 +1,11 @@
 package com.java110.core.language;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 英文
  */
+@Component
 public class En extends DefaultLanguage{
     static {
         menuCatalogs.put("设备","Machine");
