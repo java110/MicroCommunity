@@ -368,9 +368,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
         </if>
@@ -422,9 +419,6 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
@@ -479,9 +473,6 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
