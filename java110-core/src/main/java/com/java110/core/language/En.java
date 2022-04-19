@@ -72,7 +72,7 @@ public class En extends DefaultLanguage{
         menuCatalogs.put("设备","Machine");
         menuCatalogs.put("首页","Index");
         menuCatalogs.put("业务受理","Business");
-        menuCatalogs.put("费用报表","report");
+        menuCatalogs.put("费用报表","Report");
         menuCatalogs.put("物业服务","Service");
         menuCatalogs.put("设备停车","Parking");
         menuCatalogs.put("常用菜单","Tools");
