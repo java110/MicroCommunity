@@ -7,7 +7,6 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
-import com.java110.dto.UnitDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -24,7 +23,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
-import com.java110.vo.api.ApiUnitVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -110,6 +108,13 @@ public class QueryRoomsCmd extends AbstractServiceCmdListener {
      * @param roomDtos
      */
     private void refreshRoomOwners(String userId, String communityId, List<RoomDto> roomDtos) {
+
+        /**
+         * 量太大时 查询 会比较慢，如果其他地方有bug 切换 查询报表去，不能靠这个接口查询大量数据
+         */
+        if (roomDtos == null || roomDtos.size() > 20) {
+            return;
+        }
         List<String> roomIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
             roomIds.add(roomDto.getRoomId());
