@@ -108,7 +108,7 @@ public class DeleteOwnerCmd extends AbstractServiceCmdListener {
         if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
             for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
                 OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
-                flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+                flag = ownerAppUserV1InnerServiceSMOImpl.deleteOwnerAppUser(ownerAppUserPo);
                 if (flag < 1) {
                     throw new CmdException("删除失败");
                 }
