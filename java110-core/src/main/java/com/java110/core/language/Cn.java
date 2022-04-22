@@ -2,7 +2,6 @@ package com.java110.core.language;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -14,14 +13,12 @@ import java.util.Map;
 
 /**
  * 繁体
- *
  */
 @Component
 public class Cn extends DefaultLanguage {
     private static Map<String, String> menuCatalogs = new HashMap<>();
     private static Map<String, String> menus = new HashMap<>();
     private static Map<String, String> msgs = new HashMap<>();
-
 
 
     public List<MenuCatalogDto> getMenuCatalog(List<MenuCatalogDto> menuCatalogDtos) {
@@ -58,7 +55,7 @@ public class Cn extends DefaultLanguage {
     public JSONArray getPrivilegeMenuDto(JSONArray tmpPrivilegeArrays) {
         String menuName = "";
         JSONObject priObj = null;
-        for (int priIndex = 0;priIndex < tmpPrivilegeArrays.size(); priIndex++) {
+        for (int priIndex = 0; priIndex < tmpPrivilegeArrays.size(); priIndex++) {
             priObj = tmpPrivilegeArrays.getJSONObject(priIndex);
             menuName = menus.get(priObj.get("gName"));
             if (!StringUtil.isEmpty(menuName)) {
@@ -89,7 +86,7 @@ public class Cn extends DefaultLanguage {
         return resultVo;
     }
 
-    public String getLangMsg(String msg){
+    public String getLangMsg(String msg) {
         String msgStr = msgs.get(msg);
         if (!StringUtil.isEmpty(msg)) {
             return msgStr;
@@ -261,6 +258,75 @@ public class Cn extends DefaultLanguage {
         menus.put("历史缴费导入", "歷史繳費導入");
         menus.put("打印配置", "打印配置");
         menus.put("收据模板", "收據模板");
+        menus.put("基础数据", "基礎數據");
+        menus.put("小区信息", "小區信息");
+        menus.put("物业公司", "物業公司");
+        menus.put("周边商家", "周邊商家");
+        menus.put("入驻审核", "入駐審核");
+        menus.put("租赁管理", "租賃管理");
+        menus.put("租赁配置", "租賃配置");
+        menus.put("房源信息", "房源信息");
+        menus.put("出租审核", "出租審核");
+        menus.put("租赁预约", "租賃預約");
+        menus.put("出租历史", "出租歷史");
+        menus.put("智慧运营", "智慧運營");
+        menus.put("旧货甩卖", "舊貨甩賣");
+        menus.put("发布需求", "發布需求");
+        menus.put("制作优惠券", "製作優惠券");
+        menus.put("购买记录", "購買記錄");
+        menus.put("商家店铺", "商家店鋪");
+        menus.put("商城菜单", "商城菜單");
+        menus.put("开店审核", "開店審核");
+        menus.put("店铺信息", "店鋪信息");
+        menus.put("小区店铺", "小區店鋪");
+        menus.put("专区目录", "專區目錄");
+        menus.put("专区商品", "專區商品");
+        menus.put("店铺类型", "店鋪類型");
+        menus.put("上架服务", "上架服務");
+        menus.put("上架商品", "上架商品");
+        menus.put("店铺变更", "店鋪變更");
+        menus.put("财务管理", "財務管理");
+        menus.put("提现审核", "提現審核");
+        menus.put("提现付款", "提現付款");
+        menus.put("提现记录", "提現記錄");
+        menus.put("设置保证金", "設置保證金");
+        menus.put("保证金明细", "保證金明細");
+        menus.put("商户管理", "商戶管理");
+        menus.put("商户管理员", "商戶管理員");
+        menus.put("营销中心", "營銷中心");
+        menus.put("发布广告", "發布廣告");
+        menus.put("便民菜单维护", "便民菜單維護");
+        menus.put("订单中心", "訂單中心");
+        menus.put("受理单", "受理單");
+        menus.put("登录日志", "登錄日誌");
+        menus.put("商城订单", "商城訂單");
+        menus.put("退货订单", "退貨訂單");
+        menus.put("服务管理", "服務管理");
+        menus.put("应用信息", "應用信息");
+        menus.put("服务信息", "服務信息");
+        menus.put("服务注册", "服務註冊");
+        menus.put("服务实现", "服務實現");
+        menus.put("服务提供", "服務提供");
+        menus.put("业务轨迹", "業務軌跡");
+        menus.put("菜单管理", "菜單管理");
+        menus.put("菜单目录", "菜單目錄");
+        menus.put("菜单组", "菜單組");
+        menus.put("菜单维护", "菜單維護");
+        menus.put("映射管理", "映射管理");
+        menus.put("编码映射", "編碼映射");
+        menus.put("属性管理", "屬性管理");
+        menus.put("属性", "屬性");
+        menus.put("报表开发", "報表開發");
+        menus.put("报表组", "報表組");
+        menus.put("报表信息", "報表信息");
+        menus.put("报表组件", "報表組件");
+        menus.put("缓存管理", "緩存管理");
+        menus.put("刷新缓存", "刷新緩存");
+        menus.put("定时任务管理", "定時任務管理");
+        menus.put("定时任务", "定時任務");
+        menus.put("日志中心", "日誌中心");
+        menus.put("交互日志", "交互日誌");
+        menus.put("初始化小区", "初始化小區");
 
     }
 

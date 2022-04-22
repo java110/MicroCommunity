@@ -292,7 +292,6 @@ public class En extends DefaultLanguage{
         menus.put("设置保证金","Set margin");
         menus.put("保证金明细","Margin details");
         menus.put("商户管理","Merchant management");
-        menus.put("商户信息","Business information");
         menus.put("商户管理员","Merchant administrator");
         menus.put("营销中心","Marketing center");
         menus.put("发布广告","release ad");
@@ -302,8 +301,6 @@ public class En extends DefaultLanguage{
         menus.put("登录日志","Login log");
         menus.put("商城订单","Mall order");
         menus.put("退货订单","Return order");
-        menus.put("系统管理","System");
-        menus.put("修改密码","Change password");
         menus.put("服务管理", "Service management");
         menus.put("应用信息","Application nformation");
         menus.put("服务信息","Service information");
