@@ -1,5 +1,6 @@
 package com.java110.core.language;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
 import com.java110.vo.ResultVo;
@@ -17,6 +18,13 @@ public interface Language {
      * @return
      */
     List<Map> getMenuDto(List<Map> menuDtos);
+
+    /**
+     * 获取菜单
+     * @param tmpPrivilegeArrays
+     * @return
+     */
+    JSONArray getPrivilegeMenuDto(JSONArray tmpPrivilegeArrays);
 
 
     /**

@@ -1,5 +1,7 @@
 package com.java110.core.language;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuCatalog.MenuCatalogDto;
 import com.java110.utils.util.StringUtil;
@@ -50,6 +52,31 @@ public class Cn extends DefaultLanguage {
 
         }
         return menuDtos;
+    }
+
+    @Override
+    public JSONArray getPrivilegeMenuDto(JSONArray tmpPrivilegeArrays) {
+        String menuName = "";
+        JSONObject priObj = null;
+        for (int priIndex = 0;priIndex < tmpPrivilegeArrays.size(); priIndex++) {
+            priObj = tmpPrivilegeArrays.getJSONObject(priIndex);
+            menuName = menus.get(priObj.get("gName"));
+            if (!StringUtil.isEmpty(menuName)) {
+                priObj.put("gName", menuName);
+            }
+
+            menuName = menus.get(priObj.get("mName"));
+            if (!StringUtil.isEmpty(menuName)) {
+                priObj.put("mName", menuName);
+            }
+
+            menuName = menus.get(priObj.get("pName"));
+            if (!StringUtil.isEmpty(menuName)) {
+                priObj.put("pName", menuName);
+            }
+
+        }
+        return tmpPrivilegeArrays;
     }
 
     @Override
