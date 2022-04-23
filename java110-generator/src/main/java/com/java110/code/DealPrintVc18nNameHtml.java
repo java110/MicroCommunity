@@ -3,12 +3,8 @@ package com.java110.code;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @ClassName DealHtml
@@ -18,7 +14,7 @@ import java.util.regex.Pattern;
  * @Version 1.0
  * add by wuxw 2022/4/20
  **/
-public class DealSelectHtml {
+public class DealPrintVc18nNameHtml {
 
     public static void main(String[] args) throws Exception {
         File file = new File("C:\\Users\\Administrator\\Documents\\project\\hc\\MicroCommunityWeb\\public\\components");
@@ -54,9 +50,9 @@ public class DealSelectHtml {
         while ((str = in.readLine()) != null) {
             context += (str + "\n");
             //doDealHtmlNode(str,fileName);
-        }
-        context = doDealHtmlNode(context, fileName, fileNameObj);
+            context = doDealHtmlNode(context, fileName, fileNameObj);
 
+        }
         js.put(fileName, fileNameObj);
         System.out.println(context);
 //        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tmpFile));
@@ -67,29 +63,24 @@ public class DealSelectHtml {
     }
 
     private static String doDealHtmlNode(String str, String fileName, JSONObject fileNameObj) {
-        if(!str.contains("<option")){
+        String vcStr = "<vc:i18n name=\"";
+        if(!str.contains(vcStr)){
             return str;
         }
 
-        String[] options =  str.split("<option");
-        String vcStr = "<vc:i18n name=\"";
+        String[] options =  str.split(vcStr);
+
         String endStr = "</vc:i18n>";
         String name = "";
         for(String optionStr: options){
-            if(!optionStr.contains("</option>")){
+            if(!optionStr.contains(endStr)){
                 continue;
             }
-            optionStr = optionStr.substring(0,optionStr.indexOf("</option>"));
-            int vcPos = optionStr.indexOf(vcStr);
-            if(vcPos < 0){
-                continue;
-            }
+            optionStr = optionStr.substring(0,optionStr.indexOf("\""));
 
-            optionStr = optionStr.substring(vcPos,optionStr.indexOf(endStr)+10);
+            fileNameObj.put(optionStr,optionStr);
 
-            name = optionStr.substring(optionStr.indexOf("\"")+1);
-            name = name.substring(0,name.indexOf("\""));
-            str = str.replace(optionStr,"{{vc.i18n('"+name+"','"+fileName+"')}}");
+            //str = str.replace(optionStr,"{{vc.i18n('"+name+"','"+fileName+"')}}");
         }
 
         return str;
