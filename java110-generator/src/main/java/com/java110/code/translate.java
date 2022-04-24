@@ -20,8 +20,8 @@ import java.util.Set;
 public class translate {
 
     public static void main(String[] args) throws Exception {
-        String enJsonStr = getJsonStr("C:\\Users\\Administrator\\Documents\\project\\hc\\MicroCommunity\\java110-generator\\src\\main\\java\\com\\java110\\code\\enJson.json");
-        String cnJsonStr = getJsonStr("C:\\Users\\Administrator\\Documents\\project\\hc\\MicroCommunity\\java110-generator\\src\\main\\java\\com\\java110\\code\\cnJson.json");
+        String enJsonStr = getJsonStr("C:\\project\\vip\\0911\\MicroCommunity\\java110-generator\\src\\main\\java\\com\\java110\\code\\enJson.json");
+        String cnJsonStr = getJsonStr("C:\\project\\vip\\0911\\MicroCommunity\\java110-generator\\src\\main\\java\\com\\java110\\code\\cnJson.json");
 
 
         JSONObject enJson = JSONObject.parseObject(enJsonStr, Feature.OrderedField);

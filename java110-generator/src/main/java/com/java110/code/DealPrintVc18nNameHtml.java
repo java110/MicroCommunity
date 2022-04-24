@@ -1,6 +1,7 @@
 package com.java110.code;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.utils.util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +18,7 @@ import java.io.FileReader;
 public class DealPrintVc18nNameHtml {
 
     public static void main(String[] args) throws Exception {
-        File file = new File("C:\\Users\\Administrator\\Documents\\project\\hc\\MicroCommunityWeb\\public\\components");
+        File file = new File("C:\\project\\vip\\MicroCommunityWeb\\public\\components");
         JSONObject js = new JSONObject();
         listFiles(file, js);
         System.out.println("js = " + js.toJSONString());
@@ -50,7 +51,7 @@ public class DealPrintVc18nNameHtml {
         while ((str = in.readLine()) != null) {
             context += (str + "\n");
             //doDealHtmlNode(str,fileName);
-            context = doDealHtmlNode(context, fileName, fileNameObj);
+            context = doDealHtmlNode(str, fileName, fileNameObj);
 
         }
         js.put(fileName, fileNameObj);
@@ -64,25 +65,49 @@ public class DealPrintVc18nNameHtml {
 
     private static String doDealHtmlNode(String str, String fileName, JSONObject fileNameObj) {
         String vcStr = "<vc:i18n name=\"";
-        if(!str.contains(vcStr)){
+        String vcStrFunc = "vc.i18n";
+        if (!str.contains(vcStr) && !str.contains(vcStrFunc)) {
             return str;
         }
+        String[] options ;
+        if(str.contains(vcStr)) {
+           options = str.split(vcStr);
 
-        String[] options =  str.split(vcStr);
+            String endStr = "</vc:i18n>";
+            String name = "";
+            for (String optionStr : options) {
+                if (!optionStr.contains(endStr)) {
+                    continue;
+                }
+                optionStr = optionStr.substring(0, optionStr.indexOf("\""));
 
-        String endStr = "</vc:i18n>";
-        String name = "";
-        for(String optionStr: options){
-            if(!optionStr.contains(endStr)){
-                continue;
+                fileNameObj.put(optionStr, optionStr);
+                //str = str.replace(optionStr,"{{vc.i18n('"+name+"','"+fileName+"')}}");
             }
-            optionStr = optionStr.substring(0,optionStr.indexOf("\""));
+        }else {
 
-            fileNameObj.put(optionStr,optionStr);
+            options = str.split(vcStrFunc);
+            String optionStr = "";
+            for (int optionIndex = 0; optionIndex < options.length; optionIndex++) {
+                if (optionIndex % 2 == 0) {
+                    continue;
+                }
+                optionStr = options[optionIndex];
+                if (!optionStr.contains("'")) {
+                    continue;
+                }
+                optionStr = optionStr.substring(2);
+                optionStr = optionStr.substring(0, optionStr.indexOf("'"));
 
-            //str = str.replace(optionStr,"{{vc.i18n('"+name+"','"+fileName+"')}}");
+                if(StringUtil.isEmpty(optionStr)){
+                    continue;
+                }
+
+                fileNameObj.put(optionStr, optionStr);
+                //str = str.replace(optionStr,"{{vc.i18n('"+name+"','"+fileName+"')}}");
+            }
+
         }
-
         return str;
     }
 }
