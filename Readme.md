@@ -55,6 +55,7 @@
 
 ![image](docs/img/owner.png)
 
+![image](docs/img/phone.png)
 
 ## 参与贡献
 
