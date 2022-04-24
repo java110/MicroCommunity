@@ -1,67 +1,60 @@
-[english](Readme_en.md) [中文](Readme_cn.md)
-## 说明
- HC小区管理系统是一套saas物业管理的系统，包括 房产、业主、 费用 （可以线上缴费）、报修（可以线上报修）、投诉建议、采购、巡检、停车、门径、道闸、监控、工作流、问卷和公告等功能。
+[english](Readme_en.md)|[中文](Readme_cn.md)
+## Introduction
+ HC community management system is a set of saas property management system, including real estate, owners, fees (payment can be made online), repair application (repair can be reported online), complaints and suggestions, procurement, inspection, parking, gates, gates, monitoring , workflow, questionnaires, and announcements.
  
- 相关代码：<br/><br/>
- 1、[物业系统前端](https://gitee.com/java110/MicroCommunityWeb) : 物业员工使用电脑端<br/>
- 2、[物业系统后端](https://gitee.com/wuxw7/MicroCommunity): 核心业务处理端<br/>
- 3、[业主手机端](https://gitee.com/java110/WechatOwnerService): 提供用户使用，包括投诉 建议，缴费、报修 等<br/>
- 4、[物业手机版](https://gitee.com/java110/PropertyApp): 物业员工使用手机端<br/>
+ Related code：<br/><br/>
+ 1、[Front end of property system](https://gitee.com/java110/MicroCommunityWeb) : 物业员工使用电脑端<br/>
+ 2、[Property system backend](https://gitee.com/wuxw7/MicroCommunity): 核心业务处理端<br/>
+ 3、[Owner's mobile phone](https://gitee.com/java110/WechatOwnerService): 提供用户使用，包括投诉 建议，缴费、报修 等<br/>
+ 4、[Property mobile version](https://gitee.com/java110/PropertyApp): 物业员工使用手机端<br/>
 
-## 如何安装
+## how to install
 
-1、[开发环境安装](docs/installHcDev.md) <br/>
-2、[生产环境安装](docs/installHcProd.md)<br/>
+1、[Development environment installation](docs/installHcDev.md) <br/>
+2、[Production environment installation](docs/installHcProd.md)<br/>
 
-## 如何使用
+## how to use
 
-[操作手册](http://bbs.homecommunity.cn/document.html?docId=102022031484710001)
+[Operation Manual](http://bbs.homecommunity.cn/document.html?docId=102022031484710001)
 
    
-## 产品
+## product
 
-1、手机端演示环境
+1、Mobile demonstration environment demo
 
    ![image](docs/img/hc.png)
 
-2、电脑端<br/>
-地址：http://demo.homecommunity.cn <br/>
-管理员账号：admin/admin<br/>
-物业演示账号:wuxw/admin<br/>
-开发者账号：dev/密码自己修改 [如何修改](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110520080050)
+2、computer demo<br/>
+url ：http://demo.homecommunity.cn <br/>
+admin account：admin/admin<br/>
+property account:wuxw/admin<br/>
+dev account：dev/Change the password yourself [How to modify](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110520080050)
     
-## 系统功能（function） 
-
-   ![image](docs/img/func.png)
+## System functions
    
-   主要系统功能请查看
+   Please check the main system functions
      
-   [功能清单](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022042459860343)
+   [Feature list](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022042459860343)
   
-## 运行效果（view）
-1.在浏览器输入 http://localhost:3000/ 如下图
+## running result（view）
+1.Type in the browser http://demo.homecommunity.cn/ As shown below
 
-![image](docs/img/login.png)
+![image](docs/img/login_en.png)
 
-    用户名为 wuxw 密码为 admin  如下图
+    username: wuxw password: admin  As shown below
 
-    点击登录，进入如下图：
+    Click to log in to enter the following picture:
 
-![image](docs/img/0004.png)
+![image](docs/img/index_en.png)
 
-![image](docs/img/index.png)
+![image](docs/img/business_en.png)
 
-![image](docs/img/business.png)
+![image](docs/img/owner_en.png)
 
-![image](docs/img/owner.png)
+## Participate and contribute
 
-![image](docs/img/phone.png)
+You can fork the code and pull request to merge the code after commit
 
-## 参与贡献
-
-您可以fork 代码后，commit后 pull request合并代码
-
-联系作者：17797173942（微信号）
 
 
 
