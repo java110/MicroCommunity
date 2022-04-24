@@ -43,14 +43,14 @@
         <maven.compile.target>1.8</maven.compile.target>
         <sourceEncoding>UTF-8</sourceEncoding>
         <spring-boot>2.0.4.RELEASE</spring-boot>
-        <mybatis.version>3.3.0</mybatis.version>
+        <mybatis.version>3.5.6</mybatis.version>
         <microcommunity.version>1.0-SNAPSHOT</microcommunity.version>
         <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
-        <logback.vaersion>1.2.3</logback.vaersion>
+        <logback.vaersion>1.2.9</logback.vaersion>
 
         <apache.common.lang3.version>3.4</apache.common.lang3.version>
-        <mybatis.version>3.4.1</mybatis.version>
-        <log4j.version>2.17.0</log4j.version>
+        <mybatis.version>3.5.6</mybatis.version>
+        <log4j.version>2.17.1</log4j.version>
         <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
         <druid.version>1.1.10</druid.version>
         <mybatis-spring.version>1.3.1</mybatis-spring.version>
@@ -63,7 +63,7 @@
         <commons-lang.version>2.5</commons-lang.version>
         <commons-beanutils.version>1.8.0</commons-beanutils.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <logback.version>1.1.2</logback.version>
+        <logback.version>1.2.9</logback.version>
         <activemq.version>5.7.0</activemq.version>
         <xbean.version>3.18</xbean.version>
         <axis.version>1.4</axis.version>
@@ -437,7 +437,7 @@
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.11.3</version>
+                <version>1.14.2</version>
             </dependency>
 
             <!-- 引入poi，解析workbook视图 -->
