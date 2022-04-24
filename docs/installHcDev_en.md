@@ -2,7 +2,7 @@
 
 1、download code <br/>
 git clone https://github.com/java110/MicroCommunity.git <br/>
-执行 mvn clean package  和 mvn clean install<br/><br/>
+Execute mvn clean package and mvn clean install<br/><br/>
 2、Add hosts<br/>
 127.0.0.1 dev.db.java110.com <br/>
 127.0.0.1 dev.zk.java110.com <br/>
