@@ -74,6 +74,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         Assert.listOnlyOne(purchaseApplyDtos, "采购申请单存在多条");
         purchaseApplyDto.setStartUserId(purchaseApplyDtos.get(0).getUserId());
         purchaseApplyDto.setResOrderType(purchaseApplyDtos.get(0).getResOrderType());
+        purchaseApplyDto.setNextStaffId(reqJson.getString("nextUserId"));
         if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_WAIT_DEAL) && reqJson.getString("state").equals("1100")) {  //如果状态是未审核 并且是审核通过，就变成审核中
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());

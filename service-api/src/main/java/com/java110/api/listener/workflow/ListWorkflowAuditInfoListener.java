@@ -12,6 +12,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -86,6 +87,9 @@ public class ListWorkflowAuditInfoListener extends AbstractServiceApiPlusListene
 
 
         for (WorkflowAuditInfoDto tmpWorkflowAuditInfoDto:workflowAuditInfoDtos ){
+            if(StringUtil.isEmpty(tmpWorkflowAuditInfoDto.getUserId())){
+                continue;
+            }
             for(UserDto tmpUserDto: userDtos){
                 if (tmpWorkflowAuditInfoDto.getUserId().equals(tmpUserDto.getUserId())){
                     tmpWorkflowAuditInfoDto.setUserName(tmpUserDto.getUserName());
