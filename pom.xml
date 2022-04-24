@@ -46,7 +46,7 @@
         <mybatis.version>3.3.0</mybatis.version>
         <microcommunity.version>1.0-SNAPSHOT</microcommunity.version>
         <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
-        <logback.vaersion>1.2.3</logback.vaersion>
+        <logback.vaersion>1.2.9</logback.vaersion>
 
         <apache.common.lang3.version>3.4</apache.common.lang3.version>
         <mybatis.version>3.4.1</mybatis.version>
