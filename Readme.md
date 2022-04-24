@@ -1,48 +1,94 @@
-[english](Readme_en.md)
-# HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，物业版uni-app和业主版uni-app,
-# 最新SQL文件加群获取 857791253、1038870655、770542020、274026637、777620972（未满）、374326790（未满）
+[english](Readme_en.md) [中文](Readme_cn.md)
+## 说明
+ HC小区管理系统是一套saas物业管理的系统，包括 房产、业主、 费用 （可以线上缴费）、报修（可以线上报修）、投诉建议、采购、巡检、停车、门径、道闸、监控、工作流、问卷和公告等功能。
+ 
+ 相关代码：<br/>
+ 1、[物业系统前端](https://gitee.com/java110/MicroCommunityWeb) : 物业员工使用电脑端<br/>
+ 2、[物业系统后端](https://gitee.com/wuxw7/MicroCommunity): 核心业务处理端<br/>
+ 3、[业主手机端](https://gitee.com/java110/WechatOwnerService): 提供用户使用，包括投诉 建议，缴费、报修 等<br/>
+ 4、[物业手机版](https://gitee.com/java110/PropertyApp): 物业员工使用手机端<br/>
 
-### 作者微信 17797173942
+## 如何安装
 
-## 开源代码说明
+1、下载代码 <br/><br/>
+git clone https://github.com/java110/MicroCommunity.git <br/>
+执行 mvn clean package  和 mvn clean install<br/><br/>
+2、添加hosts<br/><br/>
+127.0.0.1 dev.db.java110.com <br/>
+127.0.0.1 dev.zk.java110.com <br/>
+127.0.0.1 dev.kafka.java110.com <br/>
+127.0.0.1 dev.redis.java110.com <br/>
+127.0.0.1 api.java110.com <br/>
+127.0.0.1 dev.java110.com <br/><br/>
+3、安装mysql 导入TT.sql 和 hc_community.sql （文件在docs/db下）<br/><br/>
+4、安装redis 指定redis密码<br/><br/>
+5、修改模块service-开头的服务下的 application-dev.yml 和 dataSource.yml<br/>
+application-dev.yml 中主要修改redis密码
 
-### HC小区后端代码
- [https://gitee.com/wuxw7/MicroCommunity](https://gitee.com/wuxw7/MicroCommunity)
-### HC小区前端代码
-[https://gitee.com/java110/MicroCommunityWeb](https://gitee.com/java110/MicroCommunityWeb)
-### HC智慧家庭（业主版）
-[https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
-### HC掌上物业（物业版uni-app）
-[https://gitee.com/java110/PropertyApp](https://gitee.com/java110/PropertyApp)
+```yaml
+jedis:
+  pool:
+    config:
+      maxTotal: 100
+      maxIdle: 20
+      maxWaitMillis: 20000
+    host: dev.redis.java110.com
+    port: 6379
+    timeout: 3000
+    password: hc
+```
+将 password: hc 中的hc 修改为redis 指定的密码
+```yaml
+spring:
+  profiles:
+    active: share
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  application:
+    name: community-service
+  redis:
+    database: 0
+    host: dev.redis.java110.com
+    port: 6379
+    password: hc
+    pool:
+      max-active: 300
+      max-wait: 10000
+      max-idle: 100
+      min-idle: 0
+      timeout: 0
+```
+将 password: hc 中的hc 修改为redis 指定的密码<br/>
+dataSource.yml 中修改password密码<br/>
+注意 比如 service-api服务中是没有dataSource.yml 文件<br/>
+6、启动模块service-开头服务下的*ServiceApplicationStart.java文件中的main方法<br/>
+注意启动是没有顺序的，但是我们优先推荐您启动service-eureka<br/>
+7、下载前段代码 <br/>
+git clone https://github.com/java110/MicroCommunityWeb.git <br/>
+8、修改app.js 中的地址<br/>
+```shell script
+app.use('/callComponent', proxy('http://192.168.100.108:8008', opts));
+app.use('/app', proxy('http://192.168.100.108:8008', opts));
+```
+将192.168.100.108 修改为你后端的ip<br/>
+9、启动并且访问<br/>
+npm start
+```shell script
+PS C:\project\vip\MicroCommunityWeb> npm start
+> micrcommunityweb@0.0.0 start C:\project\vip\MicroCommunityWeb
+> node ./bin/www
+```
+表示启动成功<br/>
+访问地址：http://localhost:3000
 
-### HC社区商城（免费安装使用）
-[http://bbs.homecommunity.cn/topic/84-shang-cheng-bu-shu-bao-xia-zai](http://bbs.homecommunity.cn/topic/84-shang-cheng-bu-shu-bao-xia-zai)
-
-### 分支说明（branch）
-
-分支管理说明，master 为主分支，0.8-stable 为最新稳定分支（推荐使用）
 
 
-### 如何开始（how to start）
-
-[http://www.homecommunity.cn/](http://www.homecommunity.cn/)
-
-### 如何安装（how to install）
-
-方案一、梓豪方式
-
-> http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022012655760522
 
 
-[参考视频](https://www.bilibili.com/video/BV1Zq4y1c7Ph?spm_id_from=333.999.0.0)
 
-方案二、根据需求自助部署
-
-[参考视频](https://www.bilibili.com/video/BV1N7411E7rf/)
-
-方案三、宝塔方式安装
-
-[宝塔方式安装](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110831560082)
 
 ### 操作文档
 
