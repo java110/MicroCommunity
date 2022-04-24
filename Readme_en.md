@@ -11,7 +11,7 @@ Provide users with use, including complaints and suggestions, payment, repairs, 
 
 ## how to install
 
-1、[Development environment installation](docs/installHcDev.md) <br/>
+1、[Development environment installation](docs/installHcDev_en.md) <br/>
 2、[Production environment installation](docs/installHcProd.md)<br/>
 
 ## how to use
