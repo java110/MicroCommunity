@@ -23,7 +23,7 @@ Provide users with use, including complaints and suggestions, payment, repairs, 
 
 1、Mobile demonstration environment demo
 
-   ![image](docs/img/hc.png)
+   ![image](docs/img/hc_en.png)
 
 2、computer demo<br/>
 url ：http://demo.homecommunity.cn <br/>
