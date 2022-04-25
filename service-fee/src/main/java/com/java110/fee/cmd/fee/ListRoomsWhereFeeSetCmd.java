@@ -56,6 +56,8 @@ public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
         String ownerName = reqJson.getString("ownerName");
         String idCard = reqJson.getString("idCard");
         String ownerNameLike = reqJson.getString("ownerNameLike");
+        //这里优化 userId 问题
+        reqJson.put("userId","");
         //根据 业主来定位房屋信息
         if (!StringUtil.isEmpty(ownerName) || !StringUtil.isEmpty(idCard) || !StringUtil.isEmpty(ownerNameLike)) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, cmdDataFlowContext);
