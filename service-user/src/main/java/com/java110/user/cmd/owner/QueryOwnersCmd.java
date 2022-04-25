@@ -52,7 +52,7 @@ public class QueryOwnersCmd extends AbstractServiceCmdListener {
 //根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
 
-        if (reqJson.containsKey("name")) {
+        if (reqJson.containsKey("name") && !StringUtil.isEmpty(reqJson.getString("name"))) {
             queryByCondition(reqJson, cmdDataFlowContext);
             return;
         }
