@@ -78,9 +78,10 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
         }
         //获取手机号(判断手机号是否重复)
         String link = reqJson.getString("link");
-        if (link.length() != 11) {
-            throw new IllegalArgumentException("手机号输入不正确！");
-        }
+        //这里注释 因为 有国外的手机号 不是11位
+//        if (link.length() != 11) {
+//            throw new IllegalArgumentException("手机号输入不正确！");
+//        }
         if (!StringUtil.isEmpty(link) && link.contains("*")) {
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setOwnerId(reqJson.getString("ownerId"));

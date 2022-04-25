@@ -88,7 +88,7 @@ public class Cn extends DefaultLanguage {
 
     public String getLangMsg(String msg) {
         String msgStr = msgs.get(msg);
-        if (!StringUtil.isEmpty(msg)) {
+        if (!StringUtil.isEmpty(msgStr)) {
             return msgStr;
         }
 
