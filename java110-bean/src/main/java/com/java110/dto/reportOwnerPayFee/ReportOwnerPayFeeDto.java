@@ -47,6 +47,9 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String feeEndTime;
+
+
     private List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos;
 
 
@@ -275,5 +278,13 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public String getFeeEndTime() {
+        return feeEndTime;
+    }
+
+    public void setFeeEndTime(String feeEndTime) {
+        this.feeEndTime = feeEndTime;
     }
 }

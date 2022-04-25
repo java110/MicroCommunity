@@ -16,7 +16,7 @@ Provide users with use, including complaints and suggestions, payment, repairs, 
 
 ## how to use
 
-[Operation Manual](http://bbs.homecommunity.cn/document.html?docId=102022031484710001)
+[Operation Manual](https://github.com/java110/MicroCommunity/wiki)
 
    
 ## product

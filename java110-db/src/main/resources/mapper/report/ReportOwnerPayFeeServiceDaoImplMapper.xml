@@ -50,7 +50,10 @@
         LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
         left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
-        where t.end_time > NOW()
+        where 1=1
+        <if test="feeEndTime !=null and feeEndTime != ''">
+            and t.end_time &gt; #{feeEndTime}
+        </if>
         and t.state = '2008001'
         and t.status_cd = '0'
         <if test="configId !=null and configId != ''">
@@ -153,7 +156,10 @@
         LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
         left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
-        where t.end_time > NOW()
+        where 1=1
+        <if test="feeEndTime !=null and feeEndTime != ''">
+            and t.end_time &gt; #{feeEndTime}
+        </if>
         and t.state = '2008001'
         and t.status_cd = '0'
         <if test="configId !=null and configId != ''">
