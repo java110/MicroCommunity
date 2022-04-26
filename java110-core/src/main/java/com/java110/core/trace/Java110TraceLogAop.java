@@ -32,29 +32,33 @@ public class Java110TraceLogAop {
         TraceParamDto traceParamDto = new TraceParamDto();
         JSONObject paramIn = new JSONObject();
         JSONObject paramOut = new JSONObject();
-
-        Object[] args = pjp.getArgs();
-        for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
-            if (args[paramIndex] instanceof HttpServletRequest) {
+        try {
+            Object[] args = pjp.getArgs();
+            for (int paramIndex = 0; paramIndex < args.length; paramIndex++) {
+                if (args[paramIndex] instanceof HttpServletRequest) {
 //                HttpServletRequest request = (HttpServletRequest) args[paramIndex];
 //                paramIn.put("param" + paramIndex, request.getParameterMap());
-                continue;
+                    continue;
+                }
+                if (args[paramIndex] instanceof HttpServletResponse) {
+                    continue;
+                }
+                paramIn.put("param" + paramIndex, args[paramIndex]);
             }
-            if (args[paramIndex] instanceof HttpServletResponse) {
-                continue;
+            traceParamDto.setReqParam(paramIn.toJSONString());
+            out = pjp.proceed();
+        }catch (Exception e){
+            throw e;
+        }finally {
+            if (out != null) {
+                paramOut.put("param", out);
+            } else {
+                paramOut.put("param", new JSONObject());
             }
-            paramIn.put("param" + paramIndex, args[paramIndex]);
+            traceParamDto.setResParam(paramOut.toJSONString());
+            Java110TraceFactory.putParams(traceParamDto);
+            logger.debug("--Java110TraceLog---:{}", JSONObject.toJSONString(traceParamDto));
         }
-        traceParamDto.setReqParam(paramIn.toJSONString());
-        out = pjp.proceed();
-        if (paramOut != null) {
-            paramOut.put("param", out);
-        } else {
-            paramOut.put("param", new JSONObject());
-        }
-        traceParamDto.setResParam(paramOut.toJSONString());
-        Java110TraceFactory.putParams(traceParamDto);
-        logger.debug("--Java110TraceLog---:{}", paramOut.toJSONString());
         return out;
     }
 }
