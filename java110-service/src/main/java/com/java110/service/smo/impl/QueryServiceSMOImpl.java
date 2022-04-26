@@ -18,6 +18,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.ognl.Ognl;
+import org.apache.ibatis.ognl.OgnlContext;
 import org.apache.ibatis.ognl.OgnlException;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -449,7 +450,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
             Object condObj = Ognl.parseExpression(condition);
 
-            Object value = Ognl.getValue(condObj, requestParams);
+            OgnlContext context = new OgnlContext(null,null,new DefaultMemberAccess(true));
+
+            Object value = Ognl.getValue(condObj,context, requestParams);
 
             if (value instanceof Boolean) {
                 conditionResult = (Boolean) value;
