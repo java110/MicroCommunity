@@ -45,6 +45,10 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         Environment.isDevEnv();
 
+        if(reqJson.containsKey("storeId") && StoreDto.STORE_ADMIN.equals(reqJson.getString("storeId"))){
+            return ;
+        }
+
         if (!reqJson.containsKey("staffId")) {
             reqJson.put("staffId", reqJson.getString("userId"));
         }
