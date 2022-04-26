@@ -1,11 +1,13 @@
 package com.java110.core.trace;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.trace.TraceParamDto;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Aspect
 public class Java110TraceLogAop {
+    private static Logger logger = LoggerFactory.getLogger(Java110FeignClientInterceptor.class);
 
     @Pointcut("@annotation(com.java110.core.trace.Java110TraceLog) || execution(public * com.java110..*.*InnerServiceSMOImpl.*(..))")
     public void dataProcess() {
@@ -51,6 +54,7 @@ public class Java110TraceLogAop {
         }
         traceParamDto.setResParam(paramOut.toJSONString());
         Java110TraceFactory.putParams(traceParamDto);
+        logger.debug("--Java110TraceLog---:{}", paramOut.toJSONString());
         return out;
     }
 }
