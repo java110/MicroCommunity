@@ -23,6 +23,7 @@ import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -68,20 +69,9 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         // Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
         Assert.judgeAttrValue(reqJson);
-    }
 
-    @Override
-    @Java110Transactional
-    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        if (!reqJson.containsKey("ownerId") || OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
-            reqJson.put("ownerId", reqJson.getString("memberId"));
-        }
         //获取手机号(判断手机号是否重复)
         String link = reqJson.getString("link");
-        //这里注释 因为 有国外的手机号 不是11位
-//        if (link.length() != 11) {
-//            throw new IllegalArgumentException("手机号输入不正确！");
-//        }
         if (!StringUtil.isEmpty(link) && link.contains("*")) {
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setOwnerId(reqJson.getString("ownerId"));
@@ -91,19 +81,6 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
             Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
             link = ownerDtos.get(0).getLink();
             reqJson.put("link", link);
-        }
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setLink(link);
-        ownerDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
-        if (ownerDtos != null && ownerDtos.size() > 1) {
-            throw new IllegalArgumentException("手机号重复，请重新输入");
-        } else if (ownerDtos != null && ownerDtos.size() == 1) {
-            for (OwnerDto owner : ownerDtos) {
-                if ((!StringUtil.isEmpty(reqJson.getString("ownerId")) && !owner.getOwnerId().equals(reqJson.getString("ownerId"))) || (!StringUtil.isEmpty(reqJson.getString("memberId")) && !owner.getMemberId().equals(reqJson.getString("memberId")))) {
-                    throw new IllegalArgumentException("手机号重复，请重新输入");
-                }
-            }
         }
         //获取身份证号(判断身份证号是否重复)
         String idCard = reqJson.getString("idCard");
@@ -116,6 +93,26 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
             Assert.listOnlyOne(owners, "查询业主信息错误！");
             idCard = owners.get(0).getIdCard();
             reqJson.put("idCard", idCard);
+        }
+
+        String userValidate = MappingCache.getValue("USER_VALIDATE");
+
+        if("ON".equals(userValidate)){
+            return ;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setLink(link);
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+        if (ownerDtos != null && ownerDtos.size() > 1) {
+            throw new IllegalArgumentException("手机号重复，请重新输入");
+        } else if (ownerDtos != null && ownerDtos.size() == 1) {
+            for (OwnerDto owner : ownerDtos) {
+                if ((!StringUtil.isEmpty(reqJson.getString("ownerId")) && !owner.getOwnerId().equals(reqJson.getString("ownerId"))) || (!StringUtil.isEmpty(reqJson.getString("memberId")) && !owner.getMemberId().equals(reqJson.getString("memberId")))) {
+                    throw new IllegalArgumentException("手机号重复，请重新输入");
+                }
+            }
         }
         if (!StringUtil.isEmpty(idCard)) {
             OwnerDto owner = new OwnerDto();
@@ -132,6 +129,19 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
                 }
             }
         }
+    }
+
+    @Override
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        if (!reqJson.containsKey("ownerId") || OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
+            reqJson.put("ownerId", reqJson.getString("memberId"));
+        }
+
+        //这里注释 因为 有国外的手机号 不是11位
+//        if (link.length() != 11) {
+//            throw new IllegalArgumentException("手机号输入不正确！");
+//        }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
