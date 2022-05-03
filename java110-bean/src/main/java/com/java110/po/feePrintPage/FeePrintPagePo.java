@@ -29,6 +29,7 @@ public class FeePrintPagePo implements Serializable {
 
     private String pageUrl;
     private String statusCd = "0";
+    private String queryStatusCd;
     private String state;
     private String pageId;
     private String communityId;
@@ -82,5 +83,11 @@ public class FeePrintPagePo implements Serializable {
         this.pageName = pageName;
     }
 
+    public String getQueryStatusCd() {
+        return queryStatusCd;
+    }
 
+    public void setQueryStatusCd(String queryStatusCd) {
+        this.queryStatusCd = queryStatusCd;
+    }
 }
