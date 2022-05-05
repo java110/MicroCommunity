@@ -383,6 +383,12 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
 
 
     </select>
@@ -431,6 +437,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 
@@ -491,6 +503,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

@@ -137,7 +137,7 @@ public class QueryOwnersCmd extends AbstractServiceCmdListener {
         //获取当前用户id
         String ownerTypeCd = reqJson.getString("ownerTypeCd");
         OwnerDto tmpOwnerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
-        if(!StringUtil.isEmpty(ownerTypeCd)&& ownerTypeCd.contains(",")){
+        if(!StringUtil.isEmpty(ownerTypeCd) && ownerTypeCd.contains(",")){
             tmpOwnerDto.setOwnerTypeCd("");
             tmpOwnerDto.setOwnerTypeCds(ownerTypeCd.split(","));
         }
