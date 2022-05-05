@@ -348,6 +348,9 @@
         <if test="roomNum !=null and roomNum != ''">
             and t.room_num= #{roomNum}
         </if>
+        <if test="roomNumLike !=null and roomNumLike != ''">
+            and t.`room_num` like concat('%', #{roomNumLike},'%')
+        </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
@@ -718,6 +721,9 @@
         </if>
         <if test="roomNum !=null and roomNum != ''">
             and t.room_num= #{roomNum}
+        </if>
+        <if test="roomNumLike !=null and roomNumLike != ''">
+            and t.`room_num` like concat('%', #{roomNumLike},'%')
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}

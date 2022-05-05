@@ -41,6 +41,8 @@ public class RoomDto extends PageDto implements Serializable {
     private String[] layers;
     private String builtUpArea;
     private String roomNum;
+    private String roomNumLike;
+
     private String unitId;
     private String unitArea;
     private String apartment;
@@ -398,5 +400,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setFloorIds(String[] floorIds) {
         this.floorIds = floorIds;
+    }
+
+    public String getRoomNumLike() {
+        return roomNumLike;
+    }
+
+    public void setRoomNumLike(String roomNumLike) {
+        this.roomNumLike = roomNumLike;
     }
 }
