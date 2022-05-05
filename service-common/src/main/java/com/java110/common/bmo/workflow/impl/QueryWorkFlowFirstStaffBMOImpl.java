@@ -291,7 +291,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         sql.append("state varchar(12) not null COMMENT '状态 1001 申请 1002 待审核 1003 退回 1004 委托 1005 办结',");
         sql.append("create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',");
         sql.append("status_cd varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'");
-        sql.append(")");
+        sql.append(") DEFAULT CHARSET=utf8");
         logger.debug("部署表单sql" + sql.toString());
         oaWorkflowFormInnerServiceSMOImpl.createTable(sql.toString());
 
