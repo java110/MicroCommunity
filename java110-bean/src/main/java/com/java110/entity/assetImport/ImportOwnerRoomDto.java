@@ -24,6 +24,7 @@ public class ImportOwnerRoomDto implements Serializable {
     private String ownerTypeCd;
     private String layer;
     private String userId;
+    private String roomState;
 
 
     public String getFloorNum() {
@@ -177,5 +178,13 @@ public class ImportOwnerRoomDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRoomState() {
+        return roomState;
+    }
+
+    public void setRoomState(String roomState) {
+        this.roomState = roomState;
     }
 }

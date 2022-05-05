@@ -273,7 +273,8 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         int flag = 0;
         if (roomDtos == null || roomDtos.size() < 1) {
             roomPo = new RoomPo();
-            roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
+            //roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
+            roomPo.setState(importOwnerRoomDto.getRoomState());
             roomPo.setRoomId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
             roomPo.setApartment(importOwnerRoomDto.getSection());
             roomPo.setSection("1");
