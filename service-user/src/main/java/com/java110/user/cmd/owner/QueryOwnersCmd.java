@@ -52,6 +52,7 @@ public class QueryOwnersCmd extends AbstractServiceCmdListener {
 //根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
 
+
         if (reqJson.containsKey("name") && !StringUtil.isEmpty(reqJson.getString("name"))) {
             queryByCondition(reqJson, cmdDataFlowContext);
             return;
@@ -134,14 +135,20 @@ public class QueryOwnersCmd extends AbstractServiceCmdListener {
      */
     private void queryByCondition(JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
         //获取当前用户id
+        String ownerTypeCd = reqJson.getString("ownerTypeCd");
+        OwnerDto tmpOwnerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
+        if(!StringUtil.isEmpty(ownerTypeCd)&& ownerTypeCd.contains(",")){
+            tmpOwnerDto.setOwnerTypeCd("");
+            tmpOwnerDto.setOwnerTypeCds(ownerTypeCd.split(","));
+        }
         String userId = reqJson.getString("userId");
         int row = reqJson.getInteger("row");
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
-        int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+        int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(tmpOwnerDto);
         apiOwnerVo.setTotal(total);
         List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
-            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(tmpOwnerDto);
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
             for (OwnerDto ownerDto : ownerDtoList) {
                 //对业主身份证号隐藏处理

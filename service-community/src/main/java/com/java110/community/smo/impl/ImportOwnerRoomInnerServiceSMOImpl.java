@@ -419,9 +419,9 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorId = floorDtos.get(0).getFloorId();
             if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 floorPo = new FloorPo();
-                floorPo.setbId("-1");
+                //floorPo.setbId("-1");
                 floorPo.setCommunityId(importOwnerRoomDto.getCommunityId());
-                floorPo.setFloorArea("1");
+                //floorPo.setFloorArea("1");
                 floorPo.setFloorId(floorId);
                 floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
                 floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
