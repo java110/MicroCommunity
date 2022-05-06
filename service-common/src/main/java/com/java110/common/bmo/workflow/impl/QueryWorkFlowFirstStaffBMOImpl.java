@@ -254,7 +254,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                 sql.append(" varchar");
                 isVarchar = true;
             } else if ("textarea".equals(component.getString("type"))) {
-                sql.append(" longtext");
+                sql.append(" longtext CHARACTER SET utf8");
             } else if ("textdate".equals(component.getString("type"))) {
                 sql.append(" date");
             } else if ("textdatetime".equals(component.getString("type"))) {
