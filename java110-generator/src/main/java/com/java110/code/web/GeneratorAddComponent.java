@@ -78,24 +78,24 @@ public class GeneratorAddComponent extends BaseGenerator {
 
                     String value = selectValues[valueIndex];
 
-                    option += "<option  value=\"" + value + "\">" + selectValueNames[valueIndex] + "</option>\n";
+                    option += "<option  value=\"" + value + "\"><span><vc:i18n name='" + selectValueNames[valueIndex] + "' namespace='add"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></option>\n";
 
                 }
 
                 inputStr = "<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">\n" +
-                        "         <option selected  disabled value=\"\">" + required + "，请选择" + column.getString("cnCode") + "</option>\n" +
+                        "         <option selected  disabled value=\"\"><span><vc:i18n name='" + required + "，请选择" + column.getString("cnCode") + "' namespace='add"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></option>\n" +
                         "         " + option +
                         "  </select>";
             } else if ("textarea".equals(column.getString("inputType"))) {
-                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\"" +
+                inputStr = "<textarea  :placeholder=\"vc.i18n('" + required + "，请填写" + column.getString("cnCode") + "','add"+toUpperCaseFirstOne(data.getString("templateCode"))+"')\" class=\"form-control\"" +
                         " v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">" +
                         "</textarea>";
             } else {
                 inputStr = "           <input v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\" " +
-                        "                  type=\"text\" placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\">\n";
+                        "                  type=\"text\" :placeholder=\"vc.i18n('" + required + "，请填写" + column.getString("cnCode") + "','add"+toUpperCaseFirstOne(data.getString("templateCode"))+"')\" class=\"form-control\">\n";
             }
             thSb.append("<div class=\"form-group row\">\n" +
-                    "         <label class=\"col-sm-2 col-form-label\">" + column.getString("cnCode") + "</label>\n" +
+                    "         <label class=\"col-sm-2 col-form-label\"><span><vc:i18n name='" + column.getString("cnCode") + "' namespace='add"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></label>\n" +
                     "         <div class=\"col-sm-10\">\n" +
                     inputStr +
                     "         </div>\n" +

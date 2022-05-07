@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="choose@@TemplateCode@@ModelLabel">选择@@templateName@@</h3>
+                <h3 class="modal-title" id="choose@@TemplateCode@@ModelLabel"> <span><vc:i18n name="选择@@templateName@@" namespace="choose@@TemplateCode@@"></vc:i18n></span></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -17,9 +17,10 @@
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input placeholder="输入@@templateName@@名称" type="text" v-model="choose@@TemplateCode@@Info._current@@TemplateCode@@Name" class="form-control form-control-sm">
+                                        <input :placeholder="vc.i18n('输入@@templateName@@名称','choose@@TemplateCode@@')" type="text" v-model="choose@@TemplateCode@@Info._current@@TemplateCode@@Name" class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="query@@TemplateCode@@s()">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="query@@TemplateCode@@s()">
+                                                    <span><vc:i18n name="查询"></vc:i18n></span></button>
                                             </span>
                                     </div>
                                 </div>
@@ -35,7 +36,9 @@
                                         <tr v-for="@@templateCode@@ in choose@@TemplateCode@@Info.@@templateCode@@s">
                                             @@columnsName@@
                                             <td>
-                                                <button class="btn btn-primary btn-xs" v-on:click="choose@@TemplateCode@@(@@templateCode@@)">选择</button>
+                                                <button class="btn btn-primary btn-xs" v-on:click="choose@@TemplateCode@@(@@templateCode@@)">
+                                                    <span><vc:i18n name="选择"></vc:i18n></span>
+                                                    </button>
                                             </td>
                                         </tr>
                                     </tbody>

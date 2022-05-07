@@ -63,11 +63,11 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
             if ("choose".equals(tmpCond.getString("inputType"))) {
                 conditionInput.append("                            <div class=\"form-group input-group\">\n" +
-                        "                                <input type=\"text\" placeholder=\"请选择" + tmpCond.getString("name") +
+                        "                                <input type=\"text\" :placeholder=\"vc.i18n('请选择" + tmpCond.getString("name")+"','"+data.getString("templateCode")+"Manage')" +
                         "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
                         "                                <div class=\"input-group-prepend\">\n" +
                         "                                    <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_open" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "Method()\"><i\n" +
-                        "                                            class=\"glyphicon glyphicon-search\"></i> 选择\n" +
+                        "                                            class=\"glyphicon glyphicon-search\"></i> <span><vc:i18n name=\"选择\"></vc:i18n></span>\n" +
                         "                                    </button>\n" +
                         "                                </div>\n" +
                         "                            </div>\n");
@@ -82,7 +82,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
             } else if ("input".equals(tmpCond.getString("inputType"))) {
                 conditionInput.append("<div class=\"form-group\">\n" +
-                        "                                <input type=\"text\" placeholder=\"请输入" + tmpCond.getString("name") + "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
+                        "                                <input type=\"text\" :placeholder=\"vc.i18n('请选择" + tmpCond.getString("name")+"','"+data.getString("templateCode")+"Manage')" + "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
                         "                            </div>");
             } else if ("select".equals(tmpCond.getString("inputType"))){
 
@@ -94,13 +94,12 @@ public class GeneratorManagerComponent extends BaseGenerator {
                 for (int valueIndex = 0; valueIndex < selectValues.length; valueIndex++) {
 
                     String value = selectValues[valueIndex];
-
-                    option += "<option  value=\"" + value + "\">" + selectValueNames[valueIndex] + "</option>\n";
+                    option += "<option  value=\"" + value + "\"><span><vc:i18n name='" + selectValueNames[valueIndex] + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n></span></option>\n";
 
                 }
 
                 conditionInput.append("<select class=\"custom-select\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") +"\">\n" +
-                        "         <option selected  value=\"\">请选择" + tmpCond.getString("name") + "</option>\n" +
+                        "         <option selected  value=\"\"><vc:i18n name='请选择" + tmpCond.getString("name")+"' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n></span></option>\n" +
                         "         " +option+
                         "  </select>"
                 );
@@ -111,7 +110,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
             if (condIndex == 2) {
                 conditionInput.append("<div class=\"col-sm-1\">\n" +
                         "                            <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_query" + toUpperCaseFirstOne(data.getString("templateCode")) + "Method()\">\n" +
-                        "                                    <i class=\"glyphicon glyphicon-search\"></i> 查询\n" +
+                        "                                    <i class=\"glyphicon glyphicon-search\"></i> <span><vc:i18n name=\"查询\"></vc:i18n></span>\n" +
                         "                            </button>\n" +
                         "                        </div>");
             } else if (condIndex % 3 == 2) {
@@ -140,7 +139,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
         StringBuffer thSb = new StringBuffer();
         StringBuffer tdSb = new StringBuffer();
-        thSb.append("                            <th class=\"text-center\">" + data.getString("templateKeyName") + "</th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + data.getString("templateKeyName") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n><span></th>\n");
 
         tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + data.getString("templateKey") + "}}</td>\n");
 
@@ -148,16 +147,16 @@ public class GeneratorManagerComponent extends BaseGenerator {
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
             if (column.getBoolean("show")) {
-                thSb.append("                            <th class=\"text-center\">" + column.getString("cnCode") + "</th>\n");
+                thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + column.getString("cnCode") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n><span></th>\n");
                 tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
             }
         }
-        thSb.append("                            <th class=\"text-center\">操作</th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='操作'></i18n></span></th>\n");
         tdSb.append("                            <td class=\"text-center\"><div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\">修改</button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='修改'></i18n></span></button>\n" +
                 "                                </div>\n" +
                 "                                <div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\">删除</button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='删除'></i18n></span></button>\n" +
                 "                                </div></td>\n");
 
         fileContext = fileContext.replace("@@columnsCnCode@@", thSb.toString())
