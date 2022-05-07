@@ -1,59 +1,43 @@
 {
   "templateKeyName": "编号",
-  "templateName": "黑白名单",
+  "templateName": "费用套餐",
   "columns": [
     {
       "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "typeCd",
-      "limitErrInfo": "类型不能超过64",
-      "cnCode": "类型",
-      "limit": "maxLength",
-      "show": true,
-      "inputType": "select",
-      "selectValue":"B,W",
-      "selectValueName":"黑名单,白名单",
-      "required": true,
-      "desc": "必填，类型"
-    },
-    {
-      "hasDefaultValue": false,
-      "limitParam": "64",
-      "code": "ip",
-      "limitErrInfo": "IP'不能超过64",
-      "cnCode": "IP'",
+      "limitParam": "30",
+      "code": "comboName",
+      "limitErrInfo": "套餐名称不能超过30",
+      "cnCode": "套餐名称",
       "limit": "maxLength",
       "show": true,
       "inputType": "input",
       "required": true,
-      "desc": "必填，IP"
+      "desc": "必填，套餐名称"
     }
   ],
   "searchName": "编号",
-  "directories": "admin",
-  "searchCode": "id",
-  "templateCode": "wafIpBlackWhite",
+  "directories": "property",
+  "searchCode": "comboId",
+  "templateCode": "feeCombo",
   "conditions": [
     {
       "whereCondition": "equal",
-      "code": "id",
-      "name": "编号",
+      "code": "comboId",
+      "name": "套餐ID",
       "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "typeCd",
-      "name": "类型",
-      "inputType": "select",
-      "selectValue":"B,W",
-      "selectValueName":"黑名单,白名单"
+      "code": "comboName",
+      "name": "套餐名称",
+      "inputType": "input"
     },
     {
       "whereCondition": "equal",
-      "code": "ip",
-      "name": "IP",
+      "code": "communityId",
+      "name": "小区ID",
       "inputType": "input"
     }
   ],
-  "templateKey": "id"
+  "templateKey": "comboId"
 }

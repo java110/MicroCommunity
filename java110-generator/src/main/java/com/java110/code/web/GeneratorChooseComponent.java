@@ -40,18 +40,18 @@ public class GeneratorChooseComponent extends BaseGenerator {
 
         StringBuffer thSb = new StringBuffer();
         StringBuffer tdSb = new StringBuffer();
-        thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + data.getString("templateKeyName") + "' namespace='choose"+data.getString("templateCode")+"'></vc:i18n><span></th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='" + data.getString("templateKeyName") + "' namespace='choose"+data.getString("templateCode")+"'></vc:i18n></span></th>\n");
 
         tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + data.getString("templateKey") + "}}</td>\n");
 
         JSONArray columns = data.getJSONArray("columns");
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + column.getString("cnCode") + "' namespace='choose"+data.getString("templateCode")+"'></vc:i18n><span> </th>\n");
+            thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='" + column.getString("cnCode") + "' namespace='choose"+data.getString("templateCode")+"'></vc:i18n></span> </th>\n");
 
             tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
         }
-        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='操作'></i18n></span></th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='操作'></vc:i18n></span></th>\n");
 
         fileContext = fileContext.replace("@@columnsCnCode@@", thSb.toString())
                 .replace("@@columnsName@@", tdSb.toString());

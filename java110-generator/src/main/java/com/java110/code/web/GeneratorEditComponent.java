@@ -57,12 +57,12 @@ public class GeneratorEditComponent extends BaseGenerator {
 
                     String value = selectValues[valueIndex];
 
-                    option += "<option  value=\"" + value + "\"><span><vc:i18n name='" + selectValueNames[valueIndex] + "' namespace='edit"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span> </option>\n";
+                    option += "<option  value=\"" + value + "\">{{vc.i18n('" + selectValueNames[valueIndex] + "' ,'edit"+toUpperCaseFirstOne(data.getString("templateCode"))+"')}} </option>\n";
 
                 }
 
                 inputStr = "<select class=\"custom-select\" v-model=\"edit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">\n" +
-                        "         <option selected  disabled value=\"\"> <span><vc:i18n name='" + required + "，请选择" + column.getString("cnCode") + "' namespace='edit"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></option>\n" +
+                        "         <option selected  disabled value=\"\">{{vc.i18n('" + required + "，请选择" + column.getString("cnCode") + "' ,'edit"+toUpperCaseFirstOne(data.getString("templateCode"))+"')}}</option>\n" +
                         "         " + option +
                         "  </select>";
             } else if ("textarea".equals(column.getString("inputType"))) {

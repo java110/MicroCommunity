@@ -47,7 +47,7 @@ public class GeneratorViewComponent extends BaseGenerator {
 
             thSb.append("<div class=\"col-sm-4\">\n" +
                     "                        <div class=\"form-group\">\n" +
-                    "                            <label class=\"col-form-label\" > <span><vc:i18n='" + column.getString("cnCode") + "' namespace='view"+data.getString("templateCode")+"Info'></vc:i18n><span>：</label>\n" +
+                    "                            <label class=\"col-form-label\" > <span><vc:i18n name='" + column.getString("cnCode") + "' namespace='view"+data.getString("templateCode")+"Info'></vc:i18n></span>：</label>\n" +
                     "                            <label class=\"\">{{view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "}}</label>\n" +
                     "                        </div>\n" +
                     "</div>\n");

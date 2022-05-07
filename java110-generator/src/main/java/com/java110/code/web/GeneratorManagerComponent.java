@@ -139,7 +139,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
         StringBuffer thSb = new StringBuffer();
         StringBuffer tdSb = new StringBuffer();
-        thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + data.getString("templateKeyName") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n><span></th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='" + data.getString("templateKeyName") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n></span></th>\n");
 
         tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + data.getString("templateKey") + "}}</td>\n");
 
@@ -147,16 +147,16 @@ public class GeneratorManagerComponent extends BaseGenerator {
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
             if (column.getBoolean("show")) {
-                thSb.append("                            <th class=\"text-center\"><span><vc:i18n='" + column.getString("cnCode") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n><span></th>\n");
+                thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='" + column.getString("cnCode") + "' namespace='"+data.getString("templateCode")+"Manage'></vc:i18n></span></th>\n");
                 tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
             }
         }
-        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='操作'></i18n></span></th>\n");
+        thSb.append("                            <th class=\"text-center\"><span><vc:i18n name='操作'></vc:i18n></span></th>\n");
         tdSb.append("                            <td class=\"text-center\"><div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='修改'></i18n></span></button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='修改'></vc:i18n></span></button>\n" +
                 "                                </div>\n" +
                 "                                <div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='删除'></i18n></span></button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\"><span><vc:i18n name='删除'></vc:i18n></span></button>\n" +
                 "                                </div></td>\n");
 
         fileContext = fileContext.replace("@@columnsCnCode@@", thSb.toString())

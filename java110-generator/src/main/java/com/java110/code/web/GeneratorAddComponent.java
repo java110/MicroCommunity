@@ -78,12 +78,12 @@ public class GeneratorAddComponent extends BaseGenerator {
 
                     String value = selectValues[valueIndex];
 
-                    option += "<option  value=\"" + value + "\"><span><vc:i18n name='" + selectValueNames[valueIndex] + "' namespace='add"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></option>\n";
+                    option += "<option  value=\"" + value + "\">{{vc.i18n('" + selectValueNames[valueIndex] + "','add"+toUpperCaseFirstOne(data.getString("templateCode"))+"')}}</option>\n";
 
                 }
 
                 inputStr = "<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">\n" +
-                        "         <option selected  disabled value=\"\"><span><vc:i18n name='" + required + "，请选择" + column.getString("cnCode") + "' namespace='add"+toUpperCaseFirstOne(data.getString("templateCode"))+"'></vc:i18n></span></option>\n" +
+                        "         <option selected  disabled value=\"\">{{vc.i18n('" + required + "，请选择" + column.getString("cnCode") + "','add"+toUpperCaseFirstOne(data.getString("templateCode"))+"')}}</option>\n" +
                         "         " + option +
                         "  </select>";
             } else if ("textarea".equals(column.getString("inputType"))) {
