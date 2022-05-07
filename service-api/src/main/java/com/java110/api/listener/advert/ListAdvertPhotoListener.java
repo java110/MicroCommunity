@@ -119,7 +119,6 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
     private void getAdvertItem(List<AdvertDto> advertDtos, JSONArray advertPhotoAndVideos) {
         JSONObject photoAndVideo = null;
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for (AdvertDto advertDto : advertDtos) {
 
             AdvertItemDto advertItemDto = new AdvertItemDto();

@@ -141,7 +141,6 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
             return;
         }
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for(WorkflowDataFileDto tmpWorkflowDataFileDto: workflowDataFileDtos){
             tmpWorkflowDataFileDto.setRealFileName(imgUrl + tmpWorkflowDataFileDto.getRealFileName());
         }

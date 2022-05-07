@@ -205,6 +205,7 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
         }
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
+
         //查询app用户表
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
         if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {

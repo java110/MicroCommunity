@@ -372,7 +372,6 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         }
 
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(paramIn.getString("repairId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
