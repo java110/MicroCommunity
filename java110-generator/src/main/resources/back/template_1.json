@@ -1,55 +1,31 @@
 {
   "param": {
-    "area": "area",
-    "parkingType": "parking_type",
-    "num": "num",
-    "paId": "pa_id",
-    "psId": "ps_id",
-    "remark": "remark",
+    "configId": "config_id",
+    "comboId": "combo_id",
     "statusCd": "status_cd",
-    "state": "state",
-    "communityId": "community_id"
+    "communityId": "community_id",
+    "memberId": "member_id"
   },
-  "name": "parkingSpace",
+  "name": "feeComboMember",
   "shareColumn": "community_id",
-  "id": "psId",
-  "shareName": "community",
+  "id": "comboId",
+  "shareName": "fee",
   "autoMove": true,
   "required": [
     {
-      "msg": "车位ID不能为空",
-      "code": "psId"
+      "msg": "套餐不能为空",
+      "code": "comboId"
+    },
+    {
+      "msg": "费用项不能为空",
+      "code": "configId"
     },
     {
       "msg": "小区ID不能为空",
       "code": "communityId"
-    },
-    {
-      "msg": "车位编号不能为空",
-      "code": "num"
-    },
-    {
-      "msg": "停车场ID不能为空",
-      "code": "paId"
-    },
-    {
-      "msg": "车位状态不能为空",
-      "code": "state"
-    },
-    {
-      "msg": "车位面积不能为空",
-      "code": "area"
-    },
-    {
-      "msg": "数据状态不能为空",
-      "code": "statusCd"
-    },
-    {
-      "msg": "1：普通车位不能为空",
-      "code": "parkingType"
     }
   ],
-  "desc": "车位",
+  "desc": "套餐成员",
   "shareParam": "communityId",
-  "tableName": "parking_space"
+  "tableName": "fee_combo_member"
 }
