@@ -20,7 +20,7 @@
 
 ### 分支说明（branch）
 
-分支管理说明，master 为主分支，0.8-stable 为最新稳定分支（推荐使用）
+分支管理说明，master 为主分支，1.1-stable 为最新稳定分支（推荐使用）
 
 
 ### 如何开始（how to start）
