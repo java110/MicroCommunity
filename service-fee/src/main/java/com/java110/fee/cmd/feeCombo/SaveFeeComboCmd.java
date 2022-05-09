@@ -15,6 +15,7 @@
  */
 package com.java110.fee.cmd.feeCombo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.fee.IFeeComboMemberV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeComboV1InnerServiceSMO;
 import com.java110.po.feeCombo.FeeComboPo;
+import com.java110.po.feeComboMember.FeeComboMemberPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,11 +54,13 @@ public class SaveFeeComboCmd extends AbstractServiceCmdListener {
 
     @Autowired
     private IFeeComboV1InnerServiceSMO feeComboV1InnerServiceSMOImpl;
+    @Autowired
+    private IFeeComboMemberV1InnerServiceSMO feeComboMemberV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "comboName", "请求报文中未包含comboName");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -63,14 +68,34 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       FeeComboPo feeComboPo = BeanConvertUtil.covertBean(reqJson, FeeComboPo.class);
+        FeeComboPo feeComboPo = BeanConvertUtil.covertBean(reqJson, FeeComboPo.class);
         feeComboPo.setComboId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = feeComboV1InnerServiceSMOImpl.saveFeeCombo(feeComboPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        if(!reqJson.containsKey("configIds")){
+            return ;
+        }
+
+        JSONArray configIds = reqJson.getJSONArray("configIds");
+        FeeComboMemberPo feeComboMemberPo = null;
+        for(int configIndex = 0; configIndex < configIds.size() ; configIndex ++){
+            feeComboMemberPo = new FeeComboMemberPo();
+            feeComboMemberPo.setComboId(feeComboPo.getComboId());
+            feeComboMemberPo.setCommunityId(reqJson.getString("communityId"));
+            feeComboMemberPo.setConfigId(configIds.getString(configIndex));
+            feeComboMemberPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+
+            flag = feeComboMemberV1InnerServiceSMOImpl.saveFeeComboMember(feeComboMemberPo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+        }
+
+
     }
 }
