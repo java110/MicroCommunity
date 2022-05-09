@@ -23,6 +23,9 @@ private String communityId;
 
     private String statusCd = "0";
 
+    private String remark;
+
+
 
     public String getComboName() {
         return comboName;
@@ -58,5 +61,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
