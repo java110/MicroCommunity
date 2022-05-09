@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：feeComboMember.deleteFeeComboMember
@@ -43,15 +44,15 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "feeComboMember.deleteFeeComboMember")
 public class DeleteFeeComboMemberCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteFeeComboMemberCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteFeeComboMemberCmd.class);
 
     @Autowired
     private IFeeComboMemberV1InnerServiceSMO feeComboMemberV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "comboId", "comboId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "memberId", "memberId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       FeeComboMemberPo feeComboMemberPo = BeanConvertUtil.covertBean(reqJson, FeeComboMemberPo.class);
+        FeeComboMemberPo feeComboMemberPo = BeanConvertUtil.covertBean(reqJson, FeeComboMemberPo.class);
         int flag = feeComboMemberV1InnerServiceSMOImpl.deleteFeeComboMember(feeComboMemberPo);
 
         if (flag < 1) {

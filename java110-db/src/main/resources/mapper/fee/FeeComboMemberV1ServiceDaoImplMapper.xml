@@ -61,13 +61,13 @@ order by t.create_time desc
 <if test="communityId !=null and communityId != ''">
 , t.community_id= #{communityId}
 </if> 
-<if test="memberId !=null and memberId != ''">
-, t.member_id= #{memberId}
-</if> 
+
  where 1=1 <if test="comboId !=null and comboId != ''">
 and t.combo_id= #{comboId}
-</if> 
-
+</if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
     </update>
 
     <!-- 查询套餐成员数量 add by wuxw 2018-07-03 -->

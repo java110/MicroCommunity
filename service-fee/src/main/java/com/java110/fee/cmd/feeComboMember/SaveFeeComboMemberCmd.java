@@ -65,7 +65,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
        FeeComboMemberPo feeComboMemberPo = BeanConvertUtil.covertBean(reqJson, FeeComboMemberPo.class);
-        feeComboMemberPo.setComboId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        feeComboMemberPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = feeComboMemberV1InnerServiceSMOImpl.saveFeeComboMember(feeComboMemberPo);
 
         if (flag < 1) {
