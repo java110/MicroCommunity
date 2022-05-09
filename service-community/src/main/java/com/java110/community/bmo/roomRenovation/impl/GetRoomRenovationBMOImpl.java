@@ -2,7 +2,7 @@ package com.java110.community.bmo.roomRenovation.impl;
 
 import com.java110.community.bmo.roomRenovation.IGetRoomRenovationBMO;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
-import com.java110.intf.IRoomRenovationInnerServiceSMO;
+import com.java110.intf.community.IRoomRenovationInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

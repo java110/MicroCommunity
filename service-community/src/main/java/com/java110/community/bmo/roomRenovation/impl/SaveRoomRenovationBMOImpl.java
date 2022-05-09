@@ -3,7 +3,7 @@ package com.java110.community.bmo.roomRenovation.impl;
 import com.java110.community.bmo.roomRenovation.ISaveRoomRenovationBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.IRoomRenovationInnerServiceSMO;
+import com.java110.intf.community.IRoomRenovationInnerServiceSMO;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
