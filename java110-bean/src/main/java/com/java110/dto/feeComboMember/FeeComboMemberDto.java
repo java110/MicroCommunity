@@ -1,6 +1,8 @@
 package com.java110.dto.feeComboMember;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeConfigDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class FeeComboMemberDto extends PageDto implements Serializable {
+public class FeeComboMemberDto extends FeeConfigDto implements Serializable {
 
     private String configId;
 private String comboId;
