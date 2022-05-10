@@ -472,6 +472,12 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 templateMessage.setData(data);
                 //获取业主公众号地址
                 String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                if(!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")){
+                    wechatUrl += ("&wAppId=" + weChatDto.getAppId());
+                }else{
+                    wechatUrl += ("?wAppId=" + weChatDto.getAppId());
+                }
+
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
