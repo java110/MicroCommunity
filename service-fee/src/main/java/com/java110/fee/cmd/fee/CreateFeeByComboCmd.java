@@ -275,8 +275,8 @@ public class CreateFeeByComboCmd extends AbstractServiceCmdListener {
         businessUnit.put("startTime", config.getString("startTime"));
         businessUnit.put("endTime", config.getString("startTime"));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
-        businessUnit.put("payerObjId", config.getString("payerObjId"));
-        businessUnit.put("payerObjType", config.getString("payerObjType"));
+        businessUnit.put("payerObjId", paramInJson.getString("payerObjId"));
+        businessUnit.put("payerObjType", paramInJson.getString("payerObjType"));
         businessUnit.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         businessUnit.put("state", "2008001");
         businessUnit.put("batchId", paramInJson.getString("batchId"));
