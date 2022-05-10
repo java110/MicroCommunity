@@ -30,7 +30,7 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_OWNER_LINK = "390009";//业主联系方式
     public static final String SPEC_CD_CAR_INOUT_ID = "390011";//车辆进场编号
     public static final String SPEC_CD_PAY_OBJECT_NAME = "390012";//付费对象名称
-    public static final String SPEC_CD_COMBO_ID = "390015";//费用套餐ID
+    public static final String SPEC_CD_COMBO_ID = "390013";//费用套餐ID
 
 
 
