@@ -206,7 +206,10 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
-            dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
+            //解决合同bug 只有 资产变更时 操作 合同房屋
+            if(ContractChangePlanDto.PLAN_TYPE_CHANGE_ROOM.equals(contractChangePlanDtos.get(0).getPlanType())){
+                dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
+            }
 
         } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
