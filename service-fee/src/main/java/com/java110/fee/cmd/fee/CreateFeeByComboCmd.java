@@ -127,7 +127,7 @@ public class CreateFeeByComboCmd extends AbstractServiceCmdListener {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
-        feeConfigDto.setConfigId(reqJson.getString("configId"));
+        feeConfigDto.setConfigId(config.getString("configId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
 
