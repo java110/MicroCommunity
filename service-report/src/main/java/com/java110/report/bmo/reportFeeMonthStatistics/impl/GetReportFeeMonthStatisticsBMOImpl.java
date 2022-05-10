@@ -287,6 +287,11 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryFeeDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+
+
+        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear()+"");
+        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth()+"");
+
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetailCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
