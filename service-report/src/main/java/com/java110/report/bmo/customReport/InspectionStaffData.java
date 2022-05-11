@@ -10,7 +10,7 @@ import java.util.*;
 
 public class InspectionStaffData implements ReportExecute {
 
-    public JSONObject hasInTd(JSONArray tds, Map<String, Object> dataObj) {
+    public JSONObject hasInTd(JSONArray tds, Map dataObj) {
 
         if (tds == null || tds.size() < 1) {
             return null;
@@ -27,7 +27,6 @@ public class InspectionStaffData implements ReportExecute {
 
     }
 
-    @Override
     public JSONObject execute(JSONObject params, IQueryServiceDAO queryServiceDAOImpl) {
 
         JSONObject paramOut = new JSONObject();
@@ -94,7 +93,7 @@ public class InspectionStaffData implements ReportExecute {
         sql += "GROUP BY t.staff_name ,ipo.inspection_name";
 
 
-        List<Map<String, Object>> datas = queryServiceDAOImpl.executeSql(sql, sqlParams.toArray());
+        List datas = queryServiceDAOImpl.executeSql(sql, sqlParams.toArray());
 
         if (datas == null || datas.size() < 1) {
             paramOut.put("td", new JSONArray());
@@ -104,7 +103,8 @@ public class InspectionStaffData implements ReportExecute {
 
         JSONArray tds = new JSONArray();
         JSONObject td = null;
-        for (Map<String, Object> dataObj : datas) {
+        for (int dataIndex = 0 ; dataIndex < datas.size() ; dataIndex ++ ){
+            Map dataObj = (Map)datas.get(dataIndex);
             td = hasInTd(tds, dataObj);
 
             if (td == null) {
