@@ -353,8 +353,8 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             //JSONObject params = dataQuery.getRequestParams();
             Interpreter interpreter = new Interpreter();
             interpreter.eval(javaCode);
-            interpreter.set("params", new Object[]{params,queryServiceDAOImpl});
-            //interpreter.set("queryServiceDAOImpl",queryServiceDAOImpl);
+            interpreter.set("params", params.toJSONString());
+            interpreter.set("queryServiceDAOImpl",queryServiceDAOImpl);
             return JSONObject.parseObject(interpreter.eval("execute(params,queryServiceDAOImpl)").toString());
         } catch (Exception e) {
             logger.error("数据交互异常：", e);

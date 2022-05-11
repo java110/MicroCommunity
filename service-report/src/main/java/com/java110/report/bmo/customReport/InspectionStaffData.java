@@ -27,7 +27,9 @@ public class InspectionStaffData implements ReportExecute {
 
     }
 
-    public JSONObject execute(JSONObject params, IQueryServiceDAO queryServiceDAOImpl) {
+    public JSONObject execute(String paramStr, IQueryServiceDAO queryServiceDAOImpl) {
+
+        JSONObject params = JSONObject.parseObject(paramStr);
 
         JSONObject paramOut = new JSONObject();
         JSONArray th = new JSONArray();

@@ -6,5 +6,5 @@ import com.java110.service.context.DataQuery;
 
 public interface ReportExecute {
 
-    JSONObject execute(JSONObject params,IQueryServiceDAO queryServiceDAOImpl);
+    JSONObject execute(String params,IQueryServiceDAO queryServiceDAOImpl);
 }
