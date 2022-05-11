@@ -354,7 +354,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             List<String> columns = new ArrayList<>();
             Interpreter interpreter = new Interpreter();
             interpreter.eval(javaCode);
-            interpreter.set("params", params.toJSONString());
+            interpreter.set("params", params);
             interpreter.set("queryServiceDAOImpl",queryServiceDAOImpl);
             JSONObject results = JSONObject.parseObject(interpreter.eval("execute(params,queryServiceDAOImpl)").toString());
 

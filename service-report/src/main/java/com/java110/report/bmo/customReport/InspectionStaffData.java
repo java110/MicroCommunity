@@ -27,9 +27,8 @@ public class InspectionStaffData implements ReportExecute {
 
     }
 
-    public String execute(String paramStr, IQueryServiceDAO queryServiceDAOImpl) {
+    public String execute(JSONObject params, IQueryServiceDAO queryServiceDAOImpl) {
         JSONObject paramOut = new JSONObject();
-        JSONObject params = JSONObject.parseObject(paramStr);
 
         List sqlParams = new ArrayList();
         String sql = "select \n" +
@@ -106,7 +105,7 @@ public class InspectionStaffData implements ReportExecute {
             td = hasInTd(tds, dataObj);
 
             if (td == null) {
-                td = new JSONObject();
+                td = new JSONObject(true);
                 td.put("员工", dataObj.get("员工"));
                 tds.add(td);
             }
