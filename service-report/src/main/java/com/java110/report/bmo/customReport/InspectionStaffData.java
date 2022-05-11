@@ -27,13 +27,9 @@ public class InspectionStaffData implements ReportExecute {
 
     }
 
-    public JSONObject execute(String paramStr, IQueryServiceDAO queryServiceDAOImpl) {
-
-        JSONObject params = JSONObject.parseObject(paramStr);
-
+    public String execute(String paramStr, IQueryServiceDAO queryServiceDAOImpl) {
         JSONObject paramOut = new JSONObject();
-        JSONArray th = new JSONArray();
-        th.add("员工");
+        JSONObject params = JSONObject.parseObject(paramStr);
 
         List sqlParams = new ArrayList();
         String sql = "select \n" +
@@ -98,15 +94,15 @@ public class InspectionStaffData implements ReportExecute {
         List datas = queryServiceDAOImpl.executeSql(sql, sqlParams.toArray());
 
         if (datas == null || datas.size() < 1) {
-            paramOut.put("td", new JSONArray());
-
-            return paramOut;
+            paramOut.put("toatl",1);
+            paramOut.put("data",new JSONArray());
+            return paramOut.toJSONString();
         }
 
         JSONArray tds = new JSONArray();
         JSONObject td = null;
-        for (int dataIndex = 0 ; dataIndex < datas.size() ; dataIndex ++ ){
-            Map dataObj = (Map)datas.get(dataIndex);
+        for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
+            Map dataObj = (Map) datas.get(dataIndex);
             td = hasInTd(tds, dataObj);
 
             if (td == null) {
@@ -119,17 +115,10 @@ public class InspectionStaffData implements ReportExecute {
             td.put("状态", dataObj.get("状态"));
         }
 
-        for (String key : tds.getJSONObject(0).keySet()) {
-            if ("员工".equals(key)) {
-                continue;
-            }
-            th.add(key);
-        }
+        paramOut.put("total",params.get("row"));
+        paramOut.put("data",tds);
 
-
-        paramOut.put("th", th);
-        paramOut.put("td", tds);
-        return paramOut;
+        return paramOut.toJSONString();
     }
 
 
