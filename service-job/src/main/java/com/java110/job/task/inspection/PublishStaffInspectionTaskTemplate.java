@@ -192,6 +192,13 @@ public class PublishStaffInspectionTaskTemplate extends TaskSystemQuartz {
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
         logger.info("微信模板返回内容:{}", responseEntity);
 
+
+        InspectionTaskDetailDto inspectionTaskDetailPo = new InspectionTaskDetailDto();
+        inspectionTaskDetailPo.setTaskDetailId(inspectionTaskDetailDto.getTaskDetailId());
+        inspectionTaskDetailPo.setSendFlag(InspectionTaskDetailDto.SEND_FLAG_Y);
+        inspectionTaskDetailDto.setStatusCd("0");
+        inspectionTaskDetailInnerServiceSMOImpl.updateInspectionTaskDetail(inspectionTaskDetailPo);
+
     }
 
 }
