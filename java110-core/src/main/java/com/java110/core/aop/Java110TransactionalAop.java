@@ -4,6 +4,7 @@ import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.order.OrderDto;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.StringUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -42,36 +43,7 @@ public class Java110TransactionalAop {
      */
     @Before("dataProcess()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
-        // 接收到请求，记录请求内容
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        OrderDto orderDto = new OrderDto();
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = request.getHeader(key);
-            logger.debug("请求头信息 key= " + key+",value = "+value);
 
-            key = key.toLowerCase();
-            if (CommonConstant.APP_ID.equals(key) || CommonConstant.HTTP_APP_ID.equals(key)) {
-                orderDto.setAppId(value);
-            }
-            if (CommonConstant.TRANSACTION_ID.equals(key)|| CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
-                orderDto.setExtTransactionId(value);
-            }
-            if (CommonConstant.REQUEST_TIME.equals(key)|| CommonConstant.HTTP_REQ_TIME.equals(key)) {
-                orderDto.setRequestTime(value);
-            }
-            if (OrderDto.O_ID.equals(key)) {
-                orderDto.setoId(value);
-            }
-            if (CommonConstant.USER_ID.equals(key)|| CommonConstant.HTTP_USER_ID.equals(key)) {
-                orderDto.setUserId(value);
-            }
-        }
-        orderDto.setOrderTypeCd(OrderDto.ORDER_TYPE_DEAL);
-        //全局事务ID申请
-        Java110TransactionalFactory.getOrCreateOId(orderDto);
     }
 
     @AfterReturning(returning = "ret", pointcut = "dataProcess()")
@@ -99,6 +71,40 @@ public class Java110TransactionalAop {
     @Around("dataProcess()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Object o = null;
+        // 接收到请求，记录请求内容
+        String curOId = Java110TransactionalFactory.getOId();
+        if (StringUtil.isEmpty(curOId)) {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest request = attributes.getRequest();
+            Enumeration<String> headerNames = request.getHeaderNames();
+            OrderDto orderDto = new OrderDto();
+            while (headerNames.hasMoreElements()) {
+                String key = (String) headerNames.nextElement();
+                String value = request.getHeader(key);
+                logger.debug("请求头信息 key= " + key + ",value = " + value);
+
+                key = key.toLowerCase();
+                if (CommonConstant.APP_ID.equals(key) || CommonConstant.HTTP_APP_ID.equals(key)) {
+                    orderDto.setAppId(value);
+                }
+                if (CommonConstant.TRANSACTION_ID.equals(key) || CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
+                    orderDto.setExtTransactionId(value);
+                }
+                if (CommonConstant.REQUEST_TIME.equals(key) || CommonConstant.HTTP_REQ_TIME.equals(key)) {
+                    orderDto.setRequestTime(value);
+                }
+                if (OrderDto.O_ID.equals(key)) {
+                    orderDto.setoId(value);
+                }
+                if (CommonConstant.USER_ID.equals(key) || CommonConstant.HTTP_USER_ID.equals(key)) {
+                    orderDto.setUserId(value);
+                }
+            }
+            orderDto.setOrderTypeCd(OrderDto.ORDER_TYPE_DEAL);
+            //全局事务ID申请
+            Java110TransactionalFactory.getOrCreateOId(orderDto);
+        }
+
         try {
             o = pjp.proceed();
             //观察者不做处理
@@ -106,7 +112,9 @@ public class Java110TransactionalAop {
                 return o;
             }
             //完成事务
-            Java110TransactionalFactory.finishOId();
+            if (StringUtil.isEmpty(curOId)) {
+                Java110TransactionalFactory.finishOId();
+            }
             return o;
         } catch (Throwable e) {
             logger.error("执行方法异常", e);
@@ -114,7 +122,7 @@ public class Java110TransactionalAop {
             Java110TransactionalFactory.fallbackOId();
             //return new BusinessDto(BusinessDto.CODE_ERROR, "内部异常" + e.getLocalizedMessage());
             throw e;
-        }finally {
+        } finally {
             //清理事务信息
             Java110TransactionalFactory.clearOId();
         }

@@ -88,6 +88,7 @@ public class Java110TransactionalFactory {
     }
 
     public static String getOrCreateOId(OrderDto orderDto) {
+
         //全局事务开启者
         if (StringUtils.isEmpty(orderDto.getoId())) {
             createOId(orderDto);
