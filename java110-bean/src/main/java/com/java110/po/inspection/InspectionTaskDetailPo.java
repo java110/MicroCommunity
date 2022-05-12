@@ -40,6 +40,8 @@ public class InspectionTaskDetailPo implements Serializable {
     private String actUserId;
     private String actUserName;
 
+    private String sendFlag;
+
     public String getTaskDetailId() {
         return taskDetailId;
     }
@@ -174,5 +176,13 @@ public class InspectionTaskDetailPo implements Serializable {
 
     public void setActUserName(String actUserName) {
         this.actUserName = actUserName;
+    }
+
+    public String getSendFlag() {
+        return sendFlag;
+    }
+
+    public void setSendFlag(String sendFlag) {
+        this.sendFlag = sendFlag;
     }
 }

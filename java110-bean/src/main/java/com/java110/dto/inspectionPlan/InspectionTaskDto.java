@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class InspectionTaskDto extends PageDto implements Serializable {
 
+    public static final String STATE_NO_START = "20200405";
+
     private String planUserId;
     private String actInsTime;
     private String planInsTime;
