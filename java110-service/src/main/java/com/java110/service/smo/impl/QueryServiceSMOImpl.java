@@ -4,6 +4,7 @@ import bsh.Interpreter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.entity.service.ServiceSql;
@@ -356,7 +357,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             interpreter.eval(javaCode);
             interpreter.set("params", params);
             interpreter.set("queryServiceDAOImpl",queryServiceDAOImpl);
-            JSONObject results = JSONObject.parseObject(interpreter.eval("execute(params,queryServiceDAOImpl)").toString());
+            JSONObject results = JSONObject.parseObject(interpreter.eval("execute(params,queryServiceDAOImpl)").toString(), Feature.OrderedField);
 
             JSONArray data = null;
             if (results == null || results.size() < 1) {
