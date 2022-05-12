@@ -119,7 +119,9 @@ public class Java110TransactionalAop {
         } catch (Throwable e) {
             logger.error("执行方法异常", e);
             //回退事务
-            Java110TransactionalFactory.fallbackOId();
+            if (StringUtil.isEmpty(curOId)) {
+                Java110TransactionalFactory.fallbackOId();
+            }
             //return new BusinessDto(BusinessDto.CODE_ERROR, "内部异常" + e.getLocalizedMessage());
             throw e;
         } finally {
