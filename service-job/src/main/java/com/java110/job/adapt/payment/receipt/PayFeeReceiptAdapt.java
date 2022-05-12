@@ -89,6 +89,10 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+
+        if(data != null){
+            logger.debug("请求日志:{}",data);
+        }
         JSONArray businessPayFeeDetails = null;
         if (data == null) {
             FeeDetailDto feeDetailDto = new FeeDetailDto();
