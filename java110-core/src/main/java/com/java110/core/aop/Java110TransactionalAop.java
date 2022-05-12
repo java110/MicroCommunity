@@ -123,8 +123,11 @@ public class Java110TransactionalAop {
             //return new BusinessDto(BusinessDto.CODE_ERROR, "内部异常" + e.getLocalizedMessage());
             throw e;
         } finally {
-            //清理事务信息
-            Java110TransactionalFactory.clearOId();
+            //完成事务
+            if (StringUtil.isEmpty(curOId)) {
+                //清理事务信息
+                Java110TransactionalFactory.clearOId();
+            }
         }
     }
 }
