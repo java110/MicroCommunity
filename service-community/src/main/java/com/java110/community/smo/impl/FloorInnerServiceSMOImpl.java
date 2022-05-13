@@ -1,6 +1,7 @@
 package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IFloorAttrServiceDao;
+import com.java110.dto.UnitDto;
 import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
@@ -142,6 +143,12 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
     @Override
     public int queryFloorsCount(@RequestBody FloorDto floorDto) {
         return floorServiceDaoImpl.queryFloorsCount(BeanConvertUtil.beanCovertMap(floorDto));
+    }
+
+    @Override
+    public List<UnitDto> queryFloorAndUnits(@RequestBody UnitDto unitDto) {
+
+        return BeanConvertUtil.covertBeanList(floorServiceDaoImpl.queryFloorAndUnits(BeanConvertUtil.beanCovertMap(unitDto)),UnitDto.class);
     }
 
 

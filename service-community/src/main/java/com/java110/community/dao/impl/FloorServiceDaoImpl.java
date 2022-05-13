@@ -1,6 +1,7 @@
 package com.java110.community.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.UnitDto;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
@@ -145,6 +146,15 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
         }
 
         return Integer.parseInt(businessFloorInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryFloorAndUnits(Map info) {
+        logger.debug("查询queryFloorAndUnits信息 入参 floorMap : {}", info);
+
+        List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.queryFloorAndUnits", info);
+
+        return businessFloorInfos;
     }
 
 
