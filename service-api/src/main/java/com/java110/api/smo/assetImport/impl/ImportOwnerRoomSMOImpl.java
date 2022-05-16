@@ -95,9 +95,9 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
 
-            if (!StringUtil.isNumber(importOwnerRoomDto.getLayer())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行楼层不是有效数字");
-            }
+//            if (!StringUtil.isNumber(importOwnerRoomDto.getLayer())) {
+//                throw new IllegalArgumentException((roomIndex + 1) + "行楼层不是有效数字");
+//            }
 
             if (!StringUtil.isNumber(importOwnerRoomDto.getLayerCount())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行总楼层不是有效数字");
