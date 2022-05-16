@@ -18,10 +18,13 @@ public class ComponentValidateResult {
         this.storeTypeCd = storeTypeCd;
         this.communityId = communityId;
         this.userId = userId;
+        this.loginUserId = userId;
         this.userName = userName;
     }
 
     private String userId;
+
+    private String loginUserId;
 
     private String userName;
 
@@ -72,5 +75,13 @@ public class ComponentValidateResult {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getLoginUserId() {
+        return loginUserId;
+    }
+
+    public void setLoginUserId(String loginUserId) {
+        this.loginUserId = loginUserId;
     }
 }

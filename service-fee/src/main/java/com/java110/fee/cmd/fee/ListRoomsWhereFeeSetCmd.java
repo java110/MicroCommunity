@@ -73,7 +73,7 @@ public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             //获取手机号、身份证号加密标识
             String flag = reqJson.getString("flag");
-            refreshRoomOwners(reqJson.getString("userId"), reqJson.getString("communityId"), roomDtoList, flag);
+            refreshRoomOwners(reqJson.getString("loginUserId"), reqJson.getString("communityId"), roomDtoList, flag);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         } else {

@@ -89,7 +89,7 @@ public class QueryRoomsCmd extends AbstractServiceCmdListener {
         List<RoomDto> roomDtoList = null;
         if (total > 0) {
             roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            refreshRoomOwners(reqJson.getString("userId"), reqJson.getString("communityId"), roomDtoList);
+            refreshRoomOwners(reqJson.getString("loginUserId"), reqJson.getString("communityId"), roomDtoList);
         } else {
             roomDtoList = new ArrayList<>();
         }
