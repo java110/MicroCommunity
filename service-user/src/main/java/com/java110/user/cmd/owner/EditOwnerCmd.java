@@ -97,7 +97,7 @@ public class EditOwnerCmd extends AbstractServiceCmdListener {
 
         String userValidate = MappingCache.getValue("USER_VALIDATE");
 
-        if("ON".equals(userValidate)){
+        if(!"ON".equals(userValidate)){
             return ;
         }
 
