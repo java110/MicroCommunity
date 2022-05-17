@@ -235,6 +235,11 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         //处理昵称有特殊符号导致 入库失败问题
         userinfo_paramObj.put("nickname", Base64Convert.byteToBase64(userinfo_paramObj.getString("nickname").getBytes()));
 
+        //公众号未绑定 开放平台
+        if (StringUtil.isEmpty(userinfo_paramObj.getString("unionid"))) {
+            userinfo_paramObj.put("unionid", "-1");
+        }
+
         int loginFlag = paramIn.getInteger("loginFlag");
 
         //说明是登录页面，下发code 就可以，不需要下发key 之类
