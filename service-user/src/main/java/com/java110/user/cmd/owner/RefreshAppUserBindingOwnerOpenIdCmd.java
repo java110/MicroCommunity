@@ -98,7 +98,7 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends AbstractServiceCmdListe
             userAttrPo.setSpecCd(UserAttrDto.SPEC_OPEN_ID);
             userAttrPo.setValue(reqJson.getString("openId"));
             userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
-            return ;
+            return;
         }
         UserAttrPo userAttrPo = new UserAttrPo();
         userAttrPo.setUserId(userId);
@@ -106,5 +106,31 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends AbstractServiceCmdListe
         userAttrPo.setSpecCd(UserAttrDto.SPEC_OPEN_ID);
         userAttrPo.setValue(reqJson.getString("openId"));
         userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
+
+        if (!reqJson.containsKey("unionId")) {
+            return;
+        }
+
+        userAttrDto = new UserAttrDto();
+        userAttrDto.setUserId(userId);
+        userAttrDto.setSpecCd(UserAttrDto.SPEC_UNION_ID);
+        userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
+        if (userAttrDtos == null || userAttrDtos.size() < 1) {
+            userAttrPo = new UserAttrPo();
+            userAttrPo.setUserId(userId);
+            userAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            userAttrPo.setSpecCd(UserAttrDto.SPEC_UNION_ID);
+            userAttrPo.setValue(reqJson.getString("unionId"));
+            userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
+            return;
+        }
+        userAttrPo = new UserAttrPo();
+        userAttrPo.setUserId(userId);
+        userAttrPo.setAttrId(userAttrDtos.get(0).getAttrId());
+        userAttrPo.setSpecCd(UserAttrDto.SPEC_UNION_ID);
+        userAttrPo.setValue(reqJson.getString("unionId"));
+        userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
+
+
     }
 }
