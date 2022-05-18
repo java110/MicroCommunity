@@ -255,6 +255,8 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             } else {
                 errorUrl += ("?code=" + code);
             }
+            logger.debug("登录跳转url:{}", errorUrl);
+
             return ResultVo.redirectPage(errorUrl);
         }
 
@@ -272,6 +274,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             CommonCache.setValue(code, openId, expireTime);
             CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
             CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-unionid", userinfo_paramObj.getString("unionid"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -301,6 +304,8 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             CommonCache.setValue(code, openId, expireTime);
             CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
             CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-unionid", userinfo_paramObj.getString("unionid"), expireTime);
+
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
