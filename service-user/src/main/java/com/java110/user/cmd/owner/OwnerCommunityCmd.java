@@ -81,6 +81,7 @@ public class OwnerCommunityCmd extends AbstractServiceCmdListener {
                     continue;
                 }
                 tmpOwnerDto.setCommunityName(tmpCommunityDto.getName());
+                tmpOwnerDto.setsCommunityTel(tmpCommunityDto.getTel());
             }
         }
 
