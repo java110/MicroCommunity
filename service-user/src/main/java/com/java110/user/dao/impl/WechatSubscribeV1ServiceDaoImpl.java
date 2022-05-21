@@ -83,6 +83,20 @@ public class WechatSubscribeV1ServiceDaoImpl extends BaseServiceDao implements I
 
         return businessWechatSubscribeInfos;
     }
+    /**
+     * 查询微信关注信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryDistinctWechatSubscribes(Map info) throws DAOException {
+        logger.debug("查询 queryDistinctWechatSubscribes 入参 info : {}",info);
+
+        List<Map> businessWechatSubscribeInfos = sqlSessionTemplate.selectList("wechatSubscribeV1ServiceDaoImpl.queryDistinctWechatSubscribes",info);
+
+        return businessWechatSubscribeInfos;
+    }
 
 
     /**

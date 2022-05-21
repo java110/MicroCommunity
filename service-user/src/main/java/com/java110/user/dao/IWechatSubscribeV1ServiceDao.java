@@ -62,6 +62,17 @@ public interface IWechatSubscribeV1ServiceDao {
 
 
     /**
+     * 查询微信关注信息（instance过程）
+     * 根据bId 查询微信关注信息
+     * @param info bId 信息
+     * @return 微信关注信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryDistinctWechatSubscribes(Map info) throws DAOException;
+
+
+
+    /**
      * 修改微信关注信息
      * @param info 修改信息
      * @throws DAOException DAO异常

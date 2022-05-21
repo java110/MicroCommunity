@@ -347,7 +347,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             getAllOpenId(accessToken, "", weChatDto);
         }
 
-        List<WechatSubscribeDto> wechatSubscribeDtos = wechatSubscribeV1InnerServiceSMOImpl.queryWechatSubscribes(wechatSubscribeDto);
+        List<WechatSubscribeDto> wechatSubscribeDtos = wechatSubscribeV1InnerServiceSMOImpl.queryDistinctWechatSubscribes(wechatSubscribeDto);
 
         if (wechatSubscribeDtos == null || wechatSubscribeDtos.size() < 1) {
             return;
