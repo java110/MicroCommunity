@@ -191,7 +191,7 @@ public class RepairDispatchListener extends AbstractServiceApiPlusListener {
         repairUserDto.setStaffId(reqJson.getString("staffId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
         repairUserDto.setRuId(repairUserDtos.get(0).getPreRuId());
-        repairUserDto.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE});
+        repairUserDto.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE,RepairUserDto.STATE_STOP});
         repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
 
         if (repairUserDtos == null || repairUserDtos.size() < 1) {
