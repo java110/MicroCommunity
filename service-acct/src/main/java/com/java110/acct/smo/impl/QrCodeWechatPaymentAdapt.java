@@ -78,7 +78,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         paramMap.put("appid", shopSmallWeChatDto.getAppId());
         paramMap.put("mch_id", shopSmallWeChatDto.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
-        paramMap.put("body", systemName + feeName);
+        paramMap.put("body", feeName);
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());
@@ -111,7 +111,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("msg"));
+            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("err_code_des"));
         }
     }
 
@@ -135,10 +135,15 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
 
             SortedMap<String, String> paramMap = new TreeMap<String, String>();
             paramMap.put("appid", shopSmallWeChatDto.getAppId());
-            paramMap.put("mch_id", shopSmallWeChatDto.getMchId());
+            paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());
             paramMap.put("nonce_str", PayUtil.makeUUID(32));
             paramMap.put("out_trade_no", orderNum);
-            paramMap.put("sign", PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword()));
+            String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
+            if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
+                paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
+                paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户
+            }
+            paramMap.put("sign", PayUtil.createSign(paramMap, shopSmallWeChatDto.getPayPassword()));
 //转换为xml
             String xmlData = PayUtil.mapToXml(paramMap);
 

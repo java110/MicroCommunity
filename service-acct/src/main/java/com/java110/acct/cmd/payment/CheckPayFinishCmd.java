@@ -7,7 +7,6 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -35,7 +34,7 @@ public class CheckPayFinishCmd extends AbstractServiceCmdListener {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String orderId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId);
+        String orderId = reqJson.getString("orderId");
         double receivedAmount = Double.parseDouble(reqJson.getString("receivedAmount"));
         String authCode = reqJson.getString("authCode");
         if (StringUtil.isEmpty(authCode) || authCode.length() < 2) {
@@ -66,8 +65,8 @@ public class CheckPayFinishCmd extends AbstractServiceCmdListener {
         }
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
-        String paramOut = CallApiServiceFactory.postForApi(appId, reqJson.toJSONString(), "fee.payFee", String.class, userId);
-        cmdDataFlowContext.setResponseEntity(new ResponseEntity(paramOut, HttpStatus.OK));
+        JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
     }
 
 }
