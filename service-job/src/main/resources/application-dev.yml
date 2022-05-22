@@ -82,6 +82,14 @@ spring:
     encoding: UTF-8
     suffix: .html
     content-type: text/html
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 20000
+
 #  mvc:
 #    view:
 #      prefix: classpath:/templates/
