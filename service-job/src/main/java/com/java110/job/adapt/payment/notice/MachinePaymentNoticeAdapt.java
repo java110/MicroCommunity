@@ -512,6 +512,11 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             templateMessage.setData(data);
             //获取业主公众号地址
             String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            if(wechatUrl.contains("?")){
+                wechatUrl += ( "&wAppId="+smallWeChatDtos.get(0).getAppId());
+            }else{
+                wechatUrl += ( "?wAppId="+smallWeChatDtos.get(0).getAppId());
+            }
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

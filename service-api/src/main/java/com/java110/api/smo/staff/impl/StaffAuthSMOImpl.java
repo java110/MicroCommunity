@@ -2,25 +2,23 @@ package com.java110.api.smo.staff.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
+import com.java110.api.smo.staff.IStaffAuthSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.api.properties.WechatAuthProperties;
-import com.java110.api.smo.staff.IStaffAuthSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -141,6 +139,12 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         String openUrl = "";
         String url = MappingCache.getValue("OWNER_WECHAT_URL");
+
+        if (url.contains("?")) {
+            url += ("&wAppId=" + smallWeChatDto.getAppId());
+        } else {
+            url += ("?wAppId=" + smallWeChatDto.getAppId());
+        }
         try {
             openUrl = WechatConstant.OPEN_AUTH
                     .replace("APPID", smallWeChatDto.getAppId())
