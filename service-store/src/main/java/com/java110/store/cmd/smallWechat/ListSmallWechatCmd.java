@@ -22,12 +22,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.WechatFactory;
+import com.java110.dto.app.AppDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.po.smallWechat.SmallWechatPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
+import com.java110.vo.api.smallWeChat.ApiSmallWeChatVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import java.util.List;
@@ -48,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "smallWechat.listSmallWechat")
+@Java110Cmd(serviceCode = "smallWeChat.listSmallWeChats")
 public class ListSmallWechatCmd extends AbstractServiceCmdListener {
 
   private static Logger logger = LoggerFactory.getLogger(ListSmallWechatCmd.class);
@@ -63,22 +68,42 @@ public class ListSmallWechatCmd extends AbstractServiceCmdListener {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           SmallWeChatDto smallWechatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
+        String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
+        if (StringUtil.isEmpty(appId)) {
+            appId = cmdDataFlowContext.getReqHeaders().get("app-id");
+        }
+        SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(reqJson.getString("communityId"));
+        //smallWeChatDto.setWeChatType(reqJson.getString("wechatType"));
+        int count = smallWechatV1InnerServiceSMOImpl.querySmallWechatsCount(smallWeChatDto);
+        List<ApiSmallWeChatDataVo> smallWeChats = null;
+        if (count > 0) {
+            smallWeChats = BeanConvertUtil.covertBeanList(smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto), ApiSmallWeChatDataVo.class);
+            freshSecure(smallWeChats, appId);
+        } else {
+            smallWeChats = new ArrayList<>();
+        }
+        ApiSmallWeChatVo apiSmallWeChatVo = new ApiSmallWeChatVo();
+        apiSmallWeChatVo.setTotal(count);
+        apiSmallWeChatVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiSmallWeChatVo.setSmallWeChats(smallWeChats);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiSmallWeChatVo), HttpStatus.OK);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
 
-           int count = smallWechatV1InnerServiceSMOImpl.querySmallWechatsCount(smallWechatDto);
+    private void freshSecure(List<ApiSmallWeChatDataVo> smallWeChats, String appId) {
+//        if (OWNER_APP.equals(appId)) {
+//            return;
+//        }
 
-           List<SmallWeChatDto> smallWechatDtos = null;
+        for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
+            apiSmallWeChatDataVo.setwId(WechatFactory.getWId(apiSmallWeChatDataVo.getAppId()));
+            if (AppDto.WEB_APP_ID.equals(appId) || AppDto.WECHAT_MALL_APP_ID.equals(appId)) {
+                apiSmallWeChatDataVo.setAppSecret("");
+                apiSmallWeChatDataVo.setPayPassword("");
+            }
 
-           if (count > 0) {
-               smallWechatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWechatDto);
-           } else {
-               smallWechatDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, smallWechatDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        }
     }
 }

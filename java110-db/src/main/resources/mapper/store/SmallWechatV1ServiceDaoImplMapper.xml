@@ -18,9 +18,9 @@
     <!-- 查询微信配置表信息 add by wuxw 2018-07-03 -->
     <select id="getSmallWechatInfo" parameterType="Map" resultType="Map">
         select t.mch_id,t.mch_id mchId,t.status_cd,t.status_cd statusCd,t.store_Id,t.store_Id storeId,t.wechat_type,
-        t.wechat_type wechatType,t.cert_path,t.cert_path certPath,t.appId,t.appId appid,t.appSecret,t.appSecret
+        t.wechat_type wechatType,t.wechat_type weChatType,t.cert_path,t.cert_path certPath,t.appId,t.appId appid,t.appSecret,t.appSecret
         appsecret,
-        t.name,t.obj_id,t.obj_id objId,t.wechat_id,t.wechat_id wechatId,t.pay_password,t.pay_password payPassword,
+        t.name,t.obj_id,t.obj_id objId,t.wechat_id,t.wechat_id wechatId,t.wechat_id weChatId,t.pay_password,t.pay_password payPassword,
         t.obj_type,t.obj_type objType,t.remarks
         from small_wechat t
         where 1 =1
@@ -36,14 +36,23 @@
         <if test="wechatType !=null and wechatType != ''">
             and t.wechat_type= #{wechatType}
         </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
+        </if>
         <if test="certPath !=null and certPath != ''">
             and t.cert_path= #{certPath}
         </if>
         <if test="appid !=null and appid != ''">
             and t.appId= #{appid}
         </if>
+        <if test="appId !=null and appId != ''">
+            and t.appId= #{appId}
+        </if>
         <if test="appsecret !=null and appsecret != ''">
             and t.appSecret= #{appsecret}
+        </if>
+        <if test="appSecret !=null and appSecret != ''">
+            and t.appSecret= #{appSecret}
         </if>
         <if test="name !=null and name != ''">
             and t.name= #{name}
@@ -53,6 +62,9 @@
         </if>
         <if test="wechatId !=null and wechatId != ''">
             and t.wechat_id= #{wechatId}
+        </if>
+        <if test="weChatId !=null and weChatId != ''">
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="payPassword !=null and payPassword != ''">
             and t.pay_password= #{payPassword}
@@ -134,14 +146,23 @@
         <if test="wechatType !=null and wechatType != ''">
             and t.wechat_type= #{wechatType}
         </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
+        </if>
         <if test="certPath !=null and certPath != ''">
             and t.cert_path= #{certPath}
         </if>
         <if test="appid !=null and appid != ''">
             and t.appId= #{appid}
         </if>
+        <if test="appId !=null and appId != ''">
+            and t.appId= #{appId}
+        </if>
         <if test="appsecret !=null and appsecret != ''">
             and t.appSecret= #{appsecret}
+        </if>
+        <if test="appSecret !=null and appSecret != ''">
+            and t.appSecret= #{appSecret}
         </if>
         <if test="name !=null and name != ''">
             and t.name= #{name}
@@ -151,6 +172,9 @@
         </if>
         <if test="wechatId !=null and wechatId != ''">
             and t.wechat_id= #{wechatId}
+        </if>
+        <if test="weChatId !=null and weChatId != ''">
+            and t.wechat_id= #{weChatId}
         </if>
         <if test="payPassword !=null and payPassword != ''">
             and t.pay_password= #{payPassword}

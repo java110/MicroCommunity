@@ -68,7 +68,6 @@ public class SaveSmallWechatCmd extends AbstractServiceCmdListener {
         Assert.hasKeyAndValue(reqJson, "appId", "请求报文中未包含appId");
         Assert.hasKeyAndValue(reqJson, "appSecret", "请求报文中未包含appSecret");
         Assert.hasKeyAndValue(reqJson, "payPassword", "请求报文中未包含payPassword");
-        Assert.hasKeyAndValue(reqJson, "weChatType", "请求报文中未包含weChatType");
         Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId(小区id)");
         Assert.hasKeyAndValue(reqJson, "weChatType", "请求报文中未包含类型");
 
@@ -83,10 +82,11 @@ public class SaveSmallWechatCmd extends AbstractServiceCmdListener {
         }
 
         String wechatId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_weChatId);
-        reqJson.put("weChatId", wechatId);
+        reqJson.put("wechatId", wechatId);
         reqJson.put("objType", SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         SmallWechatPo smallWechatPo = BeanConvertUtil.covertBean(reqJson, SmallWechatPo.class);
         smallWechatPo.setWechatId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        smallWechatPo.setWechatType(reqJson.getString("weChatType"));
         int flag = smallWechatV1InnerServiceSMOImpl.saveSmallWechat(smallWechatPo);
 
         if (flag < 1) {
