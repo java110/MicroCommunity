@@ -11,6 +11,7 @@ import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
@@ -59,7 +60,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
 
     @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+    private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
 
 
     @Autowired
@@ -112,13 +113,13 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setMchId(onlinePayDtos.get(0).getMchId());
         smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
             payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
             certData = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "cert");
         } else {
             payPassword = smallWeChatDtos.get(0).getPayPassword();
-            certData = smallWeChatDtos.get(0).getRemarks();
+            certData = smallWeChatDtos.get(0).getCertPath();
 
         }
 
