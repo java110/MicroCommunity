@@ -10,7 +10,7 @@
         insert into small_wechat(
         mch_id,store_Id,wechat_type,cert_path,appId,appSecret,name,obj_id,wechat_id,pay_password,obj_type,remarks
         ) values (
-        #{mchId},#{storeId},#{wechatType},#{certPath},#{appid},#{appsecret},#{name},#{objId},#{wechatId},#{payPassword},#{objType},#{remarks}
+        #{mchId},#{storeId},#{wechatType},#{certPath},#{appId},#{appSecret},#{name},#{objId},#{wechatId},#{payPassword},#{objType},#{remarks}
         )
     </insert>
 
@@ -101,11 +101,11 @@
         <if test="certPath !=null and certPath != ''">
             , t.cert_path= #{certPath}
         </if>
-        <if test="appid !=null and appid != ''">
-            , t.appId= #{appid}
+        <if test="appId !=null and appId != ''">
+            , t.appId= #{appId}
         </if>
-        <if test="appsecret !=null and appsecret != ''">
-            , t.appSecret= #{appsecret}
+        <if test="appSecret !=null and appSecret != ''">
+            , t.appSecret= #{appSecret}
         </if>
         <if test="name !=null and name != ''">
             , t.name= #{name}
