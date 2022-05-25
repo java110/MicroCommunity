@@ -22,6 +22,7 @@ public class ApiSmallWeChatDataVo implements Serializable {
     private String mchId;
     private String objTypeName;
     private String wId;
+    private String certPath;
 
     public String getOperate() {
         return operate;
@@ -168,5 +169,13 @@ public class ApiSmallWeChatDataVo implements Serializable {
 
     public void setWechatId(String wechatId) {
         this.wechatId = wechatId;
+    }
+
+    public String getCertPath() {
+        return certPath;
+    }
+
+    public void setCertPath(String certPath) {
+        this.certPath = certPath;
     }
 }

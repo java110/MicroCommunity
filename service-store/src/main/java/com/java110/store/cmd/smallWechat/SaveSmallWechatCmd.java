@@ -85,7 +85,7 @@ public class SaveSmallWechatCmd extends AbstractServiceCmdListener {
         reqJson.put("wechatId", wechatId);
         reqJson.put("objType", SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         SmallWechatPo smallWechatPo = BeanConvertUtil.covertBean(reqJson, SmallWechatPo.class);
-        smallWechatPo.setWechatId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        smallWechatPo.setWechatId(wechatId);
         smallWechatPo.setWechatType(reqJson.getString("weChatType"));
         int flag = smallWechatV1InnerServiceSMOImpl.saveSmallWechat(smallWechatPo);
 
