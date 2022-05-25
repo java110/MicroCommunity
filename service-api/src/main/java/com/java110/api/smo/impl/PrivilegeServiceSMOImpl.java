@@ -6,6 +6,9 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.IGetCommunityStoreInfoSMO;
 import com.java110.api.smo.IPrivilegeServiceSMO;
+import com.java110.core.language.Language;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,6 +242,16 @@ public class PrivilegeServiceSMOImpl extends DefaultAbstractComponentSMO impleme
         for (int privilegeIndex = 0; privilegeIndex < privilegeArrays.size(); privilegeIndex++) {
             privilegeObj = privilegeArrays.getJSONObject(privilegeIndex);
             hasSameData(privilegeObj, tmpPrivilegeArrays);
+        }
+
+
+        Object lang = pd.getHeaders().get(CommonConstant.JAVA110_LANG);
+        if (!StringUtil.isNullOrNone(lang) && !CommonConstant.LANG_ZH_CN.equals(lang)) {
+            Language language = ApplicationContextFactory.getBean(lang.toString(), Language.class);
+            if (language != null) {
+                tmpPrivilegeArrays = language.getPrivilegeMenuDto(tmpPrivilegeArrays);
+            }
+
         }
         return new ResponseEntity<String>(tmpPrivilegeArrays.toJSONString(), HttpStatus.OK);
     }

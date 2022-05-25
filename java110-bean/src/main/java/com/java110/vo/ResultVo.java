@@ -2,6 +2,8 @@ package com.java110.vo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.slf4j.Logger;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import java.io.Serializable;
  * add by wuxw 2020/5/28
  **/
 public class ResultVo implements Serializable {
+
+
 
     public static final int CODE_ERROR = 404;// 未知异常
 
@@ -316,6 +320,7 @@ public class ResultVo implements Serializable {
      * @return
      */
     public static ResponseEntity<String> redirectPage(String url) {
+        
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, url);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("", headers, HttpStatus.FOUND);

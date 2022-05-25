@@ -1,6 +1,7 @@
 package com.java110.community.dao;
 
 
+import com.java110.dto.UnitDto;
 import com.java110.utils.exception.DAOException;
 
 
@@ -93,5 +94,5 @@ public interface IFloorServiceDao {
     int queryFloorsCount(Map info) throws DAOException;
 
 
-
+    List<Map> queryFloorAndUnits(Map info);
 }

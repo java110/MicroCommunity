@@ -449,10 +449,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
             repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
             super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
-            if (repairChannel.equals("T") || repairChannel.equals("D")) { //如果是电话报修和员工代客报修结单后状态变为待回访
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
-            } else if (repairChannel.equals("Z")) { //如果是业主自主报修结单后状态变为待评价
+            if ("Z".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
+            } else { //如果是业主自主报修结单后状态变为待评价
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
             }
         } else if ("F".equals(publicArea) && "1001".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是有偿的走下面
             //3.0 生成支付费用
@@ -525,10 +525,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
                 super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
             }
-            if ("T".equals(repairChannel) || "D".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
-            } else if ("Z".equals(repairChannel)) { //如果是业主自主报修结单后状态变为待评价
+
+            if ("Z".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
                 ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
+            } else { //如果是业主自主报修结单后状态变为待评价
+                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
             }
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);

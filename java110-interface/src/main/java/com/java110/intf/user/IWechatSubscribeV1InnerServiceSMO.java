@@ -59,6 +59,15 @@ public interface IWechatSubscribeV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryWechatSubscribes", method = RequestMethod.POST)
     List<WechatSubscribeDto> queryWechatSubscribes(@RequestBody WechatSubscribeDto wechatSubscribeDto);
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param wechatSubscribeDto 数据对象分享
+     * @return WechatSubscribeDto 对象数据
+     */
+    @RequestMapping(value = "/queryDistinctWechatSubscribes", method = RequestMethod.POST)
+    List<WechatSubscribeDto> queryDistinctWechatSubscribes(@RequestBody WechatSubscribeDto wechatSubscribeDto);
 
     /**
      * 查询<p>小区楼</p>总记录数

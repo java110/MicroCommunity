@@ -61,9 +61,10 @@ public class ServiceConfiguration {
         exclusions.append("/app/reportInfoBackCity/saveReportInfoBackCity,");//返省人员信息上报
         exclusions.append("/app/reportInfoAnswerValue/saveReportInfoAnswerValue,");//保存疫情问卷
         exclusions.append("/app/staffAuth,");//查询大类
-        exclusions.append("/app/floor.queryFloors,");
-        exclusions.append("/app/unit.queryUnits,");
-        exclusions.append("/app/room.queryRooms,");
+        //这里不允许开放数据安全问题
+//        exclusions.append("/app/floor.queryFloors,");
+//        exclusions.append("/app/unit.queryUnits,");
+//        exclusions.append("/app/room.queryRooms,");
         exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
         exclusions.append("/app/shop/queryShopCommunity,");
         exclusions.append("/app/shopType/queryShopType,");

@@ -24,6 +24,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     private String idCard;
     private String openId;
+    private String unionId;
     private String link;
     private String remark;
     private String appUserName;
@@ -291,5 +292,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setDefaultCommunityId(String defaultCommunityId) {
         this.defaultCommunityId = defaultCommunityId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 }

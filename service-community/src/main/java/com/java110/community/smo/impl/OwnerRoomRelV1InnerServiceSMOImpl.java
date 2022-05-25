@@ -17,6 +17,7 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IOwnerRoomRelV1ServiceDao;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.po.owner.OwnerRoomRelPo;
@@ -59,6 +60,7 @@ public class OwnerRoomRelV1InnerServiceSMOImpl extends BaseServiceSMO implements
     }
 
      @Override
+     @Java110Transactional
     public int deleteOwnerRoomRel(@RequestBody  OwnerRoomRelPo ownerRoomRelPo) {
        ownerRoomRelPo.setStatusCd("1");
        int saveFlag = ownerRoomRelV1ServiceDaoImpl.updateOwnerRoomRelInfo(BeanConvertUtil.beanCovertMap(ownerRoomRelPo));

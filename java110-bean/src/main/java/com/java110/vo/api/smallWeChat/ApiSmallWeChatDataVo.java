@@ -12,6 +12,7 @@ public class ApiSmallWeChatDataVo implements Serializable {
     private String appSecret;
     private String statusCd;
     private String weChatId;
+    private String wechatId;
     private String bId;
     private String storeId;
     private String payPassword;

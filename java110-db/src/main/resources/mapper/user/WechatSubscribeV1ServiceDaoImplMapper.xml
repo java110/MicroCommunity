@@ -33,6 +33,43 @@
     </insert>
 
 
+
+    <select id="queryDistinctWechatSubscribes" parameterType="Map" resultType="Map">
+        select distinct t.open_id,t.open_id openId,t.app_id,t.app_id
+        appId,t.nickname,t.headimgurl,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id
+        userId,t.open_type,t.open_type openType
+        from wechat_subscribe t
+        where 1 =1
+        <if test="subId !=null and subId != ''">
+            and t.sub_id= #{subId}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="nickname !=null and nickname != ''">
+            and t.nickname= #{nickname}
+        </if>
+        <if test="headimgurl !=null and headimgurl != ''">
+            and t.headimgurl= #{headimgurl}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="openType !=null and openType != ''">
+            and t.open_type= #{openType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
     <!-- 查询微信关注信息 add by wuxw 2018-07-03 -->
     <select id="getWechatSubscribeInfo" parameterType="Map" resultType="Map">
         select t.sub_id,t.sub_id subId,t.open_id,t.open_id openId,t.app_id,t.app_id

@@ -46,7 +46,6 @@ public class GetStoreAdsBMOImpl implements IGetStoreAdsBMO {
 
     private void freshAdsUrl(List<StoreAdsDto> storeAdsDtos) {
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for (StoreAdsDto tmpStoreAdsDto : storeAdsDtos) {
             tmpStoreAdsDto.setUrl(imgUrl + tmpStoreAdsDto.getUrl());
         }

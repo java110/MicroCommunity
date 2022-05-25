@@ -7,6 +7,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
@@ -22,8 +23,11 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
+import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -47,6 +51,8 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMO;
 
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
     @Autowired
     private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
@@ -83,6 +89,10 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+
+        if(data != null){
+            logger.debug("请求日志:{}",data);
+        }
         JSONArray businessPayFeeDetails = null;
         if (data == null) {
             FeeDetailDto feeDetailDto = new FeeDetailDto();
@@ -120,46 +130,55 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     }
 
     private void doPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
-        //查询缴费明细
-        PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(payFeeDetailPo.getFeeId());
-        feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        try {
+            //查询缴费明细
+            PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
+            FeeDto feeDto = new FeeDto();
+            feeDto.setFeeId(payFeeDetailPo.getFeeId());
+            feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        Assert.listOnlyOne(feeDtos, "未查询到费用信息");
+            Assert.listOnlyOne(feeDtos, "未查询到费用信息");
 
-        feeDto = feeDtos.get(0);
+            feeDto = feeDtos.get(0);
 
-        //查询业主信息
-        OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+            //查询业主信息
+            OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
 
-        //添加单元信息
-        FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
-        FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
+            //添加单元信息
+            FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
+            FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
 
-        feeReceiptDetailPo.setAmount(businessPayFeeDetail.getString("receivedAmount"));
-        feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
-        feeReceiptDetailPo.setCycle(businessPayFeeDetail.getString("cycles"));
-        feeReceiptDetailPo.setDetailId(businessPayFeeDetail.getString("detailId"));
-        feeReceiptDetailPo.setEndTime(businessPayFeeDetail.getString("endTime"));
-        feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
-        feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
-        feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
-        feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
-        computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
-        feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
-        feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
-        feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
-        feeReceiptPo.setObjType(feeDto.getPayerObjType());
-        feeReceiptPo.setObjId(feeDto.getPayerObjId());
-        feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
-        feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
-        feeReceiptPo.setPayObjName(ownerDto.getName());
+            feeReceiptDetailPo.setAmount(businessPayFeeDetail.getString("receivedAmount"));
+            feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
+            feeReceiptDetailPo.setCycle(businessPayFeeDetail.getString("cycles"));
+            feeReceiptDetailPo.setDetailId(businessPayFeeDetail.getString("detailId"));
+            feeReceiptDetailPo.setEndTime(businessPayFeeDetail.getString("endTime"));
+            feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
+            feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
+            feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
+            feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+            computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
+            feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
+            feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
+            feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
+            feeReceiptPo.setObjType(feeDto.getPayerObjType());
+            feeReceiptPo.setObjId(feeDto.getPayerObjId());
+            feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+            feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
+            feeReceiptPo.setPayObjName(ownerDto.getName());
 
-        //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
-        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
-        feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+            //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
+            feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
+            feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+        }catch (Exception e){
+            LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+            logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+            logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+            logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+            saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+            logger.error("通知异常", e);
+        }
     }
 
 

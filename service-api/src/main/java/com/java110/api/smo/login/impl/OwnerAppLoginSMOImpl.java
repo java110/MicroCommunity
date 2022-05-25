@@ -9,6 +9,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -26,7 +27,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -235,6 +235,11 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         //处理昵称有特殊符号导致 入库失败问题
         userinfo_paramObj.put("nickname", Base64Convert.byteToBase64(userinfo_paramObj.getString("nickname").getBytes()));
 
+        //公众号未绑定 开放平台
+        if (StringUtil.isEmpty(userinfo_paramObj.getString("unionid"))) {
+            userinfo_paramObj.put("unionid", "-1");
+        }
+
         int loginFlag = paramIn.getInteger("loginFlag");
 
         //说明是登录页面，下发code 就可以，不需要下发key 之类
@@ -244,11 +249,14 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             CommonCache.setValue(code, openId, expireTime);
             CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
             CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-unionid", userinfo_paramObj.getString("unionid"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
                 errorUrl += ("?code=" + code);
             }
+            logger.debug("登录跳转url:{}", errorUrl);
+
             return ResultVo.redirectPage(errorUrl);
         }
 
@@ -266,6 +274,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             CommonCache.setValue(code, openId, expireTime);
             CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
             CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-unionid", userinfo_paramObj.getString("unionid"), expireTime);
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -295,6 +304,8 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             CommonCache.setValue(code, openId, expireTime);
             CommonCache.setValue(code + "-nickname", userinfo_paramObj.getString("nickname"), expireTime);
             CommonCache.setValue(code + "-headimgurl", userinfo_paramObj.getString("headimgurl"), expireTime);
+            CommonCache.setValue(code + "-unionid", userinfo_paramObj.getString("unionid"), expireTime);
+
             if (errorUrl.indexOf("?") > 0) {
                 errorUrl += ("&code=" + code);
             } else {
@@ -523,6 +534,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         String openId = CommonCache.getValue(code);
         String nickname = CommonCache.getValue(code + "-nickname");
         String headimgurl = CommonCache.getValue(code + "-headimgurl");
+        String unionid = CommonCache.getValue(code + "-unionid");
 
         if (StringUtil.isEmpty(openId)) {
             responseEntity = new ResponseEntity<>("页面失效，请刷新后重试", HttpStatus.UNAUTHORIZED);
@@ -539,6 +551,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         JSONObject userOwnerInfo = new JSONObject();
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setOpenId(openId);
+        ownerAppUserDto.setUnionId(unionid);
         // ownerAppUserDto.setNickName(StringUtil.encodeEmoji(nickname));
         ownerAppUserDto.setNickName(nickname);
         ownerAppUserDto.setHeadImgUrl(headimgurl);

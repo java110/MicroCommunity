@@ -273,7 +273,8 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         int flag = 0;
         if (roomDtos == null || roomDtos.size() < 1) {
             roomPo = new RoomPo();
-            roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
+            //roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
+            roomPo.setState(importOwnerRoomDto.getRoomState());
             roomPo.setRoomId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
             roomPo.setApartment(importOwnerRoomDto.getSection());
             roomPo.setSection("1");
@@ -418,9 +419,9 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorId = floorDtos.get(0).getFloorId();
             if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 floorPo = new FloorPo();
-                floorPo.setbId("-1");
+                //floorPo.setbId("-1");
                 floorPo.setCommunityId(importOwnerRoomDto.getCommunityId());
-                floorPo.setFloorArea("1");
+                //floorPo.setFloorArea("1");
                 floorPo.setFloorId(floorId);
                 floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
                 floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");

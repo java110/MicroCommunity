@@ -69,6 +69,8 @@ public class UpdateFeePrintPageCmd extends AbstractServiceCmdListener {
             FeePrintPagePo newFeePrintPagePo = new FeePrintPagePo();
             newFeePrintPagePo.setCommunityId(feePrintPagePo.getCommunityId());
             newFeePrintPagePo.setState("F");
+            //解决全部设置F会把已删除还原的Bug
+            newFeePrintPagePo.setQueryStatusCd("0");
             feePrintPageV1InnerServiceSMOImpl.updateFeePrintPage(newFeePrintPagePo);
         }
 

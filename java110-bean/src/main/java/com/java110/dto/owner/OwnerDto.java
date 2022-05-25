@@ -31,6 +31,7 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String communityId;
     private String communityName;
+    private String sCommunityTel;
 
     private String roomId;
     private String[] roomIds;
@@ -363,5 +364,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
+    }
+
+    public String getsCommunityTel() {
+        return sCommunityTel;
+    }
+
+    public void setsCommunityTel(String sCommunityTel) {
+        this.sCommunityTel = sCommunityTel;
     }
 }

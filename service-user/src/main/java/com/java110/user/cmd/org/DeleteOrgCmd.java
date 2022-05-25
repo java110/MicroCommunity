@@ -86,7 +86,7 @@ public class DeleteOrgCmd extends AbstractServiceCmdListener {
             OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
             orgStaffRelDto.setOrgId(reqJson.getString("orgId"));
             List<OrgStaffRelDto> subOrgDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-            if (subOrgDtos == null || subOrgDtos.size() < 0) {
+            if (subOrgDtos == null || subOrgDtos.size() < 1) {
                 return;
             }
             UserDto userDto = new UserDto();

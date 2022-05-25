@@ -5,6 +5,7 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.api.smo.api.IApiSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.store.StoreDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -63,6 +64,11 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
+        //开发者和运营不校验小区
+        if(StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd) || StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)){
+            return new ComponentValidateResult(storeId, storeTypeCd, "", pd.getUserId(), pd.getUserName());
+        }
+
         String communityId = "";
         if (paramIn != null && paramIn.containsKey("communityId")
                 && !StringUtil.isEmpty(paramIn.getString("communityId"))
@@ -80,11 +86,12 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
-        if (!StringUtil.isEmpty(result.getUserId())) {
+        if (!StringUtil.isEmpty(result.getLoginUserId())) {
             headers.remove("user-id");
             headers.remove("user_id");
             headers.put("user-id", result.getUserId());
             headers.put("user_id", result.getUserId());
+            headers.put("login-user-id",result.getLoginUserId());
             if (!StringUtil.isEmpty(result.getUserName())) {
                 headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
             }

@@ -21,6 +21,8 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
 import com.java110.intf.community.IInspectionItemTitleV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionItemTitleValueV1InnerServiceSMO;
 import com.java110.po.inspectionItemTitle.InspectionItemTitlePo;
@@ -72,9 +74,15 @@ public class DeleteInspectionItemTitleCmd extends AbstractServiceCmdListener {
 
         InspectionItemTitleValuePo deleteInspectionItemTitleValuePo = new InspectionItemTitleValuePo();
         deleteInspectionItemTitleValuePo.setTitleId(inspectionItemTitlePo.getTitleId());
-        flag = inspectionItemTitleValueV1InnerServiceSMOImpl.deleteInspectionItemTitleValue(deleteInspectionItemTitleValuePo);
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+
+        InspectionItemTitleValueDto inspectionItemTitleValueDto = BeanConvertUtil.covertBean(reqJson, InspectionItemTitleValueDto.class);
+        int count = inspectionItemTitleValueV1InnerServiceSMOImpl.queryInspectionItemTitleValuesCount(inspectionItemTitleValueDto);
+
+        if (count > 0) {
+            flag = inspectionItemTitleValueV1InnerServiceSMOImpl.deleteInspectionItemTitleValue(deleteInspectionItemTitleValuePo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

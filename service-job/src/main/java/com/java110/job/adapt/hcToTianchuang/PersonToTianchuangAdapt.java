@@ -221,7 +221,6 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         String url = "";
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         if (fileRelDtos != null && fileRelDtos.size() > 0) {
             url = imgUrl + fileRelDtos.get(0).getFileRealName();
         }

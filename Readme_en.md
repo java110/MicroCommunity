@@ -1,170 +1,61 @@
-# HC community management system is an open source and free commercial community property management system, including back-end project, front-end project, property version uni-app and owner's version uni-app. 
+[english](Readme_en.md)|[中文](Readme_cn.md)
+## Introduction
+ HC community management system is a set of saas property management system, including real estate, owners, fees (payment can be made online), repair application (repair can be reported online), complaints and suggestions, procurement, inspection, parking, gates, gates, monitoring , workflow, questionnaires, and announcements.
+ 
+ Related code：<br/><br/>
+ 1、[Front end of property system](https://gitee.com/java110/MicroCommunityWeb) : Property staff using computer terminal<br/>
+ 2、[Property system backend](https://gitee.com/wuxw7/MicroCommunity): core business processing<br/>
+ 3、[Owner's mobile phone](https://gitee.com/java110/WechatOwnerService): 
+Provide users with use, including complaints and suggestions, payment, repairs, etc.<br/>
+ 4、[Property mobile version](https://gitee.com/java110/PropertyApp): Property staff using mobile terminal<br/>
 
+## how to install
 
+1、[Development environment installation](docs/installHcDev_en.md) <br/>
+2、[Production environment installation](docs/installHcProd.md)<br/>
 
-## Open source code description
+## how to use
 
+[Operation Manual](https://github.com/java110/MicroCommunity/wiki)
 
+   
+## product
 
-### HC cell back end code
+1、Mobile demonstration environment demo
 
-[ https://gitee.com/wuxw7/MicroCommunity ] https://gitee.com/wuxw7/MicroCommunity )
+   ![image](docs/img/hc_en.png)
 
-### HC cell front end code
+2、computer demo<br/>
+url ：http://demo.homecommunity.cn <br/>
+admin account：admin/admin<br/>
+property account:wuxw/admin<br/>
+dev account：dev/Change the password yourself [How to modify](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110520080050)
+    
+## System functions
+   
+   Please check the main system functions
+     
+   [Feature list](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022042459860343)
+  
+## running result（view）
+1.Type in the browser http://demo.homecommunity.cn/ As shown below
 
-[ https://gitee.com/java110/MicroCommunityWeb ] https://gitee.com/java110/MicroCommunityWeb )
+![image](docs/img/login_en.png)
 
-### HC smart home (owner version)
+    username: wuxw password: admin  As shown below
 
-[ https://gitee.com/java110/WechatOwnerService ] https://gitee.com/java110/WechatOwnerService )
+    Click to log in to enter the following picture:
 
-### HC handheld property (uni app for property)
+![image](docs/img/index_en.png)
 
-[ https://gitee.com/java110/PropertyApp ] https://gitee.com/java110/PropertyApp )
+![image](docs/img/business_en.png)
 
+![image](docs/img/owner_en.png)
 
+## Participate and contribute
 
-### Branch description
+You can fork the code and pull request to merge the code after commit
 
 
 
-Branch management Description: Master is the main branch, 0.5-stable is the latest stable branch (recommended for commercial landing version) and 0.1-stable is the front-end and back-end non separation Version (not recommended)
 
-
-
-
-### How to start
-
-
-
-[ http://www.homecommunity.cn/ ] http://www.homecommunity.cn/ )
-
-
-
-### How to install
-
-
-
-Scheme 1, CentOS 7.6 one button automatic installation
-
-
-
-> yum install -y wget && wget https://dl.winqi.cn/hc/hcInstall.sh && sh hcInstall.sh Your private IP
-
-
-
-Note: your private IP address is the intranet IP of the server. If the server has only one private IP address, it can be omitted. If there are more than one private IP address, it needs to be specified
-
-
-
-[reference video]（ https://www.bilibili.com/video/BV1Dk4y19728/ )
-
-
-
-Scheme 2: self service deployment according to demand
-
-
-
-[reference video]（ https://www.bilibili.com/video/BV1N7411E7rf/ )
-
-
-
-### Operation document
-
-
-
-[operation document]（ http://www.homecommunity.cn/operateDoc )
-
-
-
-### Technical documentation
-
-
-
-[technical documents]（ http://www.homecommunity.cn/devDoc )
-
-
-
-
-### Products
-
-
-
-![image](docs/img/ hc.png )
-
-
-
-
-### System function
-
-
-
-![image](docs/img/ func.png )
-
-
-
-Please check the main system functions
-
-
-
-[ http://www.homecommunity.cn//document/#/func/funcation ] http://www.homecommunity.cn//document/#/func/funcation )
-
-
-
-
-### Demo address
-
-
-
-[ http://www.homecommunity.cn/ ] http://www.homecommunity.cn/ )
-
-
-
-Property account / password: wuxw / Admin
-
-
-
-Agent account / password: days / Admin
-
-
-
-Operation and maintenance team account / password: admin / Admin
-
-
-
-Development team account / password: dev / (due to the large rights of developers, deleting data will affect the stability. To view the specific functions, it can be deployed separately in U_ User table)
-
-
-
-### Running effect (view)
-
-1. Input in the browser http://localhost : 3000 / as shown in the figure below
-
-
-
-![image](docs/img/ login.png )
-
-
-
-The user name is wuxw, and the password is admin, as shown in the figure below
-
-
-
-Click login to enter the following figure:
-
-
-
-![image](docs/img/0004.png)
-
-
-
-![image](docs/img/ index.png )
-
-
-
-![image](docs/img/ owner.png )
-
-
-
-
-![image](docs/img/ qq.png )

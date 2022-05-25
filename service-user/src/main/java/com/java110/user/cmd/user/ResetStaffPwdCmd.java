@@ -45,6 +45,10 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         Environment.isDevEnv();
 
+        if(reqJson.containsKey("storeId") && StoreDto.STORE_ADMIN.equals(reqJson.getString("storeId"))){
+            return ;
+        }
+
         if (!reqJson.containsKey("staffId")) {
             reqJson.put("staffId", reqJson.getString("userId"));
         }
@@ -74,7 +78,7 @@ public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
 
         //校验 staff 和 store 之间是否有 关系 防止 攻击
         StoreUserDto storeUserDto = new StoreUserDto();
-        storeUserDto.setUserId(reqJson.getString("staffId"));
+        storeUserDto.setUserId(reqJson.getString("userId"));
         storeUserDto.setStoreId(reqJson.getString("storeId"));
         List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
 

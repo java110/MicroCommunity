@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
+    public static final String SEND_FLAG_Y = "Y";//已经推送
+    public static final String SEND_FLAG_N = "N";//未推送数据
+
+
     private String inspectionId;
     private String inspectionName;
     private String state;
@@ -63,9 +67,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     //当前日期
     private String nowTime;
+    //二维码巡检时 的时间
+    private String qrCodeTime;
 
     private String statusCd = "0";
     private String itemId;
+
+    private String sendFlag;
 
     public String getInspectionId() {
         return inspectionId;
@@ -369,5 +377,21 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setPlanUserId(String planUserId) {
         this.planUserId = planUserId;
+    }
+
+    public String getQrCodeTime() {
+        return qrCodeTime;
+    }
+
+    public void setQrCodeTime(String qrCodeTime) {
+        this.qrCodeTime = qrCodeTime;
+    }
+
+    public String getSendFlag() {
+        return sendFlag;
+    }
+
+    public void setSendFlag(String sendFlag) {
+        this.sendFlag = sendFlag;
     }
 }

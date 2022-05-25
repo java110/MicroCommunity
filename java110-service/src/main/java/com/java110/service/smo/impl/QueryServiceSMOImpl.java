@@ -4,6 +4,7 @@ import bsh.Interpreter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.entity.service.ServiceSql;
@@ -18,6 +19,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.ognl.Ognl;
+import org.apache.ibatis.ognl.OgnlContext;
 import org.apache.ibatis.ognl.OgnlException;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -350,10 +352,30 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
     public JSONObject execJava(JSONObject params, String javaCode) throws BusinessException {
         try {
             //JSONObject params = dataQuery.getRequestParams();
+            List<String> columns = new ArrayList<>();
             Interpreter interpreter = new Interpreter();
             interpreter.eval(javaCode);
             interpreter.set("params", params);
-            return JSONObject.parseObject(interpreter.eval("execute(dataQuery)").toString());
+            interpreter.set("queryServiceDAOImpl",queryServiceDAOImpl);
+            JSONObject results = JSONObject.parseObject(interpreter.eval("execute(params,queryServiceDAOImpl)").toString(), Feature.OrderedField);
+
+            JSONArray data = null;
+            if (results == null || results.size() < 1) {
+                data = new JSONArray();
+            } else {
+                data = results.getJSONArray("data");
+            }
+
+            JSONArray th = new JSONArray();
+            for (String key : data.getJSONObject(0).keySet()) {
+                th.add(key);
+            }
+            JSONObject paramOut = new JSONObject();
+            paramOut.put("th", th);
+            paramOut.put("td", data);
+            paramOut.put("total",results.getString("total"));
+
+            return paramOut;
         } catch (Exception e) {
             logger.error("数据交互异常：", e);
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常," + e.getMessage());
@@ -449,7 +471,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
             Object condObj = Ognl.parseExpression(condition);
 
-            Object value = Ognl.getValue(condObj, requestParams);
+            OgnlContext context = new OgnlContext(null,null,new DefaultMemberAccess(true));
+
+            Object value = Ognl.getValue(condObj,context, requestParams);
 
             if (value instanceof Boolean) {
                 conditionResult = (Boolean) value;

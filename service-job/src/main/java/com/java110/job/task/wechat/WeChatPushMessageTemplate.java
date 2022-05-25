@@ -66,6 +66,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     public static final int DEFAULT_THREAD_NUM = 20;
     public static final int DEFAULT_SUBSCRIBE_PERSON = 100;
 
+    public static final int DEFAULT_QUERY_APP_OWNER_COUNT = 50;
+
     @Autowired
     private INoticeInnerServiceSMO noticeInnerServiceSMOImpl;
 
@@ -248,8 +250,19 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         ownerAppUserDto.setCommunityId(noticeDto.getCommunityId());
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
+        int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
+
+        double maxPage = Math.ceil(count/DEFAULT_QUERY_APP_OWNER_COUNT)+1;
+
+        for(int page = 0; page < maxPage; page++){
+            ownerAppUserDto.setPage(page+1);
+            ownerAppUserDto.setRow(DEFAULT_QUERY_APP_OWNER_COUNT);
+            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+            doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
+        }
+//
+//        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+//        doSend(ownerAppUserDtos, noticeDto, templateId, accessToken, weChatDto);
     }
 
     private void sendFloorOwner(NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
@@ -347,7 +360,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
             getAllOpenId(accessToken, "", weChatDto);
         }
 
-        List<WechatSubscribeDto> wechatSubscribeDtos = wechatSubscribeV1InnerServiceSMOImpl.queryWechatSubscribes(wechatSubscribeDto);
+        List<WechatSubscribeDto> wechatSubscribeDtos = wechatSubscribeV1InnerServiceSMOImpl.queryDistinctWechatSubscribes(wechatSubscribeDto);
 
         if (wechatSubscribeDtos == null || wechatSubscribeDtos.size() < 1) {
             return;

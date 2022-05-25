@@ -333,16 +333,16 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
             }
         }
 
-        //根据明细ID 查询收据信息
+//        //根据明细ID 查询收据信息
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
         feeReceiptDetailDto.setDetailId(paramObj.getString("detailId"));
-        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
-        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
-
-        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
-            cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
-            return;
-        }
+//        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
+//        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
+//
+//        if (feeReceiptDetailDtos != null && feeReceiptDetailDtos.size() > 0) {
+//            cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos.get(0)));
+//            return;
+//        }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
     }
@@ -521,6 +521,7 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        paramInJson.put("detailId", businessFeeDetail.getString("detailId"));
         //支付方式
         businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         //计算 应收金额

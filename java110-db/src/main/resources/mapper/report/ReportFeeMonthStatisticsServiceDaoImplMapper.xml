@@ -948,6 +948,7 @@
             and t.create_time &lt;= #{endTime}
         </if>
         group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
+        order by pfa.`value`
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -1108,6 +1109,7 @@
         </if>
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name,pfa.`value`,br.built_up_area
         HAVING oweAmount > 0
+        order by pfa.`value`
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -1941,7 +1943,7 @@
         select 1 from pay_fee pf where t.room_id = pf.payer_obj_id and pf.status_cd = '0' and pf.state = '2008001'
         )
         and t.community_id = #{communityId}
-        order by t.create_time desc
+        order by bo.name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

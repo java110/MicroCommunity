@@ -99,6 +99,19 @@ public class WechatSubscribeV1InnerServiceSMOImpl extends BaseServiceSMO impleme
 
         return wechatSubscribes;
     }
+    @Override
+    public List<WechatSubscribeDto> queryDistinctWechatSubscribes(@RequestBody WechatSubscribeDto wechatSubscribeDto) {
+        //校验是否传了 分页信息
+        int page = wechatSubscribeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            wechatSubscribeDto.setPage((page - 1) * wechatSubscribeDto.getRow());
+        }
+
+        List<WechatSubscribeDto> wechatSubscribes = BeanConvertUtil.covertBeanList(wechatSubscribeV1ServiceDaoImpl.queryDistinctWechatSubscribes(BeanConvertUtil.beanCovertMap(wechatSubscribeDto)), WechatSubscribeDto.class);
+
+        return wechatSubscribes;
+    }
 
 
     @Override

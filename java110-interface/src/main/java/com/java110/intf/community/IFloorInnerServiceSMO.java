@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.FloorDto;
+import com.java110.dto.UnitDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,4 +63,7 @@ public interface IFloorInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFloorsCount", method = RequestMethod.POST)
     int queryFloorsCount(@RequestBody FloorDto floorDto);
+
+    @RequestMapping(value = "/queryFloorAndUnits", method = RequestMethod.POST)
+    List<UnitDto> queryFloorAndUnits(@RequestBody UnitDto unitDto);
 }

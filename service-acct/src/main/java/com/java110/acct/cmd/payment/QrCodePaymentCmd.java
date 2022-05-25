@@ -8,6 +8,9 @@ import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -17,9 +20,9 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 扫码付
@@ -27,6 +30,9 @@ import org.springframework.http.ResponseEntity;
 @Java110Cmd(serviceCode = "payment.qrCodePayment")
 public class QrCodePaymentCmd extends AbstractServiceCmdListener {
     private static Logger logger = LoggerFactory.getLogger(QrCodePaymentCmd.class);
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
 
     private IQrCodePaymentSMO qrCodePaymentSMOImpl;
@@ -47,20 +53,28 @@ public class QrCodePaymentCmd extends AbstractServiceCmdListener {
 
         String payQrAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_QR_ADAPT);
 
-        if(StringUtil.isEmpty(payQrAdapt)) {
+        if (StringUtil.isEmpty(payQrAdapt)) {
             int pre = Integer.parseInt(authCode.substring(0, 2));
             if (pre > 24 && pre < 31) { // 支付宝
                 qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
             } else {
                 qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
             }
-        }else{
+        } else {
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean(payQrAdapt, IQrCodePaymentSMO.class);
         }
 
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(reqJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+
+        String feeName = communityDtos.get(0).getName() + "-" + reqJson.getString("payerObjName") + "-" + reqJson.getString("feeName");
+
         ResultVo resultVo = null;
         try {
-            resultVo = qrCodePaymentSMOImpl.pay(reqJson.getString("communityId"), orderId, receivedAmount, authCode, "");
+            resultVo = qrCodePaymentSMOImpl.pay(reqJson.getString("communityId"), orderId, receivedAmount, authCode, feeName);
         } catch (Exception e) {
             logger.error("异常了", e);
             cmdDataFlowContext.setResponseEntity(ResultVo.error(e.getLocalizedMessage()));

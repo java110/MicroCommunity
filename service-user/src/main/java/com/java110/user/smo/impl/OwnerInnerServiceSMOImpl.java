@@ -209,11 +209,11 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         //校验是否传了 分页信息
 
-        int page = ownerDto.getPage();
-
-        if (page != PageDto.DEFAULT_PAGE) {
-            ownerDto.setPage((page - 1) * ownerDto.getRow());
-        }
+//        int page = ownerDto.getPage();
+//
+//        if (page != PageDto.DEFAULT_PAGE) {
+//            ownerDto.setPage((page - 1) * ownerDto.getRow());
+//        }
         return ownerServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));
     }
 

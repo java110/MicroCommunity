@@ -10,12 +10,12 @@ import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -84,23 +84,30 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         request.setBizContent(bizContent.toString());
         AlipayTradePayResponse response = alipayClient.execute(request);
         logger.debug("支付宝返回:" + JSONObject.toJSONString(response));
-        if (response.isSuccess()) {
+        if ("10000".equals(response.getCode()) && response.isSuccess()) {
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
         }
 
-        if (response.isSuccess()) {
+        if ("10000".equals(response.getCode()) && response.isSuccess()) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, response.getSubMsg());
+            return new ResultVo(ResultVo.CODE_ERROR, StringUtil.isEmpty(response.getSubMsg())?"等待用户支付":response.getSubMsg());
         }
     }
 
     @Override
     public ResultVo checkPayFinish(String communityId, String orderNum) {
-        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", "app_id", "your private_key", "json", "GBK", "alipay_public_key", "RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
+                CommunitySettingFactory.getValue(communityId, "APP_ID"),
+                CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
+                "json", "UTF-8",
+                CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
+            request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
+        }
         request.setBizContent("{" +
                 "  \"out_trade_no\":\"" + orderNum + "\"," +
                 "  \"trade_no\":\"\"," +
@@ -114,7 +121,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
         } catch (AlipayApiException e) {
             return new ResultVo(ResultVo.CODE_ERROR, "查询失败" + e.getErrMsg());
         }
-
+        logger.debug("支付宝返回:" + JSONObject.toJSONString(response));
         if (!"10000".equals(response.getCode())) {
             return new ResultVo(ResultVo.CODE_ERROR, response.getMsg());
         }

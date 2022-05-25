@@ -1607,10 +1607,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();
         try {
             double month = computeFeeSMO.dayCompare(
-                    DateUtil.getDateFromString("2021-09-30 14:20:02", DateUtil.DATE_FORMATE_STRING_A),
-                    DateUtil.getDateFromString("2021-11-03 14:20:02", DateUtil.DATE_FORMATE_STRING_A)
+                    DateUtil.getDateFromString("2022-04-14 00:00:00", DateUtil.DATE_FORMATE_STRING_A),
+                    DateUtil.getDateFromString("2022-06-01 00:00:00", DateUtil.DATE_FORMATE_STRING_A)
             );
-            System.out.println(Math.ceil(month));
+            System.out.println(month);
         } catch (ParseException e) {
             e.printStackTrace();
         }

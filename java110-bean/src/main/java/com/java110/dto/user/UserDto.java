@@ -59,6 +59,7 @@ public class UserDto extends PageDto implements Serializable {
     private String staffId;
 
     private String openId;
+    private String unionId;
 
     private String statusCd = "0";
 
@@ -336,5 +337,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setUserIds(String[] userIds) {
         this.userIds = userIds;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 }

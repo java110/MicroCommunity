@@ -4,6 +4,7 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.assetImport.IImportOwnerRoomSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.assetImport.ImportOwnerRoomDto;
 import com.java110.entity.component.ComponentValidateResult;
@@ -94,9 +95,9 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
 
-            if (!StringUtil.isNumber(importOwnerRoomDto.getLayer())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行楼层不是有效数字");
-            }
+//            if (!StringUtil.isNumber(importOwnerRoomDto.getLayer())) {
+//                throw new IllegalArgumentException((roomIndex + 1) + "行楼层不是有效数字");
+//            }
 
             if (!StringUtil.isNumber(importOwnerRoomDto.getLayerCount())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行总楼层不是有效数字");
@@ -147,6 +148,15 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (!StringUtil.isNumber(importOwnerRoomDto.getOwnerTypeCd())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行业主类型不能为空");
             }
+
+            if(RoomDto.STATE_FREE.equals(importOwnerRoomDto.getRoomState()) && !StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())){
+                throw new IllegalArgumentException((roomIndex + 1) + "行房屋状态为未销售状态，不能包含业主信息");
+            }
+
+            if(!RoomDto.STATE_FREE.equals(importOwnerRoomDto.getRoomState()) && StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())){
+                throw new IllegalArgumentException((roomIndex + 1) + "行房屋状态不是未销售状态，必须包含业主信息");
+            }
+
             // 如果是业主 跳过
             if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
                 continue;
@@ -202,13 +212,14 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             Assert.hasValue(os[8], (osIndex + 1) + "行建筑面积不能为空");
             Assert.hasValue(os[9], (osIndex + 1) + "行室内面积不能为空");
             Assert.hasValue(os[10], (osIndex + 1) + "行租金不能为空");
-            if (os.length > 11 && !StringUtil.isNullOrNone(os[11])) {
-                Assert.hasValue(os[11], (osIndex + 1) + "行业主名称不能为空");
-                Assert.hasValue(os[12], (osIndex + 1) + "行性别不能为空");
-                Assert.hasValue(os[13], (osIndex + 1) + "行年龄不能为空");
-                Assert.hasValue(os[14], (osIndex + 1) + "行手机号不能为空");
-                Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
-                Assert.hasValue(os[16], (osIndex + 1) + "行业主类型不能为空");
+            Assert.hasValue(os[11], (osIndex + 1) + "行房屋状态不能为空");
+            if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
+                Assert.hasValue(os[12], (osIndex + 1) + "行业主名称不能为空");
+                Assert.hasValue(os[13], (osIndex + 1) + "行性别不能为空");
+                Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
+                Assert.hasValue(os[15], (osIndex + 1) + "行手机号不能为空");
+                Assert.hasValue(os[16], (osIndex + 1) + "行身份证不能为空");
+                Assert.hasValue(os[17], (osIndex + 1) + "行业主类型不能为空");
             }
 
             importOwnerRoomDto = new ImportOwnerRoomDto();
@@ -226,15 +237,18 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             importOwnerRoomDto.setBuiltUpArea(os[8].toString().trim());
             importOwnerRoomDto.setRoomArea(os[9].toString().trim());
             importOwnerRoomDto.setRoomRent(os[10].toString().trim());
-            if (os.length > 11 && !StringUtil.isNullOrNone(os[11])) {
-                importOwnerRoomDto.setOwnerName(os[11].toString().trim());
-                importOwnerRoomDto.setSex("男".equals(os[12].toString().trim()) ? "0" : "1");
-                String age = StringUtil.isNullOrNone(os[13]) ? CommonUtil.getAgeByCertId(os[15].toString().trim()) : os[13].toString().trim();
+            importOwnerRoomDto.setRoomState(os[11].toString().trim());
+            if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
+                importOwnerRoomDto.setOwnerName(os[12].toString().trim());
+                importOwnerRoomDto.setSex("男".equals(os[13].toString().trim()) ? "0" : "1");
+                String age = StringUtil.isNullOrNone(os[14]) ? CommonUtil.getAgeByCertId(os[16].toString().trim()) : os[14].toString().trim();
                 importOwnerRoomDto.setAge(age);
-                importOwnerRoomDto.setTel(os[14].toString().trim());
-                importOwnerRoomDto.setIdCard(os[15].toString().trim());
-                importOwnerRoomDto.setOwnerTypeCd(os[16].toString().trim());
+                importOwnerRoomDto.setTel(os[15].toString().trim());
+                importOwnerRoomDto.setIdCard(os[16].toString().trim());
+                importOwnerRoomDto.setOwnerTypeCd(os[17].toString().trim());
             }
+
+
 
             ownerRoomDtos.add(importOwnerRoomDto);
 

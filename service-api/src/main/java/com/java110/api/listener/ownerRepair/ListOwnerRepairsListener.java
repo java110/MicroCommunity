@@ -166,7 +166,6 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
         List<PhotoVo> afterPhotos = null;  //维修后图片
         PhotoVo photoVo = null;
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         for (RepairDto repairDto : ownerRepairs) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(repairDto.getRepairId());

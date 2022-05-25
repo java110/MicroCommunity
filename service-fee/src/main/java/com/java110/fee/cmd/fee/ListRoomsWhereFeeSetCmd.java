@@ -56,6 +56,8 @@ public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
         String ownerName = reqJson.getString("ownerName");
         String idCard = reqJson.getString("idCard");
         String ownerNameLike = reqJson.getString("ownerNameLike");
+        //这里优化 userId 问题
+        reqJson.put("userId","");
         //根据 业主来定位房屋信息
         if (!StringUtil.isEmpty(ownerName) || !StringUtil.isEmpty(idCard) || !StringUtil.isEmpty(ownerNameLike)) {
             queryRoomByOwnerInfo(apiRoomVo, reqJson, cmdDataFlowContext);
@@ -71,7 +73,7 @@ public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             //获取手机号、身份证号加密标识
             String flag = reqJson.getString("flag");
-            refreshRoomOwners(reqJson.getString("userId"), reqJson.getString("communityId"), roomDtoList, flag);
+            refreshRoomOwners(reqJson.getString("loginUserId"), reqJson.getString("communityId"), roomDtoList, flag);
 
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         } else {

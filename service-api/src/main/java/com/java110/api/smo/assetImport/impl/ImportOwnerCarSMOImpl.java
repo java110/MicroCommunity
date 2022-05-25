@@ -162,8 +162,9 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         }
         for (OwnerCarDto ownerCarDto : ownerCars) {
             OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(ownerCarDto, OwnerCarPo.class);
+
             //获取房屋名称
-            String roomName = ownerCarDto.getRoomName();
+            String roomName = ownerCarDto.getRoomName().trim();
             String[] split = roomName.split("-");
             String floorNum = split[0];
             String unitNum = split[1];

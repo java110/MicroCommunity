@@ -54,6 +54,10 @@ public class CmdListener extends AbstractServiceApiListener {
                 && (!reqJson.containsKey("userId") || StringUtil.isEmpty(reqJson.getString("userId")))) {
             reqJson.put("userId", reqHeader.get(CommonConstant.USER_ID));
         }
+        if (reqHeader.containsKey(CommonConstant.USER_ID)
+                && (!reqJson.containsKey("loginUserId") || StringUtil.isEmpty(reqJson.getString("loginUserId")))) {
+            reqJson.put("loginUserId", reqHeader.get(CommonConstant.LOGIN_U_ID));
+        }
         if (reqHeader.containsKey(CommonConstant.STORE_ID)
                 && (!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId")))) {
             reqJson.put("storeId", reqHeader.get(CommonConstant.STORE_ID));

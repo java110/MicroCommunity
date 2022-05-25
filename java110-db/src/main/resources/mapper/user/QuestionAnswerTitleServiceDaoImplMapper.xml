@@ -50,7 +50,7 @@
             and t.qa_id= #{qaId}
         </if>
         <if test="qaTitle !=null and qaTitle != ''">
-            and t.qa_title= #{qaTitle}
+            and t.qa_title like '%${qaTitle}%'
         </if>
         order by t.seq
         <if test="page != -1 and page != null ">
@@ -124,7 +124,7 @@
             and t.qa_id= #{qaId}
         </if>
         <if test="qaTitle !=null and qaTitle != ''">
-            and t.qa_title= #{qaTitle}
+            and t.qa_title like '%${qaTitle}%'
         </if>
 
 

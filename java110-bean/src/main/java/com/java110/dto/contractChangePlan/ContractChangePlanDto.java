@@ -19,6 +19,8 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     public static final String STATE_W = "11";//11 待审核 22 审核通过 33 审核失败
     public static final String STATE_S = "22";//11 待审核 22 审核通过 33 审核失败
     public static final String STATE_F = "33";//11 待审核 22 审核通过 33 审核失败
+
+    public static final String PLAN_TYPE_CHANGE_ROOM = "3003";
     private String planType;
     private String planTypeName;
     private String contractId;

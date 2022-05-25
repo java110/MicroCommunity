@@ -152,11 +152,13 @@ public class CommonConstant {
 
     public final static String INSTANCE_N = "N";
 
-
+    public static final String LANG_ZH_CN = "zh-cn";
+    public static final String JAVA110_LANG = "java110-lang";
     public static final String APP_ID = "app-id";
     public static final String TRANSACTION_ID = "transaction-id";
     public static final String REQUEST_TIME = "req-time";
     public static final String USER_ID = "user-id";
+    public static final String LOGIN_U_ID = "login-user-id";
     public static final String STORE_ID = "store-id";
 
     public final static String HTTP_SERVICE_API = "API";

@@ -348,6 +348,9 @@
         <if test="roomNum !=null and roomNum != ''">
             and t.room_num= #{roomNum}
         </if>
+        <if test="roomNumLike !=null and roomNumLike != ''">
+            and t.`room_num` like concat('%', #{roomNumLike},'%')
+        </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
@@ -719,6 +722,9 @@
         <if test="roomNum !=null and roomNum != ''">
             and t.room_num= #{roomNum}
         </if>
+        <if test="roomNumLike !=null and roomNumLike != ''">
+            and t.`room_num` like concat('%', #{roomNumLike},'%')
+        </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
@@ -765,7 +771,6 @@
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num`
         unitNum,f.`floor_num` floorNum,t.room_type roomType,t.room_type,f.floor_id floorId
         ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
-
         FROM
         building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
         WHERE

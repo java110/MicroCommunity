@@ -21,7 +21,8 @@
         taskId,t.task_detail_id,t.task_detail_id taskDetailId,t.patrol_type,t.description,t.patrol_type patrolType,
         t.longitude,t.latitude,t.inspection_time,t.inspection_time inspectionTime,t.inspection_state,
         t.inspection_state inspectionState,t.point_start_time,t.point_start_time
-        pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber,t.act_user_id,t.act_user_id actUserId,t.act_user_name,t.act_user_name actUserName
+        pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber,t.act_user_id,
+        t.act_user_id actUserId,t.act_user_name,t.act_user_name actUserName,t.send_flag sendFlag
         from business_inspection_task_detail t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -120,8 +121,8 @@
         t.inspection_time inspectionTime,t.inspection_state,t.inspection_state inspectionState,td3.name
         inspectionStateName,
         ipl.inspection_plan_name,ipl.inspection_plan_name inspectionPlanName,ir.route_name,ir.route_name routeName,
-        it.plan_user_name,it.plan_user_name planUserName,it.act_user_name,it.act_user_name actUserName,td4.name,td4.name
-        signTypeName,td5.name taskStateName,ip.item_id itemId
+        it.plan_user_name,it.plan_user_name planUserName,it.plan_user_id,it.plan_user_id planUserId,it.act_user_name,it.act_user_name actUserName,td4.name,td4.name
+        signTypeName,td5.name taskStateName,ip.item_id itemId,t.send_flag sendFlag
         from inspection_task_detail t
         LEFT JOIN inspection_point ip on t.inspection_id = ip.inspection_id and ip.status_cd = '0'
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'inspection_task_detail' and
@@ -210,11 +211,17 @@
         <if test="nowTime != null">
             and t.create_time &lt; #{nowTime}
         </if>
+        <if test="qrCodeTime != null">
+            and t.create_time &gt; #{qrCodeTime}
+        </if>
         <if test="inspectionStartTime !=null and inspectionStartTime != ''">
             and t.inspection_time &gt;= #{inspectionStartTime}
         </if>
         <if test="inspectionEndTime !=null and inspectionEndTime != ''">
             and t.inspection_time &lt;= #{inspectionEndTime}
+        </if>
+        <if test="sendFlag !=null and sendFlag != ''">
+            and t.send_flag = #{sendFlag}
         </if>
         order by t.sort_number desc
         <if test="page != -1 and page != null ">
@@ -266,6 +273,9 @@
         </if>
         <if test="actUserName !=null and actUserName != ''">
             , t.act_user_name= #{actUserName}
+        </if>
+        <if test="sendFlag !=null and sendFlag != ''">
+            , t.send_flag = #{sendFlag}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -362,6 +372,9 @@
         </if>
         <if test="inspectionEndTime !=null and inspectionEndTime != ''">
             and t.inspection_time &lt;= #{inspectionEndTime}
+        </if>
+        <if test="sendFlag !=null and sendFlag != ''">
+            and t.send_flag = #{sendFlag}
         </if>
     </select>
 </mapper>

@@ -63,26 +63,27 @@ public class SaveRepairReturnVisitBMOImpl implements ISaveRepairReturnVisitBMO {
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(repairReturnVisitPo.getRepairId());
         repairUserDto.setCommunityId(repairReturnVisitPo.getCommunityId());
-        if (repairChannel.equals("Z")) { //如果是业主端报修，就查询是否有已评价状态的
-            repairUserDto.setState(RepairUserDto.STATE_FINISH);
-        } else if (!StringUtil.isEmpty(maintenanceType) && maintenanceType.equals("1001")) { //如果不是业主端报修，且是有偿的，就查询已支付状态的
-            repairUserDto.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
-        } else { //其他的查询结单状态的
-            repairUserDto.setState(RepairUserDto.STATE_CLOSE);
-        }
+//        if (repairChannel.equals("Z")) { //如果是业主端报修，就查询是否有已评价状态的
+//            repairUserDto.setState(RepairUserDto.STATE_FINISH);
+//        } else if (!StringUtil.isEmpty(maintenanceType) && maintenanceType.equals("1001")) { //如果不是业主端报修，且是有偿的，就查询已支付状态的
+//            repairUserDto.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
+//        } else { //其他的查询结单状态的
+//            repairUserDto.setState(RepairUserDto.STATE_CLOSE);
+//        }
+
+        repairUserDto.setStates(new String[]{RepairUserDto.STATE_FINISH, RepairUserDto.STATE_FINISH_PAY_FEE, RepairUserDto.STATE_CLOSE});
         //查询报修派单状态
-        List<RepairUserDto> repairUserDtos = new ArrayList<>();
-        List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        if (repairUsers != null && repairUsers.size() > 0) {
-            repairUserDtos.add(repairUsers.get(repairUsers.size() - 1));
-        } else if (repairUsers == null && repairUsers.size() < 1) {
-            throw new IllegalArgumentException("信息错误！");
+        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+
+        if (repairUserDtos == null || repairUserDtos.size() < 1) {
+            throw new IllegalArgumentException("未查询到 接单 待支付 或者 评价完成的工单，不能回访");
         }
+        repairUserDto = repairUserDtos.get(repairUserDtos.size() - 1);
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date endTime = repairUserDtos.get(0).getEndTime();
+        Date endTime = repairUserDto.getEndTime();
         repairUserPo.setStartTime(format.format(endTime));
         repairUserPo.setState(RepairUserDto.STATE_FINISH_VISIT);
         repairUserPo.setContext(repairReturnVisitPo.getContext());
@@ -91,9 +92,9 @@ public class SaveRepairReturnVisitBMOImpl implements ISaveRepairReturnVisitBMO {
         repairUserPo.setRepairId(repairReturnVisitPo.getRepairId());
         repairUserPo.setStaffId(repairReturnVisitPo.getVisitPersonId());
         repairUserPo.setStaffName(repairReturnVisitPo.getVisitPersonName());
-        repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
-        repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
-        repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
+        repairUserPo.setPreStaffId(repairUserDto.getStaffId());
+        repairUserPo.setPreStaffName(repairUserDto.getStaffName());
+        repairUserPo.setPreRuId(repairUserDto.getRuId());
         repairUserPo.setRepairEvent("auditUser");
         repairUserPo.setbId("-1");
         repairUserInnerServiceSMOImpl.saveRepairUser(repairUserPo);

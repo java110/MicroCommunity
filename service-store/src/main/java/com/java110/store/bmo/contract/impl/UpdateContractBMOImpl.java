@@ -18,7 +18,13 @@ import com.java110.dto.store.StoreDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.store.*;
+import com.java110.intf.store.IContractAttrInnerServiceSMO;
+import com.java110.intf.store.IContractChangePlanDetailInnerServiceSMO;
+import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
+import com.java110.intf.store.IContractChangePlanRoomInnerServiceSMO;
+import com.java110.intf.store.IContractFileInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
+import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.contract.ContractPo;
@@ -206,7 +212,10 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
-            dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
+            //解决合同bug 只有 资产变更时 操作 合同房屋
+            if (ContractChangePlanDto.PLAN_TYPE_CHANGE_ROOM.equals(contractChangePlanDtos.get(0).getPlanType())) {
+                dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
+            }
 
         } else { //修改为审核中
             ContractChangePlanPo contractChangePlanPo = new ContractChangePlanPo();
@@ -240,10 +249,12 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             doDelOldRoomRel(contractChangePlanRoomDtos, oldContractRoomDtos);
             return;
         }
-        doAddRoomRel(contractDto, oldContractRoomDtos, contractChangePlanRoomDtos);
-
         //删除老的关系值
         doDelOldRoomRel(contractChangePlanRoomDtos, oldContractRoomDtos);
+        //增加
+        doAddRoomRel(contractDto, oldContractRoomDtos, contractChangePlanRoomDtos);
+
+
 
 
     }
@@ -366,7 +377,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
     }
 
     private boolean isDelOldRoom(ContractRoomDto oldContractRoomDto, List<ContractChangePlanRoomDto> contractChangePlanRoomDtos) {
-        if (contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() > 0) {
+        if (contractChangePlanRoomDtos == null || contractChangePlanRoomDtos.size() < 1) {
             return false;
         }
 
@@ -380,7 +391,7 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
     }
 
     private boolean isOldRoom(ContractChangePlanRoomDto tmpContractChangePlanRoomDto, List<ContractRoomDto> oldContractRoomDtos) {
-        if (oldContractRoomDtos == null || oldContractRoomDtos.size() > 0) {
+        if (oldContractRoomDtos == null || oldContractRoomDtos.size() < 1) {
             return false;
         }
 

@@ -64,6 +64,9 @@
             , t.page_name= #{pageName}
         </if>
         where 1=1
+        <if test="queryStatusCd !=null and queryStatusCd != ''">
+            and t.status_cd= #{queryStatusCd}
+        </if>
         <if test="pageId !=null and pageId != ''">
             and t.page_id= #{pageId}
         </if>

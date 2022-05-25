@@ -367,9 +367,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
         </if>
@@ -384,6 +381,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 
@@ -422,9 +425,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
         </if>
@@ -436,6 +436,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 
@@ -479,9 +485,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="ownerFlag !=null and ownerFlag != ''">
             and t.owner_flag= #{ownerFlag}
         </if>
@@ -499,6 +502,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null ">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -583,7 +592,8 @@
         t.room_id roomId
         FROM
         business_building_owner_room_rel t
-        INNER JOIN building_owner bo ON t.owner_id = bo.owner_id AND bo.status_cd = '0' AND bo.community_id = #{communityId}
+        INNER JOIN building_owner bo ON t.owner_id = bo.owner_id AND bo.status_cd = '0' AND bo.community_id =
+        #{communityId}
         WHERE
         t.operate = 'ADD'
         AND t.room_id = #{roomId}

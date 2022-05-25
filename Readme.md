@@ -1,104 +1,60 @@
-[english](Readme_en.md)
-# HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，物业版uni-app和业主版uni-app,
-# 最新SQL文件加群获取 857791253、1038870655、770542020、274026637、777620972（未满）、374326790（未满）
+[english](Readme_en.md)|[中文](Readme_cn.md)
+## Introduction
+ HC community management system is a set of saas property management system, including real estate, owners, fees (payment can be made online), repair application (repair can be reported online), complaints and suggestions, procurement, inspection, parking, gates, gates, monitoring , workflow, questionnaires, and announcements.
+ 
+ Related code：<br/><br/>
+ 1、[Front end of property system](https://gitee.com/java110/MicroCommunityWeb) : Property staff using computer terminal<br/>
+ 2、[Property system backend](https://gitee.com/wuxw7/MicroCommunity): core business processing<br/>
+ 3、[Owner's mobile phone](https://gitee.com/java110/WechatOwnerService): 
+Provide users with use, including complaints and suggestions, payment, repairs, etc.<br/>
+ 4、[Property mobile version](https://gitee.com/java110/PropertyApp): Property staff using mobile terminal<br/>
 
-### 作者微信 17797173942
+## how to install
 
-## 开源代码说明
+1、[Development environment installation](docs/installHcDev_en.md) <br/>
+2、[Production environment installation](docs/installHcProd.md)<br/>
 
-### HC小区后端代码
- [https://gitee.com/wuxw7/MicroCommunity](https://gitee.com/wuxw7/MicroCommunity)
-### HC小区前端代码
-[https://gitee.com/java110/MicroCommunityWeb](https://gitee.com/java110/MicroCommunityWeb)
-### HC智慧家庭（业主版）
-[https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
-### HC掌上物业（物业版uni-app）
-[https://gitee.com/java110/PropertyApp](https://gitee.com/java110/PropertyApp)
+## how to use
 
-### HC社区商城（免费安装使用）
-[http://bbs.homecommunity.cn/topic/84-shang-cheng-bu-shu-bao-xia-zai](http://bbs.homecommunity.cn/topic/84-shang-cheng-bu-shu-bao-xia-zai)
-
-### 分支说明（branch）
-
-分支管理说明，master 为主分支，0.8-stable 为最新稳定分支（推荐使用）
-
-
-### 如何开始（how to start）
-
-[http://www.homecommunity.cn/](http://www.homecommunity.cn/)
-
-### 如何安装（how to install）
-
-方案一、梓豪方式
-
-> http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022012655760522
-
-
-[参考视频](https://www.bilibili.com/video/BV1Zq4y1c7Ph?spm_id_from=333.999.0.0)
-
-方案二、根据需求自助部署
-
-[参考视频](https://www.bilibili.com/video/BV1N7411E7rf/)
-
-方案三、宝塔方式安装
-
-[宝塔方式安装](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110831560082)
-
-### 操作文档
-
-[操作文档](http://www.homecommunity.cn/operateDoc)
-
-### 技术文档
-
-[技术文档](http://www.homecommunity.cn/devDoc)
-
-    
-### 产品
-
-   ![image](docs/img/hc.png)
-
-    
-### 系统功能（function） 
-
-   ![image](docs/img/func.png)
+[Operation Manual](https://github.com/java110/MicroCommunity/wiki)
    
-   主要系统功能请查看
+## product
+
+1、Mobile demonstration environment demo
+
+   ![image](docs/img/hc_en.png)
+
+2、computer demo<br/>
+url ：http://demo.homecommunity.cn <br/>
+admin account：admin/admin<br/>
+property account:wuxw/admin<br/>
+dev account：dev/Change the password yourself [How to modify](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102021110520080050)
+    
+## System functions
+   
+   Please check the main system functions
      
-   [http://www.homecommunity.cn/devDoc/#/func/funcation](http://www.homecommunity.cn/devDoc/#/func/funcation)
+   [Feature list](http://bbs.homecommunity.cn/pages/bbs/topic.html?topicId=102022042459860343)
   
+## running result（view）
+1.Type in the browser http://demo.homecommunity.cn/ As shown below
 
-### 演示地址（demo）
+![image](docs/img/login_en.png)
 
-[http://www.homecommunity.cn/](http://www.homecommunity.cn/)
+    username: wuxw password: admin  As shown below
 
-物业 账号/密码：wuxw/admin
+    Click to log in to enter the following picture:
 
-运维团队 账号/密码：admin/admin
+![image](docs/img/index_en.png)
 
-开发团队 账号/密码：dev/(由于开发者权限较大，删除数据会影响稳定性，查看具体功能，可以单独部署在u_user 表中修改)
+![image](docs/img/business_en.png)
 
-### 运行效果（view）
-1.在浏览器输入 http://localhost:3000/ 如下图
+![image](docs/img/owner_en.png)
 
-![image](docs/img/login.png)
+## Participate and contribute
 
-    用户名为 wuxw 密码为 admin  如下图
+You can fork the code and pull request to merge the code after commit
 
-    点击登录，进入如下图：
-
-![image](docs/img/0004.png)
-
-![image](docs/img/index.png)
-
-![image](docs/img/owner.png)
-
-
-### 加入我们（join）
-
-
-加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 857791253、1038870655、770542020、274026637 邮箱：928255095@qq.com
-
-![image](docs/img/qq.png)
 
 
 

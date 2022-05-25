@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
-import com.java110.intf.IRoomRenovationInnerServiceSMO;
+import com.java110.intf.community.IRoomRenovationInnerServiceSMO;
 import com.java110.po.roomRenovation.RoomRenovationPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
