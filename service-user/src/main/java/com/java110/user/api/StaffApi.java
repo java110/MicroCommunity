@@ -2,7 +2,9 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.po.staffAppAuth.StaffAppAuthPo;
 import com.java110.user.bmo.staffAppAuth.IDeleteStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.IGetStaffAppAuthBMO;
@@ -14,7 +16,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -30,6 +39,9 @@ public class StaffApi {
 
     @Autowired
     private IGetStaffAppAuthBMO getStaffAppAuthBMOImpl;
+
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
     /**
      * 微信保存消息模板
@@ -125,9 +137,18 @@ public class StaffApi {
                                                   @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "communityId") String communityId) {
 
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setObjId(communityId);
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setWechatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
                 + "/app/staffAuth?storeId=" + storeId + "&staffId=" + userId
                 + "&communityId=" + communityId + "&appId=" + AppDto.WECHAT_OWNER_APP_ID;
+
+        if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
+            ownerUrl += ("&wAppId=" + smallWeChatDtos.get(0).getAppid());
+        }
         return ResultVo.createResponseEntity(ownerUrl);
     }
 }

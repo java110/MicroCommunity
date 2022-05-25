@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="smallWechatAttrV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存微信配置表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSmallWechatAttrInfo" parameterType="Map">
+        insert into small_wechat_attr(
+attr_id,wechat_id,spec_cd,community_id,value
+) values (
+#{attrId},#{wechatId},#{specCd},#{communityId},#{value}
+)
+    </insert>
+
+
+
+    <!-- 查询微信配置表信息 add by wuxw 2018-07-03 -->
+    <select id="getSmallWechatAttrInfo" parameterType="Map" resultType="Map">
+        select  t.attr_id,t.attr_id attrId,t.wechat_id,t.wechat_id wechatId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.value 
+from small_wechat_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="wechatId !=null and wechatId != ''">
+   and t.wechat_id= #{wechatId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改微信配置表信息 add by wuxw 2018-07-03 -->
+    <update id="updateSmallWechatAttrInfo" parameterType="Map">
+        update  small_wechat_attr t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="wechatId !=null and wechatId != ''">
+, t.wechat_id= #{wechatId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+, t.spec_cd= #{specCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+, t.value= #{value}
+</if> 
+ where 1=1 <if test="attrId !=null and attrId != ''">
+and t.attr_id= #{attrId}
+</if> 
+
+    </update>
+
+    <!-- 查询微信配置表数量 add by wuxw 2018-07-03 -->
+     <select id="querySmallWechatAttrsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from small_wechat_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="wechatId !=null and wechatId != ''">
+   and t.wechat_id= #{wechatId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+
+
+     </select>
+
+</mapper>

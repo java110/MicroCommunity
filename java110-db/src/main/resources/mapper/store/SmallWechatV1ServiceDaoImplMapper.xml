@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="smallWechatV1ServiceDaoImpl">
+
+
+    <!-- 保存微信配置表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSmallWechatInfo" parameterType="Map">
+        insert into small_wechat(
+        mch_id,store_Id,wechat_type,cert_path,appId,appSecret,name,obj_id,wechat_id,pay_password,obj_type,remarks
+        ) values (
+        #{mchId},#{storeId},#{wechatType},#{certPath},#{appid},#{appsecret},#{name},#{objId},#{wechatId},#{payPassword},#{objType},#{remarks}
+        )
+    </insert>
+
+
+    <!-- 查询微信配置表信息 add by wuxw 2018-07-03 -->
+    <select id="getSmallWechatInfo" parameterType="Map" resultType="Map">
+        select t.mch_id,t.mch_id mchId,t.status_cd,t.status_cd statusCd,t.store_Id,t.store_Id storeId,t.wechat_type,
+        t.wechat_type wechatType,t.cert_path,t.cert_path certPath,t.appId,t.appId appid,t.appSecret,t.appSecret
+        appsecret,
+        t.name,t.obj_id,t.obj_id objId,t.wechat_id,t.wechat_id wechatId,t.pay_password,t.pay_password payPassword,
+        t.obj_type,t.obj_type objType,t.remarks
+        from small_wechat t
+        where 1 =1
+        <if test="mchId !=null and mchId != ''">
+            and t.mch_id= #{mchId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_Id= #{storeId}
+        </if>
+        <if test="wechatType !=null and wechatType != ''">
+            and t.wechat_type= #{wechatType}
+        </if>
+        <if test="certPath !=null and certPath != ''">
+            and t.cert_path= #{certPath}
+        </if>
+        <if test="appid !=null and appid != ''">
+            and t.appId= #{appid}
+        </if>
+        <if test="appsecret !=null and appsecret != ''">
+            and t.appSecret= #{appsecret}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="wechatId !=null and wechatId != ''">
+            and t.wechat_id= #{wechatId}
+        </if>
+        <if test="payPassword !=null and payPassword != ''">
+            and t.pay_password= #{payPassword}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            and t.remarks= #{remarks}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改微信配置表信息 add by wuxw 2018-07-03 -->
+    <update id="updateSmallWechatInfo" parameterType="Map">
+        update small_wechat t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="mchId !=null and mchId != ''">
+            , t.mch_id= #{mchId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_Id= #{storeId}
+        </if>
+        <if test="wechatType !=null and wechatType != ''">
+            , t.wechat_type= #{wechatType}
+        </if>
+        <if test="certPath !=null and certPath != ''">
+            , t.cert_path= #{certPath}
+        </if>
+        <if test="appid !=null and appid != ''">
+            , t.appId= #{appid}
+        </if>
+        <if test="appsecret !=null and appsecret != ''">
+            , t.appSecret= #{appsecret}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="payPassword !=null and payPassword != ''">
+            , t.pay_password= #{payPassword}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            , t.remarks= #{remarks}
+        </if>
+        where 1=1
+        <if test="wechatId !=null and wechatId != ''">
+            and t.wechat_id= #{wechatId}
+        </if>
+
+    </update>
+
+    <!-- 查询微信配置表数量 add by wuxw 2018-07-03 -->
+    <select id="querySmallWechatsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from small_wechat t
+        where 1 =1
+        <if test="mchId !=null and mchId != ''">
+            and t.mch_id= #{mchId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_Id= #{storeId}
+        </if>
+        <if test="wechatType !=null and wechatType != ''">
+            and t.wechat_type= #{wechatType}
+        </if>
+        <if test="certPath !=null and certPath != ''">
+            and t.cert_path= #{certPath}
+        </if>
+        <if test="appid !=null and appid != ''">
+            and t.appId= #{appid}
+        </if>
+        <if test="appsecret !=null and appsecret != ''">
+            and t.appSecret= #{appsecret}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="wechatId !=null and wechatId != ''">
+            and t.wechat_id= #{wechatId}
+        </if>
+        <if test="payPassword !=null and payPassword != ''">
+            and t.pay_password= #{payPassword}
+        </if>
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="remarks !=null and remarks != ''">
+            and t.remarks= #{remarks}
+        </if>
+
+
+    </select>
+
+</mapper>
