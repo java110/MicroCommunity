@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="menuUserV1ServiceDaoImpl">
 
-
     <!-- 保存自定义菜单信息 add by wuxw 2018-07-03 -->
     <insert id="saveMenuUserInfo" parameterType="Map">
-        insert into m_menu_user(
-        mu_id,name,icon,m_id,staff_id,url,seq
-        ) values (
-        #{muId},#{name},#{icon},#{mId},#{staffId},#{url},#{seq}
-        )
+        insert into m_menu_user(mu_id, name, icon, m_id, staff_id, url, seq)
+        values (#{muId}, #{name}, #{icon}, #{mId}, #{staffId}, #{url}, #{seq})
     </insert>
-
 
     <!-- 查询自定义菜单信息 add by wuxw 2018-07-03 -->
     <select id="getMenuUserInfo" parameterType="Map" resultType="Map">
@@ -49,9 +43,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改自定义菜单信息 add by wuxw 2018-07-03 -->
     <update id="updateMenuUserInfo" parameterType="Map">
@@ -81,7 +73,6 @@
         <if test="muId !=null and muId != ''">
             and t.mu_id= #{muId}
         </if>
-
     </update>
 
     <!-- 查询自定义菜单数量 add by wuxw 2018-07-03 -->
@@ -113,8 +104,5 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
-
     </select>
-
 </mapper>

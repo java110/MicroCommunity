@@ -113,7 +113,7 @@ public class SaveOwnerCarListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        //添加小区楼
+        //添加车辆
         parkingSpaceBMOImpl.sellParkingSpace(reqJson, context);
         parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
     }

@@ -3,6 +3,8 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -36,6 +38,9 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -98,6 +103,10 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
                         feeDetail.setReceivedAmount(receivedAmount.substring(1));
                     }
                 }
+                FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
+                feeAccountDetailDto.setDetailId(feeDetail.getDetailId());
+                List<FeeAccountDetailDto> feeAccountDetailDtos = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
+                feeDetail.setFeeAccountDetailDtoList(feeAccountDetailDtos);
                 feeDetailList.add(feeDetail);
             }
             List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailList, ApiFeeDetailDataVo.class);

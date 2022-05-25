@@ -67,6 +67,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_propertyUserId = "93";
     public static final String CODE_PREFIX_propertyFeeId = "94";
     public static final String CODE_PREFIX_houseId = "95";
+    public static final String CODE_PREFIX_fadId = "96";
     public static final String CODE_PREFIX_pgId = "600";
 
     public static final String CODE_PREFIX_floorId = "73";

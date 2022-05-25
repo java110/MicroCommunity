@@ -48,7 +48,7 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
         accountDto.setObjId(accountDetailPo.getObjId());
         accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
         accountDto.setPartId(reqJson.getString("communityId"));
-        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        accountDto.setAcctType(reqJson.getString("acctType"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
         if (accountDtos == null || accountDtos.size() < 1) {
             accountDto = addAccountDto(reqJson);
@@ -85,7 +85,7 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
         accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
         accountPo.setObjId(reqJson.getString("ownerId"));
         accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
-        accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        accountPo.setAcctType(reqJson.getString("acctType"));
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(reqJson.getString("ownerId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));

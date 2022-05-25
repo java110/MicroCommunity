@@ -15,7 +15,6 @@ import java.util.Date;
  **/
 public class StoreDto extends PageDto implements Serializable {
 
-
     //运营团队store_id
     public static final String STORE_ADMIN = "400000000000000001";
 
@@ -48,8 +47,6 @@ public class StoreDto extends PageDto implements Serializable {
     private String corporation;
     private String foundingTime;
     private String state;
-
-
 
     private Date createTime;
 

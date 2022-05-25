@@ -1,9 +1,12 @@
 package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomAttrDto;
+import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -76,6 +79,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String unitNum;
     private String roomNum;
     private String oweAmount;
+
+    private List<OwnerCarAttrDto> ownerCarAttrDto;
 
 
     public String getCarColor() {
@@ -405,5 +410,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setOweAmount(String oweAmount) {
         this.oweAmount = oweAmount;
+    }
+
+    public List<OwnerCarAttrDto> getOwnerCarAttrDto() {
+        return ownerCarAttrDto;
+    }
+
+    public void setOwnerCarAttrDto(List<OwnerCarAttrDto> ownerCarAttrDto) {
+        this.ownerCarAttrDto = ownerCarAttrDto;
     }
 }

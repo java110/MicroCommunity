@@ -21,14 +21,9 @@ import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用

@@ -1,6 +1,5 @@
 package com.java110.community.smo.impl;
 
-
 import com.java110.community.dao.IRoomAttrServiceDao;
 import com.java110.community.dao.IRoomServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;

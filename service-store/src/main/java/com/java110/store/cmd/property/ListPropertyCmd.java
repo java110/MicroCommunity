@@ -21,6 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.store.StoreDto;
+import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -50,8 +51,12 @@ import java.util.List;
 public class ListPropertyCmd extends AbstractServiceCmdListener {
 
     private static Logger logger = LoggerFactory.getLogger(ListPropertyCmd.class);
+
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -75,12 +80,26 @@ public class ListPropertyCmd extends AbstractServiceCmdListener {
         storeDto.setUserId("");
         storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
 
+        StoreDto storeDto1 = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
+        storeDto1.setUserId("");
+        storeDto1.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
+
         int count = storeV1InnerServiceSMOImpl.queryStoresCount(storeDto);
 
-        List<StoreDto> storeDtos = null;
+        List<StoreDto> storeDtos = new ArrayList<>();
 
         if (count > 0) {
-            storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+            List<StoreDto> storeList = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+            List<StoreDto> stores = storeInnerServiceSMOImpl.getStores(storeDto1);
+            for (StoreDto store : storeList) {
+                for (StoreDto store1 : stores) {
+                    if (store.getStoreId().equals(store1.getStoreId())) {
+                        store.setNearByLandmarks(store1.getNearByLandmarks());
+                    }
+                }
+                storeDtos.add(store);
+            }
+//            storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
         } else {
             storeDtos = new ArrayList<>();
         }

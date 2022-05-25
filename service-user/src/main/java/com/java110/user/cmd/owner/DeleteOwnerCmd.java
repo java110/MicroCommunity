@@ -21,6 +21,7 @@ import com.java110.po.owner.OwnerPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -101,16 +102,18 @@ public class DeleteOwnerCmd extends AbstractServiceCmdListener {
         if (flag < 1) {
             throw new CmdException("删除失败");
         }
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setMemberId(reqJson.getString("ownerId"));
-        //查询app用户表
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-            for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
-                OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
-                flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-                if (flag < 1) {
-                    throw new CmdException("删除失败");
+        if (reqJson.containsKey("ownerTypeCd") && !StringUtil.isEmpty(reqJson.getString("ownerTypeCd")) && reqJson.getString("ownerTypeCd").equals("1001")) {
+            OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+            ownerAppUserDto.setMemberId(reqJson.getString("ownerId"));
+            //查询app用户表
+            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
+                    OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
+                    flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+                    if (flag < 1) {
+                        throw new CmdException("删除失败");
+                    }
                 }
             }
         }

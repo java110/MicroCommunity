@@ -20,14 +20,18 @@ public class VisitPo implements Serializable {
     private String ownerId;
     private String visitCase;
     private String visitTime;
+    private String freeTime;
     private String departureTime;
-    private String statusCd;
+    private String statusCd = "0";
     private String carNum;
     private String entourage;
     private String reasonType;
     private String state;
     private String stateName;
     private String stateRemark;
+    private String psId;
+    private String flag;
+    private String recordState;
 
     public String getvId() {
         return vId;
@@ -163,5 +167,37 @@ public class VisitPo implements Serializable {
 
     public void setStateRemark(String stateRemark) {
         this.stateRemark = stateRemark;
+    }
+
+    public String getPsId() {
+        return psId;
+    }
+
+    public void setPsId(String psId) {
+        this.psId = psId;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public String getFreeTime() {
+        return freeTime;
+    }
+
+    public void setFreeTime(String freeTime) {
+        this.freeTime = freeTime;
+    }
+
+    public String getRecordState() {
+        return recordState;
+    }
+
+    public void setRecordState(String recordState) {
+        this.recordState = recordState;
     }
 }

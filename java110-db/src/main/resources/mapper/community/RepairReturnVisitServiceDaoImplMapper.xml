@@ -17,8 +17,7 @@
 
     <!-- 查询报修回访信息 add by wuxw 2018-07-03 -->
     <select id="getRepairReturnVisitInfo" parameterType="Map" resultType="Map">
-        select t.visit_id,t.visit_id visitId,t.context,t.repair_id
-        statusCd,t.community_id,t.community_id communityId,t.visit_person_name,t.visit_person_name
+        select t.visit_id,t.visit_id visitId,t.context,t.community_id,t.community_id communityId,t.visit_person_name,t.visit_person_name
         visitPersonName,t.visit_person_id,t.visit_person_id visitPersonId,t.visit_type,t.visit_type visitType,
         rrp.repair_id repairId,rrp.repair_obj_name repairObjName,rs.repair_type_name repairTypeName,rrp.tel,rrp.repair_name repairName,
         rrp.appointment_time appointmentTime

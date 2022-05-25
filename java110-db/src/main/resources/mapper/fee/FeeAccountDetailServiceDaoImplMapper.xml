@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="feeAccountDetailServiceDaoImpl">
+
+    <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
+    <select id="getFeeAccountDetailInfo" parameterType="Map" resultType="Map">
+        select
+        t.fad_id,t.fad_id fadId,
+        t.detail_id,t.detail_id detailId,
+        t.community_id,t.community_id communityId,
+        t.state,t.amount,td.name stateName
+        from fee_account_detail t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'fee_account_detail' and td.table_columns = 'state'
+        where 1 = 1
+        <if test="fadId != null and fadId != ''">
+            and t.fadId = #{fadId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询费用明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryFeeAccountDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fee_account_detail t
+        where 1 =1
+        <if test="fadId != null and fadId != ''">
+            and t.fadId = #{fadId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+    </select>
+
+    <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveFeeAccountDetail" parameterType="Map">
+        insert into fee_account_detail(
+        fad_id,detail_id,community_id,state,amount
+        <if test="createTime != null and createTime != ''">
+            ,create_time
+        </if>
+        )
+        values(#{fadId},#{detailId},#{communityId},#{state},#{amount}
+        <if test="createTime != null and createTime != ''">
+            ,#{createTime}
+        </if>
+        )
+    </insert>
+
+</mapper>

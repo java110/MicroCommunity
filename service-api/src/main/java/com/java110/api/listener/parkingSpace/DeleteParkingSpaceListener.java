@@ -9,6 +9,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,15 @@ public class DeleteParkingSpaceListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        parkingSpaceBMOImpl.deleteParkingSpace(reqJson, context);
+        if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("F")) {
+            parkingSpaceBMOImpl.deleteParkingSpace(reqJson, context);
+        } else if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("S")) {
+            throw new IllegalArgumentException("车位已出售，不能删除！");
+        } else if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("H")) {
+            throw new IllegalArgumentException("车位已出租，不能删除！");
+        } else {
+            throw new IllegalArgumentException("未知车位！");
+        }
     }
 
 

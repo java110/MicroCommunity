@@ -100,14 +100,8 @@
         <if test="ownerId !=null and ownerId != ''">
             , t.owner_id= #{ownerId}
         </if>
-        <if test="carTypeCd !=null and carTypeCd != ''">
-            , t.car_type_cd= #{carTypeCd}
-        </if>
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
-        </if>
-        <if test="carId !=null and carId != ''">
-            , t.car_id= #{carId}
         </if>
         <if test="carColor !=null and carColor != ''">
             , t.car_color= #{carColor}
@@ -124,14 +118,22 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         where 1=1
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="carId !=null and carId != ''">
+            and t.car_id= #{carId}
+        </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="carTypeCd !=null and carTypeCd != ''">
+            and t.car_type_cd= #{carTypeCd}
+        </if>
     </update>
 
     <!-- 查询车辆数量 add by wuxw 2018-07-03 -->
@@ -187,8 +189,6 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
-
     </select>
 
 </mapper>

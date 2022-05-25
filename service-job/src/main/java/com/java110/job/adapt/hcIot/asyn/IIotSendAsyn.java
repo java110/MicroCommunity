@@ -107,6 +107,13 @@ public interface IIotSendAsyn {
      */
     void addOwnerCar(JSONObject postParameters);
 
+    /**
+     * 添加访客信息
+     *
+     * @param postParameters
+     */
+    void addVisit(JSONObject postParameters);
+
     void updateOwnerCar(JSONObject postParameters);
 
     void deleteOwnerCar(JSONObject postParameters);
@@ -133,6 +140,7 @@ public interface IIotSendAsyn {
 
     /**
      * 考勤班组同步
+     *
      * @param postParameters
      * @param staffs
      */
@@ -140,6 +148,7 @@ public interface IIotSendAsyn {
 
     /**
      * 考勤员工同步
+     *
      * @param postParameters
      * @param staffs
      */
@@ -147,12 +156,14 @@ public interface IIotSendAsyn {
 
     /**
      * 编辑考勤 同步
+     *
      * @param postParameters
      */
     void updateAttendance(JSONObject postParameters);
 
     /**
      * 删除考勤 同步
+     *
      * @param postParameters
      */
     void deleteAttendance(JSONObject postParameters);
@@ -161,18 +172,21 @@ public interface IIotSendAsyn {
 
     /**
      * 添加 道闸问候语
+     *
      * @param postParameters
      */
     void addParkingAreaText(JSONObject postParameters);
 
     /**
      * 添加岗亭
+     *
      * @param postParameters
      */
     void addParkingBox(JSONObject postParameters);
 
     /**
      * 删除岗亭
+     *
      * @param postParameters
      */
     void deleteParkingBox(JSONObject postParameters);

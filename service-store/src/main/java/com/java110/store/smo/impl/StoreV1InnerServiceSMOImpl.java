@@ -66,7 +66,7 @@ public class StoreV1InnerServiceSMOImpl extends BaseServiceSMO implements IStore
     }
 
     @Override
-    public List<StoreDto> queryStores(@RequestBody  StoreDto storeDto) {
+    public List<StoreDto> queryStores(@RequestBody StoreDto storeDto) {
 
         //校验是否传了 分页信息
 

@@ -15,7 +15,6 @@
  */
 package com.java110.job.adapt.hcIot.asyn.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -33,16 +32,11 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -487,6 +481,35 @@ public class IotSendKafkaImpl implements IIotSendAsyn {
         try {
             postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
             sendKafkaMessage(IotConstant.ADD_OWNER_CAR_URL, postParameters);
+            machineTranslateDto.setState(MachineTranslateDto.STATE_DOING);
+            machineTranslateDto.setRemark("正在同步");
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", IotConstant.ADD_OWNER_CAR_URL);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+
+        }
+    }
+
+    @Override
+    @Async
+    public void addVisit(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_VISIT,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            sendKafkaMessage(IotConstant.ADD_VISIT_URL, postParameters);
             machineTranslateDto.setState(MachineTranslateDto.STATE_DOING);
             machineTranslateDto.setRemark("正在同步");
         } catch (Exception e) {

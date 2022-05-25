@@ -61,10 +61,12 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
      * @param businessOwnerCar 车辆管理信息
      */
     protected void autoSaveDelBusinessOwnerCar(Business business, JSONObject businessOwnerCar) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("memberId", businessOwnerCar.getString("memberId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        info.put("carId", businessOwnerCar.getString("carId"));
+        info.put("communityId", businessOwnerCar.getString("communityId"));
         List<Map> currentOwnerCarInfos = getOwnerCarServiceDaoImpl().getOwnerCarInfo(info);
         if (currentOwnerCarInfos == null || currentOwnerCarInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);

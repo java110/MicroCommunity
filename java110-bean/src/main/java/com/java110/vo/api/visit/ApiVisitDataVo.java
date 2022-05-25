@@ -10,8 +10,10 @@ public class ApiVisitDataVo implements Serializable {
     private String userId;
     private String communityId;
     private String ownerId;
+    private String ownerName;
     private String visitCase;
     private String visitTime;
+    private String freeTime;
     private String departureTime;
     private String createTime;
     private String statusCd = "0";
@@ -20,6 +22,14 @@ public class ApiVisitDataVo implements Serializable {
     private String reasonType;
     private String state;
     private String stateName;
+    private String psId;
+    private String parkingAreaName;
+    private String parkingSpaceNum;
+    private String recordState;
+    private String stateRemark;
+    private String fileRelName;
+    private String fileSaveName;
+    private String url;
 
     public String getvId() {
         return vId;
@@ -155,5 +165,85 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPsId() {
+        return psId;
+    }
+
+    public void setPsId(String psId) {
+        this.psId = psId;
+    }
+
+    public String getFreeTime() {
+        return freeTime;
+    }
+
+    public void setFreeTime(String freeTime) {
+        this.freeTime = freeTime;
+    }
+
+    public String getRecordState() {
+        return recordState;
+    }
+
+    public void setRecordState(String recordState) {
+        this.recordState = recordState;
+    }
+
+    public String getParkingAreaName() {
+        return parkingAreaName;
+    }
+
+    public void setParkingAreaName(String parkingAreaName) {
+        this.parkingAreaName = parkingAreaName;
+    }
+
+    public String getParkingSpaceNum() {
+        return parkingSpaceNum;
+    }
+
+    public void setParkingSpaceNum(String parkingSpaceNum) {
+        this.parkingSpaceNum = parkingSpaceNum;
+    }
+
+    public String getStateRemark() {
+        return stateRemark;
+    }
+
+    public void setStateRemark(String stateRemark) {
+        this.stateRemark = stateRemark;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getFileRelName() {
+        return fileRelName;
+    }
+
+    public void setFileRelName(String fileRelName) {
+        this.fileRelName = fileRelName;
+    }
+
+    public String getFileSaveName() {
+        return fileSaveName;
+    }
+
+    public void setFileSaveName(String fileSaveName) {
+        this.fileSaveName = fileSaveName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

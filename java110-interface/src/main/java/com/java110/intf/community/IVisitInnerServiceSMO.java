@@ -2,6 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.visit.VisitDto;
+import com.java110.po.owner.VisitPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public interface IVisitInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param visitDto 数据对象分享
      * @return VisitDto 对象数据
      */
@@ -39,4 +39,21 @@ public interface IVisitInnerServiceSMO {
      */
     @RequestMapping(value = "/queryVisitsCount", method = RequestMethod.POST)
     int queryVisitsCount(@RequestBody VisitDto visitDto);
+
+    /**
+     * 添加访客信息
+     *
+     * @param visitPo
+     * @return
+     */
+    @RequestMapping(value = "/saveVisit", method = RequestMethod.POST)
+    void saveVisit(@RequestBody VisitPo visitPo);
+
+    /**
+     * 修改访客信息
+     *
+     * @param visitPo
+     */
+    @RequestMapping(value = "/updateVisit", method = RequestMethod.POST)
+    void updateVisit(@RequestBody VisitPo visitPo);
 }

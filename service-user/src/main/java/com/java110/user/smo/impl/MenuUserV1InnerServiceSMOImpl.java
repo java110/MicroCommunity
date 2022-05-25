@@ -66,7 +66,7 @@ public class MenuUserV1InnerServiceSMOImpl extends BaseServiceSMO implements IMe
     }
 
     @Override
-    public List<MenuUserDto> queryMenuUsers(@RequestBody  MenuUserDto menuUserDto) {
+    public List<MenuUserDto> queryMenuUsers(@RequestBody MenuUserDto menuUserDto) {
 
         //校验是否传了 分页信息
 

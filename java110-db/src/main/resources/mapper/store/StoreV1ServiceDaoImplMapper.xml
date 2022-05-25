@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="storeV1ServiceDaoImpl">
 
-
     <!-- 保存商户信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveStoreInfo" parameterType="Map">
-        insert into s_store(
-        address,store_type_cd,name,tel,state,store_id,user_id,map_y,map_x,nearby_landmarks
-        ) values (
-        #{address},#{storeTypeCd},#{name},#{tel},#{state},#{storeId},#{userId},#{mapY},#{mapX},#{nearbyLandmarks}
-        )
+        insert into s_store(address, store_type_cd, name, tel, state, store_id, user_id, map_y, map_x, nearby_landmarks)
+        values (#{address}, #{storeTypeCd}, #{name}, #{tel}, #{state}, #{storeId}, #{userId}, #{mapY}, #{mapX},
+                #{nearByLandmarks})
     </insert>
-
 
     <!-- 查询商户信息信息 add by wuxw 2018-07-03 -->
     <select id="getStoreInfo" parameterType="Map" resultType="Map">
         select t.address,t.store_type_cd,t.store_type_cd storeTypeCd,t.name,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,t.store_id,t.store_id storeId,t.user_id,t.user_id userId,t.map_y,t.map_y mapY,t.map_x,t.map_x
-        mapX,t.create_time createTime,t.nearby_landmarks nearbyLandmarks,sa.value corporation,sa1.value foundingTime,
+        mapX,t.create_time createTime,t.nearby_landmarks,t.nearby_landmarks nearByLandmarks,sa.value corporation,sa1.value foundingTime,
         CASE t.store_type_cd
         WHEN '800900000000' THEN '开发团队'
         WHEN '800900000001' THEN '运营团队'
@@ -61,13 +56,14 @@
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
         </if>
+        <if test="nearByLandmarks !=null and nearByLandmarks != ''">
+            and t.nearby_landmarks= #{nearByLandmarks}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改商户信息信息 add by wuxw 2018-07-03  t.nearby_landmarks nearbyLandmarks -->
     <update id="updateStoreInfo" parameterType="Map">
@@ -81,9 +77,8 @@
         <if test="storeTypeCd !=null and storeTypeCd != ''">
             , t.store_type_cd= #{storeTypeCd}
         </if>
-
-        <if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
-            , t.nearby_landmarks= #{nearbyLandmarks}
+        <if test="nearByLandmarks !=null and nearByLandmarks != ''">
+            , t.nearby_landmarks= #{nearByLandmarks}
         </if>
         <if test="name !=null and name != ''">
             , t.name= #{name}
@@ -107,7 +102,6 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </update>
 
     <!-- 查询商户信息数量 add by wuxw 2018-07-03 -->
@@ -145,8 +139,8 @@
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
         </if>
-
-
+        <if test="nearByLandmarks !=null and nearByLandmarks != ''">
+            and t.nearby_landmarks= #{nearByLandmarks}
+        </if>
     </select>
-
 </mapper>

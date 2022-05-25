@@ -21,13 +21,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/repair")
 public class RepairApi {
+
     @Autowired
     private IAppraiseRepairBMO appraiseRepairBMOImpl;
 
     @Autowired
     private ISaveRepairReturnVisitBMO saveRepairReturnVisitBMOImpl;
+
     @Autowired
     private IUpdateRepairReturnVisitBMO updateRepairReturnVisitBMOImpl;
+
     @Autowired
     private IDeleteRepairReturnVisitBMO deleteRepairReturnVisitBMOImpl;
 
@@ -57,16 +60,14 @@ public class RepairApi {
      * @path /app/repair/saveRepairReturnVisit
      */
     @RequestMapping(value = "/saveRepairReturnVisit", method = RequestMethod.POST)
-    public ResponseEntity<String> saveRepairReturnVisit(
-            @RequestHeader(value = "user-id") String userId,
-            @RequestHeader(value = "user-name") String userName,
-            @RequestBody JSONObject reqJson) {
+    public ResponseEntity<String> saveRepairReturnVisit(@RequestHeader(value = "user-id") String userId,
+                                                        @RequestHeader(value = "user-name") String userName,
+                                                        @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "visitType", "请求报文中未包含满意度");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
-
 
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
         repairReturnVisitPo.setVisitPersonId(userId);
@@ -125,10 +126,10 @@ public class RepairApi {
      */
     @RequestMapping(value = "/queryRepairReturnVisit", method = RequestMethod.GET)
     public ResponseEntity<String> queryRepairReturnVisit(@RequestParam(value = "communityId") String communityId,
-                                                         @RequestParam(value = "repairId",required = false) String repairId,
-                                                         @RequestParam(value = "repairName",required = false) String repairName,
-                                                         @RequestParam(value = "tel",required = false) String tel,
-                                                         @RequestParam(value = "repairType",required = false) String repairType,
+                                                         @RequestParam(value = "repairId", required = false) String repairId,
+                                                         @RequestParam(value = "repairName", required = false) String repairName,
+                                                         @RequestParam(value = "tel", required = false) String tel,
+                                                         @RequestParam(value = "repairType", required = false) String repairType,
                                                          @RequestParam(value = "state") String state,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {

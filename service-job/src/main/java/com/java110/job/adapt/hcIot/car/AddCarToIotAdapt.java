@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
@@ -50,7 +49,6 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcOwnerCarAsynImpl;
-
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;

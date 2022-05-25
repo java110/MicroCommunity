@@ -9,6 +9,7 @@ import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
@@ -21,14 +22,12 @@ import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
  */
 @Java110Listener("deleteOwnerCarListener")
 public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
-
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -38,6 +37,9 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IParkingSpaceBMO parkingSpaceBMOImpl;
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -73,6 +75,24 @@ public class DeleteOwnerCarListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+        if (reqJson.containsKey("psId") && !StringUtil.isEmpty(reqJson.getString("psId"))) {
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setPsId(reqJson.getString("psId"));
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
+            if (!StringUtil.isEmpty(parkingSpaceDtos.get(0).getParkingType()) && parkingSpaceDtos.get(0).getParkingType().equals("2")
+                    && !StringUtil.isEmpty(reqJson.getString("carTypeCd")) && reqJson.getString("carTypeCd").equals("1001")) { //子母车位
+                OwnerCarDto ownerCarDto = new OwnerCarDto();
+                ownerCarDto.setCarId(reqJson.getString("carId"));
+                ownerCarDto.setPsId(reqJson.getString("psId"));
+                ownerCarDto.setOwnerId(reqJson.getString("ownerId"));
+                ownerCarDto.setCarTypeCd("1002"); //成员车辆
+                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+                if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
+                    throw new IllegalArgumentException("该车位下含有子车辆，请先删除子车辆后再进行操作！");
+                }
+            }
+        }
         OwnerCarPo ownerCarPo = new OwnerCarPo();
         ownerCarPo.setCommunityId(reqJson.getString("communityId"));
         ownerCarPo.setCarId(reqJson.getString("carId"));

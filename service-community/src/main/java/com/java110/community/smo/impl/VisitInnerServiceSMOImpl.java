@@ -1,15 +1,15 @@
 package com.java110.community.smo.impl;
 
-
+import com.java110.po.owner.VisitPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IVisitServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.visit.VisitDto;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +35,7 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<VisitDto> queryVisits(@RequestBody  VisitDto visitDto) {
+    public List<VisitDto> queryVisits(@RequestBody VisitDto visitDto) {
 
         //校验是否传了 分页信息
 
@@ -69,7 +69,7 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
      */
     private void refreshVisit(VisitDto visit, List<UserDto> users) {
         for (UserDto user : users) {
-            if (visit.getUserId().equals(user.getUserId())) {
+            if (!StringUtil.isEmpty(visit.getUserId()) && visit.getUserId().equals(user.getUserId())) {
                 BeanConvertUtil.covertBean(user, visit);
             }
         }
@@ -92,7 +92,18 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
 
     @Override
     public int queryVisitsCount(@RequestBody VisitDto visitDto) {
-        return visitServiceDaoImpl.queryVisitsCount(BeanConvertUtil.beanCovertMap(visitDto));    }
+        return visitServiceDaoImpl.queryVisitsCount(BeanConvertUtil.beanCovertMap(visitDto));
+    }
+
+    @Override
+    public void saveVisit(@RequestBody VisitPo visitPo) {
+        visitServiceDaoImpl.saveBusinessVisitInfo(BeanConvertUtil.beanCovertMap(visitPo));
+    }
+
+    @Override
+    public void updateVisit(@RequestBody VisitPo visitPo) {
+        visitServiceDaoImpl.updateVisitInfoInstance(BeanConvertUtil.beanCovertMap(visitPo));
+    }
 
     public IVisitServiceDao getVisitServiceDaoImpl() {
         return visitServiceDaoImpl;

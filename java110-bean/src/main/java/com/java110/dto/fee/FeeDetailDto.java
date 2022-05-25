@@ -1,9 +1,11 @@
 package com.java110.dto.fee;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -63,6 +65,11 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String ardId;
     private String[] states;
 
+    private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+
+    private String fadState;
+    private String fadStateName;
+    private String amount;
 
     public String getPrimeRate() {
         return primeRate;
@@ -287,5 +294,37 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getFadState() {
+        return fadState;
+    }
+
+    public void setFadState(String fadState) {
+        this.fadState = fadState;
+    }
+
+    public String getFadStateName() {
+        return fadStateName;
+    }
+
+    public void setFadStateName(String fadStateName) {
+        this.fadStateName = fadStateName;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public List<FeeAccountDetailDto> getFeeAccountDetailDtoList() {
+        return feeAccountDetailDtoList;
+    }
+
+    public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
+        this.feeAccountDetailDtoList = feeAccountDetailDtoList;
     }
 }

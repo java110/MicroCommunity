@@ -34,6 +34,7 @@ public class OwnerCarAttrPo implements Serializable {
     private String value;
     private String memberId;
     private String carId;
+    private String bId;
 
     public String getAttrId() {
         return attrId;
@@ -89,5 +90,13 @@ public class OwnerCarAttrPo implements Serializable {
 
     public void setCarId(String carId) {
         this.carId = carId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

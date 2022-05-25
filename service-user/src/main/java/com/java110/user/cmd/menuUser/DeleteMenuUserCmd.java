@@ -51,7 +51,7 @@ public class DeleteMenuUserCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "muId", "muId不能为空");
-        Assert.hasKeyAndValue(reqJson, "mId", "mId不能为空");
+//        Assert.hasKeyAndValue(reqJson, "mId", "mId不能为空");
 
     }
 

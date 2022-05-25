@@ -19,7 +19,7 @@ public class StorePo implements Serializable {
     private String address;
     private String tel;
     private String storeTypeCd;
-    private String nearbyLandmarks;
+    private String nearByLandmarks;
     private String mapX;
     private String mapY;
     private String state;
@@ -75,12 +75,12 @@ public class StorePo implements Serializable {
         this.storeTypeCd = storeTypeCd;
     }
 
-    public String getNearbyLandmarks() {
-        return nearbyLandmarks;
+    public String getNearByLandmarks() {
+        return nearByLandmarks;
     }
 
-    public void setNearbyLandmarks(String nearbyLandmarks) {
-        this.nearbyLandmarks = nearbyLandmarks;
+    public void setNearByLandmarks(String nearByLandmarks) {
+        this.nearByLandmarks = nearByLandmarks;
     }
 
     public String getMapX() {

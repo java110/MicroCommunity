@@ -21,6 +21,9 @@ public class OwnerCarAttrDto extends PageDto implements Serializable {
     private String value;
     private String memberId;
     private String carId;
+    private String valueName;
+    private String specName;
+    private String listShow;
 
     private Date createTime;
 
@@ -88,5 +91,29 @@ public class OwnerCarAttrDto extends PageDto implements Serializable {
 
     public void setCarId(String carId) {
         this.carId = carId;
+    }
+
+    public String getValueName() {
+        return valueName;
+    }
+
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getListShow() {
+        return listShow;
+    }
+
+    public void setListShow(String listShow) {
+        this.listShow = listShow;
     }
 }

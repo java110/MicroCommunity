@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -19,10 +20,12 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
+import com.java110.po.room.RoomAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -237,23 +240,36 @@ public class ParkingSpaceBMOImpl extends ApiBaseBMO implements IParkingSpaceBMO 
             ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
         }
         //添加车辆属性
-        OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
-        ownerCarAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_cartId));
-        ownerCarAttrPo.setCarId(ownerCarPo.getCarId());
-        ownerCarAttrPo.setCommunityId(ownerCarPo.getCommunityId());
-        String carAttrs = paramInJson.getString("carAttrs");
-        if (StringUtil.isEmpty(carAttrs)) {
-            throw new IllegalArgumentException("属性值为空");
-        }
-        JSONArray jsonArray = JSONArray.parseArray(carAttrs);
-        String specCd = "";
-        if (jsonArray.size() > 0) {
-            specCd = jsonArray.getJSONObject(0).getString("specCd");
-        }
-        ownerCarAttrPo.setSpecCd(specCd);
-        ownerCarAttrPo.setValue(paramInJson.getString("value"));
-        ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);
+        dealOwnerCarAttr(paramInJson, ownerCarPo, dataFlowContext);
         super.insert(dataFlowContext, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
+    }
+
+    private void dealOwnerCarAttr(JSONObject paramInJson, OwnerCarPo ownerCarPo, DataFlowContext dataFlowContext) {
+
+        if (!paramInJson.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = paramInJson.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+        JSONObject attr = null;
+        int flag = 0;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
+            ownerCarAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+            ownerCarAttrPo.setCommunityId(ownerCarPo.getCommunityId());
+            ownerCarAttrPo.setCarId(ownerCarPo.getCarId());
+            ownerCarAttrPo.setSpecCd(attr.getString("specCd"));
+            ownerCarAttrPo.setValue(attr.getString("value"));
+            flag = ownerCarAttrInnerServiceSMOImpl.saveOwnerCarAttr(ownerCarAttrPo);
+            if (flag < 1) {
+                throw new CmdException("保存车辆属性失败");
+            }
+        }
+
     }
 
     /**

@@ -15,7 +15,6 @@ import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -36,7 +35,6 @@ import java.util.List;
 
 @Java110Listener("deleteCarParkingSpaceListener")
 public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListener {
-
 
     private static Logger logger = LoggerFactory.getLogger(DeleteCarParkingSpaceListener.class);
 
@@ -59,7 +57,6 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
     public HttpMethod getHttpMethod() {
         return HttpMethod.POST;
     }
-
 
     /**
      * @param event   事件对象

@@ -211,7 +211,6 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
@@ -501,6 +500,7 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

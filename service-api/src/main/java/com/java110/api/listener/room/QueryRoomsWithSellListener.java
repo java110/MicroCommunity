@@ -21,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,7 +69,13 @@ public class QueryRoomsWithSellListener extends AbstractServiceApiDataFlowListen
         apiRoomVo.setTotal(total);
         if (total > 0) {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsWithSell(roomDto);
-            apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
+            List<RoomDto> rooms = new ArrayList<>();
+            for (RoomDto room : roomDtoList) {
+                room.setFloorId(reqJson.getString("floorId"));
+                room.setFloorNum(reqJson.getString("floorNum"));
+                rooms.add(room);
+            }
+            apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(rooms, ApiRoomDataVo.class));
         }
         int row = reqJson.getInteger("row");
         apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
@@ -91,13 +98,13 @@ public class QueryRoomsWithSellListener extends AbstractServiceApiDataFlowListen
         try {
             //if (!reqJson.containsKey("floorNum") || StringUtils.isEmpty(reqJson.getString("floorNum"))) {
 
-                List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
 
-                if (floorDtos.size() == 0) {
-                    return;
-                }
+            if (floorDtos.size() == 0) {
+                return;
+            }
 
-                floorId = floorDtos.get(0).getFloorId();
+            floorId = floorDtos.get(0).getFloorId();
             //}
         } finally {
             reqJson.put("floorId", floorId);

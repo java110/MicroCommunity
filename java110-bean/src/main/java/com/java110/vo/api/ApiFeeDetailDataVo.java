@@ -1,8 +1,10 @@
 package com.java110.vo.api;
 
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
 import com.java110.vo.Vo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName ApiFeeVo
@@ -13,8 +15,6 @@ import java.util.Date;
  * add by wuxw 2019/6/2
  **/
 public class ApiFeeDetailDataVo extends Vo {
-
-
     private String primeRate;
     private String detailId;
     private String receivableAmount;
@@ -23,7 +23,6 @@ public class ApiFeeDetailDataVo extends Vo {
     private String receivedAmount;
     private String communityId;
     private String feeId;
-
 
     private String createTime;
     private String state;
@@ -37,6 +36,11 @@ public class ApiFeeDetailDataVo extends Vo {
     private Date preReadingTime;
     private Date curReadingTime;
 
+    private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+
+    private String fadState;
+    private String fadStateName;
+    private String amount;
 
     public String getPrimeRate() {
         return primeRate;
@@ -101,7 +105,6 @@ public class ApiFeeDetailDataVo extends Vo {
     public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-
 
     public String getCreateTime() {
         return createTime;
@@ -181,5 +184,37 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setCurReadingTime(Date curReadingTime) {
         this.curReadingTime = curReadingTime;
+    }
+
+    public String getFadState() {
+        return fadState;
+    }
+
+    public void setFadState(String fadState) {
+        this.fadState = fadState;
+    }
+
+    public String getFadStateName() {
+        return fadStateName;
+    }
+
+    public void setFadStateName(String fadStateName) {
+        this.fadStateName = fadStateName;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public List<FeeAccountDetailDto> getFeeAccountDetailDtoList() {
+        return feeAccountDetailDtoList;
+    }
+
+    public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
+        this.feeAccountDetailDtoList = feeAccountDetailDtoList;
     }
 }

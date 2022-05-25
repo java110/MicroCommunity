@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,8 +71,13 @@ public class SaveRepairReturnVisitBMOImpl implements ISaveRepairReturnVisitBMO {
             repairUserDto.setState(RepairUserDto.STATE_CLOSE);
         }
         //查询报修派单状态
-        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.listOnlyOne(repairUserDtos, "信息错误");
+        List<RepairUserDto> repairUserDtos = new ArrayList<>();
+        List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+        if (repairUsers != null && repairUsers.size() > 0) {
+            repairUserDtos.add(repairUsers.get(repairUsers.size() - 1));
+        } else if (repairUsers == null && repairUsers.size() < 1) {
+            throw new IllegalArgumentException("信息错误！");
+        }
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

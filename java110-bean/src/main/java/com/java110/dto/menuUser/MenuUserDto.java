@@ -1,6 +1,7 @@
 package com.java110.dto.menuUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,62 +16,72 @@ import java.util.Date;
 public class MenuUserDto extends PageDto implements Serializable {
 
     private String muId;
-private String name;
-private String icon;
-private String mId;
-private String staffId;
-private String url;
-private String seq;
-
+    private String name;
+    private String icon;
+    private String mId;
+    private String staffId;
+    private String url;
+    private String seq;
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
     public String getMuId() {
         return muId;
     }
-public void setMuId(String muId) {
+
+    public void setMuId(String muId) {
         this.muId = muId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getIcon() {
+
+    public String getIcon() {
         return icon;
     }
-public void setIcon(String icon) {
+
+    public void setIcon(String icon) {
         this.icon = icon;
     }
-public String getMId() {
+
+    public String getMId() {
         return mId;
     }
-public void setMId(String mId) {
+
+    public void setMId(String mId) {
         this.mId = mId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getUrl() {
+
+    public String getUrl() {
         return url;
     }
-public void setUrl(String url) {
+
+    public void setUrl(String url) {
         this.url = url;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-
 
     public Date getCreateTime() {
         return createTime;

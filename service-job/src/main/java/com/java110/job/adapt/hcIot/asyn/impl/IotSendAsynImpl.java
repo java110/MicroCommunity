@@ -713,6 +713,53 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     }
 
     @Override
+    public void addVisit(JSONObject postParameters) {
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_ADD_VISIT,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extCarId",
+                "carNum",
+                MachineTranslateDto.TYPE_OWNER_CAR);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.ADD_VISIT_URL);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+    }
+
+    @Override
     @Async
     public void updateOwnerCar(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters, MachineTranslateDto.CMD_UPDATE_OWNER_CAR,

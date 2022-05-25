@@ -18,6 +18,7 @@ public class VisitDto extends PageDto implements Serializable {
     private String vName;
     private String visitGender;
     private String ownerId;
+    private String ownerName;
     private String userId;
     private String vId;
     private String visitTime;
@@ -26,7 +27,9 @@ public class VisitDto extends PageDto implements Serializable {
     private String communityId;
     private String bId;
     private String visitStartTime;
+    private String freeTime;
     private String visitEndTime;
+    private String departureEndTime;
     private String statusCd = "0";
     private String carNum;
     private String entourage;
@@ -37,6 +40,13 @@ public class VisitDto extends PageDto implements Serializable {
     private String createTime;
     private String sameDay;
     private String carNumNoEmpty;
+    private String psId;
+    private String recordState;
+    private String parkingAreaName;
+    private String parkingSpaceNum;
+    private String flag;
+    private String fileRelName;
+    private String fileSaveName;
 
     public String getvName() {
         return vName;
@@ -220,5 +230,85 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setCarNumNoEmpty(String carNumNoEmpty) {
         this.carNumNoEmpty = carNumNoEmpty;
+    }
+
+    public String getPsId() {
+        return psId;
+    }
+
+    public void setPsId(String psId) {
+        this.psId = psId;
+    }
+
+    public String getFreeTime() {
+        return freeTime;
+    }
+
+    public void setFreeTime(String freeTime) {
+        this.freeTime = freeTime;
+    }
+
+    public String getRecordState() {
+        return recordState;
+    }
+
+    public void setRecordState(String recordState) {
+        this.recordState = recordState;
+    }
+
+    public String getParkingAreaName() {
+        return parkingAreaName;
+    }
+
+    public void setParkingAreaName(String parkingAreaName) {
+        this.parkingAreaName = parkingAreaName;
+    }
+
+    public String getParkingSpaceNum() {
+        return parkingSpaceNum;
+    }
+
+    public void setParkingSpaceNum(String parkingSpaceNum) {
+        this.parkingSpaceNum = parkingSpaceNum;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public String getDepartureEndTime() {
+        return departureEndTime;
+    }
+
+    public void setDepartureEndTime(String departureEndTime) {
+        this.departureEndTime = departureEndTime;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getFileRelName() {
+        return fileRelName;
+    }
+
+    public void setFileRelName(String fileRelName) {
+        this.fileRelName = fileRelName;
+    }
+
+    public String getFileSaveName() {
+        return fileSaveName;
+    }
+
+    public void setFileSaveName(String fileSaveName) {
+        this.fileSaveName = fileSaveName;
     }
 }

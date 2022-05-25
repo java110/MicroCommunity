@@ -48,6 +48,11 @@ public class AccountDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    //积分账户最大使用积分
+    private String maximumNumber;
+
+    //积分账户抵扣比例
+    private String deductionProportion;
 
     public String getAmount() {
         return amount;
@@ -96,7 +101,6 @@ public class AccountDto extends PageDto implements Serializable {
     public void setObjType(String objType) {
         this.objType = objType;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -168,5 +172,21 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setAcctIds(String[] acctIds) {
         this.acctIds = acctIds;
+    }
+
+    public String getMaximumNumber() {
+        return maximumNumber;
+    }
+
+    public void setMaximumNumber(String maximumNumber) {
+        this.maximumNumber = maximumNumber;
+    }
+
+    public String getDeductionProportion() {
+        return deductionProportion;
+    }
+
+    public void setDeductionProportion(String deductionProportion) {
+        this.deductionProportion = deductionProportion;
     }
 }

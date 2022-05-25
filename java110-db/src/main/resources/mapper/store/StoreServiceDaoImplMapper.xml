@@ -6,25 +6,27 @@
 
     <!-- 保存商户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreInfo" parameterType="Map">
-        insert into
-        business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
-        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearByLandmarks},#{mapX},#{mapY},#{month},#{operate})
+        insert into business_store(store_id, b_id, user_id, name, address, tel, store_type_cd, nearby_landmarks, map_x,
+                                   map_y, month, operate)
+        values (#{storeId}, #{bId}, #{userId}, #{name}, #{address}, #{tel}, #{storeTypeCd}, #{nearByLandmarks}, #{mapX},
+                #{mapY}, #{month}, #{operate})
     </insert>
     <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreAttr" parameterType="Map">
-        insert into business_store_attr(b_id,attr_id,store_id,spec_cd,value,month,operate)
-        values(#{bId},#{attrId},#{storeId},#{specCd},#{value},#{month},#{operate})
+        insert into business_store_attr(b_id, attr_id, store_id, spec_cd, value, month, operate)
+        values (#{bId}, #{attrId}, #{storeId}, #{specCd}, #{value}, #{month}, #{operate})
     </insert>
     <!-- 保存商户照片信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStorePhoto" parameterType="Map">
-        insert into business_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,month,operate)
-        values(#{storePhotoId},#{bId},#{storeId},#{storePhotoTypeCd},#{photo},#{month},#{operate})
+        insert into business_store_photo(store_photo_id, b_id, store_id, store_photo_type_cd, photo, month, operate)
+        values (#{storePhotoId}, #{bId}, #{storeId}, #{storePhotoTypeCd}, #{photo}, #{month}, #{operate})
     </insert>
     <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreCerdentials" parameterType="Map">
-        insert into
-        business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
-        values(#{storeCerdentialsId},#{bId},#{storeId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{month},#{operate})
+        insert into business_store_cerdentials(store_cerdentials_id, b_id, store_id, credentials_cd, value,
+                                               validity_period, positive_photo, negative_photo, month, operate)
+        values (#{storeCerdentialsId}, #{bId}, #{storeId}, #{credentialsCd}, #{value}, #{validityPeriod},
+                #{positivePhoto}, #{negativePhoto}, #{month}, #{operate})
     </insert>
 
     <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
@@ -95,35 +97,57 @@
 
     <!-- 保存商户信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveStoreInfoInstance" parameterType="Map">
-        insert into s_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,status_cd)
-        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,'0'
-        from business_store s where
-        s.operate = 'ADD' and s.b_id=#{bId}
+        insert into s_store(store_id, b_id, user_id, name, address, tel, store_type_cd, nearby_landmarks, map_x, map_y,
+                            status_cd)
+        select s.store_id,
+               s.b_id,
+               s.user_id,
+               s.name,
+               s.address,
+               s.tel,
+               s.store_type_cd,
+               s.nearby_landmarks,
+               s.map_x,
+               s.map_y,
+               '0'
+        from business_store s
+        where s.operate = 'ADD'
+          and s.b_id = #{bId}
     </insert>
 
     <!-- 保存商户属性信息到 instance add by wuxw 2018-07-03 -->
     <insert id="saveStoreAttrsInstance" parameterType="Map">
-        insert into s_store_attr(b_id,attr_id,store_id,spec_cd,value,status_cd)
-        select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,'0'
+        insert into s_store_attr(b_id, attr_id, store_id, spec_cd, value, status_cd)
+        select sa.b_id, sa.attr_id, sa.store_id, sa.spec_cd, sa.value, '0'
         from business_store_attr sa
-        where sa.operate = 'ADD' and sa.b_id=#{bId}
+        where sa.operate = 'ADD'
+          and sa.b_id = #{bId}
     </insert>
 
     <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveStorePhotoInstance" parameterType="Map">
-        insert into s_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,status_cd)
-        select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,'0'
+        insert into s_store_photo(store_photo_id, b_id, store_id, store_photo_type_cd, photo, status_cd)
+        select sp.store_photo_id, sp.b_id, sp.store_id, sp.store_photo_type_cd, sp.photo, '0'
         from business_store_photo sp
-        where sp.operate = 'ADD' and sp.b_id=#{bId}
+        where sp.operate = 'ADD'
+          and sp.b_id = #{bId}
     </insert>
     <!-- 保存 商户证件信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveStoreCerdentialsInstance" parameterType="Map">
-        insert into
-        s_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
-        select
-        sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
+        insert into s_store_cerdentials(store_cerdentials_id, b_id, store_id, credentials_cd, value, validity_period,
+                                        positive_photo, negative_photo, status_cd)
+        select sc.store_cerdentials_id,
+               sc.b_id,
+               sc.store_id,
+               sc.credentials_cd,
+               sc.value,
+               sc.validity_period,
+               sc.positive_photo,
+               sc.negative_photo,
+               '0'
         from business_store_cerdentials sc
-        where sc.operate = 'ADD' and sc.b_id=#{bId}
+        where sc.operate = 'ADD'
+          and sc.b_id = #{bId}
     </insert>
 
     <!-- 查询商户信息 add by wuxw 2018-07-03 -->
@@ -341,16 +365,17 @@
 
     <!--商户成员加入 add by wuxw 2018-10-27 saveBusinessMemberStore-->
     <insert id="saveBusinessMemberStore" parameterType="Map">
-        insert into business_member_store(member_store_id,b_id,store_id,member_id,month,operate)
-        values(#{memberStoreId},#{bId},#{storeId},#{memberId},#{month},#{operate})
+        insert into business_member_store(member_store_id, b_id, store_id, member_id, month, operate)
+        values (#{memberStoreId}, #{bId}, #{storeId}, #{memberId}, #{month}, #{operate})
     </insert>
 
     <!-- 商户成员加入 instance表中 add by wuxw 2018-10-27 -->
     <insert id="saveMemberStoreInstance" parameterType="Map">
-        insert into s_member_store(member_store_id,b_id,store_id,member_id,status_cd)
-        select ms.member_store_id,ms.b_id,ms.store_id,ms.member_id,'0'
-        from business_member_store ms where
-        ms.operate = 'ADD' and ms.b_id=#{bId}
+        insert into s_member_store(member_store_id, b_id, store_id, member_id, status_cd)
+        select ms.member_store_id, ms.b_id, ms.store_id, ms.member_id, '0'
+        from business_member_store ms
+        where ms.operate = 'ADD'
+          and ms.b_id = #{bId}
     </insert>
 
     <!-- 查询商户成员 add by wuxw 2018-10-27 getBusinessMemberStore-->
@@ -404,8 +429,8 @@
 
     <!-- 保存物业用户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreUser" parameterType="Map">
-        insert into business_store_user(store_user_id,b_id,store_id,user_id,rel_cd,month,operate)
-        values(#{storeUserId},#{bId},#{storeId},#{userId},#{relCd},#{month},#{operate})
+        insert into business_store_user(store_user_id, b_id, store_id, user_id, rel_cd, month, operate)
+        values (#{storeUserId}, #{bId}, #{storeId}, #{userId}, #{relCd}, #{month}, #{operate})
     </insert>
 
     <!-- 查询物业 用户信息 add by wuxw 2018-07-03 -->
@@ -425,10 +450,11 @@
 
     <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveStoreUserInstance" parameterType="Map">
-        insert into s_store_user(store_user_id,b_id,store_id,user_id,rel_cd,status_cd)
-        select sc.store_user_id,sc.b_id,sc.store_id,sc.user_id,sc.rel_cd,'0'
+        insert into s_store_user(store_user_id, b_id, store_id, user_id, rel_cd, status_cd)
+        select sc.store_user_id, sc.b_id, sc.store_id, sc.user_id, sc.rel_cd, '0'
         from business_store_user sc
-        where sc.operate = 'ADD' and sc.b_id=#{bId}
+        where sc.operate = 'ADD'
+          and sc.b_id = #{bId}
     </insert>
 
     <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
@@ -490,7 +516,6 @@
         from s_store s,store_type st
         where s.status_cd = '0'
         and s.store_type_cd = st.store_type_cd
-
         <if test="userId != null and userId != ''">
             and s.user_id = #{userId}
         </if>

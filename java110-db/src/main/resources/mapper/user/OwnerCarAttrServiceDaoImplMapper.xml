@@ -93,8 +93,13 @@
     <select id="getOwnerCarAttrInfo" parameterType="Map" resultType="Map">
         select t.attr_id,t.attr_id attrId,t.create_time,t.create_time createTime,t.spec_cd,t.spec_cd
         specCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.value,t.car_id,t.car_id carId
+        bId,t.value,t.car_id,t.car_id carId,
+        s.spec_name specName,
+        v.value_name valueName,
+        s.list_show listShow
         from owner_car_attr t
+        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name = 'owner_car_attr'
+        left join attr_value v on t.`value` = v.`value` and t.spec_cd = v.spec_cd and v.status_cd = '0'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
@@ -119,6 +124,12 @@
         </if>
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
+        </if>
+        <if test="carIds != null and carIds != null">
+            and t.car_id in
+            <foreach collection="carIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

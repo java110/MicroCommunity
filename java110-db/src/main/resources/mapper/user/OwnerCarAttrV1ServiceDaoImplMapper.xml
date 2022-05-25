@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ownerCarAttrV1ServiceDaoImpl">
 
-
     <!-- 保存车辆属性信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarAttrInfo" parameterType="Map">
-        insert into owner_car_attr(
-attr_id,spec_cd,community_id,value,member_id
-) values (
-#{attrId},#{specCd},#{communityId},#{value},#{memberId}
-)
+        insert into owner_car_attr(attr_id, spec_cd, community_id, value, member_id)
+        values (#{attrId}, #{specCd}, #{communityId}, #{value}, #{memberId})
     </insert>
-
 
     <!-- 查询车辆属性信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerCarAttrInfo" parameterType="Map" resultType="Map">
@@ -43,9 +37,7 @@ attr_id,spec_cd,community_id,value,member_id
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改车辆属性信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerCarAttrInfo" parameterType="Map">
@@ -66,10 +58,12 @@ attr_id,spec_cd,community_id,value,member_id
             , t.member_id= #{memberId}
         </if>
         where 1=1
+        <if test="carId !=null and carId != ''">
+            and t.car_id= #{carId}
+        </if>
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
         </if>
-
     </update>
 
     <!-- 查询车辆属性数量 add by wuxw 2018-07-03 -->
@@ -95,8 +89,6 @@ attr_id,spec_cd,community_id,value,member_id
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
-
     </select>
 
 </mapper>

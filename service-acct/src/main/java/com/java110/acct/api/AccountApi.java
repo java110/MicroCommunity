@@ -84,6 +84,7 @@ public class AccountApi {
             @RequestParam(value = "feeId", required = false) String feeId,
             @RequestParam(value = "link", required = false) String link,
             @RequestParam(value = "idCard", required = false) String idCard,
+            @RequestParam(value = "acctType", required = false) String acctType,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         AccountDto accountDto = new AccountDto();
@@ -118,6 +119,7 @@ public class AccountApi {
         accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
+        accountDto.setAcctType(acctType);
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerId);
         ownerDto.setCommunityId(communityId);
@@ -185,6 +187,7 @@ public class AccountApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
         Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
         Assert.hasKeyAndValue(reqJson, "amount", "金额不能为空");
+        Assert.hasKeyAndValue(reqJson, "acctType", "账户类型不能为空");
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setRemark(reqJson.getString("remark"));
         accountDetailPo.setObjId(reqJson.getString("ownerId"));

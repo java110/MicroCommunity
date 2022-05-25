@@ -1,6 +1,7 @@
 package com.java110.acct.bmo.account.impl;
 
 import com.java110.acct.bmo.account.IGetAccountBMO;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.accountDetail.AccountDetailDto;
@@ -32,6 +33,12 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    //键(积分账户最大使用积分)
+    public static final String MAXIMUM_NUMBER = "MAXIMUM_NUMBER";
+
+    //键(积分账户抵扣比例)
+    public static final String DEDUCTION_PROPORTION = "DEDUCTION_PROPORTION";
 
     /**
      * @param accountDto
@@ -116,8 +123,22 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
             accountDtos = addAccountDto(accountDto, ownerDto);
 
         }
+        //积分账户最大使用积分
+        String maximumNumber = CommunitySettingFactory.getValue(ownerDto.getCommunityId(), MAXIMUM_NUMBER);
+        //积分账户抵扣比例
+        String deductionProportion = CommunitySettingFactory.getValue(ownerDto.getCommunityId(), DEDUCTION_PROPORTION);
+        List<AccountDto> accountList = new ArrayList<>();
+        for (AccountDto account : accountDtos) {
+            if (!StringUtil.isEmpty(maximumNumber)) {
+                account.setMaximumNumber(maximumNumber);
+            }
+            if (!StringUtil.isEmpty(deductionProportion)) {
+                account.setDeductionProportion(deductionProportion);
+            }
+            accountList.add(account);
+        }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) accountDto.getRow()), count, accountDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) accountDto.getRow()), count, accountList);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

@@ -1,6 +1,5 @@
 package com.java110.api.listener.owner;
 
-
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;

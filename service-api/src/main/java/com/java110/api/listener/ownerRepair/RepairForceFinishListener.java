@@ -81,8 +81,6 @@ public class RepairForceFinishListener extends AbstractServiceApiPlusListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-
-
         //查询正在处理 工单的师傅
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));

@@ -70,6 +70,10 @@ public class IotConstant {
 
     //添加车辆
     public static final String ADD_OWNER_CAR_URL = "/extApi/car/addCar";
+
+    //添加访客
+    public static final String ADD_VISIT_URL = "/extApi/car/addVisit";
+
     //修改车辆
     public static final String UPDATE_OWNER_CAR_URL = "/extApi/car/updateCar";
     //删除车辆
