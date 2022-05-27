@@ -60,7 +60,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
             String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
             String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-            String ftpPath = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
+            String ftpPath = java110Properties.getFtpPath();
             fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
                     ftpPort, ftpUserName,
                     ftpUserPassword, ftpPath);
