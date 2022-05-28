@@ -10,6 +10,7 @@ import com.java110.dto.msg.SmsDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.cache.CommonCache;
@@ -45,6 +46,9 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
 
     @Autowired
     private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
@@ -126,14 +130,18 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
         if (userAttrDto != null) {
             UserAttrPo userAttrPo = BeanConvertUtil.covertBean(userAttrDto, UserAttrPo.class);
             userAttrPo.setValue(newKey);
-            super.update(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_ATTR_INFO);
+            userAttrPo.setStatusCd("0");
+            //super.update(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_ATTR_INFO);
+            userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
         } else {
             UserAttrPo userAttrPo = new UserAttrPo();
             userAttrPo.setAttrId("-1");
             userAttrPo.setUserId(tmpUserDto.getUserId());
             userAttrPo.setSpecCd(UserAttrDto.SPEC_KEY);
             userAttrPo.setValue(newKey);
-            super.insert(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ATTR_INFO);
+            userAttrPo.setStatusCd("0");
+            //super.insert(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ATTR_INFO);
+            userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
         }
 
 
