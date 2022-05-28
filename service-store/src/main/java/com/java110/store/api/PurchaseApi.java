@@ -267,7 +267,12 @@ public class PurchaseApi {
             //查询当前小区仓库下该物品信息
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResCode(resourceStore.getString("resCode"));
-            resourceStoreDto.setShId(resourceStore.getString("shzId"));//小区目标仓库
+
+            if (StringUtil.isEmpty(resourceStore.getString("shzId"))) {
+                resourceStore.put("shzId", resourceStore.getString("shId"));
+            }
+            resourceStoreDto.setShId(resourceStore.getString("shzId")); //小区目标仓库
+
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             //调整集团仓库物品信息
             ResourceStorePo resourceStorePo = new ResourceStorePo();
