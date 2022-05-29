@@ -11,6 +11,7 @@ public class ApiAdvertDataVo implements Serializable {
     private String classify;
     private String classifyName;
     private String locationTypeCd;
+    private String communityId;
     private String locationObjId;
     private String locationObjName;
     private String state;
@@ -213,5 +214,13 @@ public class ApiAdvertDataVo implements Serializable {
 
     public void setPageUrl(String pageUrl) {
         this.pageUrl = pageUrl;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
