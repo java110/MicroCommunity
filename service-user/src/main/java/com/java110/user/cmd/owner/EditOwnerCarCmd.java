@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.user.cmd.ownerCar;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -22,15 +22,19 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -42,10 +46,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "ownerCar.saveOwnerCar")
-public class SaveOwnerCarCmd extends AbstractServiceCmdListener {
+@Java110Cmd(serviceCode = "owner.editOwnerCar")
+public class EditOwnerCarCmd extends AbstractServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(SaveOwnerCarCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(EditOwnerCarCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
@@ -54,17 +58,25 @@ public class SaveOwnerCarCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "carId", "请求报文中未包含carId");
-        Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
-        Assert.hasKeyAndValue(reqJson, "carType", "请求报文中未包含carType");
-        Assert.hasKeyAndValue(reqJson, "psId", "请求报文中未包含psId");
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
-        Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-        Assert.hasKeyAndValue(reqJson, "carTypeCd", "请求报文中未包含carTypeCd");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
+        Assert.jsonObjectHaveKey(reqJson, "carNum", "请求报文中未包含carNum");
+        Assert.jsonObjectHaveKey(reqJson, "carId", "请求报文中未包含carId");
+        Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
+        Assert.jsonObjectHaveKey(reqJson, "carType", "请求报文中未包含carType");
+        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setMemberId(reqJson.getString("memberId"));
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
+
+        String psId = ownerCarDtos.get(0).getPsId();
+
+        if (StringUtil.isEmpty(psId) || "-1".equals(psId)) {
+            throw new IllegalArgumentException("车位已经被释放，不允许修改车辆信息");
+        }
 
     }
 
@@ -74,10 +86,10 @@ public class SaveOwnerCarCmd extends AbstractServiceCmdListener {
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(reqJson, OwnerCarPo.class);
         ownerCarPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
+        int flag = ownerCarV1InnerServiceSMOImpl.updateOwnerCar(ownerCarPo);
 
         if (flag < 1) {
-            throw new CmdException("保存数据失败");
+            throw new CmdException("修改数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
