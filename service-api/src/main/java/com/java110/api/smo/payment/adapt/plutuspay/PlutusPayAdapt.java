@@ -205,5 +205,22 @@ public class PlutusPayAdapt implements IPayAdapt {
         }
     }
 
+    public static void main(String[] args) {
+        String str = "{\n" +
+                "  \"code\": 0,\n" +
+                "  \"msg\": null,\n" +
+                "  \"content\": \"UUVA4Zh6r0ZzZT1xik2VphAIACe0sNY0awk6do5uiWuOVgqq+4zVAEHTySOjhw5DEcMPIstWJIU7mJrUnm/3GCXq8T49YUFTH+JDJ11jwVUsiuu9HjS3I3bucYMM4xqrvnovqq0VEbP5mRJQY7pECtTa2KikB0wb7bB2hwrsOMJv/Ml2KRPXN59Xt0t42xbP0wxclkgg3iCrPEX79sfer12+wwCKFo028CqN4l/xFN4TelbCiEO35n5Aq+c3k+TzlE6FWJGJDfhu62WGpIOMugUwbNgbuVnmGb92Q5K6/OnTX4oAuOoE0C06jvEOjjiiOMpB2CsEwPAkhnWppu/yIAjZpjVbBEenjcE5Y6UiqCRhlzFVcPEgjIxR6/iuSxRn4KNKcSzeXxzhG5zXtdfHRDsMhbVLNZS6aTvTYLnC2oK9LexU4pomOyu9ZISmApiE2XmgIuzNx8FRrpcuEY5Uh29Y/yNoZghuAaKeqrFevVdzEdr9b+mQOk/CA6vAXxYi4UG1WGsQrAW72puUSWSo3gk9YhC5NYscKR2P3VYcVGsTpTsKxNw84A6tP9o3ubNdAMGFw9Gjjsw+iZlgTkvD6RmWRkgJ1nZcPn8uAw5t6ShMl2+PAZLfHAQbJjYd3y/lznff8tMv8ee50SJgDD07pHqaZXSaikJ1rTGKzB/NEDJFctmE2X18pvynu4Q9pwDhDMOOgKg6TCRqcaEDW+kqpg2+jO7/KnGabmAtO/ryW2p7VDbQpa3dEP05L/KliVsIYX4pQq6f8IunmxsBIs2cIHREI4HqH52OXSms3aHyKxgrEkABF79+teeCqE/YDhwg07/DcmHVkiIrPuo2qj2x+yS4/hMCxLsQhtoH3e1BK8U=\",\n" +
+                " \"signature\": \"alnaEdVgctJkB0O2Qch1CtLUZS5qwr/pwSDFVoLqg6COCz3NAoKNhkPT7p1Ls4uaHq/j7cbG/XrHt0GQQ8UM+2z+DexheHZDG/qILpP4uI3Gkj8ER9z+yR2eGePoLh97WKCf09F/VqRL6Df9OJvPGw/R4rvbtTK85hXv7IxlPlx496/V4nokJumT3Ixb6j932vz1G4d3Jmeq8euvbpS5js6Ikq2p6XEFgAJUUODdmzp5ESch53vMzcV4P7Xsph/qtYLBls68B2b0xtyXusd0RfFTN7u5Ht9tsMki6SJbUEye+uxN2jdb/OjMDGpvpZFO0oozK5NnDNQFyOpafZICGA==\" }";
+        JSONObject json = JSON.parseObject(str);
+
+        String signature = json.getString("signature");
+        String content = json.getString("content");
+        //解密
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), "5475734f75736368496d565678494a6b");
+        //服务器返回内容
+        String paramOut = new String(bb);
+        System.out.println(paramOut);
+    }
+
 
 }

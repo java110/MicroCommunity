@@ -77,8 +77,6 @@ public class BusinessDatabusApi {
      */
     @RequestMapping(value = "/deleteBusinessDatabus", method = RequestMethod.POST)
     public ResponseEntity<String> deleteBusinessDatabus(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "databusId", "databusId不能为空");
 
 
