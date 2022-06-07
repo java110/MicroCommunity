@@ -79,8 +79,6 @@ public class UpdateWorkflowCmd extends AbstractServiceCmdListener {
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
-    @Autowired
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
