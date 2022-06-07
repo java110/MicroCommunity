@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workflowStepStaffV1ServiceDaoImpl">
+
+
+    <!-- 保存流程步骤信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkflowStepStaffInfo" parameterType="Map">
+        insert into workflow_step_staff(
+        wss_id,staff_role,step_id,staff_name,community_id,fee_id,staff_id,flow_type
+        ) values (
+        #{wssId},#{staffRole},#{stepId},#{staffName},#{communityId},#{feeId},#{staffId},#{flowType}
+        )
+    </insert>
+
+
+    <!-- 查询流程步骤信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkflowStepStaffInfo" parameterType="Map" resultType="Map">
+        select t.wss_id,t.wss_id wssId,t.staff_role,t.staff_role staffRole,t.step_id,t.step_id
+        stepId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.fee_id,t.fee_id feeId,t.staff_id,t.staff_id staffId,t.flow_type,t.flow_type flowType
+        from workflow_step_staff t
+        where 1 =1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="staffRole !=null and staffRole != ''">
+            and t.staff_role= #{staffRole}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            and t.flow_type= #{flowType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改流程步骤信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkflowStepStaffInfo" parameterType="Map">
+        update workflow_step_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="staffRole !=null and staffRole != ''">
+            , t.staff_role= #{staffRole}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            , t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            , t.flow_type= #{flowType}
+        </if>
+        where 1=1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+
+    </update>
+
+    <!-- 查询流程步骤数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkflowStepStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from workflow_step_staff t
+        where 1 =1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="staffRole !=null and staffRole != ''">
+            and t.staff_role= #{staffRole}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="flowType !=null and flowType != ''">
+            and t.flow_type= #{flowType}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -8,9 +8,9 @@
     <!-- 保存工作流程信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkflowInfo" parameterType="Map">
         insert into workflow(
-        skip_level,describle,community_id,store_id,flow_id,flow_name,flow_type,process_definition_key
+        skip_level,describle,community_id,store_id,flow_id,flow_name,flow_type,process_definition_key,start_node_finish
         ) values (
-        #{skipLevel},#{describle},#{communityId},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey}
+        #{skipLevel},#{describle},#{communityId},#{storeId},#{flowId},#{flowName},#{flowType},#{processDefinitionKey},#{startNodeFinish}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.skip_level,t.skip_level skipLevel,t.describle,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.flow_id,t.flow_id
         flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type
-        flowType,t.process_definition_key,t.process_definition_key processDefinitionKey
+        flowType,t.process_definition_key,t.process_definition_key processDefinitionKey,t.start_node_finish startNodeFinish
         from workflow t
         where 1 =1
         <if test="skipLevel !=null and skipLevel != ''">
@@ -81,6 +81,9 @@
         </if>
         <if test="flowType !=null and flowType != ''">
             , t.flow_type= #{flowType}
+        </if>
+        <if test="startNodeFinish !=null and startNodeFinish != ''">
+            , t.start_node_finish= #{startNodeFinish}
         </if>
         <if test="processDefinitionKey !=null and processDefinitionKey != ''">
             , t.process_definition_key= #{processDefinitionKey}

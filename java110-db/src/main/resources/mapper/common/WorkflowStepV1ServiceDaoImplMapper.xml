@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workflowStepV1ServiceDaoImpl">
+
+
+    <!-- 保存流程步骤信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkflowStepInfo" parameterType="Map">
+        insert into workflow_step(
+        step_id,type,community_id,store_id,flow_id,seq
+        ) values (
+        #{stepId},#{type},#{communityId},#{storeId},#{flowId},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询流程步骤信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkflowStepInfo" parameterType="Map" resultType="Map">
+        select t.step_id,t.step_id stepId,t.status_cd,t.status_cd statusCd,t.type,t.community_id,t.community_id
+        communityId,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.seq
+        from workflow_step t
+        where 1 =1
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改流程步骤信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkflowStepInfo" parameterType="Map">
+        update workflow_step t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+
+    </update>
+
+    <!-- 查询流程步骤数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkflowStepsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from workflow_step t
+        where 1 =1
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

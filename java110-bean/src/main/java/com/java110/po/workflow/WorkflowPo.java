@@ -13,6 +13,7 @@ public class WorkflowPo implements Serializable {
     private String flowType;
     private String processDefinitionKey;
     private String statusCd = "0";
+    private String startNodeFinish ="N";
 
     public String getSkipLevel() {
         return skipLevel;
@@ -84,5 +85,13 @@ public class WorkflowPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStartNodeFinish() {
+        return startNodeFinish;
+    }
+
+    public void setStartNodeFinish(String startNodeFinish) {
+        this.startNodeFinish = startNodeFinish;
     }
 }

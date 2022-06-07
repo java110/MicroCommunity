@@ -63,6 +63,8 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String startNodeFinish;
+
     private List<WorkflowStepDto> workflowSteps;
 
 
@@ -178,5 +180,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setOperationType(String operationType) {
         this.operationType = operationType;
+    }
+
+    public String getStartNodeFinish() {
+        return startNodeFinish;
+    }
+
+    public void setStartNodeFinish(String startNodeFinish) {
+        this.startNodeFinish = startNodeFinish;
     }
 }

@@ -11,6 +11,7 @@ public class WorkflowStepStaffPo implements Serializable {
     private String staffId;
     private String staffRole;
     private String flowType;
+    private String statusCd;
 
     public String getWssId() {
         return wssId;
@@ -66,5 +67,13 @@ public class WorkflowStepStaffPo implements Serializable {
 
     public void setFlowType(String flowType) {
         this.flowType = flowType;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

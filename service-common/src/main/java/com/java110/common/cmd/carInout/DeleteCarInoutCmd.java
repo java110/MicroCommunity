@@ -21,16 +21,16 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.po.car.CarInoutPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * 类表述：删除
  * 服务编码：carInout.deleteCarInout
@@ -43,7 +43,7 @@ import com.java110.core.log.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "carInout.deleteCarInout")
 public class DeleteCarInoutCmd extends AbstractServiceCmdListener {
-  private static Logger logger = LoggerFactory.getLogger(DeleteCarInoutCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteCarInoutCmd.class);
 
     @Autowired
     private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
@@ -51,7 +51,7 @@ public class DeleteCarInoutCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "inoutId", "inoutId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CarInoutPo carInoutPo = BeanConvertUtil.covertBean(reqJson, CarInoutPo.class);
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(reqJson, CarInoutPo.class);
         int flag = carInoutV1InnerServiceSMOImpl.deleteCarInout(carInoutPo);
 
         if (flag < 1) {

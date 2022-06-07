@@ -366,7 +366,12 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                         process.addFlowElement(createSequenceFlow("userTask" + y + u, "parallelGateway-join" + y, "userTask-parallelGateway-join", ""));
                         if (u == (userList.size() - 1)) {
                             if (y == (workflowStepDtos.size() - 1)) {
-                                process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", ""));
+                                if("Y".equals(workflowDto.getStartNodeFinish())){ //需要提交者确认
+                                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", ""));
+                                }else {
+                                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "endEvent", "parallelGateway-join-endEvent" + y, "${flag=='true'}"));
+                                    process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "tparallelGateway-join-repulse" + y, "${flag=='false'}"));
+                                }
                             } else {
                                 process.addFlowElement(createSequenceFlow("parallelGateway-join" + y, "repulse" + y, "parallelGateway-join-repulse", "${flag=='false'}"));
                             }
@@ -405,7 +410,12 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
                     }*/
                     process.addFlowElement(createSequenceFlow("repulse" + y, "endEvent", "repulse" + y + "endEvent", "${flag=='false'}"));
                     if (y == (workflowStepDtos.size() - 1)) {
-                        process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, ""));
+                        if("Y".equals(workflowDto.getStartNodeFinish())){ //需要提交者确认
+                            process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, ""));
+                        }else {
+                            process.addFlowElement(createSequenceFlow("task" + y, "endEvent", "task-endEvent" + y, "${flag=='true'}"));
+                            process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
+                        }
                     } else {
                         process.addFlowElement(createSequenceFlow("task" + y, "repulse" + y, "task-repulse" + y, "${flag=='false'}"));
                     }
@@ -421,22 +431,7 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
             Deployment deployment = processEngine.getRepositoryService().createDeployment()
                     .addBpmnModel(process.getId() + ".bpmn", model).name(process.getId() + "_deployment").deploy();
             workflowDto.setProcessDefinitionKey(deployment.getId());
-            //        // 4. 启动一个流程实例
-//        ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(process.getId());
-//
-//        // 5. 获取流程任务
-//        List<Task> tasks = processEngine.getTaskService().createTaskQuery().processInstanceId(processInstance.getId()).list();
-//        try{
-//            // 6. 将流程图保存到本地文件
-//            InputStream processDiagram = processEngine.getRepositoryService().getProcessDiagram(processInstance.getProcessDefinitionId());
-//            FileUtils.copyInputStreamToFile(processDiagram, new File("/deployments/"+process.getId()+".png"));
-//
-//            // 7. 保存BPMN.xml到本地文件
-//            InputStream processBpmn = processEngine.getRepositoryService().getResourceAsStream(deployment.getId(), process.getId()+".bpmn");
-//            FileUtils.copyInputStreamToFile(processBpmn,new File("/deployments/"+process.getId()+".bpmn"));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
+
         } catch (Exception e) {
             logger.error("部署工作流失败", e);
         }

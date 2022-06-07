@@ -131,7 +131,11 @@
         select t.collect_count,t.collect_count collectCount,t.like_count,t.like_count likeCount,t.status_cd,t.status_cd
         statusCd,t.title,t.read_count,t.read_count readCount,t.user_name,t.user_name userName,t.user_id,t.user_id
         userId,t.activities_id,t.activities_id activitiesId,t.type_cd,t.type_cd
-        typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        typeCd,
+        <if test="activitiesId !=null and activitiesId != ''">
+        t.context,
+        </if>
+        t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,act.type_name typeCdName,t.create_time
         createTime
         from activities t
