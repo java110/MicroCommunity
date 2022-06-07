@@ -129,6 +129,7 @@ public class UpdateWorkflowCmd extends AbstractServiceCmdListener {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        logger.debug("进入修改工作流cmd>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         if (reqJson.containsKey("flowType")) {
             String flowType = reqJson.getString("flowType");
