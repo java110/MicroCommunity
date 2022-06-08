@@ -4,14 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.file.FileDto;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.file.IAddFileSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +35,9 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
 
 
@@ -50,13 +59,28 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
         paramIn.put("context", fileContext);
         paramIn.put("fileName", uploadFile.getOriginalFilename());
 
+        FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
 
-        String apiUrl = "file.saveFile" ;
+        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
 
 
-        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                apiUrl,
-                HttpMethod.POST);
+
+        JSONObject outParam = new JSONObject();
+        outParam.put("fileId", fileName);
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        outParam.put("url",imgUrl+fileName);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
+
+//
+//        String apiUrl = "file.saveFile" ;
+//
+//
+//        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+//                apiUrl,
+//                HttpMethod.POST);
         return responseEntity;
 
     }
