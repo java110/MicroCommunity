@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.intf.community;
+package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerDto;
@@ -33,7 +33,7 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@FeignClient(name = "${java110.community-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "${java110.user-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/ownerV1Api")
 public interface IOwnerV1InnerServiceSMO {
 

@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.smo.impl;
+package com.java110.user.smo.impl;
 
 
-import com.java110.community.dao.IOwnerRoomRelV1ServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.intf.community.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.user.dao.IOwnerRoomRelV1ServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

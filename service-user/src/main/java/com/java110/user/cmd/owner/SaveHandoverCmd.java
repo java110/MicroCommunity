@@ -13,11 +13,10 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.community.IOwnerRoomRelV1InnerServiceSMO;
-import com.java110.intf.community.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -28,7 +27,6 @@ import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.po.room.RoomPo;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -37,7 +35,6 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.saveHandover")

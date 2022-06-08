@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.dao;
+package com.java110.user.dao;
 
 
 import com.java110.utils.exception.DAOException;
@@ -28,50 +28,50 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2021-09-14 18:56:16 mail: 928255095@qq.com
+ * add by 吴学文 at 2021-09-14 18:57:35 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IOwnerV1ServiceDao {
+public interface IOwnerRoomRelV1ServiceDao {
 
 
     /**
-     * 保存 业主信息信息
+     * 保存 业主房屋关系表信息
      * @param info
      * @throws DAOException DAO异常
      */
-    int saveOwnerInfo(Map info) throws DAOException;
+    int saveOwnerRoomRelInfo(Map info) throws DAOException;
 
 
 
 
     /**
-     * 查询业主信息信息（instance过程）
-     * 根据bId 查询业主信息信息
+     * 查询业主房屋关系表信息（instance过程）
+     * 根据bId 查询业主房屋关系表信息
      * @param info bId 信息
-     * @return 业主信息信息
+     * @return 业主房屋关系表信息
      * @throws DAOException DAO异常
      */
-    List<Map> getOwnerInfo(Map info) throws DAOException;
+    List<Map> getOwnerRoomRelInfo(Map info) throws DAOException;
 
 
 
     /**
-     * 修改业主信息信息
+     * 修改业主房屋关系表信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updateOwnerInfo(Map info) throws DAOException;
+    int updateOwnerRoomRelInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询业主信息总数
+     * 查询业主房屋关系表总数
      *
-     * @param info 业主信息信息
-     * @return 业主信息数量
+     * @param info 业主房屋关系表信息
+     * @return 业主房屋关系表数量
      */
-    int queryOwnersCount(Map info);
+    int queryOwnerRoomRelsCount(Map info);
 
 }

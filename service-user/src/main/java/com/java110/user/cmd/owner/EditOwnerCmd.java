@@ -14,7 +14,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.community.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;

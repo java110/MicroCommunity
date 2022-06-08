@@ -10,6 +10,8 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.entity.assetImport.ImportOwnerRoomDto;
 import com.java110.intf.community.*;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.po.floor.FloorPo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
@@ -30,7 +32,7 @@ import java.util.List;
  */
 @RestController
 public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implements IImportOwnerRoomInnerServiceSMO {
-    private static Logger logger = LoggerFactory.getLogger(CommunityServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(ImportOwnerRoomInnerServiceSMOImpl.class);
 
 
     @Autowired
