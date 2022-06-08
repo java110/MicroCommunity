@@ -84,21 +84,26 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray  businessMachines = new JSONArray();
         if (data.containsKey(OwnerPo.class.getSimpleName())) {
             Object bObj = data.get(OwnerPo.class.getSimpleName());
-            JSONArray businessMachines = null;
             if (bObj instanceof JSONObject) {
-                businessMachines = new JSONArray();
                 businessMachines.add(bObj);
             } else if (bObj instanceof List) {
                 businessMachines = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessMachines = (JSONArray) bObj;
             }
-            for (int bOwnerIndex = 0; bOwnerIndex < businessMachines.size(); bOwnerIndex++) {
-                JSONObject businessOwner = businessMachines.getJSONObject(bOwnerIndex);
-                doSendMachine(business, businessOwner);
+
+        }else {
+            if (data instanceof JSONObject) {
+                businessMachines.add(data);
             }
+        }
+
+        for (int bOwnerIndex = 0; bOwnerIndex < businessMachines.size(); bOwnerIndex++) {
+            JSONObject businessOwner = businessMachines.getJSONObject(bOwnerIndex);
+            doSendMachine(business, businessOwner);
         }
     }
 

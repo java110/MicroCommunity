@@ -57,27 +57,24 @@ public class DeleteCommunityToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        JSONArray businessCommunitys = null;
+        JSONArray   businessCommunitys = new JSONArray();
         if (data.containsKey(CommunityPo.class.getSimpleName())) {
             Object bObj = data.get(CommunityPo.class.getSimpleName());
-
             if (bObj instanceof JSONObject) {
-                businessCommunitys = new JSONArray();
                 businessCommunitys.add(bObj);
             } else if (bObj instanceof List) {
                 businessCommunitys = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessCommunitys = (JSONArray) bObj;
             }
-            for (int bMachineIndex = 0; bMachineIndex < businessCommunitys.size(); bMachineIndex++) {
-                JSONObject businessCommunity = businessCommunitys.getJSONObject(bMachineIndex);
-                doDeleteCommunity(business, businessCommunity);
-            }
         }else {
             if (data instanceof JSONObject) {
-                businessCommunitys = new JSONArray();
                 businessCommunitys.add(data);
             }
+        }
+        for (int bMachineIndex = 0; bMachineIndex < businessCommunitys.size(); bMachineIndex++) {
+            JSONObject businessCommunity = businessCommunitys.getJSONObject(bMachineIndex);
+            doDeleteCommunity(business, businessCommunity);
         }
     }
 

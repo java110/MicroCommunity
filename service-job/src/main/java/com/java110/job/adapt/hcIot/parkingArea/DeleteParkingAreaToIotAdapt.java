@@ -58,11 +58,11 @@ public class DeleteParkingAreaToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessParkingAreas = new JSONArray();
         if (data.containsKey(ParkingAreaPo.class.getSimpleName())) {
             Object bObj = data.get(ParkingAreaPo.class.getSimpleName());
-            JSONArray businessParkingAreas = null;
             if (bObj instanceof JSONObject) {
-                businessParkingAreas = new JSONArray();
+
                 businessParkingAreas.add(bObj);
             } else if (bObj instanceof List) {
                 businessParkingAreas = JSONArray.parseArray(JSONObject.toJSONString(bObj));
@@ -70,10 +70,16 @@ public class DeleteParkingAreaToIotAdapt extends DatabusAdaptImpl {
                 businessParkingAreas = (JSONArray) bObj;
             }
             //JSONObject businessParkingArea = data.getJSONObject("businessParkingArea");
-            for (int bParkingAreaIndex = 0; bParkingAreaIndex < businessParkingAreas.size(); bParkingAreaIndex++) {
-                JSONObject businessParkingArea = businessParkingAreas.getJSONObject(bParkingAreaIndex);
-                doSendParkingArea(business, businessParkingArea);
+
+        }else {
+            if (data instanceof JSONObject) {
+
+                businessParkingAreas.add(data);
             }
+        }
+        for (int bParkingAreaIndex = 0; bParkingAreaIndex < businessParkingAreas.size(); bParkingAreaIndex++) {
+            JSONObject businessParkingArea = businessParkingAreas.getJSONObject(bParkingAreaIndex);
+            doSendParkingArea(business, businessParkingArea);
         }
     }
 

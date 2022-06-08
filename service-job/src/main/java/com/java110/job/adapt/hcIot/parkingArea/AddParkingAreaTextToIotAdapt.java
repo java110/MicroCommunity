@@ -70,11 +70,10 @@ public class AddParkingAreaTextToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessParkingAreaTexts = new JSONArray();
         if (data.containsKey(ParkingAreaTextPo.class.getSimpleName())) {
             Object bObj = data.get(ParkingAreaTextPo.class.getSimpleName());
-            JSONArray businessParkingAreaTexts = null;
             if (bObj instanceof JSONObject) {
-                businessParkingAreaTexts = new JSONArray();
                 businessParkingAreaTexts.add(bObj);
             } else if (bObj instanceof List) {
                 businessParkingAreaTexts = JSONArray.parseArray(JSONObject.toJSONString(bObj));
@@ -82,10 +81,14 @@ public class AddParkingAreaTextToIotAdapt extends DatabusAdaptImpl {
                 businessParkingAreaTexts = (JSONArray) bObj;
             }
             //JSONObject businessParkingAreaText = data.getJSONObject("businessParkingAreaText");
-            for (int bParkingAreaTextIndex = 0; bParkingAreaTextIndex < businessParkingAreaTexts.size(); bParkingAreaTextIndex++) {
-                JSONObject businessParkingAreaText = businessParkingAreaTexts.getJSONObject(bParkingAreaTextIndex);
-                doSendParkingAreaText(business, businessParkingAreaText);
+        }else {
+            if (data instanceof JSONObject) {
+                businessParkingAreaTexts.add(data);
             }
+        }
+        for (int bParkingAreaTextIndex = 0; bParkingAreaTextIndex < businessParkingAreaTexts.size(); bParkingAreaTextIndex++) {
+            JSONObject businessParkingAreaText = businessParkingAreaTexts.getJSONObject(bParkingAreaTextIndex);
+            doSendParkingAreaText(business, businessParkingAreaText);
         }
     }
 
