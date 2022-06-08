@@ -14,10 +14,7 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
-import sun.misc.ProxyGenerator;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,15 +212,5 @@ public class ServiceCmdEventPublishing {
         }
     }
 
-    public static void testPoxy(Class clazz) {
-        byte[] bytes = ProxyGenerator.generateProxyClass("$Proxy", new Class[]{clazz});
-        try (
-                FileOutputStream fos = new FileOutputStream(new File("D:/$Proxy.class"))
-        ) {
-            fos.write(bytes);
-            fos.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }
