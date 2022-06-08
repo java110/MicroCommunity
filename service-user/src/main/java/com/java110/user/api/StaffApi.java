@@ -147,7 +147,7 @@ public class StaffApi {
                 + "&communityId=" + communityId + "&appId=" + AppDto.WECHAT_OWNER_APP_ID;
 
         if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
-            ownerUrl += ("&wAppId=" + smallWeChatDtos.get(0).getAppid());
+            ownerUrl += ("&wAppId=" + smallWeChatDtos.get(0).getAppId());
         }
         return ResultVo.createResponseEntity(ownerUrl);
     }
