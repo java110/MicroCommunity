@@ -2,6 +2,7 @@ package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeDto;
@@ -23,7 +24,6 @@ import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -138,6 +138,9 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
         List<String> memberIdList = new ArrayList<>(ownerAppUserDtos.size());
         for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
+            if (StringUtil.isEmpty(appUserDto.getMemberId()) || "-1".equals(appUserDto.getMemberId())) {
+                continue;
+            }
             memberIdList.add(appUserDto.getMemberId());
         }
 
