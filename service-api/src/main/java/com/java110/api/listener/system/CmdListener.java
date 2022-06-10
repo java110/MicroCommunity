@@ -70,7 +70,7 @@ public class CmdListener extends AbstractServiceApiListener {
         serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
         String requestUrl = service.getUrl() + "/cmd" + serviceCode;
-
+        //
         ResponseEntity responseEntity = null;
         if (!StringUtil.isNullOrNone(orgRequestUrl)) {
             String param = orgRequestUrl.contains("?") ? orgRequestUrl.substring(orgRequestUrl.indexOf("?") + 1, orgRequestUrl.length()) : "";

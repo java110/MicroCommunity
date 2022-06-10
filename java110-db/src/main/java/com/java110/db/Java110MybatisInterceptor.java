@@ -282,7 +282,11 @@ public class Java110MybatisInterceptor implements Interceptor {
                     String propertyName = parameterMapping.getProperty();
                     if (metaObject.hasGetter(propertyName)) {
                         Object obj = metaObject.getValue(propertyName);
-                        sql = sql.replaceFirst("\\?", getParameterValue(obj));
+                        String value = getParameterValue(obj);
+                        if(value.contains("${")){
+                            value = value.replace("${","\\${");
+                        }
+                        sql = sql.replaceFirst("\\?", value);
                         values.add(getParameterValue(obj));
                     } else if (boundSql.hasAdditionalParameter(propertyName)) {
                         Object obj = boundSql.getAdditionalParameter(propertyName);
@@ -370,13 +374,5 @@ public class Java110MybatisInterceptor implements Interceptor {
     }
 
 
-    public static void main(String[] args) {
-        String tmpTable = "" +
-                "        id_card,open_id,link,remark,user_id,app_type,app_user_name,nickname,headimgurl,community_name,state,app_user_id,community_id,app_type_cd,member_id\n" +
-                "        ";
-        String[] a = tmpTable.split(",");
-        for(String a1:a){
-            System.out.println(a1);
-        }
-    }
+
 }

@@ -18,6 +18,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class QueryContractCmd extends AbstractServiceCmdListener {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
         ContractDto contractDto = BeanConvertUtil.covertBean(reqJson, ContractDto.class);
         //如果是到期合同
         if ("1".equals(reqJson.getString("expiration"))) {

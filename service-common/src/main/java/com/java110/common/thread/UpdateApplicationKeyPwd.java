@@ -132,4 +132,12 @@ public class UpdateApplicationKeyPwd implements Runnable {
         return calendar.get(Calendar.DAY_OF_MONTH) == 1;
     }
 
+    public static void main(String[]args){
+        String a="?";
+        String value = "'${nextUserId}'";
+        if(value.contains("${")){
+            value = value.replace("${","\\${");
+        }
+        System.out.println(a.replaceFirst("\\?",value));
+    }
 }
