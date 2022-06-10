@@ -14,14 +14,6 @@
         )
     </insert>
 
-    <!-- 保存工作流节点信息 add by wuxw 2018-07-03 -->
-    <insert id="saveBusinessWorkflowStepStaffInfo" parameterType="Map">
-        insert into business_workflow_step_staff(
-        wss_id,operate,step_id,staff_name,b_id,community_id,staff_id,staff_role,flow_type
-        ) values (
-        #{wssId},#{operate},#{stepId},#{staffName},#{bId},#{communityId},#{staffId},#{staffRole},#{flowType}
-        )
-    </insert>
 
 
     <!-- 查询流程步骤信息 add by wuxw 2018-07-03 -->
