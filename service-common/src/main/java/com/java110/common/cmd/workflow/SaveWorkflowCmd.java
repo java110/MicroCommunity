@@ -22,15 +22,15 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.AbstractServiceCmdListener;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,12 +55,12 @@ public class SaveWorkflowCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "flowId", "请求报文中未包含flowId");
-Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowName");
-Assert.hasKeyAndValue(reqJson, "skipLevel", "请求报文中未包含skipLevel");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
-Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
+        Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowName");
+        Assert.hasKeyAndValue(reqJson, "skipLevel", "请求报文中未包含skipLevel");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
+        Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
+        WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
         workflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo);
 
