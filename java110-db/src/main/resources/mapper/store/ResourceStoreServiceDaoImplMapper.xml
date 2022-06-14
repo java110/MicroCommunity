@@ -318,7 +318,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        order by t.create_time desc
+        order by t.res_code
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

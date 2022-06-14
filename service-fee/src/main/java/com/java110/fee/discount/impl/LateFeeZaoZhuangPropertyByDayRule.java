@@ -133,11 +133,19 @@ public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
     }
 
     public static void main(String[] args) throws Exception {
-        int day = 316;
-        double money = 0.0;
+        int day = 266;
+        BigDecimal money = new BigDecimal(0);
+        BigDecimal yearFee = null;
+        BigDecimal monthFee = null;
+        BigDecimal dayMoney = null;
+        BigDecimal priceDec = new BigDecimal(118.24);
         for (int i = 1; i < day + 1; i++) {
-            money += ((124.51 / 30 * (i - 1) + money) * 0.003);
-            System.out.println("第" + i + "天 违约金 = " + money + ",计算公式为：(124.51/30 * (" + i + "-1) + " + money + ") * 0.003");
+            yearFee = priceDec.multiply(new BigDecimal(12));
+            monthFee = yearFee.divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
+            dayMoney = monthFee.multiply(new BigDecimal(i - 1));
+            dayMoney = dayMoney.multiply(new BigDecimal(0.003));
+            money = money.add(dayMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            System.out.println("第" + i + "天 违约金 = " + money.doubleValue() + ",计算公式为：(124.51/30 * (" + i + "-1) + " + money.doubleValue() + ") * 0.003");
         }
 
         System.out.println(money);
