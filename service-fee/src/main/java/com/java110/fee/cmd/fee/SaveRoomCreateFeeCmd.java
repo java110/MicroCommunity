@@ -3,7 +3,7 @@ package com.java110.fee.cmd.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.saveRoomCreateFee")
-public class SaveRoomCreateFeeCmd extends AbstractServiceCmdListener {
+public class SaveRoomCreateFeeCmd extends Cmd {
 
     private static final int DEFAULT_ADD_FEE_COUNT = 200;
 

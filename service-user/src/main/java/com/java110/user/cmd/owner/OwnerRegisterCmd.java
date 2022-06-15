@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -38,7 +38,7 @@ import java.util.List;
  * 服务注册功能迁移
  */
 @Java110Cmd(serviceCode = "owner.ownerRegister")
-public class OwnerRegisterCmd extends AbstractServiceCmdListener {
+public class OwnerRegisterCmd extends Cmd {
     private final static Logger logger = LoggerFactory.getLogger(OwnerRegisterCmd.class);
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;

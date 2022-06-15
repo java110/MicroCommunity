@@ -1,29 +1,17 @@
 package com.java110.fee.cmd.tempCarFee;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
-import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 类表述：删除
@@ -36,7 +24,7 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "tempCarFee.getTempCarFeeOrder")
-public class GetTempCarFeeOrderCmd extends AbstractServiceCmdListener {
+public class GetTempCarFeeOrderCmd extends Cmd {
     @Autowired
     private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
     @Autowired

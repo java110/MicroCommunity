@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
 import com.java110.po.owner.OwnerPo;
@@ -41,7 +41,7 @@ import com.java110.core.log.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "buildingOwner.deleteBuildingOwner")
-public class DeleteBuildingOwnerCmd extends AbstractServiceCmdListener {
+public class DeleteBuildingOwnerCmd extends Cmd {
   private static Logger logger = LoggerFactory.getLogger(DeleteBuildingOwnerCmd.class);
 
     @Autowired

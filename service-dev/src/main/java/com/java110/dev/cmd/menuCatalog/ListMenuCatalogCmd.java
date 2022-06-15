@@ -18,7 +18,7 @@ package com.java110.dev.cmd.menuCatalog;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "menuCatalog.listMenuCatalog")
-public class ListMenuCatalogCmd extends AbstractServiceCmdListener {
+public class ListMenuCatalogCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListMenuCatalogCmd.class);
     @Autowired

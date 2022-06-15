@@ -3,7 +3,7 @@ package com.java110.report.cmd.room;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
@@ -19,7 +19,7 @@ import java.util.List;
      查询房屋结构图
  */
 @Java110Cmd(serviceCode = "room.listRoomStructure")
-public class ListRoomStructureCmd extends AbstractServiceCmdListener {
+public class ListRoomStructureCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;

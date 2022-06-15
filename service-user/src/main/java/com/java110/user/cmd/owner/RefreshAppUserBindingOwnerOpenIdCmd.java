@@ -3,7 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.refreshAppUserBindingOwnerOpenId")
-public class RefreshAppUserBindingOwnerOpenIdCmd extends AbstractServiceCmdListener {
+public class RefreshAppUserBindingOwnerOpenIdCmd extends Cmd {
 
     @Autowired
     private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;

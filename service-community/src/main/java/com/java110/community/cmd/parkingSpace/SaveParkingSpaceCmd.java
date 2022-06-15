@@ -3,7 +3,7 @@ package com.java110.community.cmd.parkingSpace;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 @Java110Cmd(serviceCode = "parkingSpace.saveParkingSpace")
-public class SaveParkingSpaceCmd extends AbstractServiceCmdListener {
+public class SaveParkingSpaceCmd extends Cmd {
 
     @Autowired
     private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;

@@ -3,7 +3,7 @@ package com.java110.community.cmd.community;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgCommunityDto;
@@ -28,7 +28,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 @Java110Cmd(serviceCode = "community.listMyEnteredCommunitys")
-public class ListMyEnteredCommunitysCmd extends AbstractServiceCmdListener {
+public class ListMyEnteredCommunitysCmd extends Cmd {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;

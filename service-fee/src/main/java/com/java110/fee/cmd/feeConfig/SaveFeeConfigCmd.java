@@ -3,7 +3,7 @@ package com.java110.fee.cmd.feeConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
@@ -15,7 +15,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Java110Cmd(serviceCode = "feeConfig.saveFeeConfig")
-public class SaveFeeConfigCmd extends AbstractServiceCmdListener {
+public class SaveFeeConfigCmd extends Cmd {
 
     @Autowired
     private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;

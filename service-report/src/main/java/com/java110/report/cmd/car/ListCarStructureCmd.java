@@ -3,9 +3,8 @@ package com.java110.report.cmd.car;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -20,7 +19,7 @@ import java.util.List;
      查询车位结构图
  */
 @Java110Cmd(serviceCode = "car.listCarStructure")
-public class ListCarStructureCmd extends AbstractServiceCmdListener {
+public class ListCarStructureCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;

@@ -19,16 +19,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -47,7 +45,7 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "machine.unlicensedCarMachineQrCodeUrl")
-public class UnlicensedCarMachineQrCodeUrl extends AbstractServiceCmdListener {
+public class UnlicensedCarMachineQrCodeUrl extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UnlicensedCarMachineQrCodeUrl.class);
 

@@ -18,7 +18,7 @@ package com.java110.common.cmd.machine;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.utils.constant.KafkaConstant;
 import com.java110.utils.exception.CmdException;
@@ -38,7 +38,7 @@ import com.java110.core.log.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "machine.openParkingAreaDoorControlLog")
-public class OpenParkingAreaDoorControlLogCmd extends AbstractServiceCmdListener {
+public class OpenParkingAreaDoorControlLogCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(OpenParkingAreaDoorControlLogCmd.class);
 

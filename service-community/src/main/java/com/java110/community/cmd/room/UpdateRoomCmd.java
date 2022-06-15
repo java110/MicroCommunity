@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.UnitDto;
@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "room.updateRoom")
-public class UpdateRoomCmd extends AbstractServiceCmdListener {
+public class UpdateRoomCmd extends Cmd {
 
     @Autowired
     private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;

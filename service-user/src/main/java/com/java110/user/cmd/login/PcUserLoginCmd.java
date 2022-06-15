@@ -3,7 +3,7 @@ package com.java110.user.cmd.login;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -35,7 +35,7 @@ import java.util.Map;
  * 保存编码映射处理类
  */
 @Java110Cmd(serviceCode = "login.pcUserLogin")
-public class PcUserLoginCmd extends AbstractServiceCmdListener {
+public class PcUserLoginCmd extends Cmd {
     private final static Logger logger = LoggerFactory.getLogger(PcUserLoginCmd.class);
     @Autowired
     private IUserLoginInnerServiceSMO userLoginInnerServiceSMOImpl;

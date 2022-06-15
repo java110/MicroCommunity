@@ -3,7 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Java110Cmd(serviceCode = "owner.listAuditAppUserBindingOwners")
-public class ListAuditAppUserBindingOwnersCmd extends AbstractServiceCmdListener {
+public class ListAuditAppUserBindingOwnersCmd extends Cmd {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;

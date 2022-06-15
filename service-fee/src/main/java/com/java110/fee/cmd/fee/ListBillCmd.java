@@ -3,7 +3,7 @@ package com.java110.fee.cmd.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.BillDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.listBill")
-public class ListBillCmd extends AbstractServiceCmdListener {
+public class ListBillCmd extends Cmd {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;

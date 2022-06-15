@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  * 修改表单数据
  */
 @Java110Cmd(serviceCode = "oaWorkflow.updateOaWorkflowFormData")
-public class UpdateOaWorkflowFormData extends AbstractServiceCmdListener {
+public class UpdateOaWorkflowFormData extends Cmd {
 
     @Autowired
     private IOaWorkflowFormInnerServiceSMO oaWorkflowFormInnerServiceSMOImpl;

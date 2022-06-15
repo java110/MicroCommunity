@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.MappingCache;
@@ -15,14 +15,12 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 扫码付
  */
 @Java110Cmd(serviceCode = "payment.checkPayFinish")
-public class CheckPayFinishCmd extends AbstractServiceCmdListener {
+public class CheckPayFinishCmd extends Cmd {
 
 
     private IQrCodePaymentSMO qrCodePaymentSMOImpl;

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IParkingAreaAttrV1InnerServiceSMO;
@@ -19,7 +19,7 @@ import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Java110Cmd(serviceCode = "parkingArea.updateParkingArea")
-public class UpdateParkingAreaCmd extends AbstractServiceCmdListener {
+public class UpdateParkingAreaCmd extends Cmd {
 
     @Autowired
     private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;

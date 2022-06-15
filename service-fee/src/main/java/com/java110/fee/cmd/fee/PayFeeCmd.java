@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
@@ -58,7 +58,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Java110Cmd(serviceCode = "fee.payFee")
-public class PayFeeCmd extends AbstractServiceCmdListener {
+public class PayFeeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(PayFeeCmd.class);
 

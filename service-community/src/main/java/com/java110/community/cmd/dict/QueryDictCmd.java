@@ -3,7 +3,7 @@ package com.java110.community.cmd.dict;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.Dict.DictDto;
 import com.java110.dto.Dict.DictQueryDto;
@@ -22,7 +22,7 @@ import java.util.List;
  * 保存编码映射处理类
  */
 @Java110Cmd(serviceCode = "dict.queryDict")
-public class QueryDictCmd extends AbstractServiceCmdListener {
+public class QueryDictCmd extends Cmd {
     private final static Logger logger = LoggerFactory.getLogger(QueryDictCmd.class);
 
     @Autowired

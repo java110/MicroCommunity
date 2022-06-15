@@ -3,7 +3,7 @@ package com.java110.community.cmd.unit;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "unit.queryUnits")
-public class QueryUnitsCmd extends AbstractServiceCmdListener {
+public class QueryUnitsCmd extends Cmd {
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 

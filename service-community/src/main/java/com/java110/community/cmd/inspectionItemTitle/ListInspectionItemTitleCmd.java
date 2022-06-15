@@ -18,7 +18,7 @@ package com.java110.community.cmd.inspectionItemTitle;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
 import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
@@ -48,7 +48,7 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "inspectionItemTitle.listInspectionItemTitle")
-public class ListInspectionItemTitleCmd extends AbstractServiceCmdListener {
+public class ListInspectionItemTitleCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListInspectionItemTitleCmd.class);
     @Autowired

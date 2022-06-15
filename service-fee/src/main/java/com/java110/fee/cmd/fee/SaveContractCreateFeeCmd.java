@@ -3,7 +3,7 @@ package com.java110.fee.cmd.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.saveContractCreateFee")
-public class SaveContractCreateFeeCmd extends AbstractServiceCmdListener {
+public class SaveContractCreateFeeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(SaveContractCreateFeeCmd.class);
 

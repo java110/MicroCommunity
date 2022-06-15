@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -39,7 +39,7 @@ import org.springframework.http.ResponseEntity;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "machine.customCarInOutCmd")
-public class CustomCarInOutCmd extends AbstractServiceCmdListener {
+public class CustomCarInOutCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(CustomCarInOutCmd.class);
 

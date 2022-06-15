@@ -54,6 +54,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
     private final static int expireTime = 7200;
 
     private final static int LOGIN_PAGE = 1;
+    private final static int COMMON_PAGE = 2;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -214,13 +215,12 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         logger.debug("调用微信换去openId " + paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
             return ResultVo.redirectPage(errorUrl);
-
         }
-
         JSONObject paramObj = JSONObject.parseObject(paramOut.getBody());
 
         //获取 openId
         String openId = paramObj.getString("openid");
+
         String userinfo_url = WechatConstant.APP_GET_USER_INFO_URL
                 .replace("ACCESS_TOKEN", paramObj.getString("access_token"))
                 .replace("OPENID", openId);
@@ -258,6 +258,17 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
             logger.debug("登录跳转url:{}", errorUrl);
 
             return ResultVo.redirectPage(errorUrl);
+        }
+
+        if (loginFlag == COMMON_PAGE) {
+            //将openId放到redis 缓存，给前段下发临时票据
+            if (errorUrl.indexOf("?") > 0) {
+                redirectUrl += ("&openId=" + openId);
+            } else {
+                redirectUrl += ("?openId=" + openId);
+            }
+            logger.debug("跳转url:{}", redirectUrl);
+            return ResultVo.redirectPage(redirectUrl);
         }
 
         //判断当前openId 是否绑定了业主

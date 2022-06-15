@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.saveHandover")
-public class SaveHandoverCmd extends AbstractServiceCmdListener {
+public class SaveHandoverCmd extends Cmd {
 
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;

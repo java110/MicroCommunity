@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.saveParkingSpaceCreateFee")
-public class SaveParkingSpaceCreateFeeCmd extends AbstractServiceCmdListener {
+public class SaveParkingSpaceCreateFeeCmd extends Cmd {
 
     @Autowired
     private IFeeBMO feeBMOImpl;

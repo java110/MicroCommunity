@@ -1,18 +1,15 @@
 package com.java110.core.event.cmd;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 
 
 
-public abstract class AbstractServiceCmdListener implements ServiceCmdListener {
+public abstract class Cmd implements ServiceCmdListener {
 
-    private static Logger logger = LoggerFactory.getLogger(AbstractServiceCmdListener.class);
+    private static Logger logger = LoggerFactory.getLogger(Cmd.class);
 
 
     /**

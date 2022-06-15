@@ -3,7 +3,7 @@ package com.java110.acct.cmd.account;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.po.account.AccountPo;
@@ -11,11 +11,10 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import net.sf.ehcache.search.parser.InteractiveCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Java110Cmd(serviceCode = "account.deleteAccount")
-public class DeleteAccountCmd  extends AbstractServiceCmdListener {
+public class DeleteAccountCmd  extends Cmd {
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;

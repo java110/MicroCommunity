@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
@@ -52,7 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.payFeeConfirm")
-public class PayFeeConfirmCmd extends AbstractServiceCmdListener {
+public class PayFeeConfirmCmd extends Cmd {
 
     @Autowired
     private IFeeBMO feeBMOImpl;
