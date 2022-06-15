@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
@@ -75,14 +76,20 @@ public class ReportInfoAwnerData implements ReportExecute {
         JSONObject paramOut = new JSONObject();
 
         List sqlParams = new ArrayList();
-        String sql = "select rrs.`name` '上报项目',t.person_name '姓名',t.tel '电话',t.id_card '身份证号',rist.title,riav.value_content\n" +
-                "from report_info_answer t\n" +
-                "left join report_info_setting rrs on t.setting_id = rrs.setting_id and rrs.status_cd = '0'\n" +
-                "left join report_info_answer_value riav on t.user_an_id = riav.user_an_id and riav.status_cd = '0'\n" +
-                "LEFT JOIN report_info_setting_title rist on riav.title_id = rist.title_id and rist.status_cd = '0'\n" +
-                "where t.status_cd = '0'\n" +
-                "and t.create_time > ?\n" +
-                "and t.create_time < ?\n";
+        String sql = "select rrs.`name` '上报项目',t.person_name '姓名',t.tel '电话',t.id_card '身份证号',DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s') '上报时间',rist.title,riav.value_content,\n" +
+                "\t\t\t\t\t\t\t\t\n" +
+                "\t\t\t\t\t\t\t\t\t(select '业主' from building_owner bo where bo.link = t.tel and bo.status_cd = '0' and bo.community_id = t.community_id limit 1) '业主'\n" +
+                "\t\t\t\t\t\t\t\t,\n" +
+                "\t\t\t\t\t\t\t\t\t(select '员工' from u_user u \n" +
+                "\t\t\t\t\t\t\t\tinner join s_store_user su on u.user_id = su.user_id and su.status_cd = '0'\n" +
+                "\t\t\t\t\t\t\t\t\twhere u.tel = t.tel limit 1) '员工'\n" +
+                "                from report_info_answer t\n" +
+                "                left join report_info_setting rrs on t.setting_id = rrs.setting_id and rrs.status_cd = '0'\n" +
+                "                left join report_info_answer_value riav on t.user_an_id = riav.user_an_id and riav.status_cd = '0'\n" +
+                "                LEFT JOIN report_info_setting_title rist on riav.title_id = rist.title_id and rist.status_cd = '0'\n" +
+                "                where t.status_cd = '0'\n" +
+                "                and t.create_time > ?\n" +
+                "                and t.create_time < ?";
         if (params.containsKey("startTime") && !StringUtils.isEmpty(params.getString("startTime"))) {
             sqlParams.add(params.get("startTime"));
             sqlParams.add(params.get("endTime"));
@@ -123,6 +130,14 @@ public class ReportInfoAwnerData implements ReportExecute {
                 td.put("姓名", dataObj.get("姓名"));
                 td.put("电话", dataObj.get("电话"));
                 td.put("身份证号", dataObj.get("身份证号"));
+                td.put("上报时间", dataObj.get("上报时间"));
+                if(!StringUtil.isNullOrNone(dataObj.get("业主"))){
+                    td.put("身份", "业主");
+                }else if(!StringUtil.isNullOrNone(dataObj.get("员工"))){
+                    td.put("身份", "员工");
+                }else{
+                    td.put("身份", "访客");
+                }
                 tds.add(td);
             }
             td.put(dataObj.get("title").toString(), dataObj.get("value_content"));
