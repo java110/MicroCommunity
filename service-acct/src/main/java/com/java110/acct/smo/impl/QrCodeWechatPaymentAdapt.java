@@ -135,13 +135,14 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
 
             SortedMap<String, String> paramMap = new TreeMap<String, String>();
             paramMap.put("appid", shopSmallWeChatDto.getAppId());
-            paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());
+            paramMap.put("mch_id", shopSmallWeChatDto.getMchId());
             paramMap.put("nonce_str", PayUtil.makeUUID(32));
             paramMap.put("out_trade_no", orderNum);
             String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
             if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
                 paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
                 paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户
+                paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());
             }
             paramMap.put("sign", PayUtil.createSign(paramMap, shopSmallWeChatDto.getPayPassword()));
 //转换为xml
