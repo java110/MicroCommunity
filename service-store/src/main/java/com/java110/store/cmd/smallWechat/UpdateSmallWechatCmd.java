@@ -53,7 +53,7 @@ public class UpdateSmallWechatCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "wechatId", "weChatId不能为空");
+        Assert.hasKeyAndValue(reqJson, "wechatId", "wechatId不能为空");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "appId", "请求报文中未包含appId");
         Assert.hasKeyAndValue(reqJson, "appSecret", "请求报文中未包含appSecret");
