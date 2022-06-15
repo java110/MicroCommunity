@@ -235,6 +235,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             parkingSpaceDto.setPaId(paId);
             //查询停车位
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            String state = "";
             if(parkingSpaceDtos == null || parkingSpaceDtos.size() <1){
                 psId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_psId);
                 ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
@@ -247,11 +248,13 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
                 parkingSpacePo.setPsId(psId);
                 parkingSpacePo.setRemark("导入数据");
                 parkingSpaceV1InnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
+                state = ParkingSpaceDto.STATE_FREE;
             }else{
                 psId = parkingSpaceDtos.get(0).getPsId();
+                //获取停车位状态(出售 S，出租 H ，空闲 F)
+                state = parkingSpaceDtos.get(0).getState();
             }
-            //获取停车位状态(出售 S，出租 H ，空闲 F)
-            String state = parkingSpaceDtos.get(0).getState();
+
             if (!StringUtil.isEmpty(state) && !state.equals("F")) {
                 throw new IllegalArgumentException(ownerCarDto.getAreaNum() + "停车场-" + ownerCarDto.getNum() + "停车位不是空闲状态！");
             }
