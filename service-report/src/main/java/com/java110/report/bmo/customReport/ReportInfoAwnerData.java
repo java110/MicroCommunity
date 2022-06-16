@@ -108,6 +108,12 @@ public class ReportInfoAwnerData implements ReportExecute {
             sql += "and t.`person_name` like CONCAT('%',?,'%') \n";
             sqlParams.add(params.get("personName"));
         }
+        if (params.containsKey("projectName") && !StringUtils.isEmpty(params.getString("projectName"))) {
+            sql += "and rrs.`name` like CONCAT('%',?,'%') \n";
+            sqlParams.add(params.get("projectName"));
+        }
+
+        sql += " order by t.create_time desc \n";
 
         List datas = queryServiceDAOImpl.executeSql(sql, sqlParams.toArray());
 

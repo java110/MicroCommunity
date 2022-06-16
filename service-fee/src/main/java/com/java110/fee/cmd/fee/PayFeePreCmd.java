@@ -13,6 +13,7 @@ import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
@@ -39,6 +40,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +110,45 @@ public class PayFeePreCmd extends Cmd {
         Assert.hasLength(reqJson.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(reqJson.getString("feeId"), "费用ID不能为空");
         Assert.hasLength(reqJson.getString("appId"), "appId不能为空");
+
+
+        //判断是否 费用状态为缴费结束
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(reqJson.getString("feeId"));
+        feeDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(feeDtos, "传入费用ID错误");
+
+        feeDto = feeDtos.get(0);
+
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            throw new IllegalArgumentException("收费已经结束，不能再缴费");
+        }
+
+        Date endTime = feeDto.getEndTime();
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeDto.getConfigId());
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
+            try {
+                Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+                configEndTime = DateUtil.stepDay(configEndTime,5);
+
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
+
+                if (newDate.getTime() > configEndTime.getTime()) {
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                }
+
+            } catch (Exception e) {
+                logger.error("比较费用日期失败", e);
+            }
+        }
+
     }
 
     @Override

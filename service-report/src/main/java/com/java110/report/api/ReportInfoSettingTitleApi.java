@@ -118,7 +118,7 @@ public class ReportInfoSettingTitleApi {
                                                               @RequestParam(value = "titleType",required = false) String titleType,
                                                               @RequestParam(value = "title",required = false) String title,
                                                               @RequestParam(value = "titleId",required = false) String titleId,
-                                                              @RequestParam(value = "settingid",required = false) String settingid,
+                                                              @RequestParam(value = "settingId",required = false) String settingId,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ReportInfoSettingTitleDto reportInfoSettingTitleDto = new ReportInfoSettingTitleDto();
@@ -127,7 +127,7 @@ public class ReportInfoSettingTitleApi {
         reportInfoSettingTitleDto.setTitleType(titleType);
         reportInfoSettingTitleDto.setTitleLike(title);
         reportInfoSettingTitleDto.setTitleId(titleId);
-        reportInfoSettingTitleDto.setSettingId(settingid);
+        reportInfoSettingTitleDto.setSettingId(settingId);
         reportInfoSettingTitleDto.setCommunityId(communityId);
         return getReportInfoSettingTitleBMOImpl.get(reportInfoSettingTitleDto);
     }
