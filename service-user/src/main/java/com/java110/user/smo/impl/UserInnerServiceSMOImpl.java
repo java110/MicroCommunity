@@ -8,6 +8,7 @@ import com.java110.po.user.UserPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -130,6 +131,10 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
                 //openId 单独出来处理
                 if ("100201911001".equals(userAttrDto.getSpecCd())) {
                     userDto.setOpenId(userAttrDto.getValue());
+                }
+
+                if (UserAttrDto.SPEC_MALL_OPEN_ID.equals(userAttrDto.getSpecCd())){
+                    userDto.setMallOpenId(userAttrDto.getValue());
                 }
             }
 

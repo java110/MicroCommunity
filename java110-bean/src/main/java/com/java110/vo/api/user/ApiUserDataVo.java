@@ -22,6 +22,8 @@ public class ApiUserDataVo implements Serializable {
 
     private String openId;
 
+    private String mallOpenId;
+
     private String key;
 
     private int age;
@@ -132,5 +134,13 @@ public class ApiUserDataVo implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getMallOpenId() {
+        return mallOpenId;
+    }
+
+    public void setMallOpenId(String mallOpenId) {
+        this.mallOpenId = mallOpenId;
     }
 }
