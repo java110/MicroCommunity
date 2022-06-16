@@ -28,6 +28,7 @@ public class NoticeDto extends PageDto implements Serializable {
     public static final String NOTICE_TYPE_OWNER_WECHAT = "1003";//发送给业主微信
 
     private String noticeTypeCd;
+    private String[] noticeTypeCds;
     private String context;
     private String startTime;
     private String endTime;
@@ -174,5 +175,13 @@ public class NoticeDto extends PageDto implements Serializable {
 
     public void setObjName(String objName) {
         this.objName = objName;
+    }
+
+    public String[] getNoticeTypeCds() {
+        return noticeTypeCds;
+    }
+
+    public void setNoticeTypeCds(String[] noticeTypeCds) {
+        this.noticeTypeCds = noticeTypeCds;
     }
 }
