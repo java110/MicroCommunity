@@ -9,7 +9,6 @@ import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -21,6 +20,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,33 +126,41 @@ public class QueryRoomsCmd extends Cmd {
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
         for (RoomDto roomDto : roomDtos) {
             for (OwnerDto tmpOwnerDto : ownerDtos) {
-                if (roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
-                    roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
-                    roomDto.setOwnerName(tmpOwnerDto.getName());
-                    //对业主身份证号隐藏处理
-                    String idCard = tmpOwnerDto.getIdCard();
-                    if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 15) {
-                        idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
-                    }
-                    //对业主手机号隐藏处理
-                    String link = tmpOwnerDto.getLink();
-                    if (mark.size() == 0 && link != null && !link.equals("") && link.length() > 10) {
-                        link = link.substring(0, 3) + "****" + link.substring(7);
-                    }
-                    roomDto.setIdCard(idCard);
-                    roomDto.setLink(link);
+                if (!roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
+                    continue;
                 }
+                try {
+                    roomDto.setStartTime(DateUtil.getDateFromString(tmpOwnerDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+                    roomDto.setEndTime(DateUtil.getDateFromString(tmpOwnerDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+                }catch (Exception e){
+                    //
+                }
+                roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
+                roomDto.setOwnerName(tmpOwnerDto.getName());
+                //对业主身份证号隐藏处理
+                String idCard = tmpOwnerDto.getIdCard();
+                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 15) {
+                    idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+                }
+                //对业主手机号隐藏处理
+                String link = tmpOwnerDto.getLink();
+                if (mark.size() == 0 && link != null && !link.equals("") && link.length() > 10) {
+                    link = link.substring(0, 3) + "****" + link.substring(7);
+                }
+                roomDto.setIdCard(idCard);
+                roomDto.setLink(link);
+
                 //商铺类型查询起租时间
-                if (roomDto.getRoomType().equals(RoomDto.ROOM_TYPE_SHOPS)) {
-                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-                    ownerRoomRelDto.setRoomId(roomDto.getRoomId());
-                    ownerRoomRelDto.setStatusCd("0");
-                    List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                    if (ownerRoomRelDtoList != null && ownerRoomRelDtoList.size() == 1) {
-                        roomDto.setStartTime(ownerRoomRelDtoList.get(0).getStartTime());
-                        roomDto.setEndTime(ownerRoomRelDtoList.get(0).getEndTime());
-                    }
-                }
+//                if (roomDto.getRoomType().equals(RoomDto.ROOM_TYPE_SHOPS)) {
+//                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+//                    ownerRoomRelDto.setRoomId(roomDto.getRoomId());
+//                    ownerRoomRelDto.setStatusCd("0");
+//                    List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+//                    if (ownerRoomRelDtoList != null && ownerRoomRelDtoList.size() == 1) {
+//                        roomDto.setStartTime(ownerRoomRelDtoList.get(0).getStartTime());
+//                        roomDto.setEndTime(ownerRoomRelDtoList.get(0).getEndTime());
+//                    }
+//                }
             }
         }
     }
