@@ -59,7 +59,7 @@ public class ListNoticesCmd extends Cmd {
         }
 
         // 多类型同时查询
-        if (StringUtil.isEmpty(noticeDto.getNoticeTypeCd()) && noticeDto.getNoticeTypeCd().contains(",")) {
+        if (!StringUtil.isEmpty(noticeDto.getNoticeTypeCd()) && noticeDto.getNoticeTypeCd().contains(",")) {
             noticeDto.setNoticeTypeCds(noticeDto.getNoticeTypeCd().split(","));
             noticeDto.setNoticeTypeCd("");
         }
