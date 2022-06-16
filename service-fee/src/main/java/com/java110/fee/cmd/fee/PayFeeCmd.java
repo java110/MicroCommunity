@@ -164,8 +164,8 @@ public class PayFeeCmd extends Cmd {
         if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
             try {
                 Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-
-                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles") - 1);
+                configEndTime = DateUtil.stepDay(configEndTime,5);
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
 
                 if (newDate.getTime() > configEndTime.getTime()) {
                     throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
