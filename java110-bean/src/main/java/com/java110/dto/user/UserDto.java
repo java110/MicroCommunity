@@ -60,6 +60,7 @@ public class UserDto extends PageDto implements Serializable {
 
     private String openId;
     private String unionId;
+    private String mallOpenId;
 
     private String statusCd = "0";
 
@@ -345,5 +346,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
+    }
+
+    public String getMallOpenId() {
+        return mallOpenId;
+    }
+
+    public void setMallOpenId(String mallOpenId) {
+        this.mallOpenId = mallOpenId;
     }
 }
