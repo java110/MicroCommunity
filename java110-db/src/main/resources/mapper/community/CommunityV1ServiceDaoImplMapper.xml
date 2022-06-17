@@ -79,6 +79,9 @@
         <if test="feePrice !=null and feePrice != ''">
             , t.fee_price= #{feePrice}
         </if>
+        <if test="feePrice == '0'">
+            , t.fee_price= #{feePrice}
+        </if>
         <if test="address !=null and address != ''">
             , t.address= #{address}
         </if>
