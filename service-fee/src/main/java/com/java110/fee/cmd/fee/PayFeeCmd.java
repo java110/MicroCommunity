@@ -29,7 +29,7 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
-import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
