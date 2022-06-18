@@ -28,6 +28,7 @@ import java.io.Serializable;
 public class SmallWechatPo implements Serializable {
 
     private String mchId;
+    private String mchName;
     private String statusCd = "0";
     private String storeId;
     private String wechatType;
@@ -146,4 +147,11 @@ public class SmallWechatPo implements Serializable {
     }
 
 
+    public String getMchName() {
+        return mchName;
+    }
+
+    public void setMchName(String mchName) {
+        this.mchName = mchName;
+    }
 }

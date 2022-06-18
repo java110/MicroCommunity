@@ -8,9 +8,9 @@
     <!-- 保存微信配置表信息 add by wuxw 2018-07-03 -->
     <insert id="saveSmallWechatInfo" parameterType="Map">
         insert into small_wechat(
-        mch_id,store_Id,wechat_type,cert_path,appId,appSecret,name,obj_id,wechat_id,pay_password,obj_type,remarks
+        mch_id,store_Id,wechat_type,cert_path,appId,appSecret,name,obj_id,wechat_id,pay_password,obj_type,remarks,mch_name
         ) values (
-        #{mchId},#{storeId},#{wechatType},#{certPath},#{appId},#{appSecret},#{name},#{objId},#{wechatId},#{payPassword},#{objType},#{remarks}
+        #{mchId},#{storeId},#{wechatType},#{certPath},#{appId},#{appSecret},#{name},#{objId},#{wechatId},#{payPassword},#{objType},#{remarks},#{mchName}
         )
     </insert>
 
@@ -21,7 +21,7 @@
         t.wechat_type wechatType,t.wechat_type weChatType,t.cert_path,t.cert_path certPath,t.appId,t.appId appid,t.appSecret,t.appSecret
         appsecret,
         t.name,t.obj_id,t.obj_id objId,t.wechat_id,t.wechat_id wechatId,t.wechat_id weChatId,t.pay_password,t.pay_password payPassword,
-        t.obj_type,t.obj_type objType,t.remarks
+        t.obj_type,t.obj_type objType,t.remarks,t.mch_name mchName
         from small_wechat t
         where 1 =1
         <if test="mchId !=null and mchId != ''">
@@ -91,6 +91,9 @@
         </if>
         <if test="mchId !=null and mchId != ''">
             , t.mch_id= #{mchId}
+        </if>
+        <if test="mchName !=null and mchName != ''">
+            , t.mch_name= #{mchName}
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_Id= #{storeId}
