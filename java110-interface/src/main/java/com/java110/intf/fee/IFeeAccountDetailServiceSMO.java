@@ -1,4 +1,4 @@
-package com.java110.intf.feeAccountDetail;
+package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;

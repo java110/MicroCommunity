@@ -4,7 +4,7 @@ package com.java110.api.listener.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
-import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
