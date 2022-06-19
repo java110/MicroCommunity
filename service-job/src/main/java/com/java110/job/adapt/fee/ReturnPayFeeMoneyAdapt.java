@@ -49,6 +49,20 @@ import java.util.*;
 @Component(value = "returnPayFeeMoneyAdapt")
 public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
+
+    //微信支付
+    public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
+    // 微信服务商支付开关
+    public static final String WECHAT_SERVICE_PAY_SWITCH = "WECHAT_SERVICE_PAY_SWITCH";
+
+    //开关ON打开
+    public static final String WECHAT_SERVICE_PAY_SWITCH_ON = "ON";
+
+
+    private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
+
+    private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
+
     @Autowired
     private IReturnPayFeeInnerServiceSMO returnPayFeeInnerServiceSMOImpl;
 
@@ -61,7 +75,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
-
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -109,7 +122,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
         String payPassword = "";
         String certData = "";
-
+        String mchPassword = "";
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setMchId(onlinePayDtos.get(0).getMchId());
         smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
@@ -117,10 +130,16 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
             payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
             certData = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "cert");
+            mchPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
         } else {
             payPassword = smallWeChatDtos.get(0).getPayPassword();
             certData = smallWeChatDtos.get(0).getCertPath();
+            mchPassword = smallWeChatDtos.get(0).getMchId();
+        }
 
+        String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
+        if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
+            mchPassword = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
         }
 
         SortedMap<String, String> parameters = new TreeMap<String, String>();
@@ -139,14 +158,14 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(getPkcs12(certData));
         try {
             //这里写密码..默认是你的MCHID
-            keyStore.load(inputStream, onlinePayDtos.get(0).getMchId().toCharArray());
+            keyStore.load(inputStream, mchPassword.toCharArray());
         } finally {
             inputStream.close();
         }
 
         SSLContext sslcontext = SSLContexts.custom()
                 //这里也是写密码的
-                .loadKeyMaterial(keyStore, onlinePayDtos.get(0).getMchId().toCharArray())
+                .loadKeyMaterial(keyStore, mchPassword.toCharArray())
                 .build();
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslcontext,
