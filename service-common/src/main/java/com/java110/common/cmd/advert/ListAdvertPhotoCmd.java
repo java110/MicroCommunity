@@ -1,21 +1,20 @@
-package com.java110.api.listener.advert;
+package com.java110.common.cmd.advert;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.advert.AdvertItemDto;
 import com.java110.intf.common.IAdvertInnerServiceSMO;
 import com.java110.intf.common.IAdvertItemInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceCodeAdvertConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,12 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * 查询广告信息
- */
-@Java110Listener("listAdvertPhotoListener")
-public class ListAdvertPhotoListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "advert.listAdvertPhoto")
+public class ListAdvertPhotoCmd extends Cmd {
 
     @Autowired
     private IAdvertInnerServiceSMO advertInnerServiceSMOImpl;
@@ -36,40 +31,13 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
     @Autowired
     private IAdvertItemInnerServiceSMO advertItemInnerServiceSMOImpl;
 
-
     @Override
-    public String getServiceCode() {
-        return ServiceCodeAdvertConstant.LIST_ADVERT_PHOTO;
-    }
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IAdvertInnerServiceSMO getAdvertInnerServiceSMOImpl() {
-        return advertInnerServiceSMOImpl;
-    }
-
-    public void setAdvertInnerServiceSMOImpl(IAdvertInnerServiceSMO advertInnerServiceSMOImpl) {
-        this.advertInnerServiceSMOImpl = advertInnerServiceSMOImpl;
     }
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //super.validatePageInfo(reqJson);
-    }
-
-    @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ResponseEntity<String> responseEntity = null;
 
 
@@ -142,13 +110,4 @@ public class ListAdvertPhotoListener extends AbstractServiceApiListener {
         }
 
     }
-
-    public IAdvertItemInnerServiceSMO getAdvertItemInnerServiceSMOImpl() {
-        return advertItemInnerServiceSMOImpl;
-    }
-
-    public void setAdvertItemInnerServiceSMOImpl(IAdvertItemInnerServiceSMO advertItemInnerServiceSMOImpl) {
-        this.advertItemInnerServiceSMOImpl = advertItemInnerServiceSMOImpl;
-    }
-
 }

@@ -27,6 +27,7 @@ public class AdvertPo implements Serializable {
     private String viewType;
     private String advertType ;
     private String pageUrl ;
+    private String statusCd = "0";
 
     public String getAdvertId() {
         return advertId;
@@ -146,5 +147,13 @@ public class AdvertPo implements Serializable {
 
     public void setPageUrl(String pageUrl) {
         this.pageUrl = pageUrl;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

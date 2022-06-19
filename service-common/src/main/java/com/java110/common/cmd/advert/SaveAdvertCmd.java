@@ -1,34 +1,65 @@
-package com.java110.api.listener.advert;
+/*
+ * Copyright 2017-2020 吴学文 and java110 team.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.java110.common.cmd.advert;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
+import com.java110.intf.common.IAdvertItemV1InnerServiceSMO;
+import com.java110.intf.common.IAdvertV1InnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.po.advert.AdvertItemPo;
 import com.java110.po.advert.AdvertPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeAdvertConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.Date;
 
 /**
- * 保存小区侦听
- * add by wuxw 2019-06-30
+ * 类表述：保存
+ * 服务编码：advert.saveAdvert
+ * 请求路劲：/app/advert.SaveAdvert
+ * add by 吴学文 at 2022-06-19 10:07:43 mail: 928255095@qq.com
+ * open source address: https://gitee.com/wuxw7/MicroCommunity
+ * 官网：http://www.homecommunity.cn
+ * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
+ * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Listener("saveAdvertListener")
-public class SaveAdvertListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "advert.saveAdvert")
+public class SaveAdvertCmd extends Cmd {
+
+    private static Logger logger = LoggerFactory.getLogger(SaveAdvertCmd.class);
+
+    public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -36,8 +67,14 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IAdvertV1InnerServiceSMO advertV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAdvertItemV1InnerServiceSMO advertItemV1InnerServiceSMOImpl;
+
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         Assert.hasKeyAndValue(reqJson, "adName", "必填，请填写广告名称");
         Assert.hasKeyAndValue(reqJson, "adTypeCd", "必填，请选择广告类型");
@@ -52,6 +89,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         if (!hasKeyAndValue(reqJson, "photos") && !hasKeyAndValue(reqJson, "vedioName")) {
             throw new IllegalArgumentException("请求报文中没有包含视频或图片");
         }
+
     }
 
     private boolean hasKeyAndValue(JSONObject paramIn, String key) {
@@ -64,28 +102,34 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         return true;
     }
 
+
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
         String advertId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_advertId);
         reqJson.put("advertId", advertId);
         reqJson.put("state", "1000");
         reqJson.put("createTime", new Date());
         reqJson.put("communityId", "9999");
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
-        super.insert(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
+        int flag = advertV1InnerServiceSMOImpl.saveAdvert(advertPo);
+        if(flag < 1){
+            throw new CmdException("保存失败");
+        }
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex));
-                addAdvertFileRel(reqJson, context, "40000");
+                addAdvertItemPhoto(reqJson, cmdDataFlowContext, photos.getString(_photoIndex));
+                addAdvertFileRel(reqJson, cmdDataFlowContext, "40000");
             }
         } else {
-            addAdvertItemVedio(reqJson, context);
-            addAdvertFileRel(reqJson, context, "50000");
+            addAdvertItemVedio(reqJson, cmdDataFlowContext);
+            addAdvertFileRel(reqJson, cmdDataFlowContext, "50000");
         }
     }
 
-    public void addAdvertItemPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext, String photo) {
+    public void addAdvertItemPhoto(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext, String photo) {
         String itemTypeCd = "";
         String url = "";
         FileDto fileDto = new FileDto();
@@ -106,7 +150,10 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         advertItemPo.setItemTypeCd(itemTypeCd);
         advertItemPo.setUrl(fileName);
         advertItemPo.setSeq("1");
-        super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
+        int flag = advertItemV1InnerServiceSMOImpl.saveAdvertItem(advertItemPo);
+        if(flag < 1){
+            throw new CmdException("保存广告失败");
+        }
     }
 
 
@@ -117,7 +164,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public void addAdvertFileRel(JSONObject paramInJson, DataFlowContext dataFlowContext, String relTypeCd) {
+    public void addAdvertFileRel(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext, String relTypeCd) {
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setRelTypeCd(relTypeCd);
         fileRelPo.setSaveWay("40000".equals(relTypeCd) ? "table" : "ftp");
@@ -125,7 +172,10 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         fileRelPo.setObjId(paramInJson.getString("advertId"));
         fileRelPo.setFileRealName(paramInJson.getString("vedioName"));
         fileRelPo.setFileSaveName(paramInJson.getString("vedioName"));
-        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        int flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+        if(flag < 1){
+            throw new CmdException("保存广告失败");
+        }
     }
 
 
@@ -136,7 +186,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public void addAdvertItemVedio(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addAdvertItemVedio(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext) {
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
         fileRelPo.setObjId(paramInJson.getString("advertId"));
@@ -158,29 +208,5 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         advertItemPo.setUrl(url);
         advertItemPo.setSeq("1");
         super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);*/
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeAdvertConstant.ADD_ADVERT;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
-        return fileInnerServiceSMOImpl;
-    }
-
-    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
-        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
     }
 }

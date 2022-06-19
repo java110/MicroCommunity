@@ -1,36 +1,31 @@
-package com.java110.api.listener.advert;
+package com.java110.common.cmd.advert;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.common.IAdvertInnerServiceSMO;
-import com.java110.intf.common.IAdvertItemInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.advert.AdvertItemDto;
 import com.java110.dto.machine.MachineDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeAdvertConstant;
+import com.java110.intf.common.IAdvertInnerServiceSMO;
+import com.java110.intf.common.IAdvertItemInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
-/**
- * 查询广告信息
- */
-@Java110Listener("listAdvertPhotoAndVediosListener")
-public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "advert.listAdvertPhotoAndVedios")
+public class ListAdvertPhotoAndVediosCmd extends Cmd {
 
     @Autowired
     private IAdvertInnerServiceSMO advertInnerServiceSMOImpl;
@@ -49,40 +44,14 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeAdvertConstant.LIST_ADVERT_PHOTO_VEDIOS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IAdvertInnerServiceSMO getAdvertInnerServiceSMOImpl() {
-        return advertInnerServiceSMOImpl;
-    }
-
-    public void setAdvertInnerServiceSMOImpl(IAdvertInnerServiceSMO advertInnerServiceSMOImpl) {
-        this.advertInnerServiceSMOImpl = advertInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         //super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备编码");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         ResponseEntity<String> responseEntity = null;
 
         MachineDto machineDto = new MachineDto();
@@ -115,20 +84,20 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
             //查询 单元的广告，没有找 楼栋，再找找不到 就要查小区
             if (getUnitAdvert(reqJson.getString("communityId"), locationObjId, advertPhotoAndVideos)) {
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
 
             // 查询楼栋广告
             if (getFloorAdvert(reqJson.getString("communityId"), locationObjId, advertPhotoAndVideos)) {
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
 
             if (getCommunityAdvert(reqJson.getString("communityId"), advertPhotoAndVideos)) {
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
             ;
@@ -142,7 +111,7 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
             if (advertDtos != null && advertDtos.size() != 0) {
                 this.getAdvertItem(advertDtos, advertPhotoAndVideos);
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
             //房屋找不到，找 单元
@@ -153,14 +122,14 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
             Assert.listOnlyOne(roomDtos, "未找到房屋或查询多条房屋信息");
             if (getUnitAdvert(reqJson.getString("communityId"), roomDtos.get(0).getUnitId(), advertPhotoAndVideos)) {
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
 
             // 查询楼栋广告
             if (getFloorAdvert(reqJson.getString("communityId"), roomDtos.get(0).getUnitId(), advertPhotoAndVideos)) {
                 responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
-                context.setResponseEntity(responseEntity);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
 
@@ -170,7 +139,7 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
 
         responseEntity = new ResponseEntity<String>(advertPhotoAndVideos.toJSONString(), HttpStatus.OK);
 
-        context.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
 
     }
 
@@ -267,37 +236,5 @@ public class ListAdvertPhotoAndVediosListener extends AbstractServiceApiListener
             }
         }
 
-    }
-
-    public IAdvertItemInnerServiceSMO getAdvertItemInnerServiceSMOImpl() {
-        return advertItemInnerServiceSMOImpl;
-    }
-
-    public void setAdvertItemInnerServiceSMOImpl(IAdvertItemInnerServiceSMO advertItemInnerServiceSMOImpl) {
-        this.advertItemInnerServiceSMOImpl = advertItemInnerServiceSMOImpl;
-    }
-
-    public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
-        return machineInnerServiceSMOImpl;
-    }
-
-    public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
-        this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
     }
 }
