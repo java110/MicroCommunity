@@ -1,11 +1,10 @@
-package com.java110.api.listener.index;
-
+package com.java110.community.cmd.index;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.entity.audit.AuditUser;
@@ -15,25 +14,15 @@ import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
+import com.java110.utils.exception.CmdException;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName FloorDto
- * @Description 查询首页统计信息
- * @Author wuxw
- * @Date 2019/4/24 8:52
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-@Java110Listener("queryIndexTodoTaskListener")
-public class QueryIndexTodoTaskListener extends AbstractServiceApiDataFlowListener {
+@Java110Cmd(serviceCode = "index.queryIndexTodoTask")
+public class QueryIndexTodoTaskCmd extends Cmd {
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
@@ -56,25 +45,12 @@ public class QueryIndexTodoTaskListener extends AbstractServiceApiDataFlowListen
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_INDEX_TODO_TASK;
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    /**
-     * 业务层数据处理
-     *
-     * @param event 时间对象
-     */
-    @Override
-    public void soService(ServiceDataFlowEvent event) {
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        //获取请求数据
-        JSONObject reqJson = dataFlowContext.getReqJson();
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         AuditUser auditUser = new AuditUser();
         auditUser.setStoreId(reqJson.getString("storeId"));
         auditUser.setUserId(reqJson.getString("userId"));
@@ -131,30 +107,6 @@ public class QueryIndexTodoTaskListener extends AbstractServiceApiDataFlowListen
         paramOut.put("purchaseHisCount", purchaseHisCount);
         paramOut.put("collectionCount", collectionCount);
         paramOut.put("collectionHisCount", collectionHisCount);
-        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
-    }
-
-    /**
-     * 校验查询条件是否满足条件
-     *
-     * @param reqJson 包含查询条件
-     */
-    private void validateIndexStatistic(JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-
-    }
-
-    @Override
-    public int getOrder() {
-        return super.DEFAULT_ORDER;
-    }
-
-
-    public IParkingSpaceInnerServiceSMO getParkingSpaceInnerServiceSMOImpl() {
-        return parkingSpaceInnerServiceSMOImpl;
-    }
-
-    public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
-        this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
+        context.setResponseEntity(ResultVo.createResponseEntity(paramOut));
     }
 }
