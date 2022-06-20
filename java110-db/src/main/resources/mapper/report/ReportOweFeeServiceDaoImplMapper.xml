@@ -171,6 +171,8 @@
         </if>
     </update>
 
+
+
     <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
     <select id="queryReportOweFeesCount" parameterType="Map" resultType="Map">
         select count(distinct(t.payer_obj_id)) count
@@ -660,5 +662,16 @@
         </if>
         GROUP BY t.config_id,t.config_name
     </select>
+
+
+    <update id="deleteInvalidFee" parameterType="Map">
+        delete from report_owe_fee where fee_id not in (
+        select t.fee_id from pay_fee t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        where t.status_cd = '0'
+        and t.community_id= #{communityId}
+        )
+        and community_id = #{communityId}
+    </update>
 
 </mapper>

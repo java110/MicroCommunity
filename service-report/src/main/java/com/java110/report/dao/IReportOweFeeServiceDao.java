@@ -82,4 +82,6 @@ public interface IReportOweFeeServiceDao {
     double computeReportOweFeeTotalAmount(Map beanCovertMap);
 
     List<Map> computeReportOweFeeItemAmount(Map beanCovertMap);
+
+    int deleteInvalidFee(Map reportFeeDto);
 }

@@ -32,6 +32,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +105,9 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 
         Assert.hasLength(communityId, "未包含小区信息");
 
+        //
+        feeDataFiltering(communityId);
+
         //查询费用项
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityId);
@@ -125,6 +129,12 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         }
 
     }
+    private void feeDataFiltering(String communityId) {
+        Map reportFeeDto = new HashMap();
+        reportFeeDto.put("communityId", communityId);
+        reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+    }
+
 
     /**
      * 按费用项来出账

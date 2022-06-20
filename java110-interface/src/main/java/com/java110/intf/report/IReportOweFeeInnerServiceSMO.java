@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportOweFeeInnerServiceSMO
@@ -81,4 +82,14 @@ public interface IReportOweFeeInnerServiceSMO {
     double computeReportOweFeeTotalAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
     @RequestMapping(value = "/computeReportOweFeeItemAmount", method = RequestMethod.POST)
     List<ReportOweFeeItemDto> computeReportOweFeeItemAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param reportOweFeeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/deleteInvalidFee", method = RequestMethod.POST)
+    int deleteInvalidFee(@RequestBody Map reportOweFeeDto);
+
 }

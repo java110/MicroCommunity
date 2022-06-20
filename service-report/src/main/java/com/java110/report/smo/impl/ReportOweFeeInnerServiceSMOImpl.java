@@ -11,9 +11,12 @@ import com.java110.report.dao.IReportOweFeeServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -50,6 +53,16 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
         reportOweFeePo.setStatusCd("1");
         reportOweFeeServiceDaoImpl.deleteReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         return saveFlag;
+    }
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param reportOweFeeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    public int deleteInvalidFee(@RequestBody Map reportOweFeeDto){
+        return reportOweFeeServiceDaoImpl.deleteInvalidFee(reportOweFeeDto);
     }
 
     @Override

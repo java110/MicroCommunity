@@ -152,5 +152,14 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         return businessReportOweFeeInfos;
     }
 
+    @Override
+    public int deleteInvalidFee(Map info) {
+        logger.debug("保deleteInvalidFee 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.insert("reportOweFeeServiceDaoImpl.deleteInvalidFee", info);
+
+        return saveFlag;
+    }
+
 
 }
