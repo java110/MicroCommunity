@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
@@ -29,7 +29,7 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
-import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
@@ -58,7 +58,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Java110Cmd(serviceCode = "fee.payFee")
-public class PayFeeCmd extends AbstractServiceCmdListener {
+public class PayFeeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(PayFeeCmd.class);
 
@@ -164,8 +164,8 @@ public class PayFeeCmd extends AbstractServiceCmdListener {
         if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
             try {
                 Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-
-                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles") - 1);
+                configEndTime = DateUtil.stepDay(configEndTime,5);
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
 
                 if (newDate.getTime() > configEndTime.getTime()) {
                     throw new IllegalArgumentException("缴费周期超过 缴费结束时间");

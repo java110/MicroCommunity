@@ -122,7 +122,7 @@ public class OssUploadTemplate {
         ByteArrayInputStream fis = null;
         try {
             ossClient = OSSUtil.getOSSClient();
-            OSSUtil.getInputStreamByOSS(ossClient, remotePath + fileName);
+            ins = OSSUtil.getInputStreamByOSS(ossClient, remotePath + fileName);
             byteOut = new ByteArrayOutputStream();
             byte[] buf = new byte[2048];
             int bufsize = 0;

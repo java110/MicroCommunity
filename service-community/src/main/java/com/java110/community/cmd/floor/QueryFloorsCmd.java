@@ -3,7 +3,7 @@ package com.java110.community.cmd.floor;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "floor.queryFloors")
-public class QueryFloorsCmd extends AbstractServiceCmdListener {
+public class QueryFloorsCmd extends Cmd {
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;

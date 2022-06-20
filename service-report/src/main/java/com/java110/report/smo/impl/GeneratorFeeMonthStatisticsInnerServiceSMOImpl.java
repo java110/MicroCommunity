@@ -71,6 +71,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         Assert.hasLength(communityId, "未包含小区信息");
 
+        //这里处理 报表中的费用是否被人为 取消 或者费用项是否被删除，这种数据 报表中做清理，以防影响 报表的准确度
+        feeDataFiltering(communityId);
+
         //处理房屋费用
         dealRoomFee(reportFeeMonthStatisticsPo);
 
@@ -79,6 +82,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         //处理缴费结束的情况
         dealFinishFee(communityId);
+    }
+
+    private void feeDataFiltering(String communityId) {
+        Map reportFeeDto = new HashMap();
+        reportFeeDto.put("communityId", communityId);
+        reportFeeMonthStatisticsServiceDaoImpl.deleteInvalidFee(reportFeeDto);
     }
 
     private void dealFinishFee(String communityId) {

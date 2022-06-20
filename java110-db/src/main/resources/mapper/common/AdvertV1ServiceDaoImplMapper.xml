@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="advertV1ServiceDaoImpl">
+
+
+    <!-- 保存广告信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAdvertInfo" parameterType="Map">
+        insert into advert(
+        classify,ad_name,location_type_cd,ad_type_cd,advert_type,advert_id,view_type,start_time,page_url,state,end_time,community_id,location_obj_id,seq
+        ) values (
+        #{classify},#{adName},#{locationTypeCd},#{adTypeCd},#{advertType},#{advertId},#{viewType},#{startTime},#{pageUrl},#{state},#{endTime},#{communityId},#{locationObjId},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询广告信息 add by wuxw 2018-07-03 -->
+    <select id="getAdvertInfo" parameterType="Map" resultType="Map">
+        select t.classify,t.ad_name,t.ad_name adName,t.location_type_cd,t.location_type_cd
+        locationTypeCd,t.status_cd,t.status_cd statusCd,t.ad_type_cd,t.ad_type_cd adTypeCd,t.advert_type,t.advert_type
+        advertType,t.advert_id,t.advert_id advertId,t.view_type,t.view_type viewType,t.start_time,t.start_time
+        startTime,t.page_url,t.page_url pageUrl,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.location_obj_id,t.location_obj_id locationObjId,t.seq
+        from advert t
+        where 1 =1
+        <if test="classify !=null and classify != ''">
+            and t.classify= #{classify}
+        </if>
+        <if test="adName !=null and adName != ''">
+            and t.ad_name= #{adName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="adTypeCd !=null and adTypeCd != ''">
+            and t.ad_type_cd= #{adTypeCd}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type= #{advertType}
+        </if>
+        <if test="advertId !=null and advertId != ''">
+            and t.advert_id= #{advertId}
+        </if>
+        <if test="viewType !=null and viewType != ''">
+            and t.view_type= #{viewType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改广告信息 add by wuxw 2018-07-03 -->
+    <update id="updateAdvertInfo" parameterType="Map">
+        update advert t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="classify !=null and classify != ''">
+            , t.classify= #{classify}
+        </if>
+        <if test="adName !=null and adName != ''">
+            , t.ad_name= #{adName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            , t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="adTypeCd !=null and adTypeCd != ''">
+            , t.ad_type_cd= #{adTypeCd}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            , t.advert_type= #{advertType}
+        </if>
+        <if test="viewType !=null and viewType != ''">
+            , t.view_type= #{viewType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            , t.page_url= #{pageUrl}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            , t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="advertId !=null and advertId != ''">
+            and t.advert_id= #{advertId}
+        </if>
+
+    </update>
+
+    <!-- 查询广告数量 add by wuxw 2018-07-03 -->
+    <select id="queryAdvertsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from advert t
+        where 1 =1
+        <if test="classify !=null and classify != ''">
+            and t.classify= #{classify}
+        </if>
+        <if test="adName !=null and adName != ''">
+            and t.ad_name= #{adName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="adTypeCd !=null and adTypeCd != ''">
+            and t.ad_type_cd= #{adTypeCd}
+        </if>
+        <if test="advertType !=null and advertType != ''">
+            and t.advert_type= #{advertType}
+        </if>
+        <if test="advertId !=null and advertId != ''">
+            and t.advert_id= #{advertId}
+        </if>
+        <if test="viewType !=null and viewType != ''">
+            and t.view_type= #{viewType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="pageUrl !=null and pageUrl != ''">
+            and t.page_url= #{pageUrl}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>

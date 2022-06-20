@@ -15,16 +15,13 @@
  */
 package com.java110.report.cmd.reportCustomComponent;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
-import com.java110.dto.reportCustomComponentFooter.ReportCustomComponentFooterDto;
-import com.java110.intf.report.IReportCustomComponentFooterV1InnerServiceSMO;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -50,7 +47,7 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "reportCustomComponent.listReportCustomComponentData")
-public class ListReportCustomComponentDataCmd extends AbstractServiceCmdListener {
+public class ListReportCustomComponentDataCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentDataCmd.class);
     @Autowired

@@ -367,8 +367,10 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             }
 
             JSONArray th = new JSONArray();
-            for (String key : data.getJSONObject(0).keySet()) {
-                th.add(key);
+            if(data.size()>0) {
+                for (String key : data.getJSONObject(0).keySet()) {
+                    th.add(key);
+                }
             }
             JSONObject paramOut = new JSONObject();
             paramOut.put("th", th);

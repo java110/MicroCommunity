@@ -19,9 +19,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.po.smallWechat.SmallWechatPo;
 import com.java110.utils.exception.CmdException;
@@ -44,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "smallWeChat.updateSmallWeChat")
-public class UpdateSmallWechatCmd extends AbstractServiceCmdListener {
+public class UpdateSmallWechatCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(UpdateSmallWechatCmd.class);
 
@@ -54,7 +53,7 @@ public class UpdateSmallWechatCmd extends AbstractServiceCmdListener {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "wechatId", "weChatId不能为空");
+        Assert.hasKeyAndValue(reqJson, "wechatId", "wechatId不能为空");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "appId", "请求报文中未包含appId");
         Assert.hasKeyAndValue(reqJson, "appSecret", "请求报文中未包含appSecret");

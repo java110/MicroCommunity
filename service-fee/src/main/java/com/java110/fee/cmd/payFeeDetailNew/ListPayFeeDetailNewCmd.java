@@ -17,21 +17,12 @@ package com.java110.fee.cmd.payFeeDetailNew;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 
@@ -47,7 +38,7 @@ import com.java110.core.log.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "payFeeDetailNew.listPayFeeDetailNew")
-public class ListPayFeeDetailNewCmd extends AbstractServiceCmdListener {
+public class ListPayFeeDetailNewCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListPayFeeDetailNewCmd.class);
     @Autowired

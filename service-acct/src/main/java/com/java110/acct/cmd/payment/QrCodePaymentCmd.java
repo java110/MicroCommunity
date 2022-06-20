@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -28,7 +28,7 @@ import java.util.List;
  * 扫码付
  */
 @Java110Cmd(serviceCode = "payment.qrCodePayment")
-public class QrCodePaymentCmd extends AbstractServiceCmdListener {
+public class QrCodePaymentCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(QrCodePaymentCmd.class);
 
     @Autowired

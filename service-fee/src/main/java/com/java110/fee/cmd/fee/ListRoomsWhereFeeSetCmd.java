@@ -2,9 +2,8 @@ package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @Java110Cmd(serviceCode = "fee.listRoomsWhereFeeSet")
-public class ListRoomsWhereFeeSetCmd extends AbstractServiceCmdListener {
+public class ListRoomsWhereFeeSetCmd extends Cmd {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;

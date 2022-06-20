@@ -17,6 +17,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.intf.community.*;
 import com.java110.intf.user.*;
 import com.java110.po.car.OwnerCarPo;
+import com.java110.po.parking.ParkingAreaPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
@@ -67,7 +68,13 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
     @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
+    @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
@@ -160,6 +167,8 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         if (ownerCars.size() < 1) {
             throw new IllegalArgumentException("没有数据需要处理");
         }
+        String psId = "";
+        String paId = "";
         for (OwnerCarDto ownerCarDto : ownerCars) {
             OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(ownerCarDto, OwnerCarPo.class);
 
@@ -208,19 +217,48 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             parkingAreaDto.setTypeCd(ownerCarDto.getTypeCd());
             //查询停车场
             List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-            Assert.listOnlyOne(parkingAreaDtos, "查询停车场错误！");
+            //Assert.listOnlyOne(parkingAreaDtos, "查询停车场错误！");
+            if(parkingAreaDtos == null || parkingAreaDtos.size() <1){
+                paId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_paId);
+                ParkingAreaPo parkingAreaPo = new ParkingAreaPo();
+                parkingAreaPo.setCommunityId(reqJson.getString("communityId"));
+                parkingAreaPo.setNum(ownerCarDto.getAreaNum());
+                parkingAreaPo.setPaId(paId);
+                parkingAreaPo.setTypeCd(ownerCarDto.getTypeCd());
+                parkingAreaPo.setRemark("导入数据");
+                parkingAreaV1InnerServiceSMOImpl.saveParkingArea(parkingAreaPo);
+            }else{
+                paId = parkingAreaDtos.get(0).getPaId();
+            }
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setNum(ownerCarDto.getNum());
-            parkingSpaceDto.setPaId(parkingAreaDtos.get(0).getPaId());
+            parkingSpaceDto.setPaId(paId);
             //查询停车位
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            Assert.listOnlyOne(parkingSpaceDtos, "查询停车位错误！");
-            //获取停车位状态(出售 S，出租 H ，空闲 F)
-            String state = parkingSpaceDtos.get(0).getState();
-            if (!StringUtil.isEmpty(state) && !state.equals("F")) {
-                throw new IllegalArgumentException(parkingAreaDtos.get(0).getNum() + "停车场-" + parkingSpaceDtos.get(0).getNum() + "停车位不是空闲状态！");
+            String state = "";
+            if(parkingSpaceDtos == null || parkingSpaceDtos.size() <1){
+                psId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_psId);
+                ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
+                parkingSpacePo.setCommunityId(reqJson.getString("communityId"));
+                parkingSpacePo.setNum(ownerCarDto.getNum());
+                parkingSpacePo.setPaId(paId);
+                parkingSpacePo.setArea("1");
+                parkingSpacePo.setParkingType(ParkingSpaceDto.TYPE_CD_COMMON);
+                parkingSpacePo.setState(ParkingSpaceDto.STATE_FREE);
+                parkingSpacePo.setPsId(psId);
+                parkingSpacePo.setRemark("导入数据");
+                parkingSpaceV1InnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
+                state = ParkingSpaceDto.STATE_FREE;
+            }else{
+                psId = parkingSpaceDtos.get(0).getPsId();
+                //获取停车位状态(出售 S，出租 H ，空闲 F)
+                state = parkingSpaceDtos.get(0).getState();
             }
-            ownerCarPo.setPsId(parkingSpaceDtos.get(0).getPsId());
+
+            if (!StringUtil.isEmpty(state) && !state.equals("F")) {
+                throw new IllegalArgumentException(ownerCarDto.getAreaNum() + "停车场-" + ownerCarDto.getNum() + "停车位不是空闲状态！");
+            }
+            ownerCarPo.setPsId(psId);
             ownerCarPo.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
             ownerCarPo.setUserId("-1");
             ownerCarPo.setCommunityId(reqJson.getString("communityId"));
@@ -229,7 +267,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             ownerCarPo.setState("1001"); //1001 正常状态，2002 车位释放欠费状态，3003 车位释放
             ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
-            parkingSpacePo.setPsId(parkingSpaceDtos.get(0).getPsId()); //车位id
+            parkingSpacePo.setPsId(psId); //车位id
             parkingSpacePo.setState(ownerCarDto.getSpaceSate());
             parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
         }

@@ -21,6 +21,7 @@ public class SmallWeChatDto extends PageDto implements Serializable {
     public static final String WECHAT_TYPE_PUBLIC ="1100";
 
     private String mchId;
+    private String mchName;
     private String storeId;
     private String wechatType;
     private String weChatType;
@@ -196,5 +197,13 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public void setWeChatType(String weChatType) {
         this.weChatType = weChatType;
+    }
+
+    public String getMchName() {
+        return mchName;
+    }
+
+    public void setMchName(String mchName) {
+        this.mchName = mchName;
     }
 }

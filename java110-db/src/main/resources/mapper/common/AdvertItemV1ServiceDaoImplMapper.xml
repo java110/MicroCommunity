@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="advertItemV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存广告内容信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAdvertItemInfo" parameterType="Map">
+        insert into advert_item(
+item_type_cd,community_id,advert_item_id,advert_id,url,seq
+) values (
+#{itemTypeCd},#{communityId},#{advertItemId},#{advertId},#{url},#{seq}
+)
+    </insert>
+
+
+
+    <!-- 查询广告内容信息 add by wuxw 2018-07-03 -->
+    <select id="getAdvertItemInfo" parameterType="Map" resultType="Map">
+        select  t.item_type_cd,t.item_type_cd itemTypeCd,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.advert_item_id,t.advert_item_id advertItemId,t.advert_id,t.advert_id advertId,t.url,t.seq 
+from advert_item t 
+where 1 =1 
+<if test="itemTypeCd !=null and itemTypeCd != ''">
+   and t.item_type_cd= #{itemTypeCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="advertItemId !=null and advertItemId != ''">
+   and t.advert_item_id= #{advertItemId}
+</if> 
+<if test="advertId !=null and advertId != ''">
+   and t.advert_id= #{advertId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改广告内容信息 add by wuxw 2018-07-03 -->
+    <update id="updateAdvertItemInfo" parameterType="Map">
+        update  advert_item t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="itemTypeCd !=null and itemTypeCd != ''">
+, t.item_type_cd= #{itemTypeCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="advertId !=null and advertId != ''">
+, t.advert_id= #{advertId}
+</if> 
+<if test="url !=null and url != ''">
+, t.url= #{url}
+</if> 
+<if test="seq !=null and seq != ''">
+, t.seq= #{seq}
+</if> 
+ where 1=1 <if test="advertItemId !=null and advertItemId != ''">
+and t.advert_item_id= #{advertItemId}
+</if> 
+
+    </update>
+
+    <!-- 查询广告内容数量 add by wuxw 2018-07-03 -->
+     <select id="queryAdvertItemsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from advert_item t 
+where 1 =1 
+<if test="itemTypeCd !=null and itemTypeCd != ''">
+   and t.item_type_cd= #{itemTypeCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="advertItemId !=null and advertItemId != ''">
+   and t.advert_item_id= #{advertItemId}
+</if> 
+<if test="advertId !=null and advertId != ''">
+   and t.advert_id= #{advertId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+
+
+     </select>
+
+</mapper>

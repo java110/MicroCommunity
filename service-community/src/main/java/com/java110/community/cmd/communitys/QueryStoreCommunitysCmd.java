@@ -3,7 +3,7 @@ package com.java110.community.cmd.communitys;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
@@ -22,7 +22,7 @@ import java.util.List;
  * add by 吴学文 2021-09-18
  */
 @Java110Cmd(serviceCode = "/communitys/queryStoreCommunitys")
-public class QueryStoreCommunitysCmd extends AbstractServiceCmdListener {
+public class QueryStoreCommunitysCmd extends Cmd {
     private final static Logger logger = LoggerFactory.getLogger(QueryStoreCommunitysCmd.class);
 
 

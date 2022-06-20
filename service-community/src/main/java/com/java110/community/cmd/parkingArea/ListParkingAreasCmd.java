@@ -3,7 +3,7 @@ package com.java110.community.cmd.parkingArea;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "parkingArea.listParkingAreas")
-public class ListParkingAreasCmd extends AbstractServiceCmdListener {
+public class ListParkingAreasCmd extends Cmd {
     @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 

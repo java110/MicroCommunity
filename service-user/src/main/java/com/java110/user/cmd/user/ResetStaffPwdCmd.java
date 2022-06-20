@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "user.resetStaffPwd")
-public class ResetStaffPwdCmd extends AbstractServiceCmdListener {
+public class ResetStaffPwdCmd extends Cmd {
 
     @Autowired
     private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;

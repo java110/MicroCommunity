@@ -1,34 +1,24 @@
 package com.java110.community.cmd.room;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.UnitDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.*;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.po.owner.OwnerRoomRelPo;
-import com.java110.po.room.RoomAttrPo;
 import com.java110.po.room.RoomPo;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "room.deleteRoom")
-public class DeleteRoomCmd extends AbstractServiceCmdListener {
+public class DeleteRoomCmd extends Cmd {
 
     @Autowired
     private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;

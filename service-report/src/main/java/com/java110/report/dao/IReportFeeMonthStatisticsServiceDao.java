@@ -341,4 +341,6 @@ public interface IReportFeeMonthStatisticsServiceDao {
      * @return
      */
     List<Map> queryRoomAndParkingSpace(Map info);
+
+    int deleteInvalidFee(Map info);
 }

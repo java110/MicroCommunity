@@ -18,9 +18,12 @@ package com.java110.community.cmd.community;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.po.community.CommunityPo;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -42,23 +47,35 @@ import org.springframework.beans.factory.annotation.Autowired;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "community.deleteCommunity")
-public class DeleteCommunityCmd extends AbstractServiceCmdListener {
+public class DeleteCommunityCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(DeleteCommunityCmd.class);
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Environment.isDevEnv();
+
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId((String) reqJson.get("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        if (communityDtos.size() == 0 || communityDtos == null) {
+            throw new IllegalArgumentException("没有查询到communityId为：" + communityDto.getCommunityId() + "小区信息");
+        }
+        if ("1100".equals(communityDtos.get(0).getState())) {
+            throw new IllegalArgumentException("删除失败,该小区已审核通过");
+        }
         CommunityPo communityPo = BeanConvertUtil.covertBean(reqJson, CommunityPo.class);
         int flag = communityV1InnerServiceSMOImpl.deleteCommunity(communityPo);
 

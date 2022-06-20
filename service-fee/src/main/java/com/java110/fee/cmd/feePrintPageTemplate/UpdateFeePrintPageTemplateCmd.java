@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.fee.IFeePrintPageTemplateV1InnerServiceSMO;
 import com.java110.po.feePrintPageTemplate.FeePrintPageTemplatePo;
@@ -43,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "feePrintPageTemplate.updateFeePrintPageTemplate")
-public class UpdateFeePrintPageTemplateCmd extends AbstractServiceCmdListener {
+public class UpdateFeePrintPageTemplateCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateFeePrintPageTemplateCmd.class);
 

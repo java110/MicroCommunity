@@ -27,7 +27,9 @@ import com.java110.utils.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName GenerateOwnerBillTemplate
@@ -95,6 +97,11 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
      */
     private void GenerateOweFee(TaskDto taskDto, CommunityDto communityDto) {
 
+
+        //删除无用数据
+
+        feeDataFiltering(communityDto.getCommunityId());
+
         //查询费用项
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityDto.getCommunityId());
@@ -115,6 +122,12 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
         }
 
 
+    }
+
+    private void feeDataFiltering(String communityId) {
+        Map reportFeeDto = new HashMap();
+        reportFeeDto.put("communityId", communityId);
+        reportOweFeeInnerServiceSMOImpl.deleteInvalidFee(reportFeeDto);
     }
 
     /**

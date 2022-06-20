@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="activitiesV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+    <insert id="saveActivitiesInfo" parameterType="Map">
+        insert into activities(
+collect_count,like_count,title,read_count,user_name,user_id,activities_id,type_cd,context,start_time,end_time,state,community_id,header_img
+) values (
+#{collectCount},#{likeCount},#{title},#{readCount},#{userName},#{userId},#{activitiesId},#{typeCd},#{context},#{startTime},#{endTime},#{state},#{communityId},#{headerImg}
+)
+    </insert>
+
+
+
+    <!-- 查询活动信息 add by wuxw 2018-07-03 -->
+    <select id="getActivitiesInfo" parameterType="Map" resultType="Map">
+        select  t.collect_count,t.collect_count collectCount,t.like_count,t.like_count likeCount,t.status_cd,t.status_cd statusCd,t.title,t.read_count,t.read_count readCount,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.activities_id,t.activities_id activitiesId,t.type_cd,t.type_cd typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.header_img,t.header_img headerImg 
+from activities t 
+where 1 =1 
+<if test="collectCount !=null and collectCount != ''">
+   and t.collect_count= #{collectCount}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+   and t.like_count= #{likeCount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="readCount !=null and readCount != ''">
+   and t.read_count= #{readCount}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="activitiesId !=null and activitiesId != ''">
+   and t.activities_id= #{activitiesId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+   and t.header_img= #{headerImg}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改活动信息 add by wuxw 2018-07-03 -->
+    <update id="updateActivitiesInfo" parameterType="Map">
+        update  activities t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="collectCount !=null and collectCount != ''">
+, t.collect_count= #{collectCount}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+, t.like_count= #{likeCount}
+</if> 
+<if test="title !=null and title != ''">
+, t.title= #{title}
+</if> 
+<if test="readCount !=null and readCount != ''">
+, t.read_count= #{readCount}
+</if> 
+<if test="userName !=null and userName != ''">
+, t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+, t.header_img= #{headerImg}
+</if> 
+ where 1=1 <if test="activitiesId !=null and activitiesId != ''">
+and t.activities_id= #{activitiesId}
+</if> 
+
+    </update>
+
+    <!-- 查询活动数量 add by wuxw 2018-07-03 -->
+     <select id="queryActivitiessCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from activities t 
+where 1 =1 
+<if test="collectCount !=null and collectCount != ''">
+   and t.collect_count= #{collectCount}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+   and t.like_count= #{likeCount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="readCount !=null and readCount != ''">
+   and t.read_count= #{readCount}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="activitiesId !=null and activitiesId != ''">
+   and t.activities_id= #{activitiesId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+   and t.header_img= #{headerImg}
+</if> 
+
+
+     </select>
+
+</mapper>

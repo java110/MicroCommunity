@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -17,7 +17,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Java110Cmd(serviceCode = "feeConfig.deleteFeeConfig")
-public class DeleteFeeConfigCmd extends AbstractServiceCmdListener {
+public class DeleteFeeConfigCmd extends Cmd {
 
     @Autowired
     private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;

@@ -19,6 +19,7 @@ public class AdvertItemPo implements Serializable {
     private String url;
     private String communityId;
     private String seq;
+    private String statusCd="0";
 
 
     public String getAdvertItemId() {
@@ -67,5 +68,13 @@ public class AdvertItemPo implements Serializable {
 
     public void setSeq(String seq) {
         this.seq = seq;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -18,6 +18,8 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     public static final String STATE_FREE = "F";
     public static final String STATE_HIRE = "H";
 
+    public static final String TYPE_CD_COMMON = "1";
+
     private String area;
     private String typeCd;
     private String typeCdName;

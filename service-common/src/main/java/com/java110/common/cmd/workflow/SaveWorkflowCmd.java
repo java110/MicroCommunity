@@ -19,18 +19,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.po.workflow.WorkflowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -43,7 +43,7 @@ import com.java110.core.log.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "workflow.saveWorkflow")
-public class SaveWorkflowCmd extends AbstractServiceCmdListener {
+public class SaveWorkflowCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(SaveWorkflowCmd.class);
 
@@ -55,12 +55,12 @@ public class SaveWorkflowCmd extends AbstractServiceCmdListener {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "flowId", "请求报文中未包含flowId");
-Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowName");
-Assert.hasKeyAndValue(reqJson, "skipLevel", "请求报文中未包含skipLevel");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
-Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
+        Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowName");
+        Assert.hasKeyAndValue(reqJson, "skipLevel", "请求报文中未包含skipLevel");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
+        Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
+        WorkflowPo workflowPo = BeanConvertUtil.covertBean(reqJson, WorkflowPo.class);
         workflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo);
 

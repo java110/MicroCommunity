@@ -43,4 +43,5 @@ public interface IReportFeeServiceDao {
      * @return
      */
     double getFeeReceivedAmount(ReportFeeDetailDto reportFeeDetailDto);
+
 }

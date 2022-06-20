@@ -131,6 +131,10 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
                 if ("100201911001".equals(userAttrDto.getSpecCd())) {
                     userDto.setOpenId(userAttrDto.getValue());
                 }
+
+                if (UserAttrDto.SPEC_MALL_OPEN_ID.equals(userAttrDto.getSpecCd())){
+                    userDto.setMallOpenId(userAttrDto.getValue());
+                }
             }
 
 

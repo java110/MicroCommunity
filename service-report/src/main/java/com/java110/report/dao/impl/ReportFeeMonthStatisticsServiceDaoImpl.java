@@ -598,4 +598,13 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
 
+    public int deleteInvalidFee(Map info){
+        logger.debug("deleteInvalidFee 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("reportFeeMonthStatisticsServiceDaoImpl.deleteInvalidFee", info);
+
+        return saveFlag;
+    }
+
+
 }

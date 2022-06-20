@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
@@ -13,6 +13,7 @@ import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
@@ -60,7 +61,7 @@ import java.util.Map;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "fee.payFeePre")
-public class PayFeePreCmd extends AbstractServiceCmdListener {
+public class PayFeePreCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(PayFeePreCmd.class);
 
 
@@ -122,6 +123,45 @@ public class PayFeePreCmd extends AbstractServiceCmdListener {
         Assert.hasLength(reqJson.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(reqJson.getString("feeId"), "费用ID不能为空");
         Assert.hasLength(reqJson.getString("appId"), "appId不能为空");
+
+
+        //判断是否 费用状态为缴费结束
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(reqJson.getString("feeId"));
+        feeDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(feeDtos, "传入费用ID错误");
+
+        feeDto = feeDtos.get(0);
+
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            throw new IllegalArgumentException("收费已经结束，不能再缴费");
+        }
+
+        Date endTime = feeDto.getEndTime();
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeDto.getConfigId());
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
+            try {
+                Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+                configEndTime = DateUtil.stepDay(configEndTime,5);
+
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
+
+                if (newDate.getTime() > configEndTime.getTime()) {
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                }
+
+            } catch (Exception e) {
+                logger.error("比较费用日期失败", e);
+            }
+        }
+
     }
 
     @Override

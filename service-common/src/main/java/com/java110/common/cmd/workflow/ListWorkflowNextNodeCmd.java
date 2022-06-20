@@ -3,7 +3,7 @@ package com.java110.common.cmd.workflow;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.event.cmd.AbstractServiceCmdListener;
+import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "workflow.listWorkflowNextNode")
-public class ListWorkflowNextNodeCmd extends AbstractServiceCmdListener {
+public class ListWorkflowNextNodeCmd extends Cmd {
 
     @Autowired
     private IWorkflowV1InnerServiceSMO workflowV1InnerServiceSMOImpl;
