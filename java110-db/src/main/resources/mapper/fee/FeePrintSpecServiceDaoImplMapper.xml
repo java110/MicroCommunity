@@ -54,7 +54,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="content !=null and content != ''">
+        <if test="content !=null">
             , t.content= #{content}
         </if>
         <if test="specCd !=null and specCd != ''">
@@ -63,7 +63,7 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="qrImg !=null and qrImg != ''">
+        <if test="qrImg !=null">
             , t.qr_img= #{qrImg}
         </if>
         <if test="printName !=null and printName != ''">

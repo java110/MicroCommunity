@@ -76,6 +76,13 @@ spring:
     maxActive: 20
     username: TT
 
+  feign:
+    client:
+      config:
+        default:
+          connect-timeout: 30000
+          read-timeout: 30000
+
 #============== kafka ===================
 kafka:
   consumer:

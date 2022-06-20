@@ -44,7 +44,6 @@ public class FeePrintSpecApi {
     public ResponseEntity<String> saveFeePrintSpec(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含content");
         Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
 
 
@@ -64,7 +63,6 @@ public class FeePrintSpecApi {
     public ResponseEntity<String> updateFeePrintSpec(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含content");
         Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
         Assert.hasKeyAndValue(reqJson, "printId", "printId不能为空");
 

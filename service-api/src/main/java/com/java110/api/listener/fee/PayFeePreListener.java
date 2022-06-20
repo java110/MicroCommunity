@@ -238,13 +238,11 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
                     }
                 }
             }
-
         }
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
-
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         //这里调整为实收金额
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));

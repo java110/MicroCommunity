@@ -1,6 +1,7 @@
 package com.java110.po.accountDetail;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AccountDetailPo implements Serializable {
 
@@ -13,6 +14,9 @@ public class AccountDetailPo implements Serializable {
     private String relAcctId;
     private String remark;
     private String objType;
+    private String bId;
+    private Date createTime;
+    private String statusCd = "0";
 
     public String getDetailType() {
         return detailType;
@@ -86,5 +90,27 @@ public class AccountDetailPo implements Serializable {
         this.objType = objType;
     }
 
+    public String getbId() {
+        return bId;
+    }
 
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }

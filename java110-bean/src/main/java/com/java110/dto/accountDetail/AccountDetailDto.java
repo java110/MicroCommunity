@@ -33,7 +33,7 @@ public class AccountDetailDto extends PageDto implements Serializable {
     private String remark;
     private String objType;
     private String acctType;
-
+    private String bId;
 
     private Date createTime;
 
@@ -112,7 +112,6 @@ public class AccountDetailDto extends PageDto implements Serializable {
         this.objType = objType;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -143,5 +142,13 @@ public class AccountDetailDto extends PageDto implements Serializable {
 
     public void setAcctType(String acctType) {
         this.acctType = acctType;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

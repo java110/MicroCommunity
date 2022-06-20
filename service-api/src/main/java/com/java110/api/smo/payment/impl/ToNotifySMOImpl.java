@@ -17,11 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service("toNotifySMOImpl")
 public class ToNotifySMOImpl implements IToNotifySMO {
+
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
-
     private static final String DEFAULT_PAY_NOTIFY_ADAPT = "wechatPayNotifyAdapt";// 默认微信通用支付
-
 
     @Override
     public ResponseEntity<String> toNotify(String param, HttpServletRequest request) {
