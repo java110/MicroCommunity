@@ -13,6 +13,7 @@ import java.util.Date;
  **/
 public class UnitDto extends PageDto implements Serializable {
 
+    public static final String ROOM_UNIT_Y = "Y";//房屋单元
 
     /**
      * unitId
@@ -47,6 +48,7 @@ public class UnitDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+    private String roomUnit;
 
 
     public String getUnitId() {
@@ -159,5 +161,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
+    }
+
+    public String getRoomUnit() {
+        return roomUnit;
+    }
+
+    public void setRoomUnit(String roomUnit) {
+        this.roomUnit = roomUnit;
     }
 }

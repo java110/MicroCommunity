@@ -37,6 +37,9 @@
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>
+        <if test="roomUnit == 'Y'">
+            and t.unit_num != '0'
+        </if>
         <if test="lift !=null and lift != ''">
             and t.lift= #{lift}
         </if>
@@ -45,9 +48,6 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -111,6 +111,9 @@
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>
+        <if test="roomUnit == 'Y'">
+            and t.unit_num != '0'
+        </if>
         <if test="lift !=null and lift != ''">
             and t.lift= #{lift}
         </if>
@@ -119,9 +122,6 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
 
 

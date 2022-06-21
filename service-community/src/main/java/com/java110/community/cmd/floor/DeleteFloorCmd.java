@@ -6,8 +6,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
+import com.java110.intf.community.IUnitV1InnerServiceSMO;
 import com.java110.po.floor.FloorPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -23,10 +25,22 @@ public class DeleteFloorCmd extends Cmd {
     @Autowired
     private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "floorId", "请求报文中未包含floorId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+
+        UnitDto unitDto = new UnitDto();
+        unitDto.setFloorId(reqJson.getString("floorId"));
+        unitDto.setCommunityId(reqJson.getString("communityId"));
+        unitDto.setRoomUnit(UnitDto.ROOM_UNIT_Y);
+        int count = unitV1InnerServiceSMOImpl.queryUnitsCount(unitDto);
+        if (count > 0) {
+            throw new IllegalArgumentException("请先删除单元 再删除楼栋");
+        }
     }
 
     @Override
