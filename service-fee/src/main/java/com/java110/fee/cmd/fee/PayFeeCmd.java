@@ -165,7 +165,7 @@ public class PayFeeCmd extends Cmd {
             try {
                 Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
                 configEndTime = DateUtil.stepDay(configEndTime,5);
-                Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
 
                 if (newDate.getTime() > configEndTime.getTime()) {
                     throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
@@ -182,6 +182,7 @@ public class PayFeeCmd extends Cmd {
             String maximumNumber = param.getString("maximumNumber");
         }
     }
+
 
     @Override
     @Java110Transactional

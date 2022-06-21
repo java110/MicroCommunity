@@ -24,7 +24,6 @@ import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
-import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
@@ -149,7 +148,7 @@ public class PayFeePreCmd extends Cmd {
         if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
             try {
                 Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                configEndTime = DateUtil.stepDay(configEndTime,5);
+                configEndTime = DateUtil.stepDay(configEndTime, 5);
 
                 Date newDate = DateUtil.stepMonth(endTime, reqJson.getInteger("cycles"));
 
