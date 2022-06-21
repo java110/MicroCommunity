@@ -1,52 +1,36 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.owner.IOwnerBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
-import com.java110.intf.common.ISmsInnerServiceSMO;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.msg.SmsDto;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName AppUserBindingOwnerListener
- * @Description app用户绑定业主接口
- * @Author wuxw
- * @Date 2019/4/26 14:51
- * @Version 1.0
- * add by wuxw 2019/4/26
- **/
-
-@Java110Listener("appUserBindingOwnerListener")
-public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener {
-
-
-    private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
-
-    @Autowired
-    private IOwnerBMO ownerBMOImpl;
+@Java110Cmd(serviceCode = "owner.appUserBindingOwner")
+public class AppUserBindingOwnerCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -66,20 +50,11 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-    private static Logger logger = LoggerFactory.getLogger(AppUserBindingOwnerListener.class);
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_APP_USER_BINDING_OWNER;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityName", "未包含小区名称");
         Assert.hasKeyAndValue(reqJson, "areaCode", "未包含小区地区");
         Assert.hasKeyAndValue(reqJson, "appUserName", "未包含用户名称");
@@ -88,7 +63,7 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener 
         Assert.hasKeyAndValue(reqJson, "msgCode", "未包含联系电话验证码");
 
         //判断是否有用户ID
-        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
+        Map<String, String> headers = context.getReqHeaders();
 
         Assert.hasKeyAndValue(headers, "user_id", "请求头中未包含用户信息");
         SmsDto smsDto = new SmsDto();
@@ -102,11 +77,9 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener 
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
-        //判断是否有用户ID
-        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
+        Map<String, String> headers = context.getReqHeaders();
 
         String userId = headers.get("user_id");
         UserDto userDto = new UserDto();
@@ -151,65 +124,27 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener 
 
         OwnerDto tmpOwnerDto = ownerDtos.get(0);
 
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        String paramIn = dataFlowContext.getReqData();
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-        paramObj.put("openId", openId);
-        paramObj.put("userId", userId);
+        reqJson.put("openId", openId);
+        reqJson.put("userId", userId);
 
         //添加小区楼
-        ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto,context);
-
-
-
-    }
-
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
-
-    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
-        return fileInnerServiceSMOImpl;
-    }
-
-    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
-        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
-    }
-
-
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
-
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public IOwnerAppUserInnerServiceSMO getOwnerAppUserInnerServiceSMOImpl() {
-        return ownerAppUserInnerServiceSMOImpl;
-    }
-
-    public void setOwnerAppUserInnerServiceSMOImpl(IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl) {
-        this.ownerAppUserInnerServiceSMOImpl = ownerAppUserInnerServiceSMOImpl;
-    }
-
-    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
-        return userInnerServiceSMOImpl;
-    }
-
-    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
-        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+        JSONObject businessOwnerAppUser = new JSONObject();
+        businessOwnerAppUser.putAll(reqJson);
+        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
+        businessOwnerAppUser.put("state", "12000");
+        businessOwnerAppUser.put("appTypeCd", "10010");
+        businessOwnerAppUser.put("appUserId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
+        businessOwnerAppUser.put("memberId", ownerDto.getMemberId());
+        businessOwnerAppUser.put("communityName", communityDto.getName());
+        businessOwnerAppUser.put("communityId", communityDto.getCommunityId());
+        businessOwnerAppUser.put("appUserName", ownerDto.getName());
+        businessOwnerAppUser.put("idCard", ownerDto.getIdCard());
+        businessOwnerAppUser.put("link", ownerDto.getLink());
+        businessOwnerAppUser.put("userId", reqJson.getString("userId"));
+        OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(businessOwnerAppUser, OwnerAppUserPo.class);
+        int flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("保存业主失败");
+        }
     }
 }

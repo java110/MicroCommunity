@@ -1,42 +1,30 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.po.parking.ParkingSpacePo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-/**
- * @ClassName DeleteCarParkingSpaceListener
- * @Description 释放车位
- * @Author wuxw
- * @Date 2019/4/26 14:51
- * @Version 1.0
- * @site http://www.homecommunity.cn
- * add by wuxw 2019/4/26
- **/
-
-@Java110Listener("deleteCarParkingSpaceListener")
-public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListener {
-
-    private static Logger logger = LoggerFactory.getLogger(DeleteCarParkingSpaceListener.class);
+@Java110Cmd(serviceCode = "owner.deleteCarParkingSpace")
+public class DeleteCarParkingSpaceCmd extends Cmd {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
@@ -44,26 +32,18 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+
     @Autowired
-    private IParkingSpaceBMO parkingSpaceBMOImpl;
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_CAR_PARKING_SPACE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    /**
-     * @param event   事件对象
-     * @param reqJson 请求报文数据
-     */
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
 //        Assert.jsonObjectHaveKey(reqJson, "carId", "请求报文中未包含carId");
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
@@ -90,7 +70,7 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         OwnerCarDto ownerCarDto = (OwnerCarDto) reqJson.get("ownerCarDto");
         FeeDto feeDto = new FeeDto();
@@ -126,17 +106,32 @@ public class DeleteCarParkingSpaceListener extends AbstractServiceApiPlusListene
         if (oweFee) {
             ownerCarPo.setState(OwnerCarDto.STATE_FINISH);
         }
-        super.update(context, ownerCarPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
-
+        int flag = ownerCarV1InnerServiceSMOImpl.updateOwnerCar(ownerCarPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("修改车辆出错");
+        }
         reqJson.put("carNumType", ParkingSpaceDto.STATE_FREE);
         reqJson.put("psId", ownerCarDto.getPsId());
-        parkingSpaceBMOImpl.modifySellParkingSpaceState(reqJson, context);
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        parkingSpaceDto.setPsId(reqJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
+            //throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+            return;
+        }
+
+        parkingSpaceDto = parkingSpaceDtos.get(0);
+
+        JSONObject businessParkingSpace = new JSONObject();
+
+        businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
+        businessParkingSpace.put("state", reqJson.getString("carNumType"));
+        ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
+        flag = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("修改车辆出错");
+        }
     }
-
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
 }

@@ -1,38 +1,34 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.machine.ApiMachineDataVo;
 import com.java110.vo.api.machine.ApiMachineVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 查询业主或成员 对应门禁设备，一般是房屋门，单元门 小区大门
- */
-@Java110Listener("listOwnerMachines")
-public class ListOwnerMachines extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "owner.listOwnerMachines")
+public class ListOwnerMachinesCmd extends Cmd {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -50,15 +46,13 @@ public class ListOwnerMachines extends AbstractServiceApiListener {
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含业主信息");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String communityId = reqJson.getString("communityId");
         String memberId = reqJson.getString("memberId");
 
@@ -221,60 +215,5 @@ public class ListOwnerMachines extends AbstractServiceApiListener {
                 }
             }
         }
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.LIST_OWNER_MACHINES;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
-    }
-
-    public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
-        return machineInnerServiceSMOImpl;
-    }
-
-    public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
-        this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
-    }
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
     }
 }

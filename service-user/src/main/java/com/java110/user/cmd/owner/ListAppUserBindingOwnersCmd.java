@@ -1,32 +1,27 @@
-package com.java110.api.listener.owner;
+package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.community.CommunityDto;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listAppUserBindingOwnersListener")
-public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "owner.listAppUserBindingOwners")
+public class ListAppUserBindingOwnersCmd extends Cmd {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
@@ -38,35 +33,13 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS;
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //super.validatePageInfo(reqJson);
-
-        //  Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
-
-        //   Assert.hasKeyAndValue(headers, "userid", "请求头中未包含用户信息");
-    }
-
-    @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        Map<String, String> headers = context.getReqHeaders();
 
         if (!reqJson.containsKey("page")) {
             reqJson.put("page", 1);
@@ -92,7 +65,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         } else {
             ownerAppUserDtos = new ArrayList<>();
         }
-        context.setResponseEntity(ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),count,ownerAppUserDtos));
+        context.setResponseEntity(ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerAppUserDtos));
 
     }
 
@@ -103,8 +76,8 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
      */
     private void refreshCommunityArea(List<OwnerAppUserDto> ownerAppUserDtos) {
         String[] communityIds = getCommunityIds(ownerAppUserDtos);
-        if(communityIds == null || communityIds.length < 1){
-            return ;
+        if (communityIds == null || communityIds.length < 1) {
+            return;
         }
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityIds(communityIds);
@@ -140,13 +113,5 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         }
 
         return communityIds.toArray(new String[communityIds.size()]);
-    }
-
-    public IOwnerAppUserInnerServiceSMO getOwnerAppUserInnerServiceSMOImpl() {
-        return ownerAppUserInnerServiceSMOImpl;
-    }
-
-    public void setOwnerAppUserInnerServiceSMOImpl(IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl) {
-        this.ownerAppUserInnerServiceSMOImpl = ownerAppUserInnerServiceSMOImpl;
     }
 }
