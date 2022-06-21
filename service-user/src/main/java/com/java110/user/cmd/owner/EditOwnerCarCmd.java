@@ -85,7 +85,6 @@ public class EditOwnerCarCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(reqJson, OwnerCarPo.class);
-        ownerCarPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = ownerCarV1InnerServiceSMOImpl.updateOwnerCar(ownerCarPo);
 
         if (flag < 1) {
