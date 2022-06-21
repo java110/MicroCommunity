@@ -15,7 +15,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
-import com.java110.intf.feeAccountDetail.IFeeAccountDetailServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.feeAccountDetail.FeeAccountDetailPo;
