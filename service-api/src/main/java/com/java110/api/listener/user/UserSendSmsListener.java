@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Date;
 import java.util.List;
 
-import static com.java110.api.listener.owner.OwnerRegisterListener.ID_CARD_SWITCH;
 
 
 /**
@@ -36,6 +35,8 @@ public class UserSendSmsListener extends AbstractServiceApiListener {
 
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    public static final String ID_CARD_SWITCH = "ID_CARD_SWITCH";
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
