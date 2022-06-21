@@ -7,8 +7,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
+import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.community.IUnitV1InnerServiceSMO;
 import com.java110.po.unit.UnitPo;
@@ -28,6 +30,9 @@ public class DeleteUnitCmd extends Cmd {
 
     @Autowired
     private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -52,6 +57,15 @@ public class DeleteUnitCmd extends Cmd {
         total = unitInnerServiceSMOImpl.queryUnitsCount(unitDto);
         if (total < 1) {
             throw new IllegalArgumentException("传入单元不是该小区的楼的单元");
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setUnitId(reqJson.getString("unitId"));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        int count = roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
+        if(count > 0){
+            throw new IllegalArgumentException("单元下存在房屋 请先删除房屋");
+
         }
     }
 
