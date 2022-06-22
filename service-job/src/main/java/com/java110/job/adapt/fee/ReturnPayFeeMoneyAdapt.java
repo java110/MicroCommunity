@@ -3,6 +3,7 @@ package com.java110.job.adapt.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -10,7 +11,6 @@ import com.java110.entity.order.Business;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
@@ -30,7 +30,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -136,15 +135,18 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
             certData = smallWeChatDtos.get(0).getCertPath();
             mchPassword = smallWeChatDtos.get(0).getMchId();
         }
-
-        String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
-        if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
-            mchPassword = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
-        }
-
         SortedMap<String, String> parameters = new TreeMap<String, String>();
+        String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
+
+
+        System.out.println("证书地址：" + certData + ";mchPassword=" + mchPassword);
         parameters.put("appid", onlinePayDtos.get(0).getAppId());//appid
         parameters.put("mch_id", onlinePayDtos.get(0).getMchId());//商户号
+        if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
+            mchPassword = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
+            parameters.put("mch_id", mchPassword);//商户号
+            parameters.put("sub_mch_id", onlinePayDtos.get(0).getMchId());//商户号
+        }
         parameters.put("nonce_str", PayUtil.makeUUID(32));//随机数
         parameters.put("out_trade_no", onlinePayDtos.get(0).getOrderId());//商户订单号
         parameters.put("out_refund_no", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
