@@ -30,6 +30,7 @@ public class PayFeePo implements Serializable {
     private String statusCd = "0";
     private String createTime;
     private String batchId;
+    private String deductFrom;
 
     public String getFeeId() {
         return feeId;
@@ -166,4 +167,8 @@ public class PayFeePo implements Serializable {
     public void setbId(String bId) {
         this.bId = bId;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

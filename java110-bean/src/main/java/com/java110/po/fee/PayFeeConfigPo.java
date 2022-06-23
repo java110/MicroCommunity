@@ -32,6 +32,7 @@ public class PayFeeConfigPo implements Serializable {
     private String paymentCd;
 
     private String paymentCycle;
+    private String deductFrom;
     private String statusCd = "0";
 
     public String getConfigId() {
@@ -161,4 +162,8 @@ public class PayFeeConfigPo implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

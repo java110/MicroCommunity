@@ -111,6 +111,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
         feeDto.setCommunityId(tmpAccountDto.getPartId());
         feeDto.setOwnerId(tmpAccountDto.getObjId());
         feeDto.setState(FeeDto.STATE_DOING);
+        feeDto.setDeductFrom("Y");
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         if (feeDtos == null || feeDtos.size() < 1) {
             return;

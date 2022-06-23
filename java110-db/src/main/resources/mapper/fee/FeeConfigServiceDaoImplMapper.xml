@@ -8,11 +8,11 @@
     <insert id="saveBusinessFeeConfigInfo" parameterType="Map">
         insert into business_pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,square_price,is_default,operate,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text,deduct_from
         ) values (
         #{feeTypeCd},#{computingFormula},#{additionalAmount},#{squarePrice},#{isDefault},#{operate},#{configId},
         #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType},#{paymentCd},#{paymentCycle},
-        #{computingFormulaText}
+        #{computingFormulaText},#{deductFrom}
         )
     </insert>
 
@@ -23,7 +23,7 @@
         squarePrice,t.is_default,t.is_default isDefault,t.operate,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag
         feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType,
-        t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text computingFormulaText
+        t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom
         from business_pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -68,17 +68,20 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        <if test="deductFrom !=null and deductFrom != ''">
+            and t.deduct_from = #{deductFrom}
+        </if>
     </select>
 
     <!-- 保存费用配置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfigInfoInstance" parameterType="Map">
         insert into pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text,deduct_from
         ) select
         t.fee_type_cd,t.computing_formula,t.additional_amount,'0',t.square_price,t.is_default,t.config_id,t.fee_flag,t.fee_name,
         t.start_time,t.end_time,t.community_id,
-        t.b_id,t.bill_type,t.payment_cd,t.payment_cycle,t.computing_formula_text
+        t.b_id,t.bill_type,t.payment_cd,t.payment_cycle,t.computing_formula_text,t.deduct_from
         from business_pay_fee_config t where 1=1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
@@ -131,7 +134,7 @@
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
-        t.computing_formula_text,t.computing_formula_text computingFormulaText
+        t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom
         from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = td1.status_cd
@@ -201,6 +204,9 @@
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
         </if>
+        <if test="deductFrom !=null and deductFrom != ''">
+            and t.deduct_from = #{deductFrom}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -254,6 +260,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
+        </if>
+        <if test="deductFrom !=null and deductFrom != ''">
+            , t.deduct_from= #{deductFrom}
         </if>
         where 1=1
         <if test="configId !=null and configId != ''">
@@ -329,16 +338,19 @@
         <if test="billType !=null and billType != ''">
             and t.bill_type= #{billType}
         </if>
+        <if test="deductFrom !=null and deductFrom != ''">
+            and t.deduct_from = #{deductFrom}
+        </if>
     </select>
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfig" parameterType="Map">
         insert into pay_fee_config(
         fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text,deduct_from
         ) values (
         #{feeTypeCd},#{computingFormula},#{additionalAmount},'0',#{squarePrice},#{isDefault},#{configId},
-        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle},#{computingFormulaText}
+        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle},#{computingFormulaText},#{deductFrom}
         )
     </insert>
 </mapper>

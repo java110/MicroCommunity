@@ -68,6 +68,8 @@ public class ApiFeeDataVo implements Serializable {
     //实收金额映射开关值
     private String receivedAmountSwitch;
 
+    private String deductFrom;
+
     private List<FeeAttrDto> feeAttrs;
 
     public String getAmount() {
@@ -382,4 +384,8 @@ public class ApiFeeDataVo implements Serializable {
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

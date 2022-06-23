@@ -132,6 +132,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String offlinePayFeeSwitch;
 
+    private String deductFrom;
+
     public String getAmount() {
         return amount;
     }
@@ -636,4 +638,8 @@ public class FeeDto extends PageDto implements Serializable {
     public void setOfflinePayFeeSwitch(String offlinePayFeeSwitch) {
         this.offlinePayFeeSwitch = offlinePayFeeSwitch;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

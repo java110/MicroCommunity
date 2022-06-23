@@ -73,6 +73,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String computingFormulaText;
 
+    private String deductFrom;
+
     private double amount;
 
 
@@ -277,4 +279,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

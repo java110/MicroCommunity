@@ -37,6 +37,8 @@ public class ImportRoomFee {
     private String ownerName;
     private String ownerLink;
 
+    private String deductFrom = "Y";
+
 
     public String getFloorNum() {
         return floorNum;
@@ -181,4 +183,8 @@ public class ImportRoomFee {
     public void setContractId(String contractId) {
         this.contractId = contractId;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

@@ -26,6 +26,8 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String paymentCycle;
     private String computingFormulaText;
 
+    private String deductFrom;
+
 
     public String getConfigId() {
         return configId;
@@ -162,4 +164,8 @@ public class ApiFeeConfigDataVo implements Serializable {
     public void setComputingFormulaText(String computingFormulaText) {
         this.computingFormulaText = computingFormulaText;
     }
+
+    public String getDeductFrom() { return deductFrom; }
+
+    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
 }

@@ -222,6 +222,10 @@
         <if test="payerObjType !=null and payerObjType != ''">
             and t.payer_obj_type = #{payerObjType}
         </if>
+        <if test="deductFrom !=null and deductFrom != ''">
+            and t.deduct_from = #{deductFrom}
+        </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
