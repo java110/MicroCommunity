@@ -27,6 +27,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     public static final String FEE_FLAG_ONCE = "2006012";//一次性费用
     public static final String FEE_FLAG_CYCLE = "1003006";//周期性费用
+    public static final String FEE_FLAG_CYCLE_ONCE = "4012024";//间接性费用
     public static final String REDIS_PAY_OWE_FEE = "PAY_OWE_FEE_";
     public static final String REDIS_PAY_TEMP_CAR_FEE = "PAY_TEMP_CAR_FEE_";
 

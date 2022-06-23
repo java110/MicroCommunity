@@ -96,7 +96,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
 
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
             Date endTime = null;
             Date configEndTime = null;
             try {
