@@ -11,6 +11,8 @@ public abstract class Cmd implements ServiceCmdListener {
 
     private static Logger logger = LoggerFactory.getLogger(Cmd.class);
 
+    protected static final int MAX_ROW = 10000;
+
 
     /**
      * 分页信息校验

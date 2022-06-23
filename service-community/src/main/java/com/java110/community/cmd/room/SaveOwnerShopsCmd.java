@@ -1,53 +1,34 @@
-package com.java110.api.listener.room;
+package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.owner.IOwnerBMO;
-import com.java110.api.bmo.room.IRoomBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.po.room.RoomPo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-/**
- * @ClassName SaveUnitListener
- * @Description TODO 售卖房屋信息
- * @Author wuxw
- * @Date 2019/5/3 11:54
- * @Version 1.0
- * add by wuxw 2019/5/3
- **/
-@Java110Listener("saveOwnerShopsListener")
-public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
-
-    private static Logger logger = LoggerFactory.getLogger(SaveOwnerShopsListener.class);
-
-    @Autowired
-    private IRoomBMO roomBMOImpl;
-
-    @Autowired
-    private IOwnerBMO ownerBMOImpl;
+@Java110Cmd(serviceCode = "room.saveOwnerShops")
+public class SaveOwnerShopsCmd extends Cmd {
 
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
@@ -61,18 +42,17 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_OWNER_SHOPS;
-    }
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(reqJson, "ownerName", "请求报文中未包含ownerName节点");
@@ -83,14 +63,14 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        int flag = 0;
         if (!reqJson.containsKey("ownerId")
                 || reqJson.getString("ownerId").startsWith("-")
                 || StringUtil.isEmpty(reqJson.getString("ownerId"))
         ) {
             OwnerPo ownerPo = new OwnerPo();
-            ownerPo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+            ownerPo.setUserId("-1");
             ownerPo.setAge("1");
             ownerPo.setCommunityId(reqJson.getString("communityId"));
             ownerPo.setIdCard("");
@@ -101,7 +81,11 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
             ownerPo.setOwnerId(ownerPo.getMemberId()); //业主 所以和成员ID需要一样
             ownerPo.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
             ownerPo.setRemark(reqJson.getString("remark"));
-            ownerBMOImpl.addOwner(JSONObject.parseObject(JSONObject.toJSONString(ownerPo)), context);
+            ownerPo.setState("2000");
+            flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
+            if (flag < 1) {
+                throw new IllegalArgumentException("保存业主失败");
+            }
             reqJson.put("ownerId", ownerPo.getOwnerId());
         }
 
@@ -126,40 +110,31 @@ public class SaveOwnerShopsListener extends AbstractServiceApiPlusListener {
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
             OwnerRoomRelPo roomPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
-            super.delete(context, roomPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
+            flag = ownerRoomRelV1InnerServiceSMOImpl.deleteOwnerRoomRel(roomPo);
+            if (flag < 1) {
+                throw new IllegalArgumentException("删除已有房屋关系失败");
+            }
         }
 
         //添加房屋关系
         reqJson.put("state", "2001");
-        roomBMOImpl.sellRoom(reqJson, context);
-
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(reqJson);
+        businessUnit.put("relId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+        businessUnit.put("userId", "-1");
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
+        ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
         //更新房屋信息为售出
         reqJson.put("state", reqJson.getString("shopsState"));
-        roomBMOImpl.updateShellRoom(reqJson, context);
-
-        //添加物业费用信息
-        //roomBMOImpl.addPropertyFee(reqJson, context);
+        businessUnit = new JSONObject();
+        businessUnit.putAll(reqJson);
+        businessUnit.put("userId", "-1");
+        RoomPo roomPo = BeanConvertUtil.covertBean(businessUnit, RoomPo.class);
+        flag = roomV1InnerServiceSMOImpl.updateRoom(roomPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("删除已有房屋关系失败");
+        }
     }
 
 
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
-    }
 }

@@ -138,8 +138,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         SortedMap<String, String> parameters = new TreeMap<String, String>();
         String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
 
-
-        System.out.println("证书地址：" + certData + ";mchPassword=" + mchPassword);
         parameters.put("appid", onlinePayDtos.get(0).getAppId());//appid
         parameters.put("mch_id", onlinePayDtos.get(0).getMchId());//商户号
         if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
