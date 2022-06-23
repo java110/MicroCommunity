@@ -132,16 +132,20 @@ public class PayBatchFeeCmd extends Cmd {
             feeConfigDto.setConfigId(feeDto.getConfigId());
             feeConfigDto.setCommunityId(paramInObj.getString("communityId"));
             List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-            if (feeConfigDtos != null && feeConfigDtos.size() == 1) {
+            if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
+                throw new IllegalArgumentException("费用项不存在");
+            }
+            Date maxEndTime = feeDtos.get(0).getDeadlineTime();
+            if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
                 try {
-                    Date configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                    Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
-                    if (newDate.getTime() > configEndTime.getTime()) {
-                        throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
-                    }
-                } catch (Exception e) {
+                    maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
+                } catch (ParseException e) {
                     logger.error("比较费用日期失败", e);
                 }
+            }
+            Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
+            if (newDate.getTime() > maxEndTime.getTime()) {
+                throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
             }
         }
     }

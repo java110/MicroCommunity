@@ -245,7 +245,7 @@ public class RoomRenovationApi {
                 feeAttrPo3.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK); //联系方式
                 feeAttrPo3.setValue(reqJson.getString("personTel"));
                 feeAttrOwnerLinkPos.add(feeAttrPo3);
-                if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {//一次性费用
+                if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {//一次性费用
                     FeeAttrPo feeAttrPo4 = new FeeAttrPo();
                     feeAttrPo4.setFeeId(payFeePo.getFeeId());
                     feeAttrPo4.setCommunityId(reqJson.getString("communityId"));

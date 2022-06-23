@@ -738,6 +738,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endCalender.add(Calendar.HOUR, hours);
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             return FeeDto.STATE_FINISH;
+        } else if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())){
+            if ((endCalender.getTime()).after(feeDto.getDeadlineTime())) {
+                return FeeDto.STATE_FINISH;
+            }
         } else {
             if ((endCalender.getTime()).after(feeDto.getConfigEndTime())) {
                 return FeeDto.STATE_FINISH;
@@ -768,6 +772,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 endCalender.setTime(feeDto.getConfigEndTime());
             } else {
                 endCalender.setTime(feeDto.getImportFeeEndTime());
+            }
+        } else if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())){
+            if ((endCalender.getTime()).after(feeDto.getDeadlineTime())) {
+                endCalender.setTime(feeDto.getDeadlineTime());
             }
         } else {
             if ((endCalender.getTime()).after(feeDto.getConfigEndTime())) {
@@ -1404,6 +1412,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             return targetEndDateAndOweMonth;
         }
         //当前费用为一次性费用
+        Date maxEndTime = feeDto.getConfigEndTime();
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             //先取 deadlineTime
             if (feeDto.getDeadlineTime() != null) {
@@ -1411,12 +1420,47 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else if (!StringUtil.isEmpty(feeDto.getCurDegrees())) {
                 targetEndDate = feeDto.getCurReadingTime();
             } else if (feeDto.getImportFeeEndTime() == null) {
-                targetEndDate = feeDto.getConfigEndTime();
+                targetEndDate = maxEndTime;
             } else {
                 targetEndDate = feeDto.getImportFeeEndTime();
             }
             //判断当前费用是不是导入费用
             oweMonth = 1.0;
+        }else if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())){
+            maxEndTime = feeDto.getDeadlineTime();
+            Date billEndTime = DateUtil.getCurrentDate();
+            //建账时间
+            Date startDate = feeDto.getStartTime();
+            //计费起始时间
+            Date endDate = feeDto.getEndTime();
+            //缴费周期
+            long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
+            // 当前时间 - 开始时间  = 月份
+            double mulMonth = 0.0;
+            mulMonth = dayCompare(startDate, billEndTime);
+
+            // 月份/ 周期 = 轮数（向上取整）
+            double round = 0.0;
+            if ("1200".equals(feeDto.getPaymentCd())) { // 1200预付费
+                round = Math.floor(mulMonth / paymentCycle) + 1;
+            } else { //2100后付费
+                round = Math.floor(mulMonth / paymentCycle);
+            }
+            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
+            //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
+            if (maxEndTime.getTime() < targetEndDate.getTime()) {
+                targetEndDate = maxEndTime;
+            }
+            //说明欠费
+            if (endDate.getTime() < targetEndDate.getTime()) {
+                // 目标到期时间 - 到期时间 = 欠费月份
+                oweMonth = dayCompare(endDate, targetEndDate);
+            }
+
+            if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
+                targetEndDate = feeDto.getEndTime();
+            }
         } else { //周期性费用
             //当前时间
             Date billEndTime = DateUtil.getCurrentDate();
@@ -1440,8 +1484,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
             targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
             //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
-            if (feeDto.getConfigEndTime().getTime() < targetEndDate.getTime()) {
-                targetEndDate = feeDto.getConfigEndTime();
+            if (maxEndTime.getTime() < targetEndDate.getTime()) {
+                targetEndDate = maxEndTime;
             }
             //说明欠费
             if (endDate.getTime() < targetEndDate.getTime()) {

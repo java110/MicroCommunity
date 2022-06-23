@@ -130,7 +130,7 @@ public class CreateFeeByComboCmd extends Cmd {
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && config.containsKey("endTime")) {
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && config.containsKey("endTime")) {
             Date endTime = null;
             Date configEndTime = null;
             try {
@@ -149,7 +149,7 @@ public class CreateFeeByComboCmd extends Cmd {
 
         feePos.add(BeanConvertUtil.covertBean(addRoomFee(config, reqJson,feeConfigDtos), PayFeePo.class));
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             feeAttrsPos.add(addFeeAttr(reqJson, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                     config.containsKey("endTime") ? config.getString("endTime") : reqJson.getString("configEndTime")));
         }

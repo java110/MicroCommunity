@@ -235,7 +235,7 @@ public class SaveHandoverCmd extends Cmd {
                     throw new CmdException("保存费用失败");
                 }
 
-                if (FeeDto.FEE_FLAG_ONCE.equals(businessUnit.getString("feeFlag"))) {
+                if (!FeeDto.FEE_FLAG_CYCLE.equals(businessUnit.getString("feeFlag"))) {
                     feeAttrPo = addFeeAttr(businessUnit, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                             paramInJson.containsKey("endTime") ? paramInJson.getString("endTime") : feeConfigDtos.get(0).getEndTime());
                     flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);

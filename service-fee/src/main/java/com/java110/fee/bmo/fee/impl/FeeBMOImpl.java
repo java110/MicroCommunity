@@ -344,10 +344,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (FeeDto.FEE_FLAG_ONCE.equals(feeInfo.getFeeFlag())) { //缴费结束
             feeMap.put("state", FeeDto.STATE_FINISH);
         }
+        Date maxEndTime = feeInfo.getConfigEndTime();
+        if(!FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())){
+            maxEndTime = feeInfo.getDeadlineTime();
+        }
         try {
             Date endTime = DateUtil.getDateFromString(paramInJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_A);
-            Date configEndTime = feeInfo.getConfigEndTime();
-            if (endTime.getTime() >= configEndTime.getTime()) {
+            if (endTime.getTime() >= maxEndTime.getTime()) {
                 feeMap.put("state", FeeDto.STATE_FINISH);
             }
         } catch (ParseException e) {

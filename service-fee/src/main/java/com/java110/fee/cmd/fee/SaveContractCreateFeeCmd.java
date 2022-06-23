@@ -97,7 +97,7 @@ public class SaveContractCreateFeeCmd extends Cmd {
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
 
-        if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
             Date endTime = null;
             Date configEndTime = null;
             try {
@@ -176,7 +176,7 @@ public class SaveContractCreateFeeCmd extends Cmd {
             curFailRoomCount++;
             feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addContractFee(contractDtos.get(roomIndex), reqJson, context), PayFeePo.class));
             if (!StringUtil.isEmpty(contractDtos.get(roomIndex).getObjId())) {
-                if (FeeDto.FEE_FLAG_ONCE.equals(reqJson.getString("feeFlag"))) {
+                if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
                     feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                             reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
                 }
