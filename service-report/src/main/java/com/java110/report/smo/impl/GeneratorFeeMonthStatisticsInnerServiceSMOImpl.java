@@ -785,6 +785,11 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         Date endTime = ownerCarDtos.get(0).getEndTime();
 
+        Date maxEndDate = tmpReportFeeDto.getDeadlineTime();
+        if(FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())){
+            maxEndDate = tmpReportFeeDto.getConfigEndTime();
+        }
+
         //1.0 费用到期时间和费用结束时间 都不在当月
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
                 && !belongCurMonth(endTime)
@@ -804,7 +809,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
                 && belongCurMonth(endTime)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), tmpReportFeeDto.getConfigEndTime());
+            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), maxEndDate);
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -850,16 +855,21 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             return computeOnceFee(tmpReportFeeDto);
         }
 
+        Date maxEndDate = tmpReportFeeDto.getDeadlineTime();
+        if(FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())){
+            maxEndDate = tmpReportFeeDto.getConfigEndTime();
+        }
+
         //1.0 费用到期时间和费用结束时间 都不在当月
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
-                && !belongCurMonth(tmpReportFeeDto.getConfigEndTime())
+                && !belongCurMonth(maxEndDate)
                 && tmpReportFeeDto.getEndTime().getTime() < DateUtil.getFirstDate().getTime()) {
             return feePrice;
         }
 
         //2.0 费用到期时间 在当月，费用结束时间不在当月
         if (belongCurMonth(tmpReportFeeDto.getEndTime())
-                && !belongCurMonth(tmpReportFeeDto.getConfigEndTime())) {
+                && !belongCurMonth(maxEndDate)) {
             //算天数
             double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
             BigDecimal curDegree = new BigDecimal(month);
@@ -867,9 +877,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
         //3.0 费用到期时间 不在当月，费用结束时间在当月
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
-                && belongCurMonth(tmpReportFeeDto.getConfigEndTime())) {
+                && belongCurMonth(maxEndDate)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), tmpReportFeeDto.getConfigEndTime());
+            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), maxEndDate);
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
