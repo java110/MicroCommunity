@@ -223,7 +223,7 @@
             and t.payer_obj_type = #{payerObjType}
         </if>
         <if test="deductFrom !=null and deductFrom != ''">
-            and t.deduct_from = #{deductFrom}
+            and pfc.deduct_from = #{deductFrom}
         </if>
 
         order by t.create_time desc
