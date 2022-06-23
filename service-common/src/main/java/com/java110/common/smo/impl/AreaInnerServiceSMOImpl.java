@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,4 +35,44 @@ public class AreaInnerServiceSMOImpl extends BaseServiceSMO implements IAreaInne
 
         return areas;
     }
+
+    @Override
+    public List<AreaDto> getWholeArea(@RequestBody AreaDto areaDto) {
+        String areacode = "";
+        if (areaDto.getAreaCode() != null && areaDto.getAreaCode().length() > 5){
+            areacode = areaDto.getAreaCode();
+        }else{
+            areacode = "110101";
+        }
+        areaDto.setAreaCode(areacode);
+        List<AreaDto> areas = BeanConvertUtil.covertBeanList(areaServiceDaoImpl.getWholeArea(BeanConvertUtil.beanCovertMap(areaDto)), AreaDto.class);
+        List<AreaDto> newlist = new ArrayList();
+        AreaDto nowarea = new AreaDto();
+        for (AreaDto area :areas){
+            if (areacode.equals(area.getAreaCode())){
+                newlist.add(area);
+                nowarea = area;
+                break;
+            }
+        }
+        getTree(areas,nowarea,newlist);
+        Collections.reverse(newlist);
+        return newlist;
+    }
+
+    private static void getTree(List<AreaDto> areas,AreaDto area,List<AreaDto> newlist){
+        for (AreaDto a :areas){
+            if (area.getParentAreaCode().equals(a.getAreaCode())){
+                newlist.add(a);
+                area = a;
+                areas.remove(a);
+                getTree(areas,area,newlist);
+                break;
+            }
+        }
+    }
+
+
+
+
 }

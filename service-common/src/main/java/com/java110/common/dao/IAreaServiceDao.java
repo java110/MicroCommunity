@@ -22,4 +22,14 @@ public interface IAreaServiceDao {
      * @throws DAOException DAO异常
      */
     public List<Map> getProvCityArea(Map info) throws DAOException;
+
+    /**
+     * 查询完整省份 城市 区域   如：传入区，返回市省，传入  街道，返回区，市，省
+     * @param info bId 信息
+     * @return 应用信息
+     * @throws DAOException DAO异常
+     */
+    public List<Map> getWholeArea(Map info) throws DAOException;
+
+
 }
