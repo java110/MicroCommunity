@@ -165,7 +165,9 @@ public class PayFeeCmd extends Cmd {
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
             throw new IllegalArgumentException("费用项不存在");
         }
+        //一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
+        //周期性费用
         if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             try {
                 maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
@@ -177,7 +179,7 @@ public class PayFeeCmd extends Cmd {
         if (newDate.getTime() > maxEndTime.getTime()) {
             throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
         }
-        
+
         String selectUserAccount = reqJson.getString("selectUserAccount");
         JSONArray params = JSONArray.parseArray(selectUserAccount);
         for (int paramIndex = 0; paramIndex < params.size(); paramIndex++) {
@@ -596,8 +598,12 @@ public class PayFeeCmd extends Cmd {
             feeInfo.setState(FeeDto.STATE_FINISH);
         }
         feeInfo.setEndTime(endCalender.getTime());
+        Date maxEndTime = feeInfo.getDeadlineTime();
+        if(FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())){
+            maxEndTime = feeInfo.getConfigEndTime();
+        }
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if (feeInfo.getEndTime().getTime() - feeInfo.getConfigEndTime().getTime() > 30 * 24 * 60 * 60 * 1000L) {
+        if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
             throw new IllegalArgumentException("缴费超过了 费用项结束时间");
         }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
@@ -612,16 +618,15 @@ public class PayFeeCmd extends Cmd {
         paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
 
         // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
-        if (FeeFlagTypeConstant.CYCLE.equals(feeInfo.getFeeFlag())) {
+        if (!FeeFlagTypeConstant.ONETIME.equals(feeInfo.getFeeFlag())) {
             //这里 容错五天时间
-            Date configEndTime = feeInfo.getConfigEndTime();
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(configEndTime);
+            calendar.setTime(maxEndTime);
             calendar.add(Calendar.DAY_OF_MONTH, -5);
-            configEndTime = calendar.getTime();
-            if (feeInfo.getEndTime().after(configEndTime)) {
+            maxEndTime = calendar.getTime();
+            if (feeInfo.getEndTime().after(maxEndTime)) {
                 businessFee.put("state", FeeStateConstant.END);
-                businessFee.put("endTime", feeInfo.getConfigEndTime());
+                businessFee.put("endTime", maxEndTime);
             }
         }
         return businessFee;

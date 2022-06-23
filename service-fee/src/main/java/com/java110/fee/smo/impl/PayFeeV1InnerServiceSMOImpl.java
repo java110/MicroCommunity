@@ -51,16 +51,16 @@ public class PayFeeV1InnerServiceSMOImpl extends BaseServiceSMO implements IPayF
     }
 
      @Override
-    public int updatePayFee(@RequestBody PayFeePo PayFeePo) {
-        int saveFlag = payFeeV1ServiceDaoImpl.updatePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
-        return saveFlag;
-    }
-
-     @Override
     public int deletePayFee(@RequestBody  PayFeePo PayFeePo) {
        PayFeePo.setStatusCd("1");
        int saveFlag = payFeeV1ServiceDaoImpl.updatePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
        return saveFlag;
+    }
+
+    @Override
+    public int updatePayFee(@RequestBody PayFeePo PayFeePo) {
+        int saveFlag = payFeeV1ServiceDaoImpl.updatePayFeeInfo(BeanConvertUtil.beanCovertMap(PayFeePo));
+        return saveFlag;
     }
 
     @Override
