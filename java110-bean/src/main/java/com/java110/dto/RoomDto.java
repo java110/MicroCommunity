@@ -55,6 +55,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String userName;
     private String ownerId;
     private String ownerName;
+    private String ownerNameLike;
     private String idCard;
     private String link;
     private String roomType;
@@ -408,5 +409,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setRoomNumLike(String roomNumLike) {
         this.roomNumLike = roomNumLike;
+    }
+
+    public String getOwnerNameLike() {
+        return ownerNameLike;
+    }
+
+    public void setOwnerNameLike(String ownerNameLike) {
+        this.ownerNameLike = ownerNameLike;
     }
 }
