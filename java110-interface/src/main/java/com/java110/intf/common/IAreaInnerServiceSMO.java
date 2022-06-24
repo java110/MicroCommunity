@@ -27,5 +27,7 @@ public interface IAreaInnerServiceSMO {
     @RequestMapping(value = "/getProvCityArea", method = RequestMethod.POST)
     public List<AreaDto> getProvCityArea(@RequestBody AreaDto areaDto);
 
+    @RequestMapping(value = "/getWholeArea", method = RequestMethod.POST)
+    public List<AreaDto> getWholeArea(@RequestBody AreaDto areaDto);
 
 }
