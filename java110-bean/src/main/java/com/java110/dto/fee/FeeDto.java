@@ -130,6 +130,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String cycle;
     private double feeTotalPrice;
     private String batchId;
+    private String custEndTime;
 
     private String offlinePayFeeSwitch;
 
@@ -643,4 +644,11 @@ public class FeeDto extends PageDto implements Serializable {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+    public String getCustEndTime() {
+        return custEndTime;
+    }
+
+    public void setCustEndTime(String custEndTime) {
+        this.custEndTime = custEndTime;
+    }
 }

@@ -76,6 +76,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String RESOURCE_STORE_USE_RECORD_MANAGE = "resourceStoreUseRecordManage";
     public static final String RESOURCE_STAFF_FEE_MANAGE = "staffFeeManage";
     public static final String REPORT_PAY_FEE_DEPOSIT = "reportPayFeeDeposit";
+    public static final String INSPECTION_TASK_DETAILS = "inspectionTaskDetails";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -168,6 +169,8 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             case REPORT_PAY_FEE_DEPOSIT:
                 reportPayFeeDeposit(pd, result, workbook);
                 break;
+            case INSPECTION_TASK_DETAILS:
+                inspectionTaskDetails(pd, result, workbook);
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
@@ -877,6 +880,72 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         }
     }
 
+    private void inspectionTaskDetails(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("巡检明细");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("任务详情ID");
+        row.createCell(1).setCellValue("巡检点名称");
+        row.createCell(2).setCellValue("巡检计划名称");
+        row.createCell(3).setCellValue("巡检路线名称");
+        row.createCell(4).setCellValue("巡检人开始时间");
+        row.createCell(5).setCellValue("巡检人结束时间");
+        row.createCell(6).setCellValue("巡检点开始时间");
+        row.createCell(7).setCellValue("巡检点结束时间");
+        row.createCell(8).setCellValue("实际巡检时间");
+        row.createCell(9).setCellValue("实际签到状态");
+        row.createCell(10).setCellValue("计划巡检人");
+        row.createCell(11).setCellValue("实际巡检人");
+        row.createCell(12).setCellValue("巡检方式");
+        row.createCell(13).setCellValue("任务状态");
+        row.createCell(14).setCellValue("巡检点状态");
+        row.createCell(15).setCellValue("巡检情况");
+        JSONArray inspectionTaskDetails = this.getInspectionTaskDetails(pd, result);
+        if (inspectionTaskDetails == null || inspectionTaskDetails.size() == 0) {
+            return;
+        }
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < inspectionTaskDetails.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = inspectionTaskDetails.getJSONObject(roomIndex);
+            row.createCell(0).setCellValue(dataObj.getString("taskDetailId"));
+            row.createCell(1).setCellValue(dataObj.getString("inspectionName"));
+            row.createCell(2).setCellValue(dataObj.getString("inspectionPlanName"));
+            row.createCell(3).setCellValue(dataObj.getString("routeName"));
+            row.createCell(4).setCellValue(dataObj.getString("planInsTime"));
+            row.createCell(5).setCellValue(dataObj.getString("planEndTime"));
+            if (!StringUtil.isEmpty(dataObj.getString("pointStartTime"))) {
+                row.createCell(6).setCellValue(dataObj.getString("pointStartTime"));
+            } else {
+                row.createCell(6).setCellValue("--");
+            }
+            if (!StringUtil.isEmpty(dataObj.getString("pointEndTime"))) {
+                row.createCell(7).setCellValue(dataObj.getString("pointEndTime"));
+            } else {
+                row.createCell(7).setCellValue("--");
+            }
+            if (!StringUtil.isEmpty(dataObj.getString("inspectionTime"))) {
+                row.createCell(8).setCellValue(dataObj.getString("inspectionTime"));
+            } else {
+                row.createCell(8).setCellValue("--");
+            }
+            row.createCell(9).setCellValue(dataObj.getString("inspectionStateName"));
+            row.createCell(10).setCellValue(dataObj.getString("planUserName"));
+            if (!StringUtil.isEmpty(dataObj.getString("actUserName"))) {
+                row.createCell(11).setCellValue(dataObj.getString("actUserName"));
+            } else {
+                row.createCell(11).setCellValue("--");
+            }
+            row.createCell(12).setCellValue(dataObj.getString("signTypeName"));
+            row.createCell(13).setCellValue(dataObj.getString("taskStateName"));
+            row.createCell(14).setCellValue(dataObj.getString("stateName"));
+            if (!StringUtil.isEmpty(dataObj.getString("description"))) {
+                row.createCell(15).setCellValue(dataObj.getString("description"));
+            } else {
+                row.createCell(15).setCellValue("--");
+            }
+        }
+    }
+
     private void resourceStoreUseRecordManage(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("物品使用记录");
         Row row = sheet.createRow(0);
@@ -1383,6 +1452,29 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             return null;
         }
         return savedAllocationUserStorehouses.getJSONArray("data");
+    }
+
+    private JSONArray getInspectionTaskDetails(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("page", 1);
+        reqJson.put("row", 10000);
+        apiUrl = "inspectionTaskDetail.listInspectionTaskDetails" + mapToUrlParam(reqJson);
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+        JSONObject savedInspectionTaskDetails = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+        //获取限制条数的值
+        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
+        if (savedInspectionTaskDetails.getJSONArray("inspectionTaskDetails").size() > number) {
+            throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
+        }
+        if (!savedInspectionTaskDetails.containsKey("inspectionTaskDetails")) {
+            return null;
+        }
+        return savedInspectionTaskDetails.getJSONArray("inspectionTaskDetails");
     }
 
     private JSONArray getResourceStoreUseRecordManage(IPageData pd, ComponentValidateResult result) {

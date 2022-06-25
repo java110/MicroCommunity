@@ -56,6 +56,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Java110Cmd(serviceCode = "fee.payFee")
@@ -172,6 +173,7 @@ public class PayFeeCmd extends Cmd {
             try {
                 maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
             } catch (ParseException e) {
+            } catch (Exception e) {
                 logger.error("比较费用日期失败", e);
             }
         }
@@ -200,7 +202,37 @@ public class PayFeeCmd extends Cmd {
         try {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
+            JSONObject fee = modifyFee(paramObj);
+            payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
+            //判断是否有赠送规则
+            if (paramObj.containsKey("selectDiscount")) {
+                JSONArray selectDiscount = paramObj.getJSONArray("selectDiscount");
+                if (selectDiscount != null && selectDiscount.size() > 0) {
+                    for (int index = 0; index < selectDiscount.size(); index++) {
+                        JSONObject paramJson = selectDiscount.getJSONObject(index);
+                        if (!StringUtil.isEmpty(paramJson.getString("ruleId")) && paramJson.getString("ruleId").equals("102020008")) { //赠送规则
+                            JSONArray feeDiscountSpecs = paramJson.getJSONArray("feeDiscountSpecs");
+                            if (feeDiscountSpecs.size() > 0) {
+                                for (int specIndex = 0; specIndex < feeDiscountSpecs.size(); specIndex++) {
+                                    JSONObject paramIn = feeDiscountSpecs.getJSONObject(specIndex);
+                                    if (!StringUtil.isEmpty(paramIn.getString("specId")) && paramIn.getString("specId").equals("89002020980015")) { //赠送月份
+                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        String specValue = paramIn.getString("specValue");
+                                        //获取费用结束时间(也就是下次费用开始时间)
+                                        Date endTime = df.parse(payFeeDetailPo.getEndTime());
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(endTime);
+                                        cal.add(Calendar.MONTH, Integer.parseInt(specValue));
+                                        payFeeDetailPo.setEndTime(df.format(cal.getTime()));
+                                        payFeePo.setEndTime(df.format(cal.getTime()));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             //判断选择的账号
             JSONArray jsonArray = paramObj.getJSONArray("selectUserAccount");
             if (jsonArray == null || jsonArray.size() < 1) {
@@ -297,13 +329,13 @@ public class PayFeeCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("缴费失败");
             }
-            JSONObject fee = modifyFee(paramObj);
-            payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
 
             flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
@@ -314,7 +346,11 @@ public class PayFeeCmd extends Cmd {
             JSONObject discountBusiness = null;
             JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
             for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
-                addPayFeeDetailDiscount(paramObj, selectDiscounts.getJSONObject(discountIndex));
+                JSONObject param = selectDiscounts.getJSONObject(discountIndex);
+                if (!StringUtil.isEmpty(param.getString("ruleId")) && param.getString("ruleId").equals("102020008")) {
+                    return;
+                }
+                addPayFeeDetailDiscount(paramObj, param);
             }
         }
 
@@ -559,8 +595,28 @@ public class PayFeeCmd extends Cmd {
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+        } else if ("-103".equals(paramInJson.getString("cycles"))) {
+            String custEndTime = paramInJson.getString("custEndTime");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date endDates = null;
+            try {
+                endDates = format.parse(custEndTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(endDates);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            endDates = c.getTime();//这是明天
+            targetEndTime = endDates;
+            BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
+            paramInJson.put("tmpCycles", cycles.doubleValue());
+            businessFeeDetail.put("cycles", cycles.doubleValue());
+            BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
         } else {
-            targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));
+            targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));//根据缴费周期计算 结束时间
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
@@ -579,8 +635,24 @@ public class PayFeeCmd extends Cmd {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         int hours = 0;
+        //-101自定义金额 -102自定义周期 -103 自定义结束时间
         if ("-101".equals(paramInJson.getString("cycles"))) {
             endCalender = getTargetEndTime(endCalender, Double.parseDouble(paramInJson.getString("tmpCycles")));
+            System.out.println(endCalender);
+        } else if ("-103".equals(paramInJson.getString("cycles"))) {
+            String custEndTime = paramInJson.getString("custEndTime");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date endDates = null;
+            try {
+                endDates = format.parse(custEndTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(endDates);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            endDates = c.getTime();//这是明天
+            endCalender.setTime(endDates);
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         }
@@ -599,7 +671,7 @@ public class PayFeeCmd extends Cmd {
         }
         feeInfo.setEndTime(endCalender.getTime());
         Date maxEndTime = feeInfo.getDeadlineTime();
-        if(FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())){
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getConfigEndTime();
         }
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费

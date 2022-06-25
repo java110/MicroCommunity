@@ -220,12 +220,16 @@ public class FeeApi extends BaseController {
     public ResponseEntity<String> listFeeObj(
             @RequestParam(value = "feeId") String feeId,
             @RequestParam(value = "cycle", required = false) String cycle,
+            @RequestParam(value = "custEndTime", required = false) String custEndTime,
             @RequestParam(value = "communityId") String communityId) {
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(feeId);
         feeDto.setCommunityId(communityId);
         if (!StringUtil.isEmpty(cycle)) {
             feeDto.setCycle(cycle);
+        }
+        if (!StringUtil.isEmpty(custEndTime)) {
+            feeDto.setCustEndTime(custEndTime);
         }
         return queryOweFeeImpl.listFeeObj(feeDto);
     }

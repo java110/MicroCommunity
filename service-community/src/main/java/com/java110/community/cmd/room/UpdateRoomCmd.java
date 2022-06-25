@@ -161,6 +161,23 @@ public class UpdateRoomCmd extends Cmd {
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(paramInJson);
         RoomPo roomPo = BeanConvertUtil.covertBean(businessUnit, RoomPo.class);
+        if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("10")) {
+            roomPo.setSection("1");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("20")) {
+            roomPo.setSection("2");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("30")) {
+            roomPo.setSection("3");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("40")) {
+            roomPo.setSection("4");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("50")) {
+            roomPo.setSection("5");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("60")) {
+            roomPo.setSection("6");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("70")) {
+            roomPo.setSection("7");
+        } else if (paramInJson.containsKey("apartment1") && paramInJson.getString("apartment1").equals("80")) {
+            roomPo.setSection("8");
+        }
         int flag = roomV1InnerServiceSMOImpl.updateRoom(roomPo);
         if (flag < 1) {
             throw new CmdException("修改房屋失败");

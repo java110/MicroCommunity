@@ -15,19 +15,13 @@
  */
 package com.java110.fee.discount.impl;
 
-import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
 import com.java110.fee.discount.IComputeDiscount;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 缴几个月赠送几个月 规则
@@ -38,21 +32,12 @@ import java.util.Map;
 @Component(value = "reductionMonthFeeRule")
 public class ReductionMonthFeeRule implements IComputeDiscount {
 
-
     /**
      * 89002020980001	102020001	月份
      * 89002020980002	102020001	打折率
      */
     private static final String SPEC_MONTH = "89002020980014"; //月份
     private static final String SPEC_RATE = "89002020980015"; // 赠送月份
-
-
-    @Autowired
-    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
-
-    @Autowired
-    private IComputeFeeSMO computeFeeSMOImpl;
-
 
     @Override
     public ComputeDiscountDto compute(FeeDiscountDto feeDiscountDto) {
@@ -72,8 +57,9 @@ public class ReductionMonthFeeRule implements IComputeDiscount {
                 reductionMonth = Double.parseDouble(feeDiscountSpecDto.getSpecValue());
             }
         }
-
         if (feeDiscountDto.getCycles() < month) {
+            return null;
+        } else {
             ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
             computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
             computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_D);
@@ -84,34 +70,5 @@ public class ReductionMonthFeeRule implements IComputeDiscount {
             computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
             return computeDiscountDto;
         }
-
-        //查询费用
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(feeDiscountDto.getCommunityId());
-        feeDto.setFeeId(feeDiscountDto.getFeeId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        Map feePriceAll=computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
-
-        BigDecimal priceDec = new BigDecimal(feePriceAll.get("feePrice").toString());
-
-        double cycleRate = Math.floor(feeDiscountDto.getCycles()/month);
-
-        BigDecimal cycleRateDec = new BigDecimal(cycleRate);
-
-
-        BigDecimal reductionMonthDec = new BigDecimal(reductionMonth);
-
-        double discountPrice = priceDec.multiply(cycleRateDec).multiply(reductionMonthDec).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-
-        ComputeDiscountDto computeDiscountDto = new ComputeDiscountDto();
-        computeDiscountDto.setDiscountId(feeDiscountDto.getDiscountId());
-        computeDiscountDto.setDiscountType(FeeDiscountDto.DISCOUNT_TYPE_D);
-        computeDiscountDto.setRuleId(feeDiscountDto.getRuleId());
-        computeDiscountDto.setRuleName(feeDiscountDto.getRuleName());
-        computeDiscountDto.setDiscountName(feeDiscountDto.getDiscountName());
-        computeDiscountDto.setDiscountPrice(discountPrice);
-        computeDiscountDto.setFeeDiscountSpecs(feeDiscountSpecDtos);
-        return computeDiscountDto;
     }
 }

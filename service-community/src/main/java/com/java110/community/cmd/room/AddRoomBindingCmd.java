@@ -177,6 +177,23 @@ public class AddRoomBindingCmd extends Cmd {
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
             addRoomView.put("roomType", RoomDto.ROOM_TYPE_ROOM);
             RoomPo roomPo = BeanConvertUtil.covertBean(addRoomView, RoomPo.class);
+            if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("10")) {
+                roomPo.setSection("1");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("20")) {
+                roomPo.setSection("2");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("30")) {
+                roomPo.setSection("3");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("40")) {
+                roomPo.setSection("4");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("50")) {
+                roomPo.setSection("5");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("60")) {
+                roomPo.setSection("6");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("70")) {
+                roomPo.setSection("7");
+            } else if (addRoomView.containsKey("apartment1") && addRoomView.getString("apartment1").equals("80")) {
+                roomPo.setSection("8");
+            }
             flag = roomV1InnerServiceSMOImpl.saveRoom(roomPo);
             if (flag < 1) {
                 throw new CmdException("保存房屋失败");

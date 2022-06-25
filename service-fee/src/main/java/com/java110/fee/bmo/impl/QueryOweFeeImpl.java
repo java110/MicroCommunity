@@ -32,6 +32,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -129,12 +131,19 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             return ResultVo.success();
         }
         String cycel = null;
+        String custEndTime = null;
         if (!StringUtil.isEmpty(feeDto.getCycle())) {
             cycel = feeDto.getCycle();
+        }
+        if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
+            custEndTime = feeDto.getCustEndTime();
         }
         feeDto = feeDtos.get(0);
         if (!StringUtil.isEmpty(cycel)) {
             feeDto.setCycle(cycel);
+        }
+        if (!StringUtil.isEmpty(custEndTime)) {
+            feeDto.setCustEndTime(custEndTime);
         }
 
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关

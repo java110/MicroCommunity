@@ -41,7 +41,12 @@ import org.springframework.stereotype.Service;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -938,9 +943,49 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getBuiltUpArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
                 feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(3, BigDecimal.ROUND_HALF_UP);
-                if (!StringUtil.isEmpty(feeDto.getCycle())) {
+                if (!StringUtil.isEmpty(feeDto.getCycle()) && !"0".equals(feeDto.getCycle())) {
                     BigDecimal cycle = new BigDecimal(feeDto.getCycle());
                     feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeDto.getCycle()) && "0".equals(feeDto.getCycle()) && !StringUtil.isEmpty(feeDto.getCustEndTime())) {
+                    //计算周期
+                    Map<String, Object> cycleResults = dateDiff(feeDto.getEndTime(), feeDto.getCustEndTime());
+                    //月份大于0
+                    Integer months = Integer.valueOf(cycleResults.get("months").toString());
+                    Integer days = Integer.valueOf(cycleResults.get("days").toString());
+                    Integer startMonthDays = Integer.valueOf(cycleResults.get("startMonthDays").toString());
+                    Integer endMonthDays = Integer.valueOf(cycleResults.get("endMonthDays").toString());
+                    String isOneMonth = cycleResults.get("isOneMonth").toString();
+                    //整数月
+                    if (months > 0 && days == 0) {
+                        BigDecimal cycle = new BigDecimal(months);
+                        feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_UP);
+                    }
+                    //几个月几天   （单价*面积+附加费）*月份+((单价*面积+附加费)/总天数)*实际天数
+                    if (months > 0 && days > 0) {
+                        BigDecimal cycle = new BigDecimal(months);
+                        BigDecimal endMonthDayss = new BigDecimal(endMonthDays);
+                        BigDecimal dayss = new BigDecimal(days);
+                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
+                        feeTotalPrice = (monthPrice).multiply(cycle).add(monthPrice.divide(endMonthDayss).multiply(dayss)).setScale(3, BigDecimal.ROUND_HALF_UP);
+                    }
+                    //跨月份 不足一月  ((单价*面积+附加费)/开始月份总天数)*实际天数+((单价*面积+附加费)/结束月份总天数)*实际天数
+                    if (months == 0 && days > 0 && "true".equals(isOneMonth)) {
+                        BigDecimal startEndOfMonth = new BigDecimal(cycleResults.get("startEndOfMonth").toString());
+                        BigDecimal endBeginningOfMonth = new BigDecimal(cycleResults.get("endBeginningOfMonth").toString());
+                        BigDecimal endMonthDayss = new BigDecimal(endMonthDays);
+                        BigDecimal startMonthDayss = new BigDecimal(startMonthDays);
+                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
+                        feeTotalPrice = monthPrice.divide(startMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(startEndOfMonth).add(monthPrice.divide(endMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(endBeginningOfMonth)).setScale(3, BigDecimal.ROUND_HALF_UP);
+                    }
+                    //不跨月份 不足一月  (单价*面积+附加费/开始月份总天数)*实际天数
+                    if (months == 0 && days > 0 && "false".equals(isOneMonth)) {
+                        BigDecimal cycle = new BigDecimal(days);
+                        BigDecimal startMonthDayss = new BigDecimal(startMonthDays);
+                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
+                        feeTotalPrice = monthPrice.divide(startMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_UP);
+                    }
+
                 }
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
@@ -1647,16 +1692,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
 
-    public static void main(String[] args) {
-        BigDecimal squarePrice = new BigDecimal(Double.parseDouble("4.50"));
-        BigDecimal builtUpArea = new BigDecimal(Double.parseDouble("52.69"));
-        BigDecimal additionalAmount = new BigDecimal(Double.parseDouble("0"));
-            BigDecimal cycle = new BigDecimal(Double.parseDouble("3"));
-        BigDecimal  feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_DOWN);
-        System.out.println(feeTotalPrice.doubleValue());
-    }
-
 //    public static void main(String[] args) {
+//        BigDecimal squarePrice = new BigDecimal(Double.parseDouble("4.50"));
+//        BigDecimal builtUpArea = new BigDecimal(Double.parseDouble("52.69"));
+//        BigDecimal additionalAmount = new BigDecimal(Double.parseDouble("0"));
+//            BigDecimal cycle = new BigDecimal(Double.parseDouble("3"));
+//        BigDecimal  feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_DOWN);
+//        System.out.println(feeTotalPrice.doubleValue());
+//    }
+
+    //    public static void main(String[] args) {
 //        ComputeFeeSMOImpl computeFeeSMO = new ComputeFeeSMOImpl();
 //        try {
 //            Date startTime = DateUtil.getDateFromString("2020-12-31 00:00:00", DateUtil.DATE_FORMATE_STRING_A);
@@ -1669,4 +1714,110 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 //            e.printStackTrace();
 //        }
 //    }
+    static int[] getDiff(LocalDate start, LocalDate end) {
+
+        if (!start.isBefore(end)) {
+            throw new IllegalArgumentException("Start must not be before end.");
+        }
+
+        int year1 = start.getYear();
+        int month1 = start.getMonthValue();
+        int day1 = start.getDayOfMonth();
+
+        int year2 = end.getYear();
+        int month2 = end.getMonthValue();
+        int day2 = end.getDayOfMonth();
+
+        int yearDiff = year2 - year1;     // yearDiff >= 0
+        int monthDiff = month2 - month1;
+
+        int dayDiff = day2 - day1;
+
+        if (dayDiff < 0) {
+            LocalDate endMinusOneMonth = end.minusMonths(1);   // end 的上一个月
+            int monthDays = endMinusOneMonth.lengthOfMonth();  // 该月的天数
+
+            dayDiff += monthDays;  // 用上一个月的天数补上这个月差掉的日子
+
+            if (monthDiff > 0) {   // eg. start is 2018-04-03, end is 2018-08-01
+                monthDiff--;
+
+            } else {  // eg. start is 2018-04-03, end is 2019-02-01
+                monthDiff += 11;
+                yearDiff--;
+
+            }
+        }
+
+        int[] diff = new int[2];
+
+        diff[0] = yearDiff * 12 + monthDiff;
+        diff[1] = dayDiff;
+
+        return diff;
+    }
+
+    /**
+     * 计算两个日期的时间差
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public Map<String, Object> dateDiff(Date startDate, String endDate) {
+        Map<String, Object> cycle = new HashMap<>();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDates = null;
+        try {
+            endDates = format.parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(endDates);
+        calendar.add(calendar.DATE, 1);
+        Date date = calendar.getTime();
+        LocalDate end = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int[] diff = getDiff(start, end);
+        cycle.put("months", diff[0]);//几个月
+        cycle.put("days", diff[1]);//几天
+        String startDateString = format.format(startDate);
+        String endDateString = format.format(endDates);
+        cycle.put("startMonthDays", getDayOfMonth(startDateString));//开始月份天数
+        cycle.put("endMonthDays", getDayOfMonth(endDateString));//结束月份天数
+        cycle.put("isOneMonth", false);// false 不跨月 true月份
+        if (diff[0] == 0) {
+            //判断是否同一个月
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            String date1 = sdf.format(startDate);
+            String date2 = sdf.format(endDates);
+            if (!date1.equals(date2)) {
+                cycle.put("isOneMonth", true);
+                //计算夸月分两个月分别是多少天
+                SimpleDateFormat sdfday = new SimpleDateFormat("dd");
+                Integer startDate1 = Integer.valueOf(sdfday.format(startDate));
+                String endDates2 = sdfday.format(endDates);
+                cycle.put("startEndOfMonth", getDayOfMonth(startDateString) - startDate1 + 1);//开始月份天数
+                cycle.put("endBeginningOfMonth", Integer.valueOf(endDates2));//结束月份天数
+            }
+        }
+        return cycle;
+
+    }
+
+    /**
+     * 获取日期内的天数
+     *
+     * @param dateStr
+     * @return
+     */
+    public int getDayOfMonth(String dateStr) {
+        int year = Integer.parseInt(dateStr.substring(0, 4));
+        int month = Integer.parseInt(dateStr.substring(5, 7));
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, 0); //输入类型为int类型
+        return c.get(Calendar.DAY_OF_MONTH);
+    }
 }
