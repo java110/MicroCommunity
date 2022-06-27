@@ -23,8 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Java110Cmd(serviceCode = "owner.deleteOwnerCar")
-public class DeleteOwnerCarCmd extends Cmd {
+@Java110Cmd(serviceCode = "owner.deleteOwnerCars")
+public class DeleteOwnerCarsCmd extends Cmd {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tempCarFeeConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存临时费用配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveTempCarFeeConfigInfo" parameterType="Map">
+        insert into temp_car_fee_config(
+        car_type,config_id,fee_name,pa_id,area_num,start_time,end_time,rule_id,community_id,fee_config_id
+        ) values (
+        #{carType},#{configId},#{feeName},#{paId},#{areaNum},#{startTime},#{endTime},#{ruleId},#{communityId},#{feeConfigId}
+        )
+    </insert>
+
+
+    <!-- 查询临时费用配置信息 add by wuxw 2018-07-03 -->
+    <select id="getTempCarFeeConfigInfo" parameterType="Map" resultType="Map">
+        select t.car_type,t.car_type carType,t.config_id,t.config_id configId,t.fee_name,t.fee_name
+        feeName,t.pa_id,t.pa_id paId,t.area_num,t.area_num areaNum,t.start_time,t.start_time
+        startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.rule_id,t.rule_id
+        ruleId,t.community_id,t.community_id communityId,t.fee_config_id,t.fee_config_id feeConfigId
+        from temp_car_fee_config t
+        where 1 =1
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="areaNum !=null and areaNum != ''">
+            and t.area_num= #{areaNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改临时费用配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateTempCarFeeConfigInfo" parameterType="Map">
+        update temp_car_fee_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="carType !=null and carType != ''">
+            , t.car_type= #{carType}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="areaNum !=null and areaNum != ''">
+            , t.area_num= #{areaNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            , t.fee_config_id= #{feeConfigId}
+        </if>
+        where 1=1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+
+    </update>
+
+    <!-- 查询临时费用配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryTempCarFeeConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from temp_car_fee_config t
+        where 1 =1
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="areaNum !=null and areaNum != ''">
+            and t.area_num= #{areaNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+
+
+    </select>
+
+</mapper>

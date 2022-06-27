@@ -1,41 +1,27 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.fee.IFeeBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-/**
- * @ClassName SaveRoomCreateFeeListener
- * @Description TODO
- * @Author wuxw
- * @Date 2020/1/31 15:57
- * @Version 1.0
- * add by wuxw 2020/1/31
- **/
-@Java110Listener("deleteFeeListener")
-public class DeleteFeeListener extends AbstractServiceApiPlusListener {
-    private static Logger logger = LoggerFactory.getLogger(DeleteFeeListener.class);
-    @Autowired
-    private IFeeBMO feeBMOImpl;
-
-    private static final int DEFAULT_ADD_FEE_COUNT = 200;
+@Java110Cmd(serviceCode = "fee.deleteFee")
+public class DeleteFeeCmd extends Cmd {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -44,20 +30,13 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_FEE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         // super.validatePageInfo(pd);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "feeId", "未包含feeId");
@@ -90,27 +69,18 @@ public class DeleteFeeListener extends AbstractServiceApiPlusListener {
         if (feeDetailDtos != null && feeDetailDtos.size() > 0) {
             throw new IllegalArgumentException("存在缴费记录，不能取消，如果需要取消，请先退费");
         }
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", reqJson.getString("feeId"));
+        businessUnit.put("communityId", reqJson.getString("communityId"));
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
 
-        feeBMOImpl.deleteFee(reqJson, context);
-
-
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
+        int flag = payFeeV1InnerServiceSMOImpl.deletePayFee(payFeePo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("删除失败");
+        }
     }
 }

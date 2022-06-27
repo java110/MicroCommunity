@@ -14,6 +14,7 @@ public class TempCarFeeConfigPo implements Serializable {
     private String ruleId;
     private String communityId;
     private String feeConfigId;
+    private String statusCd;
 
     public String getCarType() {
         return carType;
@@ -93,5 +94,13 @@ public class TempCarFeeConfigPo implements Serializable {
 
     public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

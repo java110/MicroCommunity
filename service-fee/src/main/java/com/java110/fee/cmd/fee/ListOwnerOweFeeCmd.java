@@ -1,16 +1,10 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -18,12 +12,17 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
@@ -33,13 +32,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * 查询业主是否有欠费
- */
-@Java110Listener("listOwnerOweFeeListener")
-public class ListOwnerOweFeeListener extends AbstractServiceApiListener {
-
+@Java110Cmd(serviceCode = "fee.listOwnerOweFee")
+public class ListOwnerOweFeeCmd extends Cmd {
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
@@ -57,43 +51,15 @@ public class ListOwnerOweFeeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
     @Override
-    public String getServiceCode() {
-        return ServiceCodeFeeConfigConstant.LIST_OWNER_OWE_FEE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IFeeConfigInnerServiceSMO getFeeConfigInnerServiceSMOImpl() {
-        return feeConfigInnerServiceSMOImpl;
-    }
-
-    public void setFeeConfigInnerServiceSMOImpl(IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl) {
-        this.feeConfigInnerServiceSMOImpl = feeConfigInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "ownerId", "未包含小区业主ID");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //1.0 查询业主房屋 查询业主是否有房屋欠费
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setOwnerId(reqJson.getString("ownerId"));
@@ -118,9 +84,7 @@ public class ListOwnerOweFeeListener extends AbstractServiceApiListener {
 
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(1, resultFees.size(), resultFees);
         context.setResponseEntity(responseEntity);
-
     }
-
 
     private void getParkingSpaceOweFee(List<OwnerCarDto> ownerCarDtos, JSONObject reqJson, List<FeeDto> resultFees) {
         String payObjName = "";

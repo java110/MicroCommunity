@@ -1,36 +1,30 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.ApiParkingSpaceDataVo;
 import com.java110.vo.api.ApiParkingSpaceVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询需要设置费用的房屋
- */
-@Java110Listener("listParkingSpacesWhereFeeSetListener")
-public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiListener {
-
+@Java110Cmd(serviceCode = "fee.listParkingSpacesWhereFeeSet")
+public class ListParkingSpacesWhereFeeSetCmd extends Cmd {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -45,36 +39,17 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeFeeConfigConstant.LIST_PARKING_SPACE_WHERE_FEE_SET;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ApiParkingSpaceVo apiParkingSpaceVo = new ApiParkingSpaceVo();
         //根据 业主来定位房屋信息
         if (reqJson.containsKey("carNum")) {
             queryParkingSpaceByCarInfo(apiParkingSpaceVo, reqJson, context);
-
             return;
         }
 
@@ -104,7 +79,7 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
      * @param apiParkingSpaceVo
      * @param reqJson
      */
-    private void queryParkingSpaceByCarInfo(ApiParkingSpaceVo apiParkingSpaceVo, JSONObject reqJson, DataFlowContext context) {
+    private void queryParkingSpaceByCarInfo(ApiParkingSpaceVo apiParkingSpaceVo, JSONObject reqJson, ICmdDataFlowContext context) {
 
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
         //ownerCarDto.setByOwnerInfo(true);
@@ -126,7 +101,7 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
         context.setResponseEntity(responseEntity);
     }
 
-    private List<ParkingSpaceDto> refreshCarParkingSpaces(String communityId,  List<OwnerCarDto> ownerCarDtos) {
+    private List<ParkingSpaceDto> refreshCarParkingSpaces(String communityId, List<OwnerCarDto> ownerCarDtos) {
 
         List<String> psIds = new ArrayList<>();
 
@@ -180,22 +155,5 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
                 }
             }
         }
-    }
-
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public IOwnerRoomRelInnerServiceSMO getOwnerRoomRelInnerServiceSMOImpl() {
-        return ownerRoomRelInnerServiceSMOImpl;
-    }
-
-    public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
-        this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
     }
 }
