@@ -31,6 +31,18 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_CAR_INOUT_ID = "390011";//车辆进场编号
     public static final String SPEC_CD_PAY_OBJECT_NAME = "390012";//付费对象名称
     public static final String SPEC_CD_COMBO_ID = "390013";//费用套餐ID
+    public static final String SPEC_CD_RATE_CYCLE = "390014";//递增周期
+    public static final String SPEC_CD_RATE = "390015";//递增率
+    public static final String SPEC_CD_RATE_START_TIME = "390016";//递增开始时间
+
+    /**
+     * INSERT INTO `tt`.`t_dict` ( `status_cd`, `name`, `description`, `create_time`, `table_name`, `table_columns`)
+     * VALUES ( '390014', '递增周期', '递增周期', '2020-01-30 17:09:43', 'pay_fee_attrs', 'spec_cd');
+     * INSERT INTO `tt`.`t_dict` ( `status_cd`, `name`, `description`, `create_time`, `table_name`, `table_columns`)
+     * VALUES ( '390015', '递增率', '递增率', '2020-01-30 17:09:43', 'pay_fee_attrs', 'spec_cd');
+     * INSERT INTO `tt`.`t_dict` ( `status_cd`, `name`, `description`, `create_time`, `table_name`, `table_columns`)
+     * VALUES ( '390016', '递增开始时间', '递增开始时间', '2020-01-30 17:09:43', 'pay_fee_attrs', 'spec_cd');
+     */
 
 
 

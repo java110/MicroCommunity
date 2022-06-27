@@ -448,6 +448,8 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = 0.0;
         } else if ("1101".equals(computingFormula)) { // 租金
             feePrice = 0.0;
+        }else if ("1102".equals(computingFormula)) { // 租金
+            feePrice = 0.0;
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
         } else if ("5005".equals(computingFormula)) {
@@ -567,7 +569,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         } else if ("1101".equals(computingFormula)) { // 租金
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpRoomDto.getRoomRent()));
             feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        } else if ("4004".equals(computingFormula)) {
+        } else if ("1102".equals(computingFormula)) { // 租金
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpRoomDto.getRoomRent()));
+            feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        }else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
         } else if ("5005".equals(computingFormula)) {
 

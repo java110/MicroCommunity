@@ -79,13 +79,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         //Assert.hasKeyAndValue(reqJson, "startTime", "未包含收费其实时间");
         //Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
-    }
 
-    @Override
-    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
-        reqJson.put("userId", userId);
-        List<RoomDto> roomDtos = null;
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
         feeConfigDto.setConfigId(reqJson.getString("configId"));
@@ -109,6 +103,23 @@ public class SaveRoomCreateFeeCmd extends Cmd {
                 throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
             }
         }
+
+        if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeConfigDtos.get(0).getComputingFormula())){
+            Assert.hasKeyAndValue(reqJson, "rateCycle", "未包含递增周期");
+            Assert.hasKeyAndValue(reqJson, "rate", "未包含递增率");
+            Assert.hasKeyAndValue(reqJson, "rateStartTime", "未包含递增开始时间");
+            reqJson.put("configComputingFormula",feeConfigDtos.get(0).getComputingFormula());
+        }
+
+
+    }
+
+    @Override
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
+        reqJson.put("userId", userId);
+        List<RoomDto> roomDtos = null;
+
 
         //生成批次号
         generatorBatch(reqJson);
@@ -223,6 +234,17 @@ public class SaveRoomCreateFeeCmd extends Cmd {
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
             }
+
+            //定制开发 加入
+            //1、对合同约定的租金递增比例、递增年限各不相同的问题，支持按合同到期日期设租金递增比例。
+            //2、能自动设置递增的租金实行自动计算当月的租金。
+            if(reqJson.containsKey("configComputingFormula")
+                    && FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("configComputingFormula"))){
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_CYCLE, reqJson.getString("rateCycle")));
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE, reqJson.getString("rate")));
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_START_TIME, reqJson.getString("rateStartTime")));
+            }
+
             //付费对象名称
             feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
                     roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(roomIndex).getUnitNum() + "-" + roomDtos.get(roomIndex).getRoomNum()));
