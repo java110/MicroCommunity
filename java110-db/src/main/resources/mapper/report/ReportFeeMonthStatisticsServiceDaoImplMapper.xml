@@ -1110,7 +1110,7 @@
         </if>
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name,pfa.`value`,br.built_up_area
         HAVING oweAmount > 0
-        order by pfa.`value`
+        order by t.payer_obj_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
