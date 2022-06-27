@@ -81,4 +81,7 @@ public interface IComplaintUserInnerServiceSMO {
     @RequestMapping(value = "/getTaskCurrentUser", method = RequestMethod.POST)
     public ComplaintDto getTaskCurrentUser(@RequestBody ComplaintDto complaintDto);
 
+    @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
+    public boolean deleteTask(@RequestBody ComplaintDto complaintDto);
+
 }

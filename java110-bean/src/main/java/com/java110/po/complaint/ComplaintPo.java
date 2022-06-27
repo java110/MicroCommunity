@@ -22,6 +22,7 @@ public class ComplaintPo implements Serializable {
     private String state;
     private String communityId;
     private String startUserId;
+    private String taskId;
 
     public String getComplaintId() {
         return complaintId;
@@ -101,5 +102,13 @@ public class ComplaintPo implements Serializable {
 
     public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }
