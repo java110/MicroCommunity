@@ -16,7 +16,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.tempCarFeeConfigAttr.TempCarFeeConfigAttrDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
 import com.java110.po.tempCarFeeConfigAttr.TempCarFeeConfigAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,17 +39,16 @@ public interface ITempCarFeeConfigAttrV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveTempCarFeeConfigAttr", method = RequestMethod.POST)
-    public int saveTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
+    public int saveTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
 
     @RequestMapping(value = "/updateTempCarFeeConfigAttr", method = RequestMethod.POST)
-    public int updateTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
+    public int updateTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
 
     @RequestMapping(value = "/deleteTempCarFeeConfigAttr", method = RequestMethod.POST)
-    public int deleteTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
+    public int deleteTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param tempCarFeeConfigAttrDto 数据对象分享
      * @return TempCarFeeConfigAttrDto 对象数据

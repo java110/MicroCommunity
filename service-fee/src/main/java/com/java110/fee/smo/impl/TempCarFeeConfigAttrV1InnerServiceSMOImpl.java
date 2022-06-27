@@ -16,19 +16,17 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
 import com.java110.fee.dao.ITempCarFeeConfigAttrV1ServiceDao;
 import com.java110.intf.fee.ITempCarFeeConfigAttrV1InnerServiceSMO;
-import com.java110.dto.tempCarFeeConfigAttr.TempCarFeeConfigAttrDto;
 import com.java110.po.tempCarFeeConfigAttr.TempCarFeeConfigAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,26 +45,26 @@ public class TempCarFeeConfigAttrV1InnerServiceSMOImpl extends BaseServiceSMO im
 
 
     @Override
-    public int saveTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
+    public int saveTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
         int saveFlag = tempCarFeeConfigAttrV1ServiceDaoImpl.saveTempCarFeeConfigAttrInfo(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
+    @Override
+    public int updateTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
         int saveFlag = tempCarFeeConfigAttrV1ServiceDaoImpl.updateTempCarFeeConfigAttrInfo(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteTempCarFeeConfigAttr(@RequestBody  TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
-       tempCarFeeConfigAttrPo.setStatusCd("1");
-       int saveFlag = tempCarFeeConfigAttrV1ServiceDaoImpl.updateTempCarFeeConfigAttrInfo(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrPo));
-       return saveFlag;
+    @Override
+    public int deleteTempCarFeeConfigAttr(@RequestBody TempCarFeeConfigAttrPo tempCarFeeConfigAttrPo) {
+        tempCarFeeConfigAttrPo.setStatusCd("1");
+        int saveFlag = tempCarFeeConfigAttrV1ServiceDaoImpl.updateTempCarFeeConfigAttrInfo(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrPo));
+        return saveFlag;
     }
 
     @Override
-    public List<TempCarFeeConfigAttrDto> queryTempCarFeeConfigAttrs(@RequestBody  TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto) {
+    public List<TempCarFeeConfigAttrDto> queryTempCarFeeConfigAttrs(@RequestBody TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +82,7 @@ public class TempCarFeeConfigAttrV1InnerServiceSMOImpl extends BaseServiceSMO im
 
     @Override
     public int queryTempCarFeeConfigAttrsCount(@RequestBody TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto) {
-        return tempCarFeeConfigAttrV1ServiceDaoImpl.queryTempCarFeeConfigAttrsCount(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrDto));    }
+        return tempCarFeeConfigAttrV1ServiceDaoImpl.queryTempCarFeeConfigAttrsCount(BeanConvertUtil.beanCovertMap(tempCarFeeConfigAttrDto));
+    }
 
 }

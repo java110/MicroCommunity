@@ -9,6 +9,7 @@ public class TempCarFeeConfigAttrPo implements Serializable {
     private String specCd;
     private String value;
     private String communityId;
+    private String statusCd;
 
     public String getAttrId() {
         return attrId;
@@ -48,5 +49,13 @@ public class TempCarFeeConfigAttrPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

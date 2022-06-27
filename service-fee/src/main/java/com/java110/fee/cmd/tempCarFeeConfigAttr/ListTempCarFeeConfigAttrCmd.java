@@ -17,25 +17,22 @@ package com.java110.fee.cmd.tempCarFeeConfigAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
 import com.java110.intf.fee.ITempCarFeeConfigAttrV1InnerServiceSMO;
-import com.java110.po.tempCarFeeConfigAttr.TempCarFeeConfigAttrPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.tempCarFeeConfigAttr.TempCarFeeConfigAttrDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -51,7 +48,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "tempCarFeeConfigAttr.listTempCarFeeConfigAttr")
 public class ListTempCarFeeConfigAttrCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListTempCarFeeConfigAttrCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListTempCarFeeConfigAttrCmd.class);
     @Autowired
     private ITempCarFeeConfigAttrV1InnerServiceSMO tempCarFeeConfigAttrV1InnerServiceSMOImpl;
 
@@ -63,22 +60,22 @@ public class ListTempCarFeeConfigAttrCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigAttrDto.class);
+        TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigAttrDto.class);
 
-           int count = tempCarFeeConfigAttrV1InnerServiceSMOImpl.queryTempCarFeeConfigAttrsCount(tempCarFeeConfigAttrDto);
+        int count = tempCarFeeConfigAttrV1InnerServiceSMOImpl.queryTempCarFeeConfigAttrsCount(tempCarFeeConfigAttrDto);
 
-           List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = null;
+        List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = null;
 
-           if (count > 0) {
-               tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrV1InnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
-           } else {
-               tempCarFeeConfigAttrDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrV1InnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
+        } else {
+            tempCarFeeConfigAttrDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, tempCarFeeConfigAttrDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, tempCarFeeConfigAttrDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
