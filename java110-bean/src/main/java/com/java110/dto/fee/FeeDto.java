@@ -136,6 +136,12 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String deductFrom;
 
+    private String rateCycle;
+
+    private String rate;
+
+    private String rateStartTime;
+
     public String getAmount() {
         return amount;
     }
@@ -650,5 +656,29 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setCustEndTime(String custEndTime) {
         this.custEndTime = custEndTime;
+    }
+
+    public String getRateCycle() {
+        return rateCycle;
+    }
+
+    public void setRateCycle(String rateCycle) {
+        this.rateCycle = rateCycle;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getRateStartTime() {
+        return rateStartTime;
+    }
+
+    public void setRateStartTime(String rateStartTime) {
+        this.rateStartTime = rateStartTime;
     }
 }

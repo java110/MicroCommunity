@@ -8,10 +8,13 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -50,6 +53,9 @@ public class ListFeeCmd extends Cmd {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
@@ -117,23 +123,23 @@ public class ListFeeCmd extends Cmd {
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
 
-        if(feeDtos == null || feeDtos.size() < 1){
+        if (feeDtos == null || feeDtos.size() < 1) {
             return;
         }
-        String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),TOTAL_FEE_PRICE);
-        if(StringUtil.isEmpty(val)){
+        String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);
+        if (StringUtil.isEmpty(val)) {
             val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
         }
 
         //先取单小区的如果没有配置 取 全局的
-        String received_amount_switch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),RECEIVED_AMOUNT_SWITCH);
-        if(StringUtil.isEmpty(received_amount_switch)){
+        String received_amount_switch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), RECEIVED_AMOUNT_SWITCH);
+        if (StringUtil.isEmpty(received_amount_switch)) {
             received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
         }
 
         //先取单小区的如果没有配置 取 全局的
-        String offlinePayFeeSwitch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(),OFFLINE_PAY_FEE_SWITCH);
-        if(StringUtil.isEmpty(offlinePayFeeSwitch)){
+        String offlinePayFeeSwitch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), OFFLINE_PAY_FEE_SWITCH);
+        if (StringUtil.isEmpty(offlinePayFeeSwitch)) {
             offlinePayFeeSwitch = MappingCache.getValue(DOMAIN_COMMON, OFFLINE_PAY_FEE_SWITCH);
         }
 
@@ -144,6 +150,7 @@ public class ListFeeCmd extends Cmd {
                 Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
                 double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
                 feeDto.setCycle(feeDto.getPaymentCycle());
+                feeDto.setDeadlineTime(targetEndDate);
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
                     computeFeePriceByRoom(feeDto, oweMonth);
                 } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -151,7 +158,6 @@ public class ListFeeCmd extends Cmd {
                 } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
                     computeFeePriceByContract(feeDto, oweMonth);
                 }
-                feeDto.setDeadlineTime(targetEndDate);
 
                 feeDto.setVal(val);
                 //关闭 线下收银功能
@@ -223,6 +229,109 @@ public class ListFeeCmd extends Cmd {
             feeDto.setAmountOwed(df.format(curFeePrice) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
+
+        //考虑租金递增
+        dealRentRate(feeDto, oweMonth);
+
+    }
+
+    /**
+     * 租金处理
+     *
+     * @param feeDto
+     * @param oweMonth
+     */
+    private void dealRentRate(FeeDto feeDto, double oweMonth) {
+        if (!FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
+            return;
+        }
+
+        if (!FeeDto.STATE_DOING.equals(feeDto.getState())) {
+            return;
+        }
+
+        //查询递增信息
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setFeeId(feeDto.getFeeId());
+        feeAttrDto.setCommunityId(feeDto.getCommunityId());
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return;
+        }
+        int rateCycle = 0;
+        double rate = 0.0;
+        Date rateStartTime = null;
+        try {
+            for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
+                if (FeeAttrDto.SPEC_CD_RATE.equals(tmpFeeAttrDto.getSpecCd())) {
+                    feeDto.setRate(tmpFeeAttrDto.getValue());
+                    rate = Double.parseDouble(tmpFeeAttrDto.getValue());
+                }
+                if (FeeAttrDto.SPEC_CD_RATE_CYCLE.equals(tmpFeeAttrDto.getSpecCd())) {
+                    feeDto.setRateCycle(tmpFeeAttrDto.getValue());
+                    rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue());
+                }
+                if (FeeAttrDto.SPEC_CD_RATE_START_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
+                    rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue(), DateUtil.DATE_FORMATE_STRING_B);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("租金递增异常", e);
+            return;
+        }
+
+        if (rateCycle == 0 || rate == 0) {
+            return;
+        }
+
+        if (feeDto.getDeadlineTime().getTime() <= rateStartTime.getTime()) {
+            return;
+        }
+
+        BigDecimal oweAmountDec = new BigDecimal(0);
+        //计算 计费起始时间 到 rateStartTime 时的费用
+        double curOweMonth = 0;
+        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
+        if(feeDto.getEndTime().getTime() < rateStartTime.getTime()){
+            curOweMonth = computeFeeSMOImpl.dayCompare(feeDto.getEndTime(),rateStartTime);
+            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth));
+        }
+
+         curOweMonth = computeFeeSMOImpl.dayCompare(rateStartTime,feeDto.getDeadlineTime());
+
+        double maxCycle = Math.floor(curOweMonth/rateCycle);
+
+        //基准
+        BigDecimal firstAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
+        BigDecimal preCycleAmount = firstAmount;
+        BigDecimal rateDec = null;
+        BigDecimal lastRateAmountDec = null;
+        double curCycle = 0;
+        for(int cycleIndex = 0; cycleIndex < maxCycle; maxCycle ++){
+            rateDec = preCycleAmount.multiply(new BigDecimal(rate));
+            //增长周期的倍数
+            curCycle = (cycleIndex +1) * rateCycle;
+            if(curCycle > curOweMonth){
+                rateDec = new BigDecimal(curOweMonth/rateCycle -Math.ceil(curOweMonth/rateCycle)).multiply(rateDec);
+                lastRateAmountDec = new BigDecimal(curOweMonth/rateCycle -Math.ceil(curOweMonth/rateCycle)).multiply(rateDec);
+                firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
+                continue;
+            }
+            firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
+            preCycleAmount = preCycleAmount.add(rateDec);
+        }
+        // 1.0 还没有到 递增开始时间
+        //2.0 5.3 个月 24个月 一个递增周期
+        // 200 * 5.3 + 0.03 * (24 * 200) * (5.3/24)
+
+        // 200* 24
+
+
+
+
+
+
     }
 
     /**
