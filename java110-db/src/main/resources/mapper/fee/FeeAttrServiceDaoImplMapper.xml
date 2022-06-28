@@ -121,15 +121,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="specCd !=null and specCd != ''">
-            , t.spec_cd= #{specCd}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
-        <if test="feeId !=null and feeId != ''">
-            , t.fee_id= #{feeId}
-        </if>
         <if test="value !=null and value != ''">
             , t.value= #{value}
         </if>
@@ -139,6 +130,15 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
         </if>
 
     </update>
