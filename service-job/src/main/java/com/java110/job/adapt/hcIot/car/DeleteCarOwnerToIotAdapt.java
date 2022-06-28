@@ -36,7 +36,6 @@ import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -84,22 +83,29 @@ public class DeleteCarOwnerToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessOwnerCars = new JSONArray();
         if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
             Object bObj = data.get(OwnerCarPo.class.getSimpleName());
-            JSONArray businessOwnerCars = null;
+
             if (bObj instanceof JSONObject) {
-                businessOwnerCars = new JSONArray();
+
                 businessOwnerCars.add(bObj);
             } else if (bObj instanceof List) {
                 businessOwnerCars = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessOwnerCars = (JSONArray) bObj;
             }
-            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
-                JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
-                doSendOwnerCar(business, businessOwnerCar);
+
+        } else {
+            if (data instanceof JSONObject) {
+                businessOwnerCars.add(data);
             }
+        }
+
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
+            JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
+            doSendOwnerCar(business, businessOwnerCar);
         }
     }
 

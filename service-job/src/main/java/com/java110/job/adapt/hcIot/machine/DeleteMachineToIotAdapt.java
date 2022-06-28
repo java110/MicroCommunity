@@ -58,11 +58,10 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessMachines = new JSONArray();
         if (data.containsKey(MachinePo.class.getSimpleName())) {
             Object bObj = data.get(MachinePo.class.getSimpleName());
-            JSONArray businessMachines = null;
             if (bObj instanceof JSONObject) {
-                businessMachines = new JSONArray();
                 businessMachines.add(bObj);
             } else if (bObj instanceof List) {
                 businessMachines = JSONArray.parseArray(JSONObject.toJSONString(bObj));
@@ -70,10 +69,15 @@ public class DeleteMachineToIotAdapt extends DatabusAdaptImpl {
                 businessMachines = (JSONArray) bObj;
             }
             //JSONObject businessMachine = data.getJSONObject("businessMachine");
-            for (int bMachineIndex = 0; bMachineIndex < businessMachines.size(); bMachineIndex++) {
-                JSONObject businessMachine = businessMachines.getJSONObject(bMachineIndex);
-                doSendMachine(business, businessMachine);
+
+        }else {
+            if (data instanceof JSONObject) {
+                businessMachines.add(data);
             }
+        }
+        for (int bMachineIndex = 0; bMachineIndex < businessMachines.size(); bMachineIndex++) {
+            JSONObject businessMachine = businessMachines.getJSONObject(bMachineIndex);
+            doSendMachine(business, businessMachine);
         }
     }
 
