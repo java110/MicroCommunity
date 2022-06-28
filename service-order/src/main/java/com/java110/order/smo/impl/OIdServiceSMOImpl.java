@@ -3,8 +3,8 @@ package com.java110.order.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
-import com.java110.core.context.SecureInvocation;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
@@ -19,7 +19,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -76,7 +75,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         }
 
         //保存订单信息
-            centerServiceDAOImpl.saveOrder(BeanConvertUtil.beanCovertMap(orderDto));
+        centerServiceDAOImpl.saveOrder(BeanConvertUtil.beanCovertMap(orderDto));
 
         return new ResponseEntity<String>(JSONObject.toJSONString(orderDto), HttpStatus.OK);
     }
@@ -320,8 +319,11 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
         }
         centerServiceDAOImpl.saveOrderItem(BeanConvertUtil.beanCovertMap(orderItemDto));
 
+        //获取action
+        String action = getOrderItemAction(orderItemDto);
+
         //判断是否配置了 轨迹
-        BusinessTableHisDto businessTableHisDto = BusinessTableHisCache.getBusinessTableHisDto(orderItemDto.getAction(), orderItemDto.getActionObj());
+        BusinessTableHisDto businessTableHisDto = BusinessTableHisCache.getBusinessTableHisDto(action, orderItemDto.getActionObj());
         if (businessTableHisDto == null) {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
         }
@@ -342,6 +344,43 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         doNoticeServiceGeneratorBusiness(orderItemDto, businessTableHisDto);
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    /**
+     * 这里 兼容性处理
+     * 因为我们不涉及 物理删除 都是逻辑删除 所以 status_cd 为 1 时强行设置为DEL 为逻辑删除
+     * @param orderItemDto
+     * @return
+     */
+    private String getOrderItemAction(OrderItemDto orderItemDto) {
+
+        if (StringUtil.isEmpty(orderItemDto.getLogText())) {
+            return orderItemDto.getAction();
+        }
+
+        if ("ADD".equals(orderItemDto.getAction()) || "DEL".equals(orderItemDto.getAction())) {
+            return orderItemDto.getAction();
+        }
+
+        if (!StringUtil.isJsonObject(orderItemDto.getLogText())) {
+            return orderItemDto.getAction();
+        }
+        JSONObject logTextObj = JSONObject.parseObject(orderItemDto.getLogText());
+        if (!logTextObj.containsKey("afterValue")) {
+            return orderItemDto.getAction();
+        }
+        JSONArray afterValues = logTextObj.getJSONArray("afterValue");
+        if (afterValues == null || afterValues.size() < 1) {
+            return orderItemDto.getAction();
+        }
+
+        for (int afterValueIndex = 0; afterValueIndex < afterValues.size(); afterValueIndex++) {
+            JSONObject keyValue = afterValues.getJSONObject(afterValueIndex);
+            if (keyValue.containsKey("status_cd") && "1".equals(keyValue.getString("status_cd"))) {
+                return "DEL";
+            }
+        }
+        return orderItemDto.getAction();
     }
 
     private void doNoticeServiceGeneratorBusiness(OrderItemDto orderItemDto, BusinessTableHisDto businessTableHisDto) {

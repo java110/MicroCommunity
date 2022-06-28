@@ -1,40 +1,30 @@
-package com.java110.api.listener.fee;
-
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.dto.fee.FeeDetailDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiFeeDetailDataVo;
 import com.java110.vo.api.ApiFeeDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @ClassName FloorDto
- * @Description 小区楼数据层侦听类
- * @Author wuxw
- * @Date 2019/4/24 8:52
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-@Java110Listener("queryFeeDetail")
-public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
+@Java110Cmd(serviceCode = "fee.queryFeeDetail")
+public class QueryFeeDetailCmd extends Cmd {
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
@@ -43,26 +33,13 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
     private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_FEE_DETAIL;
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    /**
-     * 业务层数据处理
-     *
-     * @param event 时间对象
-     */
-    @Override
-    public void soService(ServiceDataFlowEvent event) {
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        //获取请求数据
-        JSONObject reqJson = dataFlowContext.getReqJson();
-        //获取开始时间
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+//获取开始时间
         if (!StringUtil.isEmpty(reqJson.getString("startTime"))) {
             String startTime = reqJson.getString("startTime") + " 00:00:00";
             reqJson.put("startTime", startTime);
@@ -72,8 +49,6 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
             String endTime = reqJson.getString("endTime") + " 23:59:59";
             reqJson.put("endTime", endTime);
         }
-        validateFeeConfigData(reqJson);
-
         //查询总记录数
         ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();
         FeeDetailDto feeDetailDto = BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class);
@@ -119,7 +94,7 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         apiFeeDetailVo.setRecords((int) Math.ceil((double) total / (double) row));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeDetailVo), HttpStatus.OK);
 
-        dataFlowContext.setResponseEntity(responseEntity);
+        context.setResponseEntity(responseEntity);
     }
 
     /**
@@ -136,30 +111,5 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
                 }
             }
         }
-    }
-
-    /**
-     * 校验查询条件是否满足条件
-     *
-     * @param reqJson 包含查询条件
-     */
-    private void validateFeeConfigData(JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        // Assert.jsonObjectHaveKey(reqJson, "feeId", "请求中未包含feeId信息");
-
-
-    }
-
-    @Override
-    public int getOrder() {
-        return super.DEFAULT_ORDER;
-    }
-
-    public IFeeDetailInnerServiceSMO getFeeDetailInnerServiceSMOImpl() {
-        return feeDetailInnerServiceSMOImpl;
-    }
-
-    public void setFeeDetailInnerServiceSMOImpl(IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl) {
-        this.feeDetailInnerServiceSMOImpl = feeDetailInnerServiceSMOImpl;
     }
 }
