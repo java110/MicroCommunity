@@ -376,7 +376,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
 
         for (int afterValueIndex = 0; afterValueIndex < afterValues.size(); afterValueIndex++) {
             JSONObject keyValue = afterValues.getJSONObject(afterValueIndex);
-            if (keyValue.containsKey("status_cd") && "1".equals(keyValue.getString("status_cd"))) {
+            if (keyValue.containsKey("status_cd") && "'1'".equals(keyValue.getString("status_cd"))) {
                 return "DEL";
             }
         }
