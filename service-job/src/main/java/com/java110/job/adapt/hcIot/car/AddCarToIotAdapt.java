@@ -76,6 +76,7 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
         JSONArray businessOwnerCars = new JSONArray();
+        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
         if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
             Object bObj = data.get(OwnerCarPo.class.getSimpleName());
 
