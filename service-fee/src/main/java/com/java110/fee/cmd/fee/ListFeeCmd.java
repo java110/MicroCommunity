@@ -206,6 +206,9 @@ public class ListFeeCmd extends Cmd {
             feeDto.setAmountOwed(df.format(curFeePrice));
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
+
+        //考虑租金递增
+        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
     }
 
     /**
@@ -231,108 +234,11 @@ public class ListFeeCmd extends Cmd {
         }
 
         //考虑租金递增
-        dealRentRate(feeDto, oweMonth);
+        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
 
     }
 
-    /**
-     * 租金处理
-     *
-     * @param feeDto
-     * @param oweMonth
-     */
-    private void dealRentRate(FeeDto feeDto, double oweMonth) {
-        if (!FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
-            return;
-        }
 
-        if (!FeeDto.STATE_DOING.equals(feeDto.getState())) {
-            return;
-        }
-
-        //查询递增信息
-        FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setFeeId(feeDto.getFeeId());
-        feeAttrDto.setCommunityId(feeDto.getCommunityId());
-        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-
-        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
-            return;
-        }
-        int rateCycle = 0;
-        double rate = 0.0;
-        Date rateStartTime = null;
-        try {
-            for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
-                if (FeeAttrDto.SPEC_CD_RATE.equals(tmpFeeAttrDto.getSpecCd())) {
-                    feeDto.setRate(tmpFeeAttrDto.getValue());
-                    rate = Double.parseDouble(tmpFeeAttrDto.getValue());
-                }
-                if (FeeAttrDto.SPEC_CD_RATE_CYCLE.equals(tmpFeeAttrDto.getSpecCd())) {
-                    feeDto.setRateCycle(tmpFeeAttrDto.getValue());
-                    rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue());
-                }
-                if (FeeAttrDto.SPEC_CD_RATE_START_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
-                    rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue(), DateUtil.DATE_FORMATE_STRING_B);
-                }
-            }
-        } catch (Exception e) {
-            logger.error("租金递增异常", e);
-            return;
-        }
-
-        if (rateCycle == 0 || rate == 0) {
-            return;
-        }
-
-        if (feeDto.getDeadlineTime().getTime() <= rateStartTime.getTime()) {
-            return;
-        }
-
-        BigDecimal oweAmountDec = new BigDecimal(0);
-        //计算 计费起始时间 到 rateStartTime 时的费用
-        double curOweMonth = 0;
-        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
-        if(feeDto.getEndTime().getTime() < rateStartTime.getTime()){
-            curOweMonth = computeFeeSMOImpl.dayCompare(feeDto.getEndTime(),rateStartTime);
-            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth));
-        }
-
-         curOweMonth = computeFeeSMOImpl.dayCompare(rateStartTime,feeDto.getDeadlineTime());
-
-        double maxCycle = Math.floor(curOweMonth/rateCycle);
-
-        //基准
-        BigDecimal firstAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
-        BigDecimal preCycleAmount = firstAmount;
-        BigDecimal rateDec = null;
-        BigDecimal lastRateAmountDec = null;
-        double curCycle = 0;
-        for(int cycleIndex = 0; cycleIndex < maxCycle; maxCycle ++){
-            rateDec = preCycleAmount.multiply(new BigDecimal(rate));
-            //增长周期的倍数
-            curCycle = (cycleIndex +1) * rateCycle;
-            if(curCycle > curOweMonth){
-                rateDec = new BigDecimal(curOweMonth/rateCycle -Math.ceil(curOweMonth/rateCycle)).multiply(rateDec);
-                lastRateAmountDec = new BigDecimal(curOweMonth/rateCycle -Math.ceil(curOweMonth/rateCycle)).multiply(rateDec);
-                firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
-                continue;
-            }
-            firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
-            preCycleAmount = preCycleAmount.add(rateDec);
-        }
-        // 1.0 还没有到 递增开始时间
-        //2.0 5.3 个月 24个月 一个递增周期
-        // 200 * 5.3 + 0.03 * (24 * 200) * (5.3/24)
-
-        // 200* 24
-
-
-
-
-
-
-    }
 
     /**
      * 根据合同来算单价
@@ -355,5 +261,8 @@ public class ListFeeCmd extends Cmd {
             feeDto.setAmountOwed(df.format(curFeePrice) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
+
+        //考虑租金递增
+        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
     }
 }

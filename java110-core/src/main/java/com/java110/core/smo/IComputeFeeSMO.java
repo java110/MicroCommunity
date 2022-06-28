@@ -163,4 +163,20 @@ public interface IComputeFeeSMO {
      * @param carInoutDtos
      */
     List<CarInoutDetailDto> computeTempCarInoutDetailStopTimeAndFee(List<CarInoutDetailDto> carInoutDtos);
+
+    /**
+     * 租金处理
+     *
+     * @param feeDto
+     */
+    void dealRentRate(FeeDto feeDto);
+
+    /**
+     * 租金处理
+     *
+     * @param feeDto
+     */
+    void dealRentRateCycle(FeeDto feeDto,double cycle);
+
+
 }

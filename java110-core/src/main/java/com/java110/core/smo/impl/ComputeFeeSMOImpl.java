@@ -20,6 +20,7 @@ import com.java110.dto.report.ReportRoomDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigAttrInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
@@ -64,6 +65,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     @Autowired(required = false)
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Autowired(required = false)
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -1862,4 +1866,108 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         c.set(year, month, 0); //输入类型为int类型
         return c.get(Calendar.DAY_OF_MONTH);
     }
+
+    /**
+     *
+     * @param feeDto
+     * @param cycle
+     */
+    public void dealRentRateCycle(FeeDto feeDto,double cycle){
+        Date endTime = feeDto.getEndTime();
+        Date date = getTargetEndTime(cycle,endTime);
+        feeDto.setDeadlineTime(date);
+        dealRentRate(feeDto);
+        feeDto.setFeeTotalPrice(Double.parseDouble(feeDto.getAmountOwed()));
+    }
+
+    /**
+     * 租金处理
+     *
+     * @param feeDto
+     */
+    public void dealRentRate(FeeDto feeDto) {
+        if (!FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
+            return;
+        }
+
+        if (!FeeDto.STATE_DOING.equals(feeDto.getState())) {
+            return;
+        }
+
+        //查询递增信息
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setFeeId(feeDto.getFeeId());
+        feeAttrDto.setCommunityId(feeDto.getCommunityId());
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return;
+        }
+        int rateCycle = 0;
+        double rate = 0.0;
+        Date rateStartTime = null;
+        try {
+            for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
+                if (FeeAttrDto.SPEC_CD_RATE.equals(tmpFeeAttrDto.getSpecCd())) {
+                    feeDto.setRate(tmpFeeAttrDto.getValue());
+                    rate = Double.parseDouble(tmpFeeAttrDto.getValue());
+                }
+                if (FeeAttrDto.SPEC_CD_RATE_CYCLE.equals(tmpFeeAttrDto.getSpecCd())) {
+                    feeDto.setRateCycle(tmpFeeAttrDto.getValue());
+                    rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue());
+                }
+                if (FeeAttrDto.SPEC_CD_RATE_START_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
+                    rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue(), DateUtil.DATE_FORMATE_STRING_B);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("租金递增异常", e);
+            return;
+        }
+
+        if (rateCycle == 0 || rate == 0) {
+            return;
+        }
+
+        if (feeDto.getDeadlineTime().getTime() <= rateStartTime.getTime()) {
+            return;
+        }
+
+        BigDecimal oweAmountDec = new BigDecimal(0);
+        //计算 计费起始时间 到 rateStartTime 时的费用
+        double curOweMonth = 0;
+        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
+        if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
+            curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
+            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+
+        curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
+
+        double maxCycle = Math.floor(curOweMonth / rateCycle);
+
+        //基准
+        BigDecimal firstAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
+        BigDecimal preCycleAmount = firstAmount;
+        BigDecimal rateDec = null; //递增周期所收费用
+        BigDecimal lastRateAmountDec = null;
+        double curCycle = 0;
+        for (int cycleIndex = 0; cycleIndex < maxCycle; maxCycle++) {
+            rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            //增长周期的倍数
+            curCycle = (cycleIndex + 1) * rateCycle;
+            if (curCycle > curOweMonth) {
+                rateDec = new BigDecimal(curOweMonth / rateCycle - Math.ceil(curOweMonth / rateCycle)).multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_UP);
+                lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.ceil(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                firstAmount = firstAmount.add(rateDec).add(lastRateAmountDec);
+                continue;
+            }
+            firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
+            preCycleAmount = preCycleAmount.add(rateDec);
+        }
+
+        firstAmount = firstAmount.add(oweAmountDec);
+        feeDto.setAmountOwed(firstAmount.doubleValue() + "");
+    }
 }
+
