@@ -8,8 +8,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -208,7 +206,7 @@ public class ListFeeCmd extends Cmd {
         }
 
         //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
+        computeFeeSMOImpl.dealRentRate(feeDto);
     }
 
     /**
@@ -234,10 +232,9 @@ public class ListFeeCmd extends Cmd {
         }
 
         //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
+        computeFeeSMOImpl.dealRentRate(feeDto);
 
     }
-
 
 
     /**
@@ -263,6 +260,6 @@ public class ListFeeCmd extends Cmd {
         }
 
         //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto, oweMonth);
+        computeFeeSMOImpl.dealRentRate(feeDto);
     }
 }
