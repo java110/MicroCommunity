@@ -78,6 +78,7 @@ public class UpdateFeeCmd extends Cmd {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             feeAttrPo.setValue(reqJson.getString("maxEndTime"));
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
                 feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
@@ -100,6 +101,7 @@ public class UpdateFeeCmd extends Cmd {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE);
             feeAttrPo.setValue(reqJson.getString("rate"));
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
                 feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
@@ -117,6 +119,7 @@ public class UpdateFeeCmd extends Cmd {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE_CYCLE);
             feeAttrPo.setValue(reqJson.getString("rateCycle"));
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
                 feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
@@ -134,6 +137,7 @@ public class UpdateFeeCmd extends Cmd {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE_START_TIME);
             feeAttrPo.setValue(reqJson.getString("rateStartTime"));
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
                 feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
