@@ -23,6 +23,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.NumberUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -181,7 +182,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
 
-        computeFeeSMOImpl.dealRentRateCycle(feeDto,Double.parseDouble(feeDto.getCycle()));
+        computeFeeSMOImpl.dealRentRateCycle(feeDto, NumberUtil.getDouble(feeDto.getCycle()));
         //应收款取值
         //先取单小区的如果没有配置 取 全局的
         String val = CommunitySettingFactory.getValue(feeDto.getCommunityId(), TOTAL_FEE_PRICE);
