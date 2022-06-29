@@ -207,33 +207,6 @@ public class FeeApi extends BaseController {
         return queryOweFeeImpl.querys(feeDto);
     }
 
-    /**
-     * 查询欠费费用
-     *
-     * @param feeId       费用ID
-     * @param communityId 小区ID
-     * @param cycle       周期
-     * @return
-     * @path /app/feeApi/listFeeObj
-     */
-    @RequestMapping(value = "/listFeeObj", method = RequestMethod.GET)
-    public ResponseEntity<String> listFeeObj(
-            @RequestParam(value = "feeId") String feeId,
-            @RequestParam(value = "cycle", required = false) String cycle,
-            @RequestParam(value = "custEndTime", required = false) String custEndTime,
-            @RequestParam(value = "communityId") String communityId) {
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(feeId);
-        feeDto.setCommunityId(communityId);
-        if (!StringUtil.isEmpty(cycle)) {
-            feeDto.setCycle(cycle);
-        }
-        if (!StringUtil.isEmpty(custEndTime)) {
-            feeDto.setCustEndTime(custEndTime);
-        }
-        return queryOweFeeImpl.listFeeObj(feeDto);
-    }
-
 
     /**
      * 查询欠费费用(批量查询)
