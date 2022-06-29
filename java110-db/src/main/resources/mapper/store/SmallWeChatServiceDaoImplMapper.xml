@@ -130,6 +130,7 @@
             t.obj_id,t.obj_id objId,
             t.obj_type,t.obj_type objType,
             t.mch_id,t.mch_id mchId,
+        t.mch_name mchName,
             t.wechat_type, t.wechat_type weChatType,
             d.name objTypeName
         from small_wechat t left join t_dict d on t.obj_type = d.status_cd and d.table_name = 'small_wechat' and d.table_columns = 'obj_type'
