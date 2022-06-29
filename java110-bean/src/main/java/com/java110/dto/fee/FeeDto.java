@@ -109,6 +109,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private Date deadlineTime;
 
+    private Date maxEndTime;
+
     private Date importFeeEndTime;
 
 
@@ -680,5 +682,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setRateStartTime(String rateStartTime) {
         this.rateStartTime = rateStartTime;
+    }
+
+    public Date getMaxEndTime() {
+        return maxEndTime;
+    }
+
+    public void setMaxEndTime(Date maxEndTime) {
+        this.maxEndTime = maxEndTime;
     }
 }

@@ -136,7 +136,7 @@
         configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,td4.name
         billTypeName,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees curDegrees,mw.pre_degrees
         preDegrees,
-        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,pfa1.`value` maxEndTime,mw.price
         mwPrice,
         pfa2.`value` ownerName,t.batch_id,t.batch_id batchId
         from pay_fee t

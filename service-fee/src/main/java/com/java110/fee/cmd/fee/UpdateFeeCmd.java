@@ -17,6 +17,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -65,6 +66,14 @@ public class UpdateFeeCmd extends Cmd {
 
         if(flag < 1){
             throw new CmdException("修改费用");
+        }
+
+        if(reqJson.containsKey("maxEndTime") && !StringUtil.isEmpty(reqJson.getString("maxEndTime"))){
+            FeeAttrPo feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+            feeAttrPo.setValue(reqJson.getString("maxEndTime"));
+            feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
         }
 
         if(!reqJson.containsKey("computingFormula")
