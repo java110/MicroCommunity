@@ -1877,7 +1877,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date date = getTargetEndTime(cycle,endTime);
         feeDto.setDeadlineTime(date);
         dealRentRate(feeDto);
-        feeDto.setFeeTotalPrice(Double.parseDouble(feeDto.getAmountOwed()));
+
     }
 
     /**
@@ -1968,6 +1968,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         firstAmount = firstAmount.add(oweAmountDec);
         feeDto.setAmountOwed(firstAmount.doubleValue() + "");
+        feeDto.setFeeTotalPrice(firstAmount.doubleValue());
     }
 }
 
