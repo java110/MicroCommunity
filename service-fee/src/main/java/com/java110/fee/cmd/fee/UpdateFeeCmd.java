@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -64,45 +65,81 @@ public class UpdateFeeCmd extends Cmd {
         PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);
         int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
 
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("修改费用");
         }
 
-        if(reqJson.containsKey("maxEndTime") && !StringUtil.isEmpty(reqJson.getString("maxEndTime"))){
+        if (reqJson.containsKey("maxEndTime") && !StringUtil.isEmpty(reqJson.getString("maxEndTime"))) {
+            FeeAttrDto feeAttrDto = new FeeAttrDto();
+            feeAttrDto.setFeeId(payFeePo.getFeeId());
+            feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             feeAttrPo.setValue(reqJson.getString("maxEndTime"));
-            feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            } else {
+                feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            }
         }
 
-        if(!reqJson.containsKey("computingFormula")
-                || !FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("computingFormula"))){
-            return ;
+        if (!reqJson.containsKey("computingFormula")
+                || !FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("computingFormula"))) {
+            return;
         }
 
-        if(reqJson.containsKey("rate")) {
+        if (reqJson.containsKey("rate")) {
+            FeeAttrDto feeAttrDto = new FeeAttrDto();
+            feeAttrDto.setFeeId(payFeePo.getFeeId());
+            feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_RATE);
+            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE);
             feeAttrPo.setValue(reqJson.getString("rate"));
-            feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            } else {
+                feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            }
         }
 
-        if(reqJson.containsKey("rateCycle")) {
+        if (reqJson.containsKey("rateCycle")) {
+            FeeAttrDto feeAttrDto = new FeeAttrDto();
+            feeAttrDto.setFeeId(payFeePo.getFeeId());
+            feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_RATE_CYCLE);
+            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE_CYCLE);
             feeAttrPo.setValue(reqJson.getString("rateCycle"));
-            feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            } else {
+                feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            }
         }
 
-        if(reqJson.containsKey("rateStartTime")) {
+        if (reqJson.containsKey("rateStartTime")) {
+            FeeAttrDto feeAttrDto = new FeeAttrDto();
+            feeAttrDto.setFeeId(payFeePo.getFeeId());
+            feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_RATE_START_TIME);
+            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_RATE_START_TIME);
             feeAttrPo.setValue(reqJson.getString("rateStartTime"));
-            feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            } else {
+                feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+            }
         }
     }
 }
