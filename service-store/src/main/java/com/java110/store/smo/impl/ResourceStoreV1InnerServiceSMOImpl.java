@@ -16,22 +16,24 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.PageDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
-import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreV1ServiceDao;
+import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.user.UserDto;
+import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2022-03-28 16:23:49 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-06-30 12:03:19 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -50,21 +52,21 @@ public class ResourceStoreV1InnerServiceSMOImpl extends BaseServiceSMO implement
         return saveFlag;
     }
 
-    @Override
-    public int updateResourceStore(@RequestBody ResourceStorePo resourceResourceStorePo) {
+     @Override
+    public int updateResourceStore(@RequestBody  ResourceStorePo resourceResourceStorePo) {
         int saveFlag = resourceResourceStoreV1ServiceDaoImpl.updateResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStorePo));
         return saveFlag;
     }
 
-    @Override
-    public int deleteResourceStore(@RequestBody ResourceStorePo resourceResourceStorePo) {
-        resourceResourceStorePo.setStatusCd("1");
-        int saveFlag = resourceResourceStoreV1ServiceDaoImpl.updateResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStorePo));
-        return saveFlag;
+     @Override
+    public int deleteResourceStore(@RequestBody  ResourceStorePo resourceResourceStorePo) {
+       resourceResourceStorePo.setStatusCd("1");
+       int saveFlag = resourceResourceStoreV1ServiceDaoImpl.updateResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStorePo));
+       return saveFlag;
     }
 
     @Override
-    public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
+    public List<ResourceStoreDto> queryResourceStores(@RequestBody  ResourceStoreDto resourceResourceStoreDto) {
 
         //校验是否传了 分页信息
 
@@ -82,7 +84,6 @@ public class ResourceStoreV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
     @Override
     public int queryResourceStoresCount(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
-        return resourceResourceStoreV1ServiceDaoImpl.queryResourceStoresCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto));
-    }
+        return resourceResourceStoreV1ServiceDaoImpl.queryResourceStoresCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto));    }
 
 }

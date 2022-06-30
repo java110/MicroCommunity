@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2022-03-28 16:23:49 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-06-30 12:03:19 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -38,7 +38,7 @@ public interface IResourceStoreV1ServiceDao {
 
 
     /**
-     * 保存 物品信息
+     * 保存 物品信息信息
      * @param info
      * @throws DAOException DAO异常
      */
@@ -48,10 +48,10 @@ public interface IResourceStoreV1ServiceDao {
 
 
     /**
-     * 查询物品信息（instance过程）
-     * 根据bId 查询物品信息
+     * 查询物品信息信息（instance过程）
+     * 根据bId 查询物品信息信息
      * @param info bId 信息
-     * @return 物品信息
+     * @return 物品信息信息
      * @throws DAOException DAO异常
      */
     List<Map> getResourceStoreInfo(Map info) throws DAOException;
@@ -59,7 +59,7 @@ public interface IResourceStoreV1ServiceDao {
 
 
     /**
-     * 修改物品信息
+     * 修改物品信息信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
@@ -67,10 +67,10 @@ public interface IResourceStoreV1ServiceDao {
 
 
     /**
-     * 查询物品总数
+     * 查询物品信息总数
      *
-     * @param info 物品信息
-     * @return 物品数量
+     * @param info 物品信息信息
+     * @return 物品信息数量
      */
     int queryResourceStoresCount(Map info);
 

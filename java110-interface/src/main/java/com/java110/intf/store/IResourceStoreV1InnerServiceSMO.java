@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2022-03-28 16:23:49 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-06-30 12:03:19 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -42,13 +42,14 @@ public interface IResourceStoreV1InnerServiceSMO {
     public int saveResourceStore(@RequestBody ResourceStorePo resourceResourceStorePo);
 
     @RequestMapping(value = "/updateResourceStore", method = RequestMethod.POST)
-    public int updateResourceStore(@RequestBody ResourceStorePo resourceResourceStorePo);
+    public int updateResourceStore(@RequestBody  ResourceStorePo resourceResourceStorePo);
 
     @RequestMapping(value = "/deleteResourceStore", method = RequestMethod.POST)
-    public int deleteResourceStore(@RequestBody ResourceStorePo resourceResourceStorePo);
+    public int deleteResourceStore(@RequestBody  ResourceStorePo resourceResourceStorePo);
 
     /**
      * <p>查询小区楼信息</p>
+     *
      *
      * @param resourceResourceStoreDto 数据对象分享
      * @return ResourceStoreDto 对象数据

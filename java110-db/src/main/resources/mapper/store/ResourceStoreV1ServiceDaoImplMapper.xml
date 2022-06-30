@@ -8,7 +8,7 @@
 
 
 
-    <!-- 保存物品信息 add by wuxw 2018-07-03 -->
+    <!-- 保存物品信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreInfo" parameterType="Map">
         insert into resource_store(
 sh_id,description,remark,store_id,res_id,parent_rst_id,warning_stock,rss_id,res_name,rst_id,out_low_price,price,mini_unit_stock,unit_code,res_code,mini_unit_code,average_price,stock,out_high_price,show_mobile,is_fixed,mini_stock
@@ -19,7 +19,7 @@ sh_id,description,remark,store_id,res_id,parent_rst_id,warning_stock,rss_id,res_
 
 
 
-    <!-- 查询物品信息 add by wuxw 2018-07-03 -->
+    <!-- 查询物品信息信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
         select  t.sh_id,t.sh_id shId,t.description,t.status_cd,t.status_cd statusCd,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.parent_rst_id,t.parent_rst_id parentRstId,t.warning_stock,t.warning_stock warningStock,t.rss_id,t.rss_id rssId,t.res_name,t.res_name resName,t.rst_id,t.rst_id rstId,t.out_low_price,t.out_low_price outLowPrice,t.price,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,t.unit_code,t.unit_code unitCode,t.res_code,t.res_code resCode,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.average_price,t.average_price averagePrice,t.stock,t.out_high_price,t.out_high_price outHighPrice,t.show_mobile,t.show_mobile showMobile,t.is_fixed,t.is_fixed isFixed,t.mini_stock,t.mini_stock miniStock 
 from resource_store t 
@@ -103,7 +103,7 @@ order by t.create_time desc
 
 
 
-    <!-- 修改物品信息 add by wuxw 2018-07-03 -->
+    <!-- 修改物品信息信息 add by wuxw 2018-07-03 -->
     <update id="updateResourceStoreInfo" parameterType="Map">
         update  resource_store t set t.status_cd = #{statusCd}
 <if test="newBId != null and newBId != ''">
@@ -178,7 +178,7 @@ and t.res_id= #{resId}
 
     </update>
 
-    <!-- 查询物品数量 add by wuxw 2018-07-03 -->
+    <!-- 查询物品信息数量 add by wuxw 2018-07-03 -->
      <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
         select  count(1) count 
 from resource_store t 
