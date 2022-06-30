@@ -72,6 +72,12 @@ public class ApiFeeDataVo implements Serializable {
 
     private List<FeeAttrDto> feeAttrs;
 
+    private String rateCycle;
+
+    private String rate;
+
+    private String rateStartTime;
+
     public String getAmount() {
         return amount;
     }
@@ -388,4 +394,28 @@ public class ApiFeeDataVo implements Serializable {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+
+    public String getRateCycle() {
+        return rateCycle;
+    }
+
+    public void setRateCycle(String rateCycle) {
+        this.rateCycle = rateCycle;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getRateStartTime() {
+        return rateStartTime;
+    }
+
+    public void setRateStartTime(String rateStartTime) {
+        this.rateStartTime = rateStartTime;
+    }
 }
