@@ -161,5 +161,11 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         return saveFlag;
     }
 
+    @Override
+    public List<Map> queryInvalidOweFee(Map info) {
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryInvalidOweFee", info);
+        return businessReportOweFeeInfos;
+    }
+
 
 }

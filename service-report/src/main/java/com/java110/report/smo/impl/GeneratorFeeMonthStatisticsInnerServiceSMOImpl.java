@@ -2,6 +2,7 @@ package com.java110.report.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
@@ -19,7 +20,6 @@ import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.report.dao.IReportFeeServiceDao;
 import com.java110.utils.util.*;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -87,7 +87,26 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     private void feeDataFiltering(String communityId) {
         Map reportFeeDto = new HashMap();
         reportFeeDto.put("communityId", communityId);
-        reportFeeMonthStatisticsServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+        List<Map> feeDtos = reportFeeMonthStatisticsServiceDaoImpl.queryInvalidFeeMonthStatistics(reportFeeDto);
+
+        List<String> feeIds = new ArrayList<>();
+        for (Map feeDto : feeDtos) {
+            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
+                continue;
+            }
+
+            feeIds.add(feeDto.get("feeId").toString());
+
+            if (feeIds.size() >= 50) {
+                reportFeeDto.put("feeIds", feeIds);
+                reportFeeMonthStatisticsServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+                feeIds = new ArrayList<>();
+            }
+        }
+        reportFeeDto.put("feeIds", feeIds);
+        if (feeIds.size() > 0) {
+            reportFeeMonthStatisticsServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+        }
     }
 
     private void dealFinishFee(String communityId) {
@@ -786,7 +805,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         Date endTime = ownerCarDtos.get(0).getEndTime();
 
         Date maxEndDate = tmpReportFeeDto.getDeadlineTime();
-        if(FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())){
+        if (FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())) {
             maxEndDate = tmpReportFeeDto.getConfigEndTime();
         }
 
@@ -856,7 +875,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         }
 
         Date maxEndDate = tmpReportFeeDto.getDeadlineTime();
-        if(FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())){
+        if (FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())) {
             maxEndDate = tmpReportFeeDto.getConfigEndTime();
         }
 

@@ -606,5 +606,14 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         return saveFlag;
     }
 
+    @Override
+    public List<Map> queryInvalidFeeMonthStatistics(Map info) {
+        logger.debug("查询押金退费总金额信息 入参 info : {}", info);
+
+        List<Map> deposits = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryInvalidFeeMonthStatistics", info);
+
+        return deposits;
+    }
+
 
 }

@@ -21,10 +21,7 @@ import com.java110.report.dao.IReportFeeYearCollectionDetailServiceDao;
 import com.java110.report.dao.IReportFeeYearCollectionServiceDao;
 import com.java110.report.dao.IReportOweFeeServiceDao;
 import com.java110.service.smo.ISaveSystemErrorSMO;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ExceptionUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +29,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,9 +128,29 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 
     }
     private void feeDataFiltering(String communityId) {
+
         Map reportFeeDto = new HashMap();
         reportFeeDto.put("communityId", communityId);
-        reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+        List<Map> feeDtos = reportOweFeeServiceDaoImpl.queryInvalidOweFee(reportFeeDto);
+
+        List<String> feeIds = new ArrayList<>();
+        for (Map feeDto : feeDtos) {
+            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
+                continue;
+            }
+
+            feeIds.add(feeDto.get("feeId").toString());
+
+            if (feeIds.size() >= 50) {
+                reportFeeDto.put("feeIds", feeIds);
+                reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+                feeIds = new ArrayList<>();
+            }
+        }
+        reportFeeDto.put("feeIds", feeIds);
+        if (feeIds.size() > 0) {
+            reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+        }
     }
 
 

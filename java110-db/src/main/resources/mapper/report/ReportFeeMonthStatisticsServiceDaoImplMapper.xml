@@ -2600,15 +2600,21 @@
         </foreach>
     </select>
 
+    <!-- 查询无效费用 add by wuxw 2018-07-03 -->
+    <select id="queryInvalidFeeMonthStatistics" parameterType="Map" resultType="Map">
+        select t.fee_id feeId from pay_fee t
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id
+        inner join report_fee_month_statistics rfms on t.fee_id = rfms.fee_id and rfms.status_cd = '0'
+        where (t.status_cd = '1' or pfc.status_cd = '1')
+        and t.community_id= #{communityId}
+    </select>
 
     <!--清理报表 无效数据-->
     <update id="deleteInvalidFee" parameterType="Map">
-        delete from report_fee_month_statistics where fee_id not in (
-        select t.fee_id from pay_fee t
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        where t.status_cd = '0'
-        and t.community_id= #{communityId}
-        )
+        delete from report_fee_month_statistics where fee_id  in
+        <foreach collection="feeIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
         and community_id = #{communityId}
     </update>
 </mapper>
