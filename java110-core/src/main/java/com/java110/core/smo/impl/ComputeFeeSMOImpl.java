@@ -1890,10 +1890,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             return;
         }
 
-        if (!FeeDto.STATE_DOING.equals(feeDto.getState())) {
-            return;
-        }
-
         //查询递增信息
         FeeAttrDto feeAttrDto = new FeeAttrDto();
         feeAttrDto.setFeeId(feeDto.getFeeId());
@@ -1917,11 +1913,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue());
                 }
                 if (FeeAttrDto.SPEC_CD_RATE_START_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
+                    feeDto.setRateStartTime(tmpFeeAttrDto.getValue());
                     rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue(), DateUtil.DATE_FORMATE_STRING_B);
                 }
             }
         } catch (Exception e) {
             logger.error("租金递增异常", e);
+            return;
+        }
+
+        if (!FeeDto.STATE_DOING.equals(feeDto.getState())) {
             return;
         }
 
