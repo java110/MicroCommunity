@@ -26,8 +26,6 @@ public class SaveApplyRoomDiscountBMOImpl implements ISaveApplyRoomDiscountBMO {
     @Java110Transactional
     public ResponseEntity<String> save(ApplyRoomDiscountPo applyRoomDiscountPo) {
 
-        applyRoomDiscountPo.setArdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ardId));
-        applyRoomDiscountPo.setState(ApplyRoomDiscountDto.STATE_APPLY);
         int flag = applyRoomDiscountInnerServiceSMOImpl.saveApplyRoomDiscount(applyRoomDiscountPo);
 
         if (flag > 0) {

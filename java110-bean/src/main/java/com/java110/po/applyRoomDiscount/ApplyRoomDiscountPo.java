@@ -1,6 +1,7 @@
 package com.java110.po.applyRoomDiscount;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ApplyRoomDiscountPo implements Serializable {
 
@@ -25,6 +26,7 @@ public class ApplyRoomDiscountPo implements Serializable {
     private String feeId;
     private String returnWay;
     private String returnAmount;
+    private List<String> photos;
 
     //是否可用状态
     private String inUse;
@@ -46,7 +48,6 @@ public class ApplyRoomDiscountPo implements Serializable {
     public void setArdId(String ardId) {
         this.ardId = ardId;
     }
-
 
     public String getCheckUserId() {
         return checkUserId;
@@ -206,5 +207,13 @@ public class ApplyRoomDiscountPo implements Serializable {
 
     public void setReturnAmount(String returnAmount) {
         this.returnAmount = returnAmount;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 }

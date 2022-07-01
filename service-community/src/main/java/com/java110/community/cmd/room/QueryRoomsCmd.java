@@ -21,6 +21,7 @@ import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,9 +83,18 @@ public class QueryRoomsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
+        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("1")) {
+            if (reqJson.containsKey("roomNumLike") && !StringUtil.isEmpty(reqJson.getString("roomNumLike"))) {
+                String[] roomNumLikes = reqJson.getString("roomNumLike").split("-");
+                roomDto.setFloorNum(roomNumLikes[0]);
+                roomDto.setUnitNum(roomNumLikes[1]);
+                roomDto.setRoomNum(roomNumLikes[2]);
+                roomDto.setRoomNumLike("");
+            }
+        }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //查询总记录数
-        int total = roomInnerServiceSMOImpl.queryRoomsCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
+        int total = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
         apiRoomVo.setTotal(total);
         List<RoomDto> roomDtoList = null;
         if (total > 0) {
@@ -132,7 +142,7 @@ public class QueryRoomsCmd extends Cmd {
                 try {
                     roomDto.setStartTime(DateUtil.getDateFromString(tmpOwnerDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
                     roomDto.setEndTime(DateUtil.getDateFromString(tmpOwnerDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-                }catch (Exception e){
+                } catch (Exception e) {
                     //
                 }
                 roomDto.setOwnerId(tmpOwnerDto.getOwnerId());

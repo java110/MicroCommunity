@@ -5,10 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.dto.applyRoomDiscountType.ApplyRoomDiscountTypeDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
+import com.java110.dto.file.FileDto;
 import com.java110.fee.bmo.account.ISaveAccountBMO;
 import com.java110.fee.bmo.account.IUpdateAccountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IAuditApplyRoomDiscountBMO;
@@ -21,12 +23,15 @@ import com.java110.fee.bmo.applyRoomDiscountType.IGetApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.ISaveApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.IUpdateApplyRoomDiscountTypeBMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountRuleInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -100,6 +105,12 @@ public class ApplyRoomDiscountApi {
     @Autowired
     private IUpdateAccountBMO updateAccountBMOImpl;
 
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     /**
      * 优惠申请
      *
@@ -137,6 +148,9 @@ public class ApplyRoomDiscountApi {
         if (applyRoomDiscountDtos.size() == 0) {
             //空置房优惠可用
             applyRoomDiscountPo.setInUse("0");
+            applyRoomDiscountPo.setArdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ardId));
+            applyRoomDiscountPo.setState(ApplyRoomDiscountDto.STATE_APPLY);
+            saveFile(applyRoomDiscountPo);
             return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
         } else if (applyRoomDiscountDtos.size() > 0) {
             //取出结束时间
@@ -145,12 +159,47 @@ public class ApplyRoomDiscountApi {
             if (startDate.getTime() - finishTime.getTime() >= 0) {
                 //空置房优惠可用
                 applyRoomDiscountPo.setInUse("0");
+                applyRoomDiscountPo.setArdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ardId));
+                applyRoomDiscountPo.setState(ApplyRoomDiscountDto.STATE_APPLY);
+                saveFile(applyRoomDiscountPo);
                 return saveApplyRoomDiscountBMOImpl.save(applyRoomDiscountPo);
             } else {
                 throw new UnsupportedOperationException("该时间段已经申请过空置房，请重新输入空置房申请开始和结束时间");
             }
         } else {
             throw new UnsupportedOperationException("信息错误");
+        }
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param applyRoomDiscountPo
+     */
+    public void saveFile(ApplyRoomDiscountPo applyRoomDiscountPo) {
+        //获取图片
+        List<String> photos = applyRoomDiscountPo.getPhotos();
+        FileRelPo fileRelPo = new FileRelPo();
+        fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+        fileRelPo.setObjId(applyRoomDiscountPo.getArdId());
+        //table表示表存储 ftp表示ftp文件存储
+        fileRelPo.setSaveWay("ftp");
+        fileRelPo.setCreateTime(new Date());
+        //图片上传
+        if (photos != null && photos.size() > 0) {
+            //19000表示装修图片
+            fileRelPo.setRelTypeCd("19000");
+            for (String photo : photos) {
+                FileDto fileDto = new FileDto();
+                fileDto.setCommunityId("-1");
+                fileDto.setContext(photo);
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+                fileRelPo.setFileRealName(fileName);
+                fileRelPo.setFileSaveName(fileName);
+                fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+            }
         }
     }
 
@@ -310,6 +359,7 @@ public class ApplyRoomDiscountApi {
      * 89002020980011	102020006	减免金额
      * 89002020980012	102020007	月份
      * 89002020980013	102020007	打折率
+     *
      * @param feeDiscountSpecs
      * @return
      */
@@ -380,6 +430,7 @@ public class ApplyRoomDiscountApi {
      */
     @RequestMapping(value = "/queryApplyRoomDiscount", method = RequestMethod.GET)
     public ResponseEntity<String> queryApplyRoomDiscount(@RequestParam(value = "communityId") String communityId,
+                                                         @RequestParam(value = "ardId", required = false) String ardId,
                                                          @RequestParam(value = "roomName", required = false) String roomName,
                                                          @RequestParam(value = "roomId", required = false) String roomId,
                                                          @RequestParam(value = "state", required = false) String state,
@@ -387,6 +438,7 @@ public class ApplyRoomDiscountApi {
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
+        applyRoomDiscountDto.setArdId(ardId);
         applyRoomDiscountDto.setPage(page);
         applyRoomDiscountDto.setRow(row);
         applyRoomDiscountDto.setCommunityId(communityId);

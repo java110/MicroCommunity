@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -45,6 +46,16 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
     private String feeId;
     private String returnWay;
     private String returnAmount;
+
+    private List<String> photos;
+    //文件真实名称
+    private String fileRealName;
+    //文件存储名称
+    private String fileSaveName;
+    private String url;
+    private List<String> urls;
+    //文件类型
+    private String relTypeCd;
 
     private String statusCd = "0";
 
@@ -254,5 +265,53 @@ public class ApplyRoomDiscountDto extends PageDto implements Serializable {
 
     public void setReturnAmount(String returnAmount) {
         this.returnAmount = returnAmount;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getFileRealName() {
+        return fileRealName;
+    }
+
+    public void setFileRealName(String fileRealName) {
+        this.fileRealName = fileRealName;
+    }
+
+    public String getFileSaveName() {
+        return fileSaveName;
+    }
+
+    public void setFileSaveName(String fileSaveName) {
+        this.fileSaveName = fileSaveName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getRelTypeCd() {
+        return relTypeCd;
+    }
+
+    public void setRelTypeCd(String relTypeCd) {
+        this.relTypeCd = relTypeCd;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }
