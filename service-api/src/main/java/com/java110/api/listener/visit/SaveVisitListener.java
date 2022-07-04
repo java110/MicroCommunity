@@ -115,6 +115,10 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
         if (reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))) {
             //获取预约车免费时长的值
             String freeTime = CommunitySettingFactory.getValue(reqJson.getString("communityId"), CAR_FREE_TIME);
+
+            if(StringUtil.isEmpty(freeTime)){
+                freeTime = "120";
+            }
             String visitTime = reqJson.getString("visitTime");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date time = df.parse(visitTime);
