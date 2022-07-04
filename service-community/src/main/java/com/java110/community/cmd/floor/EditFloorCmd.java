@@ -6,14 +6,19 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.FloorDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
 import com.java110.po.floor.FloorPo;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Java110Cmd(serviceCode = "floor.editFloor")
 public class EditFloorCmd extends Cmd {
@@ -30,6 +35,16 @@ public class EditFloorCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "userId", "请求报文中未包含userId");
         Assert.jsonObjectHaveKey(reqJson, "floorNum", "请求报文中未包含floorNum");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+
+        FloorDto floorDto = new FloorDto();
+        floorDto.setFloorNum(reqJson.getString("floorNum"));
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+
+        if (floorDtos != null && floorDtos.size() > 0 && !reqJson.getString("floorId").equals(floorDtos.get(0).getFloorId())) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
+        }
+
     }
 
     @Override
