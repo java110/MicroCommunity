@@ -65,6 +65,7 @@
     <select id="queryImportFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from import_fee t
+        left join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
