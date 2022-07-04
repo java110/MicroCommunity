@@ -80,7 +80,8 @@ public class NavServiceSMOImpl extends DefaultAbstractComponentSMO implements IN
         resultUserInfo.put("sex", tmpUserInfo.getString("sex"));
         resultUserInfo.put("localtionCd", tmpUserInfo.getString("localtionCd"));
         resultUserInfo.put("levelCd", tmpUserInfo.getString("levelCd"));
-        resultUserInfo.put("tel", CommonUtil.mobileEncrypt(tmpUserInfo.getString("tel")));
+        //resultUserInfo.put("tel", CommonUtil.mobileEncrypt(tmpUserInfo.getString("tel")));
+        resultUserInfo.put("tel", tmpUserInfo.getString("tel")); // 这里不加密了 因为前台很多地方直接 关联出 用户的手机号 所以 加密了 没法处理 modify by wuxw 2022-07-04
         resultUserInfo.put("email", tmpUserInfo.getString("email"));
         resultUserInfo.put("userId",tmpUserInfo.getString("userId"));
         String watermark = MappingCache.getValue("watermark");
