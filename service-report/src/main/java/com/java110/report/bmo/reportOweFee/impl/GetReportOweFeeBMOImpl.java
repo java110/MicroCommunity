@@ -187,10 +187,12 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByRoom(reportOwe);
                 reportOweFee.setOweId(reportOweFees.get(0).getOweId());
                 reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
+                reportOweFee.setOwnerTel(reportOweFees.get(0).getOwnerTel());
             } else if (reportOweFee.getPayerObjType().equals("6666")) {
                 List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByCar(reportOwe);
                 reportOweFee.setOweId(reportOweFees.get(0).getOweId());
                 reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
+                reportOweFee.setOwnerTel(reportOweFees.get(0).getOwnerTel());
             }
             reportOweFeeDtos.add(reportOweFee);
         }
