@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionPointV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionPointInfo" parameterType="Map">
+        insert into inspection_point(
+point_obj_name,item_id,inspection_id,point_obj_id,nfc_code,point_obj_type,remark,inspection_name,community_id
+) values (
+#{pointObjName},#{itemId},#{inspectionId},#{pointObjId},#{nfcCode},#{pointObjType},#{remark},#{inspectionName},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionPointInfo" parameterType="Map" resultType="Map">
+        select  t.point_obj_name,t.point_obj_name pointObjName,t.item_id,t.item_id itemId,t.inspection_id,t.inspection_id inspectionId,t.point_obj_id,t.point_obj_id pointObjId,t.nfc_code,t.nfc_code nfcCode,t.point_obj_type,t.point_obj_type pointObjType,t.remark,t.status_cd,t.status_cd statusCd,t.inspection_name,t.inspection_name inspectionName,t.community_id,t.community_id communityId 
+from inspection_point t 
+where 1 =1 
+<if test="pointObjName !=null and pointObjName != ''">
+   and t.point_obj_name= #{pointObjName}
+</if> 
+<if test="itemId !=null and itemId != ''">
+   and t.item_id= #{itemId}
+</if> 
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+<if test="pointObjId !=null and pointObjId != ''">
+   and t.point_obj_id= #{pointObjId}
+</if> 
+<if test="nfcCode !=null and nfcCode != ''">
+   and t.nfc_code= #{nfcCode}
+</if> 
+<if test="pointObjType !=null and pointObjType != ''">
+   and t.point_obj_type= #{pointObjType}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改巡检点信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionPointInfo" parameterType="Map">
+        update  inspection_point t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="pointObjName !=null and pointObjName != ''">
+, t.point_obj_name= #{pointObjName}
+</if> 
+<if test="itemId !=null and itemId != ''">
+, t.item_id= #{itemId}
+</if> 
+<if test="pointObjId !=null and pointObjId != ''">
+, t.point_obj_id= #{pointObjId}
+</if> 
+<if test="nfcCode !=null and nfcCode != ''">
+, t.nfc_code= #{nfcCode}
+</if> 
+<if test="pointObjType !=null and pointObjType != ''">
+, t.point_obj_type= #{pointObjType}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+, t.inspection_name= #{inspectionName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="inspectionId !=null and inspectionId != ''">
+and t.inspection_id= #{inspectionId}
+</if> 
+
+    </update>
+
+    <!-- 查询巡检点数量 add by wuxw 2018-07-03 -->
+     <select id="queryInspectionPointsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from inspection_point t 
+where 1 =1 
+<if test="pointObjName !=null and pointObjName != ''">
+   and t.point_obj_name= #{pointObjName}
+</if> 
+<if test="itemId !=null and itemId != ''">
+   and t.item_id= #{itemId}
+</if> 
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+<if test="pointObjId !=null and pointObjId != ''">
+   and t.point_obj_id= #{pointObjId}
+</if> 
+<if test="nfcCode !=null and nfcCode != ''">
+   and t.nfc_code= #{nfcCode}
+</if> 
+<if test="pointObjType !=null and pointObjType != ''">
+   and t.point_obj_type= #{pointObjType}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>

@@ -21,6 +21,8 @@ public class InspectionRoutePointRelPo implements Serializable {
     private String pointEndTime;
     private String sortNumber;
 
+    private String statusCd = "0";
+
     public String getIrpRelId() {
         return irpRelId;
     }
@@ -75,5 +77,13 @@ public class InspectionRoutePointRelPo implements Serializable {
 
     public void setSortNumber(String sortNumber) {
         this.sortNumber = sortNumber;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -24,6 +24,7 @@ public class InspectionPlanPo implements Serializable {
     private String remark;
     private String createUserId;
     private String createUserName;
+    private String statusCd;
 
     public String getInspectionPlanId() {
         return inspectionPlanId;
@@ -119,5 +120,13 @@ public class InspectionPlanPo implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

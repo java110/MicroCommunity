@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionPlanStaffV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存巡检人信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionPlanStaffInfo" parameterType="Map">
+        insert into inspection_plan_staff(
+ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,community_id,staff_id
+) values (
+#{ipStaffId},#{staffName},#{startTime},#{inspectionPlanId},#{endTime},#{communityId},#{staffId}
+)
+    </insert>
+
+
+
+    <!-- 查询巡检人信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionPlanStaffInfo" parameterType="Map" resultType="Map">
+        select  t.ip_staff_id,t.ip_staff_id ipStaffId,t.staff_name,t.staff_name staffName,t.start_time,t.start_time startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId 
+from inspection_plan_staff t 
+where 1 =1 
+<if test="ipStaffId !=null and ipStaffId != ''">
+   and t.ip_staff_id= #{ipStaffId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改巡检人信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionPlanStaffInfo" parameterType="Map">
+        update  inspection_plan_staff t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+, t.staff_name= #{staffName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+, t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+ where 1=1 <if test="ipStaffId !=null and ipStaffId != ''">
+and t.ip_staff_id= #{ipStaffId}
+</if> 
+
+    </update>
+
+    <!-- 查询巡检人数量 add by wuxw 2018-07-03 -->
+     <select id="queryInspectionPlanStaffsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from inspection_plan_staff t 
+where 1 =1 
+<if test="ipStaffId !=null and ipStaffId != ''">
+   and t.ip_staff_id= #{ipStaffId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+
+
+     </select>
+
+</mapper>

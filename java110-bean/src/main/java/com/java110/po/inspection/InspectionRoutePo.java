@@ -18,6 +18,8 @@ public class InspectionRoutePo implements Serializable {
     private String seq;
     private String remark;
 
+    private String statusCd="0";
+
     public String getInspectionRouteId() {
         return inspectionRouteId;
     }
@@ -56,5 +58,13 @@ public class InspectionRoutePo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

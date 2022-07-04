@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionPlanV1ServiceDaoImpl">
+
+
+    <!-- 保存巡检计划信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionPlanInfo" parameterType="Map">
+        insert into inspection_plan(
+        inspection_plan_name,create_user_id,inspection_route_id,inspection_plan_period,remark,create_user_name,sign_type,start_time,inspection_plan_id,end_time,state,community_id
+        ) values (
+        #{inspectionPlanName},#{createUserId},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},#{createUserName},#{signType},#{startTime},#{inspectionPlanId},#{endTime},#{state},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询巡检计划信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
+        select t.inspection_plan_name,t.inspection_plan_name inspectionPlanName,t.create_user_id,t.create_user_id
+        createUserId,t.inspection_route_id,t.inspection_route_id
+        inspectionRouteId,t.inspection_plan_period,t.inspection_plan_period
+        inspectionPlanPeriod,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.sign_type,t.sign_type signType,t.start_time,t.start_time
+        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
+        endTime,t.state,t.community_id,t.community_id communityId
+        from inspection_plan t
+        where 1 =1
+        <if test="inspectionPlanName !=null and inspectionPlanName != ''">
+            and t.inspection_plan_name= #{inspectionPlanName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod != ''">
+            and t.inspection_plan_period= #{inspectionPlanPeriod}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="signType !=null and signType != ''">
+            and t.sign_type= #{signType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改巡检计划信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionPlanInfo" parameterType="Map">
+        update inspection_plan t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="inspectionPlanName !=null and inspectionPlanName != ''">
+            , t.inspection_plan_name= #{inspectionPlanName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            , t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod != ''">
+            , t.inspection_plan_period= #{inspectionPlanPeriod}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="signType !=null and signType != ''">
+            , t.sign_type= #{signType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+
+    </update>
+
+    <!-- 查询巡检计划数量 add by wuxw 2018-07-03 -->
+    <select id="queryInspectionPlansCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_plan t
+        where 1 =1
+        <if test="inspectionPlanName !=null and inspectionPlanName != ''">
+            and t.inspection_plan_name= #{inspectionPlanName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod != ''">
+            and t.inspection_plan_period= #{inspectionPlanPeriod}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="signType !=null and signType != ''">
+            and t.sign_type= #{signType}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
