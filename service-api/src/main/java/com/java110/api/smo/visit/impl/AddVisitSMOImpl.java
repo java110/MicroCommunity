@@ -26,8 +26,6 @@ public class AddVisitSMOImpl extends DefaultAbstractComponentSMO implements IAdd
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-        System.out.println("paramIn  "+paramIn);
-        System.out.println("pd     "+pd);
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
