@@ -10,6 +10,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
@@ -24,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class QueryPropertyAssetsIndexCmd extends Cmd {
 
     @Autowired
-    private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
+    private IFloorInnerServiceSMO floorV1InnerServiceSMOImpl;
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
