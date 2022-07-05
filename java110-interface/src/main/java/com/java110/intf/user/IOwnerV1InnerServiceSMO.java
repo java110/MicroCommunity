@@ -65,4 +65,7 @@ public interface IOwnerV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwnersCount", method = RequestMethod.POST)
     int queryOwnersCount(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/queryOwnersBindCount", method = RequestMethod.POST)
+    int queryOwnersBindCount(@RequestBody OwnerDto ownerDto);
 }

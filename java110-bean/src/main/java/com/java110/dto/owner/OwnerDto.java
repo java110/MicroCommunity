@@ -28,6 +28,9 @@ public class OwnerDto extends PageDto implements Serializable {
     // 1000 表示待审核，2000 审核完成  3000 拒绝审核
     public static final String STATE_FINISH = "2000";
 
+    public static final String IS_BIND_Y="Y";
+    public static final String IS_BIND_N="N";
+
 
     private String communityId;
     private String communityName;
@@ -74,6 +77,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String isBind;
 
 
     public String getSex() {
@@ -372,5 +377,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setsCommunityTel(String sCommunityTel) {
         this.sCommunityTel = sCommunityTel;
+    }
+
+    public String getIsBind() {
+        return isBind;
+    }
+
+    public void setIsBind(String isBind) {
+        this.isBind = isBind;
     }
 }

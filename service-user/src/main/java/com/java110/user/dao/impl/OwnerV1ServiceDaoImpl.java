@@ -104,5 +104,17 @@ public class OwnerV1ServiceDaoImpl extends BaseServiceDao implements IOwnerV1Ser
         return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryOwnersBindCount(Map info) {
+        logger.debug("查询 queryOwnersBindCount 入参 info : {}",info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerV1ServiceDaoImpl.queryOwnersBindCount", info);
+        if (businessOwnerInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+    }
+
 
 }

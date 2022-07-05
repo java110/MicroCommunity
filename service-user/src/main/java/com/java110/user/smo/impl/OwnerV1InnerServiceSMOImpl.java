@@ -84,4 +84,9 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
         return ownerV1ServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));    }
 
+    @Override
+    public int queryOwnersBindCount(@RequestBody OwnerDto ownerDto) {
+        return ownerV1ServiceDaoImpl.queryOwnersBindCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
 }
