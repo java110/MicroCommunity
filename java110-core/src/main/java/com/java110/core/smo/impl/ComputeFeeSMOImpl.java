@@ -434,15 +434,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
                     builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getRoomRent())));
                 }
-                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
-                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(builtUpArea.doubleValue() + "");
             } else if ("1102".equals(computingFormula)) { // 租金
                 BigDecimal builtUpArea = new BigDecimal(0);
                 for (ContractRoomDto tmpContractRoomDto : contractRoomDtos) {
                     builtUpArea = builtUpArea.add(new BigDecimal(Double.parseDouble(tmpContractRoomDto.getRoomRent())));
                 }
-                feeReceiptDetailPo.setArea(builtUpArea.doubleValue() + "");
-                feeReceiptDetailPo.setSquarePrice(feeDto.getSquarePrice() + "/" + feeDto.getAdditionalAmount());
+                feeReceiptDetailPo.setArea("");
+                feeReceiptDetailPo.setSquarePrice(builtUpArea.doubleValue() + "");
             }else if ("4004".equals(computingFormula)) {
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {

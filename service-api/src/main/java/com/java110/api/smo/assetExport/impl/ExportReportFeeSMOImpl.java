@@ -1291,6 +1291,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
+        reqJson.put("storeId",result.getStoreId());
         apiUrl = "purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
