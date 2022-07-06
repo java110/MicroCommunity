@@ -42,9 +42,9 @@ public class AreaInnerServiceSMOImpl extends BaseServiceSMO implements IAreaInne
         if (areaDto.getAreaCode() != null && areaDto.getAreaCode().length() > 5){
             areacode = areaDto.getAreaCode();
         }else{
-            areacode = "110101";
+            areacode = "110101001";//东华门街道
         }
-        areaDto.setAreaCode(areacode);
+        areaDto.setAreaCode(areacode.substring(0,2));
         List<AreaDto> areas = BeanConvertUtil.covertBeanList(areaServiceDaoImpl.getWholeArea(BeanConvertUtil.beanCovertMap(areaDto)), AreaDto.class);
         List<AreaDto> newlist = new ArrayList();
         AreaDto nowarea = new AreaDto();
@@ -60,7 +60,7 @@ public class AreaInnerServiceSMOImpl extends BaseServiceSMO implements IAreaInne
         return newlist;
     }
 
-    private static void getTree(List<AreaDto> areas,AreaDto area,List<AreaDto> newlist){
+    private void getTree(List<AreaDto> areas,AreaDto area,List<AreaDto> newlist){
         for (AreaDto a :areas){
             if (area.getParentAreaCode().equals(a.getAreaCode())){
                 newlist.add(a);
@@ -71,8 +71,6 @@ public class AreaInnerServiceSMOImpl extends BaseServiceSMO implements IAreaInne
             }
         }
     }
-
-
 
 
 }
