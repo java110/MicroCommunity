@@ -1,23 +1,21 @@
-package com.java110.dto.Dict;
+package com.java110.po.dict;
 
-import com.java110.dto.PageDto;
-
-import java.io.Serializable;
-
-/**
- * <br>
- * Created by hu ping on 10/22/2019
- * <p>
- */
-public class DictDto extends PageDto implements Serializable {
+public class DictPo {
 
     private int id;
     private String statusCd;
     private String name;
     private String description;
-
     private String tableName;
     private String tableColumns;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getStatusCd() {
         return statusCd;
@@ -57,13 +55,5 @@ public class DictDto extends PageDto implements Serializable {
 
     public void setTableColumns(String tableColumns) {
         this.tableColumns = tableColumns;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }
