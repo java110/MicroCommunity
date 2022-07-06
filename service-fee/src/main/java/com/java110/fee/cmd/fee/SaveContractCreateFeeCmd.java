@@ -83,6 +83,7 @@ public class SaveContractCreateFeeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         logger.debug("ServiceDataFlowEvent : {}", event);
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 //        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 //        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
 //        reqJson.put("storeId", storeId);
@@ -123,8 +124,8 @@ public class SaveContractCreateFeeCmd extends Cmd {
         }
 
         contractDto.setContractId(reqJson.getString("contractId"));
-
-        contractDto.setCommunityId(reqJson.getString("communityId"));
+        contractDto.setStoreId(storeId);
+        //contractDto.setCommunityId(reqJson.getString("communityId"));
         contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
 
         if (contractDtos == null || contractDtos.size() < 1) {

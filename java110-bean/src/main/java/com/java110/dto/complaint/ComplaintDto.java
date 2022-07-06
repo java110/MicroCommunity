@@ -17,6 +17,9 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public static final String STATE_AGREE = "";
 
+    public static final String STATE_WAIT = "10001";
+    public static final String STATE_FINISH = "10002";
+
     //工作流实例ID
     private String processInstanceId;
 

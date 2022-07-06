@@ -17,7 +17,7 @@ import java.util.List;
 public class RoomDto extends PageDto implements Serializable {
 
     public static final String STATE_SELL = "2001"; // 已入住
-    public static final String STATE_FREE = "2002"; //未入住
+    public static final String STATE_FREE = "2002"; //未销售
     public static final String STATE_DELIVERY = "2003";//已交房
     public static final String STATE_RENOVATION = "2005";//已装修
     public static final String STATE_SHOP_FIRE = "2006";//已经租

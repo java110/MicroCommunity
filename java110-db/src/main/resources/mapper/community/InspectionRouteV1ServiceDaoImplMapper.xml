@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionRouteV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionRouteInfo" parameterType="Map">
+        insert into inspection_route(
+inspection_route_id,remark,community_id,seq,route_name
+) values (
+#{inspectionRouteId},#{remark},#{communityId},#{seq},#{routeName}
+)
+    </insert>
+
+
+
+    <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionRouteInfo" parameterType="Map" resultType="Map">
+        select  t.inspection_route_id,t.inspection_route_id inspectionRouteId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq,t.route_name,t.route_name routeName 
+from inspection_route t 
+where 1 =1 
+<if test="inspectionRouteId !=null and inspectionRouteId != ''">
+   and t.inspection_route_id= #{inspectionRouteId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="routeName !=null and routeName != ''">
+   and t.route_name= #{routeName}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改巡检点信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionRouteInfo" parameterType="Map">
+        update  inspection_route t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+, t.seq= #{seq}
+</if> 
+<if test="routeName !=null and routeName != ''">
+, t.route_name= #{routeName}
+</if> 
+ where 1=1 <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+and t.inspection_route_id= #{inspectionRouteId}
+</if> 
+
+    </update>
+
+    <!-- 查询巡检点数量 add by wuxw 2018-07-03 -->
+     <select id="queryInspectionRoutesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from inspection_route t 
+where 1 =1 
+<if test="inspectionRouteId !=null and inspectionRouteId != ''">
+   and t.inspection_route_id= #{inspectionRouteId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="seq !=null and seq != ''">
+   and t.seq= #{seq}
+</if> 
+<if test="routeName !=null and routeName != ''">
+   and t.route_name= #{routeName}
+</if> 
+
+
+     </select>
+
+</mapper>

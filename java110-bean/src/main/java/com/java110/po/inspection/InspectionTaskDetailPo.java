@@ -42,6 +42,8 @@ public class InspectionTaskDetailPo implements Serializable {
 
     private String sendFlag;
 
+    private String statusCd;
+
     public String getTaskDetailId() {
         return taskDetailId;
     }
@@ -184,5 +186,13 @@ public class InspectionTaskDetailPo implements Serializable {
 
     public void setSendFlag(String sendFlag) {
         this.sendFlag = sendFlag;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

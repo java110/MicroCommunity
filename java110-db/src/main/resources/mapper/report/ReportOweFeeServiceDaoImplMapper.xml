@@ -343,7 +343,7 @@
         payerObjName,t.config_id,t.config_id configId,t.fee_name,t.fee_name
         feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,
-        bo.owner_id ownerId,bo.name ownerName
+        bo.owner_id ownerId,bo.name ownerName,bo.link ownerTel
         from report_owe_fee t
         left join building_owner_room_rel borr on borr.room_id = t.payer_obj_id and borr.status_cd = '0'
         left join building_owner bo on borr.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
@@ -427,7 +427,7 @@
         payerObjName,t.config_id,t.config_id configId,t.fee_name,t.fee_name
         feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,
-        bo.owner_id ownerId,bo.name ownerName
+        bo.owner_id ownerId,bo.name ownerName,bo.link ownerTel
         from report_owe_fee t
         left join owner_car oc on oc.car_id = t.payer_obj_id and oc.status_cd = '0'
         left join building_owner bo on oc.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'

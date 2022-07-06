@@ -8,11 +8,11 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.dto.file.FileDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
@@ -115,6 +115,10 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
         if (reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))) {
             //获取预约车免费时长的值
             String freeTime = CommunitySettingFactory.getValue(reqJson.getString("communityId"), CAR_FREE_TIME);
+
+            if (StringUtil.isEmpty(freeTime)) {
+                freeTime = "120";
+            }
             String visitTime = reqJson.getString("visitTime");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date time = df.parse(visitTime);
@@ -166,7 +170,12 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
                 reqJson.put("psId", "-1");
             }
             //查询预约车辆登记次数
-            int number = Integer.parseInt(CommunitySettingFactory.getValue(reqJson.getString("communityId"), VISIT_NUMBER));
+            String visitNumber = CommunitySettingFactory.getValue(reqJson.getString("communityId"), VISIT_NUMBER);
+            if (StringUtil.isEmpty(visitNumber)) {
+                visitNumber = "10000";
+            }
+            int number = Integer.parseInt(visitNumber);
+
             VisitDto visitDto = new VisitDto();
             //查询当天车辆登记次数
             visitDto.setOwnerId(reqJson.getString("ownerId"));
@@ -228,9 +237,9 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
             super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
         }
         commit(context);
-        if (!StringUtil.isEmpty(reqJson.getString("state")) && reqJson.getString("state").equals("1")
+        if ("1".equals(reqJson.getString("state"))
                 && reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))
-                && !existCar && !StringUtil.isEmpty(reqJson.getString("psId"))) { //审核通过且有车位就更新车位状态
+                && !existCar && !StringUtil.isEmpty(reqJson.getString("psId")) && !"-1".equals(reqJson.getString("psId"))) { //审核通过且有车位就更新车位状态
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setPsId(reqJson.getString("psId"));
             //查询停车位

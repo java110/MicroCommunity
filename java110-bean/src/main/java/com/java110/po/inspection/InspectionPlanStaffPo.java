@@ -19,6 +19,7 @@ public class InspectionPlanStaffPo implements Serializable {
     private String staffName;
     private String startTime;
     private String endTime;
+    private String statusCd = "0";
 
     public String getIpStaffId() {
         return ipStaffId;
@@ -74,5 +75,13 @@ public class InspectionPlanStaffPo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

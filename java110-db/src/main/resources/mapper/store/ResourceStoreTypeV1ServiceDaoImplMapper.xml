@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceResourceStoreTypeTypeV1ServiceDaoImpl">
+
+
+    <!-- 保存物品类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceStoreTypeInfo" parameterType="Map">
+        insert into resource_store_type(
+        rst_id,name,description,store_id,parent_id
+        ) values (
+        #{rstId},#{name},#{description},#{storeId},#{parentId}
+        )
+    </insert>
+
+
+    <!-- 查询物品类型信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceStoreTypeInfo" parameterType="Map" resultType="Map">
+        select t.rst_id,t.rst_id rstId,t.name,t.description,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.parent_id,t.parent_id parentId
+        from resource_store_type t
+        where 1 =1
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="parentId !=null and parentId != ''">
+            and t.parent_id= #{parentId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改物品类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceStoreTypeInfo" parameterType="Map">
+        update resource_store_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="description !=null and description != ''">
+            , t.description= #{description}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="parentId !=null and parentId != ''">
+            , t.parent_id= #{parentId}
+        </if>
+        where 1=1
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+
+    </update>
+
+    <!-- 查询物品类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryResourceStoreTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from resource_store_type t
+        where 1 =1
+        <if test="rstId !=null and rstId != ''">
+            and t.rst_id= #{rstId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="parentId !=null and parentId != ''">
+            and t.parent_id= #{parentId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -209,15 +209,16 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("收费对象");
         row.createCell(1).setCellValue("业主名称");
-        row.createCell(2).setCellValue("开始时间");
-        row.createCell(3).setCellValue("结束时间");
+        row.createCell(2).setCellValue("手机号");
+        row.createCell(3).setCellValue("开始时间");
+        row.createCell(4).setCellValue("结束时间");
         if (!StringUtil.isEmpty(configIds)) {
             for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
-                row.createCell(4 + feeConfigIndex).setCellValue(feeConfigDtos.get(feeConfigIndex).getFeeName());
+                row.createCell(5 + feeConfigIndex).setCellValue(feeConfigDtos.get(feeConfigIndex).getFeeName());
             }
-            row.createCell(4 + feeConfigDtos.size()).setCellValue("合计");
+            row.createCell(5 + feeConfigDtos.size()).setCellValue("合计");
         } else {
-            row.createCell(4).setCellValue("合计");
+            row.createCell(5).setCellValue("合计");
         }
 
 
@@ -227,15 +228,16 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             dataObj = oweFees.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("payerObjName"));
             row.createCell(1).setCellValue(dataObj.getString("ownerName"));
-            row.createCell(2).setCellValue(dataObj.getString("endTime"));
-            row.createCell(3).setCellValue(dataObj.getString("deadlineTime"));
+            row.createCell(2).setCellValue(dataObj.getString("ownerTel"));
+            row.createCell(3).setCellValue(dataObj.getString("endTime"));
+            row.createCell(4).setCellValue(dataObj.getString("deadlineTime"));
             if (!StringUtil.isEmpty(configIds)) {
                 for (int feeConfigIndex = 0; feeConfigIndex < feeConfigDtos.size(); feeConfigIndex++) {
-                    row.createCell(4 + feeConfigIndex).setCellValue(getFeeConfigAmount(feeConfigDtos.get(feeConfigIndex), dataObj));
+                    row.createCell(5 + feeConfigIndex).setCellValue(getFeeConfigAmount(feeConfigDtos.get(feeConfigIndex), dataObj));
                 }
-                row.createCell(4 + feeConfigDtos.size()).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
+                row.createCell(5 + feeConfigDtos.size()).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
             } else {
-                row.createCell(4).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
+                row.createCell(5).setCellValue(getAllFeeOweAmount(feeConfigDtos, dataObj));
             }
 
         }

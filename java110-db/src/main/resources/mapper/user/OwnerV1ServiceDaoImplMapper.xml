@@ -163,4 +163,23 @@
 
     </select>
 
+
+
+    <select id="queryOwnersBindCount" parameterType="Map" resultType="Map">
+        select count(DISTINCT t.member_id) count from building_owner t
+        left join owner_app_user oau  on t.community_id = oau.community_id and t.member_id = oau.member_id and oau.status_cd = '0'
+        where t.status_cd = '0'
+        <if test='isBind == "N"'>
+        and oau.member_id is null
+        </if>
+        <if test='isBind == "Y"'>
+        and oau.member_id is not null
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
 </mapper>

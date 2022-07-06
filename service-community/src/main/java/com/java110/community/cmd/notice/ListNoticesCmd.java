@@ -50,6 +50,7 @@ public class ListNoticesCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        reqJson.remove("userId");
         NoticeDto noticeDto = BeanConvertUtil.covertBean(reqJson, NoticeDto.class);
         if (!StringUtil.isEmpty("clientType") && "H5".equals(reqJson.get("clientType"))) {
             Date day = new Date();
