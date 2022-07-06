@@ -68,7 +68,7 @@ public class ApiFeeDataVo implements Serializable {
     //实收金额映射开关值
     private String receivedAmountSwitch;
 
-    private String deductFrom;
+    private String deductFrom = "Y";
 
     private List<FeeAttrDto> feeAttrs;
 

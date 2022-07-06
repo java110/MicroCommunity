@@ -74,7 +74,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String computingFormulaText;
 
-    private String deductFrom;
+    private String deductFrom = "Y";
 
     private double amount;
 

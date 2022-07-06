@@ -882,10 +882,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null and startTime != ''">
-            and t.create_time &gt;= #{startTime}
+            and t.fee_create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{endTime}
+            and t.deadline_time &lt;= #{endTime}
         </if>
         group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,t.deadline_time
         ) t
@@ -943,10 +943,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null and startTime != ''">
-            and t.create_time &gt;= #{startTime}
+            and t.fee_create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{endTime}
+            and t.deadline_time &lt;= #{endTime}
         </if>
         group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
         order by pfa.`value`
@@ -1005,10 +1005,10 @@
             and t.community_id= #{communityId}
         </if>
         <if test="startTime !=null and startTime != ''">
-            and t.create_time &gt;= #{startTime}
+            and t.fee_create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{endTime}
+            and t.deadline_time &lt;= #{endTime}
         </if>
     </select>
 

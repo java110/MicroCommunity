@@ -26,7 +26,7 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String paymentCycle;
     private String computingFormulaText;
 
-    private String deductFrom;
+    private String deductFrom = "Y";
 
 
     public String getConfigId() {

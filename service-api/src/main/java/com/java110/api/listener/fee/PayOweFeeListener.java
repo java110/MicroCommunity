@@ -124,13 +124,7 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
             String remark = paramObj.getString("remark");
-            String paySource = "现场收银台支付";
-            if (!StringUtil.isEmpty(remark)) {
-                remark = "-" + remark;
-            } else {
-                remark = "";
-            }
-            feeObj.put("remark", paySource + remark);
+            feeObj.put("remark", remark);
             if (!feeObj.containsKey("primeRate") && AppDto.OWNER_WECHAT_PAY.equals(appId)) {  //微信公众号支付
                 feeObj.put("primeRate", "5");
                 feeObj.put("remark", "线上公众号支付");
@@ -181,8 +175,8 @@ public class PayOweFeeListener extends AbstractServiceApiDataFlowListener {
         if (AppDto.OWNER_WECHAT_PAY.equals(appId)
                 && FeeDetailDto.PRIME_REATE_WECHAT.equals(paramObj.getString("primeRate"))) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
             paramObj.put("remark", "线上公众号支付");
-        } else if(AppDto.OWNER_WECHAT_PAY.equals(appId)
-                && FeeDetailDto.PRIME_REATE_WECHAT_APP.equals(paramObj.getString("primeRate"))){
+        } else if (AppDto.OWNER_WECHAT_PAY.equals(appId)
+                && FeeDetailDto.PRIME_REATE_WECHAT_APP.equals(paramObj.getString("primeRate"))) {
             paramObj.put("remark", "线上小程序支付");
         }
         paramObj.put("state", "1400");
