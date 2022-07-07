@@ -65,12 +65,12 @@ public class ListDictCmd extends Cmd {
 
            DictDto dictDto = BeanConvertUtil.covertBean(reqJson, DictDto.class);
 
-           int count = dictV1InnerServiceSMOImpl.queryDictsCount(dictDto);
+           int count = dictV1InnerServiceSMOImpl.queryDictsAndSpecCount(dictDto);
 
            List<DictDto> dictDtos = null;
 
            if (count > 0) {
-               dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
+               dictDtos = dictV1InnerServiceSMOImpl.queryDictAndSpecs(dictDto);
            } else {
                dictDtos = new ArrayList<>();
            }
