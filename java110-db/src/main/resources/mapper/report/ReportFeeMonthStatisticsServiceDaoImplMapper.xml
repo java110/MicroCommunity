@@ -398,7 +398,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-        left join pay_fee_config pfc on pf.config_id = pf.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -449,7 +448,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryReportFeeSummaryDetail" parameterType="Map" resultType="Map">
-        select t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime
+        select t.obj_name objName,t.fee_name feeName,t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime
         ,t.config_id configId
         ,t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,
         t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
@@ -461,7 +460,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-        left join pay_fee_config pfc on pf.config_id = pf.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
