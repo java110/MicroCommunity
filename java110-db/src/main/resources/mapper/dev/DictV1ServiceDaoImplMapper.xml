@@ -75,11 +75,11 @@
     </update>
 
     <!-- 修改字典表信息 add by wuxw 2018-07-03 -->
-    <update id="deleteDictInfo" parameterType="Map">
+    <delete id="deleteDictInfo" parameterType="Map">
         delete from t_dict
         where 1=1
         and id= #{id}
-    </update>
+    </delete>
 
     <!-- 查询字典表数量 add by wuxw 2018-07-03 -->
     <select id="queryDictsCount" parameterType="Map" resultType="Map">
