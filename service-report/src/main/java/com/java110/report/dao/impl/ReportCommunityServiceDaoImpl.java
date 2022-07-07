@@ -100,4 +100,21 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
 
         return communityDtos;
     }
+
+    public int deleteInvalidFee(Map info){
+        logger.debug("deleteInvalidFee 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("reportCommunityServiceDaoImpl.deleteInvalidFee", info);
+
+        return saveFlag;
+    }
+
+    @Override
+    public List<Map> queryInvalidFeeMonthStatistics(Map info) {
+        logger.debug("查询押金退费总金额信息 入参 info : {}", info);
+
+        List<Map> deposits = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryInvalidFeeMonthStatistics", info);
+
+        return deposits;
+    }
 }

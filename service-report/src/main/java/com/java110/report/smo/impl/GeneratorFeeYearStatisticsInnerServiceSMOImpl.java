@@ -31,8 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName GeneratorFeeMonthStatisticsInnerServiceSMOImpl
@@ -84,12 +83,40 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
 
         Assert.hasLength(communityId, "未包含小区信息");
 
+        //这里处理 报表中的费用是否被人为 取消 或者费用项是否被删除，这种数据 报表中做清理，以防影响 报表的准确度
+        feeDataFiltering(communityId);
+
         //处理房屋费用
         dealRoomFee(reportFeeMonthStatisticsPo);
 
         //处理车位费用
         dealCarFee(reportFeeMonthStatisticsPo);
 
+    }
+
+    private void feeDataFiltering(String communityId) {
+        Map reportFeeDto = new HashMap();
+        reportFeeDto.put("communityId", communityId);
+        List<Map> feeDtos = reportCommunityServiceDaoImpl.queryInvalidFeeMonthStatistics(reportFeeDto);
+
+        List<String> feeIds = new ArrayList<>();
+        for (Map feeDto : feeDtos) {
+            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
+                continue;
+            }
+
+            feeIds.add(feeDto.get("feeId").toString());
+
+            if (feeIds.size() >= 50) {
+                reportFeeDto.put("feeIds", feeIds);
+                reportCommunityServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+                feeIds = new ArrayList<>();
+            }
+        }
+        reportFeeDto.put("feeIds", feeIds);
+        if (feeIds.size() > 0) {
+            reportCommunityServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+        }
     }
 
 

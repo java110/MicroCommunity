@@ -69,4 +69,14 @@ public interface IReportCommunityServiceDao {
      * @return
      */
     List<Map> queryCarStructures(Map info);
+
+    int deleteInvalidFee(Map info);
+
+    /**
+     * 查询无效的数据
+     * @param reportFeeDto
+     * @return
+     */
+    List<Map> queryInvalidFeeMonthStatistics(Map reportFeeDto);
+
 }
