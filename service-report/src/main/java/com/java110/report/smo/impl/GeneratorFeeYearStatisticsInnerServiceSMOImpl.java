@@ -258,15 +258,17 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         configStartTime.setTime(tmpReportFeeDto.getConfigEndTime());
         int endYear = configEndTime.get(Calendar.YEAR);
         int curYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
-        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, null, tmpReportCarDto);
-        tmpReportFeeDto.setFeePrice(feePrice);
+
+        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+        //刷入欠费金额
+        computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
         if (endYear > curYear) {
             endYear = curYear;
         }
 
         for (int year = startYear; year <= endYear; year++) {
-            computeYearFee(year, tmpReportFeeDto, reportFeeYearCollectionPo);
+            computeYearFee(year, feeDto, reportFeeYearCollectionPo);
         }
 
     }
@@ -351,15 +353,16 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
         //当前年
         int curYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
 
-        double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, null);
-        tmpReportFeeDto.setFeePrice(feePrice);
+        FeeDto feeDto = BeanConvertUtil.covertBean(tmpReportFeeDto, FeeDto.class);
+        //刷入欠费金额
+        computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
         if (endYear > curYear) {
             endYear = curYear;
         }
 
         for (int year = startYear; year <= endYear; year++) {
-            computeYearFee(year, tmpReportFeeDto, reportFeeYearCollectionPo);
+            computeYearFee(year, feeDto, reportFeeYearCollectionPo);
         }
     }
 
@@ -367,10 +370,10 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
      * 计算指定年的数据
      *
      * @param year
-     * @param tmpReportFeeDto
+     * @param feeDto
      * @param reportFeeYearCollectionPo
      */
-    private void computeYearFee(int year, ReportFeeDto tmpReportFeeDto, ReportFeeYearCollectionPo reportFeeYearCollectionPo) {
+    private void computeYearFee(int year, FeeDto feeDto, ReportFeeYearCollectionPo reportFeeYearCollectionPo) {
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
 
         ReportFeeYearCollectionDetailDto reportFeeYearCollectionDetailDto = new ReportFeeYearCollectionDetailDto();
@@ -386,9 +389,9 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
             return;
         }
 
-        double receivableAmount = getReceivableAmount(tmpReportFeeDto);
+        double receivableAmount = feeDto.getFeePrice();
 
-        double receivedAmount = getReceivedAmount(tmpReportFeeDto, year);
+        double receivedAmount = getReceivedAmount(feeDto, year);
 
         ReportFeeYearCollectionDetailPo reportFeeYearCollectionDetailPo = null;
 
@@ -453,7 +456,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
      * @param tmpReportFeeDto
      * @return
      */
-    private double getReceivedAmount(ReportFeeDto tmpReportFeeDto, int year) {
+    private double getReceivedAmount(FeeDto tmpReportFeeDto, int year) {
         ReportFeeDetailDto feeDetailDto = new ReportFeeDetailDto();
         feeDetailDto.setConfigId(tmpReportFeeDto.getConfigId());
         feeDetailDto.setPayerObjId(tmpReportFeeDto.getPayerObjId());
