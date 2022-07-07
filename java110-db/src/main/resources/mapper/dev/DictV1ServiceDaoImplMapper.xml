@@ -49,23 +49,24 @@
 
     <!-- 修改字典表信息 add by wuxw 2018-07-03 -->
     <update id="updateDictInfo" parameterType="Map">
-        update t_dict t <set>
-        <if test="statusCd != null and statusCd != ''">
-            t.status_cd = #{statusCd},
-        </if>
-        <if test="tableColumns !=null and tableColumns != ''">
-             t.table_columns= #{tableColumns},
-        </if>
-        <if test="name !=null and name != ''">
-             t.name= #{name},
-        </if>
-        <if test="description !=null and description != ''">
-             t.description= #{description},
-        </if>
-        <if test="tableName !=null and tableName != ''">
-             t.table_name= #{tableName}
-        </if>
-    </set>
+        update t_dict t
+        <set>
+            <if test="statusCd != null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="tableColumns !=null and tableColumns != ''">
+                t.table_columns= #{tableColumns},
+            </if>
+            <if test="name !=null and name != ''">
+                t.name= #{name},
+            </if>
+            <if test="description !=null and description != ''">
+                t.description= #{description},
+            </if>
+            <if test="tableName !=null and tableName != ''">
+                t.table_name= #{tableName}
+            </if>
+        </set>
         where 1=1
         <if test="id !=null and id != ''">
             and t.id= #{id}
@@ -75,9 +76,9 @@
 
     <!-- 修改字典表信息 add by wuxw 2018-07-03 -->
     <update id="deleteDictInfo" parameterType="Map">
-        delete from  t_dict
+        delete from t_dict
         where 1=1
-            and id= #{id}
+        and id= #{id}
     </update>
 
     <!-- 查询字典表数量 add by wuxw 2018-07-03 -->
@@ -104,6 +105,73 @@
             and t.table_name= #{tableName}
         </if>
 
+
+    </select>
+
+
+    <!-- 查询字典表数量 add by wuxw 2018-07-03 -->
+    <select id="queryDictsAndSpecCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from t_dict t
+        inner JOIN t_dict_spec ds on t.table_name = ds.table_name and t.table_columns = ds.table_columns
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and ds.spec_id = #{specId}
+        </if>
+        <if test="tableColumns !=null and tableColumns != ''">
+            and t.table_columns= #{tableColumns}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="tableName !=null and tableName != ''">
+            and t.table_name= #{tableName}
+        </if>
+
+
+    </select>
+
+    <!-- 查询字典表信息 add by wuxw 2018-07-03 -->
+    <select id="getDictAndSpecInfo" parameterType="Map" resultType="Map">
+        select t.table_columns,t.table_columns tableColumns,t.name,t.description,t.status_cd,t.status_cd
+        statusCd,t.id,t.table_name,t.table_name tableName,ds.spec_name specName
+        from t_dict t
+        inner JOIN t_dict_spec ds on t.table_name = ds.table_name and t.table_columns = ds.table_columns
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and ds.spec_id = #{specId}
+        </if>
+        <if test="tableColumns !=null and tableColumns != ''">
+            and t.table_columns= #{tableColumns}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="tableName !=null and tableName != ''">
+            and t.table_name= #{tableName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 

@@ -80,4 +80,21 @@ public interface IDictV1ServiceDao {
      */
     int queryDictsCount(Map info);
 
+
+    /**
+     * 查询字典表总数
+     *
+     * @param info 字典表信息
+     * @return 字典表数量
+     */
+    int queryDictsAndSpecCount(Map info);
+    /**
+     * 查询字典表信息（instance过程）
+     * 根据bId 查询字典表信息
+     * @param info bId 信息
+     * @return 字典表信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getDictAndSpecInfo(Map info) throws DAOException;
+
 }

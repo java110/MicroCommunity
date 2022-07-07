@@ -87,14 +87,23 @@ public class Java110Converter implements Converter {
         }
 
         if (target == int.class || target == Integer.class) {
+            if(StringUtil.isNullOrNone(value)){
+                return 0;
+            }
             return Integer.parseInt(String.valueOf(value));
         }
 
         if (target == long.class || target == Long.class) {
+            if(StringUtil.isNullOrNone(value)){
+                return 0;
+            }
             return Long.parseLong(String.valueOf(value));
         }
 
         if (target == double.class || target == Double.class) {
+            if(StringUtil.isNullOrNone(value)){
+                return 0;
+            }
             return Double.parseDouble(String.valueOf(value));
         }
 

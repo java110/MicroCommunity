@@ -21,6 +21,8 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.dictSpec.DictSpecDto;
+import com.java110.intf.dev.IDictSpecV1InnerServiceSMO;
 import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.po.dict.DictPo;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +32,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -51,12 +55,14 @@ public class SaveDictCmd extends Cmd {
     @Autowired
     private IDictV1InnerServiceSMO dictV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IDictSpecV1InnerServiceSMO dictSpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "statusCd", "请求报文中未包含statusCd");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-        Assert.hasKeyAndValue(reqJson, "tableColumns", "请求报文中未包含tableColumns");
-        Assert.hasKeyAndValue(reqJson, "tableName", "请求报文中未包含tableName");
+        Assert.hasKeyAndValue(reqJson, "specId", "请求报文中未包含类型");
 
     }
 
@@ -64,7 +70,15 @@ public class SaveDictCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        DictSpecDto dictSpecDto  = new DictSpecDto();
+        dictSpecDto.setSpecId(reqJson.getString("specId"));
+        List<DictSpecDto> dictSpecDtos = dictSpecV1InnerServiceSMOImpl.queryDictSpecs(dictSpecDto);
+
+        Assert.listOnlyOne(dictSpecDtos,"未查询到类型");
+
         DictPo dictPo = BeanConvertUtil.covertBean(reqJson, DictPo.class);
+        dictPo.setTableName(dictSpecDtos.get(0).getTableName());
+        dictPo.setTableColumns(dictSpecDtos.get(0).getTableColumns());
         int flag = dictV1InnerServiceSMOImpl.saveDict(dictPo);
 
         if (flag < 1) {

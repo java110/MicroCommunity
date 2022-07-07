@@ -84,4 +84,25 @@ public class DictV1InnerServiceSMOImpl extends BaseServiceSMO implements IDictV1
     public int queryDictsCount(@RequestBody DictDto dictDto) {
         return dictV1ServiceDaoImpl.queryDictsCount(BeanConvertUtil.beanCovertMap(dictDto));    }
 
+    @Override
+    public List<DictDto> queryDictAndSpecs(@RequestBody  DictDto dictDto) {
+
+        //校验是否传了 分页信息
+
+        int page = dictDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            dictDto.setPage((page - 1) * dictDto.getRow());
+        }
+
+        List<DictDto> dicts = BeanConvertUtil.covertBeanList(dictV1ServiceDaoImpl.getDictAndSpecInfo(BeanConvertUtil.beanCovertMap(dictDto)), DictDto.class);
+
+        return dicts;
+    }
+
+
+    @Override
+    public int queryDictsAndSpecCount(@RequestBody DictDto dictDto) {
+        return dictV1ServiceDaoImpl.queryDictsAndSpecCount(BeanConvertUtil.beanCovertMap(dictDto));    }
+
 }

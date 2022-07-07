@@ -18,6 +18,8 @@ public class DictDto extends PageDto implements Serializable {
 
     private String tableName;
     private String tableColumns;
+    private String specName;
+    private String specId;
 
     public String getStatusCd() {
         return statusCd;
@@ -65,5 +67,21 @@ public class DictDto extends PageDto implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 }

@@ -65,4 +65,23 @@ public interface IDictV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryDictsCount", method = RequestMethod.POST)
     int queryDictsCount(@RequestBody DictDto dictDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param dictDto 数据对象分享
+     * @return DictDto 对象数据
+     */
+    @RequestMapping(value = "/queryDictAndSpecs", method = RequestMethod.POST)
+    List<DictDto> queryDictAndSpecs(@RequestBody DictDto dictDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param dictDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryDictsAndSpecCount", method = RequestMethod.POST)
+    int queryDictsAndSpecCount(@RequestBody DictDto dictDto);
 }

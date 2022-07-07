@@ -122,4 +122,36 @@ public class DictV1ServiceDaoImpl extends BaseServiceDao implements IDictV1Servi
     }
 
 
+    /**
+     * 查询字典表数量
+     * @param info 字典表信息
+     * @return 字典表数量
+     */
+    @Override
+    public int queryDictsAndSpecCount(Map info) {
+        logger.debug("查询 queryDictsCount 入参 info : {}",info);
+
+        List<Map> businessDictInfos = sqlSessionTemplate.selectList("dictV1ServiceDaoImpl.queryDictsAndSpecCount", info);
+        if (businessDictInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessDictInfos.get(0).get("count").toString());
+    }
+
+
+    /**
+     * 查询字典表信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getDictAndSpecInfo(Map info) throws DAOException {
+        logger.debug("查询 getDictInfo 入参 info : {}",info);
+
+        List<Map> businessDictInfos = sqlSessionTemplate.selectList("dictV1ServiceDaoImpl.getDictAndSpecInfo",info);
+
+        return businessDictInfos;
+    }
 }
