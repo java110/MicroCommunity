@@ -77,7 +77,7 @@ public class Java110MybatisInterceptor implements Interceptor {
      */
     private void dealDeleteSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
 
-        String tmpTable = sql.substring(sql.indexOf("into") + 4, sql.indexOf("(")).trim();
+        String tmpTable = sql.substring(sql.indexOf("from") + 4, sql.indexOf("where")).trim();
         String tmpTableHasT = tmpTable;
         if(tmpTable.indexOf(" ") > 0){
             tmpTable = tmpTable.substring(0,tmpTable.indexOf(" "));
