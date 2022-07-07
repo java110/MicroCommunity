@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dictSpecV1ServiceDaoImpl">
+
+
+    <!-- 保存物品类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveDictSpecInfo" parameterType="Map">
+        insert into t_dict_spec(
+        spec_id,table_columns,spec_name,table_name
+        ) values (
+        #{specId},#{tableColumns},#{specName},#{tableName}
+        )
+    </insert>
+
+
+    <!-- 查询物品类型信息 add by wuxw 2018-07-03 -->
+    <select id="getDictSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.table_columns,t.table_columns tableColumns,t.spec_name,t.spec_name
+        specName,t.status_cd,t.status_cd statusCd,t.table_name,t.table_name tableName
+        from t_dict_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="tableColumns !=null and tableColumns != ''">
+            and t.table_columns= #{tableColumns}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="tableName !=null and tableName != ''">
+            and t.table_name= #{tableName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改物品类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateDictSpecInfo" parameterType="Map">
+        update t_dict_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="tableColumns !=null and tableColumns != ''">
+            , t.table_columns= #{tableColumns}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="tableName !=null and tableName != ''">
+            , t.table_name= #{tableName}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+    </update>
+
+    <!-- 查询物品类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryDictSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from t_dict_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="tableColumns !=null and tableColumns != ''">
+            and t.table_columns= #{tableColumns}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="tableName !=null and tableName != ''">
+            and t.table_name= #{tableName}
+        </if>
+
+
+    </select>
+
+</mapper>

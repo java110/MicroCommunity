@@ -28,6 +28,8 @@ public class PurchaseApplyDetailPo implements Serializable {
     private String rsId;
     private String originalStock;
 
+    private String statusCd = "0";
+
     public String getApplyOrderId() {
         return applyOrderId;
     }
@@ -114,5 +116,13 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setOriginalStock(String originalStock) {
         this.originalStock = originalStock;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

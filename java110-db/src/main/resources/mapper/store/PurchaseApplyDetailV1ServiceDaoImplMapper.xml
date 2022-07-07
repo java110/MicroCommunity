@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="purchaseApplyDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存采购申请明细信息 add by wuxw 2018-07-03 -->
+    <insert id="savePurchaseApplyDetailInfo" parameterType="Map">
+        insert into purchase_apply_detail(
+        original_stock,quantity,operate,price,purchase_remark,purchase_quantity,rs_id,apply_order_id,remark,id,res_id
+        ) values (
+        #{originalStock},#{quantity},#{operate},#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},#{resId}
+        )
+    </insert>
+
+
+    <!-- 查询采购申请明细信息 add by wuxw 2018-07-03 -->
+    <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
+        select t.original_stock,t.original_stock originalStock,t.quantity,t.price,t.purchase_remark,t.purchase_remark
+        purchaseRemark,t.purchase_quantity,t.purchase_quantity purchaseQuantity,t.rs_id,t.rs_id
+        rsId,t.apply_order_id,t.apply_order_id applyOrderId,t.remark,t.status_cd,t.status_cd
+        statusCd,t.id,t.res_id,t.res_id resId
+        from purchase_apply_detail t
+        where 1 =1
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="purchaseRemark !=null and purchaseRemark != ''">
+            and t.purchase_remark= #{purchaseRemark}
+        </if>
+        <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+            and t.purchase_quantity= #{purchaseQuantity}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改采购申请明细信息 add by wuxw 2018-07-03 -->
+    <update id="updatePurchaseApplyDetailInfo" parameterType="Map">
+        update purchase_apply_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            , t.original_stock= #{originalStock}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            , t.quantity= #{quantity}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="purchaseRemark !=null and purchaseRemark != ''">
+            , t.purchase_remark= #{purchaseRemark}
+        </if>
+        <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+            , t.purchase_quantity= #{purchaseQuantity}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            , t.rs_id= #{rsId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            , t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="resId !=null and resId != ''">
+            , t.res_id= #{resId}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+
+    </update>
+
+    <!-- 查询采购申请明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryPurchaseApplyDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from purchase_apply_detail t
+        where 1 =1
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="purchaseRemark !=null and purchaseRemark != ''">
+            and t.purchase_remark= #{purchaseRemark}
+        </if>
+        <if test="purchaseQuantity !=null and purchaseQuantity != ''">
+            and t.purchase_quantity= #{purchaseQuantity}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+
+
+    </select>
+
+</mapper>
