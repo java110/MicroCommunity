@@ -214,6 +214,27 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
+    public int queryReportFloorUnitFeeSummaryDetailCount(Map info) {
+        logger.debug("查询费用月统计数据 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetailCount", info);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryReportFloorUnitFeeSummaryDetail(Map info) throws DAOException {
+        logger.debug("查询费用月统计信息 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetail", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
     public Map queryReportFloorUnitFeeSummaryMajor(Map info) {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
