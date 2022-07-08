@@ -2272,8 +2272,6 @@
     <select id="getReceivableInformation" parameterType="Map" resultType="Map">
         select a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt; a.receivedAmount,'0',a.receivableAmount-a.receivedAmount) oweAmount
         from (
-        select sum(t.receivable_amount) receivableAmount,SUM(t.received_amount) receivedAmount,SUM(t.owe_amount)
-        oweAmount
         select sum(t.his_owe_amount+t.cur_receivable_amount)
         receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
         from report_fee_month_statistics t
