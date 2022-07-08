@@ -781,6 +781,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
      */
     @Override
     public ResponseEntity<String> queryReportProficientCount(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear()+"");
+        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth()+"");
         JSONObject result = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 
