@@ -6,6 +6,8 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.dto.resourceStoreType.ResourceStoreTypeDto;
+import com.java110.intf.store.IResourceStoreTypeV1InnerServiceSMO;
 import com.java110.utils.constant.ServiceCodeResourceStoreTypeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class SaveResourceStoreTypeListener extends AbstractServiceApiPlusListene
     @Autowired
     private IResourceStoreTypeBMO resourceStoreTypeBMOImpl;
 
+    @Autowired
+    private IResourceStoreTypeV1InnerServiceSMO resourceStoreTypeV1InnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -31,8 +36,16 @@ public class SaveResourceStoreTypeListener extends AbstractServiceApiPlusListene
             String storeId = event.getDataFlowContext().getRequestCurrentHeaders().get("store-id");
             reqJson.put("storeId", storeId);
         }
-
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        ResourceStoreTypeDto resourceStoreTypeDto = new ResourceStoreTypeDto();
+        resourceStoreTypeDto.setStoreId(reqJson.getString("storeId"));
+        resourceStoreTypeDto.setName(reqJson.getString("name"));
+        int flag = resourceStoreTypeV1InnerServiceSMOImpl.queryResourceStoreTypesCount(resourceStoreTypeDto);
+
+        if(flag > 0){
+            throw new IllegalArgumentException("类型名称已存在");
+        }
+
     }
 
     @Override

@@ -551,11 +551,17 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         BigDecimal feePriceDec = new BigDecimal(tmpReportFeeDto.getFeePrice());
 
         Date curDate = DateUtil.getFirstDate();
+        Date nowDate = DateUtil.getCurrentDate();
         double month = 0.0;
         //已经超过截止时间 和 还没有到开始时间
         if (curDate.getTime() > tmpReportFeeDto.getDeadlineTime().getTime()
-                || curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
+                || nowDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
             return 0.0;
+        }
+
+        //如果 1号小于 计费起始时间 那么 将curDate 改为 当前时间
+        if (curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
+            curDate = tmpReportFeeDto.getEndTime();
         }
 
         //这里需要判断 结束时间 是否 大于了当月最后一天，当月天数 * 每天金额
