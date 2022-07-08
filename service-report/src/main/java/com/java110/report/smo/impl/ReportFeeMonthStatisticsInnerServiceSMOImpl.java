@@ -200,6 +200,26 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
+    public int queryFeeBreakdownDetailCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetailCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryFeeBreakdownDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        //校验是否传了 分页信息
+
+        int page = reportFeeMonthStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
+        }
+
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+
+        return reportFeeMonthStatisticss;
+    }
+
+    @Override
     public ReportFeeMonthStatisticsDto queryFeeBreakdownMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatistics = BeanConvertUtil.covertBean(
                 reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownMajor(
