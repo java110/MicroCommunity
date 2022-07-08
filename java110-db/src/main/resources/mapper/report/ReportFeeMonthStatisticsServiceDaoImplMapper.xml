@@ -956,7 +956,7 @@
      and t.receivable_amount >= 0 and t.received_amount >= 0 and t.owe_amount >= 0
      -->
     <select id="queryFeeBreakdown" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,SUM(t.his_owe_amount)
+        select t.fee_name feeName,td.name feeTypeCd,pfc.fee_type_cd,t.config_id configId,SUM(t.his_owe_amount)
         hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
         SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
         hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,

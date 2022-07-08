@@ -30,7 +30,7 @@ public class QueryReportFeeBreakdownDetailCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未传入小区信息");
-        Assert.hasKeyAndValue(reqJson, "feeName", "未传入费用项名称");
+        Assert.hasKeyAndValue(reqJson, "configId", "未传入费用项");
         super.validatePageInfo(reqJson);
     }
 
