@@ -10,6 +10,7 @@ import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ public class QueryReportFeeBreakdownDetailCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
+        if(StringUtil.isEmpty(reportFeeMonthStatisticsDto.getYearMonth())){
+            reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear()+"");
+            reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth()+"");
+        }
         if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto.getStartTime())) {
             reportFeeMonthStatisticsDto.setStartTime(reportFeeMonthStatisticsDto.getStartTime() + " 00:00:00");
         }
