@@ -83,15 +83,16 @@ public class QueryRoomsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
-        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("1")) {
-            if (reqJson.containsKey("roomNumLike") && !StringUtil.isEmpty(reqJson.getString("roomNumLike"))) {
-                String[] roomNumLikes = reqJson.getString("roomNumLike").split("-");
-                roomDto.setFloorNum(roomNumLikes[0]);
-                roomDto.setUnitNum(roomNumLikes[1]);
-                roomDto.setRoomNum(roomNumLikes[2]);
-                roomDto.setRoomNumLike("");
-            }
-        }
+        //导致业务受理搜索查询
+//        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("1")) {
+//            if (reqJson.containsKey("roomNumLike") && !StringUtil.isEmpty(reqJson.getString("roomNumLike"))) {
+//                String[] roomNumLikes = reqJson.getString("roomNumLike").split("-");
+//                roomDto.setFloorNum(roomNumLikes[0]);
+//                roomDto.setUnitNum(roomNumLikes[1]);
+//                roomDto.setRoomNum(roomNumLikes[2]);
+//                roomDto.setRoomNumLike("");
+//            }
+//        }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
