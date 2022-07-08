@@ -60,5 +60,6 @@ public class QueryReportFloorUnitFeeSummaryDetailCmd extends Cmd {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
+        context.setResponseEntity(responseEntity);
     }
 }
