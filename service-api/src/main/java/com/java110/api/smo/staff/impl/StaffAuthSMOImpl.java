@@ -139,6 +139,10 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         String openUrl = "";
         String url = MappingCache.getValue("OWNER_WECHAT_URL");
+        url = url
+                + "/app/loginStaffWechatAuth?appId=992020061452450002&staffId="
+                + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId())
+        + "&communityId=" + communityId;
 
         if (url.contains("?")) {
             url += ("&wAppId=" + smallWeChatDto.getAppId());
@@ -153,11 +157,7 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
                     .replace(
                             "REDIRECT_URL",
                             URLEncoder
-                                    .encode(
-                                            (url
-                                                    + "/app/loginStaffWechatAuth?appId=992020061452450002&staffId="
-                                                    + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()))
-                                                    + "&communityId=" + communityId,
+                                    .encode(url,
                                             "UTF-8")).replace("STATE", "1");
             response.sendRedirect(openUrl);
         } catch (Exception e) {
