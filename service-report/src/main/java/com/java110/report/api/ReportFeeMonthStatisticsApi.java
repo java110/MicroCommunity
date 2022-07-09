@@ -553,22 +553,6 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryOwePaymentCount(reportFeeMonthStatisticsDto);
     }
 
-
-    /**
-     * 查询费用分项表
-     *
-     * @param communityId 小区ID
-     * @return
-     * @serviceCode /reportFeeMonthStatistics/queryReportProficient
-     * @path /app/reportFeeMonthStatistics/queryReportProficient
-     */
-    @RequestMapping(value = "/queryReportProficient", method = RequestMethod.GET)
-    public ResponseEntity<String> queryReportProficient(@RequestParam(value = "communityId") String communityId) {
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
-        reportFeeMonthStatisticsDto.setCommunityId(communityId);
-        return getReportFeeMonthStatisticsBMOImpl.queryReportProficientCount(reportFeeMonthStatisticsDto);
-    }
-
     /**
      * 查询未收费房屋
      * select t.* from building_room t
