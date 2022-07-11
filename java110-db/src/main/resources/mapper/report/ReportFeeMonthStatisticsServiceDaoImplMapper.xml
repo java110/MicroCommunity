@@ -1440,6 +1440,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        and t.amount_owed > 0
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name
         HAVING oweAmount > 0
         ) t
@@ -1491,6 +1492,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        and t.amount_owed > 0
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name,pfa.`value`,br.built_up_area
         HAVING oweAmount > 0
         order by t.payer_obj_name

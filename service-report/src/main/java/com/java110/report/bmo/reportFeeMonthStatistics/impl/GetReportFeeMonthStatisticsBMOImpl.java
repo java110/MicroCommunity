@@ -1227,6 +1227,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         }
     }
 
+
+
     private void freshReportDeadlineDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
 
         Date nowDate = DateUtil.getCurrentDate();
