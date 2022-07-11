@@ -696,7 +696,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 continue;
             }
             for (OwnerDto ownerDto1 : ownerDtos) {
-                if (!reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto.getOwnerId()) && !reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
                     continue;
                 }
                 objName = reportFeeMonthStatisticsDto.getObjName() + "(" + ownerDto1.getFloorNum() + "栋" + ownerDto1.getUnitNum() + "单元" + ownerDto1.getRoomNum() + "室)";
