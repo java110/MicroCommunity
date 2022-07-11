@@ -2273,10 +2273,11 @@
 
     <select id="getReceivableInformation" parameterType="Map" resultType="Map">
         select a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.receivedAmount,'0',a.receivableAmount-a.receivedAmount) oweAmount
+        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
         from (
         select sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
+        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
+        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1=1
@@ -2288,10 +2289,11 @@
 
     <select id="getFloorReceivableInformation" parameterType="Map" resultType="Map">
         select a.floorNum,a.`name`,a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.receivedAmount,'0',a.receivableAmount-a.receivedAmount) oweAmount
+        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
         from (
         select f.floor_num floorNum,f.`name`,sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
+        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
+        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join building_room br on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
@@ -2308,10 +2310,11 @@
 
     <select id="getFeeConfigReceivableInformation" parameterType="Map" resultType="Map">
         select a.feeName,a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.receivedAmount,'0',a.receivableAmount-a.receivedAmount) oweAmount
+        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
         from (
         select t.fee_name feeName,sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
+        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
+        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join building_room br on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
