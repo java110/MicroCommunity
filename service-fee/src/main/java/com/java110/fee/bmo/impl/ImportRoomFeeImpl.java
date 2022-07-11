@@ -150,6 +150,9 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
         for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
+            if(StringUtil.isEmpty(importRoomFee.getRoomId())){
+                throw new IllegalArgumentException("房屋不存在，"+importRoomFee.getFloorNum()+"-"+importRoomFee.getUnitNum()+"-"+importRoomFee.getRoomNum());
+            }
             for (OwnerDto tmpOwnerDto : ownerDtos) {
                 if (importRoomFee.getRoomId().equals(tmpOwnerDto.getRoomId())) {
                     importRoomFee.setOwnerId(tmpOwnerDto.getOwnerId());
