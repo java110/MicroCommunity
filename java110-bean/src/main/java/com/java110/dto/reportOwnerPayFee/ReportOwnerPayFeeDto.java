@@ -42,18 +42,15 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
     private String unitNum;
     private String roomNum;
 
-
     private Date createTime;
 
     private String statusCd = "0";
 
     private String feeEndTime;
 
+    private String feeTypeCd;
 
     private List<ReportOwnerPayFeeDto> reportOwnerPayFeeDtos;
-
-
-
 
     public String getConfigName() {
         return configName;
@@ -286,5 +283,13 @@ public class ReportOwnerPayFeeDto extends PageDto implements Serializable {
 
     public void setFeeEndTime(String feeEndTime) {
         this.feeEndTime = feeEndTime;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
     }
 }

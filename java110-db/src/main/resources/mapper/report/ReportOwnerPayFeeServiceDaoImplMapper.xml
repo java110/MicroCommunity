@@ -7,11 +7,11 @@
 
     <!-- 保存业主缴费明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportOwnerPayFeeInfo" parameterType="Map">
-        insert into report_owner_pay_fee(
-        config_name,amount,pf_id,detail_id,obj_name,owner_id,fee_id,pf_month,owner_name,pf_year,config_id,pf_date,obj_id,fee_name,community_id,obj_type
-        ) values (
-        #{configName},#{amount},#{pfId},#{detailId},#{objName},#{ownerId},#{feeId},#{pfMonth},#{ownerName},#{pfYear},#{configId},#{pfDate},#{objId},#{feeName},#{communityId},#{objType}
-        )
+        insert into report_owner_pay_fee(config_name, amount, pf_id, detail_id, obj_name, owner_id, fee_id, pf_month,
+                                         owner_name, pf_year, config_id, pf_date, obj_id, fee_name, community_id,
+                                         obj_type)
+        values (#{configName}, #{amount}, #{pfId}, #{detailId}, #{objName}, #{ownerId}, #{feeId}, #{pfMonth},
+                #{ownerName}, #{pfYear}, #{configId}, #{pfDate}, #{objId}, #{feeName}, #{communityId}, #{objType})
     </insert>
 
     <select id="queryReportOwnerMonthPayFees" parameterType="Map" resultType="Map">
@@ -38,17 +38,24 @@
 
     <!-- 查询业主缴费明细信息 add by wuxw 2018-07-03 -->
     <select id="getReportOwnerPayFeeInfo" parameterType="Map" resultType="Map">
-        select t.community_id communityId,pfa.`value` ownerId,pfa1.`value` ownerName,pfc.fee_name feeName,pfa2.`value` importFeeName,t.config_id configId,t.fee_id feeId,
-        concat(ff.floor_num , '-' , bu.unit_num , '-',br.room_num) roomName,t.payer_obj_type payerObjType,oc.car_num carNum,con.contract_code contractCode
+        select t.community_id communityId,pfa.`value` ownerId,pfa1.`value` ownerName,pfc.fee_name feeName,pfa2.`value`
+        importFeeName,t.config_id configId,t.fee_id feeId,
+        concat(ff.floor_num , '-' , bu.unit_num , '-',br.room_num) roomName,t.payer_obj_type payerObjType,oc.car_num
+        carNum,con.contract_code contractCode
         from pay_fee t
-        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
-        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
-        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd = '390002' and pfa2.status_cd = '0'
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
+        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd =
+        '390007' and pfa.status_cd = '0'
+        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd
+        = '390008' and pfa1.status_cd = '0'
+        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd =
+        '390002' and pfa2.status_cd = '0'
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and
+        pfc.status_cd = '0'
         LEFT JOIN building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
         LEFT JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
-        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and
+        oc.car_type_cd='1001'
         left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
         where 1=1
         <if test="feeEndTime !=null and feeEndTime != ''">
@@ -64,6 +71,9 @@
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and pfa1.`value` = #{ownerName}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
@@ -147,14 +157,19 @@
     <select id="queryReportOwnerPayFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee t
-        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
-        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
-        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd = '390002' and pfa2.status_cd = '0'
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and pfc.status_cd = '0'
+        inner join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.community_id = t.community_id and pfa.spec_cd =
+        '390007' and pfa.status_cd = '0'
+        inner join pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.community_id = t.community_id and pfa1.spec_cd
+        = '390008' and pfa1.status_cd = '0'
+        left join pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.community_id = t.community_id and pfa2.spec_cd =
+        '390002' and pfa2.status_cd = '0'
+        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.community_id = t.community_id and
+        pfc.status_cd = '0'
         LEFT JOIN building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
         LEFT JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         LEFT JOIN f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
-        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and oc.car_type_cd='1001'
+        left join owner_car oc on t.payer_obj_id = oc.car_id and t.payer_obj_type = '6666' and oc.status_cd = '0' and
+        oc.car_type_cd='1001'
         left join contract con on t.payer_obj_id = con.contract_id and t.payer_obj_type = '7777' and con.status_cd = '0'
         where 1=1
         <if test="feeEndTime !=null and feeEndTime != ''">
@@ -182,6 +197,9 @@
         </if>
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num = #{roomNum}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
     </select>
 

@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("getReportFeeMonthStatisticsBMOImpl")
@@ -232,8 +233,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryReportFloorUnitFeeSummary(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear()+"");
-        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth()+"");
+        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
+        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFloorUnitFeeSummaryCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
@@ -276,11 +277,34 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdownMajor(reportFeeMonthStatisticsDto);
+            reportFeeMonthStatisticsDto.setPage(PageDto.DEFAULT_PAGE);
+            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatistics = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeBreakdown(reportFeeMonthStatisticsDto);
+            BigDecimal allOweAmount = new BigDecimal(0.0);
+            BigDecimal allHisOweReceivedAmount = new BigDecimal(0.0);
+            for (ReportFeeMonthStatisticsDto reportFeeMonthStatistic : reportFeeMonthStatistics) {
+                //获取历史欠费
+                BigDecimal hisOweAmount = new BigDecimal(reportFeeMonthStatistic.getHisOweAmount());
+                //获取当月应收
+                BigDecimal curReceivableAmount = new BigDecimal(reportFeeMonthStatistic.getCurReceivableAmount());
+                //获取当月实收
+                BigDecimal curReceivedAmount = new BigDecimal(reportFeeMonthStatistic.getCurReceivedAmount());
+                //获取欠债追回
+                BigDecimal hisOweReceivedAmount = new BigDecimal(reportFeeMonthStatistic.getHisOweReceivedAmount());
+                //计算欠费金额
+                BigDecimal oweAmount = hisOweAmount.add(curReceivableAmount).subtract(curReceivedAmount).subtract(hisOweReceivedAmount);
+                if (oweAmount.compareTo(BigDecimal.ZERO) == 1) { //欠费金额大于0
+                    allOweAmount = allOweAmount.add(oweAmount);
+                }
+                if (hisOweReceivedAmount.compareTo(BigDecimal.ZERO) == 1) { //欠费追回大于0
+                    allHisOweReceivedAmount = allHisOweReceivedAmount.add(hisOweReceivedAmount);
+                }
+            }
             if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
-                    reportFeeMonthStatisticsDto1.setAllOweAmount(tmpReportFeeMonthStatisticsDto.getAllOweAmount());
+                    reportFeeMonthStatisticsDto1.setAllOweAmount(allOweAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+                    reportFeeMonthStatisticsDto1.setAllHisOweReceivedAmount(allHisOweReceivedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                 }
             }
         } else {
@@ -298,24 +322,43 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     public ResponseEntity<String> queryFeeDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
 
 
-        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear()+"");
-        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth()+"");
+        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
+        reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
 
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetailCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
-        //应收总金额(大计)
-        Double allReceivableAmount = 0.0;
-        //实收金额(大计)
-        Double allReceivedAmount = 0.0;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllFeeDetail(reportFeeMonthStatisticsDto);
+            reportFeeMonthStatisticsDto.setPage(PageDto.DEFAULT_PAGE);
+            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatistics = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeDetail(reportFeeMonthStatisticsDto);
+            BigDecimal allOweAmount = new BigDecimal(0.0);
+            BigDecimal allHisOweReceivedAmount = new BigDecimal(0.0);
+            for (ReportFeeMonthStatisticsDto reportFeeMonthStatistic : reportFeeMonthStatistics) {
+                //获取历史欠费
+                BigDecimal hisOweAmount = new BigDecimal(reportFeeMonthStatistic.getHisOweAmount());
+                //获取当月应收
+                BigDecimal curReceivableAmount = new BigDecimal(reportFeeMonthStatistic.getCurReceivableAmount());
+                //获取当月实收
+                BigDecimal curReceivedAmount = new BigDecimal(reportFeeMonthStatistic.getCurReceivedAmount());
+                //获取欠费追回
+                BigDecimal hisOweReceivedAmount = new BigDecimal(reportFeeMonthStatistic.getHisOweReceivedAmount());
+                //计算欠费金额
+                BigDecimal oweAmount = hisOweAmount.add(curReceivableAmount).subtract(curReceivedAmount).subtract(hisOweReceivedAmount);
+                if (oweAmount.compareTo(BigDecimal.ZERO) == 1) { //欠费金额大于0
+                    allOweAmount = allOweAmount.add(oweAmount);
+                }
+                if (hisOweReceivedAmount.compareTo(BigDecimal.ZERO) == 1) { //欠费追回大于0
+                    allHisOweReceivedAmount = allHisOweReceivedAmount.add(hisOweReceivedAmount);
+                }
+            }
             if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
                     reportFeeMonthStatisticsDto1.setAllReceivableAmount(reportFeeMonthStatisticsList.get(0).getAllReceivableAmount());
                     reportFeeMonthStatisticsDto1.setAllReceivedAmount(reportFeeMonthStatisticsList.get(0).getAllReceivedAmount());
-                    reportFeeMonthStatisticsDto1.setAllOweAmount(reportFeeMonthStatisticsList.get(0).getAllOweAmount());
+                    reportFeeMonthStatisticsDto1.setAllOweAmount(allOweAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+                    reportFeeMonthStatisticsDto1.setAllHisOweReceivedAmount(allHisOweReceivedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                 }
             }
         } else {
@@ -383,8 +426,6 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
-
-
         //吴学文 注释 感觉和上面的369 功能重复
         //int size = 0;
         if (count > 0) {
@@ -1217,7 +1258,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     private void freshReportOweDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                int day = DateUtil.daysBetween(DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A), DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                int day = DateUtil.daysBetween(DateUtil.getDateFromString(format.format(new Date()), DateUtil.DATE_FORMATE_STRING_A), DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
                         DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {

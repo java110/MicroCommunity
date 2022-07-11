@@ -99,6 +99,7 @@ public class ReportOwnerPayFeeApi {
                                                          @RequestParam(value = "configId", required = false) String configId,
                                                          @RequestParam(value = "roomName", required = false) String roomName,
                                                          @RequestParam(value = "ownerName", required = false) String ownerName,
+                                                         @RequestParam(value = "feeTypeCd",required = false) String feeTypeCd,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         ReportOwnerPayFeeDto reportOwnerPayFeeDto = new ReportOwnerPayFeeDto();
@@ -109,6 +110,7 @@ public class ReportOwnerPayFeeApi {
         reportOwnerPayFeeDto.setConfigId(configId);
         reportOwnerPayFeeDto.setRoomName(roomName);
         reportOwnerPayFeeDto.setOwnerName(ownerName);
+        reportOwnerPayFeeDto.setFeeTypeCd(feeTypeCd);
         if (!StringUtil.isEmpty(roomName) && roomName.contains("-")) {
             String[] datas = roomName.split("-");
             if (datas.length != 3) {

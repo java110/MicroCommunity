@@ -27,11 +27,11 @@ public class GetReportOwnerPayFeeBMOImpl implements IGetReportOwnerPayFeeBMO {
      * @return 订单服务能够接受的报文
      */
     public ResponseEntity<String> get(ReportOwnerPayFeeDto reportOwnerPayFeeDto) {
-        if(!StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())) {
-            reportOwnerPayFeeDto.setFeeEndTime(reportOwnerPayFeeDto.getPfYear()+"-01-01");
-        }else{
-            Calendar calendar =Calendar.getInstance();
-            reportOwnerPayFeeDto.setFeeEndTime(calendar.get(Calendar.YEAR)+"-01-01");
+        if (!StringUtil.isEmpty(reportOwnerPayFeeDto.getPfYear())) {
+            reportOwnerPayFeeDto.setFeeEndTime(reportOwnerPayFeeDto.getPfYear() + "-01-01");
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            reportOwnerPayFeeDto.setFeeEndTime(calendar.get(Calendar.YEAR) + "-01-01");
         }
         int count = reportOwnerPayFeeInnerServiceSMOImpl.queryReportOwnerPayFeesCount(reportOwnerPayFeeDto);
 

@@ -490,7 +490,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     private void reportPrePaymentFee(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("预交费提醒表");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("序号");
+        row.createCell(0).setCellValue("房号");
         row.createCell(1).setCellValue("费用项");
         row.createCell(2).setCellValue("费用开始时间");
         row.createCell(3).setCellValue("距离费用开始时间（天）");
@@ -513,7 +513,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     private void reportDeadlineFee(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("费用到期提醒表");
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("序号");
+        row.createCell(0).setCellValue("房号");
         row.createCell(1).setCellValue("费用项");
         row.createCell(2).setCellValue("费用结束时间");
         row.createCell(3).setCellValue("距离费用结束时间（天）");
@@ -1582,8 +1582,9 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(3).setCellValue("面积");
         row.createCell(4).setCellValue("费用项");
         row.createCell(5).setCellValue("费用开始时间");
-        row.createCell(6).setCellValue("欠费时长（天）");
-        row.createCell(7).setCellValue("欠费金额");
+        row.createCell(6).setCellValue("更新时间");
+        row.createCell(7).setCellValue("欠费时长（天）");
+        row.createCell(8).setCellValue("欠费金额");
         //查询楼栋信息
         JSONArray rooms = this.getReportOweFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -1599,8 +1600,9 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
             row.createCell(4).setCellValue(dataObj.getString("feeName"));
             row.createCell(5).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(6).setCellValue(dataObj.getString("oweDay"));
-            row.createCell(7).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(6).setCellValue(dataObj.getString("updateTime"));
+            row.createCell(7).setCellValue(dataObj.getString("oweDay"));
+            row.createCell(8).setCellValue(dataObj.getString("oweAmount"));
         }
     }
 
