@@ -385,9 +385,9 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
                 = BeanConvertUtil.covertBeanList(reportFeeYearCollectionDetailServiceDaoImpl.getReportFeeYearCollectionDetailInfo(BeanConvertUtil.beanCovertMap(reportFeeYearCollectionDetailDto)),
                 ReportFeeYearCollectionDetailDto.class);
 
-        if (!ListUtil.isNull(reportFeeYearCollectionDetailDtos) && year != curYear) { // 说明已经处理过了 不再处理
-            return;
-        }
+//        if (!ListUtil.isNull(reportFeeYearCollectionDetailDtos) && year != curYear) { // 说明已经处理过了 不再处理
+//            return;
+//        }
 
         double receivableAmount = feeDto.getFeePrice();
 

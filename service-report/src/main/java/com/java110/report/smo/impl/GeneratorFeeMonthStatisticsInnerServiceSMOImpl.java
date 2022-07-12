@@ -244,7 +244,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(tmpReportCarDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());//这里不能注释 如果一个费用创建多条时会有bug
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
@@ -442,7 +442,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(reportRoomDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId()); //这里不能注释，因为一个费用多次创建时会存在覆盖 存在bug问题
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
