@@ -5,6 +5,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.report.ReportCarDto;
@@ -513,6 +514,8 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
+            //处理水电费，水电费根据开始时间要在相应月补充数据
+            dealMeteWater(reportFeeMonthStatisticsPo, tmpReportFeeDto);
         }
 
 
@@ -524,6 +527,45 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
+    }
+
+    /**
+     * 处理水电费
+     *
+     * @param reportFeeMonthStatisticsPo
+     * @param tmpReportFeeDto
+     */
+    private void dealMeteWater(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo, ReportFeeDto tmpReportFeeDto) {
+
+        //如果是 水费 电费 煤气费
+        if (!FeeConfigDto.FEE_TYPE_CD_METER.equals(tmpReportFeeDto.getFeeTypeCd())
+                && !FeeConfigDto.FEE_TYPE_CD_WATER.equals(tmpReportFeeDto.getFeeTypeCd())
+                && !FeeConfigDto.FEE_TYPE_CD_GAS.equals(tmpReportFeeDto.getFeeTypeCd())
+        ) {
+            return;
+        }
+        //根据费用开始时间 计算月份
+        Date endTime = tmpReportFeeDto.getEndTime();
+        //去除 0 因为表里的月份是没有零
+        String curMonth = Integer.parseInt(DateUtil.getFormatTimeString(endTime, "MM"))+"";
+        String curYear = DateUtil.getFormatTimeString(endTime, "YYYY");
+        //查询是否存在 数据
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
+        reportFeeMonthStatisticsDto.setCommunityId(tmpReportFeeDto.getCommunityId());
+        reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
+        reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
+        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
+        reportFeeMonthStatisticsDto.setFeeYear(curYear);
+        reportFeeMonthStatisticsDto.setFeeMonth(curMonth);
+        List<ReportFeeMonthStatisticsDto> statistics = BeanConvertUtil.covertBeanList(
+                reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
+                ReportFeeMonthStatisticsDto.class);
+        if (!ListUtil.isNull(statistics)) {
+            return;
+        }
+        reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
+        reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
     }
 
 
