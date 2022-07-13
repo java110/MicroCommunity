@@ -79,7 +79,16 @@ public class ApiFeeDataVo implements Serializable {
     private String rateStartTime;
 
 
-    private Date maxEndTime;
+
+    private String maxEndTime;
+
+    public String getMaxEndTime() {
+        return maxEndTime;
+    }
+
+    public void setMaxEndTime(String maxEndTime) {
+        this.maxEndTime = maxEndTime;
+    }
 
     public String getAmount() {
         return amount;
@@ -422,11 +431,6 @@ public class ApiFeeDataVo implements Serializable {
         this.rateStartTime = rateStartTime;
     }
 
-    public Date getMaxEndTime() {
-        return maxEndTime;
-    }
 
-    public void setMaxEndTime(Date maxEndTime) {
-        this.maxEndTime = maxEndTime;
-    }
+
 }
