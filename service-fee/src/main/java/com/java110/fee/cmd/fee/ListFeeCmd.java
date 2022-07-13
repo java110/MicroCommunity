@@ -226,8 +226,8 @@ public class ListFeeCmd extends Cmd {
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(df.format(curFeePrice) + "");
+                && !FeeDto.STATE_FINISH.equals(feeDto.getState())
+                && feeDto.getDeadlineTime() == null) {
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
 

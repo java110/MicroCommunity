@@ -122,6 +122,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
         feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
@@ -319,6 +320,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
         feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
@@ -497,6 +499,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
         feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
@@ -654,7 +657,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(feeConfigDto, PayFeeConfigPo.class);
         payFeeConfigPo.setAdditionalAmount("0");
         payFeeConfigPo.setBillType(FeeConfigDto.BILL_TYPE_MONTH);
-        payFeeConfigPo.setComputingFormula("4004");
+        payFeeConfigPo.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         payFeeConfigPo.setEndTime(DateUtil.getLastTime());
         payFeeConfigPo.setFeeFlag("2006012");
         payFeeConfigPo.setIsDefault("F");

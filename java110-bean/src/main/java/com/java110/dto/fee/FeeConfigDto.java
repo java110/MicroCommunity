@@ -35,6 +35,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public static final String COMPUTING_FORMULA_TEMP_CAR = "9999";
     public static final String COMPUTING_FORMULA_RANT_RATE = "1102"; // 租金递增
+    public static final String COMPUTING_FORMULA_DYNAMIC = "4004"; // 租金递增
 
     public static final String PAYMENT_CD_PRE = "1200";
     public static final String PAYMENT_CD_AFTER = "2100";

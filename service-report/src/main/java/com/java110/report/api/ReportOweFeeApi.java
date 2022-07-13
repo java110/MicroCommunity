@@ -134,11 +134,13 @@ public class ReportOweFeeApi {
     public ResponseEntity<String> queryReportAllOweFee(@RequestParam(value = "communityId") String communityId,
                                                        @RequestParam(value = "configIds", required = false) String configIds,
                                                        @RequestParam(value = "payObjType", required = false) String payObjType,
+                                                       @RequestParam(value = "hasOweFee", required = false) String hasOweFee,
                                                        @RequestParam(value = "num", required = false) String num) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjType(payObjType);
         reportOweFeeDto.setPayerObjName(num);
         reportOweFeeDto.setCommunityId(communityId);
+        reportOweFeeDto.setHasOweFee(hasOweFee);
         if (!StringUtil.isEmpty(configIds)) {
             String[] tmpConfigIds = configIds.split(",");
             reportOweFeeDto.setConfigIds(tmpConfigIds);
