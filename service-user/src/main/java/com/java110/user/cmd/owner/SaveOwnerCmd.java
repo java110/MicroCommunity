@@ -147,7 +147,7 @@ public class SaveOwnerCmd extends Cmd {
             reqJson.put("fileSaveName", fileName);
 
             JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "10000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", reqJson.getString("memberId"));
