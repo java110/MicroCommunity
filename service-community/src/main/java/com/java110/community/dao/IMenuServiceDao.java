@@ -131,4 +131,5 @@ public interface IMenuServiceDao {
      */
     int queryMenusCount(Map info);
 
+    List<Map> hasPrivilege(Map info);
 }

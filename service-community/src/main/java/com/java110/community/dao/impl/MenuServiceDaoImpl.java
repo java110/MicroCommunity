@@ -287,5 +287,14 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
         return Integer.parseInt(businessMenuInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> hasPrivilege(Map info) {
+        logger.debug("查询路由信息 入参 info : {}", info);
+
+        List<Map> businessMenuInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.hasPrivilege", info);
+
+        return businessMenuInfos;
+    }
+
 
 }

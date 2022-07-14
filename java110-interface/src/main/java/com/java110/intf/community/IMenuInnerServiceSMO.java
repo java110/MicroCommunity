@@ -1,7 +1,9 @@
 package com.java110.intf.community;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.basePrivilege.HasPrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -179,4 +181,5 @@ public interface IMenuInnerServiceSMO {
     int deleteMenu(@RequestBody MenuDto routeDto);
 
 
+    List<HasPrivilegeDto> hasPrivilege(@RequestBody HasPrivilegeDto hasPrivilegeDto);
 }

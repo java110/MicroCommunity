@@ -1,14 +1,15 @@
 package com.java110.community.smo.impl;
 
 
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IMenuServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.basePrivilege.HasPrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -162,6 +163,12 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
     public int deleteMenu(@RequestBody MenuDto menuDto) {
         menuDto.setStatusCd("1");
         return menuServiceDaoImpl.updateMenuInfo(BeanConvertUtil.beanCovertMap(menuDto));
+    }
+
+    @Override
+    public List<HasPrivilegeDto> hasPrivilege(@RequestBody HasPrivilegeDto hasPrivilegeDto) {
+        List<HasPrivilegeDto> privilegeDtos = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.hasPrivilege(BeanConvertUtil.beanCovertMap(hasPrivilegeDto)), HasPrivilegeDto.class);
+        return privilegeDtos;
     }
 
     @Override

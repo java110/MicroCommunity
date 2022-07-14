@@ -28,6 +28,7 @@
         <module>service-acct</module>
         <module>service-oa</module>
         <module>service-dev</module>
+        <module>springboot</module>
 
     </modules>
 
