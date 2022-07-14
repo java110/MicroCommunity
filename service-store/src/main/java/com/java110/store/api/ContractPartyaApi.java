@@ -105,12 +105,18 @@ public class ContractPartyaApi {
      */
     @RequestMapping(value = "/queryContractPartya", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractPartya(@RequestHeader(value = "store-id") String storeId,
+                                                      @RequestParam(value = "partyA", required = false) String partyA,
+                                                      @RequestParam(value = "aContacts", required = false) String aContacts,
+                                                      @RequestParam(value = "aLink", required = false) String aLink,
                                                       @RequestParam(value = "page") int page,
                                                       @RequestParam(value = "row") int row) {
         ContractPartyaDto contractPartyaDto = new ContractPartyaDto();
         contractPartyaDto.setPage(page);
         contractPartyaDto.setRow(row);
         contractPartyaDto.setStoreId(storeId);
+        contractPartyaDto.setPartyA(partyA);
+        contractPartyaDto.setaContacts(aContacts);
+        contractPartyaDto.setaLink(aLink);
         return getContractPartyaBMOImpl.get(contractPartyaDto);
     }
 }

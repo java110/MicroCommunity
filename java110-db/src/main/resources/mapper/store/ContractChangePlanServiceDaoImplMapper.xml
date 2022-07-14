@@ -40,6 +40,15 @@
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
         </if>
+        <if test="contractName !=null and contractName != ''">
+            and ct.contract_name= #{contractName}
+        </if>
+        <if test="contractCode !=null and contractCode != ''">
+            and ct.contract_code= #{contractCode}
+        </if>
+        <if test="contractType !=null and contractType != ''">
+            and ct.contract_type= #{contractType}
+        </if>
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
         </if>
@@ -116,6 +125,15 @@
         </if>
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
+        </if>
+        <if test="contractName !=null and contractName != ''">
+            and c.contract_name= #{contractName}
+        </if>
+        <if test="contractCode !=null and contractCode != ''">
+            and c.contract_code= #{contractCode}
+        </if>
+        <if test="contractType !=null and contractType != ''">
+            and c.contract_type= #{contractType}
         </if>
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}

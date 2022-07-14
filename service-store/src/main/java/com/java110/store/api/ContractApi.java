@@ -66,7 +66,6 @@ import com.java110.store.bmo.contractTypeSpec.IUpdateContractTypeSpecBMO;
 import com.java110.store.bmo.contractTypeTemplate.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -560,11 +559,17 @@ public class ContractApi {
      */
     @RequestMapping(value = "/queryContractType", method = RequestMethod.GET)
     public ResponseEntity<String> queryContractType(@RequestHeader(value = "store-id") String storeId,
+                                                    @RequestParam(value = "audit", required = false) String audit,
+                                                    @RequestParam(value = "typeName", required = false) String typeName,
+                                                    @RequestParam(value = "contractTypeId", required = false) String contractTypeId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ContractTypeDto contractTypeDto = new ContractTypeDto();
         contractTypeDto.setPage(page);
         contractTypeDto.setRow(row);
+        contractTypeDto.setAudit(audit);
+        contractTypeDto.setTypeName(typeName);
+        contractTypeDto.setContractTypeId(contractTypeId);
         contractTypeDto.setStoreId(storeId);
         return getContractTypeBMOImpl.get(contractTypeDto);
     }
@@ -862,8 +867,8 @@ public class ContractApi {
                     roomInfo = rooms.getJSONObject(roomIndex);
                     contractChangePlanRoomPo = BeanConvertUtil.covertBean(roomInfo, ContractChangePlanRoomPo.class);
                     contractChangePlanRoomPo.setRoomName(roomInfo.getString("floorNum")
-                            +"-"+roomInfo.getString("unitNum")
-                            +"-"+roomInfo.getString("roomNum"));
+                            + "-" + roomInfo.getString("unitNum")
+                            + "-" + roomInfo.getString("roomNum"));
                     contractChangePlanRoomPos.add(contractChangePlanRoomPo);
                 }
             }
@@ -871,7 +876,7 @@ public class ContractApi {
 
         ContractChangePlanDetailPo contractChangePlanDetailPo = BeanConvertUtil.covertBean(reqJson, ContractChangePlanDetailPo.class);
         contractChangePlanDetailPo.setStoreId(storeId);
-        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo,contractChangePlanRoomPos,reqJson);
+        return saveContractChangePlanBMOImpl.save(contractChangePlanPo, contractChangePlanDetailPo, contractChangePlanRoomPos, reqJson);
     }
 
     /**
@@ -929,6 +934,8 @@ public class ContractApi {
                                                           @RequestParam(value = "row") int row,
                                                           @RequestParam(value = "contractId", required = false) String contractId,
                                                           @RequestParam(value = "contractName", required = false) String contractName,
+                                                          @RequestParam(value = "contractCode", required = false) String contractCode,
+                                                          @RequestParam(value = "contractType", required = false) String contractType,
                                                           @RequestParam(value = "planId", required = false) String planId
     ) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
@@ -938,6 +945,8 @@ public class ContractApi {
         contractChangePlanDto.setContractId(contractId);
         contractChangePlanDto.setContractName(contractName);
         contractChangePlanDto.setPlanId(planId);
+        contractChangePlanDto.setContractCode(contractCode);
+        contractChangePlanDto.setContractType(contractType);
         return getContractChangePlanBMOImpl.get(contractChangePlanDto);
     }
 
