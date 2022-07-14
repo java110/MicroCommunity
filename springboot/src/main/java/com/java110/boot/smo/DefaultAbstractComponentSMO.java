@@ -11,6 +11,7 @@ import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.cache.PrivilegeCache;
 import com.java110.utils.constant.CommonConstant;
@@ -60,6 +61,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
+
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
 
     /**
@@ -334,7 +339,6 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
             return;
         }
-        String tmpResource = null;
         boolean hasPrivilege = false;
         for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
             if (resource.equals(privilegeDto.getResource())) {
@@ -345,20 +349,18 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
             return;
         }
 
-        ResultVo resultVo = null;
-        if (resultVo == null ||
-                resultVo.getCode() != ResultVo.CODE_OK) {
-            throw new UnsupportedOperationException("用户没有权限操作");
-        }
-        JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource(resource);
+        basePrivilegeDto.setUserId(pd.getUserId());
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
 
-        hasPrivilege = false;
         if (privileges == null || privileges.size() < 1) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
+
+        hasPrivilege = false;
         for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
-            tmpResource = privileges.getJSONObject(privilegeIndex).getString("resource");
-            if (resource.equals(tmpResource)) {
+            if (resource.equals(privileges.get(privilegeIndex).get("resource"))) {
                 hasPrivilege = true;
                 break;
             }

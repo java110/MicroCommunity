@@ -78,9 +78,11 @@ public class AccountWithdrawalApplyInnerServiceSMOImpl extends BaseServiceSMO im
         return accountWithdrawalApplyServiceDaoImpl.queryAccountWithdrawalApplysCount(BeanConvertUtil.beanCovertMap(accountWithdrawalApplyDto));    }
 
     @Override
-    public List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String[] states, int page, int row) {
+    public List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String[] states) {
 
         //校验是否传了 分页信息
+        int page =1;
+        int row = 10;
 
         if (page != PageDto.DEFAULT_PAGE) {
             page = ((page - 1) * row);

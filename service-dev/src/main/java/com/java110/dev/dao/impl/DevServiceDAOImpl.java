@@ -18,7 +18,7 @@ import java.util.Map;
  * 中心服务 数据操作类
  * Created by wuxw on 2018/4/14.
  */
-@Service("centerServiceDAOImpl")
+@Service("devServiceDAOImpl")
 @Transactional
 public class DevServiceDAOImpl extends BaseServiceDao implements IDevServiceDAO {
 

@@ -180,6 +180,6 @@ public interface IMenuInnerServiceSMO {
     @RequestMapping(value = "/deleteMenu", method = RequestMethod.POST)
     int deleteMenu(@RequestBody MenuDto routeDto);
 
-
+    @RequestMapping(value = "/hasPrivilege", method = RequestMethod.POST)
     List<HasPrivilegeDto> hasPrivilege(@RequestBody HasPrivilegeDto hasPrivilegeDto);
 }

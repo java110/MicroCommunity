@@ -35,13 +35,13 @@ public class GeneratorGroupBuyBatchTemplate extends TaskSystemQuartz {
 
     private static final int EXPIRE_IN = 7200;
 
-    @Autowired
+    @Autowired(required = false)
     private IGroupBuySettingInnerServiceSMO groupBuySettingInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IGroupBuyBatchInnerServiceSMO groupBuyBatchInnerServiceSMOImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IGroupBuyProductInnerServiceSMO groupBuyProductInnerServiceSMOImpl;
 
 

@@ -29,6 +29,7 @@
         <module>service-oa</module>
         <module>service-dev</module>
         <module>springboot</module>
+        <module>java110-boot</module>
 
     </modules>
 

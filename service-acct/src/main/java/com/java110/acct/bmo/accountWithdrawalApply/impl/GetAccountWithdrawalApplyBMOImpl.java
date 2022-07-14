@@ -49,7 +49,7 @@ public class GetAccountWithdrawalApplyBMOImpl implements IGetAccountWithdrawalAp
 
         List<AccountWithdrawalApplyDto> accountWithdrawalApplyDtos = null;
         if (count > 0) {
-            accountWithdrawalApplyDtos = accountWithdrawalApplyInnerServiceSMOImpl.listStateWithdrawalApplys(states, page, row);
+            accountWithdrawalApplyDtos = accountWithdrawalApplyInnerServiceSMOImpl.listStateWithdrawalApplys(states);
         } else {
             accountWithdrawalApplyDtos = new ArrayList<>();
         }

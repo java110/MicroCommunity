@@ -7,18 +7,8 @@ jedis:
     host: dev.redis.java110.com
     port: 6379
     timeout: 3000
-    password: hc
+    password: hc12345678
 
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    leaseExpirationDurationInSeconds: 30
-    preferIpAddress: true
-    instanceId: ${spring.cloud.client.ip-address}:${server.port}
-  client:
-    serviceUrl:
-      defaultZone: http://dev.java110.com:8761/eureka/
-      #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8008
   tomcat:
@@ -45,12 +35,12 @@ spring:
       enabled: true
       force: true
   application:
-    name: community-service
+    name: boot-service
   redis:
     database: 0
     host: dev.redis.java110.com
     port: 6379
-    password: hc
+    password: hc12345678
     pool:
       max-active: 300
       max-wait: 10000

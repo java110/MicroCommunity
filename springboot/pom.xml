@@ -24,6 +24,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-boot</artifactId>
+            <version>${hc.version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
@@ -77,6 +82,11 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-user</artifactId>
+            <version>${hc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>service-order</artifactId>
             <version>${hc.version}</version>
         </dependency>
         <dependency>

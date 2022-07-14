@@ -1,4 +1,4 @@
-package com.java110.intf.store.purchase;
+package com.java110.intf.store;
 
 
 import com.java110.config.feign.FeignConfiguration;

@@ -60,7 +60,7 @@ public interface IAccountWithdrawalApplyInnerServiceSMO {
      * @return AccountWithdrawalApplyDto 对象数据
      */
     @RequestMapping(value = "/listStateWithdrawalApplys", method = RequestMethod.POST)
-    List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String [] states, int page, int row);
+    List<AccountWithdrawalApplyDto> listStateWithdrawalApplys(@RequestParam String [] states);
     /**
      * 查询<p>小区楼</p>总记录数
      *
