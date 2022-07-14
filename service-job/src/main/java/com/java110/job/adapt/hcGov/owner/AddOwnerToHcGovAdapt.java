@@ -77,23 +77,26 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessOwnerRoomRelPo = new JSONArray();
         if (data.containsKey(OwnerRoomRelPo.class.getSimpleName())) {
             Object bObj = data.get(OwnerRoomRelPo.class.getSimpleName());
-            JSONArray businessOwnerRoomRelPo = null;
             if (bObj instanceof JSONObject) {
-                businessOwnerRoomRelPo = new JSONArray();
                 businessOwnerRoomRelPo.add(bObj);
             } else if (bObj instanceof List) {
                 businessOwnerRoomRelPo = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessOwnerRoomRelPo = (JSONArray) bObj;
             }
-            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bOwnerIndex = 0; bOwnerIndex < businessOwnerRoomRelPo.size(); bOwnerIndex++) {
-                JSONObject businessOwnerCar = businessOwnerRoomRelPo.getJSONObject(bOwnerIndex);
-                doAddOwner(business, businessOwnerCar);
-
+        }else {
+            if (data instanceof JSONObject) {
+                businessOwnerRoomRelPo.add(data);
             }
+        }
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerIndex = 0; bOwnerIndex < businessOwnerRoomRelPo.size(); bOwnerIndex++) {
+            JSONObject businessOwnerCar = businessOwnerRoomRelPo.getJSONObject(bOwnerIndex);
+            doAddOwner(business, businessOwnerCar);
+
         }
     }
 

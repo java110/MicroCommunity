@@ -71,23 +71,27 @@ public class AddStaffToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessUserPo = new JSONArray();
         if (data.containsKey(UserPo.class.getSimpleName())) {
             Object bObj = data.get(UserPo.class.getSimpleName());
-            JSONArray businessUserPo = null;
             if (bObj instanceof JSONObject) {
-                businessUserPo = new JSONArray();
                 businessUserPo.add(bObj);
             } else if (bObj instanceof List) {
                 businessUserPo = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessUserPo = (JSONArray) bObj;
             }
-            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bUserIndex = 0; bUserIndex < businessUserPo.size(); bUserIndex++) {
-                JSONObject businessUserCar = businessUserPo.getJSONObject(bUserIndex);
-                doAddUser(business, businessUserCar);
-
+        }else {
+            if (data instanceof JSONObject) {
+                businessUserPo.add(data);
             }
+        }
+
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bUserIndex = 0; bUserIndex < businessUserPo.size(); bUserIndex++) {
+            JSONObject businessUserCar = businessUserPo.getJSONObject(bUserIndex);
+            doAddUser(business, businessUserCar);
+
         }
     }
 

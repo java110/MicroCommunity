@@ -57,23 +57,28 @@ public class AddLocationToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray  businessCommunityLocations = new JSONArray();
         if (data.containsKey(CommunityLocationPo.class.getSimpleName())) {
             Object bObj = data.get(CommunityLocationPo.class.getSimpleName());
-            JSONArray businessCommunityLocations = null;
+
             if (bObj instanceof JSONObject) {
-                businessCommunityLocations = new JSONArray();
                 businessCommunityLocations.add(bObj);
             } else if (bObj instanceof List) {
                 businessCommunityLocations = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessCommunityLocations = (JSONArray) bObj;
             }
-            //JSONObject businessCommunityLocation = data.getJSONObject("businessCommunityLocation");
-            for (int bCommunityLocationIndex = 0; bCommunityLocationIndex < businessCommunityLocations.size(); bCommunityLocationIndex++) {
-                JSONObject businessCommunityLocation = businessCommunityLocations.getJSONObject(bCommunityLocationIndex);
-                doAddCommunityLocation(business, businessCommunityLocation);
-
+        }else {
+            if (data instanceof JSONObject) {
+                businessCommunityLocations.add(data);
             }
+        }
+
+        //JSONObject businessCommunityLocation = data.getJSONObject("businessCommunityLocation");
+        for (int bCommunityLocationIndex = 0; bCommunityLocationIndex < businessCommunityLocations.size(); bCommunityLocationIndex++) {
+            JSONObject businessCommunityLocation = businessCommunityLocations.getJSONObject(bCommunityLocationIndex);
+            doAddCommunityLocation(business, businessCommunityLocation);
+
         }
     }
 

@@ -102,26 +102,30 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessVisits = new JSONArray();
         if (data.containsKey(VisitPo.class.getSimpleName())) {
             Object bObj = data.get(VisitPo.class.getSimpleName());
-            JSONArray businessVisits = null;
             if (bObj instanceof JSONObject) {
-                businessVisits = new JSONArray();
                 businessVisits.add(bObj);
             } else if (bObj instanceof List) {
                 businessVisits = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessVisits = (JSONArray) bObj;
             }
-            for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
-                JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
-                if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")) {
-                    sendMessage(business, businessVisit);
-                }
-                if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")
-                        && !StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //审核通过时走适配器
-                    doAddVisit(business, businessVisit);
-                }
+        }else {
+            if (data instanceof JSONObject) {
+                businessVisits.add(data);
+            }
+        }
+
+        for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
+            JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
+            if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")) {
+                sendMessage(business, businessVisit);
+            }
+            if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")
+                    && !StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //审核通过时走适配器
+                doAddVisit(business, businessVisit);
             }
         }
     }

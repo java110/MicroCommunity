@@ -65,22 +65,25 @@ public class EditFloorToHcGovAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessOwnerCars = new JSONArray();
         if (data.containsKey(FloorPo.class.getSimpleName())) {
             Object bObj = data.get(FloorPo.class.getSimpleName());
-            JSONArray businessOwnerCars = null;
             if (bObj instanceof JSONObject) {
-                businessOwnerCars = new JSONArray();
                 businessOwnerCars.add(bObj);
             } else if (bObj instanceof List) {
                 businessOwnerCars = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessOwnerCars = (JSONArray) bObj;
             }
-            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-            for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
-                JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
-                doEditFloor(business, businessOwnerCar);
+        }else {
+            if (data instanceof JSONObject) {
+                businessOwnerCars.add(data);
             }
+        }
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerCarIndex = 0; bOwnerCarIndex < businessOwnerCars.size(); bOwnerCarIndex++) {
+            JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(bOwnerCarIndex);
+            doEditFloor(business, businessOwnerCar);
         }
     }
 
