@@ -51,6 +51,9 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
+
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
     // 微信服务商支付开关
@@ -379,8 +382,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     protected ResponseEntity<String> getStoreInfo(IPageData pd, RestTemplate restTemplate) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
 
-        ResultVo resultVo = null;
-
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getStoreInfo(pd, restTemplate, pd.getUserId());
+        logger.debug("查询商户信息 getStoreInfo ：{}",resultVo.toString());
         return new ResponseEntity<String>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 

@@ -9,6 +9,7 @@ import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.http.ResponseEntity;
  * 查询用户是否存在 商户信息
  */
 @Java110Cmd(serviceCode = "query.store.byuser")
-public class UserHasStoreCmd extends Cmd {
+public class QueryStoreByUserCmd extends Cmd {
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
 
@@ -44,7 +45,7 @@ public class UserHasStoreCmd extends Cmd {
 
         String storeInfo = responseEntity.getBody();
         if (Assert.isJsonObject(storeInfo) && JSONObject.parseObject(storeInfo).containsKey("storeId")) {
-            context.setResponseEntity(new ResponseEntity<>("有商户信息", HttpStatus.OK));
+            context.setResponseEntity(responseEntity);
             return;
         }
         context.setResponseEntity(new ResponseEntity<>("初始化商户", HttpStatus.FORBIDDEN));

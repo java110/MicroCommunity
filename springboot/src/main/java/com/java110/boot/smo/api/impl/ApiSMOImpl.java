@@ -8,6 +8,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.store.StoreDto;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -28,6 +29,9 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     private final static Logger logger = LoggerFactory.getLogger(ApiSMOImpl.class);
 

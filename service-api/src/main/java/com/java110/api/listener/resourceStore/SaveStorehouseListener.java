@@ -39,7 +39,7 @@ public class SaveStorehouseListener extends AbstractServiceApiPlusListener {
         storehouseDto.setStoreId(reqJson.getString("storeId"));
         int flag  =  storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 
-        if(flag < 1){
+        if(flag > 0){
             throw new IllegalArgumentException("已存在仓库");
         }
     }

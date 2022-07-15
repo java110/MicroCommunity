@@ -24,7 +24,8 @@ public class ServiceStartInit {
             ApplicationContextFactory.setApplicationContext(context);
             env = context.getEnvironment();
 
-            String logSwitch = env.getProperty(EnvironmentConstant.LOG_SWITCH);
+            //String logSwitch = env.getProperty(EnvironmentConstant.LOG_SWITCH);
+            String logSwitch = "ON";
             if (!StringUtil.isEmpty(logSwitch)) {
                 //设置日志级别
                 SystemLogDto.setLogSwatch(logSwitch);

@@ -34,7 +34,7 @@ public class QueryUserPrivilege extends Cmd {
         String storeId = context.getReqHeaders().get("store-id");
 
         Assert.hasLength(userId, "未包含用户");
-        Assert.hasLength(storeId, "未包含用户");
+        Assert.hasLength(storeId, "未包含商户");
     }
 
     @Override
