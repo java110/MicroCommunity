@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 /**
  * 查询用户是否存在 商户信息
  */
-@Java110Cmd(serviceCode = "store.userHasStore")
+@Java110Cmd(serviceCode = "query.store.byuser")
 public class UserHasStoreCmd extends Cmd {
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
