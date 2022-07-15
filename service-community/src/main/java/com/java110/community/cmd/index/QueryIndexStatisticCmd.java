@@ -8,8 +8,10 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Java110Cmd(serviceCode = "index.queryIndexStatistic")
 public class QueryIndexStatisticCmd extends Cmd {
 
@@ -27,7 +31,8 @@ public class QueryIndexStatisticCmd extends Cmd {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
-
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -39,6 +44,15 @@ public class QueryIndexStatisticCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        String storeId = context.getReqHeaders().get("store-id");
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(storeId);
+        storeDto.setPage(1);
+        storeDto.setRow(1);
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos, "商户不存在");
 // 查询业主 总数量
         ApiIndexStatisticVo apiIndexStatisticVo = new ApiIndexStatisticVo();
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
@@ -70,6 +84,7 @@ public class QueryIndexStatisticCmd extends Cmd {
         apiIndexStatisticVo.setFreeParkingSpaceCount(freeParkingSpaceCount + "");
         apiIndexStatisticVo.setShopCount(shopCount + "");
         apiIndexStatisticVo.setFreeShopCount(freeShopCount + "");
+        apiIndexStatisticVo.setStoreTypeCd(storeDtos.get(0).getStoreTypeCd());
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiIndexStatisticVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }

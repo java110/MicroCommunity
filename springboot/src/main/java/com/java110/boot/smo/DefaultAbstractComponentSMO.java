@@ -388,7 +388,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     }
 
     private ResponseEntity<String> getStoreEnterCommunitys(IPageData pd, String storeId, String storeTypeCd, RestTemplate restTemplate) {
-        ResultVo resultVo = null;
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getStoreEnterCommunitys(pd, storeId, storeTypeCd, restTemplate);
         return new ResponseEntity<String>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 

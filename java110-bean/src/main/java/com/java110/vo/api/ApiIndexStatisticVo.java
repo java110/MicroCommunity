@@ -19,6 +19,7 @@ public class ApiIndexStatisticVo extends Vo {
     private String loseMachineCount;
     private String machineRecordCount;
     private String failRecordCount;
+    private String storeTypeCd;
 
 
 
@@ -117,5 +118,13 @@ public class ApiIndexStatisticVo extends Vo {
 
     public void setFailRecordCount(String failRecordCount) {
         this.failRecordCount = failRecordCount;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
     }
 }
