@@ -15,6 +15,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -38,15 +39,16 @@ public class QueryStoreCommunitysCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
-        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
-        Assert.hasLength(storeId, "未包含商户");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
+        if(StringUtil.isEmpty(storeId)){
+            storeId = reqJson.getString("memberId");
+        }
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreId(storeId);
         storeDto.setPage(1);

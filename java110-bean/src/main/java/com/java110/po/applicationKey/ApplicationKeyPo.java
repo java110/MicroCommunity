@@ -26,6 +26,8 @@ public class ApplicationKeyPo implements Serializable {
     private String endTime;
     private String typeFlag;
     private String pwd;
+    private String statusCd;
+
 
 
     public String getApplicationKeyId() {
@@ -138,5 +140,13 @@ public class ApplicationKeyPo implements Serializable {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="applicationKeyV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存申请钥匙信息 add by wuxw 2018-07-03 -->
+    <insert id="saveApplicationKeyInfo" parameterType="Map">
+        insert into application_key(
+application_key_id,id_card,sex,type_flag,machine_id,type_cd,name,tel,start_time,state,end_time,community_id,pwd,age
+) values (
+#{applicationKeyId},#{idCard},#{sex},#{typeFlag},#{machineId},#{typeCd},#{name},#{tel},#{startTime},#{state},#{endTime},#{communityId},#{pwd},#{age}
+)
+    </insert>
+
+
+
+    <!-- 查询申请钥匙信息 add by wuxw 2018-07-03 -->
+    <select id="getApplicationKeyInfo" parameterType="Map" resultType="Map">
+        select  t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card idCard,t.sex,t.status_cd,t.status_cd statusCd,t.type_flag,t.type_flag typeFlag,t.machine_id,t.machine_id machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.pwd,t.age 
+from application_key t 
+where 1 =1 
+<if test="applicationKeyId !=null and applicationKeyId != ''">
+   and t.application_key_id= #{applicationKeyId}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="sex !=null and sex != ''">
+   and t.sex= #{sex}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="typeFlag !=null and typeFlag != ''">
+   and t.type_flag= #{typeFlag}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="pwd !=null and pwd != ''">
+   and t.pwd= #{pwd}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改申请钥匙信息 add by wuxw 2018-07-03 -->
+    <update id="updateApplicationKeyInfo" parameterType="Map">
+        update  application_key t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="idCard !=null and idCard != ''">
+, t.id_card= #{idCard}
+</if> 
+<if test="sex !=null and sex != ''">
+, t.sex= #{sex}
+</if> 
+<if test="typeFlag !=null and typeFlag != ''">
+, t.type_flag= #{typeFlag}
+</if> 
+<if test="machineId !=null and machineId != ''">
+, t.machine_id= #{machineId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+, t.tel= #{tel}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="pwd !=null and pwd != ''">
+, t.pwd= #{pwd}
+</if> 
+<if test="age !=null and age != ''">
+, t.age= #{age}
+</if> 
+ where 1=1 <if test="applicationKeyId !=null and applicationKeyId != ''">
+and t.application_key_id= #{applicationKeyId}
+</if> 
+
+    </update>
+
+    <!-- 查询申请钥匙数量 add by wuxw 2018-07-03 -->
+     <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from application_key t 
+where 1 =1 
+<if test="applicationKeyId !=null and applicationKeyId != ''">
+   and t.application_key_id= #{applicationKeyId}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="sex !=null and sex != ''">
+   and t.sex= #{sex}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="typeFlag !=null and typeFlag != ''">
+   and t.type_flag= #{typeFlag}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="pwd !=null and pwd != ''">
+   and t.pwd= #{pwd}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+
+
+     </select>
+
+</mapper>
