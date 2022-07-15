@@ -36,63 +36,136 @@
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
+            <artifactId>java110-service</artifactId>
+            <version>${hc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.java110</groupId>
             <artifactId>service-community</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-common</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-dev</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-fee</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-job</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-oa</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-acct</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-report</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-store</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-user</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>service-order</artifactId>
             <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+
+
     </dependencies>
 
 

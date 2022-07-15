@@ -1,20 +1,22 @@
-package com.java110.api.listener.applicationKey;
+package com.java110.common.cmd.applicationKey;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
 import com.java110.dto.machine.ApplicationKeyDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
+import com.java110.intf.common.IApplicationKeyV1InnerServiceSMO;
+import com.java110.po.applicationKey.ApplicationKeyPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,25 +25,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-/**
- * 生成访客密码
- */
-@Java110Listener("applyVisitorApplicationKey")
-public class ApplyVisitorApplicationKey extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "applicationKey.applyVisitorApplicationKey")
+public class ApplyVisitorApplicationKeyCmd extends Cmd {
 
-    @Autowired
-    private IApplicationKeyBMO applicationKeyBMOImpl;
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
 
+    @Autowired
+    private IApplicationKeyV1InnerServiceSMO applicationKeyV1InnerServiceSMOImpl;
+
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
         Assert.hasKeyAndValue(reqJson, "idCard", "必填，请填写身份证号");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ResponseEntity<String> responseEntity = null;
         ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
@@ -84,15 +85,9 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiPlusListener {
             reqJson.put("endTime", endTime);
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
             reqJson.put("pwd", pwd);
-            applicationKeyBMOImpl.addApplicationVisitKey(reqJson, context);
+            addApplicationVisitKey(reqJson);
         }
 
-        super.commit(context);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            context.setResponseEntity(responseEntity);
-            return;
-        }
 
         JSONObject resObj = new JSONObject();
         resObj.put("pwd", reqJson.getString("pwd"));
@@ -100,23 +95,27 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiPlusListener {
 
         responseEntity = new ResponseEntity<>(resObj.toJSONString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-
     }
 
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addApplicationVisitKey(JSONObject paramInJson) {
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeApplicationKeyConstant.APPLY_VISITOR_APPLICATION_KEY;
-    }
+        //查询 是否住户密码已经审核完
 
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(paramInJson, ApplicationKeyPo.class);
+        applicationKeyPo.setApplicationKeyId(paramInJson.getString("applicationKeyId"));
+        applicationKeyPo.setState("10001");
+        applicationKeyPo.setTypeFlag("1100103");
+        applicationKeyPo.setStartTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        int flag = applicationKeyV1InnerServiceSMOImpl.saveApplicationKey(applicationKeyPo);
+        if (flag < 1) {
+            throw new CmdException("申请钥匙失败");
+        }
     }
 
     /**
@@ -128,16 +127,9 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiPlusListener {
         Random random = new Random();
         String result = "";
         for (int i = 0; i < 6; i++) {
-            result += (random.nextInt(9) + 1);;
+            result += (random.nextInt(9) + 1);
+            ;
         }
         return result;
-    }
-
-    public IApplicationKeyInnerServiceSMO getApplicationKeyInnerServiceSMOImpl() {
-        return applicationKeyInnerServiceSMOImpl;
-    }
-
-    public void setApplicationKeyInnerServiceSMOImpl(IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl) {
-        this.applicationKeyInnerServiceSMOImpl = applicationKeyInnerServiceSMOImpl;
     }
 }
