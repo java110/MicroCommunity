@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineRecordV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存开门记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineRecordInfo" parameterType="Map">
+        insert into machine_record(
+file_time,similar,machine_code,open_type_cd,id_card,machine_record_id,machine_id,name,tel,community_id,record_type_cd,file_id
+) values (
+#{fileTime},#{similar},#{machineCode},#{openTypeCd},#{idCard},#{machineRecordId},#{machineId},#{name},#{tel},#{communityId},#{recordTypeCd},#{fileId}
+)
+    </insert>
+
+
+
+    <!-- 查询开门记录信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineRecordInfo" parameterType="Map" resultType="Map">
+        select  t.file_time,t.file_time fileTime,t.similar,t.machine_code,t.machine_code machineCode,t.open_type_cd,t.open_type_cd openTypeCd,t.id_card,t.id_card idCard,t.status_cd,t.status_cd statusCd,t.machine_record_id,t.machine_record_id machineRecordId,t.machine_id,t.machine_id machineId,t.name,t.tel,t.community_id,t.community_id communityId,t.record_type_cd,t.record_type_cd recordTypeCd,t.file_id,t.file_id fileId 
+from machine_record t 
+where 1 =1 
+<if test="fileTime !=null and fileTime != ''">
+   and t.file_time= #{fileTime}
+</if> 
+<if test="similar !=null and similar != ''">
+   and t.similar= #{similar}
+</if> 
+<if test="machineCode !=null and machineCode != ''">
+   and t.machine_code= #{machineCode}
+</if> 
+<if test="openTypeCd !=null and openTypeCd != ''">
+   and t.open_type_cd= #{openTypeCd}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="machineRecordId !=null and machineRecordId != ''">
+   and t.machine_record_id= #{machineRecordId}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="recordTypeCd !=null and recordTypeCd != ''">
+   and t.record_type_cd= #{recordTypeCd}
+</if> 
+<if test="fileId !=null and fileId != ''">
+   and t.file_id= #{fileId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改开门记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineRecordInfo" parameterType="Map">
+        update  machine_record t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="fileTime !=null and fileTime != ''">
+, t.file_time= #{fileTime}
+</if> 
+<if test="similar !=null and similar != ''">
+, t.similar= #{similar}
+</if> 
+<if test="machineCode !=null and machineCode != ''">
+, t.machine_code= #{machineCode}
+</if> 
+<if test="openTypeCd !=null and openTypeCd != ''">
+, t.open_type_cd= #{openTypeCd}
+</if> 
+<if test="idCard !=null and idCard != ''">
+, t.id_card= #{idCard}
+</if> 
+<if test="machineId !=null and machineId != ''">
+, t.machine_id= #{machineId}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+, t.tel= #{tel}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="recordTypeCd !=null and recordTypeCd != ''">
+, t.record_type_cd= #{recordTypeCd}
+</if> 
+<if test="fileId !=null and fileId != ''">
+, t.file_id= #{fileId}
+</if> 
+ where 1=1 <if test="machineRecordId !=null and machineRecordId != ''">
+and t.machine_record_id= #{machineRecordId}
+</if> 
+
+    </update>
+
+    <!-- 查询开门记录数量 add by wuxw 2018-07-03 -->
+     <select id="queryMachineRecordsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from machine_record t 
+where 1 =1 
+<if test="fileTime !=null and fileTime != ''">
+   and t.file_time= #{fileTime}
+</if> 
+<if test="similar !=null and similar != ''">
+   and t.similar= #{similar}
+</if> 
+<if test="machineCode !=null and machineCode != ''">
+   and t.machine_code= #{machineCode}
+</if> 
+<if test="openTypeCd !=null and openTypeCd != ''">
+   and t.open_type_cd= #{openTypeCd}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="machineRecordId !=null and machineRecordId != ''">
+   and t.machine_record_id= #{machineRecordId}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="recordTypeCd !=null and recordTypeCd != ''">
+   and t.record_type_cd= #{recordTypeCd}
+</if> 
+<if test="fileId !=null and fileId != ''">
+   and t.file_id= #{fileId}
+</if> 
+
+
+     </select>
+
+</mapper>

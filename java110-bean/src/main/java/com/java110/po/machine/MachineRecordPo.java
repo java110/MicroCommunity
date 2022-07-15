@@ -29,6 +29,7 @@ public class MachineRecordPo implements Serializable {
     private String noticeState;
     private String auditMessage;
     private String similar;
+    private String statusCd;
 
     public String getMachineRecordId() {
         return machineRecordId;
@@ -164,5 +165,13 @@ public class MachineRecordPo implements Serializable {
 
     public void setSimilar(String similar) {
         this.similar = similar;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

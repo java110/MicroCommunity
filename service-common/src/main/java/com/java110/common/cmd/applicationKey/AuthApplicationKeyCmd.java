@@ -1,51 +1,45 @@
-package com.java110.api.listener.applicationKey;
+package com.java110.common.cmd.applicationKey;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.IMachineRecordV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.po.machine.MachineRecordPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import com.sun.tools.javac.jvm.Gen;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 钥匙认证接口
- */
-@Java110Listener("authApplicationKeyListener")
-public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
-    private static Logger logger = LoggerFactory.getLogger(AuthApplicationKeyListener.class);
-
-    @Autowired
-    private IApplicationKeyBMO applicationKeyBMOImpl;
-
-    @Autowired
-    private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
+@Java110Cmd(serviceCode = "applicationKey.authApplicationKeys")
+public class AuthApplicationKeyCmd extends Cmd {
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -60,33 +54,12 @@ public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeApplicationKeyConstant.AUTH_APPLICATIONKEYS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
+    @Autowired
+    private IMachineRecordV1InnerServiceSMO machineRecordV1InnerServiceSMOImpl;
 
 
     @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IApplicationKeyInnerServiceSMO getApplicationKeyInnerServiceSMOImpl() {
-        return applicationKeyInnerServiceSMOImpl;
-    }
-
-    public void setApplicationKeyInnerServiceSMOImpl(IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl) {
-        this.applicationKeyInnerServiceSMOImpl = applicationKeyInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
         Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
@@ -94,9 +67,7 @@ public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //1.0 根据 小区ID和 设备编码查询设备ID
 
         MachineDto machineDto = new MachineDto();
@@ -127,15 +98,30 @@ public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
         }
         context.setResponseEntity(responseEntity);
 
-
-
-        applicationKeyBMOImpl.addMachineRecord(reqParam, context);
-
-
-        //context.setResponseEntity(responseEntity);
+        addMachineRecord(reqParam);
 
     }
 
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addMachineRecord(JSONObject paramInJson) {
+
+        //paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        paramInJson.put("name", "匿名");
+        paramInJson.put("tel", "");
+        paramInJson.put("idCard", "");
+        paramInJson.put("openTypeCd", "2000");
+        paramInJson.put("machineRecordId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(paramInJson, MachineRecordPo.class);
+        int flag = machineRecordV1InnerServiceSMOImpl.saveMachineRecord(machineRecordPo);
+        if (flag < 1) {
+            throw new CmdException("保存开门记录失败");
+        }
+    }
 
     private void refreshMachines(List<ApplicationKeyDto> applicationKeyDtos) {
 
@@ -163,7 +149,7 @@ public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
 
             if (!"2000".equals(applicationKeyDto.getLocationTypeCd())
                     && !"3000".equals(applicationKeyDto.getLocationTypeCd())
-            ) {
+                    ) {
                 communityIds.add(applicationKeyDto.getLocationObjId());
                 tmpApplicationKeyDtos.add(applicationKeyDto);
             }
@@ -261,30 +247,5 @@ public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
                 }
             }
         }
-    }
-
-
-    public IFloorInnerServiceSMO getFloorInnerServiceSMOImpl() {
-        return floorInnerServiceSMOImpl;
-    }
-
-    public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
-        this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
     }
 }

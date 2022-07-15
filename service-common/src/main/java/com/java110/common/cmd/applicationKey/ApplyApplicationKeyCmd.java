@@ -172,7 +172,7 @@ public class ApplyApplicationKeyCmd extends Cmd{
 
 
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
+        businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
         businessUnit.put("relTypeCd", "60000");
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", paramInJson.getString("applicationKeyId"));

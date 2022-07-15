@@ -1,38 +1,33 @@
-package com.java110.api.listener.applicationKey;
+package com.java110.common.cmd.applicationKey;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.applicationKey.ApiApplicationKeyDataVo;
 import com.java110.vo.api.applicationKey.ApiApplicationKeyVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listApplicationKeysListener")
-public class ListApplicationKeysListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "applicationKey.listApplicationKeys")
+public class ListApplicationKeysCmd extends Cmd{
 
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
@@ -49,41 +44,16 @@ public class ListApplicationKeysListener extends AbstractServiceApiListener {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeApplicationKeyConstant.LIST_APPLICATIONKEYS;
-    }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IApplicationKeyInnerServiceSMO getApplicationKeyInnerServiceSMOImpl() {
-        return applicationKeyInnerServiceSMOImpl;
-    }
-
-    public void setApplicationKeyInnerServiceSMOImpl(IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl) {
-        this.applicationKeyInnerServiceSMOImpl = applicationKeyInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
 
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ApplicationKeyDto applicationKeyDto = BeanConvertUtil.covertBean(reqJson, ApplicationKeyDto.class);
 
         int count = applicationKeyInnerServiceSMOImpl.queryApplicationKeysCount(applicationKeyDto);
@@ -138,7 +108,7 @@ public class ListApplicationKeysListener extends AbstractServiceApiListener {
 
             if (!"2000".equals(applicationKeyDto.getLocationTypeCd())
                     && !"3000".equals(applicationKeyDto.getLocationTypeCd())
-            ) {
+                    ) {
                 communityIds.add(applicationKeyDto.getLocationObjId());
                 tmpApplicationKeyDtos.add(applicationKeyDto);
             }
@@ -236,30 +206,5 @@ public class ListApplicationKeysListener extends AbstractServiceApiListener {
                 }
             }
         }
-    }
-
-
-    public IFloorInnerServiceSMO getFloorInnerServiceSMOImpl() {
-        return floorInnerServiceSMOImpl;
-    }
-
-    public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
-        this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
-    }
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
     }
 }
