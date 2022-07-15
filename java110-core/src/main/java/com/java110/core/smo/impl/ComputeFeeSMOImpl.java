@@ -1518,7 +1518,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //判断当前费用是不是导入费用
             oweMonth = 1.0;
         }else if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())){
-            maxEndTime = feeDto.getDeadlineTime();
+            if(feeDto.getDeadlineTime() != null) {
+                maxEndTime = feeDto.getDeadlineTime();
+            }
             Date billEndTime = DateUtil.getCurrentDate();
             //建账时间
             Date startDate = feeDto.getStartTime();
