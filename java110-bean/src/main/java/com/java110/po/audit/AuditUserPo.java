@@ -18,6 +18,7 @@ public class AuditUserPo implements Serializable {
     private String userName;
     private String auditLink;
     private String objCode;
+    private String statusCd;
 
     public String getAuditUserId() {
         return auditUserId;
@@ -65,5 +66,13 @@ public class AuditUserPo implements Serializable {
 
     public void setObjCode(String objCode) {
         this.objCode = objCode;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auditUserV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存审核用户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAuditUserInfo" parameterType="Map">
+        insert into audit_user(
+obj_code,audit_user_id,store_id,user_name,user_id,audit_link
+) values (
+#{objCode},#{auditUserId},#{storeId},#{userName},#{userId},#{auditLink}
+)
+    </insert>
+
+
+
+    <!-- 查询审核用户信息 add by wuxw 2018-07-03 -->
+    <select id="getAuditUserInfo" parameterType="Map" resultType="Map">
+        select  t.obj_code,t.obj_code objCode,t.audit_user_id,t.audit_user_id auditUserId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.audit_link,t.audit_link auditLink 
+from audit_user t 
+where 1 =1 
+<if test="objCode !=null and objCode != ''">
+   and t.obj_code= #{objCode}
+</if> 
+<if test="auditUserId !=null and auditUserId != ''">
+   and t.audit_user_id= #{auditUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="auditLink !=null and auditLink != ''">
+   and t.audit_link= #{auditLink}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改审核用户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAuditUserInfo" parameterType="Map">
+        update  audit_user t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="objCode !=null and objCode != ''">
+, t.obj_code= #{objCode}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+, t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="auditLink !=null and auditLink != ''">
+, t.audit_link= #{auditLink}
+</if> 
+ where 1=1 <if test="auditUserId !=null and auditUserId != ''">
+and t.audit_user_id= #{auditUserId}
+</if> 
+
+    </update>
+
+    <!-- 查询审核用户数量 add by wuxw 2018-07-03 -->
+     <select id="queryAuditUsersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from audit_user t 
+where 1 =1 
+<if test="objCode !=null and objCode != ''">
+   and t.obj_code= #{objCode}
+</if> 
+<if test="auditUserId !=null and auditUserId != ''">
+   and t.audit_user_id= #{auditUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="auditLink !=null and auditLink != ''">
+   and t.audit_link= #{auditLink}
+</if> 
+
+
+     </select>
+
+</mapper>
