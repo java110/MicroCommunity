@@ -19,6 +19,7 @@ public class CarBlackWhitePo implements Serializable {
     private String startTime;
     private String endTime;
     private String paId;
+    private String statusCd="0";
 
 
     public String getBwId() {
@@ -75,5 +76,13 @@ public class CarBlackWhitePo implements Serializable {
 
     public void setPaId(String paId) {
         this.paId = paId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

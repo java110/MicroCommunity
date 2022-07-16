@@ -15,7 +15,7 @@ public class ServiceCodeCarInoutConstant {
     /**
      * 修改 车辆进场
      */
-    public static final String UPDATE_CARINOUT = "carInout.updateCarInout";
+    public static final String UPDATE_CARINOUT = "ccccccc";
 //    /**
 //     * 删除 车辆进场
 //     */
