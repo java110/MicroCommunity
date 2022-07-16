@@ -9,6 +9,7 @@ public class CommunityLocationPo implements Serializable {
 private String locationId;
 private String locationType;
 private String communityId;
+private String statusCd="0";
 public String getLocationName() {
         return locationName;
     }
@@ -34,6 +35,11 @@ public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
-
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }

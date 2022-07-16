@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityLocationV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存小区位置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityLocationInfo" parameterType="Map">
+        insert into community_location(
+location_name,location_id,location_type,community_id
+) values (
+#{locationName},#{locationId},#{locationType},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询小区位置信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityLocationInfo" parameterType="Map" resultType="Map">
+        select  t.location_name,t.location_name locationName,t.location_id,t.location_id locationId,t.location_type,t.location_type locationType,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId 
+from community_location t 
+where 1 =1 
+<if test="locationName !=null and locationName != ''">
+   and t.location_name= #{locationName}
+</if> 
+<if test="locationId !=null and locationId != ''">
+   and t.location_id= #{locationId}
+</if> 
+<if test="locationType !=null and locationType != ''">
+   and t.location_type= #{locationType}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区位置信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityLocationInfo" parameterType="Map">
+        update  community_location t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="locationName !=null and locationName != ''">
+, t.location_name= #{locationName}
+</if> 
+<if test="locationType !=null and locationType != ''">
+, t.location_type= #{locationType}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="locationId !=null and locationId != ''">
+and t.location_id= #{locationId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区位置数量 add by wuxw 2018-07-03 -->
+     <select id="queryCommunityLocationsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from community_location t 
+where 1 =1 
+<if test="locationName !=null and locationName != ''">
+   and t.location_name= #{locationName}
+</if> 
+<if test="locationId !=null and locationId != ''">
+   and t.location_id= #{locationId}
+</if> 
+<if test="locationType !=null and locationType != ''">
+   and t.location_type= #{locationType}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>
