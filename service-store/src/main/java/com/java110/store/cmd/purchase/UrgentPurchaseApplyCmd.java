@@ -11,7 +11,9 @@ import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -57,6 +59,9 @@ public class UrgentPurchaseApplyCmd extends Cmd {
     @Autowired
     private IPurchaseApplyBMO purchaseApplyBMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
@@ -68,6 +73,16 @@ public class UrgentPurchaseApplyCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
         String userName = context.getReqHeaders().get("user-name");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setRow(1);
+        userDto.setPage(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"用户不存在");
+
+        userName = userDtos.get(0).getName();
+
         String storeId = context.getReqHeaders().get("store-id");
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setResOrderType(reqJson.getString("resOrderType"));
