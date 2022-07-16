@@ -17,6 +17,7 @@ public class AttendanceClassesPo implements Serializable {
     private String clockTypeValue;
     private String classesObjName;
 
+    private String statusCd;
 
     public String getTimeOffset() {
         return timeOffset;
@@ -112,5 +113,13 @@ public class AttendanceClassesPo implements Serializable {
 
     public void setClassesObjName(String classesObjName) {
         this.classesObjName = classesObjName;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
