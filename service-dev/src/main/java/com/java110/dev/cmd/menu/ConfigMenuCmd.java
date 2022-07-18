@@ -1,46 +1,38 @@
-package com.java110.api.listener.configMenu;
+package com.java110.dev.cmd.menu;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
-import com.java110.entity.center.AppService;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeConfigMenuConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("bindingConfigMenuListener")
-public class BindingConfigMenuListener extends AbstractServiceApiListener {
-
+@Java110Cmd(serviceCode = "menu.configMenu")
+public class ConfigMenuCmd extends Cmd {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         JSONArray infos = reqJson.getJSONArray("data");
 
         Assert.hasKeyByFlowData(infos, "addMenuView", "name", "必填，请填写菜单名称");
@@ -54,15 +46,8 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        String userId = context.getReqHeaders().get("user-id");
         JSONArray infos = reqJson.getJSONArray("data");
 
 
@@ -76,17 +61,17 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         }
 
         if (!hasKey(viewMenuGroupInfo, "gId")) {
-            saveMenuGroup(viewMenuGroupInfo, context);
+            saveMenuGroup(viewMenuGroupInfo, userId);
         }
 
         if (!hasKey(addPrivilegeView, "pId")) {
-            saveMenuPrivilege(addPrivilegeView, context);
+            saveMenuPrivilege(addPrivilegeView, userId);
         }
         if (!hasKey(addMenuView, "mId")) {
             addMenuView.put("mId", addPrivilegeView.getString("mId"));
             addMenuView.put("gId", viewMenuGroupInfo.getString("gId"));
             addMenuView.put("pId", addPrivilegeView.getString("pId"));
-            saveMenu(addMenuView, context);
+            saveMenu(addMenuView, userId);
         }
 
         JSONObject outParam = new JSONObject();
@@ -101,48 +86,32 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
 
     }
 
-    private void saveMenuGroup(Map info, DataFlowContext context) {
+    private void saveMenuGroup(Map info, String userId) {
         info.put("gId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU_GROUP));
-        info.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        info.put("userId", userId);
         MenuGroupDto menuGroupDto = BeanConvertUtil.covertBean(info, MenuGroupDto.class);
         if (menuInnerServiceSMOImpl.saveMenuGroup(menuGroupDto) < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "参数异常，保存菜单组失败");
         }
     }
 
-    private void saveMenu(Map info, DataFlowContext context) {
+    private void saveMenu(Map info, String userId) {
         //info.put("mId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU));
-        info.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        info.put("userId", userId);
         MenuDto menuDto = BeanConvertUtil.covertBean(info, MenuDto.class);
         if (menuInnerServiceSMOImpl.saveMenu(menuDto) < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "参数异常，保存菜单失败");
         }
     }
 
-    private void saveMenuPrivilege(Map info, DataFlowContext context) {
+    private void saveMenuPrivilege(Map info, String userId) {
         info.put("pId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.BASE_PRIVILEGE));
-        info.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        info.put("userId", userId);
         BasePrivilegeDto basePrivilegeDto = BeanConvertUtil.covertBean(info, BasePrivilegeDto.class);
         if (menuInnerServiceSMOImpl.saveBasePrivilege(basePrivilegeDto) < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "参数异常，保存菜单权限失败");
         }
     }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConfigMenuConstant.BINDING_CONFIGMENU;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
 
     private boolean hasKey(JSONObject info, String key) {
         if (!info.containsKey(key)
@@ -170,14 +139,5 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         }
 
         throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
-    }
-
-
-    public IMenuInnerServiceSMO getMenuInnerServiceSMOImpl() {
-        return menuInnerServiceSMOImpl;
-    }
-
-    public void setMenuInnerServiceSMOImpl(IMenuInnerServiceSMO menuInnerServiceSMOImpl) {
-        this.menuInnerServiceSMOImpl = menuInnerServiceSMOImpl;
     }
 }
