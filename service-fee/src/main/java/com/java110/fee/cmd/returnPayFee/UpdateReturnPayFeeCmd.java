@@ -27,9 +27,9 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "returnPayFee.updateReturnPayFee")
 public class UpdateReturnPayFeeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateReturnPayFeeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateReturnPayFeeCmd.class);
 
 
     @Autowired
@@ -54,7 +54,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "returnFeeId", "returnFeeId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -62,7 +62,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(reqJson, ReturnPayFeePo.class);
+        ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(reqJson, ReturnPayFeePo.class);
         int flag = returnPayFeeV1InnerServiceSMOImpl.updateReturnPayFee(returnPayFeePo);
 
         if (flag < 1) {

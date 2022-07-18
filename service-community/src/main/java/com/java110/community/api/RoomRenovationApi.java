@@ -11,6 +11,7 @@ import com.java110.community.bmo.roomRenovationDetail.ISaveRoomRenovationDetailB
 import com.java110.community.bmo.roomRenovationRecord.IDeleteRoomRenovationRecordBMO;
 import com.java110.community.bmo.roomRenovationRecord.IGetRoomRenovationRecordBMO;
 import com.java110.community.bmo.roomRenovationRecord.ISaveRoomRenovationRecordBMO;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.communitySetting.CommunitySettingDto;
@@ -44,12 +45,7 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -575,6 +571,7 @@ public class RoomRenovationApi {
      * @path /app/roomRenovation/saveRoomRenovationDetail
      */
     @RequestMapping(value = "/saveRoomRenovationDetail", method = RequestMethod.POST)
+    @Java110Transactional
     public ResponseEntity<String> saveRoomRenovationDetail(@RequestHeader(value = "user-id") String userId,
                                                            @RequestHeader(value = "user-name") String userName,
                                                            @RequestBody JSONObject reqJson) {
@@ -582,9 +579,18 @@ public class RoomRenovationApi {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "detailType", "请求报文中未包含detailType");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
         RoomRenovationDetailPo roomRenovationDetailPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationDetailPo.class);
         roomRenovationDetailPo.setStaffId(userId);
-        roomRenovationDetailPo.setStaffName(userName);
+        roomRenovationDetailPo.setStaffName(userDtos.get(0).getName());
         RoomRenovationPo roomRenovationPo = new RoomRenovationPo();
         roomRenovationPo.setrId(roomRenovationDetailPo.getrId());
         roomRenovationPo.setState(roomRenovationDetailPo.getState());
