@@ -17,8 +17,8 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.IAttendanceClassesAttrV1ServiceDao;
+import com.java110.dto.attendanceClasses.AttendanceClassesAttrDto;
 import com.java110.intf.common.IAttendanceClassesAttrV1InnerServiceSMO;
-import com.java110.dto.attendanceClassesAttr.AttendanceClassesAttrDto;
 import com.java110.po.attendanceClassesAttr.AttendanceClassesAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -47,26 +47,26 @@ public class AttendanceClassesAttrV1InnerServiceSMOImpl extends BaseServiceSMO i
 
 
     @Override
-    public int saveAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo) {
+    public int saveAttendanceClassesAttr(@RequestBody AttendanceClassesAttrPo attendanceClassesAttrPo) {
         int saveFlag = attendanceClassesAttrV1ServiceDaoImpl.saveAttendanceClassesAttrInfo(BeanConvertUtil.beanCovertMap(attendanceClassesAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo) {
+    @Override
+    public int updateAttendanceClassesAttr(@RequestBody AttendanceClassesAttrPo attendanceClassesAttrPo) {
         int saveFlag = attendanceClassesAttrV1ServiceDaoImpl.updateAttendanceClassesAttrInfo(BeanConvertUtil.beanCovertMap(attendanceClassesAttrPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo) {
-       attendanceClassesAttrPo.setStatusCd("1");
-       int saveFlag = attendanceClassesAttrV1ServiceDaoImpl.updateAttendanceClassesAttrInfo(BeanConvertUtil.beanCovertMap(attendanceClassesAttrPo));
-       return saveFlag;
+    @Override
+    public int deleteAttendanceClassesAttr(@RequestBody AttendanceClassesAttrPo attendanceClassesAttrPo) {
+        attendanceClassesAttrPo.setStatusCd("1");
+        int saveFlag = attendanceClassesAttrV1ServiceDaoImpl.updateAttendanceClassesAttrInfo(BeanConvertUtil.beanCovertMap(attendanceClassesAttrPo));
+        return saveFlag;
     }
 
     @Override
-    public List<AttendanceClassesAttrDto> queryAttendanceClassesAttrs(@RequestBody  AttendanceClassesAttrDto attendanceClassesAttrDto) {
+    public List<AttendanceClassesAttrDto> queryAttendanceClassesAttrs(@RequestBody AttendanceClassesAttrDto attendanceClassesAttrDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +84,7 @@ public class AttendanceClassesAttrV1InnerServiceSMOImpl extends BaseServiceSMO i
 
     @Override
     public int queryAttendanceClassesAttrsCount(@RequestBody AttendanceClassesAttrDto attendanceClassesAttrDto) {
-        return attendanceClassesAttrV1ServiceDaoImpl.queryAttendanceClassesAttrsCount(BeanConvertUtil.beanCovertMap(attendanceClassesAttrDto));    }
+        return attendanceClassesAttrV1ServiceDaoImpl.queryAttendanceClassesAttrsCount(BeanConvertUtil.beanCovertMap(attendanceClassesAttrDto));
+    }
 
 }

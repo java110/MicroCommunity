@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.intf.common;
+package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.attendanceClasses.AttendanceClassesAttrDto;
-import com.java110.po.attendanceClassesAttr.AttendanceClassesAttrPo;
+import com.java110.dto.complaint.ComplaintDto;
+import com.java110.po.complaint.ComplaintPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,42 +27,42 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2022-07-16 18:00:56 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-07-17 00:29:44 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/attendanceClassesAttrV1Api")
-public interface IAttendanceClassesAttrV1InnerServiceSMO {
+@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/complaintV1Api")
+public interface IComplaintV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/saveAttendanceClassesAttr", method = RequestMethod.POST)
-    public int saveAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo);
+    @RequestMapping(value = "/saveComplaint", method = RequestMethod.POST)
+    public int saveComplaint(@RequestBody ComplaintPo complaintPo);
 
-    @RequestMapping(value = "/updateAttendanceClassesAttr", method = RequestMethod.POST)
-    public int updateAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo);
+    @RequestMapping(value = "/updateComplaint", method = RequestMethod.POST)
+    public int updateComplaint(@RequestBody ComplaintPo complaintPo);
 
-    @RequestMapping(value = "/deleteAttendanceClassesAttr", method = RequestMethod.POST)
-    public int deleteAttendanceClassesAttr(@RequestBody  AttendanceClassesAttrPo attendanceClassesAttrPo);
+    @RequestMapping(value = "/deleteComplaint", method = RequestMethod.POST)
+    public int deleteComplaint(@RequestBody ComplaintPo complaintPo);
 
     /**
      * <p>查询小区楼信息</p>
      *
      *
-     * @param attendanceClassesAttrDto 数据对象分享
-     * @return AttendanceClassesAttrDto 对象数据
+     * @param complaintDto 数据对象分享
+     * @return ComplaintDto 对象数据
      */
-    @RequestMapping(value = "/queryAttendanceClassesAttrs", method = RequestMethod.POST)
-    List<AttendanceClassesAttrDto> queryAttendanceClassesAttrs(@RequestBody AttendanceClassesAttrDto attendanceClassesAttrDto);
+    @RequestMapping(value = "/queryComplaints", method = RequestMethod.POST)
+    List<ComplaintDto> queryComplaints(@RequestBody ComplaintDto complaintDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param attendanceClassesAttrDto 数据对象分享
+     * @param complaintDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryAttendanceClassesAttrsCount", method = RequestMethod.POST)
-    int queryAttendanceClassesAttrsCount(@RequestBody AttendanceClassesAttrDto attendanceClassesAttrDto);
+    @RequestMapping(value = "/queryComplaintsCount", method = RequestMethod.POST)
+    int queryComplaintsCount(@RequestBody ComplaintDto complaintDto);
 }

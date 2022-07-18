@@ -10,6 +10,7 @@ private String attrId;
 private String specCd;
 private String storeId;
 private String value;
+private String statusCd;
 public String getClassesId() {
         return classesId;
     }
@@ -41,6 +42,11 @@ public void setValue(String value) {
         this.value = value;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
-
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }

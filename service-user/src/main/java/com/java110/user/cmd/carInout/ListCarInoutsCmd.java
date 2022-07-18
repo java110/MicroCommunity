@@ -1,10 +1,11 @@
-package com.java110.api.listener.carInout;
+package com.java110.user.cmd.carInout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -12,16 +13,14 @@ import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ServiceCodeCarInoutConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.api.carInout.ApiCarInoutDataVo;
 import com.java110.vo.api.carInout.ApiCarInoutVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -30,14 +29,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Java110Cmd(serviceCode = "carInout.listCarInouts")
+public class ListCarInoutsCmd extends Cmd{
 
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listCarInoutsListener")
-public class ListCarInoutsListener extends AbstractServiceApiListener {
-    private static Logger logger = LoggerFactory.getLogger(ListCarInoutsListener.class);
-
+    private static Logger logger = LoggerFactory.getLogger(ListCarInoutsCmd.class);
 
     @Autowired
     private ICarInoutInnerServiceSMO carInoutInnerServiceSMOImpl;
@@ -49,39 +44,13 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeCarInoutConstant.LIST_CARINOUTS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public ICarInoutInnerServiceSMO getCarInoutInnerServiceSMOImpl() {
-        return carInoutInnerServiceSMOImpl;
-    }
-
-    public void setCarInoutInnerServiceSMOImpl(ICarInoutInnerServiceSMO carInoutInnerServiceSMOImpl) {
-        this.carInoutInnerServiceSMOImpl = carInoutInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         CarInoutDto carInoutDto = BeanConvertUtil.covertBean(reqJson, CarInoutDto.class);
 
         if (reqJson.containsKey("state") && reqJson.getString("state").contains(",")) {
