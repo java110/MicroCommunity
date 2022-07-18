@@ -169,17 +169,18 @@ public class PayFeeCmd extends Cmd {
         //一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
-        if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
+                || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             try {
                 maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
             } catch (ParseException e) {
             } catch (Exception e) {
                 logger.error("比较费用日期失败", e);
             }
-        }
-        Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
-        if (newDate.getTime() > maxEndTime.getTime()) {
-            throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+            Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
+            if (newDate.getTime() > maxEndTime.getTime()) {
+                throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+            }
         }
 
         String selectUserAccount = reqJson.getString("selectUserAccount");
