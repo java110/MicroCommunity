@@ -162,6 +162,9 @@ public class GetPayFeeAuditBMOImpl implements IGetPayFeeAuditBMO {
 
         for (PayFeeAuditDto payFeeAuditDto : payFeeAuditDtos) {
             for (OrderDto orderDto : orderDtos) {
+                if(StringUtil.isEmpty(payFeeAuditDto.getbId())){
+                    continue;
+                }
                 if (payFeeAuditDto.getbId().equals(orderDto.getbId())) {
                     payFeeAuditDto.setUserId(orderDto.getUserId());
                     payFeeAuditDto.setUserName(orderDto.getUserName());
