@@ -78,8 +78,13 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         Map<String, Object> variables = new HashMap<String, Object>();
         //variables.put("complaintDto", complaintDto);
         variables.put("startUserId", complaintDto.getCurrentUserId());
+        String key = getWorkflowDto(complaintDto.getCommunityId());
 
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(complaintDto.getCommunityId()), complaintDto.getComplaintId(), variables);
+        if(StringUtil.isEmpty(key)){
+            return null;
+        }
+
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -98,11 +103,13 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         workflowDto.setCommunityId(communityId);
         List<WorkflowDto> workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
 
-        Assert.listOnlyOne(workflowDtos, "未找到 投诉建议流程或找到多条，请在物业账号系统管理下流程管理中配置流程");
+        if(workflowDtos == null || workflowDtos.size() < 1){
+            return "";
+        }
 
         WorkflowDto tmpWorkflowDto = workflowDtos.get(0);
         if (StringUtil.isEmpty(tmpWorkflowDto.getProcessDefinitionKey())) {
-            throw new IllegalArgumentException("投诉建议流程还未部署");
+            return "";
         }
         return WorkflowDto.DEFAULT_PROCESS + tmpWorkflowDto.getFlowId();
     }
@@ -312,6 +319,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public boolean deleteTask(@RequestBody ComplaintDto complaintDto){
         String taskId = complaintDto.getTaskId();
+
         Task task = taskService.createTaskQuery().taskId(complaintDto.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         ProcessInstance pi = runtimeService.createProcessInstanceQuery()

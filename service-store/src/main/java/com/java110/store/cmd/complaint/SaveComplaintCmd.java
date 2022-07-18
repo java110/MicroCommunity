@@ -1,34 +1,29 @@
-package com.java110.api.listener.complaint;
+package com.java110.store.cmd.complaint;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.complaint.IComplaintBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.IComplaintV1InnerServiceSMO;
+import com.java110.po.complaint.ComplaintPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeComplaintConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("saveComplaintListener")
-public class SaveComplaintListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IComplaintBMO complaintBMOImpl;
+@Java110Cmd(serviceCode = "complaint.saveComplaint")
+public class SaveComplaintCmd extends Cmd{
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -36,10 +31,14 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
 
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
+
+    @Override
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择投诉类型");
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请选择房屋编号");
@@ -48,14 +47,20 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写投诉内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         reqJson.put("startUserId", reqJson.getString("userId"));
-        complaintBMOImpl.addComplaint(reqJson, context);
+        reqJson.put("complaintId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_complaintId));
+        reqJson.put("state", "10001");
+        ComplaintPo complaintPo = BeanConvertUtil.covertBean(reqJson, ComplaintPo.class);
+        int flag = complaintV1InnerServiceSMOImpl.saveComplaint(complaintPo);
+        if(flag < 1){
+            throw new CmdException("投诉失败");
+        }
 
         if (reqJson.containsKey("photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
@@ -80,37 +85,21 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
                 businessUnit.put("fileRealName", fileDto.getFileId());
                 businessUnit.put("fileSaveName", fileName);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+                fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }
 
         //commit(context);
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
         complaintDto.setCurrentUserId(reqJson.getString("userId"));
-        complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
+        complaintDto = complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
 
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeComplaintConstant.ADD_COMPLAINT;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IComplaintUserInnerServiceSMO getComplaintUserInnerServiceSMOImpl() {
-        return complaintUserInnerServiceSMOImpl;
-    }
-
-    public void setComplaintUserInnerServiceSMOImpl(IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl) {
-        this.complaintUserInnerServiceSMOImpl = complaintUserInnerServiceSMOImpl;
+        //没有配置流程，直接设置为完成
+        if(complaintDto == null){
+             complaintPo = new ComplaintPo();
+             complaintPo.setComplaintId(reqJson.getString("complaintId"));
+             complaintPo.setState(ComplaintDto.STATE_FINISH);
+            complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
+        }
     }
 }

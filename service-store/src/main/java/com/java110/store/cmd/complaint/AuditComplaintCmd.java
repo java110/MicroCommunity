@@ -1,32 +1,27 @@
-package com.java110.api.listener.complaint;
+package com.java110.store.cmd.complaint;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.complaint.IComplaintBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.common.IComplaintUserInnerServiceSMO;
-import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.complaint.ComplaintDto;
-import com.java110.utils.constant.ServiceCodeComplaintConstant;
+import com.java110.intf.common.IComplaintUserInnerServiceSMO;
+import com.java110.intf.community.IComplaintV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.po.complaint.ComplaintPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("auditComplaintListener")
-public class AuditComplaintListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IComplaintBMO complaintBMOImpl;
+@Java110Cmd(serviceCode = "complaint.auditComplaint")
+public class AuditComplaintCmd extends Cmd {
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
@@ -35,33 +30,11 @@ public class AuditComplaintListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeComplaintConstant.AUDIT_COMPLAINT;
-    }
+    @Autowired
+    private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IComplaintUserInnerServiceSMO getComplaintUserInnerServiceSMOImpl() {
-        return complaintUserInnerServiceSMOImpl;
-    }
-
-    public void setComplaintUserInnerServiceSMOImpl(IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl) {
-        this.complaintUserInnerServiceSMOImpl = complaintUserInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "complaintId", "投诉ID不能为空");
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
@@ -69,11 +42,10 @@ public class AuditComplaintListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
         Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
-        //super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setComplaintId(reqJson.getString("complaintId"));
@@ -93,17 +65,23 @@ public class AuditComplaintListener extends AbstractServiceApiPlusListener {
         boolean isLastTask = complaintUserInnerServiceSMOImpl.completeTask(complaintDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         if (isLastTask) {
-            complaintBMOImpl.updateComplaint(reqJson, context);
+            complaintDto = new ComplaintDto();
+            complaintDto.setStoreId(reqJson.getString("storeId"));
+            complaintDto.setCommunityId(reqJson.getString("communityId"));
+            complaintDto.setComplaintId(reqJson.getString("complaintId"));
+            complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+
+            Assert.listOnlyOne(complaintDtos, "存在多条记录，或不存在数据" + complaintDto.getComplaintId());
+
+            JSONObject businessComplaint = new JSONObject();
+            businessComplaint.putAll(BeanConvertUtil.beanCovertMap(complaintDtos.get(0)));
+            businessComplaint.put("state", "10002");
+            ComplaintPo complaintPo = BeanConvertUtil.covertBean(businessComplaint, ComplaintPo.class);
+            int flag = complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
+            if (flag < 1) {
+                throw new CmdException("投诉不存在");
+            }
         }
         context.setResponseEntity(responseEntity);
-
-    }
-
-    public IComplaintInnerServiceSMO getComplaintInnerServiceSMOImpl() {
-        return complaintInnerServiceSMOImpl;
-    }
-
-    public void setComplaintInnerServiceSMOImpl(IComplaintInnerServiceSMO complaintInnerServiceSMOImpl) {
-        this.complaintInnerServiceSMOImpl = complaintInnerServiceSMOImpl;
     }
 }
