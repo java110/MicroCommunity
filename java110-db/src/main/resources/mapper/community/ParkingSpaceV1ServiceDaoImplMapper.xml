@@ -5,129 +5,125 @@
 <mapper namespace="parkingSpaceV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存车位信息 add by wuxw 2018-07-03 -->
     <insert id="saveParkingSpaceInfo" parameterType="Map">
         insert into parking_space(
-area,parking_type,num,pa_id,ps_id,remark,state,community_id
-) values (
-#{area},#{parkingType},#{num},#{paId},#{psId},#{remark},#{state},#{communityId}
-)
+        area,parking_type,num,pa_id,ps_id,remark,state,community_id
+        ) values (
+        #{area},#{parkingType},#{num},#{paId},#{psId},#{remark},#{state},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询车位信息 add by wuxw 2018-07-03 -->
     <select id="getParkingSpaceInfo" parameterType="Map" resultType="Map">
-        select  t.area,t.parking_type,t.parking_type parkingType,t.num,t.pa_id,t.pa_id paId,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId 
-from parking_space t 
-where 1 =1 
-<if test="area !=null and area != ''">
-   and t.area= #{area}
-</if> 
-<if test="parkingType !=null and parkingType != ''">
-   and t.parking_type= #{parkingType}
-</if> 
-<if test="num !=null and num != ''">
-   and t.num= #{num}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="psId !=null and psId != ''">
-   and t.ps_id= #{psId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.area,t.parking_type,t.parking_type parkingType,t.num,t.pa_id,t.pa_id paId,t.ps_id,t.ps_id
+        psId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId
+        from parking_space t
+        where 1 =1
+        <if test="area !=null and area != ''">
+            and t.area= #{area}
+        </if>
+        <if test="parkingType !=null and parkingType != ''">
+            and t.parking_type= #{parkingType}
+        </if>
+        <if test="num !=null and num != ''">
+            and t.num= #{num}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改车位信息 add by wuxw 2018-07-03 -->
     <update id="updateParkingSpaceInfo" parameterType="Map">
-        update  parking_space t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="area !=null and area != ''">
-, t.area= #{area}
-</if> 
-<if test="parkingType !=null and parkingType != ''">
-, t.parking_type= #{parkingType}
-</if> 
-<if test="num !=null and num != ''">
-, t.num= #{num}
-</if> 
-<if test="paId !=null and paId != ''">
-, t.pa_id= #{paId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="psId !=null and psId != ''">
-and t.ps_id= #{psId}
-</if> 
+        update parking_space t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="area !=null and area != ''">
+            , t.area= #{area}
+        </if>
+        <if test="parkingType !=null and parkingType != ''">
+            , t.parking_type= #{parkingType}
+        </if>
+        <if test="num !=null and num != ''">
+            , t.num= #{num}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
 
     </update>
 
     <!-- 查询车位数量 add by wuxw 2018-07-03 -->
-     <select id="queryParkingSpacesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from parking_space t 
-where 1 =1 
-<if test="area !=null and area != ''">
-   and t.area= #{area}
-</if> 
-<if test="parkingType !=null and parkingType != ''">
-   and t.parking_type= #{parkingType}
-</if> 
-<if test="num !=null and num != ''">
-   and t.num= #{num}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="psId !=null and psId != ''">
-   and t.ps_id= #{psId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryParkingSpacesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_space t
+        where 1 =1
+        <if test="area !=null and area != ''">
+            and t.area= #{area}
+        </if>
+        <if test="parkingType !=null and parkingType != ''">
+            and t.parking_type= #{parkingType}
+        </if>
+        <if test="num !=null and num != ''">
+            and t.num= #{num}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="psId !=null and psId != ''">
+            and t.ps_id= #{psId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

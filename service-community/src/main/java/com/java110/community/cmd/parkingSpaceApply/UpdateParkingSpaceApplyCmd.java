@@ -22,27 +22,30 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.parking.ParkingSpacePo;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -74,6 +77,9 @@ public class UpdateParkingSpaceApplyCmd extends Cmd {
     @Autowired
     private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
@@ -85,6 +91,17 @@ public class UpdateParkingSpaceApplyCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+
+        //审核失败
+        if (ParkingSpaceApplyDto.STATE_FAIL.equals(parkingSpaceApplyPo.getState())) {
+            parkingSpaceApplyPo.setPsId("");
+            parkingSpaceApplyPo.setConfigId("");
+            int flag = parkingSpaceApplyV1InnerServiceSMOImpl.updateParkingSpaceApply(parkingSpaceApplyPo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
+            return;
+        }
 
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
@@ -134,10 +151,18 @@ public class UpdateParkingSpaceApplyCmd extends Cmd {
                 throw new CmdException("更新数据失败");
             }
             catId = ownerCarPo.getCarId();
-        }else {
+        } else {
             catId = ownerCarDtos.get(0).getCarId();
         }
 
+        // 将车位状态 修改为已出租状态
+        ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
+        parkingSpacePo.setPsId(parkingSpaceApply.getPsId());
+        parkingSpacePo.setState(ParkingSpaceDto.STATE_HIRE);
+        flag = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+        if (flag < 1) {
+            throw new CmdException("更新车位状态失败");
+        }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setConfigId(parkingSpaceApply.getConfigId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
