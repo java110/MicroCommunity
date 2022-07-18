@@ -20,20 +20,24 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.couponUser.CouponUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.couponUser.CouponUserDto;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -53,15 +57,60 @@ public class ListCouponUserCmd extends Cmd {
     @Autowired
     private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "tel", "未包含手机号");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CouponUserDto couponUserDto = BeanConvertUtil.covertBean(reqJson, CouponUserDto.class);
+
+        //是否包含小区ID
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(reqJson.getString("communityId"));
+        communityMemberDto.setMemberTypeCd(CommunityMemberDto.MEMBER_TYPE_PROPERTY);
+        communityMemberDto.setPage(1);
+        communityMemberDto.setRow(1);
+        List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
+
+        Assert.listOnlyOne(communityMemberDtos, "小区物业不存在");
+
+        //查询所有家庭成员
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setLink(reqJson.getString("tel"));
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setPage(1);
+        ownerDto.setRow(1);
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            return;
+        }
+
+        ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            return;
+        }
+        List<String> tels = new ArrayList<>();
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
+            tels.add(tmpOwnerDto.getLink());
+        }
+
+        couponUserDto.setTel("");
+        couponUserDto.setTels(tels.toArray(new String[tels.size()]));
 
         int count = couponUserV1InnerServiceSMOImpl.queryCouponUsersCount(couponUserDto);
 

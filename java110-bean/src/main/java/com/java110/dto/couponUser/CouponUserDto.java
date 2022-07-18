@@ -22,6 +22,7 @@ public class CouponUserDto extends PageDto implements Serializable {
     private String validityDay;
     private String poolId;
     private String tel;
+    private String[] tels;
     private String state;
     private String couponId;
     private String[] couponIds;
@@ -34,6 +35,7 @@ public class CouponUserDto extends PageDto implements Serializable {
     private String isExpire;
 
     private String statusCd = "0";
+    private String storeId;
 
 
     public String getCouponName() {
@@ -146,5 +148,21 @@ public class CouponUserDto extends PageDto implements Serializable {
 
     public void setIsExpire(String isExpire) {
         this.isExpire = isExpire;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String[] getTels() {
+        return tels;
+    }
+
+    public void setTels(String[] tels) {
+        this.tels = tels;
     }
 }

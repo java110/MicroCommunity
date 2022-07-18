@@ -8,9 +8,9 @@
     <!-- 保存用户优惠券信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponUserInfo" parameterType="Map">
         insert into coupon_user(
-        coupon_name,actual_price,validity_day,pool_id,tel,state,coupon_id,user_name,user_id
+        coupon_name,actual_price,validity_day,pool_id,tel,state,coupon_id,user_name,user_id,store_id
         ) values (
-        #{couponName},#{actualPrice},#{validityDay},#{poolId},#{tel},#{state},#{couponId},#{userName},#{userId}
+        #{couponName},#{actualPrice},#{validityDay},#{poolId},#{tel},#{state},#{couponId},#{userName},#{userId},#{storeId}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.coupon_name,t.coupon_name couponName,t.actual_price,t.actual_price
         actualPrice,t.validity_day,t.validity_day validityDay,t.pool_id,t.pool_id poolId,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,t.coupon_id,t.coupon_id couponId,t.user_name,t.user_name userName,t.user_id,t.user_id
-        userId,t.create_time createTime
+        userId,t.create_time createTime,t.store_id storeId
         from coupon_user t
         where 1 =1
         <if test="couponName !=null and couponName != ''">
@@ -38,6 +38,12 @@
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
+        <if test="tels !=null">
+            and t.tel in
+            <foreach collection="tels" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -53,11 +59,15 @@
                 #{item}
             </foreach>
         </if>
+
         <if test="userName !=null and userName != ''">
             and t.user_name= #{userName}
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -124,6 +134,12 @@
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
+        <if test="tels !=null">
+            and t.tel in
+            <foreach collection="tels" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -133,11 +149,20 @@
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
         </if>
+        <if test="couponIds !=null">
+            and t.coupon_id in
+            <foreach collection="couponIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="userName !=null and userName != ''">
             and t.user_name= #{userName}
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
 

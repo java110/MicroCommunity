@@ -16,7 +16,7 @@
 package com.java110.po.couponUser;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-11-24 00:19:34 mail: 928255095@qq.com
@@ -28,75 +28,103 @@ import java.util.Date;
 public class CouponUserPo implements Serializable {
 
     private String couponName;
-private String actualPrice;
-private String validityDay;
-private String poolId;
-private String tel;
-private String statusCd = "0";
-private String state;
-private String couponId;
-private String userName;
-private String userId;
-public String getCouponName() {
+    private String actualPrice;
+    private String validityDay;
+    private String poolId;
+    private String tel;
+    private String statusCd = "0";
+    private String state;
+    private String couponId;
+    private String userName;
+    private String userId;
+    private String storeId;
+
+    public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getActualPrice() {
+
+    public String getActualPrice() {
         return actualPrice;
     }
-public void setActualPrice(String actualPrice) {
+
+    public void setActualPrice(String actualPrice) {
         this.actualPrice = actualPrice;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getPoolId() {
+
+    public String getPoolId() {
         return poolId;
     }
-public void setPoolId(String poolId) {
+
+    public void setPoolId(String poolId) {
         this.poolId = poolId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
 
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
 }
