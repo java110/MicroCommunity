@@ -24,8 +24,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
 import com.java110.po.machine.MachineAttrPo;
 import com.java110.po.machine.MachinePo;
 import com.java110.utils.exception.CmdException;
@@ -34,6 +36,8 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -48,12 +52,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Java110Cmd(serviceCode = "machine.saveMachine")
 public class SaveMachineCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger( SaveMachineCmd.class );
+    private static Logger logger = LoggerFactory.getLogger(SaveMachineCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
     private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
+    @Autowired
+    private ICommunityLocationV1InnerServiceSMO communityLocationV1InnerServiceSMOImpl;
 
     @Autowired
     private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
@@ -67,7 +73,6 @@ public class SaveMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "direction", "必填，请选择设备方向");
         Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
-        Assert.hasKeyAndValue(reqJson, "locationObjId", "必填，请填写位置对象ID");
 
         //属性校验
         Assert.judgeAttrValue(reqJson);
@@ -78,17 +83,25 @@ public class SaveMachineCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        MachinePo machinePo = BeanConvertUtil.covertBean( reqJson, MachinePo.class );
-        machinePo.setMachineId( GenerateCodeFactory.getGeneratorId( CODE_PREFIX_ID ) );
-        int flag = machineV1InnerServiceSMOImpl.saveMachine( machinePo );
+        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+        communityLocationDto.setCommunityId(reqJson.getString("communityId"));
+        communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
+        List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+
+        Assert.listOnlyOne(locationDtos, "位置不存在");
+
+        MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
+        machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
+        machinePo.setMachineId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = machineV1InnerServiceSMOImpl.saveMachine(machinePo);
 
         if (flag < 1) {
-            throw new CmdException( "保存数据失败" );
+            throw new CmdException("保存数据失败");
         }
 
         dealMachineAttr(reqJson);
 
-        cmdDataFlowContext.setResponseEntity( ResultVo.success() );
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
     private void dealMachineAttr(JSONObject paramObj) {
@@ -108,10 +121,10 @@ public class SaveMachineCmd extends Cmd {
             attr = BeanConvertUtil.covertBean(attrs.getJSONObject(attrIndex), MachineAttrPo.class);
             attr.setCommunityId(paramObj.getString("communityId"));
             attr.setMachineId(paramObj.getString("machineId"));
-            attr.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID ));
+            attr.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             flag = machineAttrInnerServiceSMOImpl.saveMachineAttrs(attr);
             if (flag < 1) {
-                throw new CmdException( "保存数据失败" );
+                throw new CmdException("保存数据失败");
             }
         }
 

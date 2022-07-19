@@ -24,8 +24,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
 import com.java110.po.machine.MachineAttrPo;
 import com.java110.po.machine.MachinePo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -36,6 +38,8 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 /**
@@ -60,6 +64,9 @@ public class UpdateMachineCmd extends Cmd {
     @Autowired
     private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityLocationV1InnerServiceSMO communityLocationV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "设备ID不能为空");
@@ -79,10 +86,16 @@ public class UpdateMachineCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+        communityLocationDto.setCommunityId(reqJson.getString("communityId"));
+        communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
+        List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
 
+        Assert.listOnlyOne(locationDtos, "位置不存在");
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
-        int flag = machineV1InnerServiceSMOImpl.updateMachine(machinePo);
+        machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
 
+        int flag = machineV1InnerServiceSMOImpl.updateMachine(machinePo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
@@ -91,7 +104,6 @@ public class UpdateMachineCmd extends Cmd {
         if (attrs.size() < 1) {
             return;
         }
-
 
         MachineAttrPo attr = null;
         JSONObject aObj = null;
