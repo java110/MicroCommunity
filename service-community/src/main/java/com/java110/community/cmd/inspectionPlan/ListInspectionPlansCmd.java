@@ -1,23 +1,22 @@
-package com.java110.api.listener.inspectionPlan;
+package com.java110.community.cmd.inspectionPlan;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
-import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionPlan.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
-import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
+import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
+import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
+import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
-import com.java110.dto.inspectionPlan.InspectionPlanDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.inspectionPlan.ApiInspectionPlanDataVo;
 import com.java110.vo.api.inspectionPlan.ApiInspectionPlanVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,12 +24,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listInspectionPlansListener")
-public class ListInspectionPlansListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "inspectionPlan.listInspectionPlans")
+public class ListInspectionPlansCmd extends Cmd {
 
     @Autowired
     private IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl;
@@ -39,41 +34,14 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
     @Autowired
     private IInspectionRouteInnerServiceSMO inspectionRouteInnerServiceSMOImpl;
 
-
     @Override
-    public String getServiceCode() {
-        return ServiceCodeInspectionPlanConstant.LIST_INSPECTION_PLANS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IInspectionPlanInnerServiceSMO getInspectionPlanInnerServiceSMOImpl() {
-        return inspectionPlanInnerServiceSMOImpl;
-    }
-
-    public void setInspectionPlanInnerServiceSMOImpl(IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl) {
-        this.inspectionPlanInnerServiceSMOImpl = inspectionPlanInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         InspectionPlanDto inspectionPlanDto = BeanConvertUtil.covertBean(reqJson, InspectionPlanDto.class);
 
         int count = inspectionPlanInnerServiceSMOImpl.queryInspectionPlansCount(inspectionPlanDto);
@@ -147,6 +115,5 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionPlanVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }
