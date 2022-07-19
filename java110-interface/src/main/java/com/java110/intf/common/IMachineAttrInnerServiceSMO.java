@@ -50,4 +50,6 @@ public interface IMachineAttrInnerServiceSMO {
     @RequestMapping(value = "/saveMachineAttrs", method = RequestMethod.POST)
     int saveMachineAttrs(@RequestBody MachineAttrPo machineAttrPo);
 
+    @RequestMapping(value = "/updateMachineAttrs", method = RequestMethod.POST)
+    int updateMachineAttrs(@RequestBody MachineAttrPo attr);
 }

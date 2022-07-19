@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.machine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,15 +23,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
+import com.java110.po.machine.MachineAttrPo;
 import com.java110.po.machine.MachinePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -52,16 +55,22 @@ public class SaveMachineCmd extends Cmd {
     @Autowired
     private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineAttrInnerServiceSMO machineAttrInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue( reqJson, "machineCode", "请求报文中未包含machineCode" );
-        Assert.hasKeyAndValue( reqJson, "machineVersion", "请求报文中未包含machineVersion" );
-        Assert.hasKeyAndValue( reqJson, "machineTypeCd", "请求报文中未包含machineTypeCd" );
-        Assert.hasKeyAndValue( reqJson, "communityId", "请求报文中未包含communityId" );
-        Assert.hasKeyAndValue( reqJson, "machineName", "请求报文中未包含machineName" );
-        Assert.hasKeyAndValue( reqJson, "authCode", "请求报文中未包含authCode" );
-        Assert.hasKeyAndValue( reqJson, "direction", "请求报文中未包含direction" );
-        Assert.hasKeyAndValue( reqJson, "typeId", "请求报文中未包含typeId" );
+        Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
+        Assert.hasKeyAndValue(reqJson, "machineVersion", "必填，请填写设备版本号");
+        Assert.hasKeyAndValue(reqJson, "machineName", "必填，请填写设备名称");
+        Assert.hasKeyAndValue(reqJson, "machineTypeCd", "必填，请选择设备类型");
+        Assert.hasKeyAndValue(reqJson, "direction", "必填，请选择设备方向");
+        Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
+        Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
+        Assert.hasKeyAndValue(reqJson, "locationObjId", "必填，请填写位置对象ID");
+
+        //属性校验
+        Assert.judgeAttrValue(reqJson);
 
     }
 
@@ -77,6 +86,34 @@ public class SaveMachineCmd extends Cmd {
             throw new CmdException( "保存数据失败" );
         }
 
+        dealMachineAttr(reqJson);
+
         cmdDataFlowContext.setResponseEntity( ResultVo.success() );
+    }
+
+    private void dealMachineAttr(JSONObject paramObj) {
+
+        if (!paramObj.containsKey("attrs")) {
+            return;
+        }
+
+        JSONArray attrs = paramObj.getJSONArray("attrs");
+        if (attrs.size() < 1) {
+            return;
+        }
+
+        MachineAttrPo attr = null;
+        int flag = 0;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = BeanConvertUtil.covertBean(attrs.getJSONObject(attrIndex), MachineAttrPo.class);
+            attr.setCommunityId(paramObj.getString("communityId"));
+            attr.setMachineId(paramObj.getString("machineId"));
+            attr.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID ));
+            flag = machineAttrInnerServiceSMOImpl.saveMachineAttrs(attr);
+            if (flag < 1) {
+                throw new CmdException( "保存数据失败" );
+            }
+        }
+
     }
 }

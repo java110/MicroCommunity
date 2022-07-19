@@ -58,6 +58,11 @@ public class MachineAttrInnerServiceSMOImpl extends BaseServiceSMO implements IM
         return machineAttrServiceDaoImpl.saveMachineAttrs(BeanConvertUtil.beanCovertMap(machineAttrPo));
     }
 
+    @Override
+    public int updateMachineAttrs(@RequestBody MachineAttrPo machineAttrPo) {
+        return machineAttrServiceDaoImpl.updateMachineAttrs(BeanConvertUtil.beanCovertMap(machineAttrPo));
+    }
+
     public IMachineAttrServiceDao getMachineAttrServiceDaoImpl() {
         return machineAttrServiceDaoImpl;
     }

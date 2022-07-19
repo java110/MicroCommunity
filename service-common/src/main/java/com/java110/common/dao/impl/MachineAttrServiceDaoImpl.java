@@ -136,5 +136,12 @@ public class MachineAttrServiceDaoImpl extends BaseServiceDao implements IMachin
         return saveFlag;
     }
 
+    @Override
+    public int updateMachineAttrs(Map info) {
+        int saveFlag = sqlSessionTemplate.update("machineAttrServiceDaoImpl.updateMachineAttrInfoInstance", info);
+        return saveFlag;
+    }
+
+
 
 }

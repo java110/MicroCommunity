@@ -73,5 +73,7 @@ public interface IMachineAttrServiceDao {
      */
     int queryMachineAttrsCount(Map info);
 
-    int saveMachineAttrs(Map beanCovertMap);
+    int saveMachineAttrs(Map info);
+
+    int updateMachineAttrs(Map info);
 }

@@ -99,18 +99,20 @@ public class AccountApi {
             String payerObjType = feeDtos.get(0).getPayerObjType();
             //获取付费对象id
             String payerObjId = feeDtos.get(0).getPayerObjId();
-            if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("3333")) { //房屋
+            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(payerObjType)) { //房屋
                 OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                 ownerRoomRelDto.setRoomId(payerObjId);
                 List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
                 Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
                 ownerId = ownerRoomRelDtos.get(0).getOwnerId();
-            } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
                 OwnerCarDto ownerCarDto = new OwnerCarDto();
                 ownerCarDto.setCarId(payerObjId);
                 List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 //                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
                 ownerId = ownerCarDtos.get(0).getOwnerId();
+            } else {
+                ownerId = "-1";
             }
             accountDto.setObjId(ownerId);
         } else {
