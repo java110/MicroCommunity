@@ -20,6 +20,8 @@ public class CommunityLocationDto extends PageDto implements Serializable {
     private String locationType;
     private String communityId;
     private String locationTypeName;
+    private String locationObjId;
+    private String locationObjName;
 
 
     private Date createTime;
@@ -82,5 +84,21 @@ public class CommunityLocationDto extends PageDto implements Serializable {
 
     public void setLocationTypeName(String locationTypeName) {
         this.locationTypeName = locationTypeName;
+    }
+
+    public String getLocationObjId() {
+        return locationObjId;
+    }
+
+    public void setLocationObjId(String locationObjId) {
+        this.locationObjId = locationObjId;
+    }
+
+    public String getLocationObjName() {
+        return locationObjName;
+    }
+
+    public void setLocationObjName(String locationObjName) {
+        this.locationObjName = locationObjName;
     }
 }
