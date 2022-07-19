@@ -73,7 +73,8 @@
     <select id="getCommunityLocationInfo" parameterType="Map" resultType="Map">
         select t.location_name,t.location_name locationName,t.location_id,t.location_id
         locationId,t.location_type,t.location_type locationType,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
-        bId,t.community_id,t.community_id communityId,d.name locationTypeName
+        bId,t.community_id,t.community_id communityId,d.name locationTypeName,
+        t.location_obj_id locationObjId,t.location_obj_name locationObjName
         from community_location t
         left join t_dict d on t.location_type = d.status_cd and d.table_name = 'community_location' and d.table_columns = 'location_type'
         where 1 =1
@@ -85,6 +86,12 @@
         </if>
         <if test="locationType !=null and locationType != ''">
             and t.location_type= #{locationType}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="locationObjName !=null and locationObjName != ''">
+            and t.location_obj_name= #{locationObjName}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
