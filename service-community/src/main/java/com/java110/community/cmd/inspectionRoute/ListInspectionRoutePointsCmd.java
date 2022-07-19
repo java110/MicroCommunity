@@ -1,37 +1,32 @@
-package com.java110.api.listener.inspectionRoute;
+package com.java110.community.cmd.inspectionRoute;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeInspectionRouteConstant;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.inspectionPoint.ApiInspectionPointDataVo;
 import com.java110.vo.api.inspectionPoint.ApiInspectionPointVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listInspectionRoutePointsListener")
-public class ListInspectionRoutePointsListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "inspectionRoute.listInspectionRoutePoints")
+public class ListInspectionRoutePointsCmd extends Cmd {
 
     @Autowired
     private IInspectionRoutePointRelInnerServiceSMO inspectionRoutePointRelInnerServiceSMOImpl;
@@ -46,40 +41,13 @@ public class ListInspectionRoutePointsListener extends AbstractServiceApiListene
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeInspectionRouteConstant.LIST_INSPECTIONROUTE_POINTS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IInspectionRoutePointRelInnerServiceSMO getInspectionRoutePointRelInnerServiceSMOImpl() {
-        return inspectionRoutePointRelInnerServiceSMOImpl;
-    }
-
-    public void setInspectionRoutePointRelInnerServiceSMOImpl(IInspectionRoutePointRelInnerServiceSMO inspectionRoutePointRelInnerServiceSMOImpl) {
-        this.inspectionRoutePointRelInnerServiceSMOImpl = inspectionRoutePointRelInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         InspectionRoutePointRelDto inspectionRoutePointRelDto = BeanConvertUtil.covertBean(reqJson, InspectionRoutePointRelDto.class);
 
         int count = inspectionRoutePointRelInnerServiceSMOImpl.queryInspectionRoutePointRelsCount(inspectionRoutePointRelDto);
