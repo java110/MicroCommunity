@@ -21,10 +21,15 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.inspectionPlan.InspectionTaskDto;
+import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.inspectionTask.ApiInspectionTaskDataVo;
+import com.java110.vo.api.inspectionTask.ApiInspectionTaskVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +50,17 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "inspectionTask.listInspectionTask")
+@Java110Cmd(serviceCode = "inspectionTask.listInspectionTasks")
 public class ListInspectionTaskCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListInspectionTaskCmd.class);
     @Autowired
-    private IInspectionTaskV1InnerServiceSMO inspectionTaskV1InnerServiceSMOImpl;
+    private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
@@ -62,20 +68,33 @@ public class ListInspectionTaskCmd extends Cmd {
 
         InspectionTaskDto inspectionTaskDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDto.class);
 
-        int count = inspectionTaskV1InnerServiceSMOImpl.queryInspectionTasksCount(inspectionTaskDto);
-
-        List<InspectionTaskDto> inspectionTaskDtos = null;
-
-        if (count > 0) {
-            inspectionTaskDtos = inspectionTaskV1InnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
-        } else {
-            inspectionTaskDtos = new ArrayList<>();
+        if (reqJson.containsKey("moreState") && reqJson.getString("moreState").contains(",")) {
+            inspectionTaskDto.setStates(reqJson.getString("moreState").split(","));
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionTaskDtos);
+        //查询当天巡检任务标识
+        if (!StringUtil.isEmpty(reqJson.getString("isToday"))) {
+            inspectionTaskDto.setDayTask(reqJson.getString("isToday"));
+        }
+        int count = inspectionTaskInnerServiceSMOImpl.queryInspectionTasksCount(inspectionTaskDto);
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        List<ApiInspectionTaskDataVo> inspectionTasks = null;
+
+        if (count > 0) {
+            inspectionTasks = BeanConvertUtil.covertBeanList(inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto), ApiInspectionTaskDataVo.class);
+        } else {
+            inspectionTasks = new ArrayList<>();
+        }
+
+        ApiInspectionTaskVo apiInspectionTaskVo = new ApiInspectionTaskVo();
+
+        apiInspectionTaskVo.setTotal(count);
+        apiInspectionTaskVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiInspectionTaskVo.setInspectionTasks(inspectionTasks);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionTaskVo), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+
     }
 }
