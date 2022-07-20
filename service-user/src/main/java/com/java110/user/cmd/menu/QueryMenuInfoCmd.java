@@ -79,6 +79,84 @@ public class QueryMenuInfoCmd extends Cmd {
         }
         JSONObject resultObj = JSONObject.parseObject(privilegeGroup.getBody().toString());
 
-        context.setResponseEntity(new ResponseEntity<String>(resultObj.toJSONString(), HttpStatus.OK));
+
+
+        if (!resultObj.containsKey("menus")) {
+            return;
+        }
+
+        context.setResponseEntity(refreshMenusInfo(resultObj.getJSONArray("menus")));
+
+    }
+
+    /**
+     * 刷新菜单信息
+     * 将 数据 [{
+     * "gId": "800201904001",
+     * "menuDescription": "添加员工",
+     * "menuGroupSeq": 1,
+     * "menuSeq": 1,
+     * "icon": "fa-desktop",
+     * "mId": "700201904001",
+     * "menuName": "添加员工",
+     * "pId": "500201904001",
+     * "menuGroupName": "员工管理",
+     * "label": "",
+     * "menuGroupDescription": "员工管理",
+     * "url": "/"
+     * }],
+     * 转为：
+     * "[{'id':1,'icon':'fa-desktop','name':'我的菜单','label':'HOT','childs':[" +
+     * "{'name':'子菜单','href':'http://www.baidu.com'}]}," +
+     * "{'id':2,'icon':'fa-flask','name':'我的菜单','childs':[],'href':'/doc'}," +
+     * "{'id':3,'icon':'fa-globe','name':'我的菜单','childs':[{'name':'子菜单','href':'http://www.baidu.com'}]}" +
+     * "]";
+     *
+     * @param menusList 菜单列表
+     * @return
+     */
+    private ResponseEntity<String> refreshMenusInfo(JSONArray menusList) {
+        JSONArray tempMenus = new JSONArray();
+        JSONObject tempMenu = null;
+        for (int menuIndex = 0; menuIndex < menusList.size(); menuIndex++) {
+            JSONObject tMenu = menusList.getJSONObject(menuIndex);
+            tempMenu = this.getMenuFromMenus(tempMenus, tMenu.getString("gId"));
+            if (tempMenu == null) {
+                tempMenu = new JSONObject();
+                tempMenu.put("id", tMenu.getString("gId"));
+                tempMenu.put("icon", tMenu.getString("icon"));
+                tempMenu.put("name", tMenu.getString("menuGroupName"));
+                tempMenu.put("label", tMenu.getString("label"));
+                tempMenu.put("seq", tMenu.getString("menuGroupSeq"));
+                tempMenu.put("childs", new JSONArray());
+                tempMenus.add(tempMenu);
+            }
+            //获取孩子菜单
+            JSONArray childs = tempMenu.getJSONArray("childs");
+            JSONObject childMenu = new JSONObject();
+            childMenu.put("name", tMenu.getString("menuName"));
+            childMenu.put("href", tMenu.getString("url"));
+            childMenu.put("seq", tMenu.getString("menuSeq"));
+            childMenu.put("isShow", tMenu.getString("isShow"));
+            childMenu.put("description", tMenu.getString("description"));
+            childs.add(childMenu);
+        }
+        return new ResponseEntity<String>(tempMenus.toJSONString(), HttpStatus.OK);
+    }
+
+    /**
+     * 在菜单列表查询菜单
+     *
+     * @param gId
+     * @return
+     */
+    private JSONObject getMenuFromMenus(JSONArray tempMenus, String gId) {
+        for (int tempIndex = 0; tempIndex < tempMenus.size(); tempIndex++) {
+            if (tempMenus.getJSONObject(tempIndex).getString("id").equals(gId)) {
+                return tempMenus.getJSONObject(tempIndex);
+            }
+        }
+
+        return null;
     }
 }
