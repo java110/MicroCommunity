@@ -1955,7 +1955,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal rateDec = null; //递增周期所收费用
         BigDecimal lastRateAmountDec = null;
         double curCycle = 0;
-        for (int cycleIndex = 0; cycleIndex < maxCycle; maxCycle++) {
+        for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_UP);
             //增长周期的倍数
             curCycle = (cycleIndex + 1) * rateCycle;
