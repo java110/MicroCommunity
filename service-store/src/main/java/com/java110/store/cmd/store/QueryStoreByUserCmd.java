@@ -9,6 +9,7 @@ import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,10 @@ public class QueryStoreByUserCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = event.getCmdDataFlowContext().getReqHeaders().get("user-id");
+
+        if(StringUtil.isEmpty(userId)){
+            userId = reqJson.getString("userId");
+        }
 
         DataQuery dataQuery = new DataQuery();
         dataQuery.setServiceCode("query.store.byuser");
