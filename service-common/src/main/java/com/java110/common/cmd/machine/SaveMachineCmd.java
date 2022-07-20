@@ -25,6 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityLocationDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
@@ -33,6 +34,7 @@ import com.java110.po.machine.MachinePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +95,8 @@ public class SaveMachineCmd extends Cmd {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
         machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
         machinePo.setMachineId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        machinePo.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        machinePo.setState(MachineDto.MACHINE_STATE_ON);
         int flag = machineV1InnerServiceSMOImpl.saveMachine(machinePo);
 
         if (flag < 1) {
