@@ -43,19 +43,29 @@ public class QueryUserPrivilege extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
         String storeId = context.getReqHeaders().get("store-id");
 
-        StoreDto storeDto = new StoreDto();
-        storeDto.setStoreId(storeId);
-        storeDto.setPage(1);
-        storeDto.setRow(1);
-        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+        if(StringUtil.isEmpty(userId)){
+            userId = reqJson.getString("userId");
+        }
+        String domain = "";
+        if(!reqJson.containsKey("domain") || StringUtil.isEmpty(reqJson.getString("domain"))) {
 
-        Assert.listOnlyOne(storeDtos, "商户不存在");
+            StoreDto storeDto = new StoreDto();
+            storeDto.setStoreId(storeId);
+            storeDto.setPage(1);
+            storeDto.setRow(1);
+            List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+            Assert.listOnlyOne(storeDtos, "商户不存在");
+            domain = storeDtos.get(0).getStoreTypeCd();
+        }else{
+            domain = reqJson.getString("domain");
+        }
 
         DataQuery dataQuery = new DataQuery();
         dataQuery.setServiceCode("query.user.privilege");
         JSONObject param = new JSONObject();
         param.put("userId", userId);
-        param.put("domain", storeDtos.get(0).getStoreTypeCd());
+        param.put("domain", domain);
         dataQuery.setRequestParams(param);
         queryServiceSMOImpl.commonQueryService(dataQuery);
         ResponseEntity<String> privilegeGroup = dataQuery.getResponseEntity();
