@@ -66,6 +66,10 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             return rooms;
         }
 
+        if(rooms.size() > 50){
+            return rooms;
+        }
+
         String[] roomIds = getRoomIds(rooms);
         Map attrParamInfo = new HashMap();
         attrParamInfo.put("roomIds", roomIds);

@@ -6,10 +6,14 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -31,6 +35,9 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -94,7 +101,32 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
             }
         }
 
+        List<String> ownerIds = new ArrayList<>();
+        for(OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos){
+            ownerIds.add(ownerAppUserDto.getMemberId());
+        }
 
+        if(ownerIds.size() < 1){
+            return;
+        }
+
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(ownerIds.toArray(new String[ownerIds.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size() < 1){
+            return ;
+        }
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        for(OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos){
+            for(FileRelDto tmpFileRelDto : fileRelDtos){
+                if(!ownerAppUserDto.getMemberId().equals(tmpFileRelDto.getObjId())){
+                    continue;
+                }
+                ownerAppUserDto.setHeadImgUrl(imgUrl +tmpFileRelDto.getFileRealName() );
+            }
+        }
     }
 
     /**
