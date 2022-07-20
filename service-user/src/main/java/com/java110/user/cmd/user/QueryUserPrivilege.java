@@ -31,10 +31,13 @@ public class QueryUserPrivilege extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
-        String storeId = context.getReqHeaders().get("store-id");
+        //String storeId = context.getReqHeaders().get("store-id");
+
+        if(StringUtil.isEmpty(userId)){
+            userId = reqJson.getString("userId");
+        }
 
         Assert.hasLength(userId, "未包含用户");
-        Assert.hasLength(storeId, "未包含商户");
     }
 
     @Override
