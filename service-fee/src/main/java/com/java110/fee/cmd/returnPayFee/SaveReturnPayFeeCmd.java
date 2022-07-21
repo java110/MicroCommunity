@@ -108,7 +108,7 @@ public class SaveReturnPayFeeCmd extends Cmd {
         returnPayFeePo.setState(ReturnPayFeeDto.STATE_WAIT);
         returnPayFeePo.setCycles((reqJson.getDouble("cycles") * -1)+"");
         returnPayFeePo.setReceivableAmount((reqJson.getDouble("receivableAmount") * -1)+"");
-        returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivableAmount") * -1)+"");
+        returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivedAmount") * -1)+"");
         int flag = returnPayFeeV1InnerServiceSMOImpl.saveReturnPayFee(returnPayFeePo);
 
         if (flag < 1) {
