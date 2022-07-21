@@ -1,66 +1,37 @@
-package com.java110.api.listener.mapping;
+package com.java110.dev.cmd.mapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IMappingInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.mapping.MappingDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IMappingInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.mapping.ApiMappingDataVo;
 import com.java110.vo.api.mapping.ApiMappingVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.utils.constant.ServiceCodeMappingConstant;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listMappingsListener")
-public class ListMappingsListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "mapping.listMappings")
+public class ListMappingsCmd extends Cmd {
 
     @Autowired
     private IMappingInnerServiceSMO mappingInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeMappingConstant.LIST_MAPPINGS;
-    }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IMappingInnerServiceSMO getMappingInnerServiceSMOImpl() {
-        return mappingInnerServiceSMOImpl;
-    }
-
-    public void setMappingInnerServiceSMOImpl(IMappingInnerServiceSMO mappingInnerServiceSMOImpl) {
-        this.mappingInnerServiceSMOImpl = mappingInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         MappingDto mappingDto = BeanConvertUtil.covertBean(reqJson, MappingDto.class);
 
@@ -83,6 +54,5 @@ public class ListMappingsListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiMappingVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }
