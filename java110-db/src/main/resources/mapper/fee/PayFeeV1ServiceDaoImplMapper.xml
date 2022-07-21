@@ -115,9 +115,7 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="payerObjType !=null and payerObjType != ''">
             , t.payer_obj_type= #{payerObjType}
         </if>
@@ -127,6 +125,9 @@
         where 1=1
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
