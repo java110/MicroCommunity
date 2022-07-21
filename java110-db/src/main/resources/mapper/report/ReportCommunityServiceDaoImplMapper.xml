@@ -213,6 +213,7 @@
         WHERE 1 =1
         and u.unit_id = #{unitId}
         and t.community_id= #{communityId}
+        order by t.layer ,t.room_num
     </select>
 
 </mapper>

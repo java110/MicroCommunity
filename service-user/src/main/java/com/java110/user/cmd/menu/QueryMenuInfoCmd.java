@@ -46,6 +46,11 @@ public class QueryMenuInfoCmd extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
         String storeId = context.getReqHeaders().get("store-id");
 
+        String groupType = "P_WEB";
+        if(reqJson.containsKey("groupType") && !StringUtil.isEmpty(reqJson.getString("groupType"))){
+            groupType = reqJson.getString("groupType");
+        }
+
         if(StringUtil.isEmpty(userId)){
             userId = reqJson.getString("userId");
         }
@@ -69,7 +74,7 @@ public class QueryMenuInfoCmd extends Cmd {
         JSONObject param = new JSONObject();
         param.put("userId", userId);
         param.put("domain", domain);
-        param.put("groupType", "P_WEB");
+        param.put("groupType", groupType);
         dataQuery.setRequestParams(param);
         queryServiceSMOImpl.commonQueryService(dataQuery);
         ResponseEntity<String> privilegeGroup = dataQuery.getResponseEntity();
