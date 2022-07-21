@@ -1,11 +1,26 @@
-package com.java110.api.listener.meterWater;
+/*
+ * Copyright 2017-2020 吴学文 and java110 team.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.java110.fee.cmd.meterWater;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.meterWater.IMeterWaterBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -15,35 +30,47 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
+import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * 保存商户侦听
- * add by wuxw 2019-06-30
+ * 类表述：保存
+ * 服务编码：meterWater.saveMeterWater
+ * 请求路劲：/app/meterWater.SaveMeterWater
+ * add by 吴学文 at 2022-07-21 09:17:10 mail: 928255095@qq.com
+ * open source address: https://gitee.com/wuxw7/MicroCommunity
+ * 官网：http://www.homecommunity.cn
+ * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
+ * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Listener("saveMeterWaterListener")
-public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "meterWater.saveMeterWater")
+public class SaveMeterWaterCmd extends Cmd {
 
-    @Autowired
-    private IMeterWaterBMO meterWaterBMOImpl;
+    private static Logger logger = LoggerFactory.getLogger(SaveMeterWaterCmd.class);
+
+    public static final String CODE_PREFIX_ID = "10";
+
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -67,10 +94,18 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "feeTypeCd", "请求报文中未包含费用类型");
         Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含费用项");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
@@ -81,18 +116,13 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
+
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-//        if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
-//            reqJson.put("meterType", "1010");
-//        } else if (FeeConfigDto.FEE_TYPE_CD_GAS.equals(reqJson.getString("feeTypeCd"))) {
-//            reqJson.put("meterType", "3030");
-//        } else {
-//            reqJson.put("meterType", "2020");
-//        }
-        //获取抄表对象id(即房屋id)
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
         String objId = reqJson.getString("objId");
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomId(objId);
@@ -124,11 +154,11 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         if (waterRemarkList.contains(communityId)
                 && FeeConfigDto.FEE_TYPE_CD_METER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
-            meterWaterBMOImpl.addMeterWater(reqJson, context);
+            addMeterWater(reqJson);
         } else if (electricRemarkList.contains(communityId)
                 && FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
-            meterWaterBMOImpl.addMeterWater(reqJson, context);
+            addMeterWater(reqJson);
         } else {
             PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -142,15 +172,21 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setState(FeeDto.STATE_DOING);
             payFeePo.setBatchId(reqJson.getString("batchId"));
-            payFeePo.setUserId(context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-            super.insert(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+            payFeePo.setUserId("-1");
+            int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             feeAttrPo.setValue(reqJson.getString("curReadingTime"));
             feeAttrPo.setFeeId(payFeePo.getFeeId());
-            feeAttrPo.setAttrId("-1");
-            super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setCommunityId(reqJson.getString("communityId"));
             ownerDto.setRoomId(reqJson.getString("objId"));
@@ -162,29 +198,56 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
                 feeAttrPo.setValue(ownerDtos.get(0).getOwnerId());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
-                feeAttrPo.setAttrId("-2");
-                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+                if (flag < 1) {
+                    throw new CmdException("保存数据失败");
+                }
 
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(reqJson.getString("communityId"));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
                 feeAttrPo.setValue(ownerDtos.get(0).getLink());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
-                feeAttrPo.setAttrId("-3");
-                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+                if (flag < 1) {
+                    throw new CmdException("保存数据失败");
+                }
 
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(reqJson.getString("communityId"));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
                 feeAttrPo.setValue(ownerDtos.get(0).getName());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
-                feeAttrPo.setAttrId("-4");
-                super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+                if (flag < 1) {
+                    throw new CmdException("保存数据失败");
+                }
             }
             reqJson.put("feeId", payFeePo.getFeeId());
-            meterWaterBMOImpl.addMeterWater(reqJson, context);
+            addMeterWater(reqJson);
+        }
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addMeterWater(JSONObject paramInJson) {
+        MeterWaterPo meterWaterPo = BeanConvertUtil.covertBean(paramInJson, MeterWaterPo.class);
+        meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = meterWaterV1InnerServiceSMOImpl.saveMeterWater(meterWaterPo);
+
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
         }
     }
+
+
 
     /**
      * 生成批次号
@@ -211,16 +274,6 @@ public class SaveMeterWaterListener extends AbstractServiceApiPlusListener {
         }
 
         reqJson.put("batchId", payFeeBatchPo.getBatchId());
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeMeterWaterConstant.ADD_METERWATER;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
     }
 
 }

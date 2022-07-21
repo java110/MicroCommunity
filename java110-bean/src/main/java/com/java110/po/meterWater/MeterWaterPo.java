@@ -19,6 +19,7 @@ public class MeterWaterPo implements Serializable {
     private String feeId;
     private double price;
     private Date createTime;
+    private String statusCd = "0";
 
     public String getRemark() {
         return remark;
@@ -130,5 +131,13 @@ public class MeterWaterPo implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

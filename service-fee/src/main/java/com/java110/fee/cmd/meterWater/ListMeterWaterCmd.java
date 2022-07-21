@@ -1,35 +1,66 @@
-package com.java110.api.listener.meterWater;
+/*
+ * Copyright 2017-2020 吴学文 and java110 team.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.java110.fee.cmd.meterWater;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
-import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeMeterWaterConstant;
+import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
+import com.java110.po.meterWater.MeterWaterPo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
+import com.java110.dto.meterWater.MeterWaterDto;
 import java.util.List;
+import java.util.ArrayList;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
- * 查询小区侦听类
+ * 类表述：查询
+ * 服务编码：meterWater.listMeterWater
+ * 请求路劲：/app/meterWater.ListMeterWater
+ * add by 吴学文 at 2022-07-21 09:17:10 mail: 928255095@qq.com
+ * open source address: https://gitee.com/wuxw7/MicroCommunity
+ * 官网：http://www.homecommunity.cn
+ * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
+ * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Listener("listMeterWatersListener")
-public class ListMeterWatersListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "meterWater.listMeterWaters")
+public class ListMeterWaterCmd extends Cmd {
+
+  private static Logger logger = LoggerFactory.getLogger(ListMeterWaterCmd.class);
+    @Autowired
+    private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
 
     @Autowired
     private IMeterWaterInnerServiceSMO meterWaterInnerServiceSMOImpl;
@@ -41,38 +72,13 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeMeterWaterConstant.LIST_METERWATERS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IMeterWaterInnerServiceSMO getMeterWaterInnerServiceSMOImpl() {
-        return meterWaterInnerServiceSMOImpl;
-    }
-
-    public void setMeterWaterInnerServiceSMOImpl(IMeterWaterInnerServiceSMO meterWaterInnerServiceSMOImpl) {
-        this.meterWaterInnerServiceSMOImpl = meterWaterInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         MeterWaterDto meterWaterDto = BeanConvertUtil.covertBean(reqJson, MeterWaterDto.class);
         ResultVo resultVo = null;
@@ -97,7 +103,6 @@ public class ListMeterWatersListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 
     private boolean freshFeeDtoParam(MeterWaterDto meterWaterDto, JSONObject reqJson) {
