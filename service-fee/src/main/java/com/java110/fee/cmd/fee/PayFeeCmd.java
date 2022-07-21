@@ -247,7 +247,7 @@ public class PayFeeCmd extends Cmd {
             }
             for (int columnIndex = 0; columnIndex < jsonArray.size(); columnIndex++) {
                 JSONObject param = jsonArray.getJSONObject(columnIndex);
-                if (!StringUtil.isEmpty(param.getString("acctType")) && param.getString("acctType").equals("2004")) { //积分账户
+                if (AccountDto.ACCT_TYPE_INTEGRAL.equals(param.getString("acctType"))) { //积分账户
                     //账户金额
                     BigDecimal amount = new BigDecimal(param.getString("amount"));
                     //获取最大抵扣积分
@@ -590,32 +590,44 @@ public class PayFeeCmd extends Cmd {
             targetEndTime = endCalender.getTime();
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
-            businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
-        } else if ("-103".equals(paramInJson.getString("cycles"))) {
-            String custEndTime = paramInJson.getString("custEndTime");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date endDates = null;
-            try {
-                endDates = format.parse(custEndTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            //处理 可能还存在 实收手工减免的情况
+            if(paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))){
+                businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
+            }else {
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
+        } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
+            String custEndTime = paramInJson.getString("custEndTime");
+            Date endDates = DateUtil.getDateFromStringB(custEndTime);
             Calendar c = Calendar.getInstance();
             c.setTime(endDates);
             c.add(Calendar.DAY_OF_MONTH, 1);
             endDates = c.getTime();//这是明天
             targetEndTime = endDates;
-            BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            BigDecimal receivedAmount1 =  new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
-            businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            //处理 可能还存在 实收手工减免的情况
+            if(paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))){
+                businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
+            }else {
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            }
         } else {
             targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));//根据缴费周期计算 结束时间
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
+
+            //出租递增问题处理
+            if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
+                computeFeeSMOImpl.dealRentRateCycle(feeDto,cycles.doubleValue());
+                if(feeDto.getOweFee()> 0){
+                    businessFeeDetail.put("receivableAmount", feeDto.getOweFee());
+                }
+            }
         }
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);

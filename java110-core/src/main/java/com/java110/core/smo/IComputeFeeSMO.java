@@ -179,4 +179,10 @@ public interface IComputeFeeSMO {
     void dealRentRateCycle(FeeDto feeDto,double cycle);
 
 
+    /**
+     * 租金处理
+     * @param feeDto
+     * @param custEndTime
+     */
+    void dealRentRateCustEndTime(FeeDto feeDto, Date custEndTime);
 }

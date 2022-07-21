@@ -27,9 +27,7 @@ public class BeanTest extends TestCase {
 
 
     public void testBean(){
-        Product product = new Product();
 
-        product.setStatus_cd("status_cd");
-        System.out.println(product.getStatus_cd());
+        System.out.println(Math.ceil(0.1));
     }
 }

@@ -20,6 +20,7 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -182,7 +184,17 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
 
-        computeFeeSMOImpl.dealRentRateCycle(feeDto, NumberUtil.getDouble(feeDto.getCycle()));
+        if(!StringUtil.isEmpty(custEndTime)){
+            try {
+                computeFeeSMOImpl.dealRentRateCustEndTime(feeDto, DateUtil.getDateFromString(custEndTime,DateUtil.DATE_FORMATE_STRING_B));
+            } catch (Exception e) {
+                throw new CmdException("计算费用失败"+e);
+            }
+        }else {
+            computeFeeSMOImpl.dealRentRateCycle(feeDto, NumberUtil.getDouble(feeDto.getCycle()));
+        }
+
+
         //应收款取值
         //先取单小区的如果没有配置 取 全局的
         String val = CommunitySettingFactory.getValue(feeDto.getCommunityId(), TOTAL_FEE_PRICE);
