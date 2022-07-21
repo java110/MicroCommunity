@@ -1949,29 +1949,32 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         double maxCycle = Math.floor(curOweMonth / rateCycle);
 
-        //基准
-        BigDecimal firstAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
-        BigDecimal preCycleAmount = firstAmount;
+        // 增长前的欠费
+        BigDecimal addTotalAmount = oweAmountDec ;
+        BigDecimal preCycleAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
         BigDecimal rateDec = null; //递增周期所收费用
         BigDecimal lastRateAmountDec = null;
         double curCycle = 0;
+        BigDecimal curAmount = null; // 当期金额
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
+            //当期增长部分
             rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_UP);
             //增长周期的倍数
             curCycle = (cycleIndex + 1) * rateCycle;
             if (curCycle > curOweMonth) {
+                //不足增长周期增长率
                 rateDec = new BigDecimal(curOweMonth / rateCycle - Math.ceil(curOweMonth / rateCycle)).multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_UP);
                 lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.ceil(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                firstAmount = firstAmount.add(rateDec).add(lastRateAmountDec);
+                addTotalAmount = addTotalAmount.add(rateDec).add(lastRateAmountDec);
                 continue;
             }
-            firstAmount = firstAmount.add(rateDec).add(preCycleAmount);
-            preCycleAmount = preCycleAmount.add(rateDec);
+            //本期金额
+            curAmount = rateDec.add(preCycleAmount);// 增长部分 + 上本期费用
+            addTotalAmount = addTotalAmount.add(curAmount); // 计入总的 费用中
+            preCycleAmount = curAmount;
         }
-
-        firstAmount = firstAmount.add(oweAmountDec);
-        feeDto.setAmountOwed(firstAmount.doubleValue() + "");
-        feeDto.setFeeTotalPrice(firstAmount.doubleValue());
+        feeDto.setAmountOwed(addTotalAmount.doubleValue() + "");
+        feeDto.setFeeTotalPrice(addTotalAmount.doubleValue());
     }
 }
 
