@@ -79,4 +79,7 @@ public interface IReportCommunityServiceDao {
      */
     List<Map> queryInvalidFeeMonthStatistics(Map reportFeeDto);
 
+
+    List<Map>  queryRoomsTree(Map info);
+
 }

@@ -117,4 +117,14 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
 
         return deposits;
     }
+
+
+    @Override
+    public List<Map> queryRoomsTree(Map info) {
+        logger.debug("查询queryRoomsTree信息 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> communityDtos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryRoomsTree", info);
+
+        return communityDtos;
+    }
 }

@@ -56,4 +56,12 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
     }
 
 
+    @Override
+    public List<RoomDto> queryRoomsTree(@RequestBody RoomDto roomDto) {
+        //校验是否传了 分页信息
+        List<RoomDto> roomDtos = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryRoomsTree(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
+
+        return roomDtos;
+    }
+
 }

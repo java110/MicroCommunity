@@ -41,5 +41,12 @@ public interface IReportCommunityInnerServiceSMO {
     @RequestMapping(value = "/queryCarStructures", method = RequestMethod.POST)
     List<OwnerCarDto> queryCarStructures(@RequestBody OwnerCarDto ownerCarDto);
 
+    /**
+     * 查询房屋树形
+     * @param roomDto
+     * @return
+     */
+    @RequestMapping(value = "/queryRoomsTree", method = RequestMethod.POST)
+    List<RoomDto> queryRoomsTree(@RequestBody RoomDto roomDto);
 
 }
