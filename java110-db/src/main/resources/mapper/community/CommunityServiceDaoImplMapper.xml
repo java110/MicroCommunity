@@ -135,7 +135,7 @@
         s.list_show listShow
         from s_community_attr sa
         left join attr_spec s on sa.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name =
-        'building_community_attr' and sa.spec_cd = v.spec_cd
+        'building_community_attr' and sa.spec_cd = s.spec_cd
         left join attr_value v on sa.`value` = v.`value` and s.spec_id = v.spec_id and v.status_cd = '0'
         where
         1=1
