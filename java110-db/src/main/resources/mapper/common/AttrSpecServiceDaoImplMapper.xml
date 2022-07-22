@@ -8,9 +8,9 @@
     <!-- 保存属性规格表信息 add by wuxw 2018-07-03 -->
     <insert id="saveAttrSpecInfo" parameterType="Map">
         insert into attr_spec(
-        spec_type,spec_name,spec_holdplace,spec_value_type,spec_cd,spec_show,required,table_name,list_show,domain
+        spec_type,spec_name,spec_holdplace,spec_value_type,spec_cd,spec_id,spec_show,required,table_name,list_show,domain
         ) values (
-        #{specType},#{specName},#{specHoldplace},#{specValueType},#{specCd},#{specShow},#{required},#{tableName},#{listShow},#{domain}
+        #{specType},#{specName},#{specHoldplace},#{specValueType},#{specCd},#{specId},#{specShow},#{required},#{tableName},#{listShow},#{domain}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.spec_type,t.spec_type specType,t.spec_name,t.spec_name specName,t.spec_holdplace,t.spec_holdplace
         specHoldplace,t.spec_value_type,t.spec_value_type specValueType,t.spec_cd,t.spec_cd
         specCd,t.status_cd,t.status_cd statusCd,t.spec_show,t.spec_show specShow,t.required,t.table_name,t.table_name
-        tableName,t.list_show,t.list_show listShow,t.domain
+        tableName,t.list_show,t.list_show listShow,t.domain,t.spec_id specId
         from attr_spec t
         where 1 =1
         <if test="specType !=null and specType != ''">
@@ -37,6 +37,9 @@
         </if>
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}
+        </if>
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -97,9 +100,12 @@
         <if test="domain !=null and domain != ''">
             , t.domain= #{domain}
         </if>
-        where 1=1
         <if test="specCd !=null and specCd != ''">
-            and t.spec_cd= #{specCd}
+            , t.spec_cd= #{specCd}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
         </if>
 
     </update>
@@ -123,6 +129,9 @@
         </if>
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}
+        </if>
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

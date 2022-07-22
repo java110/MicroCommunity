@@ -43,7 +43,7 @@ public class AttrValueApi {
     @RequestMapping(value = "/saveAttrValue", method = RequestMethod.POST)
     public ResponseEntity<String> saveAttrValue(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "specId", "请求报文中未包含specId");
         Assert.hasKeyAndValue(reqJson, "value", "请求报文中未包含value");
         Assert.hasKeyAndValue(reqJson, "valueName", "请求报文中未包含valueName");
         Assert.hasKeyAndValue(reqJson, "valueShow", "请求报文中未包含valueShow");
@@ -64,7 +64,7 @@ public class AttrValueApi {
     @RequestMapping(value = "/updateAttrValue", method = RequestMethod.POST)
     public ResponseEntity<String> updateAttrValue(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "specId", "请求报文中未包含specId");
         Assert.hasKeyAndValue(reqJson, "value", "请求报文中未包含value");
         Assert.hasKeyAndValue(reqJson, "valueName", "请求报文中未包含valueName");
         Assert.hasKeyAndValue(reqJson, "valueShow", "请求报文中未包含valueShow");
@@ -106,7 +106,8 @@ public class AttrValueApi {
      * valueName: '',
      */
     @RequestMapping(value = "/queryAttrValue", method = RequestMethod.GET)
-    public ResponseEntity<String> queryAttrValue(@RequestParam(value = "specCd") String specCd,
+    public ResponseEntity<String> queryAttrValue(@RequestParam(value = "specCd",required = false) String specCd,
+                                                 @RequestParam(value = "specId",required = false) String specId,
                                                  @RequestParam(value = "page", required = false) int page,
                                                  @RequestParam(value = "row", required = false) int row,
                                                  @RequestParam(value = "value", required = false) String value,
@@ -122,6 +123,7 @@ public class AttrValueApi {
         attrValueDto.setValueName(valueName);
         attrValueDto.setValueShow(valueShow);
         attrValueDto.setDomain(domain);
+        attrValueDto.setSpecId(specId);
         return getAttrValueBMOImpl.get(attrValueDto);
     }
 }

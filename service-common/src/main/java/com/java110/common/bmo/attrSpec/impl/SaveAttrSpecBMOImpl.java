@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IAttrSpecInnerServiceSMO;
 import com.java110.po.attrSpec.AttrSpecPo;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,10 @@ public class SaveAttrSpecBMOImpl implements ISaveAttrSpecBMO {
      */
     @Java110Transactional
     public ResponseEntity<String> save(AttrSpecPo attrSpecPo) {
-
-        attrSpecPo.setSpecCd(GenerateCodeFactory.getSpecCd());
+        attrSpecPo.setSpecId(GenerateCodeFactory.getGeneratorId("11"));
+        if(StringUtil.isEmpty(attrSpecPo.getSpecCd())) {
+            attrSpecPo.setSpecCd(GenerateCodeFactory.getSpecCd());
+        }
         int flag = attrSpecInnerServiceSMOImpl.saveAttrSpec(attrSpecPo);
 
         if (flag > 0) {

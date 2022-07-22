@@ -19,6 +19,7 @@ public class AttrValueDto extends PageDto implements Serializable {
     private String valueName;
     private String valueShow;
     private String specCd;
+    private String specId;
     private String value;
     private String domain;
 
@@ -91,5 +92,13 @@ public class AttrValueDto extends PageDto implements Serializable {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 }

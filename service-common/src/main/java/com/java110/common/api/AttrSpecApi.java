@@ -70,6 +70,7 @@ public class AttrSpecApi {
     public ResponseEntity<String> updateAttrSpec(@RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "specCd", "请求报文中未包含specCd");
+        Assert.hasKeyAndValue(reqJson, "specId", "请求报文中未包含specId");
         Assert.hasKeyAndValue(reqJson, "tableName", "请求报文中未包含tableName");
         Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
         Assert.hasKeyAndValue(reqJson, "specHoldplace", "请求报文中未包含specHoldplace");
@@ -96,7 +97,7 @@ public class AttrSpecApi {
     @RequestMapping(value = "/deleteAttrSpec", method = RequestMethod.POST)
     public ResponseEntity<String> deleteAttrSpec(@RequestBody JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "specCd", "specCd不能为空");
+        Assert.hasKeyAndValue(reqJson, "specId", "specId不能为空");
 
 
         AttrSpecPo attrSpecPo = BeanConvertUtil.covertBean(reqJson, AttrSpecPo.class);
@@ -114,6 +115,7 @@ public class AttrSpecApi {
     @RequestMapping(value = "/queryAttrSpec", method = RequestMethod.GET)
     public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName", required = false) String tableName,
                                                 @RequestParam(value = "specCd", required = false) String specCd,
+                                                @RequestParam(value = "specId", required = false) String specId,
                                                 @RequestParam(value = "specName", required = false) String specName,
                                                 @RequestParam(value = "domain", required = false) String domain,
                                                 @RequestParam(value = "page", required = false) int page,
@@ -127,6 +129,7 @@ public class AttrSpecApi {
         attrSpecDto.setSpecCd(specCd);
         attrSpecDto.setSpecName(specName);
         attrSpecDto.setDomain(domain);
+        attrSpecDto.setSpecId(specId);
         return getAttrSpecBMOImpl.get(attrSpecDto);
     }
 }

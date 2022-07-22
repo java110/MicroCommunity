@@ -9,12 +9,14 @@ public class AttrSpecPo implements Serializable {
     private String specHoldplace;
     private String specValueType;
     private String specCd;
+    private String specId;
     private String statusCd = "0";
     private String specShow;
     private String required;
     private String tableName;
     private String listShow;
     private String domain;
+
 
 
     public String getSpecType() {
@@ -103,5 +105,13 @@ public class AttrSpecPo implements Serializable {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 }
