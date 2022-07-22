@@ -11,6 +11,7 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String startTime;
     private String endTime;
     private String computingFormula;
+    private String computingFormulaName;
     private String squarePrice;
     private String additionalAmount;
     private String feeTypeCdName;
@@ -168,4 +169,13 @@ public class ApiFeeConfigDataVo implements Serializable {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+
+
+    public String getComputingFormulaName() {
+        return computingFormulaName;
+    }
+
+    public void setComputingFormulaName(String computingFormulaName) {
+        this.computingFormulaName = computingFormulaName;
+    }
 }

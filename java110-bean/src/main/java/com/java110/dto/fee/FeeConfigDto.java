@@ -44,6 +44,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String feeTypeCd;
     private String computingFormula;
+    private String computingFormulaName;
     private String additionalAmount;
     private String squarePrice;
     private String isDefault;
@@ -285,4 +286,12 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+
+    public String getComputingFormulaName() {
+        return computingFormulaName;
+    }
+
+    public void setComputingFormulaName(String computingFormulaName) {
+        this.computingFormulaName = computingFormulaName;
+    }
 }

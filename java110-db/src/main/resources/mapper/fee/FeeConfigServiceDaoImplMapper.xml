@@ -134,8 +134,8 @@
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
-        t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom
-        from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
+        t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom,td4.name computingFormulaName
+        from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3,t_dict td4
         where 1 =1
         and t.fee_type_cd = td1.status_cd
         and td1.table_name = 'pay_fee_config'
@@ -146,6 +146,9 @@
         and t.bill_type = td3.status_cd
         and td3.table_name = 'pay_fee_config'
         and td3.table_columns = 'bill_type'
+        and t.computing_formula = td4.status_cd
+        and td4.table_name = 'pay_fee_config'
+        and td4.table_columns = 'computing_formula'
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
         </if>
