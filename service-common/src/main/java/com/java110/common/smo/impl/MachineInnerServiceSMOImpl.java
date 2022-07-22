@@ -65,6 +65,7 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
         MachineAttrDto machineAttrDto = new MachineAttrDto();
         machineAttrDto.setMachineIds(machineIds.toArray(new String[machineIds.size()]));
         machineAttrDto.setCommunityId(machines.get(0).getCommunityId());
+        machineAttrDto.setDomain(machineDto.getDomain());
         List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
 
         List<MachineAttrDto> tMachineAttrDtos = null;

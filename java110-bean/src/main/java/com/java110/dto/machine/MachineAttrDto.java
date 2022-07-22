@@ -28,6 +28,7 @@ public class MachineAttrDto extends PageDto implements Serializable {
     private String valueName;
     private String specName;
     private String listShow;
+    private String domain;
 
 
     private Date createTime;
@@ -122,5 +123,13 @@ public class MachineAttrDto extends PageDto implements Serializable {
 
     public void setListShow(String listShow) {
         this.listShow = listShow;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }

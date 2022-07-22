@@ -97,6 +97,9 @@
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>
+        <if test="domain !=null and domain != ''">
+            and s.domain= #{domain}
+        </if>
         <if test="machineIds !=null ">
             and t.machine_id in
             <foreach collection="machineIds" item="item" index="index" open="(" close=")" separator=",">
