@@ -26,7 +26,7 @@ public class AttrSpecDto extends PageDto implements Serializable {
     private String required;
     private String tableName;
     private String listShow;
-
+    private String domain;
 
     private Date createTime;
 
@@ -123,5 +123,11 @@ public class AttrSpecDto extends PageDto implements Serializable {
     }
 
 
+    public String getDomain() {
+        return domain;
+    }
 
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
 }

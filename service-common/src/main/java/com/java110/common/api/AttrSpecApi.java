@@ -115,6 +115,7 @@ public class AttrSpecApi {
     public ResponseEntity<String> queryAttrSpec(@RequestParam(value = "tableName", required = false) String tableName,
                                                 @RequestParam(value = "specCd", required = false) String specCd,
                                                 @RequestParam(value = "specName", required = false) String specName,
+                                                @RequestParam(value = "domain", required = false) String domain,
                                                 @RequestParam(value = "page", required = false) int page,
                                                 @RequestParam(value = "row", required = false) int row
 
@@ -125,6 +126,7 @@ public class AttrSpecApi {
         attrSpecDto.setRow(row);
         attrSpecDto.setSpecCd(specCd);
         attrSpecDto.setSpecName(specName);
+        attrSpecDto.setDomain(domain);
         return getAttrSpecBMOImpl.get(attrSpecDto);
     }
 }
