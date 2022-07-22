@@ -69,22 +69,26 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray   businessStoreUsers = new JSONArray();
         if (data.containsKey(StoreUserPo.class.getSimpleName())) {
             Object bObj = data.get(StoreUserPo.class.getSimpleName());
-            JSONArray businessStoreUsers = null;
             if (bObj instanceof JSONObject) {
-                businessStoreUsers = new JSONArray();
+
                 businessStoreUsers.add(bObj);
             } else if (bObj instanceof List) {
                 businessStoreUsers = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessStoreUsers = (JSONArray) bObj;
             }
-            //JSONObject businessStoreUser = data.getJSONObject("businessStoreUser");
-            for (int bStoreUserIndex = 0; bStoreUserIndex < businessStoreUsers.size(); bStoreUserIndex++) {
-                JSONObject businessStoreUser = businessStoreUsers.getJSONObject(bStoreUserIndex);
-                doSendStoreUser(business, businessStoreUser);
+        }else {
+            if (data instanceof JSONObject) {
+                businessStoreUsers.add(data);
             }
+        }
+        //JSONObject businessStoreUser = data.getJSONObject("businessStoreUser");
+        for (int bStoreUserIndex = 0; bStoreUserIndex < businessStoreUsers.size(); bStoreUserIndex++) {
+            JSONObject businessStoreUser = businessStoreUsers.getJSONObject(bStoreUserIndex);
+            doSendStoreUser(business, businessStoreUser);
         }
     }
 
