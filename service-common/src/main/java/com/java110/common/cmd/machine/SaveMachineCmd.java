@@ -103,12 +103,12 @@ public class SaveMachineCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
-        dealMachineAttr(reqJson);
+        dealMachineAttr(reqJson,machinePo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    private void dealMachineAttr(JSONObject paramObj) {
+    private void dealMachineAttr(JSONObject paramObj,MachinePo machinePo) {
 
         if (!paramObj.containsKey("attrs")) {
             return;
@@ -124,7 +124,7 @@ public class SaveMachineCmd extends Cmd {
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = BeanConvertUtil.covertBean(attrs.getJSONObject(attrIndex), MachineAttrPo.class);
             attr.setCommunityId(paramObj.getString("communityId"));
-            attr.setMachineId(paramObj.getString("machineId"));
+            attr.setMachineId(machinePo.getMachineId());
             attr.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             flag = machineAttrInnerServiceSMOImpl.saveMachineAttrs(attr);
             if (flag < 1) {
