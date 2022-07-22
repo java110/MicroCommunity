@@ -92,9 +92,8 @@
         s.list_show listShow,
         s.spec_type specType
         from parking_area_attr t
-        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and s.table_name =
-        'parking_area_attr'
-        left join attr_value v on t.`value` = v.`value` and t.spec_cd = v.spec_cd and v.status_cd = '0'
+        left join attr_spec s on t.spec_cd = s.spec_cd and s.status_cd = '0' and t.spec_cd = s.spec_cd and s.table_name = 'parking_area_attr'
+        left join attr_value v on t.`value` = v.`value` and s.spec_id = v.spec_id and v.status_cd = '0'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
