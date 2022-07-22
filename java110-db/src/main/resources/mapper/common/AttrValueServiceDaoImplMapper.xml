@@ -20,9 +20,13 @@
         select t.value_id,t.value_id valueId,t.value_name,t.value_name valueName,t.value_show,t.value_show
         valueShow,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.value
         from attr_value t
+        LEFT JOIN attr_spec spec on t.spec_cd = spec.spec_cd and spec.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and spec.domain= #{domain}
         </if>
         <if test="valueName !=null and valueName != ''">
             and t.value_name= #{valueName}
@@ -76,7 +80,14 @@
     <select id="queryAttrValuesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from attr_value t
+        LEFT JOIN attr_spec spec on t.spec_cd = spec.spec_cd and spec.status_cd = '0'
         where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and spec.domain= #{domain}
+        </if>
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
         </if>

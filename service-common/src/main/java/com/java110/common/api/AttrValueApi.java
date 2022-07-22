@@ -110,6 +110,7 @@ public class AttrValueApi {
                                                  @RequestParam(value = "page", required = false) int page,
                                                  @RequestParam(value = "row", required = false) int row,
                                                  @RequestParam(value = "value", required = false) String value,
+                                                 @RequestParam(value = "domain", required = false) String domain,
                                                  @RequestParam(value = "valueShow", required = false) String valueShow,
                                                  @RequestParam(value = "valueName", required = false) String valueName
     ) {
@@ -120,6 +121,7 @@ public class AttrValueApi {
         attrValueDto.setValue(value);
         attrValueDto.setValueName(valueName);
         attrValueDto.setValueShow(valueShow);
+        attrValueDto.setDomain(domain);
         return getAttrValueBMOImpl.get(attrValueDto);
     }
 }
