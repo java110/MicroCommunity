@@ -26,6 +26,7 @@ public class NoticePo implements Serializable {
 
     private String state;
     private String stateName;
+    private String statusCd = "0";
 
 
     public String getNoticeId() {
@@ -122,5 +123,13 @@ public class NoticePo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

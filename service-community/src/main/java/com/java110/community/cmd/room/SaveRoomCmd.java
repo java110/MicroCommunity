@@ -1,54 +1,35 @@
-package com.java110.api.listener.room;
+package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.room.IRoomBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.po.room.RoomPo;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
-/**
- * @ClassName SaveUnitListener
- * @Description TODO 保存房屋信息
- * @Author wuxw
- * @Date 2019/5/3 11:54
- * @Version 1.0
- * add by wuxw 2019/5/3
- **/
-@Java110Listener("saveRoomListener")
-public class SaveRoomListener extends AbstractServiceApiPlusListener {
-    private static Logger logger = LoggerFactory.getLogger(SaveRoomListener.class);
+@Java110Cmd(serviceCode = "room.saveRoom")
+public class SaveRoomCmd extends Cmd {
 
-
-    @Autowired
-    private IRoomBMO roomBMOImpl;
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_ROOM;
-    }
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomNum", "请求报文中未包含roomNum节点");
@@ -100,26 +81,15 @@ public class SaveRoomListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         if ("0".equals(reqJson.getString("unitNum"))) { // 处理为商铺
             reqJson.put("roomType", RoomDto.ROOM_TYPE_SHOPS);
         } else {
             reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
         }
-        roomBMOImpl.addRoom(reqJson, context);
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
+        reqJson.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
+        reqJson.put("userId", context.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
+        RoomPo roomPo = BeanConvertUtil.covertBean(reqJson, RoomPo.class);
+        roomV1InnerServiceSMOImpl.saveRoom(roomPo);
     }
 }
