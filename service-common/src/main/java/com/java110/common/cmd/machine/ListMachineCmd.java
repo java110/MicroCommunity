@@ -20,32 +20,30 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.community.CommunityLocationDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import com.java110.vo.api.machine.ApiMachineDataVo;
 import com.java110.vo.api.machine.ApiMachineVo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.machine.MachineDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 
 
 /**
@@ -61,7 +59,7 @@ import com.java110.core.log.LoggerFactory;
 @Java110Cmd(serviceCode = "machine.listMachines")
 public class ListMachineCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMachineCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMachineCmd.class);
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -129,20 +127,20 @@ public class ListMachineCmd extends Cmd {
         String heartbeatTime = machineDto.getHeartbeatTime();
         try {
             if (StringUtil.isEmpty(heartbeatTime)) {
-                machineDto.setStateName(machineDto.getStateName() + ";设备离线");
+                machineDto.setStateName("设备离线");
             } else {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(DateUtil.getDateFromString(heartbeatTime, DateUtil.DATE_FORMATE_STRING_A));
                 calendar.add(Calendar.MINUTE, 2);
                 if (calendar.getTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
-                    machineDto.setStateName(machineDto.getStateName() + ";设备离线");
+                    machineDto.setStateName("设备离线");
                 } else {
-                    machineDto.setStateName(machineDto.getStateName() + ";设备在线");
+                    machineDto.setStateName("设备在线");
                 }
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            machineDto.setStateName(machineDto.getStateName() + ";设备离线");
+            machineDto.setStateName("设备离线");
         }
     }
 
