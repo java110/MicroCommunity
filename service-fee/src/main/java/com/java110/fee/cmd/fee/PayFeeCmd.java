@@ -625,7 +625,7 @@ public class PayFeeCmd extends Cmd {
             if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
                 computeFeeSMOImpl.dealRentRateCycle(feeDto,cycles.doubleValue());
                 if(feeDto.getOweFee()> 0){
-                    businessFeeDetail.put("receivableAmount", feeDto.getOweFee());
+                    businessFeeDetail.put("receivableAmount", feeDto.getAmountOwed());
                 }
             }
         }
@@ -649,13 +649,7 @@ public class PayFeeCmd extends Cmd {
             System.out.println(endCalender);
         } else if ("-103".equals(paramInJson.getString("cycles"))) {
             String custEndTime = paramInJson.getString("custEndTime");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date endDates = null;
-            try {
-                endDates = format.parse(custEndTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Date endDates = DateUtil.getDateFromStringB(custEndTime);
             Calendar c = Calendar.getInstance();
             c.setTime(endDates);
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -682,6 +676,11 @@ public class PayFeeCmd extends Cmd {
         if (FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getConfigEndTime();
         }
+
+        if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeInfo.getFeeFlag())){
+            maxEndTime = feeInfo.getMaxEndTime();
+        }
+
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
         if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
             throw new IllegalArgumentException("缴费超过了 费用项结束时间");
@@ -705,7 +704,7 @@ public class PayFeeCmd extends Cmd {
             calendar.add(Calendar.DAY_OF_MONTH, -5);
             maxEndTime = calendar.getTime();
             if (feeInfo.getEndTime().after(maxEndTime)) {
-                businessFee.put("state", FeeStateConstant.END);
+                businessFee.put("state", FeeDto.STATE_FINISH);
                 businessFee.put("endTime", maxEndTime);
             }
         }

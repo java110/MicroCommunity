@@ -2247,11 +2247,18 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal lastRateAmountDec = null;
         double curCycle = 0;
         BigDecimal curAmount = null; // 当期金额
+        Date curEndTime = null;
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             //当期增长部分
             rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_UP);
             //增长周期的倍数
             curCycle = (cycleIndex + 1) * rateCycle;
+
+            // 计算本轮的 计费起始时间
+            Calendar curEndTimeCalender = Calendar.getInstance();
+            curEndTimeCalender.setTime(rateStartTime);
+            curEndTimeCalender.set(Calendar.MONTH,new Double(curCycle).intValue());
+            curEndTime = curEndTimeCalender.getTime();
             if (curCycle > curOweMonth) {
                 //不足增长周期增长率
                 rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -2261,7 +2268,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
             //本期金额
             curAmount = rateDec.add(preCycleAmount);// 增长部分 + 上本期费用
-            addTotalAmount = addTotalAmount.add(curAmount); // 计入总的 费用中
+            //如果计费起始时间 大于 递增开始时间 那么本轮 不计入
+            if(feeDto.getEndTime().getTime()< curEndTime.getTime()){
+                addTotalAmount = addTotalAmount.add(curAmount); // 计入总的 费用中
+            }
             preCycleAmount = curAmount;
         }
         feeDto.setAmountOwed(addTotalAmount.doubleValue() + "");
