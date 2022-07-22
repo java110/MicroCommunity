@@ -1,66 +1,37 @@
-package com.java110.api.listener.service;
+package com.java110.dev.cmd.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IServiceInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.service.ServiceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IServiceInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.service.ApiServiceDataVo;
 import com.java110.vo.api.service.ApiServiceVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.utils.constant.ServiceCodeServiceConstant;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Java110Cmd(serviceCode = "service.listServices")
+public class ListServicesCmd extends Cmd {
 
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listServicesListener")
-public class ListServicesListener extends AbstractServiceApiListener {
 
     @Autowired
     private IServiceInnerServiceSMO serviceInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeServiceConstant.LIST_SERVICES;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IServiceInnerServiceSMO getServiceInnerServiceSMOImpl() {
-        return serviceInnerServiceSMOImpl;
-    }
-
-    public void setServiceInnerServiceSMOImpl(IServiceInnerServiceSMO serviceInnerServiceSMOImpl) {
-        this.serviceInnerServiceSMOImpl = serviceInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ServiceDto serviceDto = BeanConvertUtil.covertBean(reqJson, ServiceDto.class);
 
@@ -83,6 +54,5 @@ public class ListServicesListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiServiceVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }

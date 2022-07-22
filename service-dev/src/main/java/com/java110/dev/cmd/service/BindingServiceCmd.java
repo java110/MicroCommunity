@@ -1,33 +1,30 @@
-package com.java110.api.listener.service;
-
+package com.java110.dev.cmd.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.service.RouteDto;
+import com.java110.dto.service.ServiceDto;
+import com.java110.intf.community.IAppInnerServiceSMO;
+import com.java110.intf.community.IRouteInnerServiceSMO;
+import com.java110.intf.community.IServiceInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.ServiceCodeServiceConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.community.IAppInnerServiceSMO;
-import com.java110.intf.community.IRouteInnerServiceSMO;
-import com.java110.intf.community.IServiceInnerServiceSMO;
-import com.java110.dto.app.AppDto;
-import com.java110.dto.service.RouteDto;
-import com.java110.dto.service.ServiceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-@Java110Listener("bindingServiceListener")
-public class BindingServiceListener extends AbstractServiceApiListener {
-
+@Java110Cmd(serviceCode = "service.bindingService")
+public class BindingServiceCmd extends Cmd {
 
     @Autowired
     private IAppInnerServiceSMO appInnerServiceSMOImpl;
@@ -41,8 +38,7 @@ public class BindingServiceListener extends AbstractServiceApiListener {
     private IRouteInnerServiceSMO routeInnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         JSONArray infos = reqJson.getJSONArray("data");
 
         Assert.hasKeyByFlowData(infos, "addRouteView", "orderTypeCd", "必填，请填写订单类型");
@@ -55,7 +51,7 @@ public class BindingServiceListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         JSONArray infos = reqJson.getJSONArray("data");
 
@@ -169,47 +165,5 @@ public class BindingServiceListener extends AbstractServiceApiListener {
         }
         return true;
 
-    }
-
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeServiceConstant.BINDING_SERVICE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IAppInnerServiceSMO getAppInnerServiceSMOImpl() {
-        return appInnerServiceSMOImpl;
-    }
-
-    public void setAppInnerServiceSMOImpl(IAppInnerServiceSMO appInnerServiceSMOImpl) {
-        this.appInnerServiceSMOImpl = appInnerServiceSMOImpl;
-    }
-
-
-    public IServiceInnerServiceSMO getServiceInnerServiceSMOImpl() {
-        return serviceInnerServiceSMOImpl;
-    }
-
-    public void setServiceInnerServiceSMOImpl(IServiceInnerServiceSMO serviceInnerServiceSMOImpl) {
-        this.serviceInnerServiceSMOImpl = serviceInnerServiceSMOImpl;
-    }
-
-    public IRouteInnerServiceSMO getRouteInnerServiceSMOImpl() {
-        return routeInnerServiceSMOImpl;
-    }
-
-    public void setRouteInnerServiceSMOImpl(IRouteInnerServiceSMO routeInnerServiceSMOImpl) {
-        this.routeInnerServiceSMOImpl = routeInnerServiceSMOImpl;
     }
 }

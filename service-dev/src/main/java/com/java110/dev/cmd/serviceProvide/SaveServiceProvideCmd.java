@@ -1,52 +1,42 @@
-package com.java110.api.listener.serviceProvide;
+package com.java110.dev.cmd.serviceProvide;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.service.ServiceProvideDto;
+import com.java110.intf.community.IServiceInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.IServiceInnerServiceSMO;
-import com.java110.dto.service.ServiceProvideDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.utils.constant.ServiceCodeServiceProvideConstant;
 
-
-import com.java110.core.annotation.Java110Listener;
-
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("saveServiceProvideListener")
-public class SaveServiceProvideListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "serviceProvide.saveServiceProvide")
+public class SaveServiceProvideCmd extends Cmd {
 
     @Autowired
     private IServiceInnerServiceSMO serviceInnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+//Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         JSONArray infos = reqJson.getJSONArray("data");
 
         Assert.hasKeyByFlowData(infos, "Service", "name", "必填，请填写服务名称");
         Assert.hasKeyByFlowData(infos, "Service", "serviceCode", "必填，请填写服务编码");
         Assert.hasKeyByFlowData(infos, "devServiceProvideView", "queryModel", "必填，请选择是否显示菜单");
         Assert.hasKeyByFlowData(infos, "devServiceProvideView", "params", "必填，请填写参数");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         JSONArray infos = reqJson.getJSONArray("data");
 
 
@@ -69,30 +59,6 @@ public class SaveServiceProvideListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(viewServiceInfo.toJSONString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeServiceProvideConstant.ADD_SERVICEPROVIDE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IServiceInnerServiceSMO getServiceInnerServiceSMOImpl() {
-        return serviceInnerServiceSMOImpl;
-    }
-
-    public void setServiceInnerServiceSMOImpl(IServiceInnerServiceSMO serviceInnerServiceSMOImpl) {
-        this.serviceInnerServiceSMOImpl = serviceInnerServiceSMOImpl;
     }
 
     private boolean hasKey(JSONObject info, String key) {
