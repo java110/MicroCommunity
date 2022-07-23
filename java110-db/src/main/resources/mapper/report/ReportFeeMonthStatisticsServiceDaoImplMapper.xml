@@ -1276,7 +1276,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
+        select t.config_id configId,t.obj_id objId,t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
         ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
         deadlineTime,t.create_time createTime,max(t.update_time) updateTime,SUM(t.his_owe_amount)
         hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
