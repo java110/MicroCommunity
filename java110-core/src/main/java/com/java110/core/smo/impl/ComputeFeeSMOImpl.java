@@ -2257,7 +2257,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             // 计算本轮的 计费起始时间
             Calendar curEndTimeCalender = Calendar.getInstance();
             curEndTimeCalender.setTime(rateStartTime);
-            curEndTimeCalender.set(Calendar.MONTH,new Double(curCycle).intValue());
+            curEndTimeCalender.add(Calendar.MONTH,new Double(curCycle).intValue());
             curEndTime = curEndTimeCalender.getTime();
             if (curCycle > curOweMonth) {
                 //不足增长周期增长率
