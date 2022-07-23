@@ -1276,7 +1276,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
-        select t.config_id configId,t.obj_id objId,t.obj_name objName,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
+        select t.config_id configId,t.obj_id objId,t.obj_name objName,t.obj_type objType,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
         ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
         deadlineTime,t.create_time createTime,max(t.update_time) updateTime,SUM(t.his_owe_amount)
         hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
@@ -1292,6 +1292,7 @@
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on pf.fee_id = pfa.fee_id and pfa.spec_cd = '390008' and pfa.status_cd ='0'
         where t.status_cd = '0'
+
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1331,7 +1332,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.deadline_time &lt;= #{endTime}
         </if>
-        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,pfa.`value`,br.built_up_area
+        group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_type,t.obj_name,pfa.`value`,br.built_up_area
         order by pfa.`value`
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
