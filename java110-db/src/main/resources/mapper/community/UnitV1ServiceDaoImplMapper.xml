@@ -37,7 +37,7 @@
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>
-        <if test="roomUnit == 'Y'">
+        <if test='roomUnit == "Y"'>
             and t.unit_num != '0'
         </if>
         <if test="lift !=null and lift != ''">
@@ -111,7 +111,7 @@
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>
-        <if test="roomUnit == 'Y'">
+        <if test='roomUnit == "Y"'>
             and t.unit_num != '0'
         </if>
         <if test="lift !=null and lift != ''">
