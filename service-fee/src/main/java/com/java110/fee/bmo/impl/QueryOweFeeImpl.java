@@ -20,7 +20,6 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -34,9 +33,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -184,13 +180,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
 
-        if(!StringUtil.isEmpty(custEndTime)){
-            try {
-                computeFeeSMOImpl.dealRentRateCustEndTime(feeDto, DateUtil.getDateFromString(custEndTime,DateUtil.DATE_FORMATE_STRING_B));
-            } catch (Exception e) {
-                throw new CmdException("计算费用失败"+e);
-            }
-        }else {
+        if (!StringUtil.isEmpty(custEndTime)) {
+            Date date = DateUtil.getDateFromStringB(custEndTime);
+            computeFeeSMOImpl.dealRentRateCustEndTime(feeDto, date);
+        } else {
             computeFeeSMOImpl.dealRentRateCycle(feeDto, NumberUtil.getDouble(feeDto.getCycle()));
         }
 
@@ -463,7 +456,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feePrice = 0.0;
         } else if ("1101".equals(computingFormula)) { // 租金
             feePrice = 0.0;
-        }else if ("1102".equals(computingFormula)) { // 租金
+        } else if ("1102".equals(computingFormula)) { // 租金
             feePrice = 0.0;
         } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
@@ -587,7 +580,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         } else if ("1102".equals(computingFormula)) { // 租金
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpRoomDto.getRoomRent()));
             feePrice = additionalAmount.setScale(3, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        }else if ("4004".equals(computingFormula)) {
+        } else if ("4004".equals(computingFormula)) {
             feePrice = Double.parseDouble(feeDto.getAmount());
         } else if ("5005".equals(computingFormula)) {
 

@@ -2198,16 +2198,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         try {
             for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
                 if (FeeAttrDto.SPEC_CD_RATE.equals(tmpFeeAttrDto.getSpecCd())) {
-                    feeDto.setRate(tmpFeeAttrDto.getValue());
-                    rate = Double.parseDouble(tmpFeeAttrDto.getValue());
+                    feeDto.setRate(tmpFeeAttrDto.getValue().trim());
+                    rate = Double.parseDouble(tmpFeeAttrDto.getValue().trim());
                 }
                 if (FeeAttrDto.SPEC_CD_RATE_CYCLE.equals(tmpFeeAttrDto.getSpecCd())) {
-                    feeDto.setRateCycle(tmpFeeAttrDto.getValue());
-                    rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue());
+                    feeDto.setRateCycle(tmpFeeAttrDto.getValue().trim());
+                    rateCycle = Integer.parseInt(tmpFeeAttrDto.getValue().trim());
                 }
                 if (FeeAttrDto.SPEC_CD_RATE_START_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
-                    feeDto.setRateStartTime(tmpFeeAttrDto.getValue());
-                    rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue(), DateUtil.DATE_FORMATE_STRING_B);
+                    feeDto.setRateStartTime(tmpFeeAttrDto.getValue().trim());
+                    rateStartTime = DateUtil.getDateFromString(tmpFeeAttrDto.getValue().trim(), DateUtil.DATE_FORMATE_STRING_B);
                 }
             }
         } catch (Exception e) {
@@ -2269,7 +2269,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //本期金额
             curAmount = rateDec.add(preCycleAmount);// 增长部分 + 上本期费用
             //如果计费起始时间 大于 递增开始时间 那么本轮 不计入
-            if(feeDto.getEndTime().getTime()< curEndTime.getTime()){
+            if(feeDto.getEndTime().getTime()<= curEndTime.getTime()){
                 addTotalAmount = addTotalAmount.add(curAmount); // 计入总的 费用中
             }
             preCycleAmount = curAmount;
