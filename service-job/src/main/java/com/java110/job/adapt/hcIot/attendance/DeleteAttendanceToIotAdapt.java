@@ -68,22 +68,25 @@ public class DeleteAttendanceToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray businessOwnerAttendances = new JSONArray();
         if (data.containsKey(AttendanceClassesPo.class.getSimpleName())) {
             Object bObj = data.get(AttendanceClassesPo.class.getSimpleName());
-            JSONArray businessOwnerAttendances = null;
             if (bObj instanceof JSONObject) {
-                businessOwnerAttendances = new JSONArray();
                 businessOwnerAttendances.add(bObj);
             } else if (bObj instanceof List) {
                 businessOwnerAttendances = JSONArray.parseArray(JSONObject.toJSONString(bObj));
             } else {
                 businessOwnerAttendances = (JSONArray) bObj;
             }
-            //JSONObject businessOwnerAttendance = data.getJSONObject("businessOwnerAttendance");
-            for (int bOwnerAttendanceIndex = 0; bOwnerAttendanceIndex < businessOwnerAttendances.size(); bOwnerAttendanceIndex++) {
-                JSONObject businessOwnerAttendance = businessOwnerAttendances.getJSONObject(bOwnerAttendanceIndex);
-                doSendOwnerAttendance(business, businessOwnerAttendance);
+        } else {
+            if (data instanceof JSONObject) {
+                businessOwnerAttendances.add(data);
             }
+        }
+        //JSONObject businessOwnerAttendance = data.getJSONObject("businessOwnerAttendance");
+        for (int bOwnerAttendanceIndex = 0; bOwnerAttendanceIndex < businessOwnerAttendances.size(); bOwnerAttendanceIndex++) {
+            JSONObject businessOwnerAttendance = businessOwnerAttendances.getJSONObject(bOwnerAttendanceIndex);
+            doSendOwnerAttendance(business, businessOwnerAttendance);
         }
     }
 
