@@ -121,6 +121,8 @@ public class IotConstant {
     //添加考勤班次
     public static final String ADD_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/addAttendanceClassStaffs";
 
+    //修改考勤班次
+    public static final String UPDATE_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/updateAttendanceClassStaffs";
 
     //删除考勤班次
     public static final String DELETE_ATTENDANCE_CLASSES_STAFFS = "/extApi/attendance/deleteAttendanceClassStaff";

@@ -18,10 +18,15 @@ package com.java110.job.adapt.hcIot.staff;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.org.OrgStaffRelDto;
-import com.java110.dto.store.StoreUserDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
@@ -53,6 +58,16 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
     @Autowired
     private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
 
     /**
      * accessToken={access_token}
@@ -69,7 +84,7 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        JSONArray   businessStoreUsers = new JSONArray();
+        JSONArray businessStoreUsers = new JSONArray();
         if (data.containsKey(StoreUserPo.class.getSimpleName())) {
             Object bObj = data.get(StoreUserPo.class.getSimpleName());
             if (bObj instanceof JSONObject) {
@@ -80,7 +95,7 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessStoreUsers = (JSONArray) bObj;
             }
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessStoreUsers.add(data);
             }
@@ -114,15 +129,30 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
         if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
             return;
         }
+
+        MachineDto machineDto = new MachineDto();
+        machineDto.setLocationObjId(orgStaffRelDtos.get(0).getDepartmentId());
+        machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ATTENDANCE);
+        List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+
+        String img = getStaffPhoto(orgStaffRelDtos.get(0));
+
         JSONObject storeUserObj = null;
         List<JSONObject> storeUserObjs = new ArrayList<>();
-        for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos ){
+        for (AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
+
             storeUserObj = new JSONObject();
             storeUserObj.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
             storeUserObj.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
             storeUserObj.put("staffName", orgStaffRelDtos.get(0).getStaffName());
             storeUserObj.put("departmentId", orgStaffRelDtos.get(0).getDepartmentId());
             storeUserObj.put("departmentName", orgStaffRelDtos.get(0).getDepartmentName());
+            if (machineDtos != null && machineDtos.size() < 1) {
+                storeUserObj.put("machineCode", machineDtos.get(0).getMachineCode());
+                storeUserObj.put("extMachineId", machineDtos.get(0).getMachineId());
+                storeUserObj.put("extCommunityId", machineDtos.get(0).getCommunityId());
+            }
+            storeUserObj.put("faceBase64", img);
             storeUserObjs.add(storeUserObj);
         }
         JSONObject postParameters = new JSONObject();
@@ -130,5 +160,25 @@ public class AddStaffToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("extClassesId", attendanceClassesDtos.get(0).getClassesId());
         postParameters.put("extCommunityId", "-1");
         hcStoreUserAsynImpl.addAttendanceStaff(postParameters, storeUserObjs);
+    }
+
+    private String getStaffPhoto(OrgStaffRelDto orgStaffRelDto) {
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(orgStaffRelDto.getStaffId());
+        fileRelDto.setRelTypeCd("12000");
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        if (fileRelDtos == null || fileRelDtos.size() != 1) {
+            return "";
+        }
+        FileDto fileDto = new FileDto();
+        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
+        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
+        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
+        if (fileDtos == null || fileDtos.size() != 1) {
+            return "";
+        }
+
+        return fileDtos.get(0).getContext();
     }
 }

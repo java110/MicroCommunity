@@ -18,9 +18,13 @@ package com.java110.job.adapt.hcIot.staff;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
@@ -54,6 +58,16 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
 
     /**
@@ -118,6 +132,11 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
             return;
         }
 
+        MachineDto machineDto = new MachineDto();
+        machineDto.setLocationObjId(orgStaffRelDtos.get(0).getDepartmentId());
+        machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ATTENDANCE);
+        List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+
         for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos ){
             JSONObject postParameters = new JSONObject();
             postParameters.put("classesName", tmpAttendanceClassesDto.getClassesName());
@@ -125,6 +144,11 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
             postParameters.put("deleteStaff", "1");
             postParameters.put("extCommunityId", "-1");
+            if (machineDtos != null && machineDtos.size() < 1) {
+                postParameters.put("machineCode", machineDtos.get(0).getMachineCode());
+                postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
+                postParameters.put("extCommunityId", machineDtos.get(0).getCommunityId());
+            }
             hcStoreUserAsynImpl.deleteAttendanceStaff(postParameters);
         }
 
