@@ -29,7 +29,7 @@ public class OrgTreeDto implements Serializable {
     }
 
     private String id;
-    private String icon;
+    private String icon ="/img/org.png";
     private String text;
     private String parentId;
     private List<OrgTreeDto> children;
