@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.org.OrgDto;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.po.org.OrgPo;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +31,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -53,8 +56,14 @@ public class UpdateOrgCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "orgId", "orgId不能为空");
-Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
+        Assert.hasKeyAndValue(reqJson, "orgId", "组织ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "orgName", "必填，请填写组织名称");
+        Assert.hasKeyAndValue(reqJson, "orgLevel", "必填，请填写报修人名称");
+        Assert.hasKeyAndValue(reqJson, "parentOrgId", "必填，请选择上级ID");
+        //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        reqJson.put("storeId", storeId);
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
 
     }
 
@@ -62,7 +71,19 @@ Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       OrgPo orgPo = BeanConvertUtil.covertBean(reqJson, OrgPo.class);
+        OrgDto orgDto = new OrgDto();
+        orgDto.setOrgId(reqJson.getString("orgId"));
+        orgDto.setStoreId(reqJson.getString("storeId"));
+        List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
+
+        Assert.listOnlyOne(orgDtos, "未查询到组织信息 或查询到多条数据");
+
+        JSONObject businessOrg = new JSONObject();
+        businessOrg.putAll(reqJson);
+        businessOrg.put("allowOperation", orgDtos.get(0).getAllowOperation());
+        businessOrg.put("belongCommunityId", orgDtos.get(0).getBelongCommunityId());
+        OrgPo orgPo = BeanConvertUtil.covertBean(businessOrg, OrgPo.class);
+
         int flag = orgV1InnerServiceSMOImpl.updateOrg(orgPo);
 
         if (flag < 1) {
