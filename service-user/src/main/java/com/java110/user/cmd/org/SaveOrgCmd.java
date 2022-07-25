@@ -58,7 +58,6 @@ public class SaveOrgCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "orgName", "必填，请填写组织名称");
-        Assert.hasKeyAndValue(reqJson, "orgLevel", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(reqJson, "parentOrgId", "必填，请选择上级ID");
         //Assert.hasKeyAndValue(reqJson, "belongCommunityId", "必填，请选择隶属小区");
         //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
