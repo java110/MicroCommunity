@@ -150,6 +150,17 @@ public class DateUtil {
         }
     }
 
+    public static Date getDateFromStringA(String date){
+        SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_A);
+        try{
+            synchronized (sDateFormat) {
+                return sDateFormat.parse(date);
+            }
+        }catch (Exception e){
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     public static Date getDefaultDateFromString(String date)
             throws ParseException {
         return getDateFromString(date, "yyyyMMddHHmmss");

@@ -682,8 +682,10 @@ public class PayFeeCmd extends Cmd {
         }
 
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
-            throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+        if(maxEndTime != null) {
+            if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
+                throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+            }
         }
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
