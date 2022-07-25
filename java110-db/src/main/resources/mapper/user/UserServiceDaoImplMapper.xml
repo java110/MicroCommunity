@@ -456,9 +456,11 @@
     <!-- 查询员工总量 -->
     <select id="getStaffCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from u_user u
-        left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
-        left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+        u_user u
+        <if test="orgId !=null and orgId != ''">
+            left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
+            left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+        </if>
         where u.level_cd = '01'
         <if test="storeId !=null and storeId != ''">
             and uosr.store_id = #{storeId}
@@ -497,11 +499,16 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select uo.org_id orgId,uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,uosr.store_id storeId,uosr.rel_cd relCd
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id
+        <if test="storeId !=null and storeId != ''">
+        ,uosr.store_id storeId,uosr.rel_cd relCd
+        </if>
         from
         u_user u
+        <if test="orgId !=null and orgId != ''">
         left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
         left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+        </if>
         where u.level_cd = '01'
         <if test="storeId !=null and storeId != ''">
             and uosr.store_id = #{storeId}
