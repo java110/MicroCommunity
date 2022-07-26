@@ -74,4 +74,7 @@ public interface IUserV1ServiceDao {
      */
     int queryUsersCount(Map info);
 
+    int queryStaffsNoInOrgCount(Map beanCovertMap);
+
+    List<Map> queryStaffsNoInOrg(Map beanCovertMap);
 }

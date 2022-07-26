@@ -86,4 +86,23 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
     public int queryUsersCount(@RequestBody UserDto userDto) {
         return userV1ServiceDaoImpl.queryUsersCount(BeanConvertUtil.beanCovertMap(userDto));    }
 
+    @Override
+    public int queryStaffsNoInOrgCount(@RequestBody  UserDto userDto) {
+        return userV1ServiceDaoImpl.queryStaffsNoInOrgCount(BeanConvertUtil.beanCovertMap(userDto));
+    }
+
+    @Override
+    public List<UserDto> queryStaffsNoInOrg(@RequestBody UserDto userDto) {
+        //校验是否传了 分页信息
+
+        int page = userDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            userDto.setPage((page - 1) * userDto.getRow());
+        }
+
+        List<UserDto> users = BeanConvertUtil.covertBeanList(userV1ServiceDaoImpl.queryStaffsNoInOrg(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
+
+        return users;    }
+
 }

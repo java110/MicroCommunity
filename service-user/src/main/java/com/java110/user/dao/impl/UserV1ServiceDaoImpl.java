@@ -108,5 +108,26 @@ public class UserV1ServiceDaoImpl extends BaseServiceDao implements IUserV1Servi
         return Integer.parseInt(businessUserInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryStaffsNoInOrgCount(Map info) {
+        logger.debug("查询 queryStaffsNoInOrgCount 入参 info : {}",info);
+
+        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrgCount", info);
+        if (businessUserInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessUserInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryStaffsNoInOrg(Map info) {
+        logger.debug("查询 queryStaffsNoInOrg 入参 info : {}",info);
+
+        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrg",info);
+
+        return businessUserInfos;
+    }
+
 
 }

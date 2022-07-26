@@ -65,4 +65,18 @@ public interface IUserV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryUsersCount", method = RequestMethod.POST)
     int queryUsersCount(@RequestBody UserDto userDto);
+
+
+    @RequestMapping(value = "/queryStaffsNoInOrgCount", method = RequestMethod.POST)
+    int queryStaffsNoInOrgCount(@RequestBody UserDto userDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param userDto 数据对象分享
+     * @return UserDto 对象数据
+     */
+    @RequestMapping(value = "/queryStaffsNoInOrg", method = RequestMethod.POST)
+    List<UserDto> queryStaffsNoInOrg(@RequestBody UserDto userDto);
 }
