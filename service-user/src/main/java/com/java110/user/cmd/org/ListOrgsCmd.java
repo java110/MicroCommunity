@@ -40,8 +40,12 @@ public class ListOrgsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        String storeId = context.getReqHeaders().get("store-id");
-        reqJson.put("storeId", storeId);
+        if (!reqJson.containsKey("storeId")) {
+            String storeId = context.getReqHeaders().get("store-id");
+            reqJson.put("storeId", storeId);
+        }
+//        String storeId = context.getReqHeaders().get("store-id");
+//        reqJson.put("storeId", storeId);
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
     }
 
