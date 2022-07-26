@@ -40,6 +40,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public static final String PAYMENT_CD_PRE = "1200";
     public static final String PAYMENT_CD_AFTER = "2100";
 
+    public static final String DEDUCT_FROM_N = "N";
 
 
     private String feeTypeCd;
@@ -283,9 +284,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
         this.amount = amount;
     }
 
-    public String getDeductFrom() { return deductFrom; }
+    public String getDeductFrom() {
+        return deductFrom;
+    }
 
-    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+    public void setDeductFrom(String deductFrom) {
+        this.deductFrom = deductFrom;
+    }
 
     public String getComputingFormulaName() {
         return computingFormulaName;
