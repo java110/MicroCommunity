@@ -501,7 +501,7 @@
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id
-        <if test="storeId !=null and storeId != ''">
+        <if test="orgId !=null and orgId != ''">
             ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,uosr.rel_cd relCd
         </if>
         from
