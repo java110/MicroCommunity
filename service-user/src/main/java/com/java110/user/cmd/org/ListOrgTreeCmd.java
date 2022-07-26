@@ -72,7 +72,7 @@ public class ListOrgTreeCmd extends Cmd {
                 continue;
             }
             if (orgDto.getParentOrgId().equals(parentOrgDto.getId())) {
-                child = new OrgTreeDto(orgDto.getOrgId(), orgDto.getOrgName(), orgDto.getParentOrgId(), parentOrgDto + " / " + orgDto.getOrgName());
+                child = new OrgTreeDto(orgDto.getOrgId(), orgDto.getOrgName(), orgDto.getParentOrgId(), parentOrgDto.getAllOrgName() + " / " + orgDto.getOrgName());
                 childs.add(child);
             }
         }
