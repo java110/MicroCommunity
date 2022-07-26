@@ -170,17 +170,23 @@
         where t.level_cd = '01'
         and su.store_id = #{storeId}
         and (osr.org_id != #{orgId} or osr.org_id is null)
+        <if test="staffName !=null and staffName != ''">
+            and t.name like concat('%', #{staffName},'%')
+        </if>
     </select>
 
     <select id="queryStaffsNoInOrg" parameterType="Map" resultType="Map">
         select t.address,t.sex,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.level_cd,t.level_cd
-        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.password,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age
+        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         LEFT JOIN u_org_staff_rel osr on su.user_id = osr.staff_id and osr.status_cd = '0'
         where t.level_cd = '01'
         and su.store_id = #{storeId}
         and (osr.org_id != #{orgId} or osr.org_id is null)
+        <if test="staffName !=null and staffName != ''">
+            and t.name like concat('%', #{staffName},'%')
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
