@@ -129,10 +129,8 @@ public class UserStaffAddCmd extends Cmd {
         Assert.jsonObjectHaveKey(paramObj, "name", "请求参数中未包含name 节点，请确认");
         //Assert.jsonObjectHaveKey(paramObj,"email","请求参数中未包含email 节点，请确认");
         Assert.jsonObjectHaveKey(paramObj, "tel", "请求参数中未包含tel 节点，请确认");
-        Assert.jsonObjectHaveKey(paramObj, "orgId", "请求报文格式错误或未包含部门信息");
         Assert.jsonObjectHaveKey(paramObj, "address", "请求报文格式错误或未包含地址信息");
         Assert.jsonObjectHaveKey(paramObj, "sex", "请求报文格式错误或未包含性别信息");
-        Assert.jsonObjectHaveKey(paramObj, "relCd", "请求报文格式错误或未包含员工角色");
 
 
         if (paramObj.containsKey("email") && !StringUtil.isEmpty(paramObj.getString("email"))) {
