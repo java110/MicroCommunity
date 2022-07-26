@@ -59,9 +59,13 @@ public class UserStaffAddCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        if (!reqJson.containsKey("storeId")) {
+            String storeId = context.getReqHeaders().get("store-id");
+            reqJson.put("storeId", storeId);
+        }
         //获取数据上下文对象
         Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
-        Assert.jsonObjectHaveKey(reqJson, "storeTypeCd", "请求参数中未包含storeTypeCd 节点，请确认");
         //判断员工手机号是否重复(员工可根据手机号登录平台)
         UserDto userDto = new UserDto();
         userDto.setTel(reqJson.getString("tel"));
@@ -189,7 +193,7 @@ public class UserStaffAddCmd extends Cmd {
     public void addStaffOrg(JSONObject paramInJson) {
 
         JSONObject businessOrgStaffRel = new JSONObject();
-        businessOrgStaffRel.put("relId", "-1");
+        businessOrgStaffRel.put("relId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
         businessOrgStaffRel.put("storeId", paramInJson.getString("storeId"));
         businessOrgStaffRel.put("staffId", paramInJson.getString("userId"));
         businessOrgStaffRel.put("orgId", paramInJson.getString("orgId"));
