@@ -136,7 +136,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String offlinePayFeeSwitch;
 
-    private String deductFrom = "Y";
+    private String deductFrom;
 
     private String rateCycle;
 
