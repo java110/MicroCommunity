@@ -22,16 +22,18 @@ public class OrgTreeDto implements Serializable {
 
     }
 
-    public OrgTreeDto(String id, String text,String parentId) {
+    public OrgTreeDto(String id, String text,String parentId,String allOrgName) {
         this.id = id;
         this.text = text;
         this.parentId = parentId;
+        this.allOrgName = allOrgName;
     }
 
     private String id;
     private String icon ="/img/org.png";
     private String text;
     private String parentId;
+    private String allOrgName;
     private List<OrgTreeDto> children;
 
 
@@ -73,5 +75,13 @@ public class OrgTreeDto implements Serializable {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getAllOrgName() {
+        return allOrgName;
+    }
+
+    public void setAllOrgName(String allOrgName) {
+        this.allOrgName = allOrgName;
     }
 }

@@ -50,7 +50,7 @@ public class ListOrgTreeCmd extends Cmd {
         OrgTreeDto storeOrgTreeDto = null;
         for (OrgDto tmpOrgDto : orgDtos) {
             if (OrgDto.ORG_LEVEL_STORE.equals(tmpOrgDto.getOrgLevel())) {
-                storeOrgTreeDto = new OrgTreeDto(tmpOrgDto.getOrgId(), tmpOrgDto.getOrgName(), tmpOrgDto.getParentOrgId());
+                storeOrgTreeDto = new OrgTreeDto(tmpOrgDto.getOrgId(), tmpOrgDto.getOrgName(), tmpOrgDto.getParentOrgId(), tmpOrgDto.getOrgName());
             }
         }
 
@@ -68,11 +68,11 @@ public class ListOrgTreeCmd extends Cmd {
         List<OrgTreeDto> childs = new ArrayList<>();
         OrgTreeDto child = null;
         for (OrgDto orgDto : orgDtos) {
-            if(parentOrgDto.getId().equals(orgDto.getOrgId())){ // 他自己跳过
+            if (parentOrgDto.getId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
             }
             if (orgDto.getParentOrgId().equals(parentOrgDto.getId())) {
-                child = new OrgTreeDto(orgDto.getOrgId(), orgDto.getOrgName(), orgDto.getParentOrgId());
+                child = new OrgTreeDto(orgDto.getOrgId(), orgDto.getOrgName(), orgDto.getParentOrgId(), parentOrgDto + " / " + orgDto.getOrgName());
                 childs.add(child);
             }
         }
