@@ -3,7 +3,6 @@ package com.java110.user.cmd.user;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -22,7 +21,6 @@ import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.store.StoreUserPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.StoreUserRelConstant;
 import com.java110.utils.constant.UserLevelConstant;
@@ -79,18 +77,17 @@ public class UserStaffAddCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = "";
-        String oldUserId = "";
+
         String relCd = reqJson.getString("relCd");//员工 组织 岗位
-        if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("userId"))) {
-            //将userId 强制写成-1
-            oldUserId = "-1";
-            userId = GenerateCodeFactory.getUserId();
-            reqJson.put("userId", userId);
-            //添加用户
-            addUser(reqJson);
-        }
+
+        userId = GenerateCodeFactory.getUserId();
         reqJson.put("userId", userId);
-        reqJson.put("relCd", "-1".equals(oldUserId) ? StoreUserRelConstant.REL_COMMON : StoreUserRelConstant.REL_ADMIN);
+        //添加用户
+        addUser(reqJson);
+        reqJson.put("userId", userId);
+        if (!reqJson.containsKey("relCd") || StringUtil.isEmpty(reqJson.getString("relCd"))) {
+            reqJson.put("relCd", StoreUserRelConstant.REL_COMMON);
+        }
         addStaff(reqJson);
         //重写 员工岗位
         reqJson.put("relCd", relCd);
@@ -115,7 +112,7 @@ public class UserStaffAddCmd extends Cmd {
             businessUnit.put("fileSaveName", fileName);
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-            if(flag <1){
+            if (flag < 1) {
                 throw new CmdException("保存图片异常");
             }
         }
@@ -191,6 +188,10 @@ public class UserStaffAddCmd extends Cmd {
     }
 
     public void addStaffOrg(JSONObject paramInJson) {
+
+        if (!paramInJson.containsKey("orgId") || StringUtil.isEmpty(paramInJson.getString("orgId"))) {
+            return;
+        }
 
         JSONObject businessOrgStaffRel = new JSONObject();
         businessOrgStaffRel.put("relId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
