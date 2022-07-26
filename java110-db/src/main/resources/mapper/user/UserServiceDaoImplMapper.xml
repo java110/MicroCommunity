@@ -457,13 +457,14 @@
     <select id="getStaffCount" parameterType="Map" resultType="Map">
         select count(1) count
         from u_user u
+        inner join s_store_user su on su.user_id = u.user_id
         <if test="orgId !=null and orgId != ''">
             left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
             left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
         </if>
         where u.level_cd = '01'
         <if test="storeId !=null and storeId != ''">
-            and uosr.store_id = #{storeId}
+            and su.store_id = #{storeId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uosr.org_id = #{orgId}
@@ -505,13 +506,14 @@
         </if>
         from
         u_user u
+        inner join s_store_user su on su.user_id = u.user_id
         <if test="orgId !=null and orgId != ''">
-        left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
-        left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
+            left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
+            left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
         </if>
         where u.level_cd = '01'
         <if test="storeId !=null and storeId != ''">
-            and uosr.store_id = #{storeId}
+            and su.store_id = #{storeId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uosr.org_id = #{orgId}
