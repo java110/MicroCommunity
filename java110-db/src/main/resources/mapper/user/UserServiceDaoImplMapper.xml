@@ -479,7 +479,7 @@
             and u.name like concat('%',#{staffName},'%')
         </if>
         <if test="staffId != null and staffId !=''">
-            and uosr.staff_id = #{staffId}
+            and u.user_id = #{staffId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uo.org_id = #{orgId}
@@ -527,7 +527,7 @@
             and u.name like concat('%',#{staffName},'%')
         </if>
         <if test="staffId != null and staffId !=''">
-            and uosr.staff_id = #{staffId}
+            and u.user_id = #{staffId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uo.org_id = #{orgId}
