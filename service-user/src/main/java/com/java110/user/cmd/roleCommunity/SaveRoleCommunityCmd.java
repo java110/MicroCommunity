@@ -15,6 +15,7 @@
  */
 package com.java110.user.cmd.roleCommunity;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -55,20 +56,30 @@ public class SaveRoleCommunityCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "roleId", "请求报文中未包含roleId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-
+        if (!reqJson.containsKey("communitys") || reqJson.getJSONArray("communitys").size() < 1) {
+            throw new IllegalArgumentException("未包含小区信息");
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
-       RoleCommunityPo roleCommunityPo = BeanConvertUtil.covertBean(reqJson, RoleCommunityPo.class);
-        roleCommunityPo.setRcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = roleCommunityV1InnerServiceSMOImpl.saveRoleCommunity(roleCommunityPo);
+        RoleCommunityPo roleCommunityPo = null;
+        JSONArray communitys = reqJson.getJSONArray("communitys");
+        for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
+            roleCommunityPo = new RoleCommunityPo();
+            roleCommunityPo.setCommunityId(communitys.getJSONObject(communityIndex).getString("communityId"));
+            roleCommunityPo.setCommunityName(communitys.getJSONObject(communityIndex).getString("communityName"));
+            roleCommunityPo.setRoleId(reqJson.getString("roleId"));
+            roleCommunityPo.setStoreId(storeId);
+            roleCommunityPo.setRcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            int flag = roleCommunityV1InnerServiceSMOImpl.saveRoleCommunity(roleCommunityPo);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

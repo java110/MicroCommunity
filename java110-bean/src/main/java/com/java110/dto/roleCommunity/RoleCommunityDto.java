@@ -1,6 +1,7 @@
 package com.java110.dto.roleCommunity;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class RoleCommunityDto extends PageDto implements Serializable {
 
     private String roleId;
-private String rcId;
-private String communityId;
-private String storeId;
+    private String rcId;
+    private String communityId;
+    private  String communityName;
+    private String storeId;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String storeId;
     public String getRoleId() {
         return roleId;
     }
-public void setRoleId(String roleId) {
+
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
-public String getRcId() {
+
+    public String getRcId() {
         return rcId;
     }
-public void setRcId(String rcId) {
+
+    public void setRcId(String rcId) {
         this.rcId = rcId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
@@ -65,5 +74,13 @@ public void setStoreId(String storeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

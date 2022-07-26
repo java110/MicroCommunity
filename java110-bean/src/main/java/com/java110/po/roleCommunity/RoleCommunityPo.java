@@ -17,6 +17,7 @@ package com.java110.po.roleCommunity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-07-25 17:12:49 mail: 928255095@qq.com
@@ -28,41 +29,58 @@ import java.util.Date;
 public class RoleCommunityPo implements Serializable {
 
     private String roleId;
-private String rcId;
-private String statusCd = "0";
-private String communityId;
-private String storeId;
-public String getRoleId() {
+    private String rcId;
+    private String statusCd = "0";
+    private String communityId;
+    private  String communityName;
+    private String storeId;
+
+    public String getRoleId() {
         return roleId;
     }
-public void setRoleId(String roleId) {
+
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
-public String getRcId() {
+
+    public String getRcId() {
         return rcId;
     }
-public void setRcId(String rcId) {
+
+    public void setRcId(String rcId) {
         this.rcId = rcId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
 
+    public String getCommunityName() {
+        return communityName;
+    }
 
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
 }

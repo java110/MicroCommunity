@@ -8,9 +8,9 @@
     <!-- 保存项目授权信息 add by wuxw 2018-07-03 -->
     <insert id="saveRoleCommunityInfo" parameterType="Map">
         insert into u_role_community(
-        role_id,rc_id,community_id,store_id
+        role_id,rc_id,community_id,community_name,store_id
         ) values (
-        #{roleId},#{rcId},#{communityId},#{storeId}
+        #{roleId},#{rcId},#{communityId},#{communityName},#{storeId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询项目授权信息 add by wuxw 2018-07-03 -->
     <select id="getRoleCommunityInfo" parameterType="Map" resultType="Map">
         select t.role_id,t.role_id roleId,t.rc_id,t.rc_id rcId,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId
+        statusCd,t.community_id,t.community_id communityId,t.community_name communityName,t.store_id,t.store_id storeId
         from u_role_community t
         where 1 =1
         <if test="roleId !=null and roleId != ''">
@@ -55,6 +55,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
