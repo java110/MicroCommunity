@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.org.OrgDto;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.po.org.OrgPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -54,11 +57,20 @@ public class SaveOrgCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "orgId", "请求报文中未包含orgId");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-Assert.hasKeyAndValue(reqJson, "orgName", "请求报文中未包含orgName");
-Assert.hasKeyAndValue(reqJson, "orgLevel", "请求报文中未包含orgLevel");
-Assert.hasKeyAndValue(reqJson, "parentOrgId", "请求报文中未包含parentOrgId");
+        Assert.hasKeyAndValue(reqJson, "orgName", "必填，请填写组织名称");
+        Assert.hasKeyAndValue(reqJson, "parentOrgId", "必填，请选择上级ID");
+        //Assert.hasKeyAndValue(reqJson, "belongCommunityId", "必填，请选择隶属小区");
+        //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
+
+        OrgDto orgDto = new OrgDto();
+        orgDto.setOrgId(reqJson.getString("parentOrgId"));
+        List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
+
+        Assert.listOnlyOne(orgDtos,"上级组织不存在");
+
+        int orgLevel = Integer.parseInt(orgDtos.get(0).getOrgLevel());
+        orgLevel +=1;
+        reqJson.put("orgLevel",orgLevel);
 
     }
 
@@ -66,8 +78,17 @@ Assert.hasKeyAndValue(reqJson, "parentOrgId", "请求报文中未包含parentOrg
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       OrgPo orgPo = BeanConvertUtil.covertBean(reqJson, OrgPo.class);
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+
+        JSONObject businessOrg = new JSONObject();
+        businessOrg.putAll(reqJson);
+        businessOrg.put("allowOperation", "T");
+        businessOrg.put("belongCommunityId", "");
+
+        OrgPo orgPo = BeanConvertUtil.covertBean(businessOrg, OrgPo.class);
         orgPo.setOrgId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        orgPo.setStoreId(storeId);
+
         int flag = orgV1InnerServiceSMOImpl.saveOrg(orgPo);
 
         if (flag < 1) {

@@ -68,6 +68,9 @@ public class ListOrgTreeCmd extends Cmd {
         List<OrgTreeDto> childs = new ArrayList<>();
         OrgTreeDto child = null;
         for (OrgDto orgDto : orgDtos) {
+            if(parentOrgDto.getId().equals(orgDto.getOrgId())){ // 他自己跳过
+                continue;
+            }
             if (orgDto.getParentOrgId().equals(parentOrgDto.getId())) {
                 child = new OrgTreeDto(orgDto.getOrgId(), orgDto.getOrgName(), orgDto.getParentOrgId());
                 childs.add(child);
