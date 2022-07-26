@@ -30,14 +30,18 @@ public class DeleteStaffOrgRelCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setOrgId(reqJson.getString("orgId"));
-        orgStaffRelDto.setStaffId(reqJson.getString("staffId"));
+        orgStaffRelDto.setStaffId(reqJson.getString("userId"));
         List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-        Assert.listOnlyOne(orgStaffRelDtos, "关系不存在");
-        OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
-        orgStaffRelPo.setRelId(orgStaffRelDtos.get(0).getRelId());
-        int flag =  orgStaffRelV1InnerServiceSMOImpl.deleteOrgStaffRel(orgStaffRelPo);
-        if(flag < 1){
-            throw new CmdException("关联员工失败");
+        if (orgStaffRelDtos == null || orgStaffRelDtos.size() < 1) {
+            throw new CmdException("关系不存在");
+        }
+        for (OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRelDtos) {
+            OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
+            orgStaffRelPo.setRelId(tmpOrgStaffRelDto.getRelId());
+            int flag = orgStaffRelV1InnerServiceSMOImpl.deleteOrgStaffRel(orgStaffRelPo);
+            if (flag < 1) {
+                throw new CmdException("关联员工失败");
+            }
         }
     }
 }
