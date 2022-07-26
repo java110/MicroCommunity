@@ -1925,19 +1925,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         //在当前月中 这块有问题
         if (toDate.getTime() < newFromMaxDay.getTime().getTime()) {
             monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-            return tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
+            return tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
         }
         // 上月天数
         days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
         tmpDays = new BigDecimal(days);
         monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-        BigDecimal preRresMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal preRresMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP);
 
         //下月天数
         days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
         tmpDays = new BigDecimal(days);
         monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
-        resMonth = tmpDays.divide(monthDay, 2, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
+        resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
         return resMonth;
     }
 
@@ -2233,7 +2233,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
             curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
-            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(4, BigDecimal.ROUND_HALF_UP);
         }
 
         curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
@@ -2250,7 +2250,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date curEndTime = null;
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             //当期增长部分
-            rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(4, BigDecimal.ROUND_HALF_UP);
             //增长周期的倍数
             curCycle = (cycleIndex + 1) * rateCycle;
 
@@ -2261,8 +2261,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             curEndTime = curEndTimeCalender.getTime();
             if (curCycle > curOweMonth) {
                 //不足增长周期增长率
-                rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(2, BigDecimal.ROUND_HALF_UP);
-                lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(4, BigDecimal.ROUND_HALF_UP);
+                lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
                 addTotalAmount = addTotalAmount.add(rateDec).add(lastRateAmountDec);
                 continue;
             }
