@@ -15,6 +15,11 @@ import java.util.Date;
  **/
 public class OrgStaffRelDto extends PageDto implements Serializable {
 
+    //600311000001
+    //600311000002
+    public static final String REL_CD_ADMIN="600311000001";//管理员
+    public static final String REL_CD_PUBLIC="600311000002";//管理员
+
     private String relId;
     private String storeId;
     private String orgId;
