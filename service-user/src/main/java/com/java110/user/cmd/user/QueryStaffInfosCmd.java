@@ -116,20 +116,22 @@ public class QueryStaffInfosCmd extends Cmd {
                 continue;
             }
             apiStaffDataVo.setParentOrgId(apiStaffDataVo.getOrgId());
-            findParents(apiStaffDataVo, orgDtos, null);
+
+            findParents(apiStaffDataVo, orgDtos, null,0);
 
         }
 
     }
 
 
-    private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto) {
+    private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto,int orgDeep) {
         for (OrgDto orgDto : orgDtos) {
+            curOrgDto = orgDto;
             if (!apiStaffDataVo.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
             }
             apiStaffDataVo.setParentOrgId(orgDto.getParentOrgId());
-            curOrgDto = orgDto;
+
             if (StringUtil.isEmpty(apiStaffDataVo.getOrgName())) {
                 apiStaffDataVo.setOrgName(orgDto.getOrgName() );
                 continue;
@@ -149,7 +151,13 @@ public class QueryStaffInfosCmd extends Cmd {
             return;
         }
 
-        findParents(apiStaffDataVo, orgDtos, curOrgDto);
+        orgDeep +=1;
+
+        if(orgDeep > 20){
+            return ;
+        }
+
+        findParents(apiStaffDataVo, orgDtos, curOrgDto,orgDeep);
     }
 
     /**

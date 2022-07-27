@@ -67,11 +67,11 @@ public class ListStaffOrgsCmd extends Cmd {
 
         for (OrgStaffRelDto orgStaffRelDto : orgStaffRels) {
             orgStaffRelDto.setParentOrgId(orgStaffRelDto.getOrgId());
-            findParents(orgStaffRelDto, orgDtos, null);
+            findParents(orgStaffRelDto, orgDtos, null, 0);
         }
     }
 
-    private void findParents(OrgStaffRelDto orgStaffRelDto, List<OrgDto> orgDtos, OrgDto curOrgDto) {
+    private void findParents(OrgStaffRelDto orgStaffRelDto, List<OrgDto> orgDtos, OrgDto curOrgDto, int orgDeep) {
         for (OrgDto orgDto : orgDtos) {
             if (!orgStaffRelDto.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
@@ -79,7 +79,7 @@ public class ListStaffOrgsCmd extends Cmd {
             orgStaffRelDto.setParentOrgId(orgDto.getParentOrgId());
             curOrgDto = orgDto;
             if (StringUtil.isEmpty(orgStaffRelDto.getOrgName())) {
-                orgStaffRelDto.setOrgName(orgDto.getOrgName() );
+                orgStaffRelDto.setOrgName(orgDto.getOrgName());
                 continue;
             }
             orgStaffRelDto.setOrgName(orgDto.getOrgName() + " / " + orgStaffRelDto.getOrgName());
@@ -96,7 +96,11 @@ public class ListStaffOrgsCmd extends Cmd {
         if (curOrgDto != null && "-1".equals(curOrgDto.getParentOrgId())) {
             return;
         }
+        orgDeep += 1;
+        if (orgDeep > 20) {
+            return;
+        }
 
-        findParents(orgStaffRelDto, orgDtos, curOrgDto);
+        findParents(orgStaffRelDto, orgDtos, curOrgDto, orgDeep);
     }
 }
