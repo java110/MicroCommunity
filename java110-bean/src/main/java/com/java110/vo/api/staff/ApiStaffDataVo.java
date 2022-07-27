@@ -42,6 +42,8 @@ public class ApiStaffDataVo implements Serializable {
 
     private String relCd;
 
+    private String relCdName;
+
 
 
     public String getUserId() {
@@ -202,5 +204,13 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setRelCd(String relCd) {
         this.relCd = relCd;
+    }
+
+    public String getRelCdName() {
+        return relCdName;
+    }
+
+    public void setRelCdName(String relCdName) {
+        this.relCdName = relCdName;
     }
 }
