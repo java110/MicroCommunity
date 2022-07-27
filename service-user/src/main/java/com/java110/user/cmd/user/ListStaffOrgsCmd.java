@@ -79,7 +79,7 @@ public class ListStaffOrgsCmd extends Cmd {
             orgStaffRelDto.setParentOrgId(orgDto.getParentOrgId());
             curOrgDto = orgDto;
             if (StringUtil.isEmpty(orgStaffRelDto.getOrgName())) {
-                orgStaffRelDto.setOrgName(orgDto.getOrgName() + orgStaffRelDto.getOrgName());
+                orgStaffRelDto.setOrgName(orgDto.getOrgName() );
                 continue;
             }
             orgStaffRelDto.setOrgName(orgDto.getOrgName() + " / " + orgStaffRelDto.getOrgName());
