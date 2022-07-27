@@ -5,102 +5,157 @@
 <mapper namespace="privilegeUserV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存用户权限信息 add by wuxw 2018-07-03 -->
     <insert id="savePrivilegeUserInfo" parameterType="Map">
         insert into p_privilege_user(
-privilege_flag,pu_id,p_id,store_id,user_id
-) values (
-#{privilegeFlag},#{puId},#{pId},#{storeId},#{userId}
-)
+        privilege_flag,pu_id,p_id,store_id,user_id
+        ) values (
+        #{privilegeFlag},#{puId},#{pId},#{storeId},#{userId}
+        )
     </insert>
-
 
 
     <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
     <select id="getPrivilegeUserInfo" parameterType="Map" resultType="Map">
-        select  t.privilege_flag,t.privilege_flag privilegeFlag,t.pu_id,t.pu_id puId,t.p_id,t.p_id pId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_id,t.user_id userId 
-from p_privilege_user t 
-where 1 =1 
-<if test="privilegeFlag !=null and privilegeFlag != ''">
-   and t.privilege_flag= #{privilegeFlag}
-</if> 
-<if test="puId !=null and puId != ''">
-   and t.pu_id= #{puId}
-</if> 
-<if test="pId !=null and pId != ''">
-   and t.p_id= #{pId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.privilege_flag,t.privilege_flag privilegeFlag,t.pu_id,t.pu_id puId,t.p_id,t.p_id
+        pId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_id,t.user_id userId
+        from p_privilege_user t
+        where 1 =1
+        <if test="privilegeFlag !=null and privilegeFlag != ''">
+            and t.privilege_flag= #{privilegeFlag}
+        </if>
+        <if test="puId !=null and puId != ''">
+            and t.pu_id= #{puId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改用户权限信息 add by wuxw 2018-07-03 -->
     <update id="updatePrivilegeUserInfo" parameterType="Map">
-        update  p_privilege_user t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="privilegeFlag !=null and privilegeFlag != ''">
-, t.privilege_flag= #{privilegeFlag}
-</if> 
-<if test="pId !=null and pId != ''">
-, t.p_id= #{pId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
- where 1=1 <if test="puId !=null and puId != ''">
-and t.pu_id= #{puId}
-</if> 
+        update p_privilege_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="privilegeFlag !=null and privilegeFlag != ''">
+            , t.privilege_flag= #{privilegeFlag}
+        </if>
+        <if test="pId !=null and pId != ''">
+            , t.p_id= #{pId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1
+        <if test="puId !=null and puId != ''">
+            and t.pu_id= #{puId}
+        </if>
 
     </update>
 
     <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
-     <select id="queryPrivilegeUsersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from p_privilege_user t 
-where 1 =1 
-<if test="privilegeFlag !=null and privilegeFlag != ''">
-   and t.privilege_flag= #{privilegeFlag}
-</if> 
-<if test="puId !=null and puId != ''">
-   and t.pu_id= #{puId}
-</if> 
-<if test="pId !=null and pId != ''">
-   and t.p_id= #{pId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+    <select id="queryPrivilegeUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from p_privilege_user t
+        where 1 =1
+        <if test="privilegeFlag !=null and privilegeFlag != ''">
+            and t.privilege_flag= #{privilegeFlag}
+        </if>
+        <if test="puId !=null and puId != ''">
+            and t.pu_id= #{puId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+    </select>
 
+    <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
+    <select id="queryPrivilegeUserInfoCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from p_privilege_user t
+        inner JOIN u_user uu on t.user_id = uu.user_id and uu.status_cd = '0'
+        where 1 =1
+        <if test="privilegeFlag !=null and privilegeFlag != ''">
+            and t.privilege_flag= #{privilegeFlag}
+        </if>
+        <if test="puId !=null and puId != ''">
+            and t.pu_id= #{puId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+    </select>
 
-     </select>
+    <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
+    <select id="queryPrivilegeUserInfos" parameterType="Map" resultType="Map">
+        select t.privilege_flag,t.privilege_flag privilegeFlag,t.pu_id,t.pu_id puId,t.p_id,t.p_id
+        pId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_id,t.user_id userId,
+        uu.address,uu.sex,uu.user_id,uu.user_id userId,uu.level_cd,uu.level_cd
+        levelCd,uu.location_cd,uu.location_cd locationCd,uu.score,uu.name,uu.tel,uu.email,uu.age
+        from p_privilege_user t
+        inner JOIN u_user uu on t.user_id = uu.user_id and uu.status_cd = '0'
+        where 1 =1
+        <if test="privilegeFlag !=null and privilegeFlag != ''">
+            and t.privilege_flag= #{privilegeFlag}
+        </if>
+        <if test="puId !=null and puId != ''">
+            and t.pu_id= #{puId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
 
 </mapper>

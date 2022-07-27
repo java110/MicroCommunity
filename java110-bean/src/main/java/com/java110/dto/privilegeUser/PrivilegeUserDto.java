@@ -1,6 +1,7 @@
 package com.java110.dto.privilegeUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,11 +15,12 @@ import java.util.Date;
  **/
 public class PrivilegeUserDto extends PageDto implements Serializable {
 
+    public static final String PRIVILEGE_FLAG_GROUP = "1";
     private String privilegeFlag;
-private String puId;
-private String pId;
-private String storeId;
-private String userId;
+    private String puId;
+    private String pId;
+    private String storeId;
+    private String userId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String userId;
     public String getPrivilegeFlag() {
         return privilegeFlag;
     }
-public void setPrivilegeFlag(String privilegeFlag) {
+
+    public void setPrivilegeFlag(String privilegeFlag) {
         this.privilegeFlag = privilegeFlag;
     }
-public String getPuId() {
+
+    public String getPuId() {
         return puId;
     }
-public void setPuId(String puId) {
+
+    public void setPuId(String puId) {
         this.puId = puId;
     }
-public String getPId() {
+
+    public String getPId() {
         return pId;
     }
-public void setPId(String pId) {
+
+    public void setPId(String pId) {
         this.pId = pId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

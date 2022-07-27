@@ -86,4 +86,24 @@ public class PrivilegeUserV1InnerServiceSMOImpl extends BaseServiceSMO implement
     public int queryPrivilegeUsersCount(@RequestBody PrivilegeUserDto privilegeUserDto) {
         return privilegeUserV1ServiceDaoImpl.queryPrivilegeUsersCount(BeanConvertUtil.beanCovertMap(privilegeUserDto));    }
 
+    @Override
+    public int queryPrivilegeUserInfoCount(@RequestBody PrivilegeUserDto privilegeUserDto) {
+        return privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfoCount(BeanConvertUtil.beanCovertMap(privilegeUserDto));
+    }
+
+    @Override
+    public List<UserDto> queryPrivilegeUserInfos(@RequestBody PrivilegeUserDto privilegeUserDto) {
+        //校验是否传了 分页信息
+
+        int page = privilegeUserDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            privilegeUserDto.setPage((page - 1) * privilegeUserDto.getRow());
+        }
+
+        List<UserDto> privilegeUsers = BeanConvertUtil.covertBeanList(privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfos(BeanConvertUtil.beanCovertMap(privilegeUserDto)), UserDto.class);
+
+        return privilegeUsers;
+    }
+
 }

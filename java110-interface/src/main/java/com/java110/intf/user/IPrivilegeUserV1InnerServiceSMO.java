@@ -17,6 +17,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.privilegeUser.PrivilegeUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.po.privilegeUser.PrivilegeUserPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,17 +40,16 @@ public interface IPrivilegeUserV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/savePrivilegeUser", method = RequestMethod.POST)
-    public int savePrivilegeUser(@RequestBody  PrivilegeUserPo privilegeUserPo);
+    public int savePrivilegeUser(@RequestBody PrivilegeUserPo privilegeUserPo);
 
     @RequestMapping(value = "/updatePrivilegeUser", method = RequestMethod.POST)
-    public int updatePrivilegeUser(@RequestBody  PrivilegeUserPo privilegeUserPo);
+    public int updatePrivilegeUser(@RequestBody PrivilegeUserPo privilegeUserPo);
 
     @RequestMapping(value = "/deletePrivilegeUser", method = RequestMethod.POST)
-    public int deletePrivilegeUser(@RequestBody  PrivilegeUserPo privilegeUserPo);
+    public int deletePrivilegeUser(@RequestBody PrivilegeUserPo privilegeUserPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param privilegeUserDto 数据对象分享
      * @return PrivilegeUserDto 对象数据
@@ -65,4 +65,10 @@ public interface IPrivilegeUserV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryPrivilegeUsersCount", method = RequestMethod.POST)
     int queryPrivilegeUsersCount(@RequestBody PrivilegeUserDto privilegeUserDto);
+
+    @RequestMapping(value = "/queryPrivilegeUserInfoCount", method = RequestMethod.POST)
+    int queryPrivilegeUserInfoCount(@RequestBody PrivilegeUserDto privilegeUserDto);
+
+    @RequestMapping(value = "/queryPrivilegeUserInfos", method = RequestMethod.POST)
+    List<UserDto> queryPrivilegeUserInfos(@RequestBody PrivilegeUserDto privilegeUserDto);
 }
