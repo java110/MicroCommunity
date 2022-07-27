@@ -19,7 +19,13 @@
     <select id="getPrivilegeUserInfo" parameterType="Map" resultType="Map">
         select t.privilege_flag,t.privilege_flag privilegeFlag,t.pu_id,t.pu_id puId,t.p_id,t.p_id
         pId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_id,t.user_id userId
+        <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
+        ,pg.`name` roleName
+        </if>
         from p_privilege_user t
+        <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
+        left join p_privilege_group pg on t.p_id = pg.pg_id  and pg.status_cd = '0'
+        </if>
         where 1 =1
         <if test="privilegeFlag !=null and privilegeFlag != ''">
             and t.privilege_flag= #{privilegeFlag}
@@ -76,6 +82,9 @@
     <select id="queryPrivilegeUsersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from p_privilege_user t
+        <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
+            left join p_privilege_group pg on t.p_id = pg.pg_id  and pg.status_cd = '0'
+        </if>
         where 1 =1
         <if test="privilegeFlag !=null and privilegeFlag != ''">
             and t.privilege_flag= #{privilegeFlag}
