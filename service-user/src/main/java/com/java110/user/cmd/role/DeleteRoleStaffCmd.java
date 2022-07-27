@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.privilegeUser.PrivilegeUserDto;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
 import com.java110.po.privilegeUser.PrivilegeUserPo;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +31,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -50,7 +53,8 @@ public class DeleteRoleStaffCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "rcId", "rcId不能为空");
+        Assert.hasKeyAndValue(reqJson, "roleId", "roleId不能为空");
+        Assert.hasKeyAndValue(reqJson, "userId", "userId不能为空");
 
     }
 
@@ -58,11 +62,23 @@ public class DeleteRoleStaffCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        PrivilegeUserPo privilegeUserPo = BeanConvertUtil.covertBean(reqJson, PrivilegeUserPo.class);
-        int flag = privilegeUserV1InnerServiceSMOImpl.deletePrivilegeUser(privilegeUserPo);
+        PrivilegeUserDto privilegeUserDto = new PrivilegeUserDto();
+        privilegeUserDto.setpId(reqJson.getString("roleId"));
+        privilegeUserDto.setUserId(reqJson.getString("userId"));
+        List<PrivilegeUserDto> privilegeUserDtos = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUsers(privilegeUserDto);
 
-        if (flag < 1) {
-            throw new CmdException("删除数据失败");
+        if (privilegeUserDtos == null || privilegeUserDtos.size() < 1) {
+            return;
+        }
+
+        for(PrivilegeUserDto tmpPrivilegeUserDto : privilegeUserDtos) {
+            PrivilegeUserPo privilegeUserPo = new PrivilegeUserPo();
+            privilegeUserPo.setPuId(tmpPrivilegeUserDto.getPuId());
+            int flag = privilegeUserV1InnerServiceSMOImpl.deletePrivilegeUser(privilegeUserPo);
+
+            if (flag < 1) {
+                throw new CmdException("删除数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
