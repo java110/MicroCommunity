@@ -502,7 +502,7 @@
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName
         <if test="orgId !=null and orgId != ''">
-            ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,
+            ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId
         </if>
         from
         u_user u
