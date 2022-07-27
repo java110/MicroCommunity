@@ -9,7 +9,7 @@ public class SmallWechatAttrPo implements Serializable {
     private String specCd;
     private String communityId;
     private String value;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getAttrId() {
         return attrId;

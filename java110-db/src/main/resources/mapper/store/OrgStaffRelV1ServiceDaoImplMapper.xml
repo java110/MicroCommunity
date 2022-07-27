@@ -18,8 +18,9 @@
     <!-- 查询员工部门关系信息 add by wuxw 2018-07-03 -->
     <select id="getOrgStaffRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.org_id,t.org_id
-        orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd
+        orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd,td.`name` relCdName
         from u_org_staff_rel t
+        left join t_dict td on t.rel_cd = td.status_cd and td.table_name = 'u_org_staff_rel' and td.table_columns = 'rel_cd'
         where 1 =1
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
