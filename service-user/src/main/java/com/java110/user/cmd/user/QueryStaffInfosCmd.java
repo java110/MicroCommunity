@@ -5,7 +5,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.org.OrgDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
+import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -26,6 +31,12 @@ public class QueryStaffInfosCmd extends Cmd {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IOrgV1InnerServiceSMO orgV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -49,6 +60,7 @@ public class QueryStaffInfosCmd extends Cmd {
         if (count > 0) {
             staffs = BeanConvertUtil.covertBeanList(userInnerServiceSMOImpl.getStaffs(userDto), ApiStaffDataVo.class);
             refreshInitials(staffs);
+            refreshOrgs(staffs,reqJson.getString("storeId"));
         } else {
             staffs = new ArrayList<>();
         }
@@ -62,6 +74,75 @@ public class QueryStaffInfosCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStaffVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    private void refreshOrgs(List<ApiStaffDataVo> staffs,String storeId) {
+        if(staffs == null ||  staffs.size()<1){
+            return ;
+        }
+
+        List<String>  staffIds  = new ArrayList<>();
+        for(ApiStaffDataVo apiStaffDataVo : staffs){
+            staffIds.add(apiStaffDataVo.getUserId());
+        }
+
+        OrgDto orgDto = new OrgDto();
+        orgDto.setStoreId(storeId);
+        List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
+        if (orgDtos == null || orgDtos.size() < 1) {
+            return;
+        }
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setStaffIds(staffIds.toArray(new String[staffIds.size()]));
+        orgStaffRelDto.setStoreId(storeId);
+        List<OrgStaffRelDto> orgStaffRels = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+
+        if (orgStaffRels == null || orgStaffRels.size() < 1) {
+            return;
+        }
+
+
+        for(ApiStaffDataVo apiStaffDataVo : staffs){
+            for(OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRels){
+                if(!apiStaffDataVo.getUserId().equals(tmpOrgStaffRelDto.getStaffId())){
+                    continue;
+                }
+                tmpOrgStaffRelDto.setParentOrgId(tmpOrgStaffRelDto.getOrgId());
+                findParents(tmpOrgStaffRelDto, orgDtos, null);
+                apiStaffDataVo.setOrgName(tmpOrgStaffRelDto.getOrgName());
+            }
+        }
+
+    }
+
+
+    private void findParents(OrgStaffRelDto orgStaffRelDto, List<OrgDto> orgDtos, OrgDto curOrgDto) {
+        for (OrgDto orgDto : orgDtos) {
+            if (!orgStaffRelDto.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
+                continue;
+            }
+            orgStaffRelDto.setParentOrgId(orgDto.getParentOrgId());
+            curOrgDto = orgDto;
+            if (StringUtil.isEmpty(orgStaffRelDto.getOrgName())) {
+                orgStaffRelDto.setOrgName(orgDto.getOrgName() );
+                continue;
+            }
+            orgStaffRelDto.setOrgName(orgDto.getOrgName() + " / " + orgStaffRelDto.getOrgName());
+        }
+
+        if (curOrgDto != null && OrgDto.ORG_LEVEL_STORE.equals(curOrgDto.getOrgLevel())) {
+            return;
+        }
+
+        if (curOrgDto != null && curOrgDto.getParentOrgId().equals(curOrgDto.getOrgId())) {
+            return;
+        }
+
+        if (curOrgDto != null && "-1".equals(curOrgDto.getParentOrgId())) {
+            return;
+        }
+
+        findParents(orgStaffRelDto, orgDtos, curOrgDto);
     }
 
     /**

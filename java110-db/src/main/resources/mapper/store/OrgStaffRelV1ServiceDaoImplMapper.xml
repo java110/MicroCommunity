@@ -37,6 +37,13 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+        <if test="staffIds != null">
+            and t.staff_id in
+            <foreach collection="staffIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="relCd !=null and relCd != ''">
             and t.rel_cd= #{relCd}
         </if>
@@ -93,6 +100,13 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+        <if test="staffIds != null">
+            and t.staff_id in
+            <foreach collection="staffIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="relCd !=null and relCd != ''">
             and t.rel_cd= #{relCd}
         </if>

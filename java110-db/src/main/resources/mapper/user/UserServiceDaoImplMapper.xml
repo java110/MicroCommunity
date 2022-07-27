@@ -500,13 +500,14 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName
         <if test="orgId !=null and orgId != ''">
-            ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,uosr.rel_cd relCd
+            ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,
         </if>
         from
         u_user u
         inner join s_store_user su on su.user_id = u.user_id
+        left join t_dict td on su.rel_cd =  td.status_cd and td.table_name='s_store_user'  and td.table_columns='rel_cd'
         <if test="orgId !=null and orgId != ''">
             left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
             left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'

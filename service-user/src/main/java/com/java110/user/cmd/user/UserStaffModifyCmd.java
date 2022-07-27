@@ -11,15 +11,18 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
+import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.org.OrgStaffRelPo;
+import com.java110.po.store.StoreUserPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -48,6 +51,9 @@ public class UserStaffModifyCmd extends Cmd {
 
     @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreUserV1InnerServiceSMO  storeUserV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -134,6 +140,22 @@ public class UserStaffModifyCmd extends Cmd {
         orgStaffRelPo.setOrgId(paramObj.getString("orgId"));
 
         flag = orgStaffRelV1InnerServiceSMOImpl.updateOrgStaffRel(orgStaffRelPo);
+        if (flag < 1) {
+            throw new CmdException("保存员工 失败");
+        }
+
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setUserId(userPo.getUserId());
+        List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
+
+        if (storeUserDtos == null || storeUserDtos.size() < 1) {
+            return;
+        }
+        StoreUserPo storeUserPo = new StoreUserPo();
+        storeUserPo.setRelCd(paramObj.getString("relCd"));
+        storeUserPo.setStoreUserId(storeUserDtos.get(0).getStoreUserId());
+
+        flag = storeUserV1InnerServiceSMOImpl.updateStoreUser(storeUserPo);
         if (flag < 1) {
             throw new CmdException("保存员工 失败");
         }
