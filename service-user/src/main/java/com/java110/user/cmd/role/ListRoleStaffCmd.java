@@ -36,7 +36,7 @@ public class ListRoleStaffCmd extends Cmd {
         String storeId = context.getReqHeaders().get("store-id");
 
         PrivilegeUserDto privilegeUserDto = new PrivilegeUserDto();
-        privilegeUserDto.setPId(reqJson.getString("roleId"));
+        privilegeUserDto.setpId(reqJson.getString("roleId"));
         privilegeUserDto.setStoreId(storeId);
         privilegeUserDto.setPrivilegeFlag(PrivilegeUserDto.PRIVILEGE_FLAG_GROUP);
 

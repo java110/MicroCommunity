@@ -44,13 +44,6 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
         this.puId = puId;
     }
 
-    public String getPId() {
-        return pId;
-    }
-
-    public void setPId(String pId) {
-        this.pId = pId;
-    }
 
     public String getStoreId() {
         return storeId;
@@ -83,5 +76,13 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getpId() {
+        return pId;
+    }
+
+    public void setpId(String pId) {
+        this.pId = pId;
     }
 }
