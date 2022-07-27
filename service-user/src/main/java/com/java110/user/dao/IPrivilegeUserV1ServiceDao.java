@@ -77,4 +77,8 @@ public interface IPrivilegeUserV1ServiceDao {
     List<Map> queryPrivilegeUserInfos(Map info);
 
     int queryPrivilegeUserInfoCount(Map info);
+
+    int queryStaffsNoRoleCount(Map info);
+
+    List<Map> queryStaffsNoRoleInfos(Map info);
 }

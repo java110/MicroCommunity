@@ -21,6 +21,7 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
     private String pId;
     private String storeId;
     private String userId;
+    private String userName;
 
 
     private Date createTime;
@@ -84,5 +85,13 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
 
     public void setpId(String pId) {
         this.pId = pId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

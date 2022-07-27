@@ -106,4 +106,24 @@ public class PrivilegeUserV1InnerServiceSMOImpl extends BaseServiceSMO implement
         return privilegeUsers;
     }
 
+    @Override
+    public int queryStaffsNoRoleCount(@RequestBody PrivilegeUserDto privilegeUserDto) {
+        return privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleCount(BeanConvertUtil.beanCovertMap(privilegeUserDto));
+    }
+
+    @Override
+    public List<UserDto> queryStaffsNoRoleInfos(@RequestBody PrivilegeUserDto privilegeUserDto) {
+        //校验是否传了 分页信息
+
+        int page = privilegeUserDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            privilegeUserDto.setPage((page - 1) * privilegeUserDto.getRow());
+        }
+
+        List<UserDto> privilegeUsers = BeanConvertUtil.covertBeanList(privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleInfos(BeanConvertUtil.beanCovertMap(privilegeUserDto)), UserDto.class);
+
+        return privilegeUsers;
+    }
+
 }
