@@ -20,7 +20,14 @@
         select t.role_id,t.role_id roleId,t.rc_id,t.rc_id rcId,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.community_name communityName,t.store_id,t.store_id storeId
         from u_role_community t
+        <if test="staffId != null and staffId != ''">
+            LEFT JOIN p_privilege_group role on t.role_id = role.pg_id and role.status_cd = '0'
+            left join p_privilege_user pu on pu.p_id = role.pg_id and pu.privilege_flag = '1' and pu.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and pu.user_id = #{staffId}
+        </if>
         <if test="roleId !=null and roleId != ''">
             and t.role_id= #{roleId}
         </if>
@@ -73,7 +80,14 @@
     <select id="queryRoleCommunitysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from u_role_community t
+        <if test="staffId != null and staffId != ''">
+            LEFT JOIN p_privilege_group role on t.role_id = role.pg_id and role.status_cd = '0'
+            left join p_privilege_user pu on pu.p_id = role.pg_id and pu.privilege_flag = '1' and pu.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and pu.user_id = #{staffId}
+        </if>
         <if test="roleId !=null and roleId != ''">
             and t.role_id= #{roleId}
         </if>

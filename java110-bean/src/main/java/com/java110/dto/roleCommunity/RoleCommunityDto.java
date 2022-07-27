@@ -20,6 +20,7 @@ public class RoleCommunityDto extends PageDto implements Serializable {
     private String communityId;
     private  String communityName;
     private String storeId;
+    private String staffId;
 
 
     private Date createTime;
@@ -82,5 +83,13 @@ public class RoleCommunityDto extends PageDto implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }

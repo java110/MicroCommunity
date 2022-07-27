@@ -9,16 +9,17 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.roleCommunity.RoleCommunityDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
-import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
-import com.java110.intf.user.IOrgInnerServiceSMO;
-import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.community.ApiCommunityVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Java110Cmd(serviceCode = "community.listMyEnteredCommunitys")
 public class ListMyEnteredCommunitysCmd extends Cmd {
 
@@ -37,7 +39,7 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
     private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
 
     @Autowired
-    private IOrgCommunityInnerServiceSMO orgCommunityInnerServiceSMOImpl;
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
 
     @Autowired
     private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
@@ -45,14 +47,36 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+
+        if (!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId"))) {
+            reqJson.put("storeId", cmdDataFlowContext.getReqHeaders().get("store-id"));
+        }
+
+        if (!reqJson.containsKey("userId") || StringUtil.isEmpty(reqJson.getString("userId"))) {
+            reqJson.put("userId", cmdDataFlowContext.getReqHeaders().get("user-id"));
+        }
+
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+
+        // 判断是不是管理员，管理员反馈 物业 的所有小区
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
 
         //校验商户是否存在;
         StoreDto storeDto = new StoreDto();
@@ -61,22 +85,9 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
 
         Assert.listOnlyOne(storeDtos, "商户不存在");
 
-        //1.0 先查询 员工对应的部门
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
-        orgStaffRelDto.setStaffId(reqJson.getString("userId"));
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-        Assert.listOnlyOne(orgStaffRelDtos, "未查询到相应员工对应的部门信息或查询到多条");
-        //2.0 再根据 部门对应的 小区ID查询小区信息
-        OrgDto orgDto = new OrgDto();
-        orgDto.setOrgId(orgStaffRelDtos.get(0).getParentOrgId());
-        orgDto.setStoreId(reqJson.getString("storeId"));
-        orgDto.setOrgLevel("2");
-        List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-        Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
         int count = 0;
         List<ApiCommunityDataVo> communitys = null;
-        if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
+        if(UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())){
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
@@ -89,15 +100,14 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
             } else {
                 communitys = new ArrayList<>();
             }
-        } else {
-            String companyOrgId = orgDtos.get(0).getOrgId();
-            OrgCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, OrgCommunityDto.class);
-            orgCommunityDto.setOrgId(companyOrgId);
-            count = orgCommunityInnerServiceSMOImpl.queryOrgCommunitysCount(orgCommunityDto);
+        }else{
+            RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
+            orgCommunityDto.setStaffId(userDtos.get(0).getStaffId());
+            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysCount(orgCommunityDto);
             if (count > 0) {
-                List<OrgCommunityDto> orgCommunityDtos = orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto);
-                communitys = BeanConvertUtil.covertBeanList(orgCommunityDtos, ApiCommunityDataVo.class);
-                for (OrgCommunityDto tmpOrgCommunityDto : orgCommunityDtos) {
+                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(orgCommunityDto);
+                communitys = BeanConvertUtil.covertBeanList(roleCommunityDtos, ApiCommunityDataVo.class);
+                for (RoleCommunityDto tmpOrgCommunityDto : roleCommunityDtos) {
                     for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {
                         if (tmpOrgCommunityDto.getCommunityId().equals(tmpApiCommunityDataVo.getCommunityId())) {
                             tmpApiCommunityDataVo.setName(tmpOrgCommunityDto.getCommunityName());
@@ -107,8 +117,8 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
             } else {
                 communitys = new ArrayList<>();
             }
-        }
 
+        }
         //兼容 系统刚开始没有小区时
         if (communitys.size() < 1 && (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd()) || StoreDto.STORE_TYPE_DEV.equals(storeDtos.get(0).getStoreTypeCd()))) {
             ApiCommunityDataVo apiCommunityDataVo = new ApiCommunityDataVo();
