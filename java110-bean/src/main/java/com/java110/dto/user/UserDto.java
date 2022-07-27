@@ -80,6 +80,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String relCd;
 
+    private String  relCdName;
+
     private String score;
 
     private String userFlag;
@@ -354,5 +356,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setMallOpenId(String mallOpenId) {
         this.mallOpenId = mallOpenId;
+    }
+
+    public String getRelCdName() {
+        return relCdName;
+    }
+
+    public void setRelCdName(String relCdName) {
+        this.relCdName = relCdName;
     }
 }
