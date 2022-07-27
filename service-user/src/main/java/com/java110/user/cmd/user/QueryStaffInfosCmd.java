@@ -107,27 +107,34 @@ public class QueryStaffInfosCmd extends Cmd {
                 if(!apiStaffDataVo.getUserId().equals(tmpOrgStaffRelDto.getStaffId())){
                     continue;
                 }
-                tmpOrgStaffRelDto.setParentOrgId(tmpOrgStaffRelDto.getOrgId());
-                findParents(tmpOrgStaffRelDto, orgDtos, null);
-                apiStaffDataVo.setOrgName(tmpOrgStaffRelDto.getOrgName());
+               apiStaffDataVo.setOrgId(tmpOrgStaffRelDto.getOrgId());
             }
+        }
+
+        for(ApiStaffDataVo apiStaffDataVo : staffs) {
+            if(StringUtil.isEmpty(apiStaffDataVo.getOrgId())){
+                continue;
+            }
+            apiStaffDataVo.setParentOrgId(apiStaffDataVo.getOrgId());
+            findParents(apiStaffDataVo, orgDtos, null);
+
         }
 
     }
 
 
-    private void findParents(OrgStaffRelDto orgStaffRelDto, List<OrgDto> orgDtos, OrgDto curOrgDto) {
+    private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto) {
         for (OrgDto orgDto : orgDtos) {
-            if (!orgStaffRelDto.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
+            if (!apiStaffDataVo.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
             }
-            orgStaffRelDto.setParentOrgId(orgDto.getParentOrgId());
+            apiStaffDataVo.setParentOrgId(orgDto.getParentOrgId());
             curOrgDto = orgDto;
-            if (StringUtil.isEmpty(orgStaffRelDto.getOrgName())) {
-                orgStaffRelDto.setOrgName(orgDto.getOrgName() );
+            if (StringUtil.isEmpty(apiStaffDataVo.getOrgName())) {
+                apiStaffDataVo.setOrgName(orgDto.getOrgName() );
                 continue;
             }
-            orgStaffRelDto.setOrgName(orgDto.getOrgName() + " / " + orgStaffRelDto.getOrgName());
+            apiStaffDataVo.setOrgName(orgDto.getOrgName() + " / " + apiStaffDataVo.getOrgName());
         }
 
         if (curOrgDto != null && OrgDto.ORG_LEVEL_STORE.equals(curOrgDto.getOrgLevel())) {
@@ -142,7 +149,7 @@ public class QueryStaffInfosCmd extends Cmd {
             return;
         }
 
-        findParents(orgStaffRelDto, orgDtos, curOrgDto);
+        findParents(apiStaffDataVo, orgDtos, curOrgDto);
     }
 
     /**
