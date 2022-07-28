@@ -195,6 +195,12 @@
         <if test="locationTypeCd !=null and locationTypeCd != ''">
             and t.location_type_cd= #{locationTypeCd}
         </if>
+        <if test="machineTypeCds != null ">
+            and t.machine_type_cd in
+            <foreach collection="machineTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="typeId !=null and typeId != ''">
             and t.type_id= #{typeId}
         </if>
@@ -320,6 +326,12 @@
         </if>
         <if test="machineTypeCd !=null and machineTypeCd != ''">
             and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineTypeCds != null ">
+            and t.machine_type_cd in
+            <foreach collection="machineTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="machineIp !=null and machineIp != ''">
             and t.machine_ip= #{machineIp}

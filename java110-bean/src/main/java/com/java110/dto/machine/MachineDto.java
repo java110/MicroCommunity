@@ -34,6 +34,7 @@ public class MachineDto extends PageDto implements Serializable {
     private String communityId;
     private String machineName;
     private String machineTypeCd;
+    private String[] machineTypeCds;
     private String locationType;
     private String machineTypeCdName;
     private String machineIp;
@@ -329,5 +330,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String[] getMachineTypeCds() {
+        return machineTypeCds;
+    }
+
+    public void setMachineTypeCds(String[] machineTypeCds) {
+        this.machineTypeCds = machineTypeCds;
     }
 }

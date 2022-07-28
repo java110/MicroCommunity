@@ -90,6 +90,10 @@ public class ListMachinesCmd extends Cmd {
 
         MachineDto machineDto = BeanConvertUtil.covertBean(reqJson, MachineDto.class);
 
+        if (reqJson.containsKey("machineTypeCds") && !StringUtil.isEmpty(reqJson.getString("machineTypeCds"))) {
+            machineDto.setMachineTypeCds(reqJson.getString("machineTypeCds").split(","));
+        }
+
         int count = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
 
         List<ApiMachineDataVo> machines = null;
