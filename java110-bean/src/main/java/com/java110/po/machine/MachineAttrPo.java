@@ -17,6 +17,7 @@ public class MachineAttrPo implements Serializable {
     private String attrId;
     private String specCd;
     private String value;
+    private String statusCd="0";
 
     public String getMachineId() {
         return machineId;
@@ -56,5 +57,13 @@ public class MachineAttrPo implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
