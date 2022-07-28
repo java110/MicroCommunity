@@ -84,16 +84,20 @@ public class SaveMachineCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
-        communityLocationDto.setCommunityId(reqJson.getString("communityId"));
-        communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
-        List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
-
-        Assert.listOnlyOne(locationDtos, "位置不存在");
-
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
-        machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
+
+        if(!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))){
+            CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+            communityLocationDto.setCommunityId(reqJson.getString("communityId"));
+            communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
+            List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+            Assert.listOnlyOne(locationDtos, "位置不存在");
+            machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
+        }else{
+            machinePo.setLocationObjId("-1");
+            machinePo.setLocationTypeCd("-1");
+        }
+
         machinePo.setMachineId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         machinePo.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         machinePo.setState(MachineDto.MACHINE_STATE_ON);

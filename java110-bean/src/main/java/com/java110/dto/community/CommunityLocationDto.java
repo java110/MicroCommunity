@@ -15,6 +15,7 @@ import java.util.Date;
  **/
 public class CommunityLocationDto extends PageDto implements Serializable {
 
+
     private String locationName;
     private String locationId;
     private String locationType;
