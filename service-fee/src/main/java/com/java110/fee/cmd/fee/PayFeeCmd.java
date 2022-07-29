@@ -681,6 +681,11 @@ public class PayFeeCmd extends Cmd {
             maxEndTime = feeInfo.getMaxEndTime();
         }
 
+        //如果间歇性费用没有设置结束时间 则取费用项的
+        if (maxEndTime == null) {
+            maxEndTime = feeInfo.getConfigEndTime();
+        }
+
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
         if(maxEndTime != null) {
             if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
