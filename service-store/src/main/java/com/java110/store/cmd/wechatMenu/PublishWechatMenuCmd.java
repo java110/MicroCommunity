@@ -1,38 +1,30 @@
-package com.java110.api.listener.smallWeChat;
+package com.java110.store.cmd.wechatMenu;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.smallWeChat.IWechatMenuBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.WechatFactory;
-import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
-import com.java110.intf.store.IWechatMenuInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.wechatMenu.WechatMenuDto;
-import com.java110.utils.constant.ServiceCodeWechatMenuConstant;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.store.IWechatMenuInnerServiceSMO;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-/**
- * 保存商户侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("publishWechatMenuListener")
-public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IWechatMenuBMO wechatMenuBMOImpl;
+@Java110Cmd(serviceCode = "smallWeChat.publicWechatMenu")
+public class PublishWechatMenuCmd extends Cmd {
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -43,13 +35,11 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
-
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
     }
-
     /**
      * {
      * "button":[
@@ -86,8 +76,8 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
      * @param reqJson 请求报文
      */
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        //查询一级菜单
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+//查询一级菜单
         WechatMenuDto wechatMenuDto = BeanConvertUtil.covertBean(reqJson, WechatMenuDto.class);
         wechatMenuDto.setMenuLevel(WechatMenuDto.MENU_LEVEL_ONE);
         List<WechatMenuDto> wechatMenuDtos = wechatMenuInnerServiceSMOImpl.queryWechatMenus(wechatMenuDto);
@@ -157,15 +147,4 @@ public class PublishWechatMenuListener extends AbstractServiceApiPlusListener {
         }
         wechatMenuObj.put("sub_button", subButtons);
     }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeWechatMenuConstant.PUBLIC_WECHATMENU;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
 }
