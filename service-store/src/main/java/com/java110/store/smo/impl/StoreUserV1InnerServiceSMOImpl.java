@@ -16,6 +16,7 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.po.store.StoreUserPo;
 import com.java110.store.dao.IStoreUserV1ServiceDao;
@@ -47,18 +48,21 @@ public class StoreUserV1InnerServiceSMOImpl extends BaseServiceSMO implements IS
 
 
     @Override
+    @Java110Transactional
     public int saveStoreUser(@RequestBody StoreUserPo storeUserPo) {
         int saveFlag = storeUserV1ServiceDaoImpl.saveStoreUserInfo(BeanConvertUtil.beanCovertMap(storeUserPo));
         return saveFlag;
     }
 
      @Override
+     @Java110Transactional
     public int updateStoreUser(@RequestBody  StoreUserPo storeUserPo) {
         int saveFlag = storeUserV1ServiceDaoImpl.updateStoreUserInfo(BeanConvertUtil.beanCovertMap(storeUserPo));
         return saveFlag;
     }
 
      @Override
+     @Java110Transactional
     public int deleteStoreUser(@RequestBody  StoreUserPo storeUserPo) {
        storeUserPo.setStatusCd("1");
        int saveFlag = storeUserV1ServiceDaoImpl.updateStoreUserInfo(BeanConvertUtil.beanCovertMap(storeUserPo));
