@@ -117,49 +117,57 @@ public class UpdateStaffToIotAdapt extends DatabusAdaptImpl {
         orgStaffRelDto.setStoreId(storeUserPo.getStoreId());
         List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
 
-        Assert.listOnlyOne(orgStaffRelDtos, "未包含员工信息");
 
-        //查询员工部门是否参与考勤
-        AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
-        attendanceClassesDto.setClassesObjType(AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT);
-        attendanceClassesDto.setClassesObjId(orgStaffRelDtos.get(0).getDepartmentId());
-        List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
-
-        //员工部门没有考勤，不用处理
-        if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
-            return;
+        if(orgStaffRelDtos == null || orgStaffRelDtos.size()<1){
+            throw new IllegalArgumentException("员工未包含组织");
         }
 
-        MachineDto machineDto = new MachineDto();
-        machineDto.setLocationObjId(orgStaffRelDtos.get(0).getDepartmentId());
-        machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ATTENDANCE);
-        List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+        for (OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRelDtos) {
 
-        String img = getStaffPhoto(orgStaffRelDtos.get(0));
+            //查询员工部门是否参与考勤
+            AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
+            attendanceClassesDto.setClassesObjType(AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT);
+            attendanceClassesDto.setClassesObjId(tmpOrgStaffRelDto.getOrgId());
+            List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
 
-        JSONObject storeUserObj = null;
-        List<JSONObject> storeUserObjs = new ArrayList<>();
-        for (AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
-
-            storeUserObj = new JSONObject();
-            storeUserObj.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
-            storeUserObj.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
-            storeUserObj.put("staffName", orgStaffRelDtos.get(0).getStaffName());
-            storeUserObj.put("departmentId", orgStaffRelDtos.get(0).getDepartmentId());
-            storeUserObj.put("departmentName", orgStaffRelDtos.get(0).getDepartmentName());
-            if (machineDtos != null && machineDtos.size() < 1) {
-                storeUserObj.put("machineCode", machineDtos.get(0).getMachineCode());
-                storeUserObj.put("extMachineId", machineDtos.get(0).getMachineId());
-                storeUserObj.put("extCommunityId", machineDtos.get(0).getCommunityId());
+            //员工部门没有考勤，不用处理
+            if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
+                continue;
             }
-            storeUserObj.put("faceBase64", img);
-            storeUserObjs.add(storeUserObj);
+
+            MachineDto machineDto = new MachineDto();
+            machineDto.setLocationObjId(tmpOrgStaffRelDto.getOrgId());
+            machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ATTENDANCE);
+            List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+
+            String img = getStaffPhoto(tmpOrgStaffRelDto);
+
+            JSONObject storeUserObj = null;
+            List<JSONObject> storeUserObjs = new ArrayList<>();
+            for (AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
+
+                storeUserObj = new JSONObject();
+                storeUserObj.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
+                storeUserObj.put("extStaffId", tmpOrgStaffRelDto.getStaffId());
+                storeUserObj.put("staffName", tmpOrgStaffRelDto.getStaffName());
+                storeUserObj.put("departmentId", tmpOrgStaffRelDto.getOrgId());
+                storeUserObj.put("departmentName", tmpOrgStaffRelDto.getOrgName());
+                if (machineDtos != null && machineDtos.size() < 1) {
+                    storeUserObj.put("machineCode", machineDtos.get(0).getMachineCode());
+                    storeUserObj.put("extMachineId", machineDtos.get(0).getMachineId());
+                    storeUserObj.put("extCommunityId", machineDtos.get(0).getCommunityId());
+                }
+                storeUserObj.put("faceBase64", img);
+                storeUserObjs.add(storeUserObj);
+            }
+            JSONObject postParameters = new JSONObject();
+            postParameters.put("classesName", attendanceClassesDtos.get(0).getClassesName());
+            postParameters.put("extClassesId", attendanceClassesDtos.get(0).getClassesId());
+            postParameters.put("extCommunityId", "-1");
+            hcStoreUserAsynImpl.updateAttendanceStaff(postParameters, storeUserObjs);
         }
-        JSONObject postParameters = new JSONObject();
-        postParameters.put("classesName", attendanceClassesDtos.get(0).getClassesName());
-        postParameters.put("extClassesId", attendanceClassesDtos.get(0).getClassesId());
-        postParameters.put("extCommunityId", "-1");
-        hcStoreUserAsynImpl.updateAttendanceStaff(postParameters, storeUserObjs);
+
+
     }
 
     private String getStaffPhoto(OrgStaffRelDto orgStaffRelDto) {
