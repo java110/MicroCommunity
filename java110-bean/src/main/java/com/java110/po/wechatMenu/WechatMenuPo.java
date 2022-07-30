@@ -14,6 +14,7 @@ public class WechatMenuPo implements Serializable {
     private String wechatMenuId;
     private String parentMenuId;
     private String seq;
+    private String statusCd="1";
 
     public String getPagepath() {
         return pagepath;
@@ -93,5 +94,14 @@ public class WechatMenuPo implements Serializable {
 
     public void setSeq(String seq) {
         this.seq = seq;
+    }
+
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
