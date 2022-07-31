@@ -509,7 +509,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-单元-房屋 如 1-1-1");
         }
 
-        String[] values = searchValue.split("-");
+        String[] values = searchValue.split("-",3);
 
         if (values.length != 3) {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-单元-房屋 如 1-1-1");

@@ -33,6 +33,16 @@ public class AppTest
         return new TestSuite( AppTest.class );
     }
 
+
+    public void testSplit(){
+        String a= "1-1-1-1001";
+        String[] as = a.split("-",3);
+
+        for(String aa :as){
+            System.out.println(aa);
+        }
+    }
+
     /**
      * Rigourous Test :-)
      */
