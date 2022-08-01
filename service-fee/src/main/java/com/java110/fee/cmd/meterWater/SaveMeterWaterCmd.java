@@ -168,6 +168,7 @@ public class SaveMeterWaterCmd extends Cmd {
             payFeePo.setEndTime(reqJson.getString("preReadingTime"));
             payFeePo.setPayerObjId(reqJson.getString("objId"));
             //payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            payFeePo.setbId("-1");
             payFeePo.setPayerObjType(reqJson.getString("objType"));
             payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
             payFeePo.setState(FeeDto.STATE_DOING);
@@ -240,6 +241,7 @@ public class SaveMeterWaterCmd extends Cmd {
     public void addMeterWater(JSONObject paramInJson) {
         MeterWaterPo meterWaterPo = BeanConvertUtil.covertBean(paramInJson, MeterWaterPo.class);
         meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+
         int flag = meterWaterV1InnerServiceSMOImpl.saveMeterWater(meterWaterPo);
 
         if (flag < 1) {
