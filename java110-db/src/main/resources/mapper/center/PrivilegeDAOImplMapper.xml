@@ -187,6 +187,9 @@
         inner join p_privilege_group pg on t.p_id = pg.pg_id and pg.status_cd = '0' and pg.pg_id != '600201904002'
         inner join p_privilege_rel pr on pg.pg_id = pr.pg_id and pr.status_cd ='0'
         INNER JOIN p_privilege p on pr.p_id = p.p_id and p.status_cd = '0'
+        <if test="communityId != null and communityId != ''">
+            LEFT JOIN u_role_community rc on pg.pg_id = rc.role_id and rc.status_cd = '0'
+        </if>
         where t.status_cd = '0'
         and t.privilege_flag = '1'
         <if test="resource != null and resource != ''">
@@ -194,6 +197,9 @@
         </if>
         <if test="storeId != null and storeId != ''">
             and t.store_id = #{storeId}
+        </if>
+        <if test="communityId != null and communityId != ''">
+            and t.community_id = #{communityId}
         </if>
     </select>
 

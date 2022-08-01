@@ -38,6 +38,7 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
     private String stName;
 
     private String createTime;
+    private String communityId;
 
     public String getPId() {
         return pId;
@@ -133,5 +134,13 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
 
     public void setStName(String stName) {
         this.stName = stName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

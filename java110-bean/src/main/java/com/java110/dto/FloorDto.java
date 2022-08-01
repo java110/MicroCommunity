@@ -48,6 +48,8 @@ public class FloorDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private int seq;
+
     private List<FloorAttrDto> floorAttrDto;
 
     public String getFloorId() {
@@ -144,5 +146,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setFloorAttrDto(List<FloorAttrDto> floorAttrDto) {
         this.floorAttrDto = floorAttrDto;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 }

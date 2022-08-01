@@ -24,6 +24,7 @@ public class FloorPo implements Serializable {
     private String remark;
     private String communityId;
     private String statusCd = "0";
+    private int seq;
 
     public String getFloorId() {
         return floorId;
@@ -95,5 +96,13 @@ public class FloorPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 }

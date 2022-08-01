@@ -8,9 +8,9 @@
     <!-- 保存楼栋信息 add by wuxw 2018-07-03 -->
     <insert id="saveFloorInfo" parameterType="Map">
         insert into f_floor(
-        floor_id,name,remark,b_id,community_id,user_id,floor_num,floor_area
+        floor_id,name,remark,b_id,community_id,user_id,floor_num,floor_area,seq
         ) values (
-        #{floorId},#{name},#{remark},#{bId},#{communityId},#{userId},#{floorNum},#{floorArea}
+        #{floorId},#{name},#{remark},#{bId},#{communityId},#{userId},#{floorNum},#{floorArea},#{seq}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getFloorInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.name floorName,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.user_id,t.user_id userId,t3.name userName,
-        t.floor_num,t.floor_num floorNum,t.floor_area,t.floor_area floorArea
+        t.floor_num,t.floor_num floorNum,t.floor_area,t.floor_area floorArea,t.seq
         from f_floor t
         LEFT JOIN f_floor_attr t2 on t.floor_id = t2.floor_id and t2.spec_cd='100201912001' and t2.value='8008'
         LEFT JOIN u_user t3 on t.user_id = t3.user_id and t3.status_cd = 0
@@ -48,7 +48,7 @@
         <if test="floorArea !=null and floorArea != ''">
             and t.floor_area= #{floorArea}
         </if>
-        order by t.create_time desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -79,6 +79,9 @@
         </if>
         <if test="floorArea !=null and floorArea != ''">
             , t.floor_area= #{floorArea}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
         </if>
         where 1=1
         <if test="floorId !=null and floorId != ''">
@@ -121,8 +124,6 @@
         <if test="floorArea !=null and floorArea != ''">
             and t.floor_area= #{floorArea}
         </if>
-
-
     </select>
 
 </mapper>
