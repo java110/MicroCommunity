@@ -60,7 +60,7 @@
         where t.status_cd = '0'
         and t.community_id = #{communityId}
         and bu.unit_id = #{unitId}
-        order by t.layer,t.room_num
+        order by CONVERT(t.layer,SIGNED),t.room_num
     </select>
 
     <select id="queryCarStructures" parameterType="Map" resultType="Map">
@@ -213,7 +213,7 @@
         WHERE 1 =1
         and u.unit_id = #{unitId}
         and t.community_id= #{communityId}
-        order by t.layer ,t.room_num
+        order by CONVERT(t.layer,SIGNED) ,t.room_num
     </select>
 
 </mapper>
