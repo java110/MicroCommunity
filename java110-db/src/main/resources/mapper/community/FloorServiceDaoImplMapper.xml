@@ -81,7 +81,7 @@
     <select id="getFloorInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.name,t.status_cd, t.status_cd statusCd,t.remark,t.b_id,
         t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum,t.community_id communityId,t.community_id,
-        t.floor_area,t.floor_area floorArea
+        t.floor_area,t.floor_area floorArea,t.seq
         from f_floor t
         where 1 =1
         <if test="floorId !=null and floorId != ''">
@@ -199,7 +199,8 @@
         f.`remark`,
         f.`user_id` userId,
         f.`community_id` communityId,
-        f.floor_area floorArea
+        f.floor_area floorArea,
+        f.seq
         FROM
         f_floor f
         where 1=1
