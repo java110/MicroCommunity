@@ -41,6 +41,8 @@ public class ApiUnitVo implements Serializable {
     //创建时间
     private String createTime;
 
+    private int seq;
+
 
     public String getUnitId() {
         return unitId;
@@ -120,5 +122,13 @@ public class ApiUnitVo implements Serializable {
 
     public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 }

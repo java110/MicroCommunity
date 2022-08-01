@@ -127,7 +127,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        order by unitNum asc
+        order by ff.seq,t.unit_id asc
        <!-- <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>limit 10;-->
