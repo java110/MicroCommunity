@@ -374,7 +374,10 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             cell2.setCellStyle(cellStyle);
             cell3 = row.createCell(3);
             if (feeObj.containsKey("curDegrees")) {
-                cell3.setCellValue(startTime + "至" + endTime + " " + feeObj.getString("preDegrees") + "至" + feeObj.getString("curDegrees"));
+                double totalDegrees = feeObj.getDouble("curDegrees") - feeObj.getDouble("preDegrees");
+                BigDecimal degreesDec = new BigDecimal(totalDegrees).setScale(2,BigDecimal.ROUND_HALF_UP);
+
+                cell3.setCellValue(startTime + "至" + endTime + " " + feeObj.getString("preDegrees") + "至" + feeObj.getString("curDegrees")+" 总："+degreesDec.doubleValue());
             } else {
                 cell3.setCellValue(startTime + "至" + endTime);
             }
