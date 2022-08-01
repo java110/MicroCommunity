@@ -35,6 +35,7 @@ public class ApiFloorDataVo  extends Vo {
     private String userName;
 
     private String createTime;
+    private int seq;
 
 
     public String getFloorId() {
@@ -99,5 +100,13 @@ public class ApiFloorDataVo  extends Vo {
 
     public void setFloorArea(String floorArea) {
         this.floorArea = floorArea;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 }
