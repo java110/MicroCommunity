@@ -217,7 +217,7 @@ public class SavePropertyCmd extends Cmd {
         orgPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
         orgPo.setAllowOperation("F");
         orgPo.setBelongCommunityId("9999");
-        orgPo.setParentOrgId(orgPo.getOrgId());
+        orgPo.setParentOrgId("-1");
         orgPo.setStoreId(storePo.getStoreId());
 
         flag = orgV1InnerServiceSMOImpl.saveOrg(orgPo);
@@ -226,37 +226,37 @@ public class SavePropertyCmd extends Cmd {
         }
 
         //保存分公司
-        OrgPo orgHeadPo = new OrgPo();
-        orgHeadPo.setOrgName("公司总部");
-        orgHeadPo.setOrgLevel("2");
-        orgHeadPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
-        orgHeadPo.setAllowOperation("F");
-        orgHeadPo.setBelongCommunityId("9999");
-        orgHeadPo.setParentOrgId(orgPo.getOrgId());
-        orgHeadPo.setStoreId(storePo.getStoreId());
-        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
+//        OrgPo orgHeadPo = new OrgPo();
+//        orgHeadPo.setOrgName("公司总部");
+//        orgHeadPo.setOrgLevel("2");
+//        orgHeadPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
+//        orgHeadPo.setAllowOperation("F");
+//        orgHeadPo.setBelongCommunityId("9999");
+//        orgHeadPo.setParentOrgId(orgPo.getOrgId());
+//        orgHeadPo.setStoreId(storePo.getStoreId());
+//        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPo);
+//        if (flag < 1) {
+//            throw new CmdException("注册失败");
+//        }
 
-        //保存部门
-        OrgPo orgHeadPartPo = new OrgPo();
-        orgHeadPartPo.setOrgName("总部办公室");
-        orgHeadPartPo.setOrgLevel("3");
-        orgHeadPartPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
-        orgHeadPartPo.setAllowOperation("F");
-        orgHeadPartPo.setBelongCommunityId("9999");
-        orgHeadPartPo.setParentOrgId(orgHeadPo.getOrgId());
-        orgHeadPartPo.setStoreId(storePo.getStoreId());
-        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPartPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
+//        //保存部门
+//        OrgPo orgHeadPartPo = new OrgPo();
+//        orgHeadPartPo.setOrgName("总部办公室");
+//        orgHeadPartPo.setOrgLevel("3");
+//        orgHeadPartPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
+//        orgHeadPartPo.setAllowOperation("F");
+//        orgHeadPartPo.setBelongCommunityId("9999");
+//        orgHeadPartPo.setParentOrgId(orgHeadPo.getOrgId());
+//        orgHeadPartPo.setStoreId(storePo.getStoreId());
+//        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPartPo);
+//        if (flag < 1) {
+//            throw new CmdException("注册失败");
+//        }
 
 
         //添加组织 员工关系
         OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
-        orgStaffRelPo.setOrgId(orgHeadPartPo.getOrgId());
+        orgStaffRelPo.setOrgId(orgPo.getOrgId());
         orgStaffRelPo.setStaffId(userPo.getUserId());
         orgStaffRelPo.setRelId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         orgStaffRelPo.setRelCd(StoreUserRelConstant.REL_ADMIN);
