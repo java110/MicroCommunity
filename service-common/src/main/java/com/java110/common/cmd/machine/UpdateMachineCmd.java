@@ -25,6 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityLocationDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
@@ -85,14 +86,16 @@ public class UpdateMachineCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
-        communityLocationDto.setCommunityId(reqJson.getString("communityId"));
-        communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
-        List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
-
-        Assert.listOnlyOne(locationDtos, "位置不存在");
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
-        machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
+
+        if(!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
+            CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+            communityLocationDto.setCommunityId(reqJson.getString("communityId"));
+            communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
+            List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+            Assert.listOnlyOne(locationDtos, "位置不存在");
+            machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
+        }
 
         int flag = machineV1InnerServiceSMOImpl.updateMachine(machinePo);
         if (flag < 1) {

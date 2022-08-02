@@ -179,6 +179,7 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
         postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
         postParameters.put("deviceId", machineDto.getMachineCode());
         postParameters.put("channelId", machineDto.getMachineVersion());
+        postParameters.put("port", machineDto.getMachineIp());
         postParameters.put("mediaProtocol", "UDP");
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.PLAY_VIDEO), HttpMethod.POST, httpEntity, String.class);
