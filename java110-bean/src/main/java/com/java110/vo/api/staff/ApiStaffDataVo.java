@@ -36,6 +36,8 @@ public class ApiStaffDataVo implements Serializable {
 
     private String parentOrgName;
 
+    private String orgLevel;
+
     private String staffId;
 
     private String staffName;
@@ -212,5 +214,13 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setRelCdName(String relCdName) {
         this.relCdName = relCdName;
+    }
+
+    public String getOrgLevel() {
+        return orgLevel;
+    }
+
+    public void setOrgLevel(String orgLevel) {
+        this.orgLevel = orgLevel;
     }
 }

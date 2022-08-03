@@ -130,6 +130,12 @@ public class QueryStaffInfosCmd extends Cmd {
             if (!apiStaffDataVo.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
             }
+
+            //如果到一级 就结束
+            if(OrgDto.ORG_LEVEL_STORE.equals(apiStaffDataVo.getOrgLevel())){
+                continue;
+            }
+
             apiStaffDataVo.setParentOrgId(orgDto.getParentOrgId());
 
             if (StringUtil.isEmpty(apiStaffDataVo.getOrgName())) {
@@ -137,6 +143,7 @@ public class QueryStaffInfosCmd extends Cmd {
                 continue;
             }
             apiStaffDataVo.setOrgName(orgDto.getOrgName() + " / " + apiStaffDataVo.getOrgName());
+            apiStaffDataVo.setOrgLevel(orgDto.getOrgLevel());
         }
 
         if (curOrgDto != null && OrgDto.ORG_LEVEL_STORE.equals(curOrgDto.getOrgLevel())) {

@@ -213,7 +213,7 @@
         WHERE 1 =1
         and u.unit_id = #{unitId}
         and t.community_id= #{communityId}
-        order by CONVERT(t.layer,SIGNED) ,t.room_num
+        order by CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED)
     </select>
 
 </mapper>
