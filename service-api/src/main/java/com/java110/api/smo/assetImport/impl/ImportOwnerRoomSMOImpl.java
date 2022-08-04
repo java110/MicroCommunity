@@ -146,6 +146,10 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 throw new IllegalArgumentException((roomIndex + 1) + "行手机号不能为空");
             }
 
+            if (importOwnerRoomDto.getTel().length() > 11) {
+                throw new IllegalArgumentException((roomIndex + 1) + "行手机号超过11位,请核实");
+            }
+
             if (StringUtil.isEmpty(importOwnerRoomDto.getIdCard())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行身份证号不能为空");
             }
