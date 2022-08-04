@@ -1,11 +1,11 @@
-package com.java110.api.listener.visit;
+package com.java110.community.cmd.visit;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.visit.IVisitBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
@@ -13,48 +13,49 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
+import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.owner.VisitPo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeVisitConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("saveVisitListener")
-public class SaveVisitListener extends AbstractServiceApiPlusListener {
-
-    @Autowired
-    private IVisitBMO visitBMOImpl;
+@Java110Cmd(serviceCode = "visit.saveVisit")
+public class SaveVisitCmd extends Cmd {
 
     @Autowired
     private IVisitInnerServiceSMO visitInnerServiceSMOImpl;
 
     @Autowired
+    private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
+
+    @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -81,9 +82,7 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
     public static final String ASCRIPTION_CAR_AREA_ID = "ASCRIPTION_CAR_AREA_ID";
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "vName", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "visitGender", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "phoneNumber", "必填，请填写访客联系方式");
@@ -92,7 +91,10 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        String userId = context.getReqHeaders().get("user-id");
+
         reqJson.put("vId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_vId));
         //是否需要审核
         String isNeedReviewFlag = CommunitySettingFactory.getValue(reqJson.getString("communityId"), IS_NEED_REVIEW);
@@ -119,14 +121,12 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
             if (StringUtil.isEmpty(freeTime)) {
                 freeTime = "120";
             }
-            String visitTime = reqJson.getString("visitTime");
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date time = df.parse(visitTime);
+            Date time = DateUtil.getDateFromStringA(reqJson.getString("visitTime"));
             Calendar newTime = Calendar.getInstance();
             newTime.setTime(time);
             newTime.add(Calendar.MINUTE, Integer.parseInt(freeTime));//日期加上分钟
             Date newDate = newTime.getTime();
-            String finishFreeTime = df.format(newDate);
+            String finishFreeTime = DateUtil.getFormatTimeString(newDate,DateUtil.DATE_FORMATE_STRING_A);
             reqJson.put("freeTime", finishFreeTime);
             if (!StringUtils.isEmpty(isNeedReviewFlag) && isNeedReviewFlag.equals("false")) { //不需要审核就随机自动分配车位
                 //获取小区配置里配置的停车场id
@@ -214,7 +214,7 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
             result = "访客信息登记成功,当前停车场已无空闲车位，登记车辆将暂时不能进入停车场，请您合理安排出行。";
         }
         reqJson.put("stateRemark", result);
-        visitBMOImpl.addVisit(reqJson, context);
+        addVisit(reqJson);
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
@@ -234,9 +234,8 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
             businessUnit.put("fileRealName", fileDto.getFileId());
             businessUnit.put("fileSaveName", fileName);
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-            super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         }
-        commit(context);
         if ("1".equals(reqJson.getString("state"))
                 && reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))
                 && !existCar && !StringUtil.isEmpty(reqJson.getString("psId")) && !"-1".equals(reqJson.getString("psId"))) { //审核通过且有车位就更新车位状态
@@ -255,7 +254,7 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
             ownerCarPo.setCarType("9901");
             ownerCarPo.setCarColor("无（预约车）");
             ownerCarPo.setPsId(reqJson.getString("psId"));
-            ownerCarPo.setUserId(context.getUserId());
+            ownerCarPo.setUserId(userId);
             ownerCarPo.setRemark("访客登记预约车");
             ownerCarPo.setCommunityId(reqJson.getString("communityId"));
             ownerCarPo.setStartTime(reqJson.getString("visitTime"));
@@ -296,19 +295,21 @@ public class SaveVisitListener extends AbstractServiceApiPlusListener {
         }
     }
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeVisitConstant.ADD_VISIT;
-    }
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addVisit(JSONObject paramInJson) {
 
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
+        JSONObject businessVisit = new JSONObject();
+        businessVisit.putAll(paramInJson);
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
+        VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
+        int flag =visitV1InnerServiceSMOImpl.saveVisit(visitPo);
+        if(flag <1){
+            throw new CmdException("保存访客失败");
+        }
     }
-
 }
