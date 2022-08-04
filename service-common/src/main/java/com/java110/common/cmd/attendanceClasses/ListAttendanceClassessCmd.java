@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -49,7 +50,7 @@ public class ListAttendanceClassessCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListAttendanceClassessCmd.class);
     @Autowired
-    private IAttendanceClassesV1InnerServiceSMO attendanceClassesV1InnerServiceSMOImpl;
+    private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -61,12 +62,12 @@ public class ListAttendanceClassessCmd extends Cmd {
 
            AttendanceClassesDto attendanceClassesDto = BeanConvertUtil.covertBean(reqJson, AttendanceClassesDto.class);
 
-           int count = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassessCount(attendanceClassesDto);
+           int count = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassessCount(attendanceClassesDto);
 
            List<AttendanceClassesDto> attendanceClassesDtos = null;
 
            if (count > 0) {
-               attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
+               attendanceClassesDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
            } else {
                attendanceClassesDtos = new ArrayList<>();
            }
