@@ -2,6 +2,7 @@ package com.java110.dto.fee;
 
 import com.java110.dto.PageDto;
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -69,6 +70,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String[] states;
 
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+    private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
     private String fadState;
     private String fadStateName;
@@ -329,5 +331,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
         this.feeAccountDetailDtoList = feeAccountDetailDtoList;
+    }
+
+    public List<PayFeeDetailDiscountDto> getPayFeeDetailDiscountDtoList() {
+        return payFeeDetailDiscountDtoList;
+    }
+
+    public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
+        this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
     }
 }

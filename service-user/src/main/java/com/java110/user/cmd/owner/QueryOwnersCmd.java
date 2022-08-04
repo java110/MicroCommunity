@@ -49,19 +49,14 @@ public class QueryOwnersCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-//根据房屋查询时 先用 房屋信息查询 业主ID
+        //根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
-
-
         if (reqJson.containsKey("name") && !StringUtil.isEmpty(reqJson.getString("name"))) {
             queryByCondition(reqJson, cmdDataFlowContext);
             return;
         }
-
         int row = reqJson.getInteger("row");
-
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
-
         //查询总记录数
         int total = ownerInnerServiceSMOImpl.queryOwnersCount(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
         apiOwnerVo.setTotal(total);
@@ -86,45 +81,34 @@ public class QueryOwnersCmd extends Cmd {
             }
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
-
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void freshRoomId(JSONObject reqJson) {
-
         if (!reqJson.containsKey("roomName")) {
             return;
         }
-
         String roomName = reqJson.getString("roomName");
         if (StringUtil.isEmpty(roomName)) {
             return;
         }
-
         if (!roomName.contains("-")) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
-
         String[] params = roomName.split("-");
         if (params.length != 3) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
-
         RoomDto roomDto = new RoomDto();
         roomDto.setFloorNum(params[0]);
         roomDto.setUnitNum(params[1]);
         roomDto.setRoomNum(params[2]);
         roomDto.setCommunityId(reqJson.getString("communityId"));
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
         Assert.listOnlyOne(roomDtos, "未查询到房屋下业主信息");
-
         reqJson.put("roomId", roomDtos.get(0).getRoomId());
-
     }
 
     /**
@@ -167,9 +151,7 @@ public class QueryOwnersCmd extends Cmd {
             }
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
-
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }

@@ -18,6 +18,7 @@ public class OwnerPo implements Serializable {
     private String sex;
     private String age;
     private String link;
+    private String address;
     private String userId;
     private String remark;
     private String ownerTypeCd;
@@ -146,5 +147,13 @@ public class OwnerPo implements Serializable {
 
     public void setOwnerFlag(String ownerFlag) {
         this.ownerFlag = ownerFlag;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

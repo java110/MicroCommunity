@@ -16,58 +16,67 @@ import java.util.Date;
 public class RouteDto extends PageDto implements Serializable {
 
     private String invokeLimitTimes;
-private String orderTypeCd;
-private String appId;
-private String id;
-private String serviceId;
-private String invokeModel;
-private String appName;
-private String serviceName;
-private String serviceCode;
-
+    private String orderTypeCd;
+    private String appId;
+    private String id;
+    private String serviceId;
+    private String invokeModel;
+    private String appName;
+    private String serviceName;
+    private String serviceCode;
+    private String serviceUrl;
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
     public String getInvokeLimitTimes() {
         return invokeLimitTimes;
     }
-public void setInvokeLimitTimes(String invokeLimitTimes) {
+
+    public void setInvokeLimitTimes(String invokeLimitTimes) {
         this.invokeLimitTimes = invokeLimitTimes;
     }
-public String getOrderTypeCd() {
+
+    public String getOrderTypeCd() {
         return orderTypeCd;
     }
-public void setOrderTypeCd(String orderTypeCd) {
+
+    public void setOrderTypeCd(String orderTypeCd) {
         this.orderTypeCd = orderTypeCd;
     }
-public String getAppId() {
+
+    public String getAppId() {
         return appId;
     }
-public void setAppId(String appId) {
+
+    public void setAppId(String appId) {
         this.appId = appId;
     }
-public String getId() {
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getServiceId() {
+
+    public String getServiceId() {
         return serviceId;
     }
-public void setServiceId(String serviceId) {
+
+    public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
-public String getInvokeModel() {
+
+    public String getInvokeModel() {
         return invokeModel;
     }
-public void setInvokeModel(String invokeModel) {
+
+    public void setInvokeModel(String invokeModel) {
         this.invokeModel = invokeModel;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -107,5 +116,13 @@ public void setInvokeModel(String invokeModel) {
 
     public void setServiceCode(String serviceCode) {
         this.serviceCode = serviceCode;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 }

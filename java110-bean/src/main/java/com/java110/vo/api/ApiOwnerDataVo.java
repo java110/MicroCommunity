@@ -29,6 +29,7 @@ public class ApiOwnerDataVo extends Vo {
 
     private String link;
 
+    private String address;
 
     private String remark;
 
@@ -155,5 +156,13 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

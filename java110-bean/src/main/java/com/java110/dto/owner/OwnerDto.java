@@ -41,6 +41,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String sex;
     private String name;
     private String link;
+    private String address;
     private String remark;
     private String ownerId;
     private String[] ownerIds;
@@ -73,12 +74,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private List<RoomDto> rooms;
 
-
     private Date createTime;
 
     private String statusCd = "0";
 
     private String isBind;
+
+    private String msg;
 
 
     public String getSex() {
@@ -385,5 +387,21 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setIsBind(String isBind) {
         this.isBind = isBind;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -80,19 +80,19 @@ public class ListStaffFinishRepairsListener extends AbstractServiceApiListener {
         List<Map> privileges = null;
         //这里加开关 其实让管理员看到所有单子这么做，不太优雅，建议 单独开发页面功能
         // 不要影响已办功能，add by 吴学文 2021-09-09
-        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+        if ("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/listStaffFinishRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         }
-        if (privileges == null || privileges.size()==0) {
+        if (privileges == null || privileges.size() == 0) {
             ownerRepairDto.setStaffId(reqJson.getString("userId"));
         }
         if (reqJson.containsKey("repairStates")) {
             String[] states = reqJson.getString("repairStates").split(",");
             ownerRepairDto.setStates(Arrays.asList(states));
-        }else{
+        } else {
             //Pc WEB维修已办
 //            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
 //            ownerRepairDto.setStates(Arrays.asList(states));

@@ -6,49 +6,62 @@ import java.util.Date;
 public class ApiServiceRegisterDataVo implements Serializable {
 
     private String id;
-private String appId;
-private String serviceId;
-private String orderTypeCd;
-private String invokeLimitTimes;
-private String invokeModel;
+    private String appId;
+    private String serviceId;
+    private String orderTypeCd;
+    private String invokeLimitTimes;
+    private String invokeModel;
 
     private String appName;
     private String serviceName;
     private String serviceCode;
-public String getId() {
+    private String serviceUrl;
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getAppId() {
+
+    public String getAppId() {
         return appId;
     }
-public void setAppId(String appId) {
+
+    public void setAppId(String appId) {
         this.appId = appId;
     }
-public String getServiceId() {
+
+    public String getServiceId() {
         return serviceId;
     }
-public void setServiceId(String serviceId) {
+
+    public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
-public String getOrderTypeCd() {
+
+    public String getOrderTypeCd() {
         return orderTypeCd;
     }
-public void setOrderTypeCd(String orderTypeCd) {
+
+    public void setOrderTypeCd(String orderTypeCd) {
         this.orderTypeCd = orderTypeCd;
     }
-public String getInvokeLimitTimes() {
+
+    public String getInvokeLimitTimes() {
         return invokeLimitTimes;
     }
-public void setInvokeLimitTimes(String invokeLimitTimes) {
+
+    public void setInvokeLimitTimes(String invokeLimitTimes) {
         this.invokeLimitTimes = invokeLimitTimes;
     }
-public String getInvokeModel() {
+
+    public String getInvokeModel() {
         return invokeModel;
     }
-public void setInvokeModel(String invokeModel) {
+
+    public void setInvokeModel(String invokeModel) {
         this.invokeModel = invokeModel;
     }
 
@@ -74,5 +87,13 @@ public void setInvokeModel(String invokeModel) {
 
     public void setServiceCode(String serviceCode) {
         this.serviceCode = serviceCode;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 }

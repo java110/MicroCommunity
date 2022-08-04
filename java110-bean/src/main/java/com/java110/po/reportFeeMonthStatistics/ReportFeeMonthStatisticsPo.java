@@ -10,6 +10,7 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
     private String remark;
     private String statusCd = "0";
     private String objName;
+    private String objNameNum;
     private String receivedAmount;
     private String feeYear;
     private String feeMonth;
@@ -219,5 +220,13 @@ public class ReportFeeMonthStatisticsPo implements Serializable {
 
     public void setPreReceivedAmount(String preReceivedAmount) {
         this.preReceivedAmount = preReceivedAmount;
+    }
+
+    public String getObjNameNum() {
+        return objNameNum;
+    }
+
+    public void setObjNameNum(String objNameNum) {
+        this.objNameNum = objNameNum;
     }
 }

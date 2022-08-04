@@ -426,6 +426,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         Double allVacantHousingDiscount = 0.0;
         //空置房减免(大计)
         Double allVacantHousingReduction = 0.0;
+        //赠送金额(大计)
+        Double allGiftAmount = 0.0;
         //吴学文 注释 感觉和上面的369 功能重复
         //int size = 0;
         if (count > 0) {
@@ -468,6 +470,10 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("5")) {
                     allVacantHousingReduction = Double.valueOf(discountPrice);
                 }
+                //赠送金额(大计)
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("6")) {
+                    allGiftAmount = Double.valueOf(discountPrice);
+                }
             }
             //应收总金额(小计)
             Double totalReceivableAmount = 0.0;
@@ -481,6 +487,8 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             Double totalVacantHousingDiscount = 0.0;
             //空置房减免金额(小计)
             Double totalVacantHousingReduction = 0.0;
+            //赠送金额(小计)
+            Double totalGiftAmount = 0.0;
             //滞纳金(小计)
             Double totalLateFee = 0.0;
             List<String> ownerIds = new ArrayList<>();
@@ -526,7 +534,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                 //滞纳金
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
                     //获取滞纳金金额
-                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice())) * (-1);
+                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice()));
                     totalLateFee = totalLateFee + discountPrice;
                     //滞纳金
                     reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPrice());
@@ -552,6 +560,16 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
                     reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPrice());
                 } else {
                     reportFeeMonthStatistics.setVacantHousingReduction("0");
+                }
+                //赠送金额
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("6")) {
+                    //赠送金额
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    totalGiftAmount = totalGiftAmount + discountPrice;
+                    //赠送金额
+                    reportFeeMonthStatistics.setGiftAmount(reportFeeMonthStatistics.getDiscountPrice());
+                } else {
+                    reportFeeMonthStatistics.setGiftAmount("0");
                 }
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getFloorNum()
@@ -641,29 +659,33 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             //实收金额(小计)
             reportFeeMonthStatisticsTotalDto.setTotalReceivedAmount(String.format("%.2f", totalReceivedAmount));
             //优惠金额(小计)
-            reportFeeMonthStatisticsTotalDto.setTotalPreferentialAmount(String.valueOf(totalPreferentialAmount));
+            reportFeeMonthStatisticsTotalDto.setTotalPreferentialAmount(String.format("%.2f",totalPreferentialAmount));
             //减免金额(小计)
-            reportFeeMonthStatisticsTotalDto.setTotalDeductionAmount(String.valueOf(totalDeductionAmount));
+            reportFeeMonthStatisticsTotalDto.setTotalDeductionAmount(String.format("%.2f",totalDeductionAmount));
             //滞纳金(小计)
-            reportFeeMonthStatisticsTotalDto.setTotalLateFee(String.valueOf(totalLateFee));
+            reportFeeMonthStatisticsTotalDto.setTotalLateFee(String.format("%.2f",totalLateFee));
             //空置房打折(小计)
-            reportFeeMonthStatisticsTotalDto.setTotalVacantHousingDiscount(String.valueOf(totalVacantHousingDiscount));
+            reportFeeMonthStatisticsTotalDto.setTotalVacantHousingDiscount(String.format("%.2f",totalVacantHousingDiscount));
             //空置房减免(小计)
-            reportFeeMonthStatisticsTotalDto.setTotalVacantHousingReduction(String.valueOf(totalVacantHousingReduction));
+            reportFeeMonthStatisticsTotalDto.setTotalVacantHousingReduction(String.format("%.2f",totalVacantHousingReduction));
+            //赠送规则金额(小计)
+            reportFeeMonthStatisticsTotalDto.setTotalGiftAmount(String.format("%.2f",totalGiftAmount));
             //应收金额(大计)
             reportFeeMonthStatisticsTotalDto.setAllReceivableAmount(String.format("%.2f", allReceivableAmount));
             //实收金额(大计)
             reportFeeMonthStatisticsTotalDto.setAllReceivedAmount(String.format("%.2f", allReceivedAmount));
             //优惠金额(大计)
-            reportFeeMonthStatisticsTotalDto.setAllPreferentialAmount(String.valueOf(allPreferentialAmount));
+            reportFeeMonthStatisticsTotalDto.setAllPreferentialAmount(String.format("%.2f",allPreferentialAmount));
             //减免金额(大计)
-            reportFeeMonthStatisticsTotalDto.setAllDeductionAmount(String.valueOf(allDeductionAmount));
+            reportFeeMonthStatisticsTotalDto.setAllDeductionAmount(String.format("%.2f",allDeductionAmount));
             //滞纳金(大计)
-            reportFeeMonthStatisticsTotalDto.setAllLateFee(String.valueOf(allLateFee));
+            reportFeeMonthStatisticsTotalDto.setAllLateFee(String.format("%.2f",allLateFee));
             //空置房打折金额(大计)
-            reportFeeMonthStatisticsTotalDto.setAllVacantHousingDiscount(String.valueOf(allVacantHousingDiscount));
+            reportFeeMonthStatisticsTotalDto.setAllVacantHousingDiscount(String.format("%.2f",allVacantHousingDiscount));
             //空置房减免金额(大计)
-            reportFeeMonthStatisticsTotalDto.setAllVacantHousingReduction(String.valueOf(allVacantHousingReduction));
+            reportFeeMonthStatisticsTotalDto.setAllVacantHousingReduction(String.format("%.2f",allVacantHousingReduction));
+            //赠送规则金额(大计)
+            reportFeeMonthStatisticsTotalDto.setAllGiftAmount(String.format("%.2f",allGiftAmount));
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
             reportList.addAll(reportFeeMonthStatisticsDtos);

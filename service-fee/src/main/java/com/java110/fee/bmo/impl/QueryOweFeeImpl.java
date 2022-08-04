@@ -87,12 +87,17 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feeDtos = new ArrayList<>();
             return ResultVo.createResponseEntity(feeDtos);
         }
+        String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);
+        if (StringUtil.isEmpty(val)) {
+            val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        }
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
                 //如果金额为0 就排除
                 //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                tmpFeeDto.setVal(val);
                 if (tmpFeeDto.getFeePrice() > 0) {
                     tmpFeeDtos.add(tmpFeeDto);
                 }

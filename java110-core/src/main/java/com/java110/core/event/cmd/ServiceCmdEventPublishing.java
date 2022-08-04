@@ -15,6 +15,7 @@ import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -146,7 +147,7 @@ public class ServiceCmdEventPublishing {
      * @param event
      * @param asyn  A 表示异步处理
      */
-    public static void multicastEvent(String serviceCode, final CmdEvent event, String asyn) {
+    public static void multicastEvent(String serviceCode, final CmdEvent event, String asyn) throws ParseException {
         List<ServiceCmdListener> listeners = getListeners(serviceCode);
         //这里判断 serviceCode + httpMethod 的侦听，如果没有注册直接报错。
         if (listeners == null || listeners.size() == 0) {
@@ -161,7 +162,11 @@ public class ServiceCmdEventPublishing {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        invokeListener(listener, event);
+                        try {
+                            invokeListener(listener, event);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 break;
@@ -191,7 +196,7 @@ public class ServiceCmdEventPublishing {
      * @since 4.1
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) {
+    protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) throws ParseException {
         try {
             //        //这里处理业务逻辑数据
             ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
@@ -206,7 +211,7 @@ public class ServiceCmdEventPublishing {
 
             //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
             //   listener.cmd(event);
-        } catch (CmdException e) {
+        } catch (CmdException | ParseException e) {
             LoggerEngine.error("发布侦听失败", e);
             throw e;
         }

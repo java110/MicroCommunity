@@ -171,12 +171,10 @@ public class FeeApi extends BaseController {
      * @path /app/feeApi/listOweFees
      */
     @RequestMapping(value = "/listOweFees", method = RequestMethod.GET)
-    public ResponseEntity<String> listOweFees(
-            @RequestParam(value = "payObjId", required = false) String payObjId,
-            @RequestParam(value = "payObjType", required = false) String payObjType,
-            @RequestParam(value = "ownerId", required = false) String ownerId,
-            @RequestParam(value = "communityId") String communityId) {
-
+    public ResponseEntity<String> listOweFees(@RequestParam(value = "payObjId", required = false) String payObjId,
+                                              @RequestParam(value = "payObjType", required = false) String payObjType,
+                                              @RequestParam(value = "ownerId", required = false) String ownerId,
+                                              @RequestParam(value = "communityId") String communityId) {
         if (StringUtil.isEmpty(payObjId) && StringUtil.isEmpty(ownerId)) {
             throw new IllegalArgumentException("费用对象或者业主不能都为空");
         }

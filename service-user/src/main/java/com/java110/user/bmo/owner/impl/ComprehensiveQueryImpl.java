@@ -179,7 +179,8 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         ownerDto.setName(searchValue);
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
+        Assert.isNotNull(ownerDtos,"未找到成员信息，请换其他条件查询");
+        //Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
         OwnerDto owner = queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
         //查询是否有脱敏权限
         List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);

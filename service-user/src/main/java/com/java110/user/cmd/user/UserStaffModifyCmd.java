@@ -114,6 +114,7 @@ public class UserStaffModifyCmd extends Cmd {
         UserDto userDto = new UserDto();
         userDto.setTel(userPo.getTel());
         userDto.setUserFlag("1");
+        userDto.setLevelCd("01"); //员工
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
         if (users != null && users.size() > 0) {
             for (UserDto user : users) {

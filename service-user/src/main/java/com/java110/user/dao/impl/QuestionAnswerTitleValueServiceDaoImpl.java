@@ -101,5 +101,10 @@ public class QuestionAnswerTitleValueServiceDaoImpl extends BaseServiceDao imple
         return businessQuestionAnswerTitleValueInfos;
     }
 
-
+    @Override
+    public List<Map> queryQuestionAnswerTitleValueResultCount(Map info) {
+        List<Map> businessQuestionAnswerTitleValueInfos
+                = sqlSessionTemplate.selectList("questionAnswerTitleValueServiceDaoImpl.queryQuestionAnswerTitleValueResultCount", info);
+        return businessQuestionAnswerTitleValueInfos;
+    }
 }

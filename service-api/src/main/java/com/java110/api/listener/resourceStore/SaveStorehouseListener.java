@@ -37,6 +37,7 @@ public class SaveStorehouseListener extends AbstractServiceApiPlusListener {
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShName(reqJson.getString("shName"));
         storehouseDto.setStoreId(reqJson.getString("storeId"));
+        storehouseDto.setShType(reqJson.getString("shType"));
         int flag  =  storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 
         if(flag > 0){

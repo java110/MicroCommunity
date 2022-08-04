@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ownerV1ServiceDaoImpl">
 
-
     <!-- 保存业主信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfo" parameterType="Map">
-        insert into building_owner(
-        id_card,sex,link,owner_type_cd,remark,owner_id,user_id,name,state,community_id,age,member_id
-        ) values (
-        #{idCard},#{sex},#{link},#{ownerTypeCd},#{remark},#{ownerId},#{userId},#{name},#{state},#{communityId},#{age},#{memberId}
-        )
+        insert into building_owner(id_card, sex, link, owner_type_cd, remark, owner_id, user_id, name, state,
+                                   community_id, age, member_id, address)
+        values (#{idCard}, #{sex}, #{link}, #{ownerTypeCd}, #{remark}, #{ownerId}, #{userId}, #{name}, #{state},
+                #{communityId}, #{age}, #{memberId}, #{address})
     </insert>
-
 
     <!-- 查询业主信息信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
         select t.id_card,t.id_card idCard,t.sex,t.link,t.owner_type_cd,t.owner_type_cd
         ownerTypeCd,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
-        userId,t.name,t.state,t.community_id,t.community_id communityId,t.age,t.member_id,t.member_id memberId
-        from building_owner t
+        userId,t.name,t.state,t.community_id,t.community_id communityId,t.age,t.member_id,t.member_id memberId,
+        t.address from building_owner t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
@@ -30,6 +26,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
@@ -65,9 +64,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改业主信息信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerInfo" parameterType="Map">
@@ -83,6 +80,9 @@
         </if>
         <if test="link !=null and link != ''">
             , t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             , t.owner_type_cd= #{ownerTypeCd}
@@ -112,7 +112,6 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
     </update>
 
     <!-- 查询业主信息数量 add by wuxw 2018-07-03 -->
@@ -128,6 +127,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
@@ -159,27 +161,22 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
-
     </select>
-
-
 
     <select id="queryOwnersBindCount" parameterType="Map" resultType="Map">
         select count(DISTINCT t.member_id) count from building_owner t
-        left join owner_app_user oau  on t.community_id = oau.community_id and t.member_id = oau.member_id and oau.status_cd = '0'
+        left join owner_app_user oau on t.community_id = oau.community_id and t.member_id = oau.member_id and
+        oau.status_cd = '0'
         where t.status_cd = '0'
         <if test='isBind == "N"'>
-        and oau.member_id is null
+            and oau.member_id is null
         </if>
         <if test='isBind == "Y"'>
-        and oau.member_id is not null
+            and oau.member_id is not null
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
     </select>
 
 </mapper>

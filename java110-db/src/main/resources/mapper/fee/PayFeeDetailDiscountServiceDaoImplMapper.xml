@@ -101,9 +101,10 @@
         detailDiscountId,t.discount_price,t.discount_price discountPrice,t.detail_id,t.detail_id
         detailId,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.discount_id,t.discount_id discountId,t.fee_id,t.fee_id feeId,fd.discount_name discountName,
-        fd.discount_type discountType
+        fd.discount_type discountType,fdr.rule_name,fdr.rule_name ruleName
         from pay_fee_detail_discount t
         left join fee_discount fd on t.discount_id = fd.discount_id and t.community_id = fd.community_id and fd.status_cd = '0'
+        left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         where 1 =1
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}

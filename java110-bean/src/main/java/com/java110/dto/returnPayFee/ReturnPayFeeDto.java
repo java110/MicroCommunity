@@ -1,9 +1,12 @@
 package com.java110.dto.returnPayFee;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -55,6 +58,9 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
 
     private String payerObjType;
     private String payerObjName;
+
+    private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+    private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
     public String getReason() {
         return reason;
@@ -167,7 +173,6 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
     public String getCreateTime() {
         return createTime;
@@ -311,5 +316,21 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
 
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
+    }
+
+    public List<FeeAccountDetailDto> getFeeAccountDetailDtoList() {
+        return feeAccountDetailDtoList;
+    }
+
+    public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
+        this.feeAccountDetailDtoList = feeAccountDetailDtoList;
+    }
+
+    public List<PayFeeDetailDiscountDto> getPayFeeDetailDiscountDtoList() {
+        return payFeeDetailDiscountDtoList;
+    }
+
+    public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
+        this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
     }
 }

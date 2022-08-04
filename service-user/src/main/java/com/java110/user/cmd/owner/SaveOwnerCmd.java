@@ -120,6 +120,9 @@ public class SaveOwnerCmd extends Cmd {
         businessOwner.putAll(reqJson);
         businessOwner.put("state", "2000");
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        if (reqJson.containsKey("age") && StringUtil.isEmpty(reqJson.getString("age"))) {
+            ownerPo.setAge(null);
+        }
         int flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
         if (flag < 1) {
             throw new CmdException("保存业主失败");

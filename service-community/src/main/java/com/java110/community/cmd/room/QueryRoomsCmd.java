@@ -7,6 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.UnitDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
@@ -24,6 +25,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +36,12 @@ import java.util.Map;
 
 @Java110Cmd(serviceCode = "room.queryRooms")
 public class QueryRoomsCmd extends Cmd {
+
     @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
-
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -93,6 +95,58 @@ public class QueryRoomsCmd extends Cmd {
 //                roomDto.setRoomNumLike("");
 //            }
 //        }
+        String roomId = "";
+        String unitId = "";
+        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("0")
+                && reqJson.containsKey("floorNum") && !StringUtil.isEmpty(reqJson.getString("floorNum"))
+                && reqJson.containsKey("unitNum") && !StringUtil.isEmpty(reqJson.getString("unitNum"))
+                && reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorNum(reqJson.getString("floorNum"));
+            floorDto.setCommunityId(reqJson.getString("communityId"));
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            if (floorDtos != null && floorDtos.size() > 0) {
+                for (FloorDto floor : floorDtos) {
+                    UnitDto unitDto = new UnitDto();
+                    unitDto.setFloorId(floor.getFloorId());
+                    unitDto.setUnitNum(reqJson.getString("unitNum"));
+                    List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+                    if (unitDtos != null && unitDtos.size() > 0) {
+                        for (UnitDto unit : unitDtos) {
+                            RoomDto room = new RoomDto();
+                            room.setUnitId(unit.getUnitId());
+                            room.setRoomNum(reqJson.getString("roomNum"));
+                            room.setCommunityId(reqJson.getString("communityId"));
+                            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(room);
+                            if (roomDtos != null && roomDtos.size() == 1) {
+                                unitId = roomDtos.get(0).getUnitId();
+                                roomId = roomDtos.get(0).getRoomId();
+                            } else {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            roomDto.setRoomId(roomId);
+            roomDto.setUnitId(unitId);
+        }
+        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+            if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+                String[] roomNums = reqJson.getString("roomNum").split("-");
+                if (roomNums != null && roomNums.length == 3) {
+                    roomDto.setFloorNum(roomNums[0]);
+                    roomDto.setUnitNum(roomNums[1]);
+                    roomDto.setRoomNum(roomNums[2]);
+                } else {
+                    throw new IllegalArgumentException("房屋编号错误！");
+                }
+            } else {
+                roomDto.setUnitNum("");
+                roomDto.setFloorNum("");
+                roomDto.setRoomNum("");
+            }
+        }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);

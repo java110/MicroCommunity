@@ -29,10 +29,12 @@ import java.util.List;
  */
 @Java110Cmd(serviceCode = "/communitys/queryStoreCommunitys")
 public class QueryStoreCommunitysCmd extends Cmd {
-    private final static Logger logger = LoggerFactory.getLogger(QueryStoreCommunitysCmd.class);
 
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
+
+    private final static Logger logger = LoggerFactory.getLogger(QueryStoreCommunitysCmd.class);
+
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 

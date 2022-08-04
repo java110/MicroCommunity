@@ -53,4 +53,7 @@ public interface IQuestionAnswerTitleValueInnerServiceSMO {
 
     @RequestMapping(value = "/queryQuestionAnswerTitleValueResult", method = RequestMethod.POST)
     List<QuestionAnswerTitleValueDto> queryQuestionAnswerTitleValueResult(@RequestBody QuestionAnswerTitleValueDto questionAnswerTitleValueDto);
+
+    @RequestMapping(value = "/queryQuestionAnswerTitleValueResultCount", method = RequestMethod.POST)
+    List<QuestionAnswerTitleValueDto> queryQuestionAnswerTitleValueResultCount(@RequestBody QuestionAnswerTitleValueDto questionAnswerTitleValueDto);
 }

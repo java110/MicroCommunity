@@ -1,6 +1,10 @@
 package com.java110.vo.api.returnPayFee;
 
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class ApiReturnPayFeeDataVo implements Serializable {
 
@@ -41,6 +45,9 @@ public class ApiReturnPayFeeDataVo implements Serializable {
 
     private String payerObjType;
     private String payerObjName;
+
+    private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+    private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
     public String getReason() {
         return reason;
@@ -320,5 +327,21 @@ public class ApiReturnPayFeeDataVo implements Serializable {
 
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
+    }
+
+    public List<FeeAccountDetailDto> getFeeAccountDetailDtoList() {
+        return feeAccountDetailDtoList;
+    }
+
+    public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
+        this.feeAccountDetailDtoList = feeAccountDetailDtoList;
+    }
+
+    public List<PayFeeDetailDiscountDto> getPayFeeDetailDiscountDtoList() {
+        return payFeeDetailDiscountDtoList;
+    }
+
+    public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
+        this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
     }
 }

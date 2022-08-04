@@ -5,6 +5,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.app.order.Ordered;
 import com.java110.utils.exception.CmdException;
 
+import java.text.ParseException;
 import java.util.EventListener;
 
 /**
@@ -30,5 +31,5 @@ public interface ServiceCmdListener extends EventListener, Ordered {
      * @param context 数据上文对象
      * @param reqJson            请求报文
      */
-    void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException;
+    void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException;
 }

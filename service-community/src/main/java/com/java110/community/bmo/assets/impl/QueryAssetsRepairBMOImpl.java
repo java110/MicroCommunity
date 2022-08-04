@@ -51,11 +51,7 @@ public class QueryAssetsRepairBMOImpl implements IQueryAssetsRepairBMO {
         repairDto.setStatess(states);
         int dealingCount = repairInnerServiceSMOImpl.queryRepairsCount(repairDto);
 
-        states = new String[]{
-                "1700",
-                "1800",
-                "1900",
-                "2000"};
+        states = new String[]{"1700", "1800", "1900", "2000"};
         repairDto.setStatess(states);
         int dealedCount = repairInnerServiceSMOImpl.queryRepairsCount(repairDto);
         data.put("unDealCount", unDealCount);

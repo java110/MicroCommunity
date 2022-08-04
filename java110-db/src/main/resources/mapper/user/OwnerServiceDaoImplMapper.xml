@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ownerServiceDaoImpl">
 
     <!-- 保存业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerInfo" parameterType="Map">
-        insert into business_building_owner(
-        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state,owner_flag
-        ) values (
-        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId},#{idCard},#{state},#{ownerFlag}
-        )
+        insert into business_building_owner(operate, sex, name, link, remark, owner_id, b_id, user_id, age, member_id,
+                                            owner_type_cd, community_id, id_card, state, owner_flag, address)
+        values (#{operate}, #{sex}, #{name}, #{link}, #{remark}, #{ownerId}, #{bId}, #{userId}, #{age}, #{memberId},
+                #{ownerTypeCd}, #{communityId}, #{idCard}, #{state}, #{ownerFlag}, #{address})
     </insert>
-
 
     <!-- 查询业主信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessOwnerInfo" parameterType="Map" resultType="Map">
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId,t.owner_flag,t.owner_flag ownerFlag,
-        t.id_card, t.id_card idCard,t.state
+        t.id_card, t.id_card idCard,t.state,t.address
         from business_building_owner t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -64,16 +61,17 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
-
+        <if test="address != null and address != ''">
+            and t.address= #{address}
+        </if>
     </select>
-
 
     <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfoInstance" parameterType="Map">
         insert into building_owner(
-        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state,owner_flag
+        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state,owner_flag,address
         ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd,
-        t.community_id communityId,t.id_card,state,t.owner_flag
+        t.community_id communityId,t.id_card,state,t.owner_flag,t.address
         from business_building_owner t where 1=1
         and t.operate= 'ADD'
         <if test="sex !=null">
@@ -115,8 +113,10 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
     </insert>
-
 
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
@@ -125,7 +125,7 @@
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
         t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName,
-        t.owner_flag,t.owner_flag ownerFlag
+        t.owner_flag,t.owner_flag ownerFlag,t.address
         <if test="roomIds != null">
             , borr.room_id roomId
         </if>
@@ -161,6 +161,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -246,6 +249,9 @@
         <if test="link !=null and link != ''">
             and t.link= #{link}
         </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -285,9 +291,7 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
-
     </select>
-
 
     <!-- 修改业主信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerInfoInstance" parameterType="Map">
@@ -303,6 +307,9 @@
         </if>
         <if test="link !=null and link != ''">
             , t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
         </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
@@ -332,7 +339,6 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
-
     </update>
 
     <!-- 查询业主数量 add by wuxw 2018-07-03 -->
@@ -348,6 +354,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -388,8 +397,6 @@
                 #{item}
             </foreach>
         </if>
-
-
     </select>
 
     <!-- 查询业主数量 add by wuxw 2018-07-03 -->
@@ -406,6 +413,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -443,18 +453,14 @@
                 #{item}
             </foreach>
         </if>
-
-
     </select>
-
 
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfoByCondition" parameterType="Map" resultType="Map">
         select t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
-        bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,
+        bId,t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,
         t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.community_id,
-        t.community_id communityId,t.id_card, t.id_card idCard
+        t.community_id communityId,t.id_card, t.id_card idCard,t.address
         FROM building_owner t
         WHERE
         t.`status_cd` = '0'
@@ -466,6 +472,9 @@
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -514,13 +523,13 @@
             limit #{page}, #{row}
         </if>
     </select>
+
     <!-- 查询未入驻业主 总数 -->
     <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
-        select
-        COUNT(1) count
-        from
-        building_owner o
-        left join building_owner_room_rel orr on o.owner_id = orr.owner_id and orr.status_cd = '0'
+        select COUNT(1) count
+        from building_owner o
+        left join building_owner_room_rel orr
+        on o.owner_id = orr.owner_id and orr.status_cd = '0'
         where o.status_cd = '0'
         and o.owner_type_cd = '1001'
         and o.community_id = #{communityId}
@@ -531,9 +540,9 @@
     <!-- 根据房屋查询业主信息 -->
     <select id="queryOwnersByRoom" parameterType="Map" resultType="Map">
         SELECT t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
-        bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
-        r.`room_id` roomId,r.`room_num` roomNum,t.community_id,t.community_id communityId,t.id_card, t.id_card idCard,orr.start_time startTime ,orr.end_time endTime
+        bId,t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
+        r.`room_id` roomId,r.`room_num` roomNum,t.community_id,t.community_id communityId,t.id_card, t.id_card
+        idCard,orr.start_time startTime ,orr.end_time endTime,t.address
         FROM building_room r,building_owner_room_rel orr,building_owner t
         WHERE r.`room_id` = orr.`room_id`
         AND orr.`owner_id` = t.`owner_id`
@@ -557,9 +566,8 @@
 
     <!-- 根据停车位查询 -->
     <select id="queryOwnersByParkingSpace" parameterType="Map" resultType="Map">
-
         select ps.num,ps.ps_id psId,t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id
-        ownerId,t.b_id,t.b_id bId,
+        ownerId,t.b_id,t.b_id bId,t.address,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,
         t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.id_card, t.id_card idCard
         from p_parking_space ps , owner_car oc,building_owner t
@@ -578,7 +586,6 @@
         <if test="psId !=null and psId != ''">
             AND ps.`ps_id` = #{psId}
         </if>
-
     </select>
 
     <select id="queryOwnerLogsByRoom" parameterType="Map" resultType="Map">
@@ -605,12 +612,12 @@
     </select>
 
     <select id="queryOwnerLogsCountByRoom" parameterType="Map" resultType="Map">
-        select
-        COUNT(1) count
+        select COUNT(1) count
         from business_building_owner_room_rel t
-        inner join building_owner bo on t.owner_id = bo.owner_id and bo.status_cd = '0' and bo.community_id = #{communityId}
+            inner join building_owner bo
+        on t.owner_id = bo.owner_id and bo.status_cd = '0' and bo.community_id = #{communityId}
         where t.operate = 'ADD'
-        and t.room_id = #{roomId}
+          and t.room_id = #{roomId}
         order by t.create_time desc
     </select>
 

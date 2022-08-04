@@ -17,6 +17,7 @@ import com.java110.user.bmo.userQuestionAnswerValue.ISaveUserQuestionAnswerValue
 import com.java110.user.bmo.userQuestionAnswerValue.IUpdateUserQuestionAnswerValueBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -163,7 +164,11 @@ public class UserQuestionAnswerApi {
         JSONObject titleObj = null;
         for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
             titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
-            Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("qaTitle") + ",未填写答案");
+            if (titleObj.containsKey("qaTitle") && !StringUtil.isEmpty(titleObj.getString("qaTitle"))) {
+                Assert.hasKeyAndValue(titleObj, "valueContent", titleObj.getString("qaTitle") + ",未填写答案");
+            } else {
+                Assert.hasKeyAndValue(titleObj, "valueContent", "未填写答案");
+            }
         }
 
         UserQuestionAnswerValuePo userQuestionAnswerValuePo = BeanConvertUtil.covertBean(reqJson, UserQuestionAnswerValuePo.class);

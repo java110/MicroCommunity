@@ -123,8 +123,6 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
-
     </select>
 
 </mapper>

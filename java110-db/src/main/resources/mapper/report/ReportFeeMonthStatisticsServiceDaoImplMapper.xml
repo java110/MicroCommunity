@@ -6,15 +6,18 @@
 
     <!-- 保存费用月统计信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportFeeMonthStatisticsInfo" parameterType="Map">
-        insert into report_fee_month_statistics(
-        receivable_amount,statistics_id,update_time,remark,obj_name,received_amount,fee_year,fee_month,fee_id,config_id,
-        obj_id,fee_name,owe_amount,community_id,fee_create_time,obj_type,deadline_time,cur_max_time,
-        his_owe_amount,cur_receivable_amount,cur_received_amount, his_owe_received_amount,pre_received_amount
-        ) values (
-        #{receivableAmount},#{statisticsId},#{updateTime},#{remark},#{objName},#{receivedAmount},#{feeYear},#{feeMonth},
-        #{feeId},#{configId},#{objId},#{feeName},#{oweAmount},#{communityId},#{feeCreateTime},#{objType},#{deadlineTime},#{curMaxTime},
-        #{hisOweAmount},#{curReceivableAmount},#{curReceivedAmount},#{hisOweReceivedAmount},#{preReceivedAmount}
-        )
+        insert into report_fee_month_statistics(receivable_amount, statistics_id, update_time, remark, obj_name,
+                                                received_amount, fee_year, fee_month, fee_id, config_id,
+                                                obj_id, fee_name, owe_amount, community_id, fee_create_time, obj_type,
+                                                deadline_time, cur_max_time,
+                                                his_owe_amount, cur_receivable_amount, cur_received_amount,
+                                                his_owe_received_amount, pre_received_amount, obj_name_num)
+        values (#{receivableAmount}, #{statisticsId}, #{updateTime}, #{remark}, #{objName}, #{receivedAmount},
+                #{feeYear}, #{feeMonth},
+                #{feeId}, #{configId}, #{objId}, #{feeName}, #{oweAmount}, #{communityId}, #{feeCreateTime}, #{objType},
+                #{deadlineTime}, #{curMaxTime},
+                #{hisOweAmount}, #{curReceivableAmount}, #{curReceivedAmount}, #{hisOweReceivedAmount},
+                #{preReceivedAmount}, #{objNameNum})
     </insert>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
@@ -27,7 +30,7 @@
         oweAmount,t.community_id,t.community_id communityId,t.fee_create_time,t.fee_create_time
         feeCreateTime,t.obj_type,t.obj_type objType,t.cur_max_time curMaxTime,
         t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,t.cur_received_amount
-        curReceivedAmount,
+        curReceivedAmount,t.obj_name_num,t.obj_name_num objNameNum,
         t.his_owe_received_amount hisOweReceivedAmount,t.pre_received_amount preReceivedAmount
         from report_fee_month_statistics t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
@@ -49,6 +52,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num = #{objNameNum}
         </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             and t.received_amount= #{receivedAmount}
@@ -127,6 +133,9 @@
         <if test="objName !=null and objName != ''">
             , t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            , t.obj_name_num= #{objNameNum}
+        </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             , t.received_amount= #{receivedAmount}
         </if>
@@ -177,7 +186,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </update>
 
     <!-- 修改费用月统计信息 add by wuxw 2018-07-03 -->
@@ -196,7 +204,6 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
-
     </update>
 
 
@@ -223,6 +230,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             and t.received_amount= #{receivedAmount}
@@ -282,6 +292,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -294,7 +307,6 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
-
         <if test="configIds !=null">
             and t.config_id in
             <foreach collection="configIds" item="item" open="(" close=")" separator=",">
@@ -349,6 +361,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -386,6 +401,7 @@
         <if test="configIds !=null">
             ,t.config_id
         </if>
+        order by CONVERT(t.fee_month,SIGNED),CONVERT(t.fee_year,SIGNED) desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -410,6 +426,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -449,9 +468,8 @@
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryReportFeeSummaryDetail" parameterType="Map" resultType="Map">
         select t.obj_name objName,t.fee_name feeName,t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime
-        ,t.config_id configId
-        ,t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,
-        t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
+        ,t.config_id configId,t.obj_name_num objNameNum,t.his_owe_amount hisOweAmount,t.cur_receivable_amount
+        curReceivableAmount,t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
         hisOweReceivedAmount,t.pre_received_amount preReceivedAmount,
         t.update_time updateTime,t.his_owe_amount+t.cur_receivable_amount
         receivableAmount,t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount receivedAmount
@@ -472,6 +490,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -534,6 +555,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -591,6 +615,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -645,7 +672,6 @@
         inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -658,6 +684,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -727,6 +756,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -765,9 +797,8 @@
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryReportFloorUnitFeeSummaryDetail" parameterType="Map" resultType="Map">
         select t.obj_name objName,t.fee_name feeName,t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime
-        ,t.config_id configId
-        ,t.his_owe_amount hisOweAmount,t.cur_receivable_amount curReceivableAmount,
-        t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
+        ,t.config_id configId,t.obj_name_num objNameNum,t.his_owe_amount hisOweAmount,t.cur_receivable_amount
+        curReceivableAmount,t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
         hisOweReceivedAmount,t.pre_received_amount preReceivedAmount,
         t.update_time updateTime,t.his_owe_amount+t.cur_receivable_amount receivableAmount,
         t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount receivedAmount
@@ -794,6 +825,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -856,6 +890,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -914,6 +951,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -947,7 +987,6 @@
         <if test="yearMonth !=null and yearMonth != ''">
             and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
-
         group by t.config_id,t.fee_name,pfc.start_time
         ) t
     </select>
@@ -983,6 +1022,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -1047,6 +1089,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -1087,9 +1132,8 @@
      -->
     <select id="queryFeeBreakdownDetail" parameterType="Map" resultType="Map">
         select t.obj_name objName,t.fee_name feeName,t.fee_year feeYear,t.fee_month feeMonth,t.create_time createTime
-        ,t.config_id configId,t.his_owe_amount
-        hisOweAmount,t.cur_receivable_amount curReceivableAmount,
-        t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
+        ,t.config_id configId,t.his_owe_amount hisOweAmount,t.obj_name_num objNameNum,t.cur_receivable_amount
+        curReceivableAmount,t.cur_received_amount curReceivedAmount,t.his_owe_received_amount
         hisOweReceivedAmount,t.pre_received_amount preReceivedAmount,
         t.update_time updateTime,t.his_owe_amount+t.cur_receivable_amount receivableAmount,
         t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount receivedAmount,t.update_time
@@ -1114,6 +1158,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -1184,6 +1231,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -1243,6 +1293,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -1283,7 +1336,8 @@
         SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
         hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
         sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount
+        sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
+        t.obj_type objType,t.obj_name_num objNameNum
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -1304,6 +1358,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -1366,6 +1423,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -1441,7 +1501,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        and t.amount_owed > 0
+        and t.amount_owed > 0 and pf.end_time &lt; now()
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name
         HAVING oweAmount > 0
         ) t
@@ -1466,8 +1526,14 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num = #{floorNum}
         </if>
         <if test="objName !=null and objName != ''">
             and t.payer_obj_name= #{objName}
@@ -1493,7 +1559,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        and t.amount_owed > 0
+        and t.amount_owed > 0 and pf.end_time &lt; now()
         group by t.fee_name,t.payer_obj_id,t.payer_obj_name,pfa.`value`,br.built_up_area
         HAVING oweAmount > 0
         order by t.payer_obj_name
@@ -1574,8 +1640,14 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num = #{floorNum}
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -1660,8 +1732,14 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num = #{floorNum}
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -1718,15 +1796,21 @@
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
-        where t.status_cd = '0' and t.state not in ('1100','1300')
+        where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num = #{floorNum}
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -1783,15 +1867,21 @@
         left join fee_discount_rule fdr on fd.rule_id = fdr.rule_id and fdr.status_cd = '0'
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
-        where t.status_cd = '0' and t.state not in ('1100','1300')
+        where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and bu.unit_num= #{unitNum}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num = #{floorNum}
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -1857,6 +1947,9 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
+        </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
         </if>
@@ -1891,8 +1984,11 @@
     <select id="queryDeadlineFee" parameterType="Map" resultType="Map">
         SELECT
         t.obj_name objName,
+        t.obj_name_num objNameNum,
+        t.obj_type objType,
         t.fee_name feeName,
-        t.deadline_time deadlineTime
+        t.deadline_time deadlineTime,
+        t.update_time updateTime
         FROM
         report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1900,7 +1996,6 @@
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-
         where t.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
@@ -1913,6 +2008,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameNum != null and objNameNum != ''">
+            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -2001,62 +2099,66 @@
     </select>
 
     <select id="queryPrePaymentCount" parameterType="Map" resultType="Map">
-        select pfc.fee_name feeName,count(t.payer_obj_id) objCount from pay_fee t
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        select pfc.fee_name feeName, count(t.payer_obj_id) objCount
+        from pay_fee t
+                 inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where t.state = '2008001'
-        and t.status_cd = '0'
-        and t.end_time &gt; #{startTime}
-        and t.end_time &lt; #{endTime}
-        and t.community_id= #{communityId}
-        group by pfc.fee_name ,pfc.config_id
+          and t.status_cd = '0'
+          and t.end_time &gt; #{startTime}
+          and t.end_time &lt; #{endTime}
+          and t.community_id = #{communityId}
+        group by pfc.fee_name, pfc.config_id
         order by objCount
     </select>
 
     <select id="queryDeadlinePaymentCount" parameterType="Map" resultType="Map">
-        SELECT
-        t.fee_name feeName,
-        count(t.obj_id) objCount
-        FROM
-        report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
-        WHERE
-        1 = 1
-        AND t.status_cd = '0'
-        and t.community_id= #{communityId}
-        AND t.deadline_time &gt; #{startTime}
-        AND t.deadline_time &lt; #{endTime}
-        group by t.config_id,t.fee_name
+        SELECT t.fee_name feeName, count(t.obj_id) objCount
+        FROM report_fee_month_statistics t
+                 inner join pay_fee pf on t.fee_id = pf.fee_id
+            and pf.community_id = t.community_id and pf.status_cd = '0'
+        WHERE 1 = 1
+          AND t.status_cd = '0'
+          and t.community_id = #{communityId}
+          AND t.deadline_time &gt; #{startTime}
+          AND t.deadline_time &lt; #{endTime}
+        group by t.config_id, t.fee_name
         order by objCount desc
     </select>
 
     <select id="queryOwePaymentCount" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,count( distinct t.obj_id) objCount
+        select t.fee_name feeName, count(distinct t.obj_id) objCount
         from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+                 inner join pay_fee pf
+                            on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.community_id = #{communityId}
-        and t.owe_amount > 0
-        group by t.config_id,t.fee_name
+          and t.owe_amount > 0
+        group by t.config_id, t.fee_name
         order by objCount desc
     </select>
 
     <select id="queryAllPaymentCount" parameterType="Map" resultType="Map">
-        select t.fee_name feeName,count(distinct t.obj_id) objCount
+        select t.fee_name feeName, count(distinct t.obj_id) objCount
         from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
+                 inner join pay_fee pf
+                            on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         where t.community_id = #{communityId}
-        group by t.config_id,t.fee_name
+        group by t.config_id, t.fee_name
         order by objCount desc
     </select>
 
     <select id="queryFinishOweFee" parameterType="Map" resultType="Map">
-        select t.config_id configId, t.fee_id feeId,t.statistics_id statisticsId,t.fee_year feeYear,fee_month feeMonth
+        select t.config_id     configId,
+               t.fee_id        feeId,
+               t.statistics_id statisticsId,
+               t.fee_year      feeYear,
+               fee_month       feeMonth
         from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.state = '2009001' and pf.community_id = #{communityId} and
-        pf.status_cd = '0'
+                 inner join pay_fee pf
+                            on t.fee_id = pf.fee_id and pf.state = '2009001' and pf.community_id = #{communityId} and
+                               pf.status_cd = '0'
         where t.owe_amount > 0
-        and t.status_cd = '0'
-        and t.community_id = #{communityId}
-        limit 100
+          and t.status_cd = '0'
+          and t.community_id = #{communityId} limit 100
     </select>
 
     <!-- 查询费用配置信息 add by wuxw 2018-07-03 -->
@@ -2335,13 +2437,16 @@
     <select id="queryNoFeeRoomsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from building_room t
-        inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
-        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+            inner join building_unit bu
+        on t.unit_id = bu.unit_id and bu.status_cd = '0'
+            inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where t.status_cd = '0'
-        and not exists(
-        select 1 from pay_fee pf where t.room_id = pf.payer_obj_id and pf.status_cd = '0' and pf.state = '2008001'
-        )
-        and t.community_id = #{communityId}
+          and not exists (
+            select 1 from pay_fee pf where t.room_id = pf.payer_obj_id
+          and pf.status_cd = '0'
+          and pf.state = '2008001'
+            )
+          and t.community_id = #{communityId}
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
@@ -2728,12 +2833,12 @@
     <select id="queryHuaningPayFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select t.floor_num
-        from f_floor t
-        where 1=1
-        and t.community_id= #{communityId}
-        GROUP BY t.floor_num
-        ) tt
+            select t.floor_num
+            from f_floor t
+            where 1=1
+            and t.community_id= #{communityId}
+            GROUP BY t.floor_num
+            ) tt
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
@@ -2831,62 +2936,62 @@
     <select id="queryHuaningPayFeeTwoCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-        select a.floorNum,d.receivableAmount ,
-        a.receivedAmount,b.receivedAmount1,
-        c.receivedAmount2
-        from
-        (select t.floor_num floorNum,sum(pfd.received_amount) receivedAmount
-        from f_floor t
-        inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
-        inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        where 1=1
-        and t.status_cd = '0'
-        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
-        and t.community_id= #{communityId}
-        GROUP BY floor_num
-        ) a,
-        (select t.floor_num floorNum,SUM(pfdm1.discount_amount) receivedAmount1
-        from f_floor t
-        inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
-        inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
-        pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
-        where 1=1
-        and t.status_cd = '0'
-        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
-        and t.community_id= #{communityId}
-        GROUP BY floor_num
-        ) b,
-        (select t.floor_num floorNum,SUM(pfdm2.received_amount) receivedAmount2
-        from f_floor t
-        inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
-        inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
-        LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
-        pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
-        where 1=1
-        and t.status_cd = '0'
-        and DATE_FORMAT(pfd.create_time,'%Y-%m') = #{yearMonth}
-        and t.community_id= #{communityId}
-        GROUP BY floor_num
-        ) c,
-        (select t.floor_num floorNum,SUM(rfms.owe_amount) receivableAmount
-        from f_floor t
-        inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.status_cd = '0'
-        where t.community_id= #{communityId}
-        group by t.floor_num
-        ) d
-        where a.floorNum = b.floorNum
-        and b.floorNum = c.floorNum
-        and c.floorNum = d.floorNum
-        ) tt
+            select a.floorNum, d.receivableAmount,
+            a.receivedAmount, b.receivedAmount1,
+            c.receivedAmount2
+            from
+            (select t.floor_num floorNum, sum (pfd.received_amount) receivedAmount
+            from f_floor t
+            inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+            inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+            inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
+            inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
+            where 1=1
+            and t.status_cd = '0'
+            and DATE_FORMAT(pfd.create_time, '%Y-%m') = #{yearMonth}
+            and t.community_id= #{communityId}
+            GROUP BY floor_num
+            ) a,
+            (select t.floor_num floorNum, SUM (pfdm1.discount_amount) receivedAmount1
+            from f_floor t
+            inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+            inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+            inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
+            inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
+            LEFT JOIN pay_fee_detail_month pfdm1 on pf.fee_id = pfdm1.fee_id and pfd.detail_id = pfdm1.detail_id and
+            pfdm1.status_cd = '0' and pfdm1.detail_year = #{year} and pfdm1.detail_month &lt; #{month}
+            where 1=1
+            and t.status_cd = '0'
+            and DATE_FORMAT(pfd.create_time, '%Y-%m') = #{yearMonth}
+            and t.community_id= #{communityId}
+            GROUP BY floor_num
+            ) b,
+            (select t.floor_num floorNum, SUM (pfdm2.received_amount) receivedAmount2
+            from f_floor t
+            inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+            inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+            inner JOIN pay_fee pf on pf.payer_obj_id = br.room_id and pf.status_cd = '0'
+            inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
+            LEFT JOIN pay_fee_detail_month pfdm2 on pf.fee_id = pfdm2.fee_id and pfd.detail_id = pfdm2.detail_id and
+            pfdm2.status_cd = '0' and pfdm2.detail_year = #{year} and pfdm2.detail_month &gt; #{month}
+            where 1=1
+            and t.status_cd = '0'
+            and DATE_FORMAT(pfd.create_time, '%Y-%m') = #{yearMonth}
+            and t.community_id= #{communityId}
+            GROUP BY floor_num
+            ) c,
+            (select t.floor_num floorNum, SUM (rfms.owe_amount) receivableAmount
+            from f_floor t
+            inner JOIN building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
+            inner JOIN building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
+            inner JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.status_cd = '0'
+            where t.community_id= #{communityId}
+            group by t.floor_num
+            ) d
+            where a.floorNum = b.floorNum
+            and b.floorNum = c.floorNum
+            and c.floorNum = d.floorNum
+            ) tt
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
@@ -2986,8 +3091,7 @@
     <select id="getReceivedAmountByMonth" parameterType="Map" resultType="Map">
         select ifnull(sum(t.received_amount),0) total
         from pay_fee_detail_month t
-        where
-        1=1
+        where 1=1
         and t.create_time &gt; #{startTime}
         and t.create_time &lt; #{endTime}
         and t.fee_id = #{feeId}
@@ -3022,11 +3126,12 @@
 
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryInvalidFeeMonthStatistics" parameterType="Map" resultType="Map">
-        select t.fee_id feeId from pay_fee t
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id
-        inner join report_fee_month_statistics rfms on t.fee_id = rfms.fee_id and rfms.status_cd = '0'
+        select t.fee_id feeId
+        from pay_fee t
+                 inner join pay_fee_config pfc on t.config_id = pfc.config_id
+                 inner join report_fee_month_statistics rfms on t.fee_id = rfms.fee_id and rfms.status_cd = '0'
         where (t.status_cd = '1' or pfc.status_cd = '1')
-        and t.community_id= #{communityId}
+          and t.community_id = #{communityId}
     </select>
 
     <!--清理报表 无效数据-->

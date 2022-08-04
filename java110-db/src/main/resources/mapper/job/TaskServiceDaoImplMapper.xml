@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="taskServiceDaoImpl">
 
     <!-- 保存定时任务信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessTaskInfo" parameterType="Map">
-        insert into business_task(
-        operate,task_cron,task_name,state,b_id,template_id,task_id
-        ) values (
-        #{operate},#{taskCron},#{taskName},#{state},#{bId},#{templateId},#{taskId}
-        )
+        insert into business_task(operate, task_cron, task_name, state, b_id, template_id, task_id)
+        values (#{operate}, #{taskCron}, #{taskName}, #{state}, #{bId}, #{templateId}, #{taskId})
     </insert>
-
 
     <!-- 查询定时任务信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessTaskInfo" parameterType="Map" resultType="Map">
@@ -44,9 +39,7 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-
     </select>
-
 
     <!-- 保存定时任务信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveTaskInfoInstance" parameterType="Map">
@@ -76,9 +69,7 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-
     </insert>
-
 
     <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
     <select id="getTaskInfo" parameterType="Map" resultType="Map">
@@ -109,6 +100,9 @@
         <if test="templateId !=null and templateId != ''">
             and t.template_id= #{templateId}
         </if>
+        <if test="templateName != null and templateName != ''">
+            and tt.template_name = #{templateName}
+        </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
@@ -116,9 +110,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改定时任务信息 add by wuxw 2018-07-03 -->
     <update id="updateTaskInfoInstance" parameterType="Map">
@@ -145,7 +137,6 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-
     </update>
 
     <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
@@ -175,13 +166,13 @@
         <if test="templateId !=null and templateId != ''">
             and t.template_id= #{templateId}
         </if>
+        <if test="templateName != null and templateName != ''">
+            and tt.template_name = #{templateName}
+        </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-
-
     </select>
-
 
     <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
     <select id="queryTaskTemplateCount" parameterType="Map" resultType="Map">
@@ -200,13 +191,12 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
     </select>
-
 
     <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
     <select id="getTaskTemplateInfo" parameterType="Map" resultType="Map">
-        select t.template_id templateId,t.template_name templateName,t.template_desc templateDesc,t.create_time createTime,t.class_bean classBean
+        select t.template_id templateId,t.template_name templateName,t.template_desc templateDesc,t.create_time
+        createTime,t.class_bean classBean
         from task_template t
         where 1 =1
         <if test="templateId !=null and templateId != ''">
@@ -225,9 +215,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
     <select id="queryTaskTemplateSpecCount" parameterType="Map" resultType="Map">
@@ -249,9 +237,7 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
     </select>
-
 
     <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
     <select id="getTaskTemplateSpecInfo" parameterType="Map" resultType="Map">
@@ -274,8 +260,6 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
     </select>
-
 
 </mapper>

@@ -144,16 +144,15 @@ public class QuestionAnswerApi {
      * @path /app/questionAnswer/queryQuestionAnswer
      */
     @RequestMapping(value = "/queryQuestionAnswer", method = RequestMethod.GET)
-    public ResponseEntity<String> queryQuestionAnswer(
-            @RequestHeader(value = "store-id", required = false) String storeId,
-            @RequestHeader(value = "user-id", required = false) String userId,
-            @RequestParam(value = "communityId", required = false) String communityId,
-            @RequestParam(value = "objType", required = false) String objType,
-            @RequestParam(value = "qaType", required = false) String qaType,
-            @RequestParam(value = "qaName", required = false) String qaName,
-            @RequestParam(value = "qaId", required = false) String qaId,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row) {
+    public ResponseEntity<String> queryQuestionAnswer(@RequestHeader(value = "store-id", required = false) String storeId,
+                                                      @RequestHeader(value = "user-id", required = false) String userId,
+                                                      @RequestParam(value = "communityId", required = false) String communityId,
+                                                      @RequestParam(value = "objType", required = false) String objType,
+                                                      @RequestParam(value = "qaType", required = false) String qaType,
+                                                      @RequestParam(value = "qaName", required = false) String qaName,
+                                                      @RequestParam(value = "qaId", required = false) String qaId,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
         questionAnswerDto.setPage(page);
         questionAnswerDto.setRow(row);

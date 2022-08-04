@@ -353,6 +353,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_REPAIR);
         businessFeeConfig.put("feeName", "报修费[系统默认]");
+        businessFeeConfig.put("deductFrom", "Y");
         businessFeeConfig.put("feeFlag", "2006012"); //一次性费用
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
@@ -504,6 +505,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         businessFeeConfig.put("feeName", "临时车费用[系统默认]");
+        businessFeeConfig.put("deductFrom", "Y");
         businessFeeConfig.put("feeFlag", "2006012");
         businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessFeeConfig.put("endTime", DateUtil.LAST_TIME);

@@ -42,6 +42,9 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
     //空置房减免金额(小计)
     private String totalVacantHousingReduction;
 
+    //赠送规则金额(小计)
+    private String totalGiftAmount;
+
     //优惠金额(大计)
     private String allPreferentialAmount;
 
@@ -56,6 +59,9 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
 
     //空置房减免金额(大计)
     private String allVacantHousingReduction;
+
+    //空置房减免金额(大计)
+    private String allGiftAmount;
 
     public String getTotalReceivableAmount() {
         return totalReceivableAmount;
@@ -167,5 +173,21 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
 
     public void setAllVacantHousingReduction(String allVacantHousingReduction) {
         this.allVacantHousingReduction = allVacantHousingReduction;
+    }
+
+    public String getTotalGiftAmount() {
+        return totalGiftAmount;
+    }
+
+    public void setTotalGiftAmount(String totalGiftAmount) {
+        this.totalGiftAmount = totalGiftAmount;
+    }
+
+    public String getAllGiftAmount() {
+        return allGiftAmount;
+    }
+
+    public void setAllGiftAmount(String allGiftAmount) {
+        this.allGiftAmount = allGiftAmount;
     }
 }

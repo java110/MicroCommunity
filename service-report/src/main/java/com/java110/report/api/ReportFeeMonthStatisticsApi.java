@@ -1,6 +1,7 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.report.ReportDeposit;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -337,6 +339,7 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
                                                     @RequestParam(value = "objId", required = false) String objId,
+                                                    @RequestParam(value = "roomName", required = false) String roomName,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
@@ -356,6 +359,12 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         reportFeeMonthStatisticsDto.setObjId(objId);
+        if(!StringUtil.isEmpty(roomName)){
+            String[] roomNameArray = roomName.split("-");
+            reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
+            reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
+            reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);
+        }
         return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
     }
 
@@ -660,13 +669,11 @@ public class ReportFeeMonthStatisticsApi {
      * @path /app/reportFeeMonthStatistics/queryHuaningPayFeeTwo
      */
     @RequestMapping(value = "/queryHuaningPayFeeTwo", method = RequestMethod.GET)
-    public ResponseEntity<String> queryHuaningPayFeeTwo(
-            @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "year") int year,
-            @RequestParam(value = "month") int month,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row
-    ) {
+    public ResponseEntity<String> queryHuaningPayFeeTwo(@RequestParam(value = "communityId") String communityId,
+                                                        @RequestParam(value = "year") int year,
+                                                        @RequestParam(value = "month") int month,
+                                                        @RequestParam(value = "page") int page,
+                                                        @RequestParam(value = "row") int row) {
         Map paramInfo = new HashMap();
         paramInfo.put("communityId", communityId);
         paramInfo.put("year", year);
@@ -687,13 +694,11 @@ public class ReportFeeMonthStatisticsApi {
      * @path /app/reportFeeMonthStatistics/queryHuaningOweFeeDetail
      */
     @RequestMapping(value = "/queryHuaningOweFeeDetail", method = RequestMethod.GET)
-    public ResponseEntity<String> queryHuaningOweFeeDetail(
-            @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "year") int year,
-            @RequestParam(value = "month") int month,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row
-    ) {
+    public ResponseEntity<String> queryHuaningOweFeeDetail(@RequestParam(value = "communityId") String communityId,
+                                                           @RequestParam(value = "year") int year,
+                                                           @RequestParam(value = "month") int month,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "row") int row) {
         Map paramInfo = new HashMap();
         paramInfo.put("communityId", communityId);
         paramInfo.put("year", year);

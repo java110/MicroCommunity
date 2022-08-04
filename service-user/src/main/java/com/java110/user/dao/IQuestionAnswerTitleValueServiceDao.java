@@ -65,4 +65,11 @@ public interface IQuestionAnswerTitleValueServiceDao {
      * @return
      */
     List<Map> queryQuestionAnswerTitleValueResult(Map info);
+
+    /**
+     * 查询问卷结果选择总人数
+     * @param info
+     * @return
+     */
+    List<Map> queryQuestionAnswerTitleValueResultCount(Map info);
 }

@@ -161,7 +161,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         payFeeConfigDiscountDto.setStatusCd("0");
         Date currentTime = new Date();
         payFeeConfigDiscountDto.setCurrentTime(currentTime);
-        //根据费用查询折扣
+        //根据费用项查询折扣（该费用项下的所有折扣信息）
         List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos =
                 payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
         if (payFeeConfigDiscountDtos == null || payFeeConfigDiscountDtos.size() < 1) {

@@ -53,6 +53,7 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
         businessFeeConfigInfo.put("paymentCd", businessFeeConfigInfo.get("payment_cd"));
         businessFeeConfigInfo.put("paymentCycle", businessFeeConfigInfo.get("payment_cycle"));
         businessFeeConfigInfo.put("billType", businessFeeConfigInfo.get("bill_type"));
+        businessFeeConfigInfo.put("deductFrom", businessFeeConfigInfo.get("deduct_from"));
         businessFeeConfigInfo.remove("bId");
         businessFeeConfigInfo.put("statusCd", statusCd);
     }
@@ -93,6 +94,7 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
         currentFeeConfigInfo.put("paymentCd", currentFeeConfigInfo.get("payment_cd"));
         currentFeeConfigInfo.put("paymentCycle", currentFeeConfigInfo.get("payment_cycle"));
         currentFeeConfigInfo.put("billType", currentFeeConfigInfo.get("bill_type"));
+        currentFeeConfigInfo.put("deductFrom", currentFeeConfigInfo.get("deduct_from"));
 
 
         currentFeeConfigInfo.put("operate", StatusConstant.OPERATE_DEL);

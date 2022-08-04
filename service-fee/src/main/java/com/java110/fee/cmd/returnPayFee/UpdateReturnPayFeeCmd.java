@@ -47,7 +47,6 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateReturnPayFeeCmd.class);
 
-
     @Autowired
     private IReturnPayFeeV1InnerServiceSMO returnPayFeeV1InnerServiceSMOImpl;
 
@@ -55,7 +54,6 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "returnFeeId", "returnFeeId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override

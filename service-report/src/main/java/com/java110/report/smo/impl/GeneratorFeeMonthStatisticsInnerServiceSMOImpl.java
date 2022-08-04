@@ -13,7 +13,11 @@ import com.java110.dto.report.ReportFeeDetailDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.report.IGeneratorFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportCommunityServiceDao;
@@ -48,6 +52,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     private IReportFeeMonthStatisticsServiceDao reportFeeMonthStatisticsServiceDaoImpl;
 
     @Autowired
+    private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
+
+    @Autowired
     private IReportCommunityServiceDao reportCommunityServiceDaoImpl;
 
     @Autowired
@@ -59,6 +66,15 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
+
     @Override
     public int generatorData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
 
@@ -67,7 +83,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
     }
 
     @Async
-    private void doGeneratorData(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
+    public void doGeneratorData(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
         String communityId = reportFeeMonthStatisticsPo.getCommunityId();
 
         Assert.hasLength(communityId, "未包含小区信息");
@@ -284,6 +300,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
             reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
             reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
+            if (!StringUtil.isEmpty(statistic.getObjType()) && statistic.getObjType().equals("3333")) { //房屋
+                reportFeeMonthStatisticsPo.setObjNameNum(statistic.getFloorNum() + "-" + statistic.getUnitNum() + "-" + statistic.getRoomNum());
+            }
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
@@ -301,6 +320,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
             reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
             reportFeeMonthStatisticsPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
+            reportFeeMonthStatisticsPo.setObjNameNum(tmpReportCarDto.getAreaNum() + "-" + tmpReportCarDto.getNum() + "-" + tmpReportCarDto.getCarNum());
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
             reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
@@ -396,6 +416,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
         reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
         reportFeeMonthStatisticsPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
+        reportFeeMonthStatisticsPo.setObjNameNum(tmpReportCarDto.getAreaNum() + "-" + tmpReportCarDto.getNum() + "-" + tmpReportCarDto.getCarNum());
         reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
 
@@ -444,11 +465,14 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
         reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId()); //这里不能注释，因为一个费用多次创建时会存在覆盖 存在bug问题
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
+        int year = DateUtil.getYear();
+        int month = DateUtil.getMonth();
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
         List<ReportFeeMonthStatisticsDto> statistics = BeanConvertUtil.covertBeanList(
                 reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
                 ReportFeeMonthStatisticsDto.class);
+        //List<ReportFeeMonthStatisticsDto> statistics = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeMonthStatisticss(reportFeeMonthStatisticsDto);
 
 
         //double receivedAmount = getReceivedAmount(tmpReportFeeDto); //实收
@@ -485,6 +509,31 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
             reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
             reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
+            /*if (!StringUtil.isEmpty(statistic.getObjType()) && statistic.getObjType().equals("3333")) { //房屋
+                if (!StringUtil.isEmpty(statistic.getObjId())) {
+                    //获取付费对象ID
+                    String objId = statistic.getObjId();
+                    RoomDto roomDto = new RoomDto();
+                    roomDto.setRoomId(objId);
+                    List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                    if (roomDtos != null && roomDtos.size() == 1) {
+                        String roomNum = roomDtos.get(0).getRoomNum();
+                        UnitDto unitDto = new UnitDto();
+                        unitDto.setUnitId(roomDtos.get(0).getUnitId());
+                        List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+                        if (unitDtos != null && unitDtos.size() == 1) {
+                            String unitNum = unitDtos.get(0).getUnitNum();
+                            FloorDto floorDto = new FloorDto();
+                            floorDto.setFloorId(unitDtos.get(0).getFloorId());
+                            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+                            if(floorDtos != null && floorDtos.size() == 1){
+                                String floorNum = floorDtos.get(0).getFloorNum();
+                                statistic.setObjNameNum(floorNum + "-" + unitNum + "-" + roomNum);
+                            }
+                        }
+                    }
+                }
+            }*/
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
@@ -503,8 +552,10 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
             if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
                 reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
             } else {
                 reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
+                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
             }
             //计算历史欠费
             reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
@@ -756,8 +807,10 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
         if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
             reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+            reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
         } else {
             reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
+            reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
         }
         //计算历史欠费
         reportFeeMonthStatisticsPo.setHisOweAmount("0");

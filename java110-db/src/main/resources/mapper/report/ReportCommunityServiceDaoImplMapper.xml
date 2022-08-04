@@ -60,7 +60,7 @@
         where t.status_cd = '0'
         and t.community_id = #{communityId}
         and bu.unit_id = #{unitId}
-        order by CONVERT(t.layer,SIGNED),t.room_num
+        order by CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
     </select>
 
     <select id="queryCarStructures" parameterType="Map" resultType="Map">

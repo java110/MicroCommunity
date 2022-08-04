@@ -8,10 +8,16 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.FloorDto;
+import com.java110.dto.RoomDto;
+import com.java110.dto.UnitDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -38,6 +44,7 @@ import java.util.Map;
 
 @Java110Cmd(serviceCode = "fee.listFee")
 public class ListFeeCmd extends Cmd {
+
     private static Logger logger = LoggerFactory.getLogger(ListFeeCmd.class);
 
     @Autowired
@@ -57,6 +64,15 @@ public class ListFeeCmd extends Cmd {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
@@ -78,6 +94,38 @@ public class ListFeeCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            String[] roomNums = reqJson.getString("roomNum").split("-");
+            if (roomNums == null || roomNums.length != 3) {
+                throw new IllegalArgumentException("房屋编号格式错误！");
+            }
+            String floorNum = roomNums[0];
+            String unitNum = roomNums[1];
+            String roomNum = roomNums[2];
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorNum(floorNum);
+            floorDto.setCommunityId(reqJson.getString("communityId"));
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            if (floorDtos != null && floorDtos.size() > 0) {
+                for (FloorDto floor : floorDtos) {
+                    UnitDto unitDto = new UnitDto();
+                    unitDto.setFloorId(floor.getFloorId());
+                    unitDto.setUnitNum(unitNum);
+                    List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+                    if (unitDtos != null && unitDtos.size() > 0) {
+                        for (UnitDto unit : unitDtos) {
+                            RoomDto roomDto = new RoomDto();
+                            roomDto.setUnitId(unit.getUnitId());
+                            roomDto.setRoomNum(roomNum);
+                            roomDto.setCommunityId(reqJson.getString("communityId"));
+                            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                            Assert.listOnlyOne(roomDtos, "查询房屋错误！");
+                            reqJson.put("payerObjId", roomDtos.get(0).getRoomId());
+                        }
+                    }
+                }
+            }
+        }
 
         FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
 
@@ -258,7 +306,6 @@ public class ListFeeCmd extends Cmd {
             feeDto.setAmountOwed(df.format(curFeePrice) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
-
         //考虑租金递增
         computeFeeSMOImpl.dealRentRate(feeDto);
     }

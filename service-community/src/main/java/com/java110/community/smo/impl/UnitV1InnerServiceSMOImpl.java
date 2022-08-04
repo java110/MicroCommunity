@@ -47,26 +47,26 @@ public class UnitV1InnerServiceSMOImpl extends BaseServiceSMO implements IUnitV1
 
 
     @Override
-    public int saveUnit(@RequestBody  UnitPo unitPo) {
+    public int saveUnit(@RequestBody UnitPo unitPo) {
         int saveFlag = unitV1ServiceDaoImpl.saveUnitInfo(BeanConvertUtil.beanCovertMap(unitPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateUnit(@RequestBody  UnitPo unitPo) {
+    @Override
+    public int updateUnit(@RequestBody UnitPo unitPo) {
         int saveFlag = unitV1ServiceDaoImpl.updateUnitInfo(BeanConvertUtil.beanCovertMap(unitPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteUnit(@RequestBody  UnitPo unitPo) {
-       unitPo.setStatusCd("1");
-       int saveFlag = unitV1ServiceDaoImpl.updateUnitInfo(BeanConvertUtil.beanCovertMap(unitPo));
-       return saveFlag;
+    @Override
+    public int deleteUnit(@RequestBody UnitPo unitPo) {
+        unitPo.setStatusCd("1");
+        int saveFlag = unitV1ServiceDaoImpl.updateUnitInfo(BeanConvertUtil.beanCovertMap(unitPo));
+        return saveFlag;
     }
 
     @Override
-    public List<UnitDto> queryUnits(@RequestBody  UnitDto unitDto) {
+    public List<UnitDto> queryUnits(@RequestBody UnitDto unitDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +84,7 @@ public class UnitV1InnerServiceSMOImpl extends BaseServiceSMO implements IUnitV1
 
     @Override
     public int queryUnitsCount(@RequestBody UnitDto unitDto) {
-        return unitV1ServiceDaoImpl.queryUnitsCount(BeanConvertUtil.beanCovertMap(unitDto));    }
+        return unitV1ServiceDaoImpl.queryUnitsCount(BeanConvertUtil.beanCovertMap(unitDto));
+    }
 
 }

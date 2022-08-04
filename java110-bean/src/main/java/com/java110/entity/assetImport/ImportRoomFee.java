@@ -37,7 +37,7 @@ public class ImportRoomFee {
     private String ownerName;
     private String ownerLink;
 
-    private String deductFrom = "Y";
+    private String deductFrom;
 
 
     public String getFloorNum() {

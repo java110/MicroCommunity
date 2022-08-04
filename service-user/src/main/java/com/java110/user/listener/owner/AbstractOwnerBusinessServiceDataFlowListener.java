@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractOwnerBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractOwnerBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractOwnerBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -32,7 +32,8 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
     /**
      * 刷新 businessOwnerInfo 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
-     *,t.community_id,t.community_id communityId
+     * ,t.community_id,t.community_id communityId
+     *
      * @param businessOwnerInfo
      */
     protected void flushBusinessOwnerInfo(Map businessOwnerInfo, String statusCd) {
@@ -41,6 +42,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         businessOwnerInfo.put("sex", businessOwnerInfo.get("sex"));
         businessOwnerInfo.put("name", businessOwnerInfo.get("name"));
         businessOwnerInfo.put("link", businessOwnerInfo.get("link"));
+        businessOwnerInfo.put("address", businessOwnerInfo.get("address"));
         businessOwnerInfo.put("remark", businessOwnerInfo.get("remark"));
         businessOwnerInfo.put("ownerId", businessOwnerInfo.get("owner_id"));
         businessOwnerInfo.put("userId", businessOwnerInfo.get("user_id"));
@@ -55,14 +57,13 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         businessOwnerInfo.put("statusCd", statusCd);
     }
 
-
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      *
      * @param businessOwner 业主信息
      */
     protected void autoSaveDelBusinessOwner(Business business, JSONObject businessOwner) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("memberId", businessOwner.getString("memberId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -70,15 +71,13 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         if (currentOwnerInfos == null || currentOwnerInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
-
         Map currentOwnerInfo = currentOwnerInfos.get(0);
-
         currentOwnerInfo.put("bId", business.getbId());
-
         currentOwnerInfo.put("operate", currentOwnerInfo.get("operate"));
         currentOwnerInfo.put("sex", currentOwnerInfo.get("sex"));
         currentOwnerInfo.put("name", currentOwnerInfo.get("name"));
         currentOwnerInfo.put("link", currentOwnerInfo.get("link"));
+        currentOwnerInfo.put("address", currentOwnerInfo.get("address"));
         currentOwnerInfo.put("remark", currentOwnerInfo.get("remark"));
         currentOwnerInfo.put("ownerId", currentOwnerInfo.get("owner_id"));
         currentOwnerInfo.put("userId", currentOwnerInfo.get("user_id"));
@@ -89,17 +88,13 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         currentOwnerInfo.put("idCard", currentOwnerInfo.get("id_card"));
         currentOwnerInfo.put("state", currentOwnerInfo.get("state"));
         currentOwnerInfo.put("ownerFlag", currentOwnerInfo.get("owner_flag"));
-
-
         currentOwnerInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerServiceDaoImpl().saveBusinessOwnerInfo(currentOwnerInfo);
-
         for (Object key : currentOwnerInfo.keySet()) {
             if (businessOwner.get(key) == null) {
                 businessOwner.put(key.toString(), currentOwnerInfo.get(key));
             }
         }
     }
-
 
 }

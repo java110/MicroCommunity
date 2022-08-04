@@ -663,6 +663,9 @@
         <if test="auditStatusCd !=null and auditStatusCd !=''">
             and scm.audit_status_cd = #{auditStatusCd}
         </if>
+        <if test="communityId != null and communityId != ''">
+            and sc.community_id = #{communityId}
+        </if>
         group by sc.community_id
     </select>
 </mapper>

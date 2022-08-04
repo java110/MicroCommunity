@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +44,28 @@ public class GetQuestionAnswerTitleValueBMOImpl implements IGetQuestionAnswerTit
 
     @Override
     public ResponseEntity<String> queryQuestionAnswerTitleValueResult(QuestionAnswerTitleValueDto questionAnswerTitleValueDto) {
-        List<QuestionAnswerTitleValueDto>  questionAnswerTitleValueDtos
-                = questionAnswerTitleValueInnerServiceSMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
+        List<QuestionAnswerTitleValueDto> questionAnswerTitleValueDtos = new ArrayList<>();
+        List<QuestionAnswerTitleValueDto> questionAnswerTitleValueResultCountDtos
+                = questionAnswerTitleValueInnerServiceSMOImpl.queryQuestionAnswerTitleValueResultCount(questionAnswerTitleValueDto);
+        if (questionAnswerTitleValueResultCountDtos != null && questionAnswerTitleValueResultCountDtos.size() > 0) {
+            //获取总人数
+            BigDecimal allCount = new BigDecimal(questionAnswerTitleValueResultCountDtos.get(0).getAllCount());
+            List<QuestionAnswerTitleValueDto> questionAnswerTitleValues
+                    = questionAnswerTitleValueInnerServiceSMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
+            for (QuestionAnswerTitleValueDto questionAnswerTitleValue : questionAnswerTitleValues) {
+                if (allCount.compareTo(BigDecimal.ZERO) == 0) {
+                    questionAnswerTitleValue.setPercentage("0.0%");
+                } else {
+                    //获取选择人数
+                    BigDecimal userCount = new BigDecimal(questionAnswerTitleValue.getUserCount());
+                    double result = userCount.doubleValue() / allCount.doubleValue();
+                    BigDecimal divide = new BigDecimal(result).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal percentage = divide.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    questionAnswerTitleValue.setPercentage(percentage + "%");
+                }
+                questionAnswerTitleValueDtos.add(questionAnswerTitleValue);
+            }
+        }
         return ResultVo.createResponseEntity(questionAnswerTitleValueDtos);
     }
 

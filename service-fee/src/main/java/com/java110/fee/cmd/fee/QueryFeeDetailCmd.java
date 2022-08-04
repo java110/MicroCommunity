@@ -7,8 +7,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -32,6 +34,9 @@ public class QueryFeeDetailCmd extends Cmd {
     @Autowired
     private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeDetailDiscountInnerServiceSMO payFeeDetailDiscountInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
@@ -39,7 +44,7 @@ public class QueryFeeDetailCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-//获取开始时间
+        //获取开始时间
         if (!StringUtil.isEmpty(reqJson.getString("startTime"))) {
             String startTime = reqJson.getString("startTime") + " 00:00:00";
             reqJson.put("startTime", startTime);
@@ -82,6 +87,10 @@ public class QueryFeeDetailCmd extends Cmd {
                 feeAccountDetailDto.setDetailId(feeDetail.getDetailId());
                 List<FeeAccountDetailDto> feeAccountDetailDtos = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
                 feeDetail.setFeeAccountDetailDtoList(feeAccountDetailDtos);
+                PayFeeDetailDiscountDto payFeeDetailDiscountDto = new PayFeeDetailDiscountDto();
+                payFeeDetailDiscountDto.setDetailId(feeDetail.getDetailId());
+                List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
+                feeDetail.setPayFeeDetailDiscountDtoList(payFeeDetailDiscountDtos);
                 feeDetailList.add(feeDetail);
             }
             List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailList, ApiFeeDetailDataVo.class);

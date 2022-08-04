@@ -1,6 +1,7 @@
 package com.java110.vo.api;
 
 import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.vo.Vo;
 
 import java.util.Date;
@@ -37,6 +38,7 @@ public class ApiFeeDetailDataVo extends Vo {
     private Date curReadingTime;
 
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
+    private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
     private String fadState;
     private String fadStateName;
@@ -216,5 +218,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setFeeAccountDetailDtoList(List<FeeAccountDetailDto> feeAccountDetailDtoList) {
         this.feeAccountDetailDtoList = feeAccountDetailDtoList;
+    }
+
+    public List<PayFeeDetailDiscountDto> getPayFeeDetailDiscountDtoList() {
+        return payFeeDetailDiscountDtoList;
+    }
+
+    public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
+        this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
     }
 }

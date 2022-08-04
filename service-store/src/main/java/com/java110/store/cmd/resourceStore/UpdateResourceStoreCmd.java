@@ -15,7 +15,6 @@ import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.purchase.ResourceStorePo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -24,10 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
 
-
 @Java110Cmd(serviceCode = "resourceStore.updateResourceStore")
 public class UpdateResourceStoreCmd extends Cmd {
-
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
@@ -40,7 +37,6 @@ public class UpdateResourceStoreCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {

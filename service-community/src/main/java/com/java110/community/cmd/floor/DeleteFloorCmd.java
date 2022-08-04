@@ -36,7 +36,7 @@ public class DeleteFloorCmd extends Cmd {
         UnitDto unitDto = new UnitDto();
         unitDto.setFloorId(reqJson.getString("floorId"));
         unitDto.setCommunityId(reqJson.getString("communityId"));
-        unitDto.setRoomUnit(UnitDto.ROOM_UNIT_Y);
+//        unitDto.setRoomUnit(UnitDto.ROOM_UNIT_Y);
         int count = unitV1InnerServiceSMOImpl.queryUnitsCount(unitDto);
         if (count > 0) {
             throw new IllegalArgumentException("请先删除单元 再删除楼栋");

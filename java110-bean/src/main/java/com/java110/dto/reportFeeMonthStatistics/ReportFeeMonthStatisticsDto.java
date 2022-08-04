@@ -22,6 +22,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String updateTime;
     private String remark;
     private String objName;
+    private String objNameNum;
     private String receivedAmount;
     private String feeYear;
     private String feeMonth;
@@ -53,7 +54,6 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String objCount;
     private String normalCount;
-
 
     private Date createTime;
     private String startTime;
@@ -117,6 +117,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     //空置房减免金额
     private String vacantHousingReduction;
+
+    //赠送金额
+    private String giftAmount;
 
     //收费率
     private String chargeRate;
@@ -636,7 +639,6 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         this.builtUpArea = builtUpArea;
     }
 
-
     public String[] getConfigIds() {
         return configIds;
     }
@@ -723,5 +725,21 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setPsName(String psName) {
         this.psName = psName;
+    }
+
+    public String getObjNameNum() {
+        return objNameNum;
+    }
+
+    public void setObjNameNum(String objNameNum) {
+        this.objNameNum = objNameNum;
+    }
+
+    public String getGiftAmount() {
+        return giftAmount;
+    }
+
+    public void setGiftAmount(String giftAmount) {
+        this.giftAmount = giftAmount;
     }
 }

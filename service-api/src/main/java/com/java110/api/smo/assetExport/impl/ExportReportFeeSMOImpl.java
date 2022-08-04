@@ -369,7 +369,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("oId"));
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(1).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("feeName"));
             row.createCell(4).setCellValue(dataObj.getString("feeTypeCdName"));
@@ -503,7 +507,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         for (int roomIndex = 0; roomIndex < prePayFees.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = prePayFees.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(0).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(0).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(1).setCellValue(dataObj.getString("feeName"));
             row.createCell(2).setCellValue(dataObj.getString("endTime"));
             row.createCell(3).setCellValue(dataObj.getString("oweDay"));
@@ -526,7 +534,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         for (int roomIndex = 0; roomIndex < deadlineFees.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = deadlineFees.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("objName"));
+            row.createCell(0).setCellValue(dataObj.getString("objNameNum"));
             row.createCell(1).setCellValue(dataObj.getString("feeName"));
             row.createCell(2).setCellValue(dataObj.getString("deadlineTime"));
             row.createCell(3).setCellValue(dataObj.getString("oweDay"));
@@ -1038,7 +1046,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = reportPayFeeDeposits.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("feeId"));
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(1).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));
             row.createCell(4).setCellValue(dataObj.getString("feeName"));
@@ -1292,7 +1304,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        reqJson.put("storeId",result.getStoreId());
+        reqJson.put("storeId", result.getStoreId());
         apiUrl = "purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -1636,7 +1648,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(roomIndex + 1);
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            row.createCell(1).setCellValue(dataObj.getString("objNameNum"));
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
             row.createCell(4).setCellValue(dataObj.getString("feeName"));

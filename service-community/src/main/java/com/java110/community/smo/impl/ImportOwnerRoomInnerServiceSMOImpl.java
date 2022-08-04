@@ -251,7 +251,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         ownerRoomRelPo.setUserId(importOwnerRoomDto.getUserId());
         ownerRoomRelPo.setbId("-1");
         ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-        ownerRoomRelPo.setState("2001");
+        ownerRoomRelPo.setState(importOwnerRoomDto.getRoomState());
         ownerRoomRelPo.setRoomId(roomId);
         ownerRoomRelPo.setOwnerId(ownerId);
         ownerRoomRelPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
@@ -303,7 +303,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             roomId = roomDtos.get(0).getRoomId();
             if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd()) || StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
                 roomPo = new RoomPo();
-                roomPo.setState(StringUtil.isEmpty(importOwnerRoomDto.getOwnerName()) ? RoomDto.STATE_FREE : RoomDto.STATE_SELL);
+                roomPo.setState(importOwnerRoomDto.getRoomState());
                 roomPo.setRoomId(roomId);
                 roomPo.setApartment(importOwnerRoomDto.getSection());
                 roomPo.setSection("1");

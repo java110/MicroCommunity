@@ -23,12 +23,12 @@ public class QuestionAnswerTitleValueDto extends PageDto implements Serializable
     private String qaValue;
     private String seq;
     private long userCount;
-
+    private String allCount;
+    private String percentage;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getValueId() {
         return valueId;
@@ -78,7 +78,6 @@ public class QuestionAnswerTitleValueDto extends PageDto implements Serializable
         this.seq = seq;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -109,5 +108,21 @@ public class QuestionAnswerTitleValueDto extends PageDto implements Serializable
 
     public void setUserCount(long userCount) {
         this.userCount = userCount;
+    }
+
+    public String getAllCount() {
+        return allCount;
+    }
+
+    public void setAllCount(String allCount) {
+        this.allCount = allCount;
+    }
+
+    public String getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(String percentage) {
+        this.percentage = percentage;
     }
 }

@@ -1,6 +1,7 @@
 package com.java110.po.questionAnswer;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class QuestionAnswerPo implements Serializable {
 
@@ -14,6 +15,12 @@ public class QuestionAnswerPo implements Serializable {
     private String objId;
     private String qaId;
     private String remark;
+    private String content;
+    private List<String> photos;
+
+    private String url;
+
+    private List<String> fileUrls;
 
     public String getQaName() {
         return qaName;
@@ -93,5 +100,37 @@ public class QuestionAnswerPo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public List<String> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
     }
 }

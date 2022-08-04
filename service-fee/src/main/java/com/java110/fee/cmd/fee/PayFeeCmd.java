@@ -170,7 +170,8 @@ public class PayFeeCmd extends Cmd {
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
         if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
-                || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+                || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())
+                || FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             try {
                 maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
             } catch (ParseException e) {
@@ -348,9 +349,6 @@ public class PayFeeCmd extends Cmd {
             JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
             for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
                 JSONObject param = selectDiscounts.getJSONObject(discountIndex);
-                if (!StringUtil.isEmpty(param.getString("ruleId")) && param.getString("ruleId").equals("102020008")) {
-                    return;
-                }
                 addPayFeeDetailDiscount(paramObj, param);
             }
         }

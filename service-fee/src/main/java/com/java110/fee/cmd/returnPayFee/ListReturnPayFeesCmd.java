@@ -20,6 +20,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -27,8 +31,10 @@ import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,11 +54,16 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "returnPayFee.listReturnPayFees")
 public class ListReturnPayFeesCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListReturnPayFeesCmd.class);
-
+    private static Logger logger = LoggerFactory.getLogger(ListReturnPayFeesCmd.class);
 
     @Autowired
     private IReturnPayFeeInnerServiceSMO returnPayFeeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailDiscountInnerServiceSMO payFeeDetailDiscountInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -66,13 +77,28 @@ public class ListReturnPayFeesCmd extends Cmd {
 
         int count = returnPayFeeInnerServiceSMOImpl.queryReturnPayFeesCount(returnPayFeeDto);
 
-        List<ReturnPayFeeDto> returnPayFeeDtos = null;
+        List<ReturnPayFeeDto> returnPayFeeDtos = new ArrayList<>();
 
         List<ApiReturnPayFeeDataVo> returnPayFees;
 
         if (count > 0) {
             //注意这里处理 记得测试退费逻辑
-            returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+            List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+            for (ReturnPayFeeDto returnPayFee : returnPayFeeList) {
+                FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
+                feeAccountDetailDto.setDetailId(returnPayFee.getDetailId());
+                List<FeeAccountDetailDto> feeAccountDetailDtos = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
+                if (feeAccountDetailDtos != null && feeAccountDetailDtos.size() > 0) {
+                    returnPayFee.setFeeAccountDetailDtoList(feeAccountDetailDtos);
+                }
+                PayFeeDetailDiscountDto payFeeDetailDiscountDto = new PayFeeDetailDiscountDto();
+                payFeeDetailDiscountDto.setDetailId(returnPayFee.getDetailId());
+                List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
+                if (payFeeDetailDiscountDtos != null && payFeeDetailDiscountDtos.size() > 0) {
+                    returnPayFee.setPayFeeDetailDiscountDtoList(payFeeDetailDiscountDtos);
+                }
+                returnPayFeeDtos.add(returnPayFee);
+            }
             //List<ReturnPayFeeDto> returnPayFeeDtoList = new ArrayList<>();
 //            for (ReturnPayFeeDto returnPayFee : returnPayFeeDtos) {
 //                //获取付款方标识

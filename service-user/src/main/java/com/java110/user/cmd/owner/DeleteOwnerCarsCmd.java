@@ -26,6 +26,7 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.deleteOwnerCars")
 public class DeleteOwnerCarsCmd extends Cmd {
+
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
@@ -43,7 +44,7 @@ public class DeleteOwnerCarsCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-//Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "carId", "carId不能为空");
         Assert.hasKeyAndValue(reqJson, "memberId", "memberId不能为空");
@@ -62,6 +63,7 @@ public class DeleteOwnerCarsCmd extends Cmd {
         }
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarId(reqJson.getString("carId"));
         ownerCarDto.setMemberId(reqJson.getString("memberId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
 

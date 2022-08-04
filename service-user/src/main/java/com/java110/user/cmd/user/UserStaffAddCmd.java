@@ -68,6 +68,7 @@ public class UserStaffAddCmd extends Cmd {
         UserDto userDto = new UserDto();
         userDto.setTel(reqJson.getString("tel"));
         userDto.setUserFlag("1");
+        userDto.setLevelCd("01"); //员工
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
         Assert.listIsNull(users, "员工手机号不能重复，请重新输入");
 

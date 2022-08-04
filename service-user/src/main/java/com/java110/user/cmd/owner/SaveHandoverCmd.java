@@ -93,6 +93,9 @@ public class SaveHandoverCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         OwnerPo ownerPo = BeanConvertUtil.covertBean(reqJson, OwnerPo.class);
         int flag = 0;
+        if (ownerPo.getAge().equals("")) {
+            ownerPo.setAge(null);
+        }
         if (reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))) {
             ownerPo.setMemberId(ownerPo.getOwnerId());
             flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
@@ -105,12 +108,9 @@ public class SaveHandoverCmd extends Cmd {
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
             reqJson.put("ownerId", ownerPo.getOwnerId());
         }
-
         if (flag < 1) {
             throw new CmdException("操作业主失败");
         }
-
-
         JSONArray rooms = reqJson.getJSONArray("rooms");
         OwnerRoomRelPo ownerRoomRelPo = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
@@ -128,7 +128,6 @@ public class SaveHandoverCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("操作业主失败");
             }
-
             RoomPo roomPo = new RoomPo();
             roomPo.setRoomId(rooms.getJSONObject(roomIndex).getString("roomId"));
             roomPo.setCommunityId(reqJson.getString("communityId"));
@@ -138,35 +137,28 @@ public class SaveHandoverCmd extends Cmd {
                 throw new CmdException("操作业主失败");
             }
         }
-
         if (!reqJson.containsKey("fees")) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
-
         JSONArray fees = reqJson.getJSONArray("fees");
         if (fees.size() < 1) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
-
         generatorBatch(reqJson);
-
         JSONObject paramInJson = null;
         PayFeePo payFeePo = null;
-
         FeeAttrPo feeAttrPo = null;
-
         List<RoomDto> roomDtos = null;
         RoomDto roomDto = null;
-
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
 
             roomDto = new RoomDto();
             roomDto.setRoomId(rooms.getJSONObject(roomIndex).getString("roomId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
-            Assert.listOnlyOne(roomDtos,"房屋不存在");
+            Assert.listOnlyOne(roomDtos, "房屋不存在");
 
             for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
 
@@ -201,7 +193,7 @@ public class SaveHandoverCmd extends Cmd {
                 businessUnit.put("state", "2008001");
                 businessUnit.put("batchId", reqJson.getString("batchId"));
                 businessUnit.put("userId", "-1");
-                businessUnit.put("bId","-1");
+                businessUnit.put("bId", "-1");
 
                 payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
 
@@ -261,17 +253,14 @@ public class SaveHandoverCmd extends Cmd {
         UserDto userDto = new UserDto();
         userDto.setUserId(reqJson.getString("userId"));
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户不存在");
         payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
         payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
         payFeeBatchPo.setMsg("正常");
         int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
-
         if (flag < 1) {
             throw new IllegalArgumentException("生成批次失败");
         }
-
         reqJson.put("batchId", payFeeBatchPo.getBatchId());
     }
 

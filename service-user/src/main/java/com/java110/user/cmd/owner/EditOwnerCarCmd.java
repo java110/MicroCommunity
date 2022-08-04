@@ -21,7 +21,6 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
@@ -68,6 +67,7 @@ public class EditOwnerCarCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setMemberId(reqJson.getString("memberId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarId(reqJson.getString("carId"));
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
