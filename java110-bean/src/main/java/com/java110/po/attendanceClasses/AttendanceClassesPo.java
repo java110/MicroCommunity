@@ -17,7 +17,7 @@ public class AttendanceClassesPo implements Serializable {
     private String clockTypeValue;
     private String classesObjName;
 
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getTimeOffset() {
         return timeOffset;
