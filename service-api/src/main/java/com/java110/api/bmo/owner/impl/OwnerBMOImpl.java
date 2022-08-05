@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -208,7 +209,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() == 0) {
             JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "10000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", paramInJson.getString("memberId"));
