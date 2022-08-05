@@ -47,7 +47,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.common",
         "com.java110.intf.community",
         "com.java110.intf.store",
-        "com.java110.intf.user"})
+        "com.java110.intf.job"})
 public class DevServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(DevServiceApplicationStart.class);
