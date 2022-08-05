@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="taskV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存任务信息 add by wuxw 2018-07-03 -->
+    <insert id="saveTaskInfo" parameterType="Map">
+        insert into task(
+task_cron,task_name,state,template_id,task_id
+) values (
+#{taskCron},#{taskName},#{state},#{templateId},#{taskId}
+)
+    </insert>
+
+
+
+    <!-- 查询任务信息 add by wuxw 2018-07-03 -->
+    <select id="getTaskInfo" parameterType="Map" resultType="Map">
+        select  t.task_cron,t.task_cron taskCron,t.task_name,t.task_name taskName,t.status_cd,t.status_cd statusCd,t.state,t.template_id,t.template_id templateId,t.task_id,t.task_id taskId 
+from task t 
+where 1 =1 
+<if test="taskCron !=null and taskCron != ''">
+   and t.task_cron= #{taskCron}
+</if> 
+<if test="taskName !=null and taskName != ''">
+   and t.task_name= #{taskName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="templateId !=null and templateId != ''">
+   and t.template_id= #{templateId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改任务信息 add by wuxw 2018-07-03 -->
+    <update id="updateTaskInfo" parameterType="Map">
+        update  task t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="taskCron !=null and taskCron != ''">
+, t.task_cron= #{taskCron}
+</if> 
+<if test="taskName !=null and taskName != ''">
+, t.task_name= #{taskName}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="templateId !=null and templateId != ''">
+, t.template_id= #{templateId}
+</if> 
+ where 1=1 <if test="taskId !=null and taskId != ''">
+and t.task_id= #{taskId}
+</if> 
+
+    </update>
+
+    <!-- 查询任务数量 add by wuxw 2018-07-03 -->
+     <select id="queryTasksCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from task t 
+where 1 =1 
+<if test="taskCron !=null and taskCron != ''">
+   and t.task_cron= #{taskCron}
+</if> 
+<if test="taskName !=null and taskName != ''">
+   and t.task_name= #{taskName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="templateId !=null and templateId != ''">
+   and t.template_id= #{templateId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+
+
+     </select>
+
+</mapper>

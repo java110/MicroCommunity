@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.common.cmd.attendanceClasses;
+package com.java110.dev.cmd.task;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
-import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
+import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.intf.dev.ITaskV1InnerServiceSMO;
+import com.java110.intf.job.ITaskAttrInnerServiceSMO;
+import com.java110.intf.job.ITaskInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.task.TaskDto;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
@@ -37,20 +39,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：attendanceClasses.listAttendanceClasses
- * 请求路劲：/app/attendanceClasses.ListAttendanceClasses
- * add by 吴学文 at 2022-07-16 17:50:14 mail: 928255095@qq.com
+ * 服务编码：task.listTask
+ * 请求路劲：/app/task.ListTask
+ * add by 吴学文 at 2022-08-05 10:23:14 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "attendanceClasses.listAttendanceClassess")
-public class ListAttendanceClassessCmd extends Cmd {
+@Java110Cmd(serviceCode = "task.listTasks")
+public class ListTasksCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListAttendanceClassessCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(ListTasksCmd.class);
+
     @Autowired
-    private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
+    private ITaskInnerServiceSMO taskInnerServiceSMOImpl;
+
+    @Autowired
+    private ITaskAttrInnerServiceSMO taskAttrInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -60,22 +66,41 @@ public class ListAttendanceClassessCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           AttendanceClassesDto attendanceClassesDto = BeanConvertUtil.covertBean(reqJson, AttendanceClassesDto.class);
 
-           int count = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassessCount(attendanceClassesDto);
+        TaskDto taskDto = BeanConvertUtil.covertBean(reqJson, TaskDto.class);
 
-           List<AttendanceClassesDto> attendanceClassesDtos = null;
+        int count = taskInnerServiceSMOImpl.queryTasksCount(taskDto);
 
-           if (count > 0) {
-               attendanceClassesDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
-           } else {
-               attendanceClassesDtos = new ArrayList<>();
-           }
+        List<TaskDto> taskDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, attendanceClassesDtos);
+        if (count > 0) {
+            taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
+            freshTaskAttr(taskDtos);
+        } else {
+            taskDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, taskDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询属性
+     *
+     * @param taskDtos
+     */
+    private void freshTaskAttr(List<TaskDto> taskDtos) {
+
+        for (TaskDto taskDto : taskDtos) {
+            TaskAttrDto taskAttrDto = new TaskAttrDto();
+            taskAttrDto.setTaskId(taskDto.getTaskId());
+            List<TaskAttrDto> taskAttrDtos = taskAttrInnerServiceSMOImpl.queryTaskAttrs(taskAttrDto);
+            taskDto.setTaskAttr(taskAttrDtos);
+        }
+
+
     }
 }

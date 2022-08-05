@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="taskAttrV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存任务属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveTaskAttrInfo" parameterType="Map">
+        insert into task_attr(
+attr_id,spec_cd,value,task_id
+) values (
+#{attrId},#{specCd},#{value},#{taskId}
+)
+    </insert>
+
+
+
+    <!-- 查询任务属性信息 add by wuxw 2018-07-03 -->
+    <select id="getTaskAttrInfo" parameterType="Map" resultType="Map">
+        select  t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.value,t.task_id,t.task_id taskId 
+from task_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改任务属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateTaskAttrInfo" parameterType="Map">
+        update  task_attr t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+, t.spec_cd= #{specCd}
+</if> 
+<if test="value !=null and value != ''">
+, t.value= #{value}
+</if> 
+<if test="taskId !=null and taskId != ''">
+, t.task_id= #{taskId}
+</if> 
+ where 1=1 <if test="attrId !=null and attrId != ''">
+and t.attr_id= #{attrId}
+</if> 
+
+    </update>
+
+    <!-- 查询任务属性数量 add by wuxw 2018-07-03 -->
+     <select id="queryTaskAttrsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from task_attr t 
+where 1 =1 
+<if test="attrId !=null and attrId != ''">
+   and t.attr_id= #{attrId}
+</if> 
+<if test="specCd !=null and specCd != ''">
+   and t.spec_cd= #{specCd}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+
+
+     </select>
+
+</mapper>

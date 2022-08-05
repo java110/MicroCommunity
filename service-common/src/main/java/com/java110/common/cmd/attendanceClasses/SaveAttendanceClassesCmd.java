@@ -80,18 +80,19 @@ public class SaveAttendanceClassesCmd extends Cmd {
         AttendanceClassesPo attendanceClassesPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesPo.class);
         attendanceClassesPo.setClassesId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         attendanceClassesPo.setStoreId(cmdDataFlowContext.getReqHeaders().get("store-id"));
+        //处理房屋属性
+        dealAttr(reqJson,attendanceClassesPo, cmdDataFlowContext);
+
         int flag = attendanceClassesV1InnerServiceSMOImpl.saveAttendanceClasses(attendanceClassesPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-        //处理房屋属性
-        dealAttr(reqJson, cmdDataFlowContext);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    private void dealAttr(JSONObject reqJson, ICmdDataFlowContext context) {
+    private void dealAttr(JSONObject reqJson,AttendanceClassesPo attendanceClassesPo, ICmdDataFlowContext context) {
 
         if (!reqJson.containsKey("attrs")) {
             return;
@@ -107,8 +108,8 @@ public class SaveAttendanceClassesCmd extends Cmd {
         int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
-            attr.put("classesId", reqJson.getString("classesId"));
-            attr.put("storeId", reqJson.getString("storeId"));
+            attr.put("classesId", attendanceClassesPo.getClassesId());
+            attr.put("storeId", attendanceClassesPo.getStoreId());
             attr.put("attrId",GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             AttendanceClassesAttrPo attendanceClassesAttrPo = BeanConvertUtil.covertBean(attr, AttendanceClassesAttrPo.class);
             flag = attendanceClassesAttrV1InnerServiceSMOImpl.saveAttendanceClassesAttr(attendanceClassesAttrPo);

@@ -41,6 +41,12 @@ public class UpdateAttendanceClassesTaskDetailBMOImpl implements IUpdateAttendan
             attendanceClassesTaskPo.setState("30000");
             attendanceClassesTaskPo.setStatusCd("0");
             attendanceClassesTaskInnerServiceSMOImpl.updateAttendanceClassesTask(attendanceClassesTaskPo);
+        }else{
+            AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
+            attendanceClassesTaskPo.setTaskId(attendanceClassesTaskDetailPo.getTaskId());
+            attendanceClassesTaskPo.setState("20000");
+            attendanceClassesTaskPo.setStatusCd("0");
+            attendanceClassesTaskInnerServiceSMOImpl.updateAttendanceClassesTask(attendanceClassesTaskPo);
         }
 
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");

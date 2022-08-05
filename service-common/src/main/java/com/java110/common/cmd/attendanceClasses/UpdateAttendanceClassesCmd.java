@@ -85,8 +85,8 @@ public class UpdateAttendanceClassesCmd extends Cmd {
         JSONObject attr = null;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
-            attr.put("classesId", reqJson.getString("classesId"));
-            attr.put("storeId", reqJson.getString("storeId"));
+            attr.put("classesId", attendanceClassesPo.getClassesId());
+            attr.put("storeId", attendanceClassesPo.getStoreId());
             if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
                 attr.put("attrId", GenerateCodeFactory.getGeneratorId("11"));
                 AttendanceClassesAttrPo attendanceClassesAttrPo = BeanConvertUtil.covertBean(attr, AttendanceClassesAttrPo.class);

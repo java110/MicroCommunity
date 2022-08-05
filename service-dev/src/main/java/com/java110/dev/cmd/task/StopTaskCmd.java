@@ -1,42 +1,33 @@
-package com.java110.api.listener.task;
+package com.java110.dev.cmd.task;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.job.ITaskInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.task.TaskDto;
-import com.java110.vo.ResultVo;
-import com.java110.utils.constant.ServiceCodeTaskConstant;
+import com.java110.intf.job.ITaskInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-/**
- * 保存商户侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("stopTaskListener")
-public class StopTaskListener extends AbstractServiceApiPlusListener {
-
+@Java110Cmd(serviceCode = "task.stopTask")
+public class StopTaskCmd extends Cmd {
     @Autowired
     private ITaskInnerServiceSMO taskInnerServiceSMOImpl;
-
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskName");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         TaskDto taskDto = new TaskDto();
         taskDto.setTaskId(reqJson.getString("taskId"));
         List<TaskDto> taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
@@ -57,17 +48,5 @@ public class StopTaskListener extends AbstractServiceApiPlusListener {
         }
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-        return;
     }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeTaskConstant.STOP_TASK;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
 }

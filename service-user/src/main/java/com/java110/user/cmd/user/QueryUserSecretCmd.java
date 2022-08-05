@@ -1,61 +1,35 @@
-package com.java110.api.listener.user;
+package com.java110.user.cmd.user;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
-/**
- * 这个类专门查询用户秘钥信息
- */
-@Java110Listener("queryUserSecretListener")
-public class QueryUserSecretListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "user.queryUserSecret")
+public class QueryUserSecretCmd extends Cmd {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.QUERY_USER_SECRET;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
-        return userInnerServiceSMOImpl;
-    }
-
-    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
-        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //super.validatePageInfo(reqJson);
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ResponseEntity<String> responseEntity = null;
         UserDto userDto = BeanConvertUtil.covertBean(reqJson, UserDto.class);
 
