@@ -209,6 +209,9 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
                 feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_SMS);
                 break;
             case FeeCollectionOrderDto.COLLECTION_WAY_WECHAT:
+                if(StringUtil.isEmpty(reportOweFeeDo.getOwnerId())  || "-1".equals(reportOweFeeDo.getOwnerId())){
+                    return;
+                }
                 if (!StringUtil.isEmpty(reportOweFeeDo.getOwnerId())) {
                     Map paramInfo = getOwnerAppUserDto(feeCollectionOrderDto.getCommunityId(), reportOweFeeDo.getOwnerId());
                     resultVo = doSendWechat(reportOweFeeDo, feeCollectionOrderDto, paramInfo);//微信
@@ -296,53 +299,53 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
                 roomName = itemDto.getPayerObjName().split("-");
             }
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
-                    try {
-                        //获取用户缴费到期时间
-                        Date endTime = itemDto.getEndTime();
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(endTime);
-                        calendar.add(Calendar.DATE, -1);
-                        endTime = calendar.getTime();
+                try {
+                    //获取用户缴费到期时间
+                    Date endTime = itemDto.getEndTime();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(endTime);
+                    calendar.add(Calendar.DATE, -1);
+                    endTime = calendar.getTime();
 
-                        Data data = new Data();
-                        PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-                        templateMessage.setTemplate_id(templateId);
-                        templateMessage.setTouser(appUserDto.getOpenId());
-                        data.setFirst(new Content(itemDto.getFeeName() + "提醒"));
-                        if ("3333".equals(reportOweFeeDo.getPayerObjType())) {
-                            data.setKeyword1(new Content(roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
-                        } else {
-                            data.setKeyword1(new Content(itemDto.getPayerObjName()));
-                        }
-                        DecimalFormat df = new DecimalFormat("0.00");
-                        data.setKeyword2(new Content(df.format(amountOwed) + "元"));
-                        data.setKeyword3(new Content(
-                                DateUtil.getFormatTimeString(itemDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_B)
-                                        + "至"
-                                        + DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)));
-                        data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员！"));
-
-                        if (!StringUtil.isEmpty(oweUrl)) {
-                            if (miniprogram == null) {
-                                templateMessage.setUrl(oweUrl + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
-                            } else {
-                                miniprogram.setPagepath(oweUrl.split("@@")[1] + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
-                                templateMessage.setMiniprogram(miniprogram);
-                            }
-                        }
-                        templateMessage.setData(data);
-                        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-                        logger.info("微信模板返回内容:{}", responseEntity);
-                    } catch (Exception e) {
-                        LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
-                        logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
-                        logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_OWE_FEE);
-                        logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
-                        saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
-                        logger.error("欠费推送失败" + feeCollectionOrderDto.getCollectionName(), e);
+                    Data data = new Data();
+                    PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                    templateMessage.setTemplate_id(templateId);
+                    templateMessage.setTouser(appUserDto.getOpenId());
+                    data.setFirst(new Content(itemDto.getFeeName() + "提醒"));
+                    if ("3333".equals(reportOweFeeDo.getPayerObjType())) {
+                        data.setKeyword1(new Content(roomName[0] + "栋" + roomName[1] + "单元" + roomName[2] + "室"));
+                    } else {
+                        data.setKeyword1(new Content(itemDto.getPayerObjName()));
                     }
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    data.setKeyword2(new Content(df.format(amountOwed) + "元"));
+                    data.setKeyword3(new Content(
+                            DateUtil.getFormatTimeString(itemDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_B)
+                                    + "至"
+                                    + DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)));
+                    data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员！"));
+
+                    if (!StringUtil.isEmpty(oweUrl)) {
+                        if (miniprogram == null) {
+                            templateMessage.setUrl(oweUrl + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
+                        } else {
+                            miniprogram.setPagepath(oweUrl.split("@@")[1] + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
+                            templateMessage.setMiniprogram(miniprogram);
+                        }
+                    }
+                    templateMessage.setData(data);
+                    logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                    ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                    logger.info("微信模板返回内容:{}", responseEntity);
+                } catch (Exception e) {
+                    LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                    logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                    logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_OWE_FEE);
+                    logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                    saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                    logger.error("欠费推送失败" + feeCollectionOrderDto.getCollectionName(), e);
                 }
+            }
         }
 
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
@@ -408,6 +411,7 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
     }
 
     private Map getOwnerAppUserDto(String communityId, String memberId) {
+
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);

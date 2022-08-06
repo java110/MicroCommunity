@@ -1,32 +1,29 @@
-package com.java110.api.listener.workflow;
+package com.java110.common.cmd.workflow;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowAuditInfoDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeWorkflowConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listWorkflowAuditInfoListener")
-public class ListWorkflowAuditInfoListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "workflow.listWorkflowAuditInfo")
+public class ListWorkflowAuditInfoCmd extends Cmd {
+
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
@@ -34,34 +31,15 @@ public class ListWorkflowAuditInfoListener extends AbstractServiceApiPlusListene
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeWorkflowConstant.LIST_WORKFLOW_AUDIT_INFO;
-    }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    public IWorkflowInnerServiceSMO getWorkflowInnerServiceSMOImpl() {
-        return workflowInnerServiceSMOImpl;
-    }
-
-    public void setWorkflowInnerServiceSMOImpl(IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl) {
-        this.workflowInnerServiceSMOImpl = workflowInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中请包含小区ID");
         Assert.hasKeyAndValue(reqJson, "businessKey", "请求报文中未包含业务ID");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         WorkflowAuditInfoDto workflowAuditInfoDto = BeanConvertUtil.covertBean(reqJson, WorkflowAuditInfoDto.class);
         List<WorkflowAuditInfoDto> workflowAuditInfoDtos = workflowInnerServiceSMOImpl.queryWorkflowAuditHistory(workflowAuditInfoDto);
