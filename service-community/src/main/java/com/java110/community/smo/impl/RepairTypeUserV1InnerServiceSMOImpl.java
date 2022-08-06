@@ -17,23 +17,21 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IRepairTypeUserV1ServiceDao;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.intf.community.IRepairTypeUserV1InnerServiceSMO;
 import com.java110.po.repair.RepairTypeUserPo;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2022-08-06 12:27:40 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-08-06 12:41:50 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -52,21 +50,21 @@ public class RepairTypeUserV1InnerServiceSMOImpl extends BaseServiceSMO implemen
         return saveFlag;
     }
 
-     @Override
-    public int updateRepairTypeUser(@RequestBody  RepairTypeUserPo repairTypeUserPo) {
+    @Override
+    public int updateRepairTypeUser(@RequestBody RepairTypeUserPo repairTypeUserPo) {
         int saveFlag = repairTypeUserV1ServiceDaoImpl.updateRepairTypeUserInfo(BeanConvertUtil.beanCovertMap(repairTypeUserPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteRepairTypeUser(@RequestBody  RepairTypeUserPo repairTypeUserPo) {
-       repairTypeUserPo.setStatusCd("1");
-       int saveFlag = repairTypeUserV1ServiceDaoImpl.updateRepairTypeUserInfo(BeanConvertUtil.beanCovertMap(repairTypeUserPo));
-       return saveFlag;
+    @Override
+    public int deleteRepairTypeUser(@RequestBody RepairTypeUserPo repairTypeUserPo) {
+        repairTypeUserPo.setStatusCd("1");
+        int saveFlag = repairTypeUserV1ServiceDaoImpl.updateRepairTypeUserInfo(BeanConvertUtil.beanCovertMap(repairTypeUserPo));
+        return saveFlag;
     }
 
     @Override
-    public List<RepairTypeUserDto> queryRepairTypeUsers(@RequestBody  RepairTypeUserDto repairTypeUserDto) {
+    public List<RepairTypeUserDto> queryRepairTypeUsers(@RequestBody RepairTypeUserDto repairTypeUserDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +82,7 @@ public class RepairTypeUserV1InnerServiceSMOImpl extends BaseServiceSMO implemen
 
     @Override
     public int queryRepairTypeUsersCount(@RequestBody RepairTypeUserDto repairTypeUserDto) {
-        return repairTypeUserV1ServiceDaoImpl.queryRepairTypeUsersCount(BeanConvertUtil.beanCovertMap(repairTypeUserDto));    }
+        return repairTypeUserV1ServiceDaoImpl.queryRepairTypeUsersCount(BeanConvertUtil.beanCovertMap(repairTypeUserDto));
+    }
 
 }

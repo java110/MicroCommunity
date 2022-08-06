@@ -20,7 +20,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.community.dao.IRepairTypeUserV1ServiceDao;
+import com.java110.community.dao.IRepairSettingV1ServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,81 +31,81 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2022-08-06 12:41:50 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-08-06 12:43:34 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Service("repairTypeUserV1ServiceDaoImpl")
-public class RepairTypeUserV1ServiceDaoImpl extends BaseServiceDao implements IRepairTypeUserV1ServiceDao {
+@Service("repairSettingV1ServiceDaoImpl")
+public class RepairSettingV1ServiceDaoImpl extends BaseServiceDao implements IRepairSettingV1ServiceDao {
 
-    private static Logger logger = LoggerFactory.getLogger(RepairTypeUserV1ServiceDaoImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(RepairSettingV1ServiceDaoImpl.class);
 
 
 
 
 
     /**
-     * 保存报修师傅信息 到 instance
+     * 保存报修设置信息 到 instance
      * @param info   bId 信息
      * @throws DAOException DAO异常
      */
     @Override
-    public int saveRepairTypeUserInfo(Map info) throws DAOException {
-        logger.debug("保存 saveRepairTypeUserInfo 入参 info : {}",info);
+    public int saveRepairSettingInfo(Map info) throws DAOException {
+        logger.debug("保存 saveRepairSettingInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("repairTypeUserV1ServiceDaoImpl.saveRepairTypeUserInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("repairSettingV1ServiceDaoImpl.saveRepairSettingInfo",info);
 
         return saveFlag;
     }
 
 
     /**
-     * 查询报修师傅信息（instance）
+     * 查询报修设置信息（instance）
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
-    public List<Map> getRepairTypeUserInfo(Map info) throws DAOException {
-        logger.debug("查询 getRepairTypeUserInfo 入参 info : {}",info);
+    public List<Map> getRepairSettingInfo(Map info) throws DAOException {
+        logger.debug("查询 getRepairSettingInfo 入参 info : {}",info);
 
-        List<Map> businessRepairTypeUserInfos = sqlSessionTemplate.selectList("repairTypeUserV1ServiceDaoImpl.getRepairTypeUserInfo",info);
+        List<Map> businessRepairSettingInfos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.getRepairSettingInfo",info);
 
-        return businessRepairTypeUserInfos;
+        return businessRepairSettingInfos;
     }
 
 
     /**
-     * 修改报修师傅信息
+     * 修改报修设置信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
-    public int updateRepairTypeUserInfo(Map info) throws DAOException {
-        logger.debug("修改 updateRepairTypeUserInfo 入参 info : {}",info);
+    public int updateRepairSettingInfo(Map info) throws DAOException {
+        logger.debug("修改 updateRepairSettingInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("repairTypeUserV1ServiceDaoImpl.updateRepairTypeUserInfo",info);
+        int saveFlag = sqlSessionTemplate.update("repairSettingV1ServiceDaoImpl.updateRepairSettingInfo",info);
 
         return saveFlag;
     }
 
      /**
-     * 查询报修师傅数量
-     * @param info 报修师傅信息
-     * @return 报修师傅数量
+     * 查询报修设置数量
+     * @param info 报修设置信息
+     * @return 报修设置数量
      */
     @Override
-    public int queryRepairTypeUsersCount(Map info) {
-        logger.debug("查询 queryRepairTypeUsersCount 入参 info : {}",info);
+    public int queryRepairSettingsCount(Map info) {
+        logger.debug("查询 queryRepairSettingsCount 入参 info : {}",info);
 
-        List<Map> businessRepairTypeUserInfos = sqlSessionTemplate.selectList("repairTypeUserV1ServiceDaoImpl.queryRepairTypeUsersCount", info);
-        if (businessRepairTypeUserInfos.size() < 1) {
+        List<Map> businessRepairSettingInfos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.queryRepairSettingsCount", info);
+        if (businessRepairSettingInfos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessRepairTypeUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(businessRepairSettingInfos.get(0).get("count").toString());
     }
 
 

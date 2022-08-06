@@ -17,6 +17,8 @@ public class RepairSettingPo implements Serializable {
     private String returnVisitFlag;
     private String repairSettingType;
 
+    private String statusCd;
+
 
     public String getRepairTypeName() {
         return repairTypeName;
@@ -105,5 +107,13 @@ public class RepairSettingPo implements Serializable {
 
     public void setRepairSettingType(String repairSettingType) {
         this.repairSettingType = repairSettingType;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

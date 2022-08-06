@@ -28,50 +28,50 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2022-08-06 12:41:50 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-08-06 12:43:34 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IRepairTypeUserV1ServiceDao {
+public interface IRepairSettingV1ServiceDao {
 
 
     /**
-     * 保存 报修师傅信息
+     * 保存 报修设置信息
      * @param info
      * @throws DAOException DAO异常
      */
-    int saveRepairTypeUserInfo(Map info) throws DAOException;
+    int saveRepairSettingInfo(Map info) throws DAOException;
 
 
 
 
     /**
-     * 查询报修师傅信息（instance过程）
-     * 根据bId 查询报修师傅信息
+     * 查询报修设置信息（instance过程）
+     * 根据bId 查询报修设置信息
      * @param info bId 信息
-     * @return 报修师傅信息
+     * @return 报修设置信息
      * @throws DAOException DAO异常
      */
-    List<Map> getRepairTypeUserInfo(Map info) throws DAOException;
+    List<Map> getRepairSettingInfo(Map info) throws DAOException;
 
 
 
     /**
-     * 修改报修师傅信息
+     * 修改报修设置信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updateRepairTypeUserInfo(Map info) throws DAOException;
+    int updateRepairSettingInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询报修师傅总数
+     * 查询报修设置总数
      *
-     * @param info 报修师傅信息
-     * @return 报修师傅数量
+     * @param info 报修设置信息
+     * @return 报修设置数量
      */
-    int queryRepairTypeUsersCount(Map info);
+    int queryRepairSettingsCount(Map info);
 
 }
