@@ -1,31 +1,30 @@
-package com.java110.api.listener.store;
+package com.java110.store.cmd.store;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.store.StoreDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.*;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.store.ApiStoreDataVo;
 import com.java110.vo.api.store.ApiStoreVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 查询商户信息
- * Created by Administrator on 2019/3/29.
- */
-@Java110Listener("listStoresByCommunityListener")
-public class ListStoresByCommunityListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "store.listStoresByCommunity")
+public class ListStoresByCommunityCmd extends Cmd {
+
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -34,31 +33,13 @@ public class ListStoresByCommunityListener extends AbstractServiceApiListener {
     private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
 
     @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_STORES_BY_COMMUNITY;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson, CommunityMemberDto.class);
         int storeCount = communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
         List<CommunityMemberDto> communityMemberDtos = null;
@@ -99,6 +80,4 @@ public class ListStoresByCommunityListener extends AbstractServiceApiListener {
 
         return storeIds.toArray(new String[storeIds.size()]);
     }
-
-
 }
