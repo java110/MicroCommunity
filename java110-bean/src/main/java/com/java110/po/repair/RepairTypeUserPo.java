@@ -11,6 +11,7 @@ public class RepairTypeUserPo implements Serializable {
     private String staffName;
     private String communityId;
     private String staffId;
+    private String statusCd;
 
     public String getTypeUserId() {
         return typeUserId;
@@ -67,5 +68,13 @@ public class RepairTypeUserPo implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
