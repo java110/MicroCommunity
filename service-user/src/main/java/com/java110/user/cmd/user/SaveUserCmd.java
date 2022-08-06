@@ -1,52 +1,38 @@
-package com.java110.api.listener.user;
+package com.java110.user.cmd.user;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserAttrDto;
+import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.user.UserPo;
 import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
-import org.springframework.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * 添加员工 2018年12月6日
- * Created by wuxw on 2018/5/18.
- */
-@Java110Listener("saveUserListener")
-public class SaveUserListener extends AbstractServiceApiPlusListener {
+import java.text.ParseException;
 
-    private final static Logger logger = LoggerFactory.getLogger(SaveUserListener.class);
+@Java110Cmd(serviceCode = "user.saveUser")
+public class SaveUserCmd extends Cmd {
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_INFO;
-    }
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(reqJson, "name", "请求参数中未包含name 节点，请确认");
         //Assert.jsonObjectHaveKey(paramObj,"email","请求参数中未包含email 节点，请确认");
@@ -61,9 +47,8 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+//判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
         String userId = "";
         if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("userId"))) {
             userId = GenerateCodeFactory.getUserId();
@@ -79,16 +64,21 @@ public class SaveUserListener extends AbstractServiceApiPlusListener {
         staffDefaultPassword = AuthenticationFactory.passwdMd5(staffDefaultPassword);
         reqJson.put("password", staffDefaultPassword);
         UserPo userPo = BeanConvertUtil.covertBean(reqJson, UserPo.class);
-        super.insert(context, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
+        int flag = userV1InnerServiceSMOImpl.saveUser(userPo);
+        if (flag < 1) {
+            throw new CmdException("保存用户失败");
+        }
 
         if (!StringUtil.isEmpty(reqJson.getString("extUserId"))) {
             UserAttrPo userAttrPo = new UserAttrPo();
             userAttrPo.setUserId(reqJson.getString("userId"));
-            userAttrPo.setAttrId("-1");
+            userAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             userAttrPo.setSpecCd(UserAttrDto.SPEC_PROPERTY_USER_ID);
             userAttrPo.setValue(reqJson.getString("extUserId"));
-            super.insert(context, userAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ATTR_INFO);
+            flag = userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
+            if (flag < 1) {
+                throw new CmdException("更新失败");
+            }
         }
     }
-
 }
