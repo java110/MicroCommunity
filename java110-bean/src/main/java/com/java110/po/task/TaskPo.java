@@ -9,6 +9,7 @@ public class TaskPo implements Serializable {
     private String state;
     private String templateId;
     private String taskId;
+    private String statusCd = "0";
 
     public String getTaskCron() {
         return taskCron;
@@ -50,5 +51,11 @@ public class TaskPo implements Serializable {
         this.taskId = taskId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }

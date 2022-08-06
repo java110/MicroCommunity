@@ -8,6 +8,7 @@ public class TaskAttrPo implements Serializable {
     private String specCd;
     private String value;
     private String taskId;
+    private String statusCd = "0";
 
     public String getAttrId() {
         return attrId;
@@ -41,5 +42,11 @@ public class TaskAttrPo implements Serializable {
         this.taskId = taskId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }
