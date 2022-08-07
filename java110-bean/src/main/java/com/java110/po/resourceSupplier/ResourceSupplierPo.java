@@ -16,6 +16,7 @@ public class ResourceSupplierPo implements Serializable {
     private String accountBank;
     private String tel;
     private String bankAccountNumber;
+    private String statusCd = "0";
 
     public String getSupplierName() {
         return supplierName;
@@ -105,5 +106,11 @@ public class ResourceSupplierPo implements Serializable {
         this.bankAccountNumber = bankAccountNumber;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }
