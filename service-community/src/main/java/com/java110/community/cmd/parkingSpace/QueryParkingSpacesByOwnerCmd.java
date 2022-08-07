@@ -1,38 +1,29 @@
-package com.java110.api.listener.parkingSpace;
-
+package com.java110.community.cmd.parkingSpace;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.ApiParkingSpaceDataVo;
 import com.java110.vo.api.ApiParkingSpaceVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @ClassName ParkingSpaceDto
- * @Description 查询业主停车位
- * @Author wuxw
- * @Date 2019/4/24 8:52
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-@Java110Listener("queryParkingSpacesByOwnerListener")
-public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlowListener {
+@Java110Cmd(serviceCode = "parkingSpace.queryParkingSpacesByOwner")
+public class QueryParkingSpacesByOwnerCmd extends Cmd{
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -41,27 +32,13 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_PARKING_SPACE_BY_OWNER;
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    /**
-     * 业务层数据处理
-     *
-     * @param event 时间对象
-     */
-    @Override
-    public void soService(ServiceDataFlowEvent event) {
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        //获取请求数据
-        JSONObject reqJson = dataFlowContext.getReqJson();
-        validateParkingSpaceData(reqJson);
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         ApiParkingSpaceVo apiParkingSpaceVo = new ApiParkingSpaceVo();
 
         OwnerCarDto ownerCarDto = new OwnerCarDto();
@@ -73,7 +50,7 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
         ResponseEntity<String> responseEntity = null;
         if (ownerCarDtos == null || ownerCarDtos.size() == 0) {
             responseEntity = new ResponseEntity<String>("{\"parkingSpaces\":[]}", HttpStatus.OK);
-            dataFlowContext.setResponseEntity(responseEntity);
+            context.setResponseEntity(responseEntity);
             return;
         }
 
@@ -106,40 +83,6 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
 
         apiParkingSpaceVo.setParkingSpaces(apiParkingSpaceDataVos);
         responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiParkingSpaceVo), HttpStatus.OK);
-        dataFlowContext.setResponseEntity(responseEntity);
-    }
-
-
-    /**
-     * 校验查询条件是否满足条件
-     *
-     * @param reqJson 包含查询条件
-     */
-    private void validateParkingSpaceData(JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
-
-    }
-
-    @Override
-    public int getOrder() {
-        return super.DEFAULT_ORDER;
-    }
-
-
-    public IParkingSpaceInnerServiceSMO getParkingSpaceInnerServiceSMOImpl() {
-        return parkingSpaceInnerServiceSMOImpl;
-    }
-
-    public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
-        this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
-    }
-
-    public IOwnerCarInnerServiceSMO getOwnerCarInnerServiceSMOImpl() {
-        return ownerCarInnerServiceSMOImpl;
-    }
-
-    public void setOwnerCarInnerServiceSMOImpl(IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl) {
-        this.ownerCarInnerServiceSMOImpl = ownerCarInnerServiceSMOImpl;
+        context.setResponseEntity(responseEntity);
     }
 }
