@@ -1,34 +1,29 @@
-package com.java110.api.listener.resourceStore;
+package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
-import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeAllocationStorehouseConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listAllocationStorehousesListener")
-public class ListAllocationStorehousesListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "resourceStore.listAllocationStorehouses")
+public class ListAllocationStorehousesCmd extends Cmd {
 
     @Autowired
     private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
@@ -37,38 +32,12 @@ public class ListAllocationStorehousesListener extends AbstractServiceApiListene
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeAllocationStorehouseConstant.LIST_ALLOCATIONSTOREHOUSES;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    public IAllocationStorehouseInnerServiceSMO getAllocationStorehouseInnerServiceSMOImpl() {
-        return allocationStorehouseInnerServiceSMOImpl;
-    }
-
-    public void setAllocationStorehouseInnerServiceSMOImpl(IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl) {
-        this.allocationStorehouseInnerServiceSMOImpl = allocationStorehouseInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         AllocationStorehouseDto allocationStorehouseDto = BeanConvertUtil.covertBean(reqJson, AllocationStorehouseDto.class);
         //获取用户id
         String userId = reqJson.getString("userId");
@@ -101,6 +70,5 @@ public class ListAllocationStorehousesListener extends AbstractServiceApiListene
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }

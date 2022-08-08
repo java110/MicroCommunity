@@ -1,58 +1,31 @@
-package com.java110.api.listener.resourceStore;
+package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
-import com.java110.dto.org.OrgStaffRelDto;
-import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
-import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
-import com.java110.intf.user.IUserLoginInnerServiceSMO;
-import com.java110.utils.constant.ServiceCodeAuditUserConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询待审核调拨单
- */
-@Java110Listener("listAllocationStoreAuditHistoryOrdersListener")
-public class ListAllocationStoreHisAuditOrders extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "resourceStore.listAllocationStoreHisAuditOrders")
+public class ListAllocationStoreHisAuditOrdersCmd extends Cmd {
 
     @Autowired
     private IAllocationStorehouseUserInnerServiceSMO allocationStorehouseUserInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeAuditUserConstant.LIST_ALLOCATION_STORE_HISTORY_AUDITORDERS;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    @Autowired
-    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
         Assert.hasKeyAndValue(reqJson, "row", "必填，请填写每页显示数");
@@ -62,8 +35,7 @@ public class ListAllocationStoreHisAuditOrders extends AbstractServiceApiListene
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         AuditUser auditUser = new AuditUser();
         auditUser.setUserId(reqJson.getString("userId"));
         auditUser.setPage(reqJson.getInteger("page"));

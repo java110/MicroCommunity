@@ -19,6 +19,8 @@ public class ResourceStoreUseRecordPo implements Serializable {
     //1001 报废回收   2002 工单损耗   3003 公用损耗
     private String state;
 
+    private String statusCd;
+
     public String getRepairId() {
         return repairId;
     }
@@ -121,5 +123,13 @@ public class ResourceStoreUseRecordPo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

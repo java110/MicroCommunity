@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceResourceStoreUseRecordUseRecordV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存使用记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceStoreUseRecordInfo" parameterType="Map">
+        insert into resource_store_use_record(
+unit_price,create_user_id,quantity,resource_store_name,rsur_id,repair_id,create_user_name,remark,store_id,res_id,state,community_id
+) values (
+#{unitPrice},#{createUserId},#{quantity},#{resourceStoreName},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{state},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询使用记录信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceStoreUseRecordInfo" parameterType="Map" resultType="Map">
+        select  t.unit_price,t.unit_price unitPrice,t.create_user_id,t.create_user_id createUserId,t.quantity,t.resource_store_name,t.resource_store_name resourceStoreName,t.rsur_id,t.rsur_id rsurId,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,t.create_user_name,t.create_user_name createUserName,t.remark,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.state,t.community_id,t.community_id communityId 
+from resource_store_use_record t 
+where 1 =1 
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="quantity !=null and quantity != ''">
+   and t.quantity= #{quantity}
+</if> 
+<if test="resourceStoreName !=null and resourceStoreName != ''">
+   and t.resource_store_name= #{resourceStoreName}
+</if> 
+<if test="rsurId !=null and rsurId != ''">
+   and t.rsur_id= #{rsurId}
+</if> 
+<if test="repairId !=null and repairId != ''">
+   and t.repair_id= #{repairId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改使用记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceStoreUseRecordInfo" parameterType="Map">
+        update  resource_store_use_record t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="unitPrice !=null and unitPrice != ''">
+, t.unit_price= #{unitPrice}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+, t.create_user_id= #{createUserId}
+</if> 
+<if test="quantity !=null and quantity != ''">
+, t.quantity= #{quantity}
+</if> 
+<if test="resourceStoreName !=null and resourceStoreName != ''">
+, t.resource_store_name= #{resourceStoreName}
+</if> 
+<if test="repairId !=null and repairId != ''">
+, t.repair_id= #{repairId}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+, t.create_user_name= #{createUserName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="resId !=null and resId != ''">
+, t.res_id= #{resId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="rsurId !=null and rsurId != ''">
+and t.rsur_id= #{rsurId}
+</if> 
+
+    </update>
+
+    <!-- 查询使用记录数量 add by wuxw 2018-07-03 -->
+     <select id="queryResourceStoreUseRecordsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from resource_store_use_record t 
+where 1 =1 
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="quantity !=null and quantity != ''">
+   and t.quantity= #{quantity}
+</if> 
+<if test="resourceStoreName !=null and resourceStoreName != ''">
+   and t.resource_store_name= #{resourceStoreName}
+</if> 
+<if test="rsurId !=null and rsurId != ''">
+   and t.rsur_id= #{rsurId}
+</if> 
+<if test="repairId !=null and repairId != ''">
+   and t.repair_id= #{repairId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>
