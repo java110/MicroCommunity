@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storehouseV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存使用记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStorehouseInfo" parameterType="Map">
+        insert into storehouse(
+sh_desc,sh_type,sh_obj_id,sh_id,sh_name,store_id,is_show
+) values (
+#{shDesc},#{shType},#{shObjId},#{shId},#{shName},#{storeId},#{isShow}
+)
+    </insert>
+
+
+
+    <!-- 查询使用记录信息 add by wuxw 2018-07-03 -->
+    <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
+        select  t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id shObjId,t.sh_id,t.sh_id shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.store_id,t.store_id storeId,t.is_show,t.is_show isShow 
+from storehouse t 
+where 1 =1 
+<if test="shDesc !=null and shDesc != ''">
+   and t.sh_desc= #{shDesc}
+</if> 
+<if test="shType !=null and shType != ''">
+   and t.sh_type= #{shType}
+</if> 
+<if test="shObjId !=null and shObjId != ''">
+   and t.sh_obj_id= #{shObjId}
+</if> 
+<if test="shId !=null and shId != ''">
+   and t.sh_id= #{shId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shName !=null and shName != ''">
+   and t.sh_name= #{shName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="isShow !=null and isShow != ''">
+   and t.is_show= #{isShow}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改使用记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateStorehouseInfo" parameterType="Map">
+        update  storehouse t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="shDesc !=null and shDesc != ''">
+, t.sh_desc= #{shDesc}
+</if> 
+<if test="shType !=null and shType != ''">
+, t.sh_type= #{shType}
+</if> 
+<if test="shObjId !=null and shObjId != ''">
+, t.sh_obj_id= #{shObjId}
+</if> 
+<if test="shName !=null and shName != ''">
+, t.sh_name= #{shName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="isShow !=null and isShow != ''">
+, t.is_show= #{isShow}
+</if> 
+ where 1=1 <if test="shId !=null and shId != ''">
+and t.sh_id= #{shId}
+</if> 
+
+    </update>
+
+    <!-- 查询使用记录数量 add by wuxw 2018-07-03 -->
+     <select id="queryStorehousesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from storehouse t 
+where 1 =1 
+<if test="shDesc !=null and shDesc != ''">
+   and t.sh_desc= #{shDesc}
+</if> 
+<if test="shType !=null and shType != ''">
+   and t.sh_type= #{shType}
+</if> 
+<if test="shObjId !=null and shObjId != ''">
+   and t.sh_obj_id= #{shObjId}
+</if> 
+<if test="shId !=null and shId != ''">
+   and t.sh_id= #{shId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shName !=null and shName != ''">
+   and t.sh_name= #{shName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="isShow !=null and isShow != ''">
+   and t.is_show= #{isShow}
+</if> 
+
+
+     </select>
+
+</mapper>

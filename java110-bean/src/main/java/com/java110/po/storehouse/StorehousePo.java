@@ -13,6 +13,8 @@ public class StorehousePo implements Serializable {
     private String storeId;
     private String isShow;
 
+    private String statusCd = "0";
+
     public String getShDesc() {
         return shDesc;
     }
@@ -67,5 +69,13 @@ public class StorehousePo implements Serializable {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

@@ -169,7 +169,7 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
                         resourceStorePo.setMiniUnitCode(originalResourceStoreDtos.get(0).getMiniUnitCode());
                         resourceStorePo.setMiniUnitStock(originalResourceStoreDtos.get(0).getMiniUnitStock());
                     }
-                    resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+                    flag = resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
                     if (flag < 1) {
                         throw new CmdException("修改失败");
                     }
