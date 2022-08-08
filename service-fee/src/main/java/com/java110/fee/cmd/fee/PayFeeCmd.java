@@ -64,7 +64,7 @@ public class PayFeeCmd extends Cmd {
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
     @Autowired
-    private IPayFeeDetailNewV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;

@@ -1,30 +1,27 @@
-package com.java110.api.listener.purchaseApply;
+package com.java110.store.cmd.purchaseApply;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyPo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 
-/**
- * 订单审核
- */
-@Java110Listener("auditApplyOrderListener")
-public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "purchaseApply.auditApplyOrder")
+public class AuditApplyOrderCmd extends Cmd {
 
     @Autowired
     private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
@@ -32,23 +29,11 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodePurchaseApplyConstant.AUDIT_PURCHASE_APPLY;
-    }
+    @Autowired
+    private IPurchaseApplyV1InnerServiceSMO purchaseApplyV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单号不能为空");
         Assert.hasKeyAndValue(reqJson, "taskId", "必填，请填写任务ID");
         Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
@@ -56,7 +41,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setTaskId(reqJson.getString("taskId"));
         purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
@@ -79,40 +64,52 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             purchaseApplyPo.setState(purchaseApplyDto.STATE_DEALING);
-            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
-            super.commit(context);
+            int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
+
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         } else if ((purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_DEALING) || purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_AUDITED))
                 && reqJson.getString("state").equals("1100")) {  //如果状态是审核中 并且是审核通过，
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
-            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
-            super.commit(context);
+            int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
+
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         } else if (purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_NOT_PASS) && reqJson.getString("state").equals("1200")) {  //如果状态未通过 并且是结束，
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
-            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
-            super.commit(context);
+            int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
+
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
 
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         if (isLastTask && purchaseApplyDtos.get(0).getState().equals(purchaseApplyDto.STATE_AUDITED)) {//已经是已审核入库完成的状态进行更新状态
-            updatePurchaseApply(reqJson, context);
+            updatePurchaseApply(reqJson);
         }
         if (reqJson.getString("state").equals("1200") && !isLastTask) {//审核拒绝时，状态变为拒绝状态
             PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
             purchaseApplyPo.setApplyOrderId(purchaseApplyDtos.get(0).getApplyOrderId());
             purchaseApplyPo.setState(purchaseApplyDto.STATE_NOT_PASS);
-            super.update(context, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
+            int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
+
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
     }
 
     /**
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    private void updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private void updatePurchaseApply(JSONObject paramInJson) {
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setStoreId(paramInJson.getString("storeId"));
         purchaseApplyDto.setApplyOrderId(paramInJson.getString("applyOrderId"));
@@ -122,6 +119,10 @@ public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(purchaseApplyDtos.get(0)));
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(businessComplaint, PurchaseApplyPo.class);
         purchaseApplyPo.setState(purchaseApplyDto.STATE_END);
-        super.update(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
+        int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
     }
 }

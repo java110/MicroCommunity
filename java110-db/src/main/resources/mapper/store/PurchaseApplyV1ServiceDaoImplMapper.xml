@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="purchaseApplyV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
+    <insert id="savePurchaseApplyInfo" parameterType="Map">
+        insert into purchase_apply(
+create_user_id,res_order_type,end_user_name,description,apply_order_id,create_user_name,store_id,user_name,user_id,warehousing_way,state,community_id,end_user_tel
+) values (
+#{createUserId},#{resOrderType},#{endUserName},#{description},#{applyOrderId},#{createUserName},#{storeId},#{userName},#{userId},#{warehousingWay},#{state},#{communityId},#{endUserTel}
+)
+    </insert>
+
+
+
+    <!-- 查询采购申请信息 add by wuxw 2018-07-03 -->
+    <select id="getPurchaseApplyInfo" parameterType="Map" resultType="Map">
+        select  t.create_user_id,t.create_user_id createUserId,t.res_order_type,t.res_order_type resOrderType,t.end_user_name,t.end_user_name endUserName,t.description,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd statusCd,t.create_user_name,t.create_user_name createUserName,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.warehousing_way,t.warehousing_way warehousingWay,t.state,t.community_id,t.community_id communityId,t.end_user_tel,t.end_user_tel endUserTel 
+from purchase_apply t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="resOrderType !=null and resOrderType != ''">
+   and t.res_order_type= #{resOrderType}
+</if> 
+<if test="endUserName !=null and endUserName != ''">
+   and t.end_user_name= #{endUserName}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="applyOrderId !=null and applyOrderId != ''">
+   and t.apply_order_id= #{applyOrderId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="warehousingWay !=null and warehousingWay != ''">
+   and t.warehousing_way= #{warehousingWay}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="endUserTel !=null and endUserTel != ''">
+   and t.end_user_tel= #{endUserTel}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改采购申请信息 add by wuxw 2018-07-03 -->
+    <update id="updatePurchaseApplyInfo" parameterType="Map">
+        update  purchase_apply t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+, t.create_user_id= #{createUserId}
+</if> 
+<if test="resOrderType !=null and resOrderType != ''">
+, t.res_order_type= #{resOrderType}
+</if> 
+<if test="endUserName !=null and endUserName != ''">
+, t.end_user_name= #{endUserName}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+, t.create_user_name= #{createUserName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+, t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="warehousingWay !=null and warehousingWay != ''">
+, t.warehousing_way= #{warehousingWay}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="endUserTel !=null and endUserTel != ''">
+, t.end_user_tel= #{endUserTel}
+</if> 
+ where 1=1 <if test="applyOrderId !=null and applyOrderId != ''">
+and t.apply_order_id= #{applyOrderId}
+</if> 
+
+    </update>
+
+    <!-- 查询采购申请数量 add by wuxw 2018-07-03 -->
+     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from purchase_apply t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="resOrderType !=null and resOrderType != ''">
+   and t.res_order_type= #{resOrderType}
+</if> 
+<if test="endUserName !=null and endUserName != ''">
+   and t.end_user_name= #{endUserName}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="applyOrderId !=null and applyOrderId != ''">
+   and t.apply_order_id= #{applyOrderId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="warehousingWay !=null and warehousingWay != ''">
+   and t.warehousing_way= #{warehousingWay}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="endUserTel !=null and endUserTel != ''">
+   and t.end_user_tel= #{endUserTel}
+</if> 
+
+
+     </select>
+
+</mapper>

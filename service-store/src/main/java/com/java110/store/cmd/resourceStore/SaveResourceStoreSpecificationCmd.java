@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.fee.cmd.payFeeDetailNew;
+package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -22,55 +22,54 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
-import com.java110.po.fee.PayFeeDetailPo;
+import com.java110.intf.store.IResourceStoreSpecificationV1InnerServiceSMO;
+import com.java110.po.resourceStoreSpecification.ResourceStoreSpecificationPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
- * 服务编码：payFeeDetailNew.savePayFeeDetailNew
- * 请求路劲：/app/payFeeDetailNew.SavePayFeeDetailNew
- * add by 吴学文 at 2021-12-06 21:10:16 mail: 928255095@qq.com
+ * 服务编码：resourceStoreSpecification.saveResourceStoreSpecification
+ * 请求路劲：/app/resourceStoreSpecification.SaveResourceStoreSpecification
+ * add by 吴学文 at 2022-08-08 14:19:39 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "payFeeDetailNew.savePayFeeDetailNew")
-public class SavePayFeeDetailNewCmd extends Cmd {
+@Java110Cmd(serviceCode = "resourceStore.saveResourceStoreSpecification")
+public class SaveResourceStoreSpecificationCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(SavePayFeeDetailNewCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(SaveResourceStoreSpecificationCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
-    private IPayFeeDetailV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
+    private IResourceStoreSpecificationV1InnerServiceSMO resourceStoreSpecificationV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "detailId", "请求报文中未包含detailId");
-Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "cycles", "请求报文中未包含cycles");
-Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
-Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
-Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate");
+        Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
+        Assert.hasKeyAndValue(reqJson, "rstId", "请求报文中未包含rstId");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-       PayFeeDetailPo payFeeDetailNewPo = BeanConvertUtil.covertBean(reqJson, PayFeeDetailPo.class);
-        payFeeDetailNewPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailNewPo);
+        if (reqJson.containsKey("rsId") && StringUtil.isEmpty(reqJson.getString("rsId"))) {
+            reqJson.put("rstId", reqJson.getString("rsId"));
+        }
+        ResourceStoreSpecificationPo resourceStoreSpecificationPo = BeanConvertUtil.covertBean(reqJson, ResourceStoreSpecificationPo.class);
+        resourceStoreSpecificationPo.setRssId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = resourceStoreSpecificationV1InnerServiceSMOImpl.saveResourceStoreSpecification(resourceStoreSpecificationPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

@@ -34,7 +34,7 @@ import java.util.List;
  */
 @FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/payFeeDetailNewV1Api")
-public interface IPayFeeDetailNewV1InnerServiceSMO {
+public interface IPayFeeDetailV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/savePayFeeDetailNew", method = RequestMethod.POST)

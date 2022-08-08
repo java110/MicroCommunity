@@ -30,7 +30,7 @@ public class PurchaseApplyPo implements Serializable {
     private String createUserName;
     private String communityId;
 
-    private String statusCd;
+    private String statusCd = "0";
 
     private ResourceStorePo[] resourceStores;
 

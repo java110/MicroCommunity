@@ -27,7 +27,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.returnPayFee.ReturnPayFeePo;
@@ -65,7 +65,7 @@ public class SaveReturnPayFeeCmd extends Cmd {
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Autowired
-    private IPayFeeDetailNewV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
 
 
     @Autowired

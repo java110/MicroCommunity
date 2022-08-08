@@ -17,7 +17,7 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.fee.dao.IPayFeeDetailNewV1ServiceDao;
-import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @RestController
-public class PayFeeDetailNewV1InnerServiceSMOImpl extends BaseServiceSMO implements IPayFeeDetailNewV1InnerServiceSMO {
+public class PayFeeDetailV1InnerServiceSMOImpl extends BaseServiceSMO implements IPayFeeDetailV1InnerServiceSMO {
 
     @Autowired
     private IPayFeeDetailNewV1ServiceDao payFeeDetailNewV1ServiceDaoImpl;

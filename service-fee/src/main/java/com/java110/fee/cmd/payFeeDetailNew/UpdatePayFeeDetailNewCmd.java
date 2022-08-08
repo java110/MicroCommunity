@@ -21,7 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -49,7 +49,7 @@ public class UpdatePayFeeDetailNewCmd extends Cmd {
 
 
     @Autowired
-    private IPayFeeDetailNewV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceResourceStoreSpecificationSpecificationV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceStoreSpecificationInfo" parameterType="Map">
+        insert into resource_store_specification(
+rss_id,rst_id,spec_name,description,store_id,parent_rst_id
+) values (
+#{rssId},#{rstId},#{specName},#{description},#{storeId},#{parentRstId}
+)
+    </insert>
+
+
+
+    <!-- 查询采购申请信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceStoreSpecificationInfo" parameterType="Map" resultType="Map">
+        select  t.rss_id,t.rss_id rssId,t.rst_id,t.rst_id rstId,t.spec_name,t.spec_name specName,t.description,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.parent_rst_id,t.parent_rst_id parentRstId 
+from resource_store_specification t 
+where 1 =1 
+<if test="rssId !=null and rssId != ''">
+   and t.rss_id= #{rssId}
+</if> 
+<if test="rstId !=null and rstId != ''">
+   and t.rst_id= #{rstId}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+   and t.parent_rst_id= #{parentRstId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改采购申请信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceStoreSpecificationInfo" parameterType="Map">
+        update  resource_store_specification t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="rstId !=null and rstId != ''">
+, t.rst_id= #{rstId}
+</if> 
+<if test="specName !=null and specName != ''">
+, t.spec_name= #{specName}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+, t.parent_rst_id= #{parentRstId}
+</if> 
+ where 1=1 <if test="rssId !=null and rssId != ''">
+and t.rss_id= #{rssId}
+</if> 
+
+    </update>
+
+    <!-- 查询采购申请数量 add by wuxw 2018-07-03 -->
+     <select id="queryResourceStoreSpecificationsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from resource_store_specification t 
+where 1 =1 
+<if test="rssId !=null and rssId != ''">
+   and t.rss_id= #{rssId}
+</if> 
+<if test="rstId !=null and rstId != ''">
+   and t.rst_id= #{rstId}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="parentRstId !=null and parentRstId != ''">
+   and t.parent_rst_id= #{parentRstId}
+</if> 
+
+
+     </select>
+
+</mapper>

@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.fee.IPayFeeDetailNewV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class ListPayFeeDetailNewCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListPayFeeDetailNewCmd.class);
     @Autowired
-    private IPayFeeDetailNewV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailNewV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
