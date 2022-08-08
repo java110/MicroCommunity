@@ -3,6 +3,7 @@ package com.java110.db;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.context.Environment;
 import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.db.dao.IQueryServiceDAO;
 import com.java110.dto.order.OrderItemDto;
@@ -11,10 +12,7 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
@@ -54,7 +52,11 @@ public class Java110MybatisInterceptor implements Interceptor {
         Map<String, Object> sqlValue = new HashMap<>();
         //获取sql语句
         String sql = showSql(configuration, boundSql, sqlValue, sqlCommandType);
-        restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        if(Environment.isStartBootWay()){
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        }else {
+            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        }
         switch (sqlCommandType) {
             case INSERT:
                 dealInsertSql(mappedStatement, parameter, sql, sqlValue);
@@ -115,6 +117,9 @@ public class Java110MybatisInterceptor implements Interceptor {
         String url = ServiceConstant.SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(orderItemDto.toString(), httpHeaders);
+        if(Environment.isStartBootWay()){
+            url = ServiceConstant.BOOT_SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
+        }
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -174,7 +179,11 @@ public class Java110MybatisInterceptor implements Interceptor {
         String url = ServiceConstant.SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(orderItemDto.toString(), httpHeaders);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> responseEntity = null;
+        if(Environment.isStartBootWay()){
+            url = ServiceConstant.BOOT_SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
+        }
+        responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("注册事务回滚日志失败" + responseEntity);
@@ -243,6 +252,9 @@ public class Java110MybatisInterceptor implements Interceptor {
         String url = ServiceConstant.SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(orderItemDto.toString(), httpHeaders);
+        if(Environment.isStartBootWay()){
+            url = ServiceConstant.BOOT_SERVICE_ORDER_URL + "/order/oIdApi/createOrderItem";
+        }
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {

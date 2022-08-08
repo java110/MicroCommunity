@@ -33,8 +33,8 @@ public class Environment {
     public final static String DEFAULT_ACTIVE = "dev";
     public final static String DEFAULT_PHONE = "cc_phone";
 
-    private final static String SPRING_CLOUD = "CLOUD"; // 环境是spring boot cloud
-    private final static String SPRING_BOOT = "BOOT"; // 环境是spring boot cloud
+    public final static String SPRING_CLOUD = "CLOUD"; // 环境是spring boot cloud
+    public final static String SPRING_BOOT = "BOOT"; // 环境是spring boot cloud
 
     private static String systemStartWay = "CLOUD"; // 环境是spring boot cloud
 

@@ -18,6 +18,7 @@ package com.java110.boot;
 import com.java110.core.annotation.Java110CmdDiscovery;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.context.Environment;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.log.LoggerFactory;
@@ -138,6 +139,20 @@ public class BootApplicationStart {
         return restTemplate;
     }
 
+    /**
+     * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+     *
+     * @return restTemplate
+     */
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
+        return restTemplate;
+    }
+
     @Bean
     @ConditionalOnBean(Java110FeignClientInterceptor.class)
     public okhttp3.OkHttpClient okHttpClient(@Autowired
@@ -157,6 +172,8 @@ public class BootApplicationStart {
             ApplicationContext context = SpringApplication.run(BootApplicationStart.class, args);
             //服务启动加载
             ServiceStartInit.initSystemConfig(context);
+
+            Environment.setSystemStartWay(Environment.SPRING_BOOT);
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
         }
