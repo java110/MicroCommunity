@@ -1,39 +1,34 @@
-package com.java110.api.listener.resourceStore;
+package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
-import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
-import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
-import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.*;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
-/**
- * 调拨单审核
- */
-@Java110Listener("auditAllocationStoreOrderListener")
-public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "resourceStore.auditAllocationStoreOrder")
+public class AuditAllocationStoreOrderCmd extends Cmd {
 
     @Autowired
     private IAllocationStorehouseUserInnerServiceSMO allocationStorehouseUserInnerServiceSMOImpl;
@@ -47,23 +42,14 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodePurchaseApplyConstant.AUDIT_ALLOCATION_STORE;
-    }
+    @Autowired
+    private IResourceStoreV1InnerServiceSMO resourceStoreV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseApplyV1InnerServiceSMO allocationStorehouseApplyV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "applyId", "订单号不能为空");
         Assert.hasKeyAndValue(reqJson, "taskId", "必填，请填写任务ID");
         Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
@@ -71,7 +57,10 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        int flag = 0;
         AllocationStorehouseApplyDto allocationStorehouseDto = new AllocationStorehouseApplyDto();
         allocationStorehouseDto.setTaskId(reqJson.getString("taskId"));
         allocationStorehouseDto.setApplyId(reqJson.getString("applyId"));
@@ -99,18 +88,20 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
             if (!StringUtil.isEmpty(procure) && procure.equals("true")) {
                 allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_REVIEWED);
             }
-            super.update(context, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
+            flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
         } else if (reqJson.getString("state").equals("1200")) {  //审核拒绝时，状态变为调拨失败  1200拒绝状态
-            revokeAllocationStorehouse(reqJson, context);
+            revokeAllocationStorehouse(reqJson);
         }
     }
 
     /**
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    private void updateAllocationStorehouse(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private void updateAllocationStorehouse(JSONObject paramInJson, ICmdDataFlowContext context) {
 
         AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
         tmpAllocationStorehouseApplyDto.setApplyId(paramInJson.getString("applyId"));
@@ -123,9 +114,12 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(allocationStorehouseApplyDtos.get(0)));
         businessComplaint.put("state", AllocationStorehouseDto.STATE_SUCCESS);
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = BeanConvertUtil.covertBean(businessComplaint, AllocationStorehouseApplyPo.class);
-
+        int flag = 0;
         if (allocationStorehouseApplyDtos.get(0).getState().equals("1201") || allocationStorehouseApplyDtos.get(0).getState().equals("1204")) {
-            super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
+            flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
             //调拨详情
             AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
             tmpAllocationStorehouseDto.setApplyId(paramInJson.getString("applyId"));
@@ -175,11 +169,13 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                         resourceStorePo.setMiniUnitCode(originalResourceStoreDtos.get(0).getMiniUnitCode());
                         resourceStorePo.setMiniUnitStock(originalResourceStoreDtos.get(0).getMiniUnitStock());
                     }
-                    super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
-                    commit(dataFlowContext);
+                    resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+                    if (flag < 1) {
+                        throw new CmdException("修改失败");
+                    }
                 } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                     ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "物品信息查询到多条，请核实后再处理！");
-                    dataFlowContext.setResponseEntity(responseEntity);
+                    context.setResponseEntity(responseEntity);
                     return;
                 } else {
                     //查询是否原仓库有此物品
@@ -214,23 +210,27 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
                     resourceStorePo.setRssId(resourceStoreDtos.get(0).getRssId());
                     resourceStorePo.setMiniUnitCode(resourceStoreDtos.get(0).getMiniUnitCode());
                     resourceStorePo.setMiniUnitStock(resourceStoreDtos.get(0).getMiniUnitStock());
-                    super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
-                    commit(dataFlowContext);
+                    flag = resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+                    if (flag < 1) {
+                        throw new CmdException("修改失败");
+                    }
                 }
             }
-        }else if(allocationStorehouseApplyDtos.get(0).getState().equals("1203")){
-            allocationStorehouseApplyPo.setState( AllocationStorehouseDto.STATE_FAIL);
-            super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
+        } else if (allocationStorehouseApplyDtos.get(0).getState().equals("1203")) {
+            allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_FAIL);
+            flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
         }
     }
 
 
     /**
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    private void revokeAllocationStorehouse(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private void revokeAllocationStorehouse(JSONObject paramInJson) {
 
         AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
         tmpAllocationStorehouseApplyDto.setApplyId(paramInJson.getString("applyId"));
@@ -242,8 +242,10 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(allocationStorehouseApplyDtos.get(0)));
         businessComplaint.put("state", AllocationStorehouseDto.STATE_FAIL);
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = BeanConvertUtil.covertBean(businessComplaint, AllocationStorehouseApplyPo.class);
-        super.update(dataFlowContext, allocationStorehouseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ALLOCATION_STOREHOUSE_APPLY);
-        //调拨详情数据
+        int flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+        if (flag < 1) {
+            throw new CmdException("修改失败");
+        }        //调拨详情数据
         AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
         tmpAllocationStorehouseDto.setApplyId(paramInJson.getString("applyId"));
         tmpAllocationStorehouseDto.setStoreId(paramInJson.getString("storeId"));
@@ -277,7 +279,10 @@ public class AuditAllocationStoreOrderListener extends AbstractServiceApiPlusLis
             BigDecimal nowMiniStock = stock1.multiply(miniUnitStock); //计算当前的最小计量总数
             BigDecimal newMiniStock = miniStock.add(nowMiniStock);
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
-            super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+            flag = resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
         }
     }
 }
