@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orgCommunityV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存组织小区信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOrgCommunityInfo" parameterType="Map">
+        insert into u_org_community(
+org_name,community_name,community_id,store_id,org_id,org_community_id
+) values (
+#{orgName},#{communityName},#{communityId},#{storeId},#{orgId},#{orgCommunityId}
+)
+    </insert>
+
+
+
+    <!-- 查询组织小区信息 add by wuxw 2018-07-03 -->
+    <select id="getOrgCommunityInfo" parameterType="Map" resultType="Map">
+        select  t.org_name,t.org_name orgName,t.community_name,t.community_name communityName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.org_id,t.org_id orgId,t.org_community_id,t.org_community_id orgCommunityId 
+from u_org_community t 
+where 1 =1 
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="orgCommunityId !=null and orgCommunityId != ''">
+   and t.org_community_id= #{orgCommunityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改组织小区信息 add by wuxw 2018-07-03 -->
+    <update id="updateOrgCommunityInfo" parameterType="Map">
+        update  u_org_community t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="orgName !=null and orgName != ''">
+, t.org_name= #{orgName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+, t.community_name= #{communityName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+, t.org_id= #{orgId}
+</if> 
+ where 1=1 <if test="orgCommunityId !=null and orgCommunityId != ''">
+and t.org_community_id= #{orgCommunityId}
+</if> 
+
+    </update>
+
+    <!-- 查询组织小区数量 add by wuxw 2018-07-03 -->
+     <select id="queryOrgCommunitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from u_org_community t 
+where 1 =1 
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="orgCommunityId !=null and orgCommunityId != ''">
+   and t.org_community_id= #{orgCommunityId}
+</if> 
+
+
+     </select>
+
+</mapper>
