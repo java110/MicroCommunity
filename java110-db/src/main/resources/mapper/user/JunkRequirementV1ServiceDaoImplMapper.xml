@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="junkRequirementV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存需求信息 add by wuxw 2018-07-03 -->
+    <insert id="saveJunkRequirementInfo" parameterType="Map">
+        insert into junk_requirement(
+reference_price,type_cd,publish_user_name,publish_user_link,context,publish_user_id,junk_requirement_id,state,classification,community_id
+) values (
+#{referencePrice},#{typeCd},#{publishUserName},#{publishUserLink},#{context},#{publishUserId},#{junkRequirementId},#{state},#{classification},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询需求信息 add by wuxw 2018-07-03 -->
+    <select id="getJunkRequirementInfo" parameterType="Map" resultType="Map">
+        select  t.reference_price,t.reference_price referencePrice,t.type_cd,t.type_cd typeCd,t.publish_user_name,t.publish_user_name publishUserName,t.publish_user_link,t.publish_user_link publishUserLink,t.context,t.publish_user_id,t.publish_user_id publishUserId,t.status_cd,t.status_cd statusCd,t.junk_requirement_id,t.junk_requirement_id junkRequirementId,t.state,t.classification,t.community_id,t.community_id communityId 
+from junk_requirement t 
+where 1 =1 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改需求信息 add by wuxw 2018-07-03 -->
+    <update id="updateJunkRequirementInfo" parameterType="Map">
+        update  junk_requirement t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+, t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserName !=null and publishUserName != ''">
+, t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+, t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+, t.publish_user_id= #{publishUserId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="classification !=null and classification != ''">
+, t.classification= #{classification}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="junkRequirementId !=null and junkRequirementId != ''">
+and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+
+    </update>
+
+    <!-- 查询需求数量 add by wuxw 2018-07-03 -->
+     <select id="queryJunkRequirementsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from junk_requirement t 
+where 1 =1 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>
