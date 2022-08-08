@@ -1,44 +1,29 @@
-package com.java110.api.listener.machineTranslate;
+package com.java110.common.cmd.machineTranslate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.common.ICarInoutInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
+import com.java110.intf.common.ICarInoutInnerServiceSMO;
+import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.api.machine.MachineResDataVo;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 
-/**
- * @ClassName MachineRoadGateOpenListener
- * @Description 查询空闲车位
- * @Author wuxw
- * @Date 2020/1/25 21:50
- * @Version 1.0
- * add by wuxw 2020/1/25
- **/
-@Java110Listener("machineGetFreeParkingSpaceListener")
-public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
-    private static Logger logger = LoggerFactory.getLogger(MachineGetFreeParkingSpaceListener.class);
+@Java110Cmd(serviceCode = "machineTranslate.machineGetFreeParkingSpace")
+public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
 
 
     private static final String MACHINE_DIRECTION_IN = "3306"; // 进入
@@ -73,18 +58,13 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-
-        //super.validateMachineHeader(event, reqJson);
-
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        //JSONObject outParam = null;
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+//JSONObject outParam = null;
         String communityId = reqJson.getString("communityId");
 
         //查询出小区内车位状态为空闲的数量
@@ -141,21 +121,5 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
 
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", realFreeParkingSpace));
 
-    }
-
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeMachineTranslateConstant.MACHINE_GET_FREE_PARKING_SPACE;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
     }
 }

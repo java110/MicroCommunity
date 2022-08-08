@@ -1,43 +1,44 @@
-package com.java110.api.listener.machineTranslate;
+package com.java110.common.cmd.machineTranslate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.machine.MachineDto;
+import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.dto.machine.MachineDto;
-import com.java110.dto.machine.MachineTranslateDto;
-import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.Map;
 
-/**
- * 调用地址
- * http://api.demo.winqi.cn/api/machineTranslate.machineCmdResult?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1
- * 硬件执行结果上报
- */
-@Java110Listener("machineCmdResultListener")
-public class MachineCmdResultListener extends AbstractServiceApiListener {
-    private final static Logger logger = LoggerFactory.getLogger(MachineCmdResultListener.class);
+@Java110Cmd(serviceCode = "machineTranslate.machineCmdResult")
+public class MachineCmdResultCmd extends Cmd {
+    private final static Logger logger = LoggerFactory.getLogger(MachineCmdResultCmd.class);
+
 
     public static final String FRONT_KAFKA_TOPIC = "webSentMessageTopic";
+    public static final String STATE_NO_TRANSLATE = "10000";//待同步
+    public static final String STATE_TRANSLATEED = "20000";//同步完成
+    public static final String STATE_TRANSLATEING = "30000";//同步中
+    public static final String STATE_CMD_SUCCESS = "40000";//命令执行成功
+    public static final String STATE_CMD_ERROR = "50000";//命令执行失败
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
@@ -57,22 +58,17 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
-    /**
-     * @param event   事件对象
-     * @param reqJson 请求报文数据
-     */
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        // Assert.hasKeyAndValue(reqJson, "faceid", "请求报文中未包含用户ID");
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         ResponseEntity<String> responseEntity = null;
         ResultVo resultVo = null;
 
-        Map<String, String> reqHeader = context.getRequestHeaders();
+        Map<String, String> reqHeader = context.getReqHeaders();
 
         HttpHeaders headers = new HttpHeaders();
         String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
@@ -125,11 +121,11 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
         tmpMtDto.setCommunityId(communityId);
         ResultVo frontResultVo = null;
         if (ResultVo.CODE_MACHINE_OK != code) {
-            tmpMtDto.setState(MachineGetTaskInfoListener.STATE_CMD_ERROR);
+            tmpMtDto.setState(STATE_CMD_ERROR);
             tmpMtDto.setRemark(reqJson.getString("msg"));
             frontResultVo = new ResultVo(ResultVo.CODE_ERROR, reqJson.getString("msg"));
         } else {
-            tmpMtDto.setState(MachineGetTaskInfoListener.STATE_CMD_SUCCESS);
+            tmpMtDto.setState(STATE_CMD_SUCCESS);
             frontResultVo = new ResultVo(ResultVo.CODE_OK, reqJson.getString("msg"));
 
         }
@@ -143,68 +139,5 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
         resultVo = new ResultVo(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK);
         responseEntity = new ResponseEntity<>(resultVo.toString(), headers, HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-    }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeMachineTranslateConstant.MACHINE_CMD_RESULT;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    public IMachineTranslateInnerServiceSMO getMachineTranslateInnerServiceSMOImpl() {
-        return machineTranslateInnerServiceSMOImpl;
-    }
-
-    public void setMachineTranslateInnerServiceSMOImpl(IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl) {
-        this.machineTranslateInnerServiceSMOImpl = machineTranslateInnerServiceSMOImpl;
-    }
-
-    public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
-        return machineInnerServiceSMOImpl;
-    }
-
-    public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
-        this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
-    }
-
-    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
-        return ownerInnerServiceSMOImpl;
-    }
-
-    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
-        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
-
-    public IFileRelInnerServiceSMO getFileRelInnerServiceSMOImpl() {
-        return fileRelInnerServiceSMOImpl;
-    }
-
-    public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
-        this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
-    }
-
-    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
-        return fileInnerServiceSMOImpl;
-    }
-
-    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
-        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
     }
 }

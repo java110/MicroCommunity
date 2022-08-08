@@ -1,17 +1,14 @@
-package com.java110.api.listener.machineTranslate;
+package com.java110.common.cmd.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
-import com.java110.intf.common.ICarInoutInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -20,41 +17,36 @@ import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.intf.common.*;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.car.CarInoutDetailPo;
+import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.PayFeePo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.CommunityMemberTypeConstant;
-import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.api.machine.MachineResDataVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName MachineRoadGateOpenListener
- * @Description 道闸开门侦听类
- * @Author wuxw
- * @Date 2020/1/25 21:50
- * @Version 1.0
- * add by wuxw 2020/1/25
- **/
-@Java110Listener("machineRoadGateOpenListener")
-public class MachineRoadGateOpenListener extends BaseMachineListener {
-    private static Logger logger = LoggerFactory.getLogger(MachineRoadGateOpenListener.class);
-
+@Java110Cmd(serviceCode = "machineTranslate.machineRoadGateOpen")
+public class MachineRoadGateOpenCmd extends BaseMachineCmd {
+    private static Logger logger = LoggerFactory.getLogger(MachineRoadGateOpenCmd.class);
 
     private static final String MACHINE_DIRECTION_IN = "3306"; // 进入
 
@@ -64,9 +56,6 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
     private static final String CAR_BLACK = "1111"; // 车辆黑名单
     private static final String CAR_WHITE = "2222"; // 车辆白名单
-
-    @Autowired
-    private IMachineTranslateBMO machineTranslateBMOImpl;
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -89,21 +78,29 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
+    @Autowired
+    private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICarInoutDetailV1InnerServiceSMO carInoutDetailV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         super.validateMachineHeader(event, reqJson);
 
         Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含车牌号");
-
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        //JSONObject outParam = null;
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+//JSONObject outParam = null;
         ResponseEntity<String> responseEntity = null;
-        Map<String, String> reqHeader = context.getRequestHeaders();
+        Map<String, String> reqHeader = context.getReqHeaders();
         String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         String machineCode = reqHeader.get("machinecode");
         HttpHeaders headers = new HttpHeaders();
@@ -143,7 +140,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * @param machineDto
      * @param communityId
      */
-    private void dealCarOut(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, MachineDto machineDto, String communityId) {
+    private void dealCarOut(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, MachineDto machineDto, String communityId) {
 
         //首先查询是否车辆有进场
         CarInoutDto carInoutDto = new CarInoutDto();
@@ -194,7 +191,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * @param machineDto
      * @return
      */
-    private boolean judgeCarOutTimeOut(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
+    private boolean judgeCarOutTimeOut(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(machineDto.getCommunityId());
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
@@ -227,21 +224,82 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         }
 
         //重新插入 一条 收费记录 收费
-
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-        AppService service = event.getAppService();
         //添加单元信息
-        machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", null);
-        machineTranslateBMOImpl.addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        modifyCarInout(reqJson, tmpCarInoutDto, "100600", null);
+        addCarInoutFee(reqJson, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
 
-        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
         reqJson.put("feeRestartTime", tmpFeeDto.getEndTime());
 
         return true;
     }
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addCarInoutFee(JSONObject paramInJson,  String communityId) {
+        addCarInoutFee(paramInJson, communityId, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+    }
+
+    public void addCarInoutFee(JSONObject paramInJson, String communityId, String startTime) {
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(communityId);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        String storeId = "-1";
+        if (communityMemberDtos != null && communityMemberDtos.size() > 0) {
+            storeId = communityMemberDtos.get(0).getMemberId();
+        }
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        feeConfigDto.setIsDefault("T");
+        feeConfigDto.setCommunityId(communityId);
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
+        }
+
+        feeConfigDto = feeConfigDtos.get(0);
+
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        businessUnit.put("configId", feeConfigDto.getConfigId());
+        businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        businessUnit.put("incomeObjId", storeId);
+        businessUnit.put("amount", "-1.00");
+        businessUnit.put("startTime", startTime);
+        businessUnit.put("endTime", DateUtil.getLastTime()); // 临时车将结束时间刷成2038年
+        businessUnit.put("communityId", communityId);
+        businessUnit.put("payerObjId", paramInJson.getString("inoutId"));
+        businessUnit.put("payerObjType", "9999");
+        businessUnit.put("feeFlag", "2006012"); // 一次性费用
+        businessUnit.put("state", "2008001"); // 收费中
+        businessUnit.put("userId", "-1");
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
+        int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+        if (flag < 1) {
+            throw new CmdException("保存费用失败");
+        }
+    }
+
+
+    public void modifyCarInout(JSONObject reqJson, CarInoutDto carInoutDto, String state, String endTime) {
+
+        JSONObject businessCarInout = new JSONObject();
+        businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
+        businessCarInout.put("state", state);
+        businessCarInout.put("outTime", endTime);
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(businessCarInout, CarInoutPo.class);
+        int flag = carInoutV1InnerServiceSMOImpl.updateCarInout(carInoutPo);
+
+        if (flag < 1) {
+            throw new CmdException("修改车辆进出记录");
+        }
+    }
+
 
     /**
      * 处理车辆未完成支付出场处理
@@ -251,7 +309,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * @param tmpCarInoutDto
      * @param machineDto
      */
-    private void dealCarOutIncomplete(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
+    private void dealCarOutIncomplete(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
         //判断车辆是否在白名单中
         String carNum = reqJson.getString("carNum");
         CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
@@ -347,22 +405,52 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         return data;
     }
 
-    private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
+    private void modifyCarInoutInfo(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
         modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto, "");
     }
 
-    private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto, String from) {
+    private void modifyCarInoutInfo(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto, String from) {
 
         //添加单元信息
-        machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto);
+        modifyCarInout(reqJson, tmpCarInoutDto);
         reqJson.put("inoutId", tmpCarInoutDto.getInoutId());
-        machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
+        addCarInoutDetail(reqJson, tmpCarInoutDto.getCommunityId(), machineDto);
         if (HIRE_SELL_OUT.equals(from)) {
-            modifyCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
+            modifyCarInoutFee(reqJson, tmpCarInoutDto.getCommunityId(), machineDto);
 
         }
 
     }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addCarInoutDetail(JSONObject paramInJson, String communityId, MachineDto machineDto) {
+
+        JSONObject businessCarInoutDetail = new JSONObject();
+        businessCarInoutDetail.put("carNum", paramInJson.getString("carNum"));
+        businessCarInoutDetail.put("inoutId", paramInJson.getString("inoutId"));
+        businessCarInoutDetail.put("communityId", communityId);
+        businessCarInoutDetail.put("machineId", machineDto.getMachineId());
+        businessCarInoutDetail.put("machineCode", machineDto.getMachineCode());
+        businessCarInoutDetail.put("carInout", machineDto.getDirection());
+        businessCarInoutDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        paramInJson.put("detailId",businessCarInoutDetail.getString("detailId"));
+        CarInoutDetailPo carInoutDetailPo = BeanConvertUtil.covertBean(businessCarInoutDetail, CarInoutDetailPo.class);
+        int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
+        if(flag < 1){
+            throw new CmdException("保存明细");
+        }
+
+    }
+
+    public void modifyCarInout(JSONObject reqJson, CarInoutDto carInoutDto) {
+        modifyCarInout(reqJson, carInoutDto, "100500", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+    }
+
 
     /**
      * 处理车辆进入
@@ -371,7 +459,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * @param machineDto
      * @param communityId
      */
-    private void dealCarIn(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, MachineDto machineDto, String communityId) {
+    private void dealCarIn(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson, MachineDto machineDto, String communityId) {
         //车辆是否黑名单 车辆
         String carNum = reqJson.getString("carNum");
         CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
@@ -385,23 +473,40 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         }
 
         HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
+        context.getReqHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        AppService service = event.getAppService();
 
         //添加单元信息
-        machineTranslateBMOImpl.addCarInout(reqJson, context, communityId);
-        machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, communityId, machineDto);
-        machineTranslateBMOImpl.addCarInoutFee(reqJson, context, communityId);
+        addCarInout(reqJson, communityId);
+        addCarInoutDetail(reqJson, communityId, machineDto);
+        addCarInoutFee(reqJson, communityId);
 
-
-        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, responseEntity.getBody()));
-            return;
-        }
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功"));
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addCarInout(JSONObject paramInJson,  String communityId) {
+
+        if (!paramInJson.containsKey("inoutId") || "-1".equals(paramInJson.getString("inoutId"))) {
+            paramInJson.put("inoutId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inoutId));
+        }
+        JSONObject businessCarInout = new JSONObject();
+        businessCarInout.put("carNum", paramInJson.getString("carNum"));
+        businessCarInout.put("inoutId", paramInJson.getString("inoutId"));
+        businessCarInout.put("communityId", communityId);
+        businessCarInout.put("state", "100300");
+        businessCarInout.put("inTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(businessCarInout, CarInoutPo.class);
+        int flag = carInoutV1InnerServiceSMOImpl.saveCarInout(carInoutPo);
+        if(flag < 1){
+            throw new CmdException("保存明细失败");
+        }
     }
 
 
@@ -409,12 +514,11 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * 出租或出售 车辆出场
      *
      * @param reqJson
-     * @param context
      * @param communityId
      * @param machineDto
      * @return
      */
-    private void modifyCarInoutFee(JSONObject reqJson, DataFlowContext context, String communityId, MachineDto machineDto) {
+    private void modifyCarInoutFee(JSONObject reqJson, String communityId, MachineDto machineDto) {
 
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(communityId);
@@ -446,23 +550,11 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         businessUnit.put("state", "2009001"); // 收费中
 
         PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
-        super.update(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
 
-    }
+        if(flag < 1){
+            throw new CmdException("修改费用失败");
+        }
 
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeMachineTranslateConstant.MACHINE_ROAD_GATE_OPEN;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
     }
 }

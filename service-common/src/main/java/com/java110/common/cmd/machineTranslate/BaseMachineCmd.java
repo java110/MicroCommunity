@@ -1,12 +1,14 @@
-package com.java110.api.listener.machineTranslate;
+package com.java110.common.cmd.machineTranslate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.dto.machine.MachineDto;
+import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -17,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 设备侦听 父类
- */
-public abstract class BaseMachineListener extends AbstractServiceApiPlusListener {
+public abstract class BaseMachineCmd extends Cmd {
 
     /**
      * 校验头部信息
@@ -28,9 +27,9 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
      * @param event
      * @param reqJson
      */
-    protected void validateMachineHeader(ServiceDataFlowEvent event, JSONObject reqJson) {
-        DataFlowContext context = event.getDataFlowContext();
-        Map<String, String> reqHeader = context.getRequestHeaders();
+    protected void validateMachineHeader(CmdEvent event, JSONObject reqJson) {
+        ICmdDataFlowContext context = event.getCmdDataFlowContext();
+        Map<String, String> reqHeader = context.getReqHeaders();
         Assert.hasKeyAndValue(reqHeader, "machinecode", "请求报文中未包含设备编码");
 //        Assert.hasKeyAndValue(reqHeader, "communityId", "请求报文中未包含小区信息");
     }
@@ -42,12 +41,12 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
      * @param context
      * @param reqJson
      */
-    protected boolean validateMachineBody(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson,
+    protected boolean validateMachineBody(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson,
                                           IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
 
         ResponseEntity<String> responseEntity = null;
         ResultVo resultVo = null;
-        Map<String, String> reqHeader = context.getRequestHeaders();
+        Map<String, String> reqHeader = context.getReqHeaders();
         HttpHeaders headers = new HttpHeaders();
         String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         if (StringUtil.isEmpty(communityId)) {
@@ -101,8 +100,8 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
         return true;
     }
 
-    protected HttpHeaders getHeader(DataFlowContext context) {
-        Map<String, String> reqHeader = context.getRequestHeaders();
+    protected HttpHeaders getHeader(ICmdDataFlowContext context) {
+        Map<String, String> reqHeader = context.getReqHeaders();
 
         HttpHeaders headers = new HttpHeaders();
 
