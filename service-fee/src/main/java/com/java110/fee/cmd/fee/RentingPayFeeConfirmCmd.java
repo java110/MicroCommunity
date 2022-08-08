@@ -1,56 +1,43 @@
-package com.java110.api.listener.fee;
+package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.fee.IFeeBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
-import com.java110.entity.center.AppService;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.rentingPool.RentingPoolPo;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
-/**
- * @ClassName PayFeeListener
- * @Description TODO 交费通知侦听
- * @Author wuxw
- * @Date 2019/6/3 13:46
- * @Version 1.0
- * add by wuxw 2019/6/3
- **/
-@Java110Listener("rentingPayFeeConfirmListener")
-public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
+@Java110Cmd(serviceCode = "fee.rentingPayFeeConfirm")
+public class RentingPayFeeConfirmCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(RentingPayFeeConfirmListener.class);
-
-    @Autowired
-    private IFeeBMO feeBMOImpl;
 
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
@@ -67,35 +54,30 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
     @Autowired
     private IRentingPoolInnerServiceSMO rentingPoolInnerServiceSMOImpl;
 
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
+
+
     @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_RENTING_PAY_CONFIRM_PRE;
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        Assert.jsonObjectHaveKey(reqJson, "oId", "请求报文中未包含订单信息");
+
+        Assert.hasLength(reqJson.getString("oId"), "订单信息不能为空");
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public void soService(ServiceDataFlowEvent event) {
-
-        logger.debug("ServiceDataFlowEvent : {}", event);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject paramObj) throws CmdException, ParseException {
         String oId = paramObj.getString("oId");
         String money = paramObj.getString("money");
         String feeName = paramObj.getString("feeName");
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.O_ID, oId);
+        context.getReqHeaders().put(CommonConstant.O_ID, oId);
         RentingPoolDto rentingPoolDto = BeanConvertUtil.covertBean(paramObj, RentingPoolDto.class);
+        int flag = 0;
 
         JSONArray businesses = new JSONArray();
         BigDecimal serviceDec = null;
@@ -112,7 +94,7 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payMoney = new BigDecimal(money);
             receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             payFeeDetailPo = new PayFeeDetailPo();
-            payFeeDetailPo.setDetailId("-1");
+            payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -124,7 +106,10 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
 
             payFeeDetailPo.setState("1400");
             //添加单元信息
-            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
+            flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
 
             communityMemberDto = new CommunityMemberDto();
             communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
@@ -149,7 +134,10 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
             payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+            flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
         }
 
         //代理商分成
@@ -160,7 +148,7 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payMoney = new BigDecimal(money);
             receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             payFeeDetailPo = new PayFeeDetailPo();
-            payFeeDetailPo.setDetailId("-2");
+            payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -170,7 +158,10 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
             //添加单元信息
-            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
+            flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
 
             communityMemberDto = new CommunityMemberDto();
             communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
@@ -195,7 +186,10 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
             payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+            flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
         }
         //运营分成
         //物业 收取费用
@@ -206,7 +200,7 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payMoney = new BigDecimal(money);
             receivableAmount = serviceDec.multiply(payMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             payFeeDetailPo = new PayFeeDetailPo();
-            payFeeDetailPo.setDetailId("-3");
+            payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             payFeeDetailPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeeDetailPo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -216,7 +210,10 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
             //添加单元信息
-            businesses.add(feeBMOImpl.addSimpleFeeDetail(payFeeDetailPo, dataFlowContext));
+            flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
 
             communityMemberDto = new CommunityMemberDto();
             communityMemberDto.setCommunityId(rentingPoolDto.getCommunityId());
@@ -241,14 +238,11 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
             payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_RENTING);
             payFeePo.setConfigId(FeeConfigDto.CONFIG_ID_RENTING);
-            businesses.add(feeBMOImpl.addSimpleFee(payFeePo, dataFlowContext));
+            flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+            if (flag < 1) {
+                throw new CmdException("添加费用异常");
+            }
         }
-        ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-        dataFlowContext.setResponseEntity(responseEntity);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            return;
-        }
-
 
         RentingPoolPo rentingPoolPo = new RentingPoolPo();
         rentingPoolPo.setRentingId(rentingPoolDto.getRentingId());
@@ -257,24 +251,5 @@ public class RentingPayFeeConfirmListener extends AbstractServiceApiDataFlowList
         rentingPoolInnerServiceSMOImpl.updateRentingPool(rentingPoolPo);
     }
 
-
-    /**
-     * 数据校验
-     *
-     * @param paramIn "communityId": "7020181217000001",
-     *                "memberId": "3456789",
-     *                "memberTypeCd": "390001200001"
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "oId", "请求报文中未包含订单信息");
-        JSONObject paramInObj = JSONObject.parseObject(paramIn);
-        Assert.hasLength(paramInObj.getString("oId"), "订单信息不能为空");
-
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
 
 }

@@ -2,7 +2,6 @@ package com.java110.api.bmo.machineTranslate.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IOwnerMachineTranslateBMO;
-import com.java110.api.listener.machineTranslate.MachineQueryUserInfoListener;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
@@ -93,7 +92,7 @@ public class OwnerMachineTranslateBMOImpl implements IOwnerMachineTranslateBMO {
         }
         machineUserResultDto.setRemarks("HC小区管理系统");
         machineUserResultDto.setReserved(ownerDto.getMemberId());
-        machineUserResultDto.setUserType(MachineQueryUserInfoListener.TYPE_OWNER);
+        machineUserResultDto.setUserType("MachineQueryUserInfoListener.TYPE_OWNER");
 
         //查询业主是否有欠费
 

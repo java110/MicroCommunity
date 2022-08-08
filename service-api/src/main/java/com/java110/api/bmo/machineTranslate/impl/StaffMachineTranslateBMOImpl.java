@@ -2,17 +2,16 @@ package com.java110.api.bmo.machineTranslate.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IStaffMachineTranslateBMO;
-import com.java110.api.listener.machineTranslate.MachineQueryUserInfoListener;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machine.MachineUserResultDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +94,7 @@ public class StaffMachineTranslateBMOImpl implements IStaffMachineTranslateBMO {
         }
         machineUserResultDto.setRemarks("HC小区管理系统");
         machineUserResultDto.setReserved(userDto.getUserId());
-        machineUserResultDto.setUserType(MachineQueryUserInfoListener.TYPE_STAFF);
+        machineUserResultDto.setUserType("MachineQueryUserInfoListener.TYPE_STAFF");
 
         //将 设备 待同步 改为同步中
         MachineTranslateDto tmpMtDto = new MachineTranslateDto();

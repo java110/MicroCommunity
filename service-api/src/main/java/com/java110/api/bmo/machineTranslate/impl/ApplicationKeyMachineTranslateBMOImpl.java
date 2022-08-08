@@ -2,7 +2,6 @@ package com.java110.api.bmo.machineTranslate.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IApplicationKeyMachineTranslateBMO;
-import com.java110.api.listener.machineTranslate.MachineQueryUserInfoListener;
 import com.java110.intf.common.IApplicationKeyInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
@@ -93,7 +92,7 @@ public class ApplicationKeyMachineTranslateBMOImpl implements IApplicationKeyMac
         }
         machineUserResultDto.setRemarks("HC小区管理系统");
         machineUserResultDto.setReserved(applicationKeyDto.getApplicationKeyId());
-        machineUserResultDto.setUserType(MachineQueryUserInfoListener.TYPE_APPLICATION_KEY);
+        machineUserResultDto.setUserType("MachineQueryUserInfoListener.TYPE_APPLICATION_KEY");
 
         //将 设备 待同步 改为同步中
         MachineTranslateDto tmpMtDto = new MachineTranslateDto();

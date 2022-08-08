@@ -1,31 +1,27 @@
-package com.java110.api.listener.file;
+package com.java110.common.cmd.file;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeServiceConstant;
+import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.file.ApiFileVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("getFileByObjIdListener")
-public class GetFileByObjIdListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "file.getFileByObjId")
+public class GetFileByObjIdCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -34,24 +30,7 @@ public class GetFileByObjIdListener extends AbstractServiceApiListener {
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
-    public String getServiceCode() {
-        return ServiceCodeServiceConstant.GET_FILE_BY_OBJ_ID;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson,"objId", "未包含文件ID");
         Assert.hasKeyAndValue(reqJson,"fileTypeCd", "未包含文件类型");
         Assert.hasKeyAndValue(reqJson,"communityId", "未包含小区ID");
@@ -59,8 +38,7 @@ public class GetFileByObjIdListener extends AbstractServiceApiListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(reqJson.getString("objId"));
         fileRelDto.setRelTypeCd(reqJson.getString("fileTypeCd"));
@@ -80,22 +58,5 @@ public class GetFileByObjIdListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(fileVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
-    }
-
-    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
-        return fileInnerServiceSMOImpl;
-    }
-
-    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
-        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
-    }
-
-    public IFileRelInnerServiceSMO getFileRelInnerServiceSMOImpl() {
-        return fileRelInnerServiceSMOImpl;
-    }
-
-    public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
-        this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
     }
 }
