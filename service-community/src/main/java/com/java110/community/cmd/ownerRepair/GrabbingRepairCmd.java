@@ -1,45 +1,35 @@
-package com.java110.api.listener.ownerRepair;
+package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
+import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.dto.repair.RepairUserDto;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.community.*;
+import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 
-/**
- * 完成报修
- * add by wuxw 2019-06-30
- */
-@Java110Listener("grabbingRepairListener")
-public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
-
-    private static Logger logger = LoggerFactory.getLogger(GrabbingRepairListener.class);
-
-    @Autowired
-    private IOwnerRepairBMO ownerRepairBMOImpl;
+@Java110Cmd(serviceCode = "ownerRepair.grabbingRepair")
+public class GrabbingRepairCmd extends Cmd {
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
@@ -53,6 +43,13 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRepairTypeUserInnerServiceSMO repairTypeUserInnerServiceSMO;
 
+    @Autowired
+    private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
+
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -60,7 +57,7 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
     public static final String REPAIR_NUMBER = "REPAIR_NUMBER";
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
@@ -68,7 +65,8 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        int flag = 0;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + reqJson.getString("repairId");
         try {
@@ -149,7 +147,7 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                     String userId = reqJson.getString("userId");
                     String userName = reqJson.getString("userName");
                     RepairUserPo repairUserPo = new RepairUserPo();
-                    repairUserPo.setRuId("-1");
+                    repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
                     repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                     repairUserPo.setState(RepairUserDto.STATE_DOING);
                     repairUserPo.setRepairId(reqJson.getString("repairId"));
@@ -161,8 +159,11 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
                     repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
                     repairUserPo.setContext("");
                     repairUserPo.setCommunityId(reqJson.getString("communityId"));
-                    super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
-                    ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_TAKING);
+                    flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
+                    if (flag < 1) {
+                        throw new CmdException("修改用户失败");
+                    }
+                    modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_TAKING);
                     ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
                     context.setResponseEntity(responseEntity);
                 } else if (state.equals("1100")) {   //1100表示接单
@@ -178,26 +179,19 @@ public class GrabbingRepairListener extends AbstractServiceApiPlusListener {
         }
     }
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeRepairDispatchStepConstant.BINDING_GRABBING_REPAIR;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IRepairInnerServiceSMO getRepairInnerServiceSMOImpl() {
-        return repairInnerServiceSMOImpl;
-    }
-
-    public void setRepairInnerServiceSMOImpl(IRepairInnerServiceSMO repairInnerServiceSMOImpl) {
-        this.repairInnerServiceSMOImpl = repairInnerServiceSMOImpl;
-    }
+    public void modifyBusinessRepairDispatch(JSONObject paramInJson, String state) {
+        //查询报修单
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(paramInJson.getString("repairId"));
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        Assert.isOne(repairDtos, "查询到多条数据，repairId=" + repairDto.getRepairId());
+        JSONObject businessOwnerRepair = new JSONObject();
+        businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
+        businessOwnerRepair.put("state", state);
+        //计算 应收金额
+        RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+        if (flag < 1) {
+            throw new CmdException("修改工单失败");
+        }    }
 }

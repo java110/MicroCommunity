@@ -1,11 +1,11 @@
-package com.java110.api.listener.ownerRepair;
+package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -14,15 +14,17 @@ import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
+import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -30,17 +32,13 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 
-/**
- * 保存小区侦听
- * add by wuxw 2019-06-30
- */
-@Java110Listener("saveOwnerRepairListener")
-public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "ownerRepair.saveOwnerRepair")
+public class SaveOwnerRepairCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -51,6 +49,15 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -58,7 +65,7 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
     public static final String REPAIR_FEE_NUMBER = "REPAIR_FEE_NUMBER";
 
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         Assert.hasKeyAndValue(reqJson, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(reqJson, "repairName", "必填，请填写报修人名称");
@@ -74,7 +81,7 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         //获取当前小区id
         String communityId = reqJson.getString("communityId");
         //查询默认费用项
@@ -106,8 +113,10 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         businessOwnerRepair.put("repairId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId));
         businessOwnerRepair.put("state", RepairDto.STATE_WAIT);
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
-        super.insert(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR);
-
+        int flag = repairPoolV1InnerServiceSMOImpl.saveRepairPoolNew(repairPoolPo);
+        if (flag < 1) {
+            throw new CmdException("修改失败");
+        }
         RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
         repairUserPo.setContext("订单提交");
         repairUserPo.setPreStaffId("-1");
@@ -120,8 +129,11 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
         repairUserPo.setRepairId(businessOwnerRepair.getString("repairId"));
         repairUserPo.setState(RepairUserDto.STATE_SUBMIT);
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setRuId("-1");
-        super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+        repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+        flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
+        if (flag < 1) {
+            throw new CmdException("修改用户失败");
+        }
         if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
@@ -142,24 +154,11 @@ public class SaveOwnerRepairListener extends AbstractServiceApiPlusListener {
                 businessUnit.put("fileRealName", fileName);
                 businessUnit.put("fileSaveName", fileName);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+                flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+                if (flag < 1) {
+                    throw new CmdException("保存图片失败");
+                }
             }
         }
     }
-
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeOwnerRepairConstant.ADD_OWNERREPAIR;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
 }
