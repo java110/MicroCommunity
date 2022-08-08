@@ -3,6 +3,7 @@ package com.java110.order.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.context.Environment;
 import com.java110.core.context.SecureInvocation;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessTableHis.BusinessTableHisDto;
@@ -40,6 +41,8 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RestTemplate outRestTemplate;
 
     @Autowired
     private ICenterServiceDAO centerServiceDAOImpl;
@@ -48,6 +51,9 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
     public static final String FALLBACK_URL = "http://SERVICE_NAME/businessApi/fallBack";
+
+    public static final String BOOT_FALLBACK_URL = "http://127.0.0.1:8008/businessApi/fallBack";
+
 
     public static final String SERVICE_NAME = "SERVICE_NAME";
 
@@ -60,7 +66,12 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             JSONArray params = generateBusinessParam(orderItemDto, businessTableHisDto);
             httpEntity = new HttpEntity<String>(params.toJSONString(), header);
             //通过fallBack 的方式生成Business
-            restTemplate.exchange(FALLBACK_URL.replace(SERVICE_NAME, orderItemDto.getServiceName()), HttpMethod.POST, httpEntity, String.class);
+
+            if(Environment.isStartBootWay()){
+                outRestTemplate.exchange(BOOT_FALLBACK_URL, HttpMethod.POST, httpEntity, String.class);
+            }else {
+                restTemplate.exchange(FALLBACK_URL.replace(SERVICE_NAME, orderItemDto.getServiceName()), HttpMethod.POST, httpEntity, String.class);
+            }
         } catch (Exception e) {
             logger.error("生成business失败", e);
 

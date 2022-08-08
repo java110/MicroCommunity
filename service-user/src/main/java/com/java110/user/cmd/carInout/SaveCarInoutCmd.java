@@ -13,7 +13,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Java110Cmd(serviceCode = "carInout.saveCarInout")
+//@Java110Cmd(serviceCode = "carInout.saveCarInout")
 public class SaveCarInoutCmd extends Cmd {
 
     @Autowired
