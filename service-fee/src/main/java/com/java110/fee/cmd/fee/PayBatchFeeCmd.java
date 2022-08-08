@@ -18,10 +18,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
@@ -93,7 +90,7 @@ public class PayBatchFeeCmd extends Cmd {
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Autowired
-    private IRepairPoolNewV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
+    private IRepairPoolV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
     @Autowired
     private IRepairUserNewV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
 

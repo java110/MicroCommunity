@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.fee.smo.impl;
+package com.java110.community.smo.impl;
 
 
-import com.java110.fee.dao.IRepairPoolNewV1ServiceDao;
-import com.java110.intf.fee.IRepairPoolNewV1InnerServiceSMO;
+import com.java110.community.dao.IRepairPoolNewV1ServiceDao;
+import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
-import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -39,7 +34,7 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @RestController
-public class RepairPoolNewV1InnerServiceSMOImpl extends BaseServiceSMO implements IRepairPoolNewV1InnerServiceSMO {
+public class RepairPoolV1InnerServiceSMOImpl extends BaseServiceSMO implements IRepairPoolV1InnerServiceSMO {
 
     @Autowired
     private IRepairPoolNewV1ServiceDao repairPoolNewV1ServiceDaoImpl;

@@ -23,6 +23,7 @@ public class JunkRequirementPo implements Serializable {
     private String state;
 
     private String communityId;
+    private String statusCd = "0";
 
     public String getJunkRequirementId() {
         return junkRequirementId;
@@ -102,5 +103,13 @@ public class JunkRequirementPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

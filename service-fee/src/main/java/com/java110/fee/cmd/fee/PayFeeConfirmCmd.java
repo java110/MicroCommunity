@@ -24,6 +24,7 @@ import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
+import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -91,7 +92,7 @@ public class PayFeeConfirmCmd extends Cmd {
     @Autowired
     private IPayFeeDetailDiscountNewV1InnerServiceSMO payFeeDetailDiscountNewV1InnerServiceSMOImpl;
     @Autowired
-    private IRepairPoolNewV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
+    private IRepairPoolV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
     @Autowired
     private IRepairUserNewV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
     @Autowired

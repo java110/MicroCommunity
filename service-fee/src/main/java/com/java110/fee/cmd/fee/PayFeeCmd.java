@@ -24,10 +24,7 @@ import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -41,7 +38,6 @@ import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
 import com.java110.utils.constant.FeeFlagTypeConstant;
-import com.java110.utils.constant.FeeStateConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -113,7 +109,7 @@ public class PayFeeCmd extends Cmd {
     private IPayFeeDetailDiscountNewV1InnerServiceSMO payFeeDetailDiscountNewV1InnerServiceSMOImpl;
 
     @Autowired
-    private IRepairPoolNewV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
+    private IRepairPoolV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
 
     @Autowired
     private IRepairUserNewV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;

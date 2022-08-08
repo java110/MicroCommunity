@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.fee.dao;
+package com.java110.community.dao;
 
 
 import com.java110.utils.exception.DAOException;
