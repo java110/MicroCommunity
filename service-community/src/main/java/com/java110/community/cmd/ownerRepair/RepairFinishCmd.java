@@ -1,12 +1,11 @@
-package com.java110.api.listener.ownerRepair;
+package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -19,11 +18,14 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairUserInnerServiceSMO;
-import com.java110.intf.community.IResourceStoreServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.*;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.store.IResourceStoreUseRecordV1InnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.intf.store.IUserStorehouseV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -34,37 +36,26 @@ import com.java110.po.owner.RepairUserPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resourceStoreUseRecord.ResourceStoreUseRecordPo;
 import com.java110.po.userStorehouse.UserStorehousePo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 完成报修
- * add by wuxw 2019-06-30
- */
-@Java110Listener("repairFinishListener")
-public class RepairFinishListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "ownerRepair.repairFinish")
+public class RepairFinishCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(RepairFinishListener.class);
-
-    @Autowired
-    private IOwnerRepairBMO ownerRepairBMOImpl;
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
@@ -90,8 +81,29 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMO;
 
+    @Autowired
+    private IUserStorehouseV1InnerServiceSMO userStorehouseV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreUseRecordV1InnerServiceSMO resourceStoreUseRecordV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
     @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "context", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
@@ -100,10 +112,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        String userId = reqJson.getString("userId");
-        String userName = reqJson.getString("userName");
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String userId = context.getReqHeaders().get("user-id");
+        String userName = context.getReqHeaders().get("user-name");
         String publicArea = reqJson.getString("publicArea");
+        int flag = 0;
         //获取报修渠道
         String repairChannel = reqJson.getString("repairChannel");
         //获取维修类型
@@ -283,7 +296,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                     userStorehousePo.setResId(resId);
                     userStorehousePo.setUserId(userId);
                     //更新库存
-                    super.update(context, userStorehousePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_USER_STOREHOUSE);
+                    flag = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorehousePo);
+                    if (flag < 1) {
+                        throw new CmdException("修改工单失败");
+                    }
                 }
                 //往物品使用记录表插入数据
                 ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
@@ -305,9 +321,15 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 //有偿服务
                 if (maintenanceType.equals("1001")) {
                     resourceStoreUseRecordPo.setUnitPrice(paramIn.getString("price"));
-                    super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
+                    flag = resourceStoreUseRecordV1InnerServiceSMOImpl.saveResourceStoreUseRecord(resourceStoreUseRecordPo);
+                    if (flag < 1) {
+                        throw new CmdException("添加失败");
+                    }
                 } else if (maintenanceType.equals("1003")) {  //需要用料
-                    super.insert(context, resourceStoreUseRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE_USE_RECORD);
+                    flag = resourceStoreUseRecordV1InnerServiceSMOImpl.saveResourceStoreUseRecord(resourceStoreUseRecordPo);
+                    if (flag < 1) {
+                        throw new CmdException("添加失败");
+                    }
                 }
                 if (!StringUtil.isEmpty(repairMaterials)) {
                     repairMaterial += repairMaterials + "；";
@@ -324,7 +346,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
         repairUserPo.setState(RepairUserDto.STATE_CLOSE);
         repairUserPo.setContext(reqJson.getString("context"));
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
-        super.update(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
+        flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
+        if (flag < 1) {
+            throw new CmdException("修改用户失败");
+        }
         if ((!StringUtil.isEmpty(repairChannel) && "Z".equals(repairChannel))
                 || (!StringUtil.isEmpty(maintenanceType) && "1001".equals(maintenanceType))) {  //如果是业主报修或者是有偿的就生成一条新状态，否则不变
             //2.0 给开始节点派支付单
@@ -393,7 +418,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
             repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_PAY_USER);
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
-            super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+            flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
+            if (flag < 1) {
+                throw new CmdException("修改用户失败");
+            }
         }
         //维修前图片处理
         if (reqJson.containsKey("beforeRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("beforeRepairPhotos"))) {
@@ -416,7 +444,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 businessUnit.put("fileRealName", fileName);
                 businessUnit.put("fileSaveName", fileName);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+                flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+                if (flag < 1) {
+                    throw new CmdException("保存图片失败");
+                }
             }
         }
         //维修后图片处理
@@ -440,7 +471,10 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 businessUnit.put("fileRealName", fileName);
                 businessUnit.put("fileSaveName", fileName);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+                flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+                if (flag < 1) {
+                    throw new CmdException("保存图片失败");
+                }
             }
         }
         if ("F".equals(publicArea) && "1002".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是无偿的走下面
@@ -448,11 +482,14 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
             repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
-            super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
             if ("Z".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
+                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_APPRAISE);
             } else { //如果是业主自主报修结单后状态变为待评价
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
+                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_RETURN_VISIT);
             }
         } else if ("F".equals(publicArea) && "1001".equals(reqJson.getString("maintenanceType"))) { //如果不是公共区域且是有偿的走下面
             //3.0 生成支付费用
@@ -492,14 +529,21 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             feePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             feePo.setState(FeeDto.STATE_DOING);
             feePo.setUserId(userId);
-            super.insert(context, feePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+
+            flag = payFeeV1InnerServiceSMOImpl.savePayFee(feePo);
+            if (flag < 1) {
+                throw new CmdException("添加费用失败");
+            }
             FeeAttrPo feeAttrPo = new FeeAttrPo();
-            feeAttrPo.setAttrId("-1");
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             feeAttrPo.setFeeId(feePo.getFeeId());
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
             feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             feeAttrPo.setValue(reqJson.getString("repairId"));
-            super.insert(context, feeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+            flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            if (flag < 1) {
+                throw new CmdException("添加费用失败");
+            }
             //改变r_repair_pool表maintenance_type维修类型
             RepairPoolPo repairPoolPo = new RepairPoolPo();
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
@@ -511,8 +555,11 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
             repairPoolPo.setRepairFee(repairFee.substring(0, repairFee.length() - 1));
             //支付方式
             repairPoolPo.setPayType(reqJson.getString("payType"));
-            super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
-            ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_PAY);
+            flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+            if (flag < 1) {
+                throw new CmdException("修改失败");
+            }
+            modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_PAY);
         } else if ("T".equals(publicArea)) {  //公共区域走这里
             //公共区域用料时修改维修类型和用料
             if ("1003".equals(maintenanceType)) {
@@ -523,39 +570,36 @@ public class RepairFinishListener extends AbstractServiceApiPlusListener {
                 repairPoolPo.setMaintenanceType(reqJson.getString("maintenanceType"));
                 //用料
                 repairPoolPo.setRepairMaterials(repairMaterial.substring(0, repairMaterial.length() - 1));
-                super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+                flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+                if (flag < 1) {
+                    throw new CmdException("修改失败");
+                }
             }
 
             if ("Z".equals(repairChannel)) { //如果是电话报修和员工代客报修结单后状态变为待回访
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_APPRAISE);
+                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_APPRAISE);
             } else { //如果是业主自主报修结单后状态变为待评价
-                ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context, RepairDto.STATE_RETURN_VISIT);
+                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_RETURN_VISIT);
             }
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
         context.setResponseEntity(responseEntity);
     }
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeRepairDispatchStepConstant.BINDING_REPAIR_FINISH;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IRepairInnerServiceSMO getRepairInnerServiceSMOImpl() {
-        return repairInnerServiceSMOImpl;
-    }
-
-    public void setRepairInnerServiceSMOImpl(IRepairInnerServiceSMO repairInnerServiceSMOImpl) {
-        this.repairInnerServiceSMOImpl = repairInnerServiceSMOImpl;
+    public void modifyBusinessRepairDispatch(JSONObject paramInJson, String state) {
+        //查询报修单
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(paramInJson.getString("repairId"));
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+        Assert.isOne(repairDtos, "查询到多条数据，repairId=" + repairDto.getRepairId());
+        JSONObject businessOwnerRepair = new JSONObject();
+        businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
+        businessOwnerRepair.put("state", state);
+        //计算 应收金额
+        RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+        if (flag < 1) {
+            throw new CmdException("修改工单失败");
+        }
     }
 }

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairUserNewV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairUserNewInfo" parameterType="Map">
+        insert into r_repair_user(
+repair_event,pre_staff_name,repair_id,ru_id,pre_staff_id,context,staff_name,pre_ru_id,start_time,state,end_time,community_id,staff_id
+) values (
+#{repairEvent},#{preStaffName},#{repairId},#{ruId},#{preStaffId},#{context},#{staffName},#{preRuId},#{startTime},#{state},#{endTime},#{communityId},#{staffId}
+)
+    </insert>
+
+
+
+    <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairUserNewInfo" parameterType="Map" resultType="Map">
+        select  t.repair_event,t.repair_event repairEvent,t.pre_staff_name,t.pre_staff_name preStaffName,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,t.ru_id,t.ru_id ruId,t.pre_staff_id,t.pre_staff_id preStaffId,t.context,t.staff_name,t.staff_name staffName,t.pre_ru_id,t.pre_ru_id preRuId,t.start_time,t.start_time startTime,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId 
+from r_repair_user t 
+where 1 =1 
+<if test="repairEvent !=null and repairEvent != ''">
+   and t.repair_event= #{repairEvent}
+</if> 
+<if test="preStaffName !=null and preStaffName != ''">
+   and t.pre_staff_name= #{preStaffName}
+</if> 
+<if test="repairId !=null and repairId != ''">
+   and t.repair_id= #{repairId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ruId !=null and ruId != ''">
+   and t.ru_id= #{ruId}
+</if> 
+<if test="preStaffId !=null and preStaffId != ''">
+   and t.pre_staff_id= #{preStaffId}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="preRuId !=null and preRuId != ''">
+   and t.pre_ru_id= #{preRuId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改费用明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairUserNewInfo" parameterType="Map">
+        update  r_repair_user t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="repairEvent !=null and repairEvent != ''">
+, t.repair_event= #{repairEvent}
+</if> 
+<if test="preStaffName !=null and preStaffName != ''">
+, t.pre_staff_name= #{preStaffName}
+</if> 
+<if test="repairId !=null and repairId != ''">
+, t.repair_id= #{repairId}
+</if> 
+<if test="preStaffId !=null and preStaffId != ''">
+, t.pre_staff_id= #{preStaffId}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="staffName !=null and staffName != ''">
+, t.staff_name= #{staffName}
+</if> 
+<if test="preRuId !=null and preRuId != ''">
+, t.pre_ru_id= #{preRuId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+ where 1=1 <if test="ruId !=null and ruId != ''">
+and t.ru_id= #{ruId}
+</if> 
+
+    </update>
+
+    <!-- 查询费用明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryRepairUserNewsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from r_repair_user t 
+where 1 =1 
+<if test="repairEvent !=null and repairEvent != ''">
+   and t.repair_event= #{repairEvent}
+</if> 
+<if test="preStaffName !=null and preStaffName != ''">
+   and t.pre_staff_name= #{preStaffName}
+</if> 
+<if test="repairId !=null and repairId != ''">
+   and t.repair_id= #{repairId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ruId !=null and ruId != ''">
+   and t.ru_id= #{ruId}
+</if> 
+<if test="preStaffId !=null and preStaffId != ''">
+   and t.pre_staff_id= #{preStaffId}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="preRuId !=null and preRuId != ''">
+   and t.pre_ru_id= #{preRuId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+
+
+     </select>
+
+</mapper>

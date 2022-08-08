@@ -1,38 +1,32 @@
-package com.java110.api.listener.ownerRepair;
+package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiPlusListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 暂停报修单
- *
- * @author fqz
- * @date 2021-12-24
- */
-@Java110Listener("repairStopListener")
-public class RepairStopListener extends AbstractServiceApiPlusListener {
+@Java110Cmd(serviceCode = "ownerRepair.repairStop")
+public class RepairStopCmd extends Cmd {
 
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
@@ -40,36 +34,36 @@ public class RepairStopListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeRepairDispatchStepConstant.BINDING_REPAIR_STOP;
-    }
+    @Autowired
+    private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) throws ParseException {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "remark", "未包含派单内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) throws ParseException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(reqJson.getString("repairId"));
         //查询报修信息
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "查询报修单错误！");
         String state = repairDtos.get(0).getState();
+        int flag = 0;
         if (!StringUtil.isEmpty(state) && !state.equals(RepairDto.STATE_STOP)) { //报修单不是暂停状态
             RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(reqJson, RepairPoolPo.class);
             repairPoolPo.setState(RepairDto.STATE_STOP); //将报修状态变为暂停状态
             //更新报修状态
-            super.update(context, repairPoolPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+            flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
+            if (flag < 1) {
+                throw new CmdException("修改工单失败");
+            }
             RepairUserPo repairUserPo = new RepairUserPo();
             repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId)); //报修派单id
             repairUserPo.setRepairId(reqJson.getString("repairId")); //报修派单
@@ -91,7 +85,10 @@ public class RepairStopListener extends AbstractServiceApiPlusListener {
             repairUserPo.setStartTime(simpleDateFormat.format(new Date())); //开始时间
             repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER); //审核用户
             repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId()); //上一节点处理id
-            super.insert(context, repairUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
+            flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
+            if (flag < 1) {
+                throw new CmdException("添加工单失败");
+            }
         }
     }
 }

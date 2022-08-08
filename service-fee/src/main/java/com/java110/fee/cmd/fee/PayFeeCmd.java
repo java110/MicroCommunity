@@ -112,7 +112,7 @@ public class PayFeeCmd extends Cmd {
     private IRepairPoolV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
 
     @Autowired
-    private IRepairUserNewV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
+    private IRepairUserV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
 
     @Autowired
     private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;

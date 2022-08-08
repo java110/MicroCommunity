@@ -92,7 +92,7 @@ public class PayBatchFeeCmd extends Cmd {
     @Autowired
     private IRepairPoolV1InnerServiceSMO repairPoolNewV1InnerServiceSMOImpl;
     @Autowired
-    private IRepairUserNewV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
+    private IRepairUserV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
