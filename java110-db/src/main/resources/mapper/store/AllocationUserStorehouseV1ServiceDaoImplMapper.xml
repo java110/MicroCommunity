@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allocationUserAllocationUserStorehousehouseV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存用户仓库信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAllocationUserStorehouseInfo" parameterType="Map">
+        insert into allocation_user_storehouse(
+res_name,start_user_id,accept_user_id,accept_user_name,start_user_name,aus_id,remark,store_id,stock,res_id,give_quantity
+) values (
+#{resName},#{startUserId},#{acceptUserId},#{acceptUserName},#{startUserName},#{ausId},#{remark},#{storeId},#{stock},#{resId},#{giveQuantity}
+)
+    </insert>
+
+
+
+    <!-- 查询用户仓库信息 add by wuxw 2018-07-03 -->
+    <select id="getAllocationUserStorehouseInfo" parameterType="Map" resultType="Map">
+        select  t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.accept_user_id,t.accept_user_id acceptUserId,t.accept_user_name,t.accept_user_name acceptUserName,t.start_user_name,t.start_user_name startUserName,t.aus_id,t.aus_id ausId,t.status_cd,t.status_cd statusCd,t.remark,t.store_id,t.store_id storeId,t.stock,t.res_id,t.res_id resId,t.give_quantity,t.give_quantity giveQuantity 
+from allocation_user_storehouse t 
+where 1 =1 
+<if test="resName !=null and resName != ''">
+   and t.res_name= #{resName}
+</if> 
+<if test="startUserId !=null and startUserId != ''">
+   and t.start_user_id= #{startUserId}
+</if> 
+<if test="acceptUserId !=null and acceptUserId != ''">
+   and t.accept_user_id= #{acceptUserId}
+</if> 
+<if test="acceptUserName !=null and acceptUserName != ''">
+   and t.accept_user_name= #{acceptUserName}
+</if> 
+<if test="startUserName !=null and startUserName != ''">
+   and t.start_user_name= #{startUserName}
+</if> 
+<if test="ausId !=null and ausId != ''">
+   and t.aus_id= #{ausId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="stock !=null and stock != ''">
+   and t.stock= #{stock}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="giveQuantity !=null and giveQuantity != ''">
+   and t.give_quantity= #{giveQuantity}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改用户仓库信息 add by wuxw 2018-07-03 -->
+    <update id="updateAllocationUserStorehouseInfo" parameterType="Map">
+        update  allocation_user_storehouse t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="resName !=null and resName != ''">
+, t.res_name= #{resName}
+</if> 
+<if test="startUserId !=null and startUserId != ''">
+, t.start_user_id= #{startUserId}
+</if> 
+<if test="acceptUserId !=null and acceptUserId != ''">
+, t.accept_user_id= #{acceptUserId}
+</if> 
+<if test="acceptUserName !=null and acceptUserName != ''">
+, t.accept_user_name= #{acceptUserName}
+</if> 
+<if test="startUserName !=null and startUserName != ''">
+, t.start_user_name= #{startUserName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="stock !=null and stock != ''">
+, t.stock= #{stock}
+</if> 
+<if test="resId !=null and resId != ''">
+, t.res_id= #{resId}
+</if> 
+<if test="giveQuantity !=null and giveQuantity != ''">
+, t.give_quantity= #{giveQuantity}
+</if> 
+ where 1=1 <if test="ausId !=null and ausId != ''">
+and t.aus_id= #{ausId}
+</if> 
+
+    </update>
+
+    <!-- 查询用户仓库数量 add by wuxw 2018-07-03 -->
+     <select id="queryAllocationUserStorehousesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from allocation_user_storehouse t 
+where 1 =1 
+<if test="resName !=null and resName != ''">
+   and t.res_name= #{resName}
+</if> 
+<if test="startUserId !=null and startUserId != ''">
+   and t.start_user_id= #{startUserId}
+</if> 
+<if test="acceptUserId !=null and acceptUserId != ''">
+   and t.accept_user_id= #{acceptUserId}
+</if> 
+<if test="acceptUserName !=null and acceptUserName != ''">
+   and t.accept_user_name= #{acceptUserName}
+</if> 
+<if test="startUserName !=null and startUserName != ''">
+   and t.start_user_name= #{startUserName}
+</if> 
+<if test="ausId !=null and ausId != ''">
+   and t.aus_id= #{ausId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="stock !=null and stock != ''">
+   and t.stock= #{stock}
+</if> 
+<if test="resId !=null and resId != ''">
+   and t.res_id= #{resId}
+</if> 
+<if test="giveQuantity !=null and giveQuantity != ''">
+   and t.give_quantity= #{giveQuantity}
+</if> 
+
+
+     </select>
+
+</mapper>

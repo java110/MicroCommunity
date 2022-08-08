@@ -17,6 +17,7 @@ public class AllocationUserStorehousePo implements Serializable {
     private String createTime;
     private String giveQuantity;
     private String resCode;
+    private String statusCd = "0";
 
     public String getAcceptUserId() {
         return acceptUserId;
@@ -120,5 +121,13 @@ public class AllocationUserStorehousePo implements Serializable {
 
     public void setResCode(String resCode) {
         this.resCode = resCode;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
