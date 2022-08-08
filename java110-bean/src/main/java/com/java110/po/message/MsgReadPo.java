@@ -16,6 +16,7 @@ public class MsgReadPo implements Serializable {
     private String msgId;
     private String userId;
     private String userName;
+    private String statusCd="0";
 
     public String getMsgReadId() {
         return msgReadId;
@@ -47,5 +48,13 @@ public class MsgReadPo implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

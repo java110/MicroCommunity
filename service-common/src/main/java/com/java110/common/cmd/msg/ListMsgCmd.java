@@ -1,66 +1,38 @@
-package com.java110.api.listener.msg;
+package com.java110.common.cmd.msg;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.intf.common.IMsgInnerServiceSMO;
+import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.event.cmd.Cmd;
+import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.msg.MsgDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.intf.common.IMsgInnerServiceSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.msg.ApiMsgDataVo;
 import com.java110.vo.api.msg.ApiMsgVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * 查询小区侦听类
- */
-@Java110Listener("listMsgListener")
-public class ListMsgListener extends AbstractServiceApiListener {
+@Java110Cmd(serviceCode = "msg.listMsg")
+public class ListMsgCmd extends Cmd {
 
     @Autowired
     private IMsgInnerServiceSMO msgInnerServiceSMOImpl;
 
-    @Override
-    public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_MSGS;
-    }
 
     @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
-    }
-
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-    public IMsgInnerServiceSMO getMsgInnerServiceSMOImpl() {
-        return msgInnerServiceSMOImpl;
-    }
-
-    public void setMsgInnerServiceSMOImpl(IMsgInnerServiceSMO msgInnerServiceSMOImpl) {
-        this.msgInnerServiceSMOImpl = msgInnerServiceSMOImpl;
-    }
-
-    @Override
-    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+    public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
     }
 
     @Override
-    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         MsgDto msgDto = BeanConvertUtil.covertBean(reqJson, MsgDto.class);
         String[] viewObjIds = new String[]{"9999", reqJson.getString("communityId"), reqJson.getString("storeId"), reqJson.getString("userId")};
         msgDto.setViewObjIds(viewObjIds);
@@ -83,6 +55,5 @@ public class ListMsgListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiMsgVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }

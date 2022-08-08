@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="machineTranslateV1ServiceDaoImpl">
+
+
+    <!-- 保存物联网同步信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineTranslateInfo" parameterType="Map">
+        insert into machine_translate(
+        machine_code,obj_b_id,update_time,machine_cmd,remark,obj_name,machine_id,type_cd,machine_translate_id,obj_id,state,community_id
+        ) values (
+        #{machineCode},#{objBId},#{updateTime},#{machineCmd},#{remark},#{objName},#{machineId},#{typeCd},#{machineTranslateId},#{objId},#{state},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询物联网同步信息 add by wuxw 2018-07-03 -->
+    <select id="getMachineTranslateInfo" parameterType="Map" resultType="Map">
+        select t.machine_code,t.machine_code machineCode,t.obj_b_id,t.obj_b_id objBId,t.status_cd,t.status_cd
+        statusCd,t.update_time,t.update_time updateTime,t.machine_cmd,t.machine_cmd
+        machineCmd,t.remark,t.obj_name,t.obj_name objName,t.machine_id,t.machine_id machineId,t.type_cd,t.type_cd
+        typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
+        objId,t.state,t.community_id,t.community_id communityId
+        from machine_translate t
+        where 1 =1
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="objBId !=null and objBId != ''">
+            and t.obj_b_id= #{objBId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            and t.update_time= #{updateTime}
+        </if>
+        <if test="machineCmd !=null and machineCmd != ''">
+            and t.machine_cmd= #{machineCmd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改物联网同步信息 add by wuxw 2018-07-03 -->
+    <update id="updateMachineTranslateInfo" parameterType="Map">
+        update machine_translate t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="objBId !=null and objBId != ''">
+            , t.obj_b_id= #{objBId}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            , t.update_time= #{updateTime}
+        </if>
+        <if test="machineCmd !=null and machineCmd != ''">
+            , t.machine_cmd= #{machineCmd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            , t.type_cd= #{typeCd}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
+        </if>
+
+    </update>
+
+    <!-- 查询物联网同步数量 add by wuxw 2018-07-03 -->
+    <select id="queryMachineTranslatesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine_translate t
+        where 1 =1
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="objBId !=null and objBId != ''">
+            and t.obj_b_id= #{objBId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            and t.update_time= #{updateTime}
+        </if>
+        <if test="machineCmd !=null and machineCmd != ''">
+            and t.machine_cmd= #{machineCmd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

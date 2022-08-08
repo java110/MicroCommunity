@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="msgReadV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存已读消息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMsgReadInfo" parameterType="Map">
+        insert into msg_read(
+msg_read_id,msg_id,user_name,user_id
+) values (
+#{msgReadId},#{msgId},#{userName},#{userId}
+)
+    </insert>
+
+
+
+    <!-- 查询已读消息信息 add by wuxw 2018-07-03 -->
+    <select id="getMsgReadInfo" parameterType="Map" resultType="Map">
+        select  t.msg_read_id,t.msg_read_id msgReadId,t.msg_id,t.msg_id msgId,t.status_cd,t.status_cd statusCd,t.user_name,t.user_name userName,t.user_id,t.user_id userId 
+from msg_read t 
+where 1 =1 
+<if test="msgReadId !=null and msgReadId != ''">
+   and t.msg_read_id= #{msgReadId}
+</if> 
+<if test="msgId !=null and msgId != ''">
+   and t.msg_id= #{msgId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改已读消息信息 add by wuxw 2018-07-03 -->
+    <update id="updateMsgReadInfo" parameterType="Map">
+        update  msg_read t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="msgId !=null and msgId != ''">
+, t.msg_id= #{msgId}
+</if> 
+<if test="userName !=null and userName != ''">
+, t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="msgReadId !=null and msgReadId != ''">
+and t.msg_read_id= #{msgReadId}
+</if> 
+
+    </update>
+
+    <!-- 查询已读消息数量 add by wuxw 2018-07-03 -->
+     <select id="queryMsgReadsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from msg_read t 
+where 1 =1 
+<if test="msgReadId !=null and msgReadId != ''">
+   and t.msg_read_id= #{msgReadId}
+</if> 
+<if test="msgId !=null and msgId != ''">
+   and t.msg_id= #{msgId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+
+     </select>
+
+</mapper>

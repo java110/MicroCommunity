@@ -21,6 +21,7 @@ public class MachineTranslatePo implements Serializable {
     private String state;
     private String updateTime;
     private String remark;
+    private String statusCd = "0";
 
 
     public String getMachineTranslateId() {
@@ -101,5 +102,13 @@ public class MachineTranslatePo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

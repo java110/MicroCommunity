@@ -84,6 +84,7 @@ msg_type,operate,msg_id,view_obj_id,title,view_type_cd,b_id,url
         select t.msg_type,t.msg_type msgType,t.msg_id,t.msg_id msgId,t.view_obj_id,t.view_obj_id
         viewObjId,t.status_cd,t.status_cd statusCd,t.title,t.view_type_cd,t.view_type_cd viewTypeCd,t.b_id,t.b_id
         bId,t.url
+        from msg t
         <if test="userId != null and userId != ''">
             LEFT JOIN msg_read mr ON t.`msg_id` = mr.`msg_id`
         </if>
