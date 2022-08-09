@@ -147,6 +147,9 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
 
 
     private List<AccountDto> addAccountDto(AccountDto accountDto, OwnerDto ownerDto) {
+        if (StringUtil.isEmpty(ownerDto.getOwnerId())) {
+            return new ArrayList<>();
+        }
         //开始锁代码
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + "AddCountDto" + ownerDto.getOwnerId();
