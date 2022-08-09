@@ -31,7 +31,6 @@ import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
 import com.java110.po.machine.MachineAttrPo;
 import com.java110.po.machine.MachinePo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -79,6 +78,14 @@ public class UpdateMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
 
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(reqJson.getString("machineCode"));
+        List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+
+        if (machineDtos != null && machineDtos.size() > 0 && !reqJson.getString("machineId").equals(machineDtos.get(0).getMachineId())) {
+            throw new CmdException("设备已存在");
+        }
+
         Assert.judgeAttrValue(reqJson);
 
     }
@@ -88,7 +95,7 @@ public class UpdateMachineCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
 
-        if(!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
+        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
             CommunityLocationDto communityLocationDto = new CommunityLocationDto();
             communityLocationDto.setCommunityId(reqJson.getString("communityId"));
             communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));

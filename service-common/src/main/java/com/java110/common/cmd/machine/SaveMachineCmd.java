@@ -76,6 +76,14 @@ public class SaveMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
 
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(reqJson.getString("machineCode"));
+        int count = machineV1InnerServiceSMOImpl.queryMachinesCount(machineDto);
+
+        if (count > 0) {
+            throw new CmdException("设备已存在");
+        }
+
         //属性校验
         Assert.judgeAttrValue(reqJson);
 
@@ -86,14 +94,14 @@ public class SaveMachineCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
 
-        if(!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))){
+        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
             CommunityLocationDto communityLocationDto = new CommunityLocationDto();
             communityLocationDto.setCommunityId(reqJson.getString("communityId"));
             communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
             List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
             Assert.listOnlyOne(locationDtos, "位置不存在");
             machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
-        }else{
+        } else {
             machinePo.setLocationObjId("-1");
             machinePo.setLocationTypeCd("-1");
         }
@@ -107,12 +115,12 @@ public class SaveMachineCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
-        dealMachineAttr(reqJson,machinePo);
+        dealMachineAttr(reqJson, machinePo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    private void dealMachineAttr(JSONObject paramObj,MachinePo machinePo) {
+    private void dealMachineAttr(JSONObject paramObj, MachinePo machinePo) {
 
         if (!paramObj.containsKey("attrs")) {
             return;
