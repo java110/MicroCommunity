@@ -36,6 +36,13 @@ public class UpdateAppUserBindingOwnerCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        if("1100".equals(reqJson.getString("state"))){
+            reqJson.put("state","12000");
+        }else{
+            reqJson.put("state","13000");
+        }
+
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setAppUserId(reqJson.getString("appUserId"));
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
