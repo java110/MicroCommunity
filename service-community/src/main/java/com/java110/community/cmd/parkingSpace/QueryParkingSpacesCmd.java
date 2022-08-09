@@ -44,7 +44,7 @@ public class QueryParkingSpacesCmd  extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         //根据车牌号去查询 车位信息
-        if (reqJson.containsKey("carNum") && !StringUtil.isEmpty("carNum")) {
+        if (reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))) {
 
             queryParkingSpaceByCarNum(reqJson, cmdDataFlowContext);
             return;

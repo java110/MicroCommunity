@@ -21,10 +21,14 @@ import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.KafkaConstant;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.*;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
+import com.java110.utils.util.BootReplaceUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -379,7 +383,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
                         "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
             }
-            dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER);
+            //dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER);
+            doNT(appService, dataFlow, dataFlow.getReqJson());
+            return;
         } else if ("T".equals(appService.getIsInstance())) {
             //如果是透传类 请求方式必须与接口提供方调用方式一致
             String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
@@ -387,7 +393,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
                         "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
             }
-            doTransfer(appService,dataFlow,dataFlow.getReqJson());
+            doTransfer(appService, dataFlow, dataFlow.getReqJson());
             return;
         } else if ("CMD".equals(appService.getIsInstance())) {
             //如果是透传类 请求方式必须与接口提供方调用方式一致
@@ -396,13 +402,66 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
                         "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
             }
-            dealCmd(appService,dataFlow,dataFlow.getReqJson());
-            return ;
+            dealCmd(appService, dataFlow, dataFlow.getReqJson());
+            return;
         } else {
             dataFlow.setApiCurrentService(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
         }
         ServiceDataFlowEventPublishing.multicastEvent(dataFlow, appService);
         DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
+    }
+
+    private void doNT(AppService service, ApiDataFlow dataFlow, JSONObject reqJson) {
+
+
+        HttpHeaders header = new HttpHeaders();
+        for (String key : dataFlow.getRequestCurrentHeaders().keySet()) {
+            header.add(key, dataFlow.getRequestCurrentHeaders().get(key));
+        }
+        HttpEntity<String> httpEntity = new HttpEntity<String>(reqJson.toJSONString(), header);
+        //http://user-service/test/sayHello
+
+        ResponseEntity responseEntity = null;
+        //配置c_service 时请注意 如果是以out 开头的调用外部的地址
+
+        try {
+            if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
+                String requestUrl = dataFlow.getRequestHeaders().get("REQUEST_URL");
+                if (!StringUtil.isNullOrNone(requestUrl)) {
+                    String param = requestUrl.contains("?") ? requestUrl.substring(requestUrl.indexOf("?") + 1, requestUrl.length()) : "";
+                    if (service.getUrl().contains("?")) {
+                        requestUrl = service.getUrl() + "&" + param;
+                    } else {
+                        requestUrl = service.getUrl() + "?" + param;
+                    }
+                }
+
+                requestUrl = BootReplaceUtil.replaceServiceName(requestUrl);
+
+                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
+            } else if (CommonConstant.HTTP_METHOD_PUT.equals(service.getMethod())) {
+                responseEntity = outRestTemplate.exchange(service.getUrl(), HttpMethod.PUT, httpEntity, String.class);
+            } else if (CommonConstant.HTTP_METHOD_DELETE.equals(service.getMethod())) {
+                String requestUrl = dataFlow.getRequestHeaders().get("REQUEST_URL");
+                if (!StringUtil.isNullOrNone(requestUrl)) {
+                    String param = requestUrl.contains("?") ? requestUrl.substring(requestUrl.indexOf("?"), requestUrl.length()) : "";
+                    if (service.getUrl().contains("?")) {
+                        requestUrl = service.getUrl() + "&" + param;
+                    } else {
+                        requestUrl = service.getUrl() + "?" + param;
+                    }
+                }
+                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
+            } else {
+                responseEntity = outRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
+            }
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+
+        logger.debug("API 服务调用下游服务请求：{}，返回为：{}", httpEntity, responseEntity);
+
+        dataFlow.setResponseEntity(responseEntity);
     }
 
     private void doTransfer(AppService appService, ApiDataFlow dataFlow, JSONObject reqJson) {
@@ -445,7 +504,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             //进入databus
             if (!CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
 
-               // dealDatabus(serviceCode, reqJson, oId);
+                // dealDatabus(serviceCode, reqJson, oId);
             }
 
 
@@ -484,7 +543,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         dataFlow.setResponseEntity(responseEntity);
     }
 
-    private void dealCmd(AppService appService,ApiDataFlow dataFlow,JSONObject reqJson) {
+    private void dealCmd(AppService appService, ApiDataFlow dataFlow, JSONObject reqJson) {
         Map<String, String> reqHeader = dataFlow.getRequestCurrentHeaders();
         HttpHeaders header = new HttpHeaders();
         for (String key : dataFlow.getRequestCurrentHeaders().keySet()) {
@@ -509,7 +568,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
-        String requestUrl =   "http://127.0.0.1:8008/cmd" + serviceCode;
+        String requestUrl = "http://127.0.0.1:8008/cmd" + serviceCode;
         //
         ResponseEntity responseEntity = null;
         if (!StringUtil.isNullOrNone(orgRequestUrl)) {

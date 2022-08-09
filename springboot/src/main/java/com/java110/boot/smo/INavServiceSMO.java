@@ -26,11 +26,5 @@ public interface INavServiceSMO {
      */
     ResponseEntity<String> getUserInfo(IPageData pd);
 
-    /**
-     * 查询入驻小区
-     *
-     * @param pd 页面封装数据
-     * @return ResponseEntity对象
-     */
-    ResponseEntity<String> listMyCommunity(IPageData pd);
+
 }
