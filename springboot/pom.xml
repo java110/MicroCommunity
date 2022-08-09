@@ -203,7 +203,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.api.ApiApplicationStart</mainClass>
+                    <mainClass>com.java110.boot.BootApplicationStart</mainClass>
                 </configuration>
             </plugin>
             <plugin>
