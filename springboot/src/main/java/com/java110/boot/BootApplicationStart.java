@@ -16,40 +16,29 @@
 package com.java110.boot;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
-import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.Environment;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
-import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.trace.Java110FeignClientInterceptor;
 import com.java110.core.trace.Java110RestTemplateInterceptor;
+import com.java110.intf.dev.ICacheV1InnerServiceSMO;
 import com.java110.service.init.ServiceStartInit;
-import io.swagger.annotations.ApiOperation;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.StringUtil;
 import okhttp3.ConnectionPool;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
@@ -59,23 +48,24 @@ import java.util.concurrent.TimeUnit;
 /**
  * 这个服务是将 系统部署为spring boot版
  * 如果是spring cloud 微服务部署 不用启动这个类
- *
+ * <p>
  * excludeName = {
- "com.java110.intf.acct",
- "com.java110.intf.code",
- "com.java110.intf.common",
- "com.java110.intf.community",
- "com.java110.intf.demo",
- "com.java110.intf.dev",
- "com.java110.intf.fee",
- "com.java110.intf.goods",
- "com.java110.intf.job",
- "com.java110.intf.oa",
- "com.java110.intf.order",
- "com.java110.intf.report",
- "com.java110.intf.store",
- "com.java110.intf.user"
- }
+ * "com.java110.intf.acct",
+ * "com.java110.intf.code",
+ * "com.java110.intf.common",
+ * "com.java110.intf.community",
+ * "com.java110.intf.demo",
+ * "com.java110.intf.dev",
+ * "com.java110.intf.fee",
+ * "com.java110.intf.goods",
+ * "com.java110.intf.job",
+ * "com.java110.intf.oa",
+ * "com.java110.intf.order",
+ * "com.java110.intf.report",
+ * "com.java110.intf.store",
+ * "com.java110.intf.user"
+ * }
+ *
  * @version v0.1
  * @auther com.java110.wuxw
  * @mail 928255095@qq.com
@@ -174,8 +164,41 @@ public class BootApplicationStart {
             ServiceStartInit.initSystemConfig(context);
 
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
+
+            //刷新缓存
+            flushMainCache(args);
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
+        }
+    }
+
+    /**
+     * 刷新主要的缓存
+     *
+     * @param args
+     */
+    private static void flushMainCache(String[] args) {
+
+        logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
+
+        //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
+        //String mapping = MappingCache.getValue("java110_hc_version");
+        String mapping = "";
+        if (StringUtil.isEmpty(mapping)) {
+            ICacheV1InnerServiceSMO devServiceCacheSMOImpl = (ICacheV1InnerServiceSMO) ApplicationContextFactory.getBean(ICacheV1InnerServiceSMO.class);
+            devServiceCacheSMOImpl.startFlush();
+            return;
+        }
+
+        if (args == null || args.length == 0) {
+            return;
+        }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("-Dcache")) {
+                logger.debug("开始刷新日志，入参为：{}", args[i]);
+                ICacheV1InnerServiceSMO devServiceCacheSMOImpl = (ICacheV1InnerServiceSMO) ApplicationContextFactory.getBean(ICacheV1InnerServiceSMO.class);
+                devServiceCacheSMOImpl.startFlush();
+            }
         }
     }
 
