@@ -64,7 +64,6 @@
 	                                <artifactItem>
 	                                    <groupId>com.java110</groupId>
 	                                    <artifactId>java110-interface</artifactId>
-	                                    <!--<testFailureIgnore>true</testFailureIgnore>-->
 	                                    <version>${microcommunity.version}</version>
 	                                    <type>jar</type>
 	                                    <overWrite>true</overWrite>
