@@ -31,7 +31,6 @@ public class UpdateOwnerRepairCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "repairObjName", "必填，请填写报修对象名称");
         Assert.hasKeyAndValue(reqJson, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写报修状态");
     }
 
     @Override
