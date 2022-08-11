@@ -13,12 +13,14 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
@@ -50,6 +52,9 @@ public class SaveOwnerRepairCmd extends Cmd {
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
     private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
 
     @Autowired
@@ -75,9 +80,19 @@ public class SaveOwnerRepairCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "repairObjName", "必填，请填写报修对象名称");
         Assert.hasKeyAndValue(reqJson, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
-        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写提交用户ID");
-        Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写提交用户名称");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
+
+       String userId =  context.getReqHeaders().get("user-id");
+       Assert.hasLength(userId,"请填写提交用户ID");
+       UserDto userDto = new UserDto();
+       userDto.setUserId(userId);
+       userDto.setPage(1);
+       userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+       Assert.listOnlyOne(userDtos,"未查询到用户");
+        reqJson.put("userId",userDtos.get(0).getUserId());
+        reqJson.put("userName",userDtos.get(0).getName());
+
     }
 
     @Override
