@@ -26,16 +26,10 @@ public class DeleteVisitSMOImpl extends DefaultAbstractComponentSMO implements I
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-
         //super.validatePageInfo(pd);
-
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "vId", "访客记录ID不能为空");
-
-
-
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_VISIT);
-
     }
 
     @Override

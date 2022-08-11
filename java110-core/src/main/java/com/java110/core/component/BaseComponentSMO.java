@@ -1,19 +1,12 @@
 package com.java110.core.component;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
-import com.java110.entity.component.ComponentValidateResult;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +21,6 @@ public class BaseComponentSMO extends BaseServiceSMO {
     private static Logger logger = LoggerFactory.getLogger(BaseComponentSMO.class);
 
     protected static final int MAX_ROW = 200;
-
 
     /**
      * 调用组件
@@ -65,12 +57,6 @@ public class BaseComponentSMO extends BaseServiceSMO {
         return responseEntity;
     }
 
-
-
-
-
-
-
     /**
      * 根据 请求路径 判断用户是否有权限操作
      *
@@ -78,9 +64,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
      * @param restTemplate
      */
     protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate) {
-
         //pd.get
-
     }
 
     /**
@@ -89,14 +73,9 @@ public class BaseComponentSMO extends BaseServiceSMO {
      * @param pd
      * @param restTemplate
      */
-    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate,String privilege) {
-
+    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate, String privilege) {
         //pd.get
-
     }
-
-
-
 
     /**
      * 分页信息校验
@@ -104,10 +83,8 @@ public class BaseComponentSMO extends BaseServiceSMO {
      * @param pd 页面数据封装
      */
     protected void validatePageInfo(IPageData pd) {
-
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
-
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("row"), "row必须为数字");
         Assert.isInteger(paramIn.getString("page"), "page必须为数字");

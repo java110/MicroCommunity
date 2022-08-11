@@ -12,23 +12,24 @@ import org.springframework.stereotype.Component;
 @Component("deleteApp")
 public class DeleteAppComponent {
 
-@Autowired
-private IDeleteAppSMO deleteAppSMOImpl;
+    @Autowired
+    private IDeleteAppSMO deleteAppSMOImpl;
 
-/**
- * 添加应用数据
- * @param pd 页面数据封装
- * @return ResponseEntity 对象
- */
-public ResponseEntity<String> delete(IPageData pd){
+    /**
+     * 添加应用数据
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<String> delete(IPageData pd) {
         return deleteAppSMOImpl.deleteApp(pd);
     }
 
-public IDeleteAppSMO getDeleteAppSMOImpl() {
+    public IDeleteAppSMO getDeleteAppSMOImpl() {
         return deleteAppSMOImpl;
     }
 
-public void setDeleteAppSMOImpl(IDeleteAppSMO deleteAppSMOImpl) {
+    public void setDeleteAppSMOImpl(IDeleteAppSMO deleteAppSMOImpl) {
         this.deleteAppSMOImpl = deleteAppSMOImpl;
     }
-            }
+}
