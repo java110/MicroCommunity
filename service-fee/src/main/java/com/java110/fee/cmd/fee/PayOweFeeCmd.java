@@ -285,9 +285,9 @@ public class PayOweFeeCmd extends Cmd {
 
         businessFee.putAll(feeMap);
         PayFeePo payFeePo =  BeanConvertUtil.covertBean(businessFee,PayFeePo.class);
-        int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+        int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
         if (flag < 1) {
-            throw new CmdException("保存失败");
+            throw new CmdException("修改失败");
         }
     }
 
