@@ -133,17 +133,18 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new IllegalArgumentException("费用项不存在");
             }
             Date maxEndTime = feeDtos.get(0).getDeadlineTime();
-            if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            if (!FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
                 try {
                     maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
                 } catch (ParseException e) {
                     logger.error("比较费用日期失败", e);
                 }
+                Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
+                if (newDate.getTime() > maxEndTime.getTime()) {
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                }
             }
-            Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
-            if (newDate.getTime() > maxEndTime.getTime()) {
-                throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
-            }
+
         }
     }
 
