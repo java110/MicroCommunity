@@ -26,6 +26,7 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
 
     @Autowired
     private IInspectionTaskDetailInnerServiceSMO inspectionTaskDetailInnerServiceSMOImpl;
+
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 

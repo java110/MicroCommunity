@@ -19,13 +19,10 @@ public class GetReportInfoAnswerValueBMOImpl implements IGetReportInfoAnswerValu
     private IReportInfoAnswerValueInnerServiceSMO reportInfoAnswerValueInnerServiceSMOImpl;
 
     /**
-     *
-     *
-     * @param  reportInfoAnswerValueDto
+     * @param reportInfoAnswerValueDto
      * @return 订单服务能够接受的报文
      */
     public ResponseEntity<String> get(ReportInfoAnswerValueDto reportInfoAnswerValueDto) {
-
 
         int count = reportInfoAnswerValueInnerServiceSMOImpl.queryReportInfoAnswerValuesCount(reportInfoAnswerValueDto);
 

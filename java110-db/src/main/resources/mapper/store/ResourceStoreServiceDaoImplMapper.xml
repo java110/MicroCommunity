@@ -256,7 +256,7 @@
             and t.remark = #{remark}
         </if>
         <if test="resCode !=null and resCode != ''">
-            and t.res_code= #{resCode}
+            and t.res_code like concat('%',#{resCode},'%')
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
@@ -318,7 +318,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        order by t.res_code
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -425,7 +425,7 @@
             and t.price= #{price}
         </if>
         <if test="resCode !=null and resCode != ''">
-            and t.res_code= #{resCode}
+            and t.res_code like concat('%',#{resCode},'%')
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}

@@ -44,8 +44,8 @@ import java.util.UUID;
 
 @Service("toPaySMOImpl")
 public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
-    private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
     @Autowired
     private RestTemplate restTemplate;

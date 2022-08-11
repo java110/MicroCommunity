@@ -92,7 +92,6 @@ public class SaveResourceStoreCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-
         String resCode = reqJson.getString("resCode");
         //根据物品编码查询物品资源表
         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
@@ -107,6 +106,9 @@ public class SaveResourceStoreCmd extends Cmd {
         businessResourceStore.put("miniStock", "0");
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
+        if (resourceStorePo.getAveragePrice() == null || resourceStorePo.getAveragePrice().equals("")) {
+            resourceStorePo.setAveragePrice("0.00");
+        }
         int flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");

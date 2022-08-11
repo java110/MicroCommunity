@@ -20,7 +20,10 @@ import com.java110.api.smo.payment.*;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -44,6 +47,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/app/payment")
 public class PaymentController extends BaseController {
+
     private final static Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
@@ -72,13 +76,18 @@ public class PaymentController extends BaseController {
 
     @Autowired
     private IToQrPayOweFeeSMO toQrPayOweFeeSMOImpl;
+
     @Autowired
     private IToPayInGoOutSMO toPayInGoOutSMOImpl;
+
     @Autowired
     private IToPayBackCitySMO toPayBackCitySMOImpl;
 
     @Autowired
     private IToPayTempCarFeeSMO toPayTempCarFeeSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     /**
      * <p>统一下单入口</p>
@@ -95,8 +104,15 @@ public class PaymentController extends BaseController {
             appId = request.getHeader("APP-ID");
         }
 
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
-                "", "", "", pd.getSessionId(), appId, pd.getPayerObjId(), pd.getPayerObjType(), pd.getEndTime());
+        JSONObject param = JSONObject.parseObject(postInfo);
+        UserDto userDto = new UserDto();
+        userDto.setUserId(pd.getUserId());
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listOnlyOne(users, "查询用户信息错误！");
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), users.get(0).getName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(), appId, param.getString("payerObjId"), param.getString("payerObjType"),
+                param.getString("endTime"));
         return toPaySMOImpl.toPay(newPd);
     }
 

@@ -33,6 +33,4 @@ public interface IResourceStoreTypeBMO extends IApiBaseBMO {
      */
      void deleteResourceStoreType(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
-
-
 }

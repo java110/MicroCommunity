@@ -29,10 +29,11 @@ public class ReportInfoSettingApi {
 
     /**
      * 微信保存消息模板
-     * @serviceCode /reportInfoSetting/saveReportInfoSetting
-     * @path /app/reportInfoSetting/saveReportInfoSetting
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportInfoSetting/saveReportInfoSetting
+     * @path /app/reportInfoSetting/saveReportInfoSetting
      */
     @RequestMapping(value = "/saveReportInfoSetting", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportInfoSetting(@RequestBody JSONObject reqJson) {
@@ -50,10 +51,11 @@ public class ReportInfoSettingApi {
 
     /**
      * 微信修改消息模板
-     * @serviceCode /reportInfoSetting/updateReportInfoSetting
-     * @path /app/reportInfoSetting/updateReportInfoSetting
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportInfoSetting/updateReportInfoSetting
+     * @path /app/reportInfoSetting/updateReportInfoSetting
      */
     @RequestMapping(value = "/updateReportInfoSetting", method = RequestMethod.POST)
     public ResponseEntity<String> updateReportInfoSetting(@RequestBody JSONObject reqJson) {
@@ -64,7 +66,7 @@ public class ReportInfoSettingApi {
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
+//        Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
         Assert.hasKeyAndValue(reqJson, "settingId", "settingId不能为空");
 
 
@@ -74,10 +76,11 @@ public class ReportInfoSettingApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSetting/deleteReportInfoSetting
-     * @path /app/reportInfoSetting/deleteReportInfoSetting
+     *
      * @param reqJson
      * @return
+     * @serviceCode /reportInfoSetting/deleteReportInfoSetting
+     * @path /app/reportInfoSetting/deleteReportInfoSetting
      */
     @RequestMapping(value = "/deleteReportInfoSetting", method = RequestMethod.POST)
     public ResponseEntity<String> deleteReportInfoSetting(@RequestBody JSONObject reqJson) {
@@ -92,23 +95,26 @@ public class ReportInfoSettingApi {
 
     /**
      * 微信删除消息模板
-     * @serviceCode /reportInfoSetting/queryReportInfoSetting
-     * @path /app/reportInfoSetting/queryReportInfoSetting
+     *
      * @param communityId 小区ID
      * @return
+     * @serviceCode /reportInfoSetting/queryReportInfoSetting
+     * @path /app/reportInfoSetting/queryReportInfoSetting
      */
     @RequestMapping(value = "/queryReportInfoSetting", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoSetting(@RequestParam(value = "communityId") String communityId,
-                                                         @RequestParam(value = "name",required = false) String name,
-                                                         @RequestParam(value = "settingId",required = false) String settingId,
-                                                      @RequestParam(value = "page") int page,
-                                                      @RequestParam(value = "row") int row) {
+                                                         @RequestParam(value = "name", required = false) String name,
+                                                         @RequestParam(value = "settingId", required = false) String settingId,
+                                                         @RequestParam(value = "reportType", required = false) String reportType,
+                                                         @RequestParam(value = "page") int page,
+                                                         @RequestParam(value = "row") int row) {
         ReportInfoSettingDto reportInfoSettingDto = new ReportInfoSettingDto();
         reportInfoSettingDto.setPage(page);
         reportInfoSettingDto.setRow(row);
         reportInfoSettingDto.setCommunityId(communityId);
         reportInfoSettingDto.setNameLike(name);
         reportInfoSettingDto.setSettingId(settingId);
+        reportInfoSettingDto.setReportType(reportType);
         return getReportInfoSettingBMOImpl.get(reportInfoSettingDto);
     }
 }

@@ -84,8 +84,8 @@ org_name,community_name,status_cd,community_id,store_id,b_id,org_id,org_communit
 
     <!-- 查询隶属小区信息 add by wuxw 2018-07-03 -->
     <select id="getOrgCommunityInfo" parameterType="Map" resultType="Map">
-        select  t.org_name,t.org_name orgName,t.community_name,t.community_name communityName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,t.org_community_id,t.org_community_id orgCommunityId 
-from u_org_community t 
+        select  t.org_name,t.org_name orgName,t.community_name,t.community_name communityName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,t.org_community_id,t.org_community_id orgCommunityId,sc.address address
+from u_org_community t LEFT JOIN s_community sc  on t.community_id=sc.community_id
 where 1 =1 
 <if test="orgName !=null and orgName != ''">
    and t.org_name= #{orgName}

@@ -1,12 +1,10 @@
 package com.java110.api.components.org;
 
-
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.org.IListOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 
 /**
  * 应用组件管理类

@@ -3,7 +3,6 @@ package com.java110.dto.inspectionPlan;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @ClassName FloorDto
@@ -17,7 +16,6 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public static final String SEND_FLAG_Y = "Y";//已经推送
     public static final String SEND_FLAG_N = "N";//未推送数据
-
 
     private String inspectionId;
     private String inspectionName;
@@ -43,7 +41,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     private String planInsTime;
     private String planEndTime;
-    private Date createTime;
+    private String createTime;
     private String pointStartTime;
     private String pointEndTime;
     private String sortNumber;
@@ -123,11 +121,11 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
         this.taskDetailId = taskDetailId;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

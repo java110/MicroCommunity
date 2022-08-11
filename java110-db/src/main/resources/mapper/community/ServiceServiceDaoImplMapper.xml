@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="serviceServiceDaoImpl">
 
     <!-- 保存服务信息 add by wuxw 2018-07-03 -->
     <insert id="saveServiceInfo" parameterType="Map">
-        insert into c_service(
-        business_type_cd,method,provide_app_id,service_code,retry_count,messageQueueName,url,timeout,is_instance,name,service_id,seq
-        ) values (
-        #{businessTypeCd},#{method},#{provideAppId},#{serviceCode},#{retryCount},#{messageQueueName},#{url},#{timeout},#{isInstance},#{name},#{serviceId},#{seq}
-        )
+        insert into c_service(business_type_cd, method, provide_app_id, service_code, retry_count, messageQueueName,
+                              url, timeout, is_instance, name, service_id, seq)
+        values (#{businessTypeCd}, #{method}, #{provideAppId}, #{serviceCode}, #{retryCount}, #{messageQueueName},
+                #{url}, #{timeout}, #{isInstance}, #{name}, #{serviceId}, #{seq})
     </insert>
-
 
     <!-- 查询服务信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessServiceInfo" parameterType="Map" resultType="Map">
@@ -61,9 +58,7 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
     </select>
-
 
     <!-- 保存服务信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveServiceInfoInstance" parameterType="Map">
@@ -109,9 +104,7 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
     </insert>
-
 
     <!-- 查询服务信息 add by wuxw 2018-07-03 -->
     <select id="getServiceInfo" parameterType="Map" resultType="Map">
@@ -181,14 +174,11 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改服务信息 add by wuxw 2018-07-03 -->
     <update id="updateServiceInfo" parameterType="Map">
         update c_service t set t.status_cd = #{statusCd}
-
         <if test="businessTypeCd !=null and businessTypeCd != ''">
             , t.business_type_cd= #{businessTypeCd}
         </if>
@@ -226,7 +216,6 @@
         <if test="serviceId !=null and serviceId != ''">
             and t.service_id= #{serviceId}
         </if>
-
     </update>
 
     <!-- 查询服务数量 add by wuxw 2018-07-03 -->
@@ -279,7 +268,7 @@
             and t.is_instance= #{isInstance}
         </if>
         <if test="name !=null and name != ''">
-            and t.name  like concat('%',#{name},'%')
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="serviceName !=null and serviceName != ''">
             and t.name like concat('%',#{serviceName},'%')
@@ -290,23 +279,30 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-
-
     </select>
-
 
     <!-- 保存服务提供信息 add by wuxw 2018-07-03
         insert into c_service_sql(
         service_code,name,params,query_model,"sql",proc,java_script,template,remark
         ) values (
         #{serviceCode},#{name},#{params},#{queryModel},#{sql},#{proc},#{javaScript},#{template},#{remark}
-        )
-     -->
+        ) -->
+
     <insert id="saveServiceProvideInfo" parameterType="Map">
         insert into c_service_sql
-            select null,#{serviceCode},#{name},#{params},#{queryModel},#{sql},#{proc},#{javaScript},#{template},#{remark},now(),'0'
+        select null,
+               #{serviceCode},
+               #{name},
+               #{params},
+               #{queryModel},
+               #{sql},
+               #{proc},
+               #{javaScript},
+               #{template},
+               #{remark},
+               now(),
+               '0'
     </insert>
-
 
     <!-- 查询服务提供信息 add by wuxw 2018-07-03 -->
     <select id="getServiceProvideInfo" parameterType="Map" resultType="Map">
@@ -331,7 +327,6 @@
         <if test="queryModel !=null and queryModel != ''">
             and t.query_model= #{queryModel}
         </if>
-
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -339,14 +334,11 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改服务提供信息 add by wuxw 2018-07-03 -->
     <update id="updateServiceProvideInfo" parameterType="Map">
         update c_service_sql t set t.status_cd = #{statusCd}
-
         <if test="serviceCode !=null and serviceCode != ''">
             , t.service_code= #{serviceCode}
         </if>
@@ -378,8 +370,6 @@
         <if test="id !=null and id != ''">
             and t.id= #{id}
         </if>
-
-
     </update>
 
     <!-- 查询服务提供数量 add by wuxw 2018-07-03 -->
@@ -400,8 +390,5 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
-
     </select>
-
 </mapper>

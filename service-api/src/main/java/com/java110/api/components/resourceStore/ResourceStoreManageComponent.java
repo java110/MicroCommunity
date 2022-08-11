@@ -1,12 +1,10 @@
 package com.java110.api.components.resourceStore;
 
-
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.resourceStore.IListResourceStoresSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 
 /**
  * 物品管理组件管理类

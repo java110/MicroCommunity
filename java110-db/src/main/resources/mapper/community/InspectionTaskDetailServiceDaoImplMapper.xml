@@ -122,7 +122,7 @@
         inspectionStateName,
         ipl.inspection_plan_name,ipl.inspection_plan_name inspectionPlanName,ir.route_name,ir.route_name routeName,
         it.plan_user_name,it.plan_user_name planUserName,it.plan_user_id,it.plan_user_id planUserId,it.act_user_name,it.act_user_name actUserName,td4.name,td4.name
-        signTypeName,td5.name taskStateName,ip.item_id itemId,t.send_flag sendFlag
+        signTypeName,td5.name taskStateName,ip.item_id itemId,t.send_flag sendFlag,t.create_time createTime
         from inspection_task_detail t
         LEFT JOIN inspection_point ip on t.inspection_id = ip.inspection_id and ip.status_cd = '0'
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'inspection_task_detail' and
@@ -223,7 +223,7 @@
         <if test="sendFlag !=null and sendFlag != ''">
             and t.send_flag = #{sendFlag}
         </if>
-        order by t.sort_number desc
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

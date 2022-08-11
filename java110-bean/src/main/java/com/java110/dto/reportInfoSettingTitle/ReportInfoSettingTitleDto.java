@@ -1,7 +1,6 @@
 package com.java110.dto.reportInfoSettingTitle;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
 import com.java110.dto.reportInfoSettingTitleValue.ReportInfoSettingTitleValueDto;
 
 import java.io.Serializable;
@@ -17,61 +16,72 @@ import java.util.List;
  * add by wuxw 2019/4/24
  **/
 public class ReportInfoSettingTitleDto extends PageDto implements Serializable {
+
     public static final String TITLE_TYPE_SINGLE = "1001"; // 单选题
     public static final String TITLE_TYPE_MULTIPLE = "2002"; // 多选题
     public static final String TITLE_TYPE_QUESTIONS = "3003"; // 简答题
 
     private String titleType;
-private String titleId;
-private String title;
-private String titleLike;
-private String communityId;
-private String seq;
-private String settingId;
-
+    private String titleId;
+    private String title;
+    private String titleLike;
+    private String communityId;
+    private String seq;
+    private String settingId;
 
     private Date createTime;
 
     private String statusCd = "0";
+
     private List<ReportInfoSettingTitleValueDto> reportInfoSettingTitleValueDtos;
 
     public String getTitleType() {
         return titleType;
     }
-public void setTitleType(String titleType) {
+
+    public void setTitleType(String titleType) {
         this.titleType = titleType;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getTitle() {
+
+    public String getTitle() {
         return title;
     }
-public void setTitle(String title) {
+
+    public void setTitle(String title) {
         this.title = title;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-public String getSettingId() {
+
+    public String getSettingId() {
         return settingId;
     }
-public void setSettingId(String settingId) {
+
+    public void setSettingId(String settingId) {
         this.settingId = settingId;
     }
-
 
     public Date getCreateTime() {
         return createTime;

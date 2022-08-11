@@ -26,7 +26,6 @@ public class GetReportInfoSettingBMOImpl implements IGetReportInfoSettingBMO {
      */
     public ResponseEntity<String> get(ReportInfoSettingDto reportInfoSettingDto) {
 
-
         int count = reportInfoSettingInnerServiceSMOImpl.queryReportInfoSettingsCount(reportInfoSettingDto);
 
         List<ReportInfoSettingDto> reportInfoSettingDtos = null;

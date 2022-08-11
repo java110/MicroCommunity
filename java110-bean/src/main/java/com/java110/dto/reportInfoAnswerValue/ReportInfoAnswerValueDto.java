@@ -1,6 +1,7 @@
 package com.java110.dto.reportInfoAnswerValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,77 +15,86 @@ import java.util.Date;
  **/
 public class ReportInfoAnswerValueDto extends PageDto implements Serializable {
 
-    public static final String TITLETYPE_RADIO ="1001";
-    public static final String TITLETYPE_CHECKBOX ="2002";
-    public static final String ITLETYPE_TEXTAREA ="3003";
+    public static final String TITLETYPE_RADIO = "1001";
+    public static final String TITLETYPE_CHECKBOX = "2002";
+    public static final String ITLETYPE_TEXTAREA = "3003";
 
     private String valueId;
-private String userAnId;
-private String titleId;
-private String anValueId;
-private String valueContent;
-private String communityId;
-private String settingId;
+    private String userAnId;
+    private String titleId;
+    private String anValueId;
+    private String valueContent;
+    private String communityId;
+    private String settingId;
 
-
-private String userName;
-private String repName;
-private String repTitle;
-private String repValue;
-private String reType;
-private String repTypeName;
-private String personName;
-
-
+    private String userName;
+    private String repName;
+    private String repTitle;
+    private String repValue;
+    private String reType;
+    private String repTypeName;
+    private String personName;
+    private String reportType;
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getUserAnId() {
+
+    public String getUserAnId() {
         return userAnId;
     }
-public void setUserAnId(String userAnId) {
+
+    public void setUserAnId(String userAnId) {
         this.userAnId = userAnId;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getAnValueId() {
+
+    public String getAnValueId() {
         return anValueId;
     }
-public void setAnValueId(String anValueId) {
+
+    public void setAnValueId(String anValueId) {
         this.anValueId = anValueId;
     }
-public String getValueContent() {
+
+    public String getValueContent() {
         return valueContent;
     }
-public void setValueContent(String valueContent) {
+
+    public void setValueContent(String valueContent) {
         this.valueContent = valueContent;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSettingId() {
+
+    public String getSettingId() {
         return settingId;
     }
-public void setSettingId(String settingId) {
+
+    public void setSettingId(String settingId) {
         this.settingId = settingId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -156,5 +166,13 @@ public void setSettingId(String settingId) {
 
     public void setPersonName(String personName) {
         this.personName = personName;
+    }
+
+    public String getReportType() {
+        return reportType;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 }

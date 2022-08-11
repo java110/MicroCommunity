@@ -186,21 +186,15 @@
         <if test="createUserName !=null and createUserName != ''">
             , t.create_user_name= #{createUserName}
         </if>
-        <if test="remark !=null and remark != ''">
-            , t.remark= #{remark}
-        </if>
+        , t.remark= #{remark}
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
         </if>
-        <if test="accountBank !=null and accountBank != ''">
-            , t.account_bank= #{accountBank}
-        </if>
+        , t.account_bank= #{accountBank}
         <if test="tel !=null and tel != ''">
             , t.tel= #{tel}
         </if>
-        <if test="bankAccountNumber !=null and bankAccountNumber != ''">
-            , t.bank_account_number= #{bankAccountNumber}
-        </if>
+        , t.bank_account_number= #{bankAccountNumber}
         where 1=1
         <if test="rsId !=null and rsId != ''">
             and t.rs_id= #{rsId}

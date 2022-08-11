@@ -94,9 +94,17 @@ public class ReportInfoBackCityApi {
      */
     @RequestMapping(value = "/queryReportInfoBackCity", method = RequestMethod.GET)
     public ResponseEntity<String> queryReportInfoBackCity(@RequestParam(value = "communityId") String communityId,
+                                                          @RequestParam(value = "name", required = false) String name,
+                                                          @RequestParam(value = "idCard", required = false) String idCard,
+                                                          @RequestParam(value = "source", required = false) String source,
+                                                          @RequestParam(value = "tel", required = false) String tel,
                                                           @RequestParam(value = "page") int page,
                                                           @RequestParam(value = "row") int row) {
         ReportInfoBackCityDto reportInfoBackCityDto = new ReportInfoBackCityDto();
+        reportInfoBackCityDto.setName(name);
+        reportInfoBackCityDto.setIdCard(idCard);
+        reportInfoBackCityDto.setSource(source);
+        reportInfoBackCityDto.setTel(tel);
         reportInfoBackCityDto.setPage(page);
         reportInfoBackCityDto.setRow(row);
         reportInfoBackCityDto.setCommunityId(communityId);

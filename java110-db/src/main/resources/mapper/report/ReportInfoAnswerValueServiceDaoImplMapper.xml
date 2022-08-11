@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportInfoAnswerValueServiceDaoImpl">
 
-
-
-
-
     <!-- 保存批量操作日志详情信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportInfoAnswerValueInfo" parameterType="Map">
-        insert into report_info_answer_value(
-value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
-) values (
-#{valueId},#{userAnId},#{titleId},#{anValueId},#{valueContent},#{communityId},#{settingId}
-)
+        insert into report_info_answer_value(value_id, user_an_id, title_id, an_value_id, value_content, community_id,
+                                             setting_id)
+        values (#{valueId}, #{userAnId}, #{titleId}, #{anValueId}, #{valueContent}, #{communityId}, #{settingId})
     </insert>
-
-
 
     <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
     <select id="getReportInfoAnswerValueInfo" parameterType="Map" resultType="Map">
@@ -26,129 +17,142 @@ value_id,user_an_id,title_id,an_value_id,value_content,community_id,setting_id
         report_info_answer_value av
         LEFT JOIN report_info_answer an on an.user_an_id = av.user_an_id and an.status_cd=0
         LEFT JOIN report_info_setting st on av.setting_id = st.setting_id and st.status_cd=0
-        LEFT JOIN report_info_setting_title tt on tt.title_id = av.title_id  and tt.status_cd=0
-        LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
+        LEFT JOIN report_info_setting_title tt on tt.title_id = av.title_id and tt.status_cd=0
+        LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and
+        td.table_columns = 'report_type'
         where 1=1
-<if test="valueId !=null and valueId != ''">
-   and av.value_id= #{valueId}
-</if> 
-<if test="userName !=null and userName != ''">
-   and ra.person_name= #{userName}
-</if>
-<if test="repName !=null and repName != ''">
-   and st.name= #{repName}
-</if>
-<if test="repTitle !=null and repTitle != ''">
-   and tt.title like concat('%',#{repTitle},'%')
-</if>
-<if test="valueContent !=null and valueContent != ''">
-   and av.value_content like concat('%',#{valueContent},'%')
-</if>
-<if test="createTime !=null and createTime != ''">
-   and av.create_time= #{createTime}
-</if> 
-<if test="userAnId !=null and userAnId != ''">
-   and av.user_an_id= #{userAnId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and av.title_id= #{titleId}
-</if> 
-<if test="anValueId !=null and anValueId != ''">
-   and av.an_value_id= #{anValueId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-   and av.value_content= #{valueContent}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and av.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and av.community_id= #{communityId}
-</if> 
-<if test="settingId !=null and settingId != ''">
-   and av.setting_id= #{settingId}
-</if> 
-order by an.person_name,tt.title,av.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
-
+        <if test="valueId !=null and valueId != ''">
+            and av.value_id= #{valueId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and ra.person_name= #{userName}
+        </if>
+        <if test="repName !=null and repName != ''">
+            and st.name= #{repName}
+        </if>
+        <if test="repTitle !=null and repTitle != ''">
+            and tt.title like concat('%',#{repTitle},'%')
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and av.value_content like concat('%',#{valueContent},'%')
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and av.create_time= #{createTime}
+        </if>
+        <if test="userAnId !=null and userAnId != ''">
+            and av.user_an_id= #{userAnId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and av.title_id= #{titleId}
+        </if>
+        <if test="anValueId !=null and anValueId != ''">
+            and av.an_value_id= #{anValueId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and av.value_content= #{valueContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and av.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and av.community_id= #{communityId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and av.setting_id= #{settingId}
+        </if>
+        <if test="repName !=null and repName != ''">
+            and st.name = #{repName}
+        </if>
+        <if test="repTitle != null and repTitle != ''">
+            and tt.title = #{repTitle}
+        </if>
+        <if test="reportType != null and reportType != ''">
+            and st.report_type = #{reportType}
+        </if>
+        order by av.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
-
-
-
 
     <!-- 修改批量操作日志详情信息 add by wuxw 2018-07-03 -->
     <update id="updateReportInfoAnswerValueInfo" parameterType="Map">
-        update  report_info_answer_value t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="valueId !=null and valueId != ''">
-, t.value_id= #{valueId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="userAnId !=null and userAnId != ''">
-, t.user_an_id= #{userAnId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-, t.title_id= #{titleId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-, t.value_content= #{valueContent}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="settingId !=null and settingId != ''">
-, t.setting_id= #{settingId}
-</if> 
- where 1=1 <if test="anValueId !=null and anValueId != ''">
-and t.an_value_id= #{anValueId}
-</if> 
-
+        update report_info_answer_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            , t.value_id= #{valueId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="userAnId !=null and userAnId != ''">
+            , t.user_an_id= #{userAnId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            , t.title_id= #{titleId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            , t.value_content= #{valueContent}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            , t.setting_id= #{settingId}
+        </if>
+        where 1=1
+        <if test="anValueId !=null and anValueId != ''">
+            and t.an_value_id= #{anValueId}
+        </if>
     </update>
 
     <!-- 查询批量操作日志详情数量 add by wuxw 2018-07-03 -->
-     <select id="queryReportInfoAnswerValuesCount" parameterType="Map" resultType="Map">
-         select count(1) count  from
-         report_info_answer_value av
-         LEFT JOIN report_info_answer an on an.user_an_id = av.user_an_id and an.status_cd=0
-         LEFT JOIN report_info_setting st on av.setting_id = st.setting_id and st.status_cd=0
-         LEFT JOIN report_info_setting_title tt on tt.title_id = av.title_id  and tt.status_cd=0
-         LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and td.table_columns = 'report_type'
-         where 1=1
-<if test="valueId !=null and valueId != ''">
-   and av.value_id= #{valueId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and av.create_time= #{createTime}
-</if> 
-<if test="userAnId !=null and userAnId != ''">
-   and av.user_an_id= #{userAnId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and av.title_id= #{titleId}
-</if> 
-<if test="anValueId !=null and anValueId != ''">
-   and av.an_value_id= #{anValueId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-   and av.value_content= #{valueContent}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and av.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and av.community_id= #{communityId}
-</if> 
-<if test="settingId !=null and settingId != ''">
-   and av.setting_id= #{settingId}
-</if> 
-
-
-     </select>
-
+    <select id="queryReportInfoAnswerValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count from
+        report_info_answer_value av
+        LEFT JOIN report_info_answer an on an.user_an_id = av.user_an_id and an.status_cd=0
+        LEFT JOIN report_info_setting st on av.setting_id = st.setting_id and st.status_cd=0
+        LEFT JOIN report_info_setting_title tt on tt.title_id = av.title_id and tt.status_cd=0
+        LEFT JOIN t_dict td on st.report_type = td.status_cd and td.table_name = 'report_info_setting' and
+        td.table_columns = 'report_type'
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and av.value_id= #{valueId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and av.create_time= #{createTime}
+        </if>
+        <if test="userAnId !=null and userAnId != ''">
+            and av.user_an_id= #{userAnId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and av.title_id= #{titleId}
+        </if>
+        <if test="anValueId !=null and anValueId != ''">
+            and av.an_value_id= #{anValueId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and av.value_content= #{valueContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and av.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and av.community_id= #{communityId}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and av.setting_id= #{settingId}
+        </if>
+        <if test="repName !=null and repName != ''">
+            and st.name = #{repName}
+        </if>
+        <if test="repTitle != null and repTitle != ''">
+            and tt.title = #{repTitle}
+        </if>
+        <if test="reportType != null and reportType != ''">
+            and st.report_type = #{reportType}
+        </if>
+    </select>
 </mapper>

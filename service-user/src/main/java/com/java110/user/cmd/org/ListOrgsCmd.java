@@ -27,7 +27,6 @@ import java.util.Map;
 @Java110Cmd(serviceCode = "org.listOrgs")
 public class ListOrgsCmd extends Cmd {
 
-
     @Autowired
     private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
 

@@ -2,12 +2,10 @@ package com.java110.api.smo.org.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.org.IListOrgsSMO;
 import com.java110.utils.constant.PrivilegeCodeConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +46,6 @@ public class ListOrgsSMOImpl extends DefaultAbstractComponentSMO implements ILis
         paramIn.putAll(paramMap);
 
         String apiUrl = "org.listOrgs" + mapToUrlParam(paramIn);
-
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

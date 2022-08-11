@@ -20,6 +20,7 @@ public class OrgCommunityDto extends PageDto implements Serializable {
     private String communityId;
     private String storeId;
     private String orgId;
+    private String address;
     private String orgCommunityId;
 
 
@@ -91,5 +92,13 @@ public class OrgCommunityDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

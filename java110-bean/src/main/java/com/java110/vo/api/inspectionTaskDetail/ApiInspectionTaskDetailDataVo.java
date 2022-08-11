@@ -3,7 +3,6 @@ package com.java110.vo.api.inspectionTaskDetail;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class ApiInspectionTaskDetailDataVo implements Serializable {
@@ -42,6 +41,8 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     private String planInsTime;
     private String planEndTime;
+
+    private String createTime;
 
     //经度
     private String longitude;
@@ -335,5 +336,21 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

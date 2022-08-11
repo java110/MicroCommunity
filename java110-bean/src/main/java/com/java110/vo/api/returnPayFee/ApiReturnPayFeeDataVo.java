@@ -28,6 +28,8 @@ public class ApiReturnPayFeeDataVo implements Serializable {
     private String feeTypeCdName;
     private String stateName;
     private String createTime;
+    private String startTime;
+    private String endTime;
 
     private String roomId;
     private String roomNum;
@@ -343,5 +345,21 @@ public class ApiReturnPayFeeDataVo implements Serializable {
 
     public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
         this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

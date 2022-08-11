@@ -1,187 +1,176 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hcGovTranslateServiceDaoImpl">
 
-
-
-
-
     <!-- 保存社区政务同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveHcGovTranslateInfo" parameterType="Map">
-        insert into hc_gov_translate(
-tran_id,code,service_code,sign,update_time,remark,req_time,send_count,ext_community_id,obj_id,state,community_id,gov_topic
-) values (
-#{tranId},#{code},#{serviceCode},#{sign},#{updateTime},#{remark},#{reqTime},#{sendCount},#{extCommunityId},#{objId},#{state},#{communityId},#{govTopic}
-)
+        insert into hc_gov_translate(tran_id, code, service_code, sign, update_time, remark, req_time, send_count,
+                                     ext_community_id, obj_id, state, community_id, gov_topic)
+        values (#{tranId}, #{code}, #{serviceCode}, #{sign}, #{updateTime}, #{remark}, #{reqTime}, #{sendCount},
+                #{extCommunityId}, #{objId}, #{state}, #{communityId}, #{govTopic})
     </insert>
-
-
 
     <!-- 查询社区政务同步信息 add by wuxw 2018-07-03 -->
     <select id="getHcGovTranslateInfo" parameterType="Map" resultType="Map">
-        select  t.tran_id,t.tran_id tranId,t.code,t.service_code,t.service_code serviceCode,t.sign,t.update_time,t.update_time updateTime,t.remark,t.status_cd,t.status_cd statusCd,t.req_time,t.req_time reqTime,t.send_count,t.send_count sendCount,t.ext_community_id,t.ext_community_id extCommunityId,t.create_time,t.create_time createTime,t.obj_id,t.obj_id objId,t.state,t.community_id,t.community_id communityId,t.gov_topic,t.gov_topic govTopic 
-from hc_gov_translate t 
-where 1 =1 
-<if test="tranId !=null and tranId != ''">
-   and t.tran_id= #{tranId}
-</if> 
-<if test="code !=null and code != ''">
-   and t.code= #{code}
-</if> 
-<if test="serviceCode !=null and serviceCode != ''">
-   and t.service_code= #{serviceCode}
-</if> 
-<if test="sign !=null and sign != ''">
-   and t.sign= #{sign}
-</if> 
-<if test="updateTime !=null and updateTime != ''">
-   and t.update_time= #{updateTime}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="reqTime !=null and reqTime != ''">
-   and t.req_time= #{reqTime}
-</if> 
-<if test="sendCount !=null and sendCount != ''">
-   and t.send_count= #{sendCount}
-</if> 
-<if test="extCommunityId !=null and extCommunityId != ''">
-   and t.ext_community_id= #{extCommunityId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="govTopic !=null and govTopic != ''">
-   and t.gov_topic= #{govTopic}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
-
+        select t.tran_id,t.tran_id tranId,t.code,t.service_code,t.service_code
+        serviceCode,t.sign,t.update_time,t.update_time updateTime,t.remark,t.status_cd,t.status_cd
+        statusCd,t.req_time,t.req_time reqTime,t.send_count,t.send_count sendCount,t.ext_community_id,t.ext_community_id
+        extCommunityId,t.create_time,t.create_time createTime,t.obj_id,t.obj_id
+        objId,t.state,t.community_id,t.community_id communityId,t.gov_topic,t.gov_topic govTopic
+        from hc_gov_translate t
+        where 1 =1
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="sign !=null and sign != ''">
+            and t.sign= #{sign}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            and t.update_time= #{updateTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="reqTime !=null and reqTime != ''">
+            and t.req_time= #{reqTime}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="extCommunityId !=null and extCommunityId != ''">
+            and t.ext_community_id= #{extCommunityId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="govTopic !=null and govTopic != ''">
+            and t.gov_topic= #{govTopic}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
     </select>
-
-
-
 
     <!-- 修改社区政务同步信息 add by wuxw 2018-07-03 -->
     <update id="updateHcGovTranslateInfo" parameterType="Map">
-        update  hc_gov_translate t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="code !=null and code != ''">
-, t.code= #{code}
-</if> 
-<if test="serviceCode !=null and serviceCode != ''">
-, t.service_code= #{serviceCode}
-</if> 
-<if test="sign !=null and sign != ''">
-, t.sign= #{sign}
-</if> 
-<if test="updateTime !=null and updateTime != ''">
-, t.update_time= #{updateTime}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="reqTime !=null and reqTime != ''">
-, t.req_time= #{reqTime}
-</if> 
-<if test="sendCount !=null and sendCount != ''">
-, t.send_count= #{sendCount}
-</if> 
-<if test="extCommunityId !=null and extCommunityId != ''">
-, t.ext_community_id= #{extCommunityId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="objId !=null and objId != ''">
-, t.obj_id= #{objId}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="govTopic !=null and govTopic != ''">
-, t.gov_topic= #{govTopic}
-</if> 
- where 1=1 <if test="tranId !=null and tranId != ''">
-and t.tran_id= #{tranId}
-</if> 
-
+        update hc_gov_translate t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="code !=null and code != ''">
+            , t.code= #{code}
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            , t.service_code= #{serviceCode}
+        </if>
+        <if test="sign !=null and sign != ''">
+            , t.sign= #{sign}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            , t.update_time= #{updateTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="reqTime !=null and reqTime != ''">
+            , t.req_time= #{reqTime}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            , t.send_count= #{sendCount}
+        </if>
+        <if test="extCommunityId !=null and extCommunityId != ''">
+            , t.ext_community_id= #{extCommunityId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="govTopic !=null and govTopic != ''">
+            , t.gov_topic= #{govTopic}
+        </if>
+        where 1=1
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
     </update>
 
     <!-- 查询社区政务同步数量 add by wuxw 2018-07-03 -->
-     <select id="queryHcGovTranslatesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from hc_gov_translate t 
-where 1 =1 
-<if test="tranId !=null and tranId != ''">
-   and t.tran_id= #{tranId}
-</if> 
-<if test="code !=null and code != ''">
-   and t.code= #{code}
-</if> 
-<if test="serviceCode !=null and serviceCode != ''">
-   and t.service_code= #{serviceCode}
-</if> 
-<if test="sign !=null and sign != ''">
-   and t.sign= #{sign}
-</if> 
-<if test="updateTime !=null and updateTime != ''">
-   and t.update_time= #{updateTime}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="reqTime !=null and reqTime != ''">
-   and t.req_time= #{reqTime}
-</if> 
-<if test="sendCount !=null and sendCount != ''">
-   and t.send_count= #{sendCount}
-</if> 
-<if test="extCommunityId !=null and extCommunityId != ''">
-   and t.ext_community_id= #{extCommunityId}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="govTopic !=null and govTopic != ''">
-   and t.gov_topic= #{govTopic}
-</if> 
-
-
-     </select>
-
+    <select id="queryHcGovTranslatesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from hc_gov_translate t
+        where 1 =1
+        <if test="tranId !=null and tranId != ''">
+            and t.tran_id= #{tranId}
+        </if>
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="sign !=null and sign != ''">
+            and t.sign= #{sign}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            and t.update_time= #{updateTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="reqTime !=null and reqTime != ''">
+            and t.req_time= #{reqTime}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="extCommunityId !=null and extCommunityId != ''">
+            and t.ext_community_id= #{extCommunityId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="govTopic !=null and govTopic != ''">
+            and t.gov_topic= #{govTopic}
+        </if>
+    </select>
 </mapper>

@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="returnPayFeeServiceDaoImpl">
 
     <!-- 保存退费表信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessReturnPayFeeInfo" parameterType="Map">
-        insert into
-            business_return_pay_fee(
-                reason,prime_rate,fee_type_cd,
-                pay_time,detail_id,receivable_amount,
-                cycles,remark,received_amount,
-                fee_id,return_fee_id,operate,
-                config_id,state,b_id,community_id) values (
-                #{reason},#{primeRate},#{feeTypeCd},#{payTime},#{detailId},#{receivableAmount},
-                #{cycles},#{remark},#{receivedAmount},#{feeId},#{returnFeeId},#{operate},#{configId},
-                #{state},#{bId},#{communityId})
-       </insert>
-
+        insert into business_return_pay_fee(reason, prime_rate, fee_type_cd,
+                                            pay_time, detail_id, receivable_amount,
+                                            cycles, remark, received_amount,
+                                            fee_id, return_fee_id, operate,
+                                            config_id, state, b_id, community_id)
+        values (#{reason}, #{primeRate}, #{feeTypeCd}, #{payTime}, #{detailId}, #{receivableAmount},
+                #{cycles}, #{remark}, #{receivedAmount}, #{feeId}, #{returnFeeId}, #{operate}, #{configId},
+                #{state}, #{bId}, #{communityId})
+    </insert>
 
     <!-- 查询退费表信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessReturnPayFeeInfo" parameterType="Map" resultType="Map">
         select
-            t.reason,
-            t.prime_rate,t.prime_rate primeRate,
-            t.fee_type_cd,t.fee_type_cd feeTypeCd,
-            t.pay_time,t.pay_time payTime,
-            t.detail_id,t.detail_id detailId,
-            t.receivable_amount,t.receivable_amount receivableAmount,
-            t.cycles,
-            t.remark,
-            t.received_amount,t.received_amount receivedAmount,
-            t.fee_id,t.fee_id feeId,
-            t.return_fee_id,t.return_fee_id returnFeeId,
-            t.operate,t.config_id,t.config_id configId,
-            t.state,
-            t.b_id,t.b_id bId,
-            t.community_id,t.community_id communityId
+        t.reason,
+        t.prime_rate,t.prime_rate primeRate,
+        t.fee_type_cd,t.fee_type_cd feeTypeCd,
+        t.pay_time,t.pay_time payTime,
+        t.detail_id,t.detail_id detailId,
+        t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,
+        t.remark,
+        t.received_amount,t.received_amount receivedAmount,
+        t.fee_id,t.fee_id feeId,
+        t.return_fee_id,t.return_fee_id returnFeeId,
+        t.operate,t.config_id,t.config_id configId,
+        t.state,
+        t.b_id,t.b_id bId,
+        t.community_id,t.community_id communityId
         from business_return_pay_fee t
         where 1 =1
         <if test="reason !=null and reason != ''">
@@ -87,14 +83,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </select>
-
 
     <!-- 保存退费表信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveReturnPayFeeInfoInstance" parameterType="Map">
         insert into return_pay_fee(
-            reason,prime_rate,fee_type_cd,pay_time,detail_id,receivable_amount,cycles,
+        reason,prime_rate,fee_type_cd,pay_time,detail_id,receivable_amount,cycles,
         remark,status_cd,received_amount,fee_id,return_fee_id,config_id,state,b_id,community_id
         ) select t.reason,t.prime_rate,t.fee_type_cd,t.pay_time,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',
         t.received_amount,t.fee_id,t.return_fee_id,t.config_id,t.state,t.b_id,t.community_id
@@ -145,9 +139,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </insert>
-
 
     <!-- 查询退费表信息 add by wuxw 2018-07-03 -->
     <select id="getReturnPayFeeInfo" parameterType="Map" resultType="Map">
@@ -176,10 +168,10 @@
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390012' and pfa.status_cd = '0'
-        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns =
+        'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         where 1 = 1
-
         <if test="reason !=null and reason != ''">
             and t.reason= #{reason}
         </if>
@@ -194,6 +186,12 @@
         </if>
         <if test="payTime !=null and payTime != ''">
             and t.pay_time= #{payTime}
+        </if>
+        <if test="startTime !=null ">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
@@ -268,7 +266,8 @@
         fl.floor_num floorNum
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns =
+        'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         left join building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
@@ -359,7 +358,8 @@
         pa.num paNum
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns =
+        'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         left join owner_car oc on pf.payer_obj_id = oc.car_id
         left join parking_space ps on oc.ps_id = ps.ps_id and ps.status_cd = '0'
@@ -419,7 +419,6 @@
         </if>
     </select>
 
-
     <!-- 修改退费表信息 add by wuxw 2018-07-03 -->
     <update id="updateReturnPayFeeInfoInstance" parameterType="Map">
         update return_pay_fee t set t.status_cd = #{statusCd}
@@ -441,7 +440,8 @@
         from return_pay_fee t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390012' and pfa.status_cd = '0'
-        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns = 'fee_type_cd'
+        inner join t_dict d on t.fee_type_cd = d.status_cd and d.table_name = 'pay_fee_config' and d.table_columns =
+        'fee_type_cd'
         inner join t_dict c on t.state = c.status_cd and c.table_name = 'return_pay_fee' and c.table_columns = 'state'
         where 1 =1
         <if test="payerObjName !=null and payerObjName != ''">
@@ -495,8 +495,11 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
+        <if test="startTime !=null ">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.create_time &lt;= #{endTime}
+        </if>
     </select>
-
 </mapper>
