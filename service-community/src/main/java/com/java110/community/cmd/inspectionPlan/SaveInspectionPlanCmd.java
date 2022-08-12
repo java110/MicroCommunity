@@ -6,18 +6,25 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.inspection.InspectionPlanPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @Java110Cmd(serviceCode = "inspectionPlan.saveInspectionPlan")
 public class SaveInspectionPlanCmd extends Cmd {
 
     @Autowired
     private IInspectionPlanV1InnerServiceSMO inspectionPlanV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -34,10 +41,22 @@ public class SaveInspectionPlanCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        String userId = context.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setRow(1);
+        userDto.setPage(1);
+       List<UserDto> userDtos =  userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+       Assert.listOnlyOne(userDtos,"员工不存在");
+
         JSONObject businessInspectionPlan = new JSONObject();
         businessInspectionPlan.putAll(reqJson);
         businessInspectionPlan.put("inspectionPlanId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inspectionPlanId));
         InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(businessInspectionPlan, InspectionPlanPo.class);
+        inspectionPlanPo.setCreateUserId(userId);
+        inspectionPlanPo.setCreateUserName(userDtos.get(0).getUserName());
         int flag = inspectionPlanV1InnerServiceSMOImpl.saveInspectionPlan(inspectionPlanPo);
         if (flag < 1) {
             throw new CmdException("保存巡检计划失败");
