@@ -56,7 +56,7 @@ public class SaveInspectionPlanCmd extends Cmd {
         businessInspectionPlan.put("inspectionPlanId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inspectionPlanId));
         InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(businessInspectionPlan, InspectionPlanPo.class);
         inspectionPlanPo.setCreateUserId(userId);
-        inspectionPlanPo.setCreateUserName(userDtos.get(0).getUserName());
+        inspectionPlanPo.setCreateUserName(userDtos.get(0).getName());
         int flag = inspectionPlanV1InnerServiceSMOImpl.saveInspectionPlan(inspectionPlanPo);
         if (flag < 1) {
             throw new CmdException("保存巡检计划失败");
