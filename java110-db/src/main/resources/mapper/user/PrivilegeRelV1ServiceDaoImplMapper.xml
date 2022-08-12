@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="privilegeRelV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存功能权限信息 add by wuxw 2018-07-03 -->
+    <insert id="savePrivilegeRelInfo" parameterType="Map">
+        insert into p_privilege_rel(
+rel_id,pg_id,p_id
+) values (
+#{relId},#{pgId},#{pId}
+)
+    </insert>
+
+
+
+    <!-- 查询功能权限信息 add by wuxw 2018-07-03 -->
+    <select id="getPrivilegeRelInfo" parameterType="Map" resultType="Map">
+        select  t.rel_id,t.rel_id relId,t.pg_id,t.pg_id pgId,t.p_id,t.p_id pId,t.status_cd,t.status_cd statusCd 
+from p_privilege_rel t 
+where 1 =1 
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+<if test="pgId !=null and pgId != ''">
+   and t.pg_id= #{pgId}
+</if> 
+<if test="pId !=null and pId != ''">
+   and t.p_id= #{pId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改功能权限信息 add by wuxw 2018-07-03 -->
+    <update id="updatePrivilegeRelInfo" parameterType="Map">
+        update  p_privilege_rel t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="relId !=null and relId != ''">
+, t.rel_id= #{relId}
+</if> 
+<if test="pgId !=null and pgId != ''">
+, t.pg_id= #{pgId}
+</if> 
+<if test="pId !=null and pId != ''">
+, t.p_id= #{pId}
+</if> 
+ where 1=1 
+    </update>
+
+    <!-- 查询功能权限数量 add by wuxw 2018-07-03 -->
+     <select id="queryPrivilegeRelsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from p_privilege_rel t 
+where 1 =1 
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+<if test="pgId !=null and pgId != ''">
+   and t.pg_id= #{pgId}
+</if> 
+<if test="pId !=null and pId != ''">
+   and t.p_id= #{pId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+
+
+     </select>
+
+</mapper>
