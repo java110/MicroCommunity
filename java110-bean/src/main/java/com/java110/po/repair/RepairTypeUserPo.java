@@ -11,7 +11,7 @@ public class RepairTypeUserPo implements Serializable {
     private String staffName;
     private String communityId;
     private String staffId;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getTypeUserId() {
         return typeUserId;

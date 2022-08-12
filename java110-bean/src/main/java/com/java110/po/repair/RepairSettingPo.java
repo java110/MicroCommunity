@@ -17,7 +17,7 @@ public class RepairSettingPo implements Serializable {
     private String returnVisitFlag;
     private String repairSettingType;
 
-    private String statusCd;
+    private String statusCd = "0";
 
 
     public String getRepairTypeName() {

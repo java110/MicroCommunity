@@ -65,7 +65,7 @@ public class EditParkingSpaceCmd extends Cmd {
         businessParkingSpace.put("state", parkingSpaceDto.getState());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
         //parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
-        int flag =  parkingSpaceV1InnerServiceSMOImpl.deleteParkingSpace(parkingSpacePo);
+        int flag =  parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
 
         if(flag < 1){
             throw new CmdException("修改车位失败");
