@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IPrivilegeInnerServiceSMO
@@ -47,5 +48,8 @@ public interface IPrivilegeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPrivilegeUsers", method = RequestMethod.POST)
     List<UserDto> queryPrivilegeUsers(@RequestBody BasePrivilegeDto privilegeDto);
+
+
+
 
 }
