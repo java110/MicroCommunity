@@ -81,7 +81,7 @@ public class AddPrivilegePrivilegeGroupCmd extends Cmd {
             tmpPId = pIds.getJSONObject(pIdIndex);
             reqJson.put("pId", tmpPId.getString("pId"));
             tmpPrivilegePo = BeanConvertUtil.covertBean(reqJson, PrivilegeRelPo.class);
-            tmpPrivilegePo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+            //tmpPrivilegePo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
             flag = privilegeRelV1InnerServiceSMOImpl.savePrivilegeRel(tmpPrivilegePo);
             if (flag < 1) {
                 errorCount++;
