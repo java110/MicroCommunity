@@ -49,6 +49,11 @@ public class QueryUserPrivilege extends Cmd {
         if(StringUtil.isEmpty(userId)){
             userId = reqJson.getString("userId");
         }
+
+        if(reqJson.containsKey("staffId") && !StringUtil.isEmpty(reqJson.getString("staffId"))){
+            userId = reqJson.getString("staffId");
+        }
+
         String domain = "";
         if(!reqJson.containsKey("domain") || StringUtil.isEmpty(reqJson.getString("domain"))) {
 
