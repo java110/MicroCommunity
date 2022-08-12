@@ -24,7 +24,7 @@ public class InspectionPlanPo implements Serializable {
     private String remark;
     private String createUserId;
     private String createUserName;
-    private String statusCd;
+    private String statusCd ="0";
 
     public String getInspectionPlanId() {
         return inspectionPlanId;
