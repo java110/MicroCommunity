@@ -17,6 +17,7 @@ package com.java110.po.privilegeRel;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-08-13 00:41:10 mail: 928255095@qq.com
@@ -28,34 +29,39 @@ import java.util.Date;
 public class PrivilegeRelPo implements Serializable {
 
     private String relId;
-private String pgId;
-private String pId;
-private String statusCd = "0";
-public String getRelId() {
+    private String pgId;
+    private String pId;
+    private String statusCd = "0";
+
+    public String getRelId() {
         return relId;
     }
-public void setRelId(String relId) {
+
+    public void setRelId(String relId) {
         this.relId = relId;
     }
-public String getPgId() {
+
+    public String getPgId() {
         return pgId;
     }
-public void setPgId(String pgId) {
+
+    public void setPgId(String pgId) {
         this.pgId = pgId;
     }
-public String getPId() {
+
+    public String getpId() {
         return pId;
     }
-public void setPId(String pId) {
+
+    public void setpId(String pId) {
         this.pId = pId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-
-
-
 }
