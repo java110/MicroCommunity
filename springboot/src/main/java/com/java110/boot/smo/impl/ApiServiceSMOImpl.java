@@ -162,7 +162,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 || "file.getFile".equals(serviceCode)
                 || "file.getFileByObjId".equals(serviceCode)
                 || "/machine/heartbeat".equals(serviceCode) // 心跳也不记录
-        ) {
+                ) {
             return;
         }
 
@@ -453,7 +453,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 }
                 responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
             } else {
-                responseEntity = outRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
+
+                String requestUrl = BootReplaceUtil.replaceServiceName(service.getUrl());
+                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
             responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
