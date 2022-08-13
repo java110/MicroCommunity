@@ -40,13 +40,13 @@ public class QueryStaffInfosCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.hasKeyAndValue(reqJson,"page","请求报文中未包含page节点");
-        Assert.hasKeyAndValue(reqJson,"row","请求报文中未包含rows节点");
+        Assert.hasKeyAndValue(reqJson, "page", "请求报文中未包含page节点");
+        Assert.hasKeyAndValue(reqJson, "row", "请求报文中未包含rows节点");
         if (!reqJson.containsKey("storeId")) {
             String storeId = context.getReqHeaders().get("store-id");
             reqJson.put("storeId", storeId);
         }
-        Assert.hasKeyAndValue(reqJson,"storeId","请求报文中未包含storeId节点");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId节点");
     }
 
     @Override
@@ -60,7 +60,7 @@ public class QueryStaffInfosCmd extends Cmd {
         if (count > 0) {
             staffs = BeanConvertUtil.covertBeanList(userInnerServiceSMOImpl.getStaffs(userDto), ApiStaffDataVo.class);
             refreshInitials(staffs);
-            refreshOrgs(staffs,reqJson.getString("storeId"));
+            refreshOrgs(staffs, reqJson.getString("storeId"));
         } else {
             staffs = new ArrayList<>();
         }
@@ -76,13 +76,13 @@ public class QueryStaffInfosCmd extends Cmd {
         context.setResponseEntity(responseEntity);
     }
 
-    private void refreshOrgs(List<ApiStaffDataVo> staffs,String storeId) {
-        if(staffs == null ||  staffs.size()<1){
-            return ;
+    private void refreshOrgs(List<ApiStaffDataVo> staffs, String storeId) {
+        if (staffs == null || staffs.size() < 1) {
+            return;
         }
 
-        List<String>  staffIds  = new ArrayList<>();
-        for(ApiStaffDataVo apiStaffDataVo : staffs){
+        List<String> staffIds = new ArrayList<>();
+        for (ApiStaffDataVo apiStaffDataVo : staffs) {
             staffIds.add(apiStaffDataVo.getUserId());
         }
 
@@ -101,30 +101,34 @@ public class QueryStaffInfosCmd extends Cmd {
             return;
         }
 
-
-        for(ApiStaffDataVo apiStaffDataVo : staffs){
-            for(OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRels){
-                if(!apiStaffDataVo.getUserId().equals(tmpOrgStaffRelDto.getStaffId())){
+        for (ApiStaffDataVo apiStaffDataVo : staffs) {
+            for (OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRels) {
+                if (!apiStaffDataVo.getUserId().equals(tmpOrgStaffRelDto.getStaffId())) {
                     continue;
                 }
-               apiStaffDataVo.setOrgId(tmpOrgStaffRelDto.getOrgId());
+                OrgDto org = new OrgDto();
+                org.setOrgId(tmpOrgStaffRelDto.getOrgId());
+                List<OrgDto> orgs = orgV1InnerServiceSMOImpl.queryOrgs(org);
+                Assert.listOnlyOne(orgs, "查询组织表错误！");
+                apiStaffDataVo.setOrgId(tmpOrgStaffRelDto.getOrgId());
+                apiStaffDataVo.setParentTwoOrgId(orgs.get(0).getParentOrgId());
             }
         }
 
-        for(ApiStaffDataVo apiStaffDataVo : staffs) {
-            if(StringUtil.isEmpty(apiStaffDataVo.getOrgId())){
+        for (ApiStaffDataVo apiStaffDataVo : staffs) {
+            if (StringUtil.isEmpty(apiStaffDataVo.getOrgId())) {
                 continue;
             }
             apiStaffDataVo.setParentOrgId(apiStaffDataVo.getOrgId());
 
-            findParents(apiStaffDataVo, orgDtos, null,0);
+            findParents(apiStaffDataVo, orgDtos, null, 0);
 
         }
 
     }
 
 
-    private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto,int orgDeep) {
+    private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto, int orgDeep) {
         for (OrgDto orgDto : orgDtos) {
             curOrgDto = orgDto;
             if (!apiStaffDataVo.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
@@ -132,14 +136,14 @@ public class QueryStaffInfosCmd extends Cmd {
             }
 
             //如果到一级 就结束
-            if(OrgDto.ORG_LEVEL_STORE.equals(apiStaffDataVo.getOrgLevel())){
+            if (OrgDto.ORG_LEVEL_STORE.equals(apiStaffDataVo.getOrgLevel())) {
                 continue;
             }
 
             apiStaffDataVo.setParentOrgId(orgDto.getParentOrgId());
 
             if (StringUtil.isEmpty(apiStaffDataVo.getOrgName())) {
-                apiStaffDataVo.setOrgName(orgDto.getOrgName() );
+                apiStaffDataVo.setOrgName(orgDto.getOrgName());
                 continue;
             }
             apiStaffDataVo.setOrgName(orgDto.getOrgName() + " / " + apiStaffDataVo.getOrgName());
@@ -158,26 +162,27 @@ public class QueryStaffInfosCmd extends Cmd {
             return;
         }
 
-        orgDeep +=1;
+        orgDeep += 1;
 
-        if(orgDeep > 20){
-            return ;
+        if (orgDeep > 20) {
+            return;
         }
 
-        findParents(apiStaffDataVo, orgDtos, curOrgDto,orgDeep);
+        findParents(apiStaffDataVo, orgDtos, curOrgDto, orgDeep);
     }
 
     /**
      * 刷入首字母
+     *
      * @param staffs
      */
     private void refreshInitials(List<ApiStaffDataVo> staffs) {
 
-        for(ApiStaffDataVo staffDataVo : staffs){
-            if(StringUtil.isEmpty(staffDataVo.getName())){
+        for (ApiStaffDataVo staffDataVo : staffs) {
+            if (StringUtil.isEmpty(staffDataVo.getName())) {
                 continue;
             }
-            staffDataVo.setInitials(PinYinUtil.getFirstSpell(staffDataVo.getName()).toUpperCase().charAt(0)+"");
+            staffDataVo.setInitials(PinYinUtil.getFirstSpell(staffDataVo.getName()).toUpperCase().charAt(0) + "");
         }
     }
 }

@@ -15,6 +15,7 @@ public class MenuDto extends PageDto implements Serializable {
     private String description;
     private String statusCd;
     private String gId;
+    private String gName;
     private String pId;
     private String pName;
     private String isShowName;
@@ -70,8 +71,6 @@ public class MenuDto extends PageDto implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 
     public String getStatusCd() {
         return statusCd;
@@ -151,5 +150,13 @@ public class MenuDto extends PageDto implements Serializable {
 
     public void setStoreTypeName(String storeTypeName) {
         this.storeTypeName = storeTypeName;
+    }
+
+    public String getgName() {
+        return gName;
+    }
+
+    public void setgName(String gName) {
+        this.gName = gName;
     }
 }

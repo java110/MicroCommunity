@@ -68,6 +68,7 @@ public class ListResourceStoresCmd extends Cmd {
         if (count > 0) {
             resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
             //查询总价
+            resourceStoreDto.setPage(Integer.valueOf(reqJson.getString("page")));
             subTotalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
             resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);
             totalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
