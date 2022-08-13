@@ -187,10 +187,10 @@
         <if test="payTime !=null and payTime != ''">
             and t.pay_time= #{payTime}
         </if>
-        <if test="startTime !=null ">
+        <if test="startTime !=null  and startTime !=''">
             and t.create_time &gt;= #{startTime}
         </if>
-        <if test="endTime !=null ">
+        <if test="endTime !=null  and endTime !='' ">
             and t.create_time &lt;= #{endTime}
         </if>
         <if test="detailId !=null and detailId != ''">
@@ -495,10 +495,10 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <if test="startTime !=null ">
+        <if test="startTime !=null  and startTime !=''">
             and t.create_time &gt;= #{startTime}
         </if>
-        <if test="endTime !=null ">
+        <if test="endTime !=null  and endTime !='' ">
             and t.create_time &lt;= #{endTime}
         </if>
     </select>
