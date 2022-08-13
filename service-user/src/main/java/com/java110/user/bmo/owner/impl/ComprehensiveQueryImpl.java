@@ -450,7 +450,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-商铺 如 1-1");
         }
 
-        String[] values = searchValue.split("-");
+        String[] values = searchValue.split("-",3);
 
         if (values.length != 2) {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-商铺 如 1-1");

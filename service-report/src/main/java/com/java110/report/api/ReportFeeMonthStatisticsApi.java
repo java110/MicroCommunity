@@ -360,7 +360,7 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         reportFeeMonthStatisticsDto.setObjId(objId);
         if(!StringUtil.isEmpty(roomName)){
-            String[] roomNameArray = roomName.split("-");
+            String[] roomNameArray = roomName.split("-",3);
             reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
             reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
             reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);

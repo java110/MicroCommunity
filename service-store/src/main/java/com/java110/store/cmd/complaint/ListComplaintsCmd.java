@@ -52,7 +52,7 @@ public class ListComplaintsCmd extends Cmd{
 
         String roomId = reqJson.getString("roomId");
         if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
-            String[] values = roomId.split("-");
+            String[] values = roomId.split("-",3);
             if (values.length == 3) {
                 RoomDto roomDto = new RoomDto();
                 roomDto.setFloorNum(values[0]);

@@ -174,7 +174,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         basePrivilegeDto.setResource("/wechatDecorationNotice");
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
-        String[] roomName = paramIn.getString("roomName").split("-");
+        String[] roomName = paramIn.getString("roomName").split("-",3);
         if (userDtos != null && userDtos.size() > 0) {
             for (UserDto userDto : userDtos) {
                 //根据 userId 查询到openId
@@ -278,7 +278,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
         if (communityDtos != null && communityDtos.size() > 0) {
             tel = communityDtos.get(0).getTel();
         }
-        String[] roomName = paramIn.getString("roomName").split("-");
+        String[] roomName = paramIn.getString("roomName").split("-",3);
         if (ownerAppUserDtos.size() > 0) {
             //获取openId
             String openId = ownerAppUserDtos.get(0).getOpenId();

@@ -174,7 +174,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
 
             //获取房屋名称
             String roomName = ownerCarDto.getRoomName().trim();
-            String[] split = roomName.split("-");
+            String[] split = roomName.split("-",3);
             String floorNum = split[0];
             String unitNum = split[1];
             String roomNum = split[2];

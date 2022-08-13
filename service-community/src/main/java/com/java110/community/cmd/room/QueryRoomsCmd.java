@@ -25,7 +25,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,7 +96,7 @@ public class QueryRoomsCmd extends Cmd {
 //        }
         String roomId = "";
         String unitId = "";
-        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("0")
+        if (reqJson.containsKey("flag") && "0".equals(reqJson.getString("flag"))
                 && reqJson.containsKey("floorNum") && !StringUtil.isEmpty(reqJson.getString("floorNum"))
                 && reqJson.containsKey("unitNum") && !StringUtil.isEmpty(reqJson.getString("unitNum"))
                 && reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
@@ -131,15 +130,15 @@ public class QueryRoomsCmd extends Cmd {
             roomDto.setRoomId(roomId);
             roomDto.setUnitId(unitId);
         }
-        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+        if (reqJson.containsKey("flag") && "1".equals(reqJson.getString("flag"))) {
             if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-                String[] roomNums = reqJson.getString("roomNum").split("-");
+                String[] roomNums = reqJson.getString("roomNum").split("-", 3);
                 if (roomNums != null && roomNums.length == 3) {
                     roomDto.setFloorNum(roomNums[0]);
                     roomDto.setUnitNum(roomNums[1]);
                     roomDto.setRoomNum(roomNums[2]);
                 } else {
-                    throw new IllegalArgumentException("房屋编号错误！");
+                    roomDto.setRoomNum(reqJson.getString("roomNum"));
                 }
             } else {
                 roomDto.setUnitNum("");

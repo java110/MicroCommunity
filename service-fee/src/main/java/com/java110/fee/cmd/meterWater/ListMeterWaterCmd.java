@@ -126,7 +126,7 @@ public class ListMeterWaterCmd extends Cmd {
         }
 
         if (MeterWaterDto.PAYER_OBJ_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
-            String[] nums = roomNum.split("-");
+            String[] nums = roomNum.split("-",3);
             if (nums.length != 3) {
                 return false;
             }
@@ -143,7 +143,7 @@ public class ListMeterWaterCmd extends Cmd {
             meterWaterDto.setObjId(roomDtos.get(0).getRoomId());
 
         } else {
-            String[] nums = roomNum.split("-");
+            String[] nums = roomNum.split("-",2);
             if (nums.length != 2) {
                 return false;
             }

@@ -138,7 +138,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             importOwnerCar.setOwnerName(os[5].toString());
             //获取车位
             String parkingLot = os[6].toString();
-            String[] split = parkingLot.split("-");
+            String[] split = parkingLot.split("-",2);
             importOwnerCar.setAreaNum(split[0]);
             importOwnerCar.setNum(split[1]);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -176,7 +176,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
 
             //获取房屋名称
             String roomName = ownerCarDto.getRoomName().trim();
-            String[] split = roomName.split("-");
+            String[] split = roomName.split("-",3);
             String floorNum = split[0];
             String unitNum = split[1];
             String roomNum = split[2];

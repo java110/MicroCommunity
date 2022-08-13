@@ -95,7 +95,7 @@ public class ListFeeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-            String[] roomNums = reqJson.getString("roomNum").split("-");
+            String[] roomNums = reqJson.getString("roomNum").split("-",3);
             if (roomNums == null || roomNums.length != 3) {
                 throw new IllegalArgumentException("房屋编号格式错误！");
             }

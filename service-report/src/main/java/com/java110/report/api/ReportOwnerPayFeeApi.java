@@ -112,7 +112,7 @@ public class ReportOwnerPayFeeApi {
         reportOwnerPayFeeDto.setOwnerName(ownerName);
         reportOwnerPayFeeDto.setFeeTypeCd(feeTypeCd);
         if (!StringUtil.isEmpty(roomName) && roomName.contains("-")) {
-            String[] datas = roomName.split("-");
+            String[] datas = roomName.split("-",3);
             if (datas.length != 3) {
                 throw new IllegalArgumentException("房屋格式错误，请填写 楼栋-单元-房屋格式");
             }
