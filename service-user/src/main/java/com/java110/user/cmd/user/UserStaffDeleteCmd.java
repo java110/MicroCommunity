@@ -49,6 +49,8 @@ public class UserStaffDeleteCmd extends Cmd {
 
         Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
         Assert.jsonObjectHaveKey(reqJson, "userId", "请求参数中未包含userId 节点，请确认");
+
+
     }
 
     @Override
