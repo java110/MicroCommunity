@@ -296,7 +296,7 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
             oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportOweFeeDo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
             String[] roomName = new String[]{};
             if ("3333".equals(reportOweFeeDo.getPayerObjType())) {
-                roomName = itemDto.getPayerObjName().split("-");
+                roomName = itemDto.getPayerObjName().split("-",3);
             }
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 try {

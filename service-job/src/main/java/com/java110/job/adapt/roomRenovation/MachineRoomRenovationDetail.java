@@ -194,7 +194,7 @@ public class MachineRoomRenovationDetail extends DatabusAdaptImpl {
         if (communityDtos != null && communityDtos.size() > 0) {
             tel = communityDtos.get(0).getTel();
         }
-        String[] roomNames = paramIn.getString("roomName").split("-");
+        String[] roomNames = paramIn.getString("roomName").split("-",3);
         if (ownerAppUserDtos.size() > 0) {
             //获取openId
             String openId = ownerAppUserDtos.get(0).getOpenId();

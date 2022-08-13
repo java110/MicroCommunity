@@ -213,7 +213,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             if (!ImportCustomCreateFeeDto.TYPE_ROOM.equals(importCustomCreateFeeDto.getObjType())) {
                 continue;
             }
-            objNames = importCustomCreateFeeDto.getObjName().split("-");
+            objNames = importCustomCreateFeeDto.getObjName().split("-",3);
             if (objNames.length != 3) {
                 continue;
             }

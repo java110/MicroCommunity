@@ -185,7 +185,7 @@ public class MachineRoomToExamine extends DatabusAdaptImpl {
         if (communityDtos != null && communityDtos.size() > 0) {
             tel = communityDtos.get(0).getTel();
         }
-        String[] roomNames = paramIn.getString("roomName").split("-");
+        String[] roomNames = paramIn.getString("roomName").split("-",3);
         //获取状态
         String state = paramIn.getString("state");
         if (ownerAppUserDtos.size() > 0) {

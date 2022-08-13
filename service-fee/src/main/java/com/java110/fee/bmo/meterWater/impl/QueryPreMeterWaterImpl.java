@@ -283,7 +283,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             return false;
         }
         if (MeterWaterDto.METER_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
-            String[] nums = roomNum.split("-");
+            String[] nums = roomNum.split("-",3);
             if (nums.length != 3) {
                 return false;
             }
@@ -300,7 +300,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto.setObjId(roomDtos.get(0).getRoomId());
 
         } else {
-            String[] nums = roomNum.split("-");
+            String[] nums = roomNum.split("-",2);
             if (nums.length != 2) {
                 return false;
             }

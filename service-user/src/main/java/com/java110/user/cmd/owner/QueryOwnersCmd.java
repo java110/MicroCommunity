@@ -97,7 +97,7 @@ public class QueryOwnersCmd extends Cmd {
         if (!roomName.contains("-")) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
-        String[] params = roomName.split("-");
+        String[] params = roomName.split("-",3);
         if (params.length != 3) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
