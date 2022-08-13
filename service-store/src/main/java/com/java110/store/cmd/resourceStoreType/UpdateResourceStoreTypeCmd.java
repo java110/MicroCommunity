@@ -34,7 +34,7 @@ public class UpdateResourceStoreTypeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         ResourceStoreTypePo resourceStoreTypePo = BeanConvertUtil.covertBean(reqJson, ResourceStoreTypePo.class);
-        int flag = resourceStoreTypeV1InnerServiceSMOImpl.saveResourceStoreType(resourceStoreTypePo);
+        int flag = resourceStoreTypeV1InnerServiceSMOImpl.updateResourceStoreType(resourceStoreTypePo);
         if (flag < 1) {
             throw new IllegalArgumentException("保存类型失败");
         }
