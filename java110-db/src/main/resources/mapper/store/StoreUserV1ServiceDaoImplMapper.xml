@@ -5,93 +5,89 @@
 <mapper namespace="storeUserV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存商户用户关系信息 add by wuxw 2018-07-03 -->
     <insert id="saveStoreUserInfo" parameterType="Map">
         insert into s_store_user(
-store_user_id,store_id,user_id,rel_cd,b_id
-) values (
-#{storeUserId},#{storeId},#{userId},#{relCd},#{bId}
-)
+        store_user_id,store_id,user_id,rel_cd,b_id
+        ) values (
+        #{storeUserId},#{storeId},#{userId},#{relCd},#{bId}
+        )
     </insert>
-
 
 
     <!-- 查询商户用户关系信息 add by wuxw 2018-07-03 -->
     <select id="getStoreUserInfo" parameterType="Map" resultType="Map">
-        select  t.status_cd,t.status_cd statusCd,t.store_user_id,t.store_user_id storeUserId,t.store_id,t.store_id storeId,t.user_id,t.user_id userId,t.rel_cd,t.rel_cd relCd 
-from s_store_user t 
-where 1 =1 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeUserId !=null and storeUserId != ''">
-   and t.store_user_id= #{storeUserId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="relCd !=null and relCd != ''">
-   and t.rel_cd= #{relCd}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.status_cd,t.status_cd statusCd,t.store_user_id,t.store_user_id storeUserId,t.store_id,t.store_id
+        storeId,t.user_id,t.user_id userId,t.rel_cd,t.rel_cd relCd
+        from s_store_user t
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeUserId !=null and storeUserId != ''">
+            and t.store_user_id= #{storeUserId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="relCd !=null and relCd != ''">
+            and t.rel_cd= #{relCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改商户用户关系信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreUserInfo" parameterType="Map">
-        update  s_store_user t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
-<if test="relCd !=null and relCd != ''">
-, t.rel_cd= #{relCd}
-</if> 
- where 1=1 <if test="storeUserId !=null and storeUserId != ''">
-and t.store_user_id= #{storeUserId}
-</if> 
+        update s_store_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="relCd !=null and relCd != ''">
+            , t.rel_cd= #{relCd}
+        </if>
+        where 1=1
+        <if test="storeUserId !=null and storeUserId != ''">
+            and t.store_user_id= #{storeUserId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
 
     </update>
 
     <!-- 查询商户用户关系数量 add by wuxw 2018-07-03 -->
-     <select id="queryStoreUsersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from s_store_user t 
-where 1 =1 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeUserId !=null and storeUserId != ''">
-   and t.store_user_id= #{storeUserId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="relCd !=null and relCd != ''">
-   and t.rel_cd= #{relCd}
-</if> 
+    <select id="queryStoreUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_store_user t
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeUserId !=null and storeUserId != ''">
+            and t.store_user_id= #{storeUserId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="relCd !=null and relCd != ''">
+            and t.rel_cd= #{relCd}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
