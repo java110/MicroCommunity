@@ -318,7 +318,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        order by t.create_time desc
+        order by t.create_time desc,t.res_id DESC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -504,7 +504,16 @@
     <select id="queryResourceStoresTotalPrice" parameterType="Map" resultType="Map">
         select IFNULL(sum(w.stock*w.average_price),0) as totalPrice from(
         select t.stock,t.average_price from resource_store t
+        left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
+        left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
+        left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
+        left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
+        'unit_code'
+        left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
+        td1.table_columns = 'unit_code'
+        left join t_dict td2 on t.is_fixed = td2.status_cd and td2.table_name='resource_store' and td2.table_columns =
+        'is_fixed'
         where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
@@ -537,7 +546,7 @@
             and t.remark = #{remark}
         </if>
         <if test="resCode !=null and resCode != ''">
-            and t.res_code= #{resCode}
+            and t.res_code like concat('%',#{resCode},'%')
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
@@ -599,7 +608,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        order by t.create_time desc
+        order by t.create_time desc,t.res_id DESC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

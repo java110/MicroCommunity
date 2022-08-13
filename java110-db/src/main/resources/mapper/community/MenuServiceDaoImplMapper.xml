@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="menuServiceDaoImpl">
 
-
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuGroupInfo" parameterType="Map">
-        insert into m_menu_group(
-        g_id,name,icon,label,seq,description,group_type,store_type
-        ) values (
-        #{gId},#{name},#{icon},#{label},#{seq},#{description},#{groupType},#{storeType}
-        )
-
+        insert into m_menu_group(g_id, name, icon, label, seq, description, group_type, store_type)
+        values (#{gId}, #{name}, #{icon}, #{label}, #{seq}, #{description}, #{groupType}, #{storeType})
     </insert>
-
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
@@ -42,7 +35,6 @@
         <if test="seq !=null">
             and t.seq= #{seq}
         </if>
-
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
@@ -50,9 +42,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改路由信息 add by wuxw 2018-07-03 -->
     <update id="updateMenuGroupInfo" parameterType="Map">
@@ -84,7 +74,6 @@
             </if>
         </set>
         where t.g_id= #{gId}
-
     </update>
 
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
@@ -121,28 +110,17 @@
         </if>
     </select>
 
-
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
-        insert into p_privilege_rel(
-        p_id,pg_id
-        ) values (
-        #{pId},#{pgId}
-        )
-
+        insert into p_privilege_rel(p_id, pg_id)
+        values (#{pId}, #{pgId})
     </insert>
-
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveBasePrivilegeInfo" parameterType="Map">
-        insert into p_privilege(
-        p_id,name,resource,domain,description,m_id
-        ) values (
-        #{pId},#{name},#{resource},#{domain},#{description},#{mId}
-        )
-
+        insert into p_privilege(p_id, name, resource, domain, description, m_id)
+        values (#{pId}, #{name}, #{resource}, #{domain}, #{description}, #{mId})
     </insert>
-
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
@@ -169,9 +147,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改路由信息 add by wuxw 2018-07-03 -->
     <update id="updateBasePrivilegeInfo" parameterType="Map">
@@ -194,7 +170,6 @@
             </if>
         </set>
         where t.p_id= #{pId}
-
     </update>
 
     <!-- 修改路由信息 add by wuxw 2018-07-03 -->
@@ -210,9 +185,7 @@
 
         </set>
         where t.p_id= #{pId}
-
     </update>
-
 
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryBasePrivilegesCount" parameterType="Map" resultType="Map">
@@ -239,16 +212,11 @@
         </if>
     </select>
 
-
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMenuInfo" parameterType="Map">
-        insert into m_menu(
-        m_id,name,g_id,url,seq,p_id,description,is_show
-        ) values (
-        #{mId},#{name},#{gId},#{url},#{seq},'-1',#{description},#{isShow}
-        )
+        insert into m_menu(m_id, name, g_id, url, seq, p_id, description, is_show)
+        values (#{mId}, #{name}, #{gId}, #{url}, #{seq}, '-1', #{description}, #{isShow})
     </insert>
-
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuInfo" parameterType="Map" resultType="Map">
@@ -270,7 +238,6 @@
         <if test="mName !=null and mName != ''">
             and t.name like concat('%',#{mName},'%')
         </if>
-
         <if test="domain !=null and domain != ''">
             and p.domain= #{domain}
         </if>
@@ -323,13 +290,9 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
-
-    <!-- 修改路由信息
-  ,t.description,t.is_show isShow
-    add by wuxw 2018-07-03 -->
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
     <update id="updateMenuInfo" parameterType="Map">
         update m_menu t
         <set>
@@ -356,7 +319,6 @@
             </if>
         </set>
         where t.m_id= #{mId}
-
     </update>
 
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
@@ -378,7 +340,7 @@
             and t.name like concat('%',#{mName},'%')
         </if>
         <if test="pId !=null and pId != ''">
-            and t.p_id= #{pId}
+            and p.p_id= #{pId}
         </if>
         <if test="domain !=null and domain != ''">
             and p.domain= #{domain}
@@ -388,9 +350,6 @@
         </if>
         <if test="mId !=null and mId != ''">
             and p.m_id= #{mId}
-        </if>
-        <if test="pId !=null and pId != ''">
-            and t.p_id= #{pId}
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
@@ -480,7 +439,4 @@
         AND ppr.status_cd = '0'
         ) tt
     </select>
-
-
-
 </mapper>
