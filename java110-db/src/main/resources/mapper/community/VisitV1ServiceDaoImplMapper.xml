@@ -11,9 +11,9 @@
     <!-- 保存访客信息 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfo" parameterType="Map">
         insert into s_visit_info(
-departure_time,v_name,ps_id,visit_gender,owner_id,reason_type,user_id,state_remark,v_id,visit_time,phone_number,free_time,visit_case,state,community_id,entourage,record_state
+departure_time,v_name,ps_id,visit_gender,owner_id,reason_type,user_id,state_remark,v_id,visit_time,phone_number,free_time,visit_case,state,community_id,entourage,record_state,car_num,status_cd
 ) values (
-#{departureTime},#{vName},#{psId},#{visitGender},#{ownerId},#{reasonType},#{userId},#{stateRemark},#{vId},#{visitTime},#{phoneNumber},#{freeTime},#{visitCase},#{state},#{communityId},#{entourage},#{recordState}
+#{departureTime},#{vName},#{psId},#{visitGender},#{ownerId},#{reasonType},#{userId},#{stateRemark},#{vId},#{visitTime},#{phoneNumber},#{freeTime},#{visitCase},#{state},#{communityId},#{entourage},#{recordState},#{carNum},#{statusCd}
 )
     </insert>
 
