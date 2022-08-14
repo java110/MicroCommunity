@@ -24,7 +24,6 @@ public class ListMenusCmd extends Cmd {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);

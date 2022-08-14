@@ -11,7 +11,7 @@ public class ResourceStoreSpecificationPo implements Serializable {
     private String description;
     private String storeId;
 
-    private String statusCd;
+    private String statusCd ="0";
 
     public String getRssId() {
         return rssId;

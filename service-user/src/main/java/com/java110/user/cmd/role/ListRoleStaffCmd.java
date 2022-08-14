@@ -32,13 +32,14 @@ public class ListRoleStaffCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-
         String storeId = context.getReqHeaders().get("store-id");
 
         PrivilegeUserDto privilegeUserDto = new PrivilegeUserDto();
         privilegeUserDto.setpId(reqJson.getString("roleId"));
         privilegeUserDto.setStoreId(storeId);
         privilegeUserDto.setPrivilegeFlag(PrivilegeUserDto.PRIVILEGE_FLAG_GROUP);
+        privilegeUserDto.setPage(Integer.parseInt(reqJson.getString("page")));
+        privilegeUserDto.setRow(Integer.parseInt(reqJson.getString("row")));
 
         int count = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUserInfoCount(privilegeUserDto);
 

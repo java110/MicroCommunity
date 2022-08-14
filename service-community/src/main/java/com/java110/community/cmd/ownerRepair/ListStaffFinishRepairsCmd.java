@@ -36,6 +36,9 @@ public class ListStaffFinishRepairsCmd extends Cmd {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -47,7 +50,7 @@ public class ListStaffFinishRepairsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
         String userId = reqJson.getString("userId");
-        String viewListStaffRepairs = MappingCache.getValue("viewListStaffRepairs");
+        String viewListStaffRepairs = MappingCache.getValue(DOMAIN_COMMON,"VIEW_LIST_STAFF_REPAIRS");
         List<Map> privileges = null;
         //这里加开关 其实让管理员看到所有单子这么做，不太优雅，建议 单独开发页面功能
         // 不要影响已办功能，add by 吴学文 2021-09-09
@@ -65,8 +68,8 @@ public class ListStaffFinishRepairsCmd extends Cmd {
             ownerRepairDto.setStates(Arrays.asList(states));
         } else {
             //Pc WEB维修已办
-//            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
-//            ownerRepairDto.setStates(Arrays.asList(states));
+            String[] states={RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER,RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
+            ownerRepairDto.setStates(Arrays.asList(states));
         }
         int count = repairInnerServiceSMOImpl.queryStaffFinishRepairsCount(ownerRepairDto);
         List<RepairDto> ownerRepairs = null;

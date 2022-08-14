@@ -90,6 +90,9 @@
         <if test="serviceUrl != null and serviceUrl != ''">
             and s.url = #{serviceUrl}
         </if>
+        <if test="appName != null and appName != ''">
+            and a.name = #{appName}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -154,6 +157,9 @@
         </if>
         <if test="serviceUrl != null and serviceUrl != ''">
             and s.url = #{serviceUrl}
+        </if>
+        <if test="appName != null and appName != ''">
+            and a.name = #{appName}
         </if>
     </select>
 </mapper>

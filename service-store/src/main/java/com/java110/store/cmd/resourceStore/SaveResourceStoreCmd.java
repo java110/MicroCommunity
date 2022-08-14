@@ -86,19 +86,23 @@ public class SaveResourceStoreCmd extends Cmd {
             throw new IllegalArgumentException("最低收费标准不能大于最高收费标准！");
         }
 
+        String resCode = reqJson.getString("resCode");
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        //根据物品编码查询物品资源表
+        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+        resourceStoreDto.setResCode(resCode);
+        resourceStoreDto.setStoreId(storeId);
+        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+        //判断资源表里是否有该物品编码，避免物品编码重复
+        Assert.listIsNull(resourceStoreDtos, "物品编码重复，请重新添加！");
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        String resCode = reqJson.getString("resCode");
-        //根据物品编码查询物品资源表
-        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setResCode(resCode);
-        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-        //判断资源表里是否有该物品编码，避免物品编码重复
-        Assert.listIsNull(resourceStoreDtos, "物品编码重复，请重新添加！");
+
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(reqJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));

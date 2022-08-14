@@ -24,11 +24,9 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
     private String userName;
     private String roleName;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getPrivilegeFlag() {
         return privilegeFlag;
@@ -46,7 +44,6 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
         this.puId = puId;
     }
 
-
     public String getStoreId() {
         return storeId;
     }
@@ -62,7 +59,6 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
