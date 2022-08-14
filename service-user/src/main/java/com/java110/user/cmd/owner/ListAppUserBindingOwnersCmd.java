@@ -59,6 +59,11 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
             reqJson.put("userId", headers.get("userid"));
         }
 
+        //根据 openId 查询的
+        if(reqJson.containsKey("openId") && !StringUtil.isEmpty(reqJson.getString("openId"))){
+            reqJson.put("userId", "");
+        }
+
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
 
 
