@@ -275,11 +275,9 @@
     <!-- 查询绑定业主数量 add by wuxw 2018-07-03 -->
     <select id="queryOwnerAppUsersCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from owner_app_user t,t_dict td1
+        from owner_app_user t
+        left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owner_app_user' and td1.table_columns = 'state'
         where 1 =1
-        and t.state = td1.status_cd
-        and td1.table_name = 'owner_app_user'
-        and td1.table_columns = 'state'
         and t.status_cd = '0'
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
