@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notepadV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存备忘录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveNotepadInfo" parameterType="Map">
+        insert into notepad(
+create_user_id,note_id,create_user_name,obj_name,title,room_id,room_name,note_type,thrid_id,obj_id,state,obj_type
+) values (
+#{createUserId},#{noteId},#{createUserName},#{objName},#{title},#{roomId},#{roomName},#{noteType},#{thridId},#{objId},#{state},#{objType}
+)
+    </insert>
+
+
+
+    <!-- 查询备忘录信息 add by wuxw 2018-07-03 -->
+    <select id="getNotepadInfo" parameterType="Map" resultType="Map">
+        select  t.create_user_id,t.create_user_id createUserId,t.note_id,t.note_id noteId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.title,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.note_type,t.note_type noteType,t.thrid_id,t.thrid_id thridId,t.obj_id,t.obj_id objId,t.state,t.obj_type,t.obj_type objType 
+from notepad t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="noteId !=null and noteId != ''">
+   and t.note_id= #{noteId}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objName !=null and objName != ''">
+   and t.obj_name= #{objName}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="roomName !=null and roomName != ''">
+   and t.room_name= #{roomName}
+</if> 
+<if test="noteType !=null and noteType != ''">
+   and t.note_type= #{noteType}
+</if> 
+<if test="thridId !=null and thridId != ''">
+   and t.thrid_id= #{thridId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改备忘录信息 add by wuxw 2018-07-03 -->
+    <update id="updateNotepadInfo" parameterType="Map">
+        update  notepad t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+, t.create_user_id= #{createUserId}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+, t.create_user_name= #{createUserName}
+</if> 
+<if test="objName !=null and objName != ''">
+, t.obj_name= #{objName}
+</if> 
+<if test="title !=null and title != ''">
+, t.title= #{title}
+</if> 
+<if test="roomId !=null and roomId != ''">
+, t.room_id= #{roomId}
+</if> 
+<if test="roomName !=null and roomName != ''">
+, t.room_name= #{roomName}
+</if> 
+<if test="noteType !=null and noteType != ''">
+, t.note_type= #{noteType}
+</if> 
+<if test="thridId !=null and thridId != ''">
+, t.thrid_id= #{thridId}
+</if> 
+<if test="objId !=null and objId != ''">
+, t.obj_id= #{objId}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+, t.obj_type= #{objType}
+</if> 
+ where 1=1 <if test="noteId !=null and noteId != ''">
+and t.note_id= #{noteId}
+</if> 
+
+    </update>
+
+    <!-- 查询备忘录数量 add by wuxw 2018-07-03 -->
+     <select id="queryNotepadsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from notepad t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="noteId !=null and noteId != ''">
+   and t.note_id= #{noteId}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="objName !=null and objName != ''">
+   and t.obj_name= #{objName}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="roomName !=null and roomName != ''">
+   and t.room_name= #{roomName}
+</if> 
+<if test="noteType !=null and noteType != ''">
+   and t.note_type= #{noteType}
+</if> 
+<if test="thridId !=null and thridId != ''">
+   and t.thrid_id= #{thridId}
+</if> 
+<if test="objId !=null and objId != ''">
+   and t.obj_id= #{objId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="objType !=null and objType != ''">
+   and t.obj_type= #{objType}
+</if> 
+
+
+     </select>
+
+</mapper>
