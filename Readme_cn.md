@@ -1,6 +1,8 @@
 [english](Readme_en.md)|[中文](Readme_cn.md)
 ## 说明
  HC小区管理系统是一套saas物业管理的系统，包括 房产、业主、 费用 （可以线上缴费）、报修（可以线上报修）、投诉建议、采购、巡检、停车、门径、道闸、监控、工作流、问卷和公告等功能。
+
+目前很多地方商用超过一年半时间 欢饮直接使用或者推广使用
  
  相关代码：<br/><br/>
  1、[物业系统前端](https://gitee.com/java110/MicroCommunityWeb) : 物业员工使用电脑端<br/>
@@ -12,6 +14,7 @@
 
 1、[开发环境安装](docs/installHcDev.md) <br/>
 2、[生产环境安装](docs/installHcProd.md)<br/>
+3、[springboot方式启动](docs/installSpringboot.md)<br/>
 
 ## 如何使用
 
@@ -62,6 +65,8 @@
 您可以fork 代码后，commit后 pull request合并代码
 
 联系作者：17797173942（微信号）
+
+QQ交流群7：374326790
 
 
 
