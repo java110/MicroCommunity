@@ -73,9 +73,9 @@ public class DeleteCommunityCmd extends Cmd {
         if (communityDtos.size() == 0 || communityDtos == null) {
             throw new IllegalArgumentException("没有查询到communityId为：" + communityDto.getCommunityId() + "小区信息");
         }
-        if ("1100".equals(communityDtos.get(0).getState())) {
-            throw new IllegalArgumentException("删除失败,该小区已审核通过");
-        }
+//        if ("1100".equals(communityDtos.get(0).getState())) {
+//            throw new IllegalArgumentException("删除失败,该小区已审核通过");
+//        }
         CommunityPo communityPo = BeanConvertUtil.covertBean(reqJson, CommunityPo.class);
         int flag = communityV1InnerServiceSMOImpl.deleteCommunity(communityPo);
 
