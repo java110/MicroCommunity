@@ -348,7 +348,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             endTime = feeObj.getString("deadlineTime").length() > 10 ? feeObj.getString("deadlineTime").substring(0, 10) : feeObj.getString("deadlineTime");
             //如果费用是周期性费用 则 结束时间减一天
             try {
-                if (feeObj.containsKey("feeFlag") && FeeDto.FEE_FLAG_CYCLE.equals(feeObj.getString("feeFlag"))) {
+                if (feeObj.containsKey("feeFlag") && (FeeDto.FEE_FLAG_CYCLE.equals(feeObj.getString("feeFlag")) || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeObj.getString("feeFlag")))) {
                     endTime = DateUtil.getFormatTimeString(DateUtil.stepDay(DateUtil.getDateFromString(endTime, DateUtil.DATE_FORMATE_STRING_B), -1),
                             DateUtil.DATE_FORMATE_STRING_B);
                 }
