@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
@@ -287,6 +288,7 @@ public class SaveStoreInfoCmd extends Cmd {
                 businessStoreObj.put("mapY", "");
             }
             StorePo storePo = BeanConvertUtil.covertBean(businessStoreObj, StorePo.class);
+            storePo.setState(StoreDto.STATE_NORMAL);
             flag = storeV1InnerServiceSMOImpl.saveStore(storePo);
 
             if (flag < 1) {

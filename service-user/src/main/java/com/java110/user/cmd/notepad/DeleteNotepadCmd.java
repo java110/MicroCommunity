@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：notepad.deleteNotepad
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "notepad.deleteNotepad")
 public class DeleteNotepadCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteNotepadCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteNotepadCmd.class);
 
     @Autowired
     private INotepadV1InnerServiceSMO notepadV1InnerServiceSMOImpl;
@@ -51,7 +52,7 @@ public class DeleteNotepadCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "noteId", "noteId不能为空");
-Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
+        Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
+        NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
         int flag = notepadV1InnerServiceSMOImpl.deleteNotepad(notepadPo);
 
         if (flag < 1) {
