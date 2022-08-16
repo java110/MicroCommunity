@@ -29,16 +29,16 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.roleCommunity.RoleCommunityDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
 import com.java110.intf.community.IActivitiesV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
-import com.java110.intf.user.IOrgInnerServiceSMO;
-import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -53,6 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,6 +101,17 @@ public class SaveActivitiesCmd extends Cmd {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
+    @Autowired
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -116,6 +128,7 @@ public class SaveActivitiesCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
@@ -132,6 +145,7 @@ public class SaveActivitiesCmd extends Cmd {
             return;
         }
 
+        reqJson.put("storeId",storeId);
         List<ApiCommunityDataVo> communityDataVos = getCommunitys(reqJson);
 
         if (communityDataVos == null || communityDataVos.size() < 1) {
@@ -161,37 +175,55 @@ public class SaveActivitiesCmd extends Cmd {
 
     public List<ApiCommunityDataVo> getCommunitys(JSONObject reqJson) {
         //1.0 先查询 员工对应的部门
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
-        orgStaffRelDto.setStaffId(reqJson.getString("userId"));
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-
-        Assert.listOnlyOne(orgStaffRelDtos, "未查询到相应员工对应的部门信息或查询到多条");
-
-        //2.0 再根据 部门对应的 小区ID查询小区信息
-        OrgDto orgDto = new OrgDto();
-        orgDto.setOrgId(orgStaffRelDtos.get(0).getParentOrgId());
-        orgDto.setStoreId(reqJson.getString("storeId"));
-        orgDto.setOrgLevel("2");
-        List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-
-        Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
-
         List<ApiCommunityDataVo> communitys = null;
-        if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
-            CommunityDto communityDto = new CommunityDto();
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        //校验商户是否存在;
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(reqJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos, "商户不存在");
+
+        int count = 0;
+        if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
+            CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
-            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
+            if (reqJson.containsKey("communityName")) {
+                communityDto.setName(reqJson.getString("communityName"));
+            }
+            count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
+            if (count > 0) {
+                communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
+            } else {
+                communitys = new ArrayList<>();
+            }
         } else {
-            String companyOrgId = orgDtos.get(0).getOrgId();
-            OrgCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, OrgCommunityDto.class);
-            orgCommunityDto.setOrgId(companyOrgId);
+            RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
+            orgCommunityDto.setStaffId(userDtos.get(0).getStaffId());
+            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysCount(orgCommunityDto);
+            if (count > 0) {
+                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(orgCommunityDto);
+                communitys = BeanConvertUtil.covertBeanList(roleCommunityDtos, ApiCommunityDataVo.class);
+                for (RoleCommunityDto tmpOrgCommunityDto : roleCommunityDtos) {
+                    for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {
+                        if (tmpOrgCommunityDto.getCommunityId().equals(tmpApiCommunityDataVo.getCommunityId())) {
+                            tmpApiCommunityDataVo.setName(tmpOrgCommunityDto.getCommunityName());
+                        }
+                    }
+                }
+            } else {
+                communitys = new ArrayList<>();
+            }
 
-            List<OrgCommunityDto> orgCommunityDtos = orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto);
-            communitys = BeanConvertUtil.covertBeanList(orgCommunityDtos, ApiCommunityDataVo.class);
         }
-
         return communitys;
     }
 

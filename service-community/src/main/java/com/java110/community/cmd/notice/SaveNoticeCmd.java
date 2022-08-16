@@ -27,11 +27,13 @@ import com.java110.dto.notice.NoticeDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.roleCommunity.RoleCommunityDto;
+import com.java110.dto.store.StoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.INoticeV1InnerServiceSMO;
-import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
-import com.java110.intf.user.IOrgInnerServiceSMO;
-import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.po.notice.NoticePo;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.exception.CmdException;
@@ -44,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,6 +81,17 @@ public class SaveNoticeCmd extends Cmd {
     @Autowired
     private INoticeV1InnerServiceSMO noticeV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "title", "必填，请填写标题");
@@ -96,6 +110,9 @@ public class SaveNoticeCmd extends Cmd {
             addNotice(reqJson);
             return;
         }
+
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        reqJson.put("storeId", storeId);
 
         //查询当前员工 的小区
 
@@ -116,25 +133,7 @@ public class SaveNoticeCmd extends Cmd {
 
         Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
 
-        List<ApiCommunityDataVo> communitys = null;
-        if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setMemberId(reqJson.getString("storeId"));
-            communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
-            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
-        } else {
-            String companyOrgId = orgDtos.get(0).getOrgId();
-            OrgCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, OrgCommunityDto.class);
-            orgCommunityDto.setOrgId(companyOrgId);
-
-            List<OrgCommunityDto> orgCommunityDtos = orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto);
-            communitys = BeanConvertUtil.covertBeanList(orgCommunityDtos, ApiCommunityDataVo.class);
-        }
-
-        if (communitys == null || communitys.size() < 1) {
-            return;
-        }
-
+        List<ApiCommunityDataVo> communitys = getStoreCommunity(reqJson);
         for (ApiCommunityDataVo apiCommunityDataVo : communitys) {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
             if (reqJson.containsKey("objType") && "001".equals(reqJson.getString("objType"))) {
@@ -145,6 +144,59 @@ public class SaveNoticeCmd extends Cmd {
 
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    private List<ApiCommunityDataVo> getStoreCommunity(JSONObject reqJson) {
+        List<ApiCommunityDataVo> communitys = null;
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        //校验商户是否存在;
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(reqJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos, "商户不存在");
+
+        int count = 0;
+        if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
+            CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
+            communityDto.setMemberId(reqJson.getString("storeId"));
+            communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
+            if (reqJson.containsKey("communityName")) {
+                communityDto.setName(reqJson.getString("communityName"));
+            }
+            count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
+            if (count > 0) {
+                communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
+            } else {
+                communitys = new ArrayList<>();
+            }
+        } else {
+            RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
+            orgCommunityDto.setStaffId(userDtos.get(0).getStaffId());
+            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysCount(orgCommunityDto);
+            if (count > 0) {
+                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(orgCommunityDto);
+                communitys = BeanConvertUtil.covertBeanList(roleCommunityDtos, ApiCommunityDataVo.class);
+                for (RoleCommunityDto tmpOrgCommunityDto : roleCommunityDtos) {
+                    for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {
+                        if (tmpOrgCommunityDto.getCommunityId().equals(tmpApiCommunityDataVo.getCommunityId())) {
+                            tmpApiCommunityDataVo.setName(tmpOrgCommunityDto.getCommunityName());
+                        }
+                    }
+                }
+            } else {
+                communitys = new ArrayList<>();
+            }
+
+        }
+        return communitys;
     }
 
     public void addNotice(JSONObject paramInJson) {
