@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="systemInfoV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存系统配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSystemInfoInfo" parameterType="Map">
+        insert into system_info(
+img_url,system_id,owner_title,default_community_id,system_title,qq_map_key,sub_system_title,company_name,mall_url,logo_url,property_title
+) values (
+#{imgUrl},#{systemId},#{ownerTitle},#{defaultCommunityId},#{systemTitle},#{qqMapKey},#{subSystemTitle},#{companyName},#{mallUrl},#{logoUrl},#{propertyTitle}
+)
+    </insert>
+
+
+
+    <!-- 查询系统配置信息 add by wuxw 2018-07-03 -->
+    <select id="getSystemInfoInfo" parameterType="Map" resultType="Map">
+        select  t.img_url,t.img_url imgUrl,t.system_id,t.system_id systemId,t.owner_title,t.owner_title ownerTitle,t.default_community_id,t.default_community_id defaultCommunityId,t.system_title,t.system_title systemTitle,t.qq_map_key,t.qq_map_key qqMapKey,t.sub_system_title,t.sub_system_title subSystemTitle,t.company_name,t.company_name companyName,t.mall_url,t.mall_url mallUrl,t.status_cd,t.status_cd statusCd,t.logo_url,t.logo_url logoUrl,t.property_title,t.property_title propertyTitle 
+from system_info t 
+where 1 =1 
+<if test="imgUrl !=null and imgUrl != ''">
+   and t.img_url= #{imgUrl}
+</if> 
+<if test="systemId !=null and systemId != ''">
+   and t.system_id= #{systemId}
+</if> 
+<if test="ownerTitle !=null and ownerTitle != ''">
+   and t.owner_title= #{ownerTitle}
+</if> 
+<if test="defaultCommunityId !=null and defaultCommunityId != ''">
+   and t.default_community_id= #{defaultCommunityId}
+</if> 
+<if test="systemTitle !=null and systemTitle != ''">
+   and t.system_title= #{systemTitle}
+</if> 
+<if test="qqMapKey !=null and qqMapKey != ''">
+   and t.qq_map_key= #{qqMapKey}
+</if> 
+<if test="subSystemTitle !=null and subSystemTitle != ''">
+   and t.sub_system_title= #{subSystemTitle}
+</if> 
+<if test="companyName !=null and companyName != ''">
+   and t.company_name= #{companyName}
+</if> 
+<if test="mallUrl !=null and mallUrl != ''">
+   and t.mall_url= #{mallUrl}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="logoUrl !=null and logoUrl != ''">
+   and t.logo_url= #{logoUrl}
+</if> 
+<if test="propertyTitle !=null and propertyTitle != ''">
+   and t.property_title= #{propertyTitle}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改系统配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateSystemInfoInfo" parameterType="Map">
+        update  system_info t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="imgUrl !=null and imgUrl != ''">
+, t.img_url= #{imgUrl}
+</if> 
+<if test="ownerTitle !=null and ownerTitle != ''">
+, t.owner_title= #{ownerTitle}
+</if> 
+<if test="defaultCommunityId !=null and defaultCommunityId != ''">
+, t.default_community_id= #{defaultCommunityId}
+</if> 
+<if test="systemTitle !=null and systemTitle != ''">
+, t.system_title= #{systemTitle}
+</if> 
+<if test="qqMapKey !=null and qqMapKey != ''">
+, t.qq_map_key= #{qqMapKey}
+</if> 
+<if test="subSystemTitle !=null and subSystemTitle != ''">
+, t.sub_system_title= #{subSystemTitle}
+</if> 
+<if test="companyName !=null and companyName != ''">
+, t.company_name= #{companyName}
+</if> 
+<if test="mallUrl !=null and mallUrl != ''">
+, t.mall_url= #{mallUrl}
+</if> 
+<if test="logoUrl !=null and logoUrl != ''">
+, t.logo_url= #{logoUrl}
+</if> 
+<if test="propertyTitle !=null and propertyTitle != ''">
+, t.property_title= #{propertyTitle}
+</if> 
+ where 1=1 <if test="systemId !=null and systemId != ''">
+and t.system_id= #{systemId}
+</if> 
+
+    </update>
+
+    <!-- 查询系统配置数量 add by wuxw 2018-07-03 -->
+     <select id="querySystemInfosCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from system_info t 
+where 1 =1 
+<if test="imgUrl !=null and imgUrl != ''">
+   and t.img_url= #{imgUrl}
+</if> 
+<if test="systemId !=null and systemId != ''">
+   and t.system_id= #{systemId}
+</if> 
+<if test="ownerTitle !=null and ownerTitle != ''">
+   and t.owner_title= #{ownerTitle}
+</if> 
+<if test="defaultCommunityId !=null and defaultCommunityId != ''">
+   and t.default_community_id= #{defaultCommunityId}
+</if> 
+<if test="systemTitle !=null and systemTitle != ''">
+   and t.system_title= #{systemTitle}
+</if> 
+<if test="qqMapKey !=null and qqMapKey != ''">
+   and t.qq_map_key= #{qqMapKey}
+</if> 
+<if test="subSystemTitle !=null and subSystemTitle != ''">
+   and t.sub_system_title= #{subSystemTitle}
+</if> 
+<if test="companyName !=null and companyName != ''">
+   and t.company_name= #{companyName}
+</if> 
+<if test="mallUrl !=null and mallUrl != ''">
+   and t.mall_url= #{mallUrl}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="logoUrl !=null and logoUrl != ''">
+   and t.logo_url= #{logoUrl}
+</if> 
+<if test="propertyTitle !=null and propertyTitle != ''">
+   and t.property_title= #{propertyTitle}
+</if> 
+
+
+     </select>
+
+</mapper>
