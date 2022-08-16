@@ -65,6 +65,9 @@ public class ListCatalogCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        if(!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId"))){
+            reqJson.put("storeId",cmdDataFlowContext.getReqHeaders().get("store-id"));
+        }
     }
 
     @Override

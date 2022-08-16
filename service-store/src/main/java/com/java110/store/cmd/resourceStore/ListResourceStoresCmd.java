@@ -56,7 +56,8 @@ public class ListResourceStoresCmd extends Cmd {
             resourceStoreDto.setShType("");
             resourceStoreDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
         } else if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
-            resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
+            //add by wuxw 这里 修改为 小区仓库也能采购 模式 所以这里不限制
+            //resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
             resourceStoreDto.setShObjId(reqJson.getString("communityId"));
         }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
