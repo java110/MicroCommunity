@@ -29,6 +29,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
@@ -37,6 +38,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -94,6 +96,9 @@ public class SaveActivitiesCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -104,13 +109,24 @@ public class SaveActivitiesCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写活动内容");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
-        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
-        Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写用户名称");
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"用户不存在");
+        reqJson.put("userId",userDtos.get(0).getUserId());
+        reqJson.put("userName",userDtos.get(0).getName());
+
         if (!reqJson.containsKey("isMoreCommunity") || "N".equals(reqJson.getString("isMoreCommunity"))) {
             addActivities(cmdDataFlowContext, reqJson);
             return;
