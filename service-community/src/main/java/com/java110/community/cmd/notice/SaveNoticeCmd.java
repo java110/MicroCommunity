@@ -116,23 +116,6 @@ public class SaveNoticeCmd extends Cmd {
 
         //查询当前员工 的小区
 
-        //1.0 先查询 员工对应的部门
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
-        orgStaffRelDto.setStaffId(reqJson.getString("userId"));
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-
-        Assert.listOnlyOne(orgStaffRelDtos, "未查询到相应员工对应的部门信息或查询到多条");
-
-        //2.0 再根据 部门对应的 小区ID查询小区信息
-        OrgDto orgDto = new OrgDto();
-        orgDto.setOrgId(orgStaffRelDtos.get(0).getParentOrgId());
-        orgDto.setStoreId(reqJson.getString("storeId"));
-        orgDto.setOrgLevel("2");
-        List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-
-        Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
-
         List<ApiCommunityDataVo> communitys = getStoreCommunity(reqJson);
         for (ApiCommunityDataVo apiCommunityDataVo : communitys) {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
