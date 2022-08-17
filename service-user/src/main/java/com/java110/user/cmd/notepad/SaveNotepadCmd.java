@@ -55,13 +55,13 @@ public class SaveNotepadCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "noteType", "请求报文中未包含noteType");
-Assert.hasKeyAndValue(reqJson, "title", "请求报文中未包含title");
-Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
-Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
-Assert.hasKeyAndValue(reqJson, "objName", "请求报文中未包含objName");
-Assert.hasKeyAndValue(reqJson, "createUserId", "请求报文中未包含createUserId");
-Assert.hasKeyAndValue(reqJson, "createUserName", "请求报文中未包含createUserName");
-Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+        Assert.hasKeyAndValue(reqJson, "title", "请求报文中未包含title");
+        Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
+        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
+        Assert.hasKeyAndValue(reqJson, "objName", "请求报文中未包含objName");
+        Assert.hasKeyAndValue(reqJson, "createUserId", "请求报文中未包含createUserId");
+        Assert.hasKeyAndValue(reqJson, "createUserName", "请求报文中未包含createUserName");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
     }
 
@@ -69,7 +69,7 @@ Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
+        NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
         notepadPo.setNoteId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = notepadV1InnerServiceSMOImpl.saveNotepad(notepadPo);
 

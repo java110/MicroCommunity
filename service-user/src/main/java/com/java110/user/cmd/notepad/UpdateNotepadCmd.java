@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "notepad.updateNotepad")
 public class UpdateNotepadCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateNotepadCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateNotepadCmd.class);
 
 
     @Autowired
@@ -55,7 +55,7 @@ public class UpdateNotepadCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "noteId", "noteId不能为空");
-Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
+        Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
+        NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
         int flag = notepadV1InnerServiceSMOImpl.updateNotepad(notepadPo);
 
         if (flag < 1) {
