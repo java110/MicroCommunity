@@ -108,6 +108,9 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
 
         List<String> ownerIds = new ArrayList<>();
         for(OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos){
+            if(StringUtil.isEmpty(ownerAppUserDto.getMemberId()) || "-1".equals(ownerAppUserDto.getMemberId())){
+                continue;
+            }
             ownerIds.add(ownerAppUserDto.getMemberId());
         }
 
@@ -129,7 +132,7 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
                 if(!ownerAppUserDto.getMemberId().equals(tmpFileRelDto.getObjId())){
                     continue;
                 }
-                ownerAppUserDto.setHeadImgUrl(imgUrl +tmpFileRelDto.getFileRealName() );
+                ownerAppUserDto.setHeadImgUrl(imgUrl +tmpFileRelDto.getFileSaveName() );
             }
         }
     }
