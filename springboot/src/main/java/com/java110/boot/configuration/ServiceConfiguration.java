@@ -72,6 +72,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/couponUser.listCouponUser,");
         exclusions.append("/app/machine.customCarInOutCmd,");
         exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration,");
+        exclusions.append("/app/propertyRightRegistration.savePropertyRightRegistration,");
+        exclusions.append("/app/system.listSystemInfo,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
