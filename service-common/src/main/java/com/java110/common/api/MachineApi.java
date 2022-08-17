@@ -152,7 +152,7 @@ public class MachineApi {
         Assert.hasKeyAndValue(reqJson, "machineCode", "未包含设备编码");
         Assert.hasKeyAndValue(reqJson, "openTypeCd", "未包含开门方式");
         Assert.hasKeyAndValue(reqJson, "similar", "未包含开门相似度");
-        Assert.hasKeyAndValue(reqJson, "photo", "未包含抓拍照片");
+        //Assert.hasKeyAndValue(reqJson, "photo", "未包含抓拍照片");
         Assert.hasKeyAndValue(reqJson, "dateTime", "未包含开门时间");
         Assert.hasKeyAndValue(reqJson, "extCommunityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "recordTypeCd", "未包含记录类型");
