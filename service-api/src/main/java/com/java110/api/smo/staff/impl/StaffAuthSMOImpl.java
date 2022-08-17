@@ -108,7 +108,16 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
                 "/staff/updateStaffAppAuth", HttpMethod.POST);
-        url = MappingCache.getValue("OWNER_WECHAT_URL")+"/#/?wAppId="+smallWeChatDto.getAppId();
+        url = MappingCache.getValue("OWNER_WECHAT_URL");
+        if(url.contains("/#/")){
+            if(url.contains("?")){
+                url += ("&wAppId="+smallWeChatDto.getAppId());
+            }else{
+                url += ("?wAppId="+smallWeChatDto.getAppId());
+            }
+        }else{
+            url += ("/#/?wAppId="+smallWeChatDto.getAppId());
+        }
         return ResultVo.redirectPage(url);
 
     }
