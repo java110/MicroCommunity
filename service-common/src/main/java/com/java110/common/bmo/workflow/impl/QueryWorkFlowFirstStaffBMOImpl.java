@@ -15,11 +15,13 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.org.OrgDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
+import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
@@ -79,6 +81,9 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
     private IOaWorkflowFormInnerServiceSMO oaWorkflowFormInnerServiceSMOImpl;
 
     @Autowired
+    private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
+
+    @Autowired
     private RepositoryService repositoryService;
 
     @Autowired
@@ -129,16 +134,19 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         Map staffInfo = workflowStepStaffs.get(0);
         String staffId = staffInfo.get("staffId") + "";
-        OrgDto orgDto = new OrgDto();
+        OrgStaffRelDto orgDto = new OrgStaffRelDto();
         if (staffId.startsWith("${")) {
             return ResultVo.createResponseEntity(orgDto);
         }
         orgDto.setStaffId(staffId);
-        List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
-        if (orgDtos == null || orgDtos.size() < 1) {
+
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setStaffId(staffId);
+        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryStaffOrgNames(orgStaffRelDto);
+        if (orgStaffRelDtos == null || orgStaffRelDtos.size() < 1) {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "未查询到员工组织信息");
         }
-        orgDto = orgDtos.get(0);
+        orgDto = orgStaffRelDtos.get(0);
         orgDto.setStaffName(staffInfo.get("staffName") + "");
 
         return ResultVo.createResponseEntity(orgDto);

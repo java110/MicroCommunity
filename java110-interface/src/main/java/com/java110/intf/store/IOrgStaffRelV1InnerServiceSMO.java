@@ -57,6 +57,10 @@ public interface IOrgStaffRelV1InnerServiceSMO {
     @RequestMapping(value = "/queryOrgStaffRels", method = RequestMethod.POST)
     List<OrgStaffRelDto> queryOrgStaffRels(@RequestBody OrgStaffRelDto orgStaffRelDto);
 
+    @RequestMapping(value = "/queryStaffOrgNames", method = RequestMethod.POST)
+    public List<OrgStaffRelDto> queryStaffOrgNames(@RequestBody OrgStaffRelDto orgStaffRelDto);
+
+
     /**
      * 查询<p>小区楼</p>总记录数
      *

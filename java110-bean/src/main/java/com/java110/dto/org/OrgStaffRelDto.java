@@ -36,6 +36,8 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
     private String parentOrgId;
     private String parentOrgName;
 
+    private String orgLevel;
+
 
     private Date createTime;
 
@@ -177,5 +179,13 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getOrgLevel() {
+        return orgLevel;
+    }
+
+    public void setOrgLevel(String orgLevel) {
+        this.orgLevel = orgLevel;
     }
 }
