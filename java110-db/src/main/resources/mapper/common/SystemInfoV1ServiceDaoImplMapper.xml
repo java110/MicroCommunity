@@ -21,7 +21,7 @@
         ownerTitle,t.default_community_id,t.default_community_id defaultCommunityId,t.system_title,t.system_title
         systemTitle,t.qq_map_key,t.qq_map_key qqMapKey,t.sub_system_title,t.sub_system_title
         subSystemTitle,t.company_name,t.company_name companyName,t.mall_url,t.mall_url mallUrl,t.status_cd,t.status_cd
-        statusCd,t.logo_url,t.logo_url logoUrl,t.property_title,t.property_title propertyTitle,system_simple_title systemSimpleTitle
+        statusCd,t.logo_url,t.logo_url logoUrl,t.property_title,t.property_title propertyTitle,t.system_simple_title systemSimpleTitle
         from system_info t
         where 1 =1
         <if test="imgUrl !=null and imgUrl != ''">
