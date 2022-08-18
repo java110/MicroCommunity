@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="appServiceDaoImpl">
 
     <!-- 保存应用信息 add by wuxw 2018-07-03 -->
     <insert id="saveAppInfo" parameterType="Map">
-        insert into c_app(
-        status_cd,app_id,black_list_ip,name,security_code,remark,while_list_ip
-        ) values (
-        '0',#{appId},#{blackListIp},#{name},#{securityCode},#{remark},#{whileListIp}
-        )
+        insert into c_app(status_cd, app_id, black_list_ip, name, security_code, remark, while_list_ip)
+        values ('0', #{appId}, #{blackListIp}, #{name}, #{securityCode}, #{remark}, #{whileListIp})
     </insert>
-
 
     <!-- 查询应用信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAppInfo" parameterType="Map" resultType="Map">
@@ -39,13 +34,10 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="whileListIp !=null and whileListIp != ''">
             and t.while_list_ip= #{whileListIp}
         </if>
-
     </select>
-
 
     <!-- 保存应用信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAppInfoInstance" parameterType="Map">
@@ -73,9 +65,7 @@
         <if test="whileListIp !=null and whileListIp != ''">
             and t.while_list_ip= #{whileListIp}
         </if>
-
     </insert>
-
 
     <!-- 查询应用信息 add by wuxw 2018-07-03 -->
     <select id="getAppInfo" parameterType="Map" resultType="Map">
@@ -93,7 +83,6 @@
                 #{item}
             </foreach>
         </if>
-
         <if test="blackListIp !=null and blackListIp != ''">
             and t.black_list_ip= #{blackListIp}
         </if>
@@ -109,41 +98,28 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
         <if test="whileListIp !=null and whileListIp != ''">
             and t.while_list_ip= #{whileListIp}
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改应用信息 add by wuxw 2018-07-03 -->
     <update id="updateAppInfo" parameterType="Map">
         update c_app t set t.status_cd = #{statusCd}
-        <if test="blackListIp !=null and blackListIp != ''">
-            , t.black_list_ip= #{blackListIp}
-        </if>
+        , t.black_list_ip= #{blackListIp}
         <if test="name !=null and name != ''">
             , t.name= #{name}
         </if>
-        <if test="securityCode !=null and securityCode != ''">
-            , t.security_code= #{securityCode}
-        </if>
-        <if test="remark !=null and remark != ''">
-            , t.remark= #{remark}
-        </if>
-
-        <if test="whileListIp !=null and whileListIp != ''">
-            , t.while_list_ip= #{whileListIp}
-        </if>
+        , t.security_code= #{securityCode}
+        , t.remark= #{remark}
+        , t.while_list_ip= #{whileListIp}
         where 1=1
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
         </if>
-
     </update>
 
     <!-- 查询应用数量 add by wuxw 2018-07-03 -->
@@ -175,12 +151,8 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-
         <if test="whileListIp !=null and whileListIp != ''">
             and t.while_list_ip= #{whileListIp}
         </if>
-
-
     </select>
-
 </mapper>

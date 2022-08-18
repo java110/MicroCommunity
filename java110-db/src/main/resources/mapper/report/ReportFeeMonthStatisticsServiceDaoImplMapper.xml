@@ -1633,7 +1633,7 @@
         = "fee_type_cd"
         left join t_dict d3 on t.state = d3.status_cd and d3.table_name = "pay_fee_detail" and d3.table_columns =
         "state"
-        where t.status_cd = '0'
+        where t.status_cd = '0'  and pf.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1725,7 +1725,7 @@
         "state"
         LEFT JOIN contract co on pf.payer_obj_id = co.contract_id and co.status_cd = '0' and pf.payer_obj_type='7777'
         LEFT JOIN c_business cb on t.b_id = cb.b_id
-        where t.status_cd = '0'
+        where t.status_cd = '0'  and pf.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>

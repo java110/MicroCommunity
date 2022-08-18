@@ -25,7 +25,6 @@ import java.util.*;
 @Java110Cmd(serviceCode = "machineTranslate.machineGetFreeParkingSpace")
 public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
 
-
     private static final String MACHINE_DIRECTION_IN = "3306"; // 进入
 
     private static final String MACHINE_DIRECTION_OUT = "3307"; //出去
@@ -53,7 +52,6 @@ public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
-
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
@@ -64,7 +62,7 @@ public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-//JSONObject outParam = null;
+        //JSONObject outParam = null;
         String communityId = reqJson.getString("communityId");
 
         //查询出小区内车位状态为空闲的数量
@@ -72,7 +70,6 @@ public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
         parkingSpaceDto.setCommunityId(communityId);
         parkingSpaceDto.setState("F");
         int freeParkingSpaceCount = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
-
 
         //查询出小区内的在场车辆
         CarInoutDto carInoutDto = new CarInoutDto();
@@ -85,16 +82,16 @@ public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
         }
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(communityId);
-        if(!carNums.isEmpty()){
+        if (!carNums.isEmpty()) {
             ownerCarDto.setCarNums(carNums.toArray(new String[carNums.size()]));
         }
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         //付款方ID-车牌号
-        Map<String,String> psIdAndCarNumMap = new HashMap<>();
+        Map<String, String> psIdAndCarNumMap = new HashMap<>();
         List<String> psIds = new ArrayList<>();
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
             psIds.add(tmpOwnerCarDto.getPsId());
-            psIdAndCarNumMap.put(tmpOwnerCarDto.getPsId(),tmpOwnerCarDto.getCarNum());
+            psIdAndCarNumMap.put(tmpOwnerCarDto.getPsId(), tmpOwnerCarDto.getCarNum());
         }
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(communityId);
@@ -103,8 +100,8 @@ public class MachineGetFreeParkingSpaceCmd extends BaseMachineCmd {
 
 //        int communityCarCount = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
         List<FeeDto> communityCars = feeInnerServiceSMOImpl.queryFees(feeDto);//有效的月报车位信息，已经支付租金的
-        for(FeeDto communityCar:communityCars){
-            if(psIdAndCarNumMap.containsKey(communityCar.getPayerObjId())){
+        for (FeeDto communityCar : communityCars) {
+            if (psIdAndCarNumMap.containsKey(communityCar.getPayerObjId())) {
                 carNums.remove(psIdAndCarNumMap.get(communityCar.getPayerObjId()));//把场内月租车位的业主车牌去掉，不算进场车辆
             }
         }

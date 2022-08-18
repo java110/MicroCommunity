@@ -1,6 +1,5 @@
 package com.java110.api.components.file;
 
-
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IUploadVedioSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
 
 /**
  * 应用组件管理类
@@ -23,7 +21,6 @@ public class UploadVedioComponent {
 
     @Autowired
     private IUploadVedioSMO uploadVedioSMOImpl;
-
 
     /**
      * 查询应用列表
