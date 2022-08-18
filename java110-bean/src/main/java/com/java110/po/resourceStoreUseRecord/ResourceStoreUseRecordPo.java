@@ -19,7 +19,7 @@ public class ResourceStoreUseRecordPo implements Serializable {
     //1001 报废回收   2002 工单损耗   3003 公用损耗
     private String state;
 
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getRepairId() {
         return repairId;

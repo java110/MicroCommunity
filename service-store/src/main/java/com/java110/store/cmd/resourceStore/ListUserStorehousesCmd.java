@@ -42,6 +42,9 @@ public class ListUserStorehousesCmd extends Cmd {
         UserStorehouseDto userStorehouseDto = BeanConvertUtil.covertBean(reqJson, UserStorehouseDto.class);
         //获取用户id
         String userId = reqJson.getString("userId");
+        if(StringUtil.isEmpty(userId)){
+            userId = context.getReqHeaders().get("user-id");
+        }
         List<Map> privileges = null;
         //查看所有个人物品权限
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();

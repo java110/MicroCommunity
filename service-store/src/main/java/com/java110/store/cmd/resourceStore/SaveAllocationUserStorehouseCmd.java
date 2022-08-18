@@ -65,6 +65,9 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = reqJson.getString("userId");
+        if(StringUtil.isEmpty(userId)){
+            userId = context.getReqHeaders().get("user-id");
+        }
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setPage(1);
