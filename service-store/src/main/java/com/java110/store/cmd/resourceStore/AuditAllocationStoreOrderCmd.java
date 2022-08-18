@@ -185,7 +185,7 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
                     resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
                     Assert.listOnlyOne(resourceStoreDtos, "原仓库记录不存在");
                     resourceStorePo = BeanConvertUtil.covertBean(allocationStorehouseDto, resourceStorePo);
-                    resourceStorePo.setResId(resourceStoreDtos.get(0).getResId());
+                    resourceStorePo.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
                     resourceStorePo.setStock(allocationStorehouseDto.getStock());
                     //获取最小计量单位数量
                     if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniUnitStock())) {
@@ -210,9 +210,9 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
                     resourceStorePo.setRssId(resourceStoreDtos.get(0).getRssId());
                     resourceStorePo.setMiniUnitCode(resourceStoreDtos.get(0).getMiniUnitCode());
                     resourceStorePo.setMiniUnitStock(resourceStoreDtos.get(0).getMiniUnitStock());
-                    flag = resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+                    flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
                     if (flag < 1) {
-                        throw new CmdException("修改失败");
+                        throw new CmdException("添加失败");
                     }
                 }
             }
