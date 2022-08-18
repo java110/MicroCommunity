@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
@@ -24,6 +25,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -95,13 +97,18 @@ public class UrgentPurchaseApplyCmd extends Cmd {
         //查询当月紧急采购的次数
         int count = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplysCount(purchaseApplyDto);
         //取出开关映射的值
-        String value = MappingCache.getValue(DOMAIN_COMMON, URGRNT_NUMBER);
+        String value = CommunitySettingFactory.getValue(purchaseApplyDto.getCommunityId(), URGRNT_NUMBER);
+        if (StringUtil.isEmpty(value)) {
+            value = MappingCache.getValue(DOMAIN_COMMON, URGRNT_NUMBER);
+        }
         if (StringUtil.isEmpty(value)) {
             throw new IllegalArgumentException("映射值为空！");
         }
         int number = Integer.parseInt(value);
         if (count >= number) {
-            throw new IllegalArgumentException("本月紧急采购次数已超过" + number + "次，请下月再使用！");
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "本月紧急采购次数已超过" + number + "次，请下月再使用！");
+            context.setResponseEntity(responseEntity);
+            return;
         }
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));

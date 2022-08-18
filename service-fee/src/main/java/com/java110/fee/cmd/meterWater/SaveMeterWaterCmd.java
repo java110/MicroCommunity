@@ -71,7 +71,6 @@ public class SaveMeterWaterCmd extends Cmd {
 
     public static final String CODE_PREFIX_ID = "10";
 
-
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
@@ -87,7 +86,6 @@ public class SaveMeterWaterCmd extends Cmd {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
-
     @Autowired
     private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
 
@@ -96,7 +94,6 @@ public class SaveMeterWaterCmd extends Cmd {
 
     @Autowired
     private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
@@ -116,13 +113,11 @@ public class SaveMeterWaterCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String objId = reqJson.getString("objId");
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomId(objId);
@@ -232,14 +227,18 @@ public class SaveMeterWaterCmd extends Cmd {
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
+
     /**
      * 添加小区信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void addMeterWater(JSONObject paramInJson) {
         MeterWaterPo meterWaterPo = BeanConvertUtil.covertBean(paramInJson, MeterWaterPo.class);
+        if (StringUtil.isEmpty(meterWaterPo.getbId())) {
+            meterWaterPo.setbId("-1");
+        }
         meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
 
         int flag = meterWaterV1InnerServiceSMOImpl.saveMeterWater(meterWaterPo);
@@ -248,7 +247,6 @@ public class SaveMeterWaterCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
     }
-
 
 
     /**

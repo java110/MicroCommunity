@@ -11,9 +11,9 @@
     <!-- 保存使用记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreUseRecordInfo" parameterType="Map">
         insert into resource_store_use_record(
-unit_price,create_user_id,quantity,resource_store_name,rsur_id,repair_id,create_user_name,remark,store_id,res_id,state,community_id
+unit_price,create_user_id,quantity,resource_store_name,rsur_id,repair_id,create_user_name,remark,store_id,res_id,state,community_id,status_cd
 ) values (
-#{unitPrice},#{createUserId},#{quantity},#{resourceStoreName},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{state},#{communityId}
+#{unitPrice},#{createUserId},#{quantity},#{resourceStoreName},#{rsurId},#{repairId},#{createUserName},#{remark},#{storeId},#{resId},#{state},#{communityId},#{statusCd}
 )
     </insert>
 

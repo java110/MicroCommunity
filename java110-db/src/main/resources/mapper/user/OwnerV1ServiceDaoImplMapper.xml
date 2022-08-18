@@ -72,9 +72,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="idCard !=null and idCard != ''">
-            , t.id_card= #{idCard}
-        </if>
+        , t.id_card= #{idCard}
         <if test="sex !=null and sex != ''">
             , t.sex= #{sex}
         </if>
@@ -105,7 +103,7 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="age !=null and age != ''">
+        <if test="age != ''">
             , t.age= #{age}
         </if>
         where 1=1

@@ -71,11 +71,6 @@ public class ObtainOwnerAge extends Cmd {
             ownerDto.setAge(String.valueOf(age));
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(ownerDto), HttpStatus.OK);
             cmdDataFlowContext.setResponseEntity(responseEntity);
-        } else {
-            msg = "业主身份证号码不匹配！";
-            ownerDto.setMsg(msg);
-            ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(ownerDto), HttpStatus.OK);
-            cmdDataFlowContext.setResponseEntity(responseEntity);
         }
     }
 }

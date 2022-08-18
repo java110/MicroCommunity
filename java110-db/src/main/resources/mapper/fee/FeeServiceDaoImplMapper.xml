@@ -204,7 +204,7 @@
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
-        <if test="payerObjIds != null ">
+        <if test="payerObjIds != null and payerObjIds.length > 0">
             and t.payer_obj_id in
             <foreach collection="payerObjIds" item="item" open="(" close=")" separator=",">
                 #{item}

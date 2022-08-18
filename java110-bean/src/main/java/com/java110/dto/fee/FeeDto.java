@@ -200,7 +200,6 @@ public class FeeDto extends PageDto implements Serializable {
         this.payerObjId = payerObjId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
