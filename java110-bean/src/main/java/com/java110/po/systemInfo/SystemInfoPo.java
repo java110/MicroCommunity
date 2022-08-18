@@ -16,7 +16,7 @@
 package com.java110.po.systemInfo;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-08-16 23:57:44 mail: 928255095@qq.com
@@ -28,90 +28,122 @@ import java.util.Date;
 public class SystemInfoPo implements Serializable {
 
     private String imgUrl;
-private String systemId;
-private String ownerTitle;
-private String defaultCommunityId;
-private String systemTitle;
-private String qqMapKey;
-private String subSystemTitle;
-private String companyName;
-private String mallUrl;
-private String statusCd = "0";
-private String logoUrl;
-private String propertyTitle;
-public String getImgUrl() {
+    private String systemId;
+    private String ownerTitle;
+    private String defaultCommunityId;
+    private String systemTitle;
+
+    private String systemSimpleTitle;
+    private String qqMapKey;
+    private String subSystemTitle;
+    private String companyName;
+    private String mallUrl;
+    private String statusCd = "0";
+    private String logoUrl;
+    private String propertyTitle;
+
+    public String getImgUrl() {
         return imgUrl;
     }
-public void setImgUrl(String imgUrl) {
+
+    public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-public String getSystemId() {
+
+    public String getSystemId() {
         return systemId;
     }
-public void setSystemId(String systemId) {
+
+    public void setSystemId(String systemId) {
         this.systemId = systemId;
     }
-public String getOwnerTitle() {
+
+    public String getOwnerTitle() {
         return ownerTitle;
     }
-public void setOwnerTitle(String ownerTitle) {
+
+    public void setOwnerTitle(String ownerTitle) {
         this.ownerTitle = ownerTitle;
     }
-public String getDefaultCommunityId() {
+
+    public String getDefaultCommunityId() {
         return defaultCommunityId;
     }
-public void setDefaultCommunityId(String defaultCommunityId) {
+
+    public void setDefaultCommunityId(String defaultCommunityId) {
         this.defaultCommunityId = defaultCommunityId;
     }
-public String getSystemTitle() {
+
+    public String getSystemTitle() {
         return systemTitle;
     }
-public void setSystemTitle(String systemTitle) {
+
+    public void setSystemTitle(String systemTitle) {
         this.systemTitle = systemTitle;
     }
-public String getQqMapKey() {
+
+    public String getQqMapKey() {
         return qqMapKey;
     }
-public void setQqMapKey(String qqMapKey) {
+
+    public void setQqMapKey(String qqMapKey) {
         this.qqMapKey = qqMapKey;
     }
-public String getSubSystemTitle() {
+
+    public String getSubSystemTitle() {
         return subSystemTitle;
     }
-public void setSubSystemTitle(String subSystemTitle) {
+
+    public void setSubSystemTitle(String subSystemTitle) {
         this.subSystemTitle = subSystemTitle;
     }
-public String getCompanyName() {
+
+    public String getCompanyName() {
         return companyName;
     }
-public void setCompanyName(String companyName) {
+
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
-public String getMallUrl() {
+
+    public String getMallUrl() {
         return mallUrl;
     }
-public void setMallUrl(String mallUrl) {
+
+    public void setMallUrl(String mallUrl) {
         this.mallUrl = mallUrl;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getLogoUrl() {
+
+    public String getLogoUrl() {
         return logoUrl;
     }
-public void setLogoUrl(String logoUrl) {
+
+    public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }
-public String getPropertyTitle() {
+
+    public String getPropertyTitle() {
         return propertyTitle;
     }
-public void setPropertyTitle(String propertyTitle) {
+
+    public void setPropertyTitle(String propertyTitle) {
         this.propertyTitle = propertyTitle;
     }
 
 
+    public String getSystemSimpleTitle() {
+        return systemSimpleTitle;
+    }
 
+    public void setSystemSimpleTitle(String systemSimpleTitle) {
+        this.systemSimpleTitle = systemSimpleTitle;
+    }
 }
