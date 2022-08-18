@@ -3,6 +3,7 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -61,6 +62,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = reqJson.getString("userId");
         UserDto userDto = new UserDto();
@@ -317,7 +319,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                         userStorePo.setMiniStock(giveQuantity);
                         userStorePo.setUserId(acceptUserId);
                         //保存接受转赠用户个人物品信息
-                        flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorePo);
+                        flag1 = userStorehouseV1InnerServiceSMOImpl.saveUserStorehouse(userStorePo);
                         if(flag1 <1){
                             throw new CmdException("保存失败");
                         }                    }
