@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "parkingSpace.queryParkingSpaces")
-public class QueryParkingSpacesCmd  extends Cmd {
-
+public class QueryParkingSpacesCmd extends Cmd {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -45,26 +44,20 @@ public class QueryParkingSpacesCmd  extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         //根据车牌号去查询 车位信息
         if (reqJson.containsKey("carNum") && !StringUtil.isEmpty(reqJson.getString("carNum"))) {
-
             queryParkingSpaceByCarNum(reqJson, cmdDataFlowContext);
             return;
         }
-
-
         int row = reqJson.getInteger("row");
-
         ApiParkingSpaceVo apiParkingSpaceVo = new ApiParkingSpaceVo();
-
+        ParkingSpaceDto parkingSpaceDto = BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class);
         //查询总记录数
-        int total = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class));
+        int total = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
         apiParkingSpaceVo.setTotal(total);
         if (total > 0) {
             List<ParkingSpaceDto> parkingSpaceDtoList = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class));
             apiParkingSpaceVo.setParkingSpaces(BeanConvertUtil.covertBeanList(parkingSpaceDtoList, ApiParkingSpaceDataVo.class));
         }
-
         apiParkingSpaceVo.setRecords((int) Math.ceil((double) total / (double) row));
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiParkingSpaceVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
@@ -72,45 +65,38 @@ public class QueryParkingSpacesCmd  extends Cmd {
     /**
      * 根据车牌号 查询 停车位
      *
-     * @param reqJson         请求报文
+     * @param reqJson            请求报文
      * @param cmdDataFlowContext 上线文对象
      */
     private void queryParkingSpaceByCarNum(JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
-
-
         ApiParkingSpaceVo apiParkingSpaceVo = new ApiParkingSpaceVo();
-
         int row = reqJson.getInteger("row");
         //查询总记录数
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         apiParkingSpaceVo.setTotal(ownerCarDtos.size());
-
         if (ownerCarDtos.size() > 0) {
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setPsIds(getPsIds(ownerCarDtos));
             List<ParkingSpaceDto> parkingSpaceDtoList = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
             apiParkingSpaceVo.setParkingSpaces(BeanConvertUtil.covertBeanList(parkingSpaceDtoList, ApiParkingSpaceDataVo.class));
         }
-
         apiParkingSpaceVo.setRecords((int) Math.ceil((double) ownerCarDtos.size() / (double) row));
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiParkingSpaceVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
-
     }
 
     /**
      * 获取 停车位Ids
+     *
      * @param ownerCarDtos 业主车位
      * @return 停车位Ids
      */
-    private String[] getPsIds(List<OwnerCarDto> ownerCarDtos){
+    private String[] getPsIds(List<OwnerCarDto> ownerCarDtos) {
         List<String> psIds = new ArrayList<String>();
-        for (OwnerCarDto ownerCarDto : ownerCarDtos){
+        for (OwnerCarDto ownerCarDto : ownerCarDtos) {
             psIds.add(ownerCarDto.getPsId());
         }
-
         return psIds.toArray(new String[psIds.size()]);
     }
 
@@ -120,11 +106,9 @@ public class QueryParkingSpacesCmd  extends Cmd {
      * @param reqJson 请求数据对象
      */
     private void refreshReqJson(JSONObject reqJson) {
-
         if (!reqJson.containsKey("state")) {
             return;
         }
-
         if ("SH".equals(reqJson.getString("state"))) {
             reqJson.put("states", new String[]{"S", "H"});
             reqJson.remove("state");

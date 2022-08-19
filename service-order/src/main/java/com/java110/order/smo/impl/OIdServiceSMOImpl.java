@@ -116,9 +116,9 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
                 JSONArray params = generateParam(orderItemDto);
                 httpEntity = new HttpEntity<String>(params.toJSONString(), header);
 
-                if(Environment.isStartBootWay()){
+                if (Environment.isStartBootWay()) {
                     outRestTemplate.exchange(BOOT_FALLBACK_URL, HttpMethod.POST, httpEntity, String.class);
-                }else {
+                } else if (!StringUtil.isEmpty(orderItemDto.getActionObj()) && !orderItemDto.getActionObj().equals("meter_water")) {
                     restTemplate.exchange(FALLBACK_URL.replace(SERVICE_NAME, orderItemDto.getServiceName()), HttpMethod.POST, httpEntity, String.class);
                 }
 
@@ -360,6 +360,7 @@ public class OIdServiceSMOImpl implements IOIdServiceSMO {
     /**
      * 这里 兼容性处理
      * 因为我们不涉及 物理删除 都是逻辑删除 所以 status_cd 为 1 时强行设置为DEL 为逻辑删除
+     *
      * @param orderItemDto
      * @return
      */

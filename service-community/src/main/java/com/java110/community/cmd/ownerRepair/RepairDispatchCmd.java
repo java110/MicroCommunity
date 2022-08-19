@@ -3,6 +3,7 @@ package com.java110.community.cmd.ownerRepair;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -94,6 +95,7 @@ public class RepairDispatchCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
 
@@ -208,7 +210,7 @@ public class RepairDispatchCmd extends Cmd {
             if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())
                     || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())
             ) {
-                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_WAIT);
+                modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_WAIT);//维修单变成未派单
                 //把自己改成退单
                 RepairUserPo repairUser = new RepairUserPo();
                 repairUser.setRuId(ruId);
@@ -216,7 +218,7 @@ public class RepairDispatchCmd extends Cmd {
                 repairUser.setState(RepairUserDto.STATE_BACK);
                 repairUser.setContext(reqJson.getString("context"));
                 repairUser.setCommunityId(reqJson.getString("communityId"));
-                flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
+                flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUser);
                 if (flag < 1) {
                     throw new CmdException("修改用户失败");
                 }

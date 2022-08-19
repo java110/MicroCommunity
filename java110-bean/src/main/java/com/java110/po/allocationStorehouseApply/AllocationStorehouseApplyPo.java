@@ -12,7 +12,7 @@ public class AllocationStorehouseApplyPo implements Serializable {
     private String remark;
     private String state;
     private String storeId;
-    private String statusCd;
+    private String statusCd = "0";
     private String communityId;
     private String createTime;
     //调拨返还状态标识

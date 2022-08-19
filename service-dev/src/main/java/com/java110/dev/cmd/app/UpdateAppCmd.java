@@ -21,6 +21,7 @@ public class UpdateAppCmd extends Cmd {
 
     @Autowired
     private IAppInnerServiceSMO appInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "appId", "应用Id不能为空");
@@ -30,17 +31,11 @@ public class UpdateAppCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         AppDto appDto = BeanConvertUtil.covertBean(reqJson, AppDto.class);
-
-
         int count = appInnerServiceSMOImpl.updateApp(appDto);
-
-
         if (count < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "修改数据失败");
         }
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);
-
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

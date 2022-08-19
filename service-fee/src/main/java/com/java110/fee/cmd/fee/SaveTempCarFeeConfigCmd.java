@@ -88,6 +88,7 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         payFeeConfigPo.setPaymentCd(FeeConfigDto.PAYMENT_CD_PRE);
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setSquarePrice("0");
+        payFeeConfigPo.setDeductFrom(FeeConfigDto.DEDUCT_FROM_N);
         flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new CmdException("保存临时收费失败");

@@ -3,14 +3,17 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.allocationUserStorehouse.AllocationUserStorehousePo;
 import com.java110.po.resourceStoreUseRecord.ResourceStoreUseRecordPo;
 import com.java110.po.userStorehouse.UserStorehousePo;
@@ -46,6 +49,9 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     @Autowired
     private IAllocationUserStorehouseV1InnerServiceSMO allocationUserStorehouseV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
 
 
     @Override
@@ -56,8 +62,22 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = reqJson.getString("userId");
+        if(StringUtil.isEmpty(userId)){
+            userId = context.getReqHeaders().get("user-id");
+        }
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"用户不存在");
+
+        reqJson.put("userName",userDtos.get(0).getName());
+
         String acceptUserId = reqJson.getString("acceptUserId");
         if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(acceptUserId) && acceptUserId.equals(userId)){
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品接受人不能是本人，所以无法进行转赠操作！");
@@ -81,7 +101,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     JSONObject paramIn = JSONObject.parseObject(String.valueOf(object));
                     ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
                     resourceStoreUseRecordPo.setRsurId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rsurId));
-                    resourceStoreUseRecordPo.setRepairId("-1"); //报修记录
+                    resourceStoreUseRecordPo.setRepairId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId)); //报修记录
                     resourceStoreUseRecordPo.setResId(paramIn.getString("resId")); //物品资源id
                     resourceStoreUseRecordPo.setCommunityId(paramInJson.getString("communityId")); //小区id
                     resourceStoreUseRecordPo.setStoreId(paramInJson.getString("storeId")); //商户id
@@ -179,7 +199,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     //获取商户id
                     String storeId = paramInJson.getString("storeId");
                     JSONObject allocationUserStorehouseJson = new JSONObject();
-                    allocationUserStorehouseJson.put("ausId", "-1");
+                    allocationUserStorehouseJson.put("ausId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ausId));
                     allocationUserStorehouseJson.put("resId", resId);
                     allocationUserStorehouseJson.put("resCode", resCode);
                     allocationUserStorehouseJson.put("resName", resName);
@@ -288,7 +308,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                         BigDecimal num8 = new BigDecimal(miniUnitStock);
                         BigDecimal unitStock = num7.divide(num8, 2, BigDecimal.ROUND_HALF_UP);
                         UserStorehousePo userStorePo = new UserStorehousePo();
-                        userStorePo.setUsId("-1");
+                        userStorePo.setUsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
                         userStorePo.setResId(resId);
                         userStorePo.setResName(resName);
                         userStorePo.setStoreId(storeId);
@@ -302,7 +322,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                         userStorePo.setMiniStock(giveQuantity);
                         userStorePo.setUserId(acceptUserId);
                         //保存接受转赠用户个人物品信息
-                        flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorePo);
+                        flag1 = userStorehouseV1InnerServiceSMOImpl.saveUserStorehouse(userStorePo);
                         if(flag1 <1){
                             throw new CmdException("保存失败");
                         }                    }

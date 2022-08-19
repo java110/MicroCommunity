@@ -18,7 +18,6 @@ package com.java110.fee.cmd.returnPayFee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -36,7 +35,6 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
 import com.java110.po.returnPayFee.ReturnPayFeePo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,7 +49,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * 类表述：更新
@@ -71,7 +68,6 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IReturnPayFeeV1InnerServiceSMO returnPayFeeV1InnerServiceSMOImpl;
 
-
     @Autowired
     private IPayFeeConfigDiscountInnerServiceSMO payFeeConfigDiscountInnerServiceSMOImpl;
 
@@ -83,8 +79,6 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     @Autowired
     private IFeeDiscountSpecInnerServiceSMO feeDiscountSpecInnerServiceSMOImpl;
-
-
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -111,6 +105,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     private static final String SPEC_MONTH = "89002020980014"; //月份
 
+    public static final String CODE_PREFIX_ID = "10";
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -284,7 +279,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     /**
      * 添加活动信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void updateReturnPayFee(JSONObject paramInJson) {
@@ -348,19 +343,19 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     /**
      * 添加小区信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void addPayFeeDetailDiscountTwo(JSONObject paramInJson, JSONObject discountJson) {
         JSONObject businessFee = new JSONObject();
-        businessFee.put("detailDiscountId", "-1");
+        businessFee.put("detailDiscountId", GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         businessFee.put("discountPrice", discountJson.getString("discountPrice"));
         businessFee.put("discountId", discountJson.getString("discountId"));
         businessFee.put("detailId", paramInJson.containsKey("newDetailId") ? paramInJson.getString("newDetailId") : paramInJson.getString("detailId"));
         businessFee.put("communityId", paramInJson.getString("communityId"));
         businessFee.put("feeId", paramInJson.getString("feeId"));
         PayFeeDetailDiscountPo payFeeDetailDiscountPo = BeanConvertUtil.covertBean(businessFee, PayFeeDetailDiscountPo.class);
-        int flag =payFeeDetailDiscountNewV1InnerServiceSMOImpl.savePayFeeDetailDiscountNew(payFeeDetailDiscountPo);
+        int flag = payFeeDetailDiscountNewV1InnerServiceSMOImpl.savePayFeeDetailDiscountNew(payFeeDetailDiscountPo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }

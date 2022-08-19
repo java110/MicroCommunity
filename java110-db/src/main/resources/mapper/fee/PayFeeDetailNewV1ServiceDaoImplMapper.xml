@@ -114,6 +114,12 @@
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
     </update>
 

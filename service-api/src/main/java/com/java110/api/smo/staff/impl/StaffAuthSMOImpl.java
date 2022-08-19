@@ -78,7 +78,7 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
 
-        logger.debug("调用微信换去openId ", paramOut);
+        logger.debug("调用微信换去openId {}", paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
             return ResultVo.redirectPage("/");
 
@@ -93,7 +93,7 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         paramOut = outRestTemplate.getForEntity(url, String.class);
 
-        logger.debug("调用微信换去openId ", paramOut);
+        logger.debug("调用微信换去openId {}", paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
             return ResultVo.redirectPage("/");
         }
@@ -109,6 +109,15 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
                 "/staff/updateStaffAppAuth", HttpMethod.POST);
         url = MappingCache.getValue("OWNER_WECHAT_URL");
+        if(url.contains("/#/")){
+            if(url.contains("?")){
+                url += ("&wAppId="+smallWeChatDto.getAppId());
+            }else{
+                url += ("?wAppId="+smallWeChatDto.getAppId());
+            }
+        }else{
+            url += ("/#/?wAppId="+smallWeChatDto.getAppId());
+        }
         return ResultVo.redirectPage(url);
 
     }

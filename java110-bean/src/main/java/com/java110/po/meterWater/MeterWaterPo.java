@@ -20,6 +20,7 @@ public class MeterWaterPo implements Serializable {
     private double price;
     private Date createTime;
     private String statusCd = "0";
+    private String bId;
 
     public String getRemark() {
         return remark;
@@ -139,5 +140,13 @@ public class MeterWaterPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

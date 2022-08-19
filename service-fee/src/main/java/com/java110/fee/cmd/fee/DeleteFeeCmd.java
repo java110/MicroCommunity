@@ -10,7 +10,9 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +33,9 @@ public class DeleteFeeCmd extends Cmd {
 
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
@@ -79,7 +84,10 @@ public class DeleteFeeCmd extends Cmd {
         PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
 
         int flag = payFeeV1InnerServiceSMOImpl.deletePayFee(payFeePo);
-        if (flag < 1) {
+
+        PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessUnit, PayFeeDetailPo.class);
+        int flag2 = payFeeDetailV1InnerServiceSMOImpl.deletePayFeeDetailNew(payFeeDetailPo);
+        if (flag < 1 || flag2 < 1) {
             throw new IllegalArgumentException("删除失败");
         }
     }

@@ -3,6 +3,7 @@ package com.java110.user.cmd.user;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -28,7 +29,7 @@ public class ChangeStaffPwdCmd extends Cmd {
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
+        Environment.isDevEnv();
     }
 
     @Override

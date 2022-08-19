@@ -36,7 +36,6 @@ import java.util.List;
 @Java110Cmd(serviceCode = "owner.editOwner")
 public class EditOwnerCmd extends Cmd {
 
-
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
@@ -51,18 +50,18 @@ public class EditOwnerCmd extends Cmd {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
+
     @Autowired
     private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含ownerId");
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(reqJson, "age", "请求报文中未包含age");
+//        Assert.jsonObjectHaveKey(reqJson, "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(reqJson, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(reqJson, "sex", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含ownerTypeCd");
@@ -84,6 +83,7 @@ public class EditOwnerCmd extends Cmd {
         }
         //获取身份证号(判断身份证号是否重复)
         String idCard = reqJson.getString("idCard");
+
         if (!StringUtil.isEmpty(idCard) && idCard.contains("*")) {
             OwnerDto owner = new OwnerDto();
             owner.setOwnerId(reqJson.getString("ownerId"));
@@ -97,8 +97,8 @@ public class EditOwnerCmd extends Cmd {
 
         String userValidate = MappingCache.getValue("USER_VALIDATE");
 
-        if(!"ON".equals(userValidate)){
-            return ;
+        if (!"ON".equals(userValidate)) {
+            return;
         }
 
         OwnerDto ownerDto = new OwnerDto();
@@ -199,6 +199,9 @@ public class EditOwnerCmd extends Cmd {
         }
         businessOwner.put("state", ownerDtos.get(0).getState());
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        if (StringUtil.isEmpty(ownerPo.getIdCard())) {
+            ownerPo.setAge(null);
+        }
         int flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
         if (flag < 1) {
             throw new CmdException("修改业主失败");

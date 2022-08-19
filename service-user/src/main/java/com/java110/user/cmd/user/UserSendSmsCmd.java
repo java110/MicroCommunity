@@ -94,7 +94,7 @@ public class UserSendSmsCmd extends Cmd {
         } else {
             CommonCache.setValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE, smsDto.getCode().toLowerCase() + "-" + new Date().getTime(), CommonCache.defaultExpireTime);
             smsDto.setSuccess(true);
-            smsDto.setMsg("当前为演示环境，您的验证码为" + msgCode);
+            smsDto.setMsg("您的验证码为" + msgCode);
         }
         ResponseEntity<String> sendMessageResult = new ResponseEntity<String>(smsDto.getMsg(), smsDto.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         context.setResponseEntity(sendMessageResult);
