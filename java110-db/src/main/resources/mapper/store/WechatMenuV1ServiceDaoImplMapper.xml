@@ -11,9 +11,9 @@
     <!-- 保存微信菜单信息 add by wuxw 2018-07-03 -->
     <insert id="saveWechatMenuInfo" parameterType="Map">
         insert into wechat_menu(
-pagepath,parent_menu_id,app_id,menu_level,menu_name,menu_type,menu_value,seq,wechat_menu_id
+pagepath,parent_menu_id,app_id,menu_level,menu_name,menu_type,menu_value,seq,wechat_menu_id,community_id
 ) values (
-#{pagepath},#{parentMenuId},#{appId},#{menuLevel},#{menuName},#{menuType},#{menuValue},#{seq},#{wechatMenuId}
+#{pagepath},#{parentMenuId},#{appId},#{menuLevel},#{menuName},#{menuType},#{menuValue},#{seq},#{wechatMenuId},#{communityId}
 )
     </insert>
 
@@ -51,7 +51,7 @@ where 1 =1
 <if test="wechatMenuId !=null and wechatMenuId != ''">
    and t.wechat_menu_id= #{wechatMenuId}
 </if> 
-order by t.create_time desc
+order by t.seq asc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
