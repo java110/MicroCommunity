@@ -20,12 +20,14 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.intf.api.IApiCallBackInnerServiceSMO;
 import com.java110.utils.constant.KafkaConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -42,6 +44,9 @@ public class OpenParkingAreaDoorControlLogCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(OpenParkingAreaDoorControlLogCmd.class);
 
+    @Autowired
+    private IApiCallBackInnerServiceSMO apiCallBackInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -52,11 +57,12 @@ public class OpenParkingAreaDoorControlLogCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        try {
-            KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_API_SEND_PARKING_AREA_WEB, reqJson.toJSONString());
-        } catch (Exception e) {
-            logger.error("发送停车场信息失败", e);
-        }
+//        try {
+//            KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_API_SEND_PARKING_AREA_WEB, reqJson.toJSONString());
+//        } catch (Exception e) {
+//            logger.error("发送停车场信息失败", e);
+//        }
+        apiCallBackInnerServiceSMOImpl.webSentParkingArea(reqJson);
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

@@ -72,7 +72,8 @@ import java.nio.charset.Charset;
         "com.java110.intf.job",
         "com.java110.intf.order",
         "com.java110.intf.oa",
-        "com.java110.intf.report"
+        "com.java110.intf.report",
+        "com.java110.intf.api"
 })
 public class CommonServiceApplicationStart {
 

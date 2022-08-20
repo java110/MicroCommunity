@@ -43,6 +43,7 @@ public class RestApi extends BaseController {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
+
     /**
      * 健康检查 服务
      *
@@ -321,6 +322,9 @@ public class RestApi extends BaseController {
 
         return responseEntity;
     }
+
+
+
 
 
     public IApiServiceSMO getApiServiceSMOImpl() {

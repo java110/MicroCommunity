@@ -73,7 +73,22 @@ import java.util.concurrent.TimeUnit;
         basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
-@EnableFeignClients(basePackages = {"com.java110.intf"})
+@EnableFeignClients(basePackages = {
+        "com.java110.intf.acct",
+        "com.java110.intf.code",
+        "com.java110.intf.common",
+        "com.java110.intf.community",
+        "com.java110.intf.demo",
+        "com.java110.intf.dev",
+        "com.java110.intf.fee",
+        "com.java110.intf.goods",
+        "com.java110.intf.job",
+        "com.java110.intf.oa",
+        "com.java110.intf.order",
+        "com.java110.intf.report",
+        "com.java110.intf.store",
+        "com.java110.intf.user"
+})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableAsync
 public class ApiApplicationStart {
