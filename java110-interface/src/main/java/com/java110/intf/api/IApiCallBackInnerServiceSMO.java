@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "${java110.api-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "api-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/apiCallBack")
 public interface IApiCallBackInnerServiceSMO {
 
