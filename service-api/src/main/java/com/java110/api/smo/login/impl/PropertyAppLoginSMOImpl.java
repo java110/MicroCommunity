@@ -61,6 +61,10 @@ public class PropertyAppLoginSMOImpl extends DefaultAbstractComponentSMO impleme
 
         JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
 
+        if (userInfo.containsKey("code") && 0 != userInfo.getIntValue("code")) {
+            return responseEntity;
+        }
+
         //根据用户查询商户信息
         String userId = userInfo.getString("userId");
 
