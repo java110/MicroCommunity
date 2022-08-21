@@ -30,6 +30,7 @@ public class NotepadDto extends PageDto implements Serializable {
     private String objId;
     private String state;
     private String objType;
+    private String noteTypeName;
 
     private String link;
 
@@ -158,5 +159,13 @@ public class NotepadDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getNoteTypeName() {
+        return noteTypeName;
+    }
+
+    public void setNoteTypeName(String noteTypeName) {
+        this.noteTypeName = noteTypeName;
     }
 }

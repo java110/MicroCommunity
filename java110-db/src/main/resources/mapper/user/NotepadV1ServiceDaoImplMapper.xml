@@ -21,8 +21,9 @@
         noteId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.obj_name,t.obj_name objName,t.title,t.room_id,t.room_id roomId,t.room_name,t.room_name
         roomName,t.note_type,t.note_type noteType,t.thrid_id,t.thrid_id thridId,t.obj_id,t.obj_id
-        objId,t.state,t.obj_type,t.obj_type objType,t.link
+        objId,t.state,t.obj_type,t.obj_type objType,t.link,t.create_time createTime,td.`name` noteTypeName
         from notepad t
+        left join t_dict td on td.table_name = 'notepad' and td.table_columns = 'note_type' and td.status_cd = t.note_type
         where 1 =1
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
