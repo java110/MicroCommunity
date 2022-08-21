@@ -21,15 +21,22 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.notepad.NotepadDto;
+import com.java110.dto.notepadDetail.NotepadDetailDto;
 import com.java110.intf.user.INotepadDetailV1InnerServiceSMO;
+import com.java110.intf.user.INotepadV1InnerServiceSMO;
+import com.java110.po.notepad.NotepadPo;
 import com.java110.po.notepadDetail.NotepadDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 /**
  * 类表述：删除
  * 服务编码：notepadDetail.deleteNotepadDetail
@@ -42,15 +49,19 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "notepad.deleteNotepadDetail")
 public class DeleteNotepadDetailCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteNotepadDetailCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteNotepadDetailCmd.class);
 
     @Autowired
     private INotepadDetailV1InnerServiceSMO notepadDetailV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private INotepadV1InnerServiceSMO notepadV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "detailId", "detailId不能为空");
-Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
 
     }
 
@@ -58,11 +69,27 @@ Assert.hasKeyAndValue(reqJson, "objId", "objId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       NotepadDetailPo notepadDetailPo = BeanConvertUtil.covertBean(reqJson, NotepadDetailPo.class);
+        NotepadDetailDto notepadDetailDto = new NotepadDetailDto();
+        notepadDetailDto.setDetailId(reqJson.getString("detailId"));
+
+        List<NotepadDetailDto> notepadDetailDtos = notepadDetailV1InnerServiceSMOImpl.queryNotepadDetails(notepadDetailDto);
+
+        Assert.listOnlyOne(notepadDetailDtos, "跟进记录不存在");
+
+        NotepadDetailPo notepadDetailPo = BeanConvertUtil.covertBean(reqJson, NotepadDetailPo.class);
         int flag = notepadDetailV1InnerServiceSMOImpl.deleteNotepadDetail(notepadDetailPo);
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        NotepadPo notepadPo = new NotepadPo();
+        notepadPo.setNoteId(reqJson.getString(notepadDetailDtos.get(0).getNoteId()));
+        notepadPo.setState(NotepadDto.STATE_DOING);
+        flag = notepadV1InnerServiceSMOImpl.updateNotepad(notepadPo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
