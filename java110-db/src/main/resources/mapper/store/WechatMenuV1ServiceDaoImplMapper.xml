@@ -51,7 +51,7 @@ where 1 =1
 <if test="wechatMenuId !=null and wechatMenuId != ''">
    and t.wechat_menu_id= #{wechatMenuId}
 </if> 
-order by t.create_time desc
+order by t.seq asc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
