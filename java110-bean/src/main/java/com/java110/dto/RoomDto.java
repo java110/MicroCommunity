@@ -78,6 +78,8 @@ public class RoomDto extends PageDto implements Serializable {
     private Date startTime;
     private Date endTime;
 
+    private String roomName;
+
 
     private String statusCd = "0";
 
@@ -417,5 +419,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setOwnerNameLike(String ownerNameLike) {
         this.ownerNameLike = ownerNameLike;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

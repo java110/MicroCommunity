@@ -43,6 +43,8 @@ public class ApiRoomDataVo implements Serializable {
     private String startTime;
     private String endTime;
 
+    private String roomName;
+
     private List<RoomAttrDto> roomAttrDto;
 
 
@@ -268,5 +270,13 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }
