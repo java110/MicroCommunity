@@ -20,8 +20,10 @@ import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.INotepadV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.notepad.NotepadPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
@@ -63,6 +65,9 @@ public class SaveOwnerRepairCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private INotepadV1InnerServiceSMO notepadV1InnerServiceSMOImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -82,16 +87,16 @@ public class SaveOwnerRepairCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
 
-       String userId =  context.getReqHeaders().get("user-id");
-       Assert.hasLength(userId,"请填写提交用户ID");
-       UserDto userDto = new UserDto();
-       userDto.setUserId(userId);
-       userDto.setPage(1);
-       userDto.setRow(1);
+        String userId = context.getReqHeaders().get("user-id");
+        Assert.hasLength(userId, "请填写提交用户ID");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-       Assert.listOnlyOne(userDtos,"未查询到用户");
-        reqJson.put("userId",userDtos.get(0).getUserId());
-        reqJson.put("userName",userDtos.get(0).getName());
+        Assert.listOnlyOne(userDtos, "未查询到用户");
+        reqJson.put("userId", userDtos.get(0).getUserId());
+        reqJson.put("userName", userDtos.get(0).getName());
 
     }
 
@@ -173,6 +178,16 @@ public class SaveOwnerRepairCmd extends Cmd {
                 if (flag < 1) {
                     throw new CmdException("保存图片失败");
                 }
+            }
+        }
+
+        if (StringUtil.jsonHasKayAndValue(reqJson, "noteId")) {
+            NotepadPo notepadPo = new NotepadPo();
+            notepadPo.setNoteId(reqJson.getString("noteId"));
+            notepadPo.setThridId(repairPoolPo.getRepairId());
+            flag = notepadV1InnerServiceSMOImpl.updateNotepad(notepadPo);
+            if (flag < 1) {
+                throw new CmdException("修改业主反馈失败");
             }
         }
     }
