@@ -4,6 +4,7 @@ import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.context.Environment;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.contract.ContractDto;
@@ -1732,6 +1733,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             value = value.replace("X", roomDto.getFeeCoefficient());
         } else if (value.contains("L")) {//处理房屋层数
             value = value.replace("L", roomDto.getLayer());
+        } else if (value.contains("RL")){
+            List<RoomAttrDto> roomAttrDtos = roomDto.getRoomAttrDto();
+            if(roomAttrDtos != null && roomAttrDtos.size() > 0){
+                for(RoomAttrDto roomAttrDto : roomAttrDtos){
+                    value = value.replace("RL"+roomAttrDto.getSpecCd(), roomAttrDto.getValue());
+                }
+            }
         }
 
         ScriptEngineManager manager = new ScriptEngineManager();
