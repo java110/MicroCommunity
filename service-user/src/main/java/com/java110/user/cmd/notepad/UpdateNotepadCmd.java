@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.notepad.NotepadDto;
 import com.java110.intf.user.INotepadV1InnerServiceSMO;
 import com.java110.po.notepad.NotepadPo;
 import com.java110.utils.exception.CmdException;
@@ -64,6 +65,7 @@ public class UpdateNotepadCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         NotepadPo notepadPo = BeanConvertUtil.covertBean(reqJson, NotepadPo.class);
+        notepadPo.setState(NotepadDto.STATE_DOING);
         int flag = notepadV1InnerServiceSMOImpl.updateNotepad(notepadPo);
 
         if (flag < 1) {
