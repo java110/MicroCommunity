@@ -66,12 +66,15 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         reqJson.put("feeConfigId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         reqJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         TempCarFeeConfigPo tempCarFeeConfigPo = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigPo.class);
+
+        //处理房屋属性
+        dealAttr(reqJson, context);
+
         int flag = tempCarFeeConfigV1InnerServiceSMOImpl.saveTempCarFeeConfig(tempCarFeeConfigPo);
         if (flag < 1) {
             throw new CmdException("保存临时收费失败");
         }
-        //处理房屋属性
-        dealAttr(reqJson, context);
+
 
         //补费用项数据
         PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
