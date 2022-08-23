@@ -73,11 +73,11 @@ public class AddTempCarFeeConfigToIotAdapt extends DatabusAdaptImpl {
 
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        JSONArray  businessTempCarFeeConfigs = new JSONArray();
         if (data.containsKey(TempCarFeeConfigPo.class.getSimpleName())) {
             Object bObj = data.get(TempCarFeeConfigPo.class.getSimpleName());
-            JSONArray businessTempCarFeeConfigs = null;
+
             if (bObj instanceof JSONObject) {
-                businessTempCarFeeConfigs = new JSONArray();
                 businessTempCarFeeConfigs.add(bObj);
             } else if (bObj instanceof List) {
                 businessTempCarFeeConfigs = JSONArray.parseArray(JSONObject.toJSONString(bObj));
@@ -85,10 +85,16 @@ public class AddTempCarFeeConfigToIotAdapt extends DatabusAdaptImpl {
                 businessTempCarFeeConfigs = (JSONArray) bObj;
             }
             //JSONObject businessTempCarFeeConfig = data.getJSONObject("businessTempCarFeeConfig");
-            for (int bTempCarFeeConfigIndex = 0; bTempCarFeeConfigIndex < businessTempCarFeeConfigs.size(); bTempCarFeeConfigIndex++) {
-                JSONObject businessTempCarFeeConfig = businessTempCarFeeConfigs.getJSONObject(bTempCarFeeConfigIndex);
-                doSendTempCarFeeConfig(business, businessTempCarFeeConfig);
+
+        }else {
+            if (data instanceof JSONObject) {
+                businessTempCarFeeConfigs.add(data);
             }
+        }
+
+        for (int bTempCarFeeConfigIndex = 0; bTempCarFeeConfigIndex < businessTempCarFeeConfigs.size(); bTempCarFeeConfigIndex++) {
+            JSONObject businessTempCarFeeConfig = businessTempCarFeeConfigs.getJSONObject(bTempCarFeeConfigIndex);
+            doSendTempCarFeeConfig(business, businessTempCarFeeConfig);
         }
     }
 
