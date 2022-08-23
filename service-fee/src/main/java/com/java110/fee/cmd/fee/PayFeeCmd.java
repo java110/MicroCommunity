@@ -165,15 +165,11 @@ public class PayFeeCmd extends Cmd {
         //一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
-        if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
-                || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())
-                || FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
-            try {
-                maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-            } catch (ParseException e) {
-            } catch (Exception e) {
-                logger.error("比较费用日期失败", e);
-            }
+        if (maxEndTime == null) {
+            maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+        }
+
+        if (maxEndTime != null && endTime != null) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
             if (newDate.getTime() > maxEndTime.getTime()) {
                 throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
@@ -204,33 +200,7 @@ public class PayFeeCmd extends Cmd {
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             //判断是否有赠送规则
-            if (paramObj.containsKey("selectDiscount")) {
-                JSONArray selectDiscount = paramObj.getJSONArray("selectDiscount");
-                if (selectDiscount != null && selectDiscount.size() > 0) {
-                    for (int index = 0; index < selectDiscount.size(); index++) {
-                        JSONObject paramJson = selectDiscount.getJSONObject(index);
-                        if (!StringUtil.isEmpty(paramJson.getString("ruleId")) && paramJson.getString("ruleId").equals("102020008")) { //赠送规则
-                            JSONArray feeDiscountSpecs = paramJson.getJSONArray("feeDiscountSpecs");
-                            if (feeDiscountSpecs.size() > 0) {
-                                for (int specIndex = 0; specIndex < feeDiscountSpecs.size(); specIndex++) {
-                                    JSONObject paramIn = feeDiscountSpecs.getJSONObject(specIndex);
-                                    if (!StringUtil.isEmpty(paramIn.getString("specId")) && paramIn.getString("specId").equals("89002020980015")) { //赠送月份
-                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                        String specValue = paramIn.getString("specValue");
-                                        //获取费用结束时间(也就是下次费用开始时间)
-                                        Date endTime = df.parse(payFeeDetailPo.getEndTime());
-                                        Calendar cal = Calendar.getInstance();
-                                        cal.setTime(endTime);
-                                        cal.add(Calendar.MONTH, Integer.parseInt(specValue));
-                                        payFeeDetailPo.setEndTime(df.format(cal.getTime()));
-                                        payFeePo.setEndTime(df.format(cal.getTime()));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            hasDiscount(paramObj, payFeePo, payFeeDetailPo);
             //判断选择的账号
             JSONArray jsonArray = paramObj.getJSONArray("selectUserAccount");
             if (jsonArray == null || jsonArray.size() < 1) {
@@ -382,6 +352,49 @@ public class PayFeeCmd extends Cmd {
 //        }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
+    }
+
+    /**
+     * 改造赠送逻辑 if 嵌套有点多 优化
+     * @param paramObj
+     * @param payFeePo
+     * @param payFeeDetailPo
+     * @throws ParseException
+     */
+    private void hasDiscount(JSONObject paramObj, PayFeePo payFeePo, PayFeeDetailPo payFeeDetailPo) throws ParseException {
+        if (!paramObj.containsKey("selectDiscount")) {
+            return;
+        }
+        JSONArray selectDiscount = paramObj.getJSONArray("selectDiscount");
+
+        if (selectDiscount == null || selectDiscount.size() < 1) {
+            return;
+        }
+        for (int index = 0; index < selectDiscount.size(); index++) {
+            JSONObject paramJson = selectDiscount.getJSONObject(index);
+            if (!"102020008".equals(paramJson.getString("ruleId"))) { //赠送规则
+                continue;
+            }
+            JSONArray feeDiscountSpecs = paramJson.getJSONArray("feeDiscountSpecs");
+            if (feeDiscountSpecs == null || feeDiscountSpecs.size() < 1) {
+                continue;
+            }
+            for (int specIndex = 0; specIndex < feeDiscountSpecs.size(); specIndex++) {
+                JSONObject paramIn = feeDiscountSpecs.getJSONObject(specIndex);
+                if (!"89002020980015".equals(paramIn.getString("specId"))) { //赠送月份
+                    continue;
+                }
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String specValue = paramIn.getString("specValue");
+                //获取费用结束时间(也就是下次费用开始时间)
+                Date endTime = df.parse(payFeeDetailPo.getEndTime());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(endTime);
+                cal.add(Calendar.MONTH, Integer.parseInt(specValue));
+                payFeeDetailPo.setEndTime(df.format(cal.getTime()));
+                payFeePo.setEndTime(df.format(cal.getTime()));
+            }
+        }
     }
 
     /**
@@ -585,9 +598,9 @@ public class PayFeeCmd extends Cmd {
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             //处理 可能还存在 实收手工减免的情况
-            if(paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))){
+            if (paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))) {
                 businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
-            }else {
+            } else {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
         } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
@@ -598,15 +611,15 @@ public class PayFeeCmd extends Cmd {
             c.add(Calendar.DAY_OF_MONTH, 1);
             endDates = c.getTime();//这是明天
             targetEndTime = endDates;
-            BigDecimal receivedAmount1 =  new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             //处理 可能还存在 实收手工减免的情况
-            if(paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))){
+            if (paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))) {
                 businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
-            }else {
+            } else {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
         } else {
@@ -617,8 +630,8 @@ public class PayFeeCmd extends Cmd {
 
             //出租递增问题处理
             if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
-                computeFeeSMOImpl.dealRentRateCycle(feeDto,cycles.doubleValue());
-                if(feeDto.getOweFee()> 0){
+                computeFeeSMOImpl.dealRentRateCycle(feeDto, cycles.doubleValue());
+                if (feeDto.getOweFee() > 0) {
                     businessFeeDetail.put("receivableAmount", feeDto.getAmountOwed());
                 }
             }
@@ -671,7 +684,7 @@ public class PayFeeCmd extends Cmd {
             maxEndTime = feeInfo.getConfigEndTime();
         }
 
-        if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeInfo.getFeeFlag())){
+        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getMaxEndTime();
         }
 
@@ -681,7 +694,7 @@ public class PayFeeCmd extends Cmd {
         }
 
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if(maxEndTime != null) {
+        if (maxEndTime != null) {
             if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
                 throw new IllegalArgumentException("缴费超过了 费用项结束时间");
             }
