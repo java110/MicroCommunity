@@ -172,7 +172,7 @@ public class PayFeeCmd extends Cmd {
         if (maxEndTime != null && endTime != null) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
             if (newDate.getTime() > maxEndTime.getTime()) {
-                throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
             }
         }
 
