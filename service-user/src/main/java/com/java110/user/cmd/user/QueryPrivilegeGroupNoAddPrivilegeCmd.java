@@ -56,6 +56,10 @@ public class QueryPrivilegeGroupNoAddPrivilegeCmd extends Cmd {
 
             Assert.listOnlyOne(storeDtos, "商户不存在");
             storeTypeCd = storeDtos.get(0).getStoreTypeCd();
+
+            if(StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd)){
+                reqJson.remove("communityId");
+            }
         }else{
             storeTypeCd = reqJson.getString("storeTypeCd");
         }
