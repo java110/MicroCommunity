@@ -85,6 +85,14 @@ public class StoreServiceApplicationStart {
         return restTemplate;
     }
 
+    @Bean
+    public RestTemplate outRestTemplate() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        return restTemplate;
+    }
+
+
     public static void main(String[] args) throws Exception {
         try {
             ServiceStartInit.preInitSystemConfig();
