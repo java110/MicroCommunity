@@ -11,7 +11,9 @@ import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
 import com.java110.utils.cache.MappingCache;
@@ -51,6 +53,9 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
     @Autowired
     private IOwnerCarOpenUserV1InnerServiceSMO ownerCarOpenUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> toPay(IPageData pd) {
         return super.businessProcess(pd);
@@ -73,6 +78,16 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
 
         ResponseEntity responseEntity = null;
+
+
+        //根据paId 查询communityId
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(paramIn.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+        Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
+        paramIn.put("communityId",parkingAreaDtos.get(0).getCommunityId());
+
 
         SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
 
@@ -146,7 +161,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         OwnerCarOpenUserPo ownerCarOpenUserPo = new OwnerCarOpenUserPo();
         ownerCarOpenUserPo.setCarNum(paramIn.getString("carNum"));
         ownerCarOpenUserPo.setNickname("未获取");
-        ownerCarOpenUserPo.setHeadimgurl("为获取");
+        ownerCarOpenUserPo.setHeadimgurl("未获取");
         ownerCarOpenUserPo.setOpenId(openId);
         ownerCarOpenUserPo.setOpenType(OwnerCarOpenUserDto.OPEN_TYPE_WECHAT);
         ownerCarOpenUserPo.setOpenUserId(GenerateCodeFactory.getGeneratorId("10"));
