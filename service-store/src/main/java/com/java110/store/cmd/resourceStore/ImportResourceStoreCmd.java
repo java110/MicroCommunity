@@ -128,7 +128,7 @@ public class ImportResourceStoreCmd extends Cmd {
             //判断资源表里是否有该物品编码，避免物品编码重复
             JSONObject businessResourceStore = new JSONObject();
             //businessResourceStore.put("stock", "0");
-            businessResourceStore.put("miniStock", "0");
+            businessResourceStore.put("miniStock", "100");
             businessResourceStore.put("outLowPrice", importResourceStoreDto.getOutLowPrice());
             businessResourceStore.put("outHighPrice", importResourceStoreDto.getOutHighPrice());
             businessResourceStore.put("showMobile", "N");
@@ -149,6 +149,7 @@ public class ImportResourceStoreCmd extends Cmd {
             resourceStorePo.setUnitCode(getUnitCode(importResourceStoreDto.getUnitCode(), dictDtos));
             resourceStorePo.setRemark(importResourceStoreDto.getRemark());
             resourceStorePo.setWarningStock(importResourceStoreDto.getWarningStock());
+            resourceStorePo.setAveragePrice(importResourceStoreDto.getPrice());
             int flag = 0;
             if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
                 resourceStorePo.setResId(GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
