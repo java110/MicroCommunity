@@ -64,6 +64,8 @@ public class UpdateTempCarFeeConfigCmd extends Cmd {
         Assert.listOnlyOne(tempCarFeeConfigDtos, "临时车收费标准不存在");
 
         TempCarFeeConfigPo tempCarFeeConfigPo = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigPo.class);
+        updateAttr(reqJson);
+
         int flag = tempCarFeeConfigV1InnerServiceSMOImpl.updateTempCarFeeConfig(tempCarFeeConfigPo);
 
         if (flag < 1) {
@@ -80,7 +82,11 @@ public class UpdateTempCarFeeConfigCmd extends Cmd {
         updateFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
 
 
-        JSONArray attrs = reqJson.getJSONArray("attrs");
+
+    }
+
+    private void updateAttr(JSONObject reqJson) {
+        int flag;JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
         }

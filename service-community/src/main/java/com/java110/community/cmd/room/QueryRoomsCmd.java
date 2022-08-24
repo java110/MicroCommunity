@@ -146,6 +146,24 @@ public class QueryRoomsCmd extends Cmd {
                 roomDto.setRoomNum("");
             }
         }
+
+        //add by wuxw 商铺 两个短线方式处理
+        if(reqJson.containsKey("roomType") && "2020602".equals(reqJson.getString("roomType"))){
+            if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+                String[] roomNums = reqJson.getString("roomNum").split("-", 2);
+                if (roomNums != null && roomNums.length == 2) {
+                    roomDto.setFloorNum(roomNums[0]);
+                    roomDto.setUnitNum("0");
+                    roomDto.setRoomNum(roomNums[1]);
+                } else {
+                    roomDto.setRoomNum(reqJson.getString("roomNum"));
+                }
+            } else {
+                roomDto.setUnitNum("");
+                roomDto.setFloorNum("");
+                roomDto.setRoomNum("");
+            }
+        }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
