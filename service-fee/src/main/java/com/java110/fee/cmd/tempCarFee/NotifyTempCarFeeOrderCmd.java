@@ -60,7 +60,7 @@ public class NotifyTempCarFeeOrderCmd extends Cmd {
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         System.out.println("获取到内存中的数据了++++++++++++==》"+paramObj.toJSONString());
         modifyCouponUser(paramObj);
-        TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(reqJson, TempCarPayOrderDto.class);
+        TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(paramObj, TempCarPayOrderDto.class);
         ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }

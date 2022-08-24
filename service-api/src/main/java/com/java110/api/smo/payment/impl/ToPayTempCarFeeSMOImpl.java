@@ -11,7 +11,9 @@ import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
 import com.java110.utils.cache.CommonCache;
@@ -58,6 +60,9 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         return super.businessProcess(pd);
     }
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
@@ -76,6 +81,13 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
 
         ResponseEntity responseEntity = null;
 
+        //根据paId 查询communityId
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(paramIn.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+        Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
+        paramIn.put("communityId",parkingAreaDtos.get(0).getCommunityId());
         SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
 
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息

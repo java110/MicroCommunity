@@ -6,6 +6,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -109,7 +110,7 @@ public class PayFeePreTempCarInoutCmd extends Cmd {
 
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
-        businessFeeDetail.put("detailId", "-1");
+        businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
         if (!businessFeeDetail.containsKey("state")) {
             businessFeeDetail.put("state", "1400");

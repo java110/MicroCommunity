@@ -73,7 +73,7 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         postParameters.put("extPaId", tempCarPayOrderDto.getPaId());
         postParameters.put("orderId", tempCarPayOrderDto.getOrderId());
         postParameters.put("amount", tempCarPayOrderDto.getAmount());
-        postParameters.put("payTime", DateUtil.getFormatTimeString(tempCarPayOrderDto.getPayTime(), DateUtil.DATE_FORMATE_STRING_A));
+        postParameters.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("payType", tempCarPayOrderDto.getPayType());
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER), HttpMethod.POST, httpEntity, String.class);
