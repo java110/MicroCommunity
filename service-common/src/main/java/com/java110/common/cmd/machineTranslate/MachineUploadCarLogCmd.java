@@ -16,12 +16,14 @@ import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -104,6 +106,9 @@ public class MachineUploadCarLogCmd extends Cmd {
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
@@ -179,6 +184,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
         }
 
+
         //保存出场明细
         CarInoutDetailPo carInoutDetailPo = new CarInoutDetailPo();
         carInoutDetailPo.setCarInout(CarInoutDetailDto.CAR_INOUT_OUT);
@@ -188,7 +194,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setInoutId(carInoutDtos.get(0).getInoutId());
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
-        carInoutDetailPo.setPaId(machineDto.getLocationObjId());
+        carInoutDetailPo.setPaId(carInoutDtos.get(0).getPaId());
         int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
@@ -314,6 +320,18 @@ public class MachineUploadCarLogCmd extends Cmd {
             state = CarInoutDto.STATE_IN_FAIL;
         }
 
+        String paId = machineDto.getLocationObjId();
+
+        if(MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())){
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+            if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1){
+                throw new CmdException("岗亭未配置停车场"+machineDto.getLocationObjId());
+            }
+            paId = parkingBoxAreaDtos.get(0).getPaId();
+        }
+
         //保存
         CarInoutPo carInoutPo = new CarInoutPo();
         carInoutPo.setCarNum(reqJson.getString("carNum"));
@@ -321,7 +339,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutPo.setInoutId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         carInoutPo.setInTime(reqJson.getString("inTime"));
         carInoutPo.setState(state);
-        carInoutPo.setPaId(machineDto.getLocationObjId());
+        carInoutPo.setPaId(paId);
         int flag = carInoutV1InnerServiceSMOImpl.saveCarInout(carInoutPo);
 
         if (flag < 1) {
@@ -338,7 +356,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setInoutId(carInoutPo.getInoutId());
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
-        carInoutDetailPo.setPaId(machineDto.getLocationObjId());
+        carInoutDetailPo.setPaId(paId);
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
         flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
