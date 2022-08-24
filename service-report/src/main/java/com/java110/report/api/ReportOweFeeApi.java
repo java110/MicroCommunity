@@ -135,12 +135,22 @@ public class ReportOweFeeApi {
                                                        @RequestParam(value = "configIds", required = false) String configIds,
                                                        @RequestParam(value = "payObjType", required = false) String payObjType,
                                                        @RequestParam(value = "hasOweFee", required = false) String hasOweFee,
+                                                       @RequestParam(value = "ownerName", required = false) String ownerName,
+                                                       @RequestParam(value = "floorId", required = false) String floorId,
+                                                       @RequestParam(value = "unitId", required = false) String unitId,
+                                                       @RequestParam(value = "roomSubType", required = false) String roomSubType,
+                                                       @RequestParam(value = "roomNum", required = false) String roomNum,
                                                        @RequestParam(value = "num", required = false) String num) {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjType(payObjType);
         reportOweFeeDto.setPayerObjName(num);
         reportOweFeeDto.setCommunityId(communityId);
         reportOweFeeDto.setHasOweFee(hasOweFee);
+        reportOweFeeDto.setOwnerName(ownerName);
+        reportOweFeeDto.setFloorId(floorId);
+        reportOweFeeDto.setUnitId(unitId);
+        reportOweFeeDto.setRoomSubType(roomSubType);
+        reportOweFeeDto.setRoomNum(roomNum);
         if (!StringUtil.isEmpty(configIds)) {
             String[] tmpConfigIds = configIds.split(",");
             reportOweFeeDto.setConfigIds(tmpConfigIds);
