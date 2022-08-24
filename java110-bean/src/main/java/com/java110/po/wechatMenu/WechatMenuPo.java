@@ -14,7 +14,7 @@ public class WechatMenuPo implements Serializable {
     private String wechatMenuId;
     private String parentMenuId;
     private String seq;
-    private String statusCd="1";
+    private String statusCd="0";
 
     public String getPagepath() {
         return pagepath;
