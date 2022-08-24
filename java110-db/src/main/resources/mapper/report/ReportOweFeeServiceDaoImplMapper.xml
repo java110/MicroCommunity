@@ -517,6 +517,87 @@
         </if>
     </select>
 
+    <select id="queryReportAllOweFeesByContract" parameterType="Map" resultType="Map">
+        select t.config_name,t.config_name configName,t.deadline_time,t.deadline_time
+        deadlineTime,t.owner_tel,t.owner_tel ownerTel,t.update_time,t.update_time updateTime,t.owe_id,t.owe_id
+        oweId,t.fee_id,t.fee_id feeId,t.amount_owed,t.amount_owed amountOwed,t.payer_obj_name,t.payer_obj_name
+        payerObjName,t.config_id,t.config_id configId,t.fee_name,t.fee_name
+        feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,
+        ct.obj_id ownerId,ct.party_b ownerName,ct.a_link ownerTel
+        from report_owe_fee t
+        left join contract ct on ct.contract_id = t.payer_obj_id and ct.status_cd = '0'
+        LEFT JOIN pay_fee pf on t.fee_id = pf.fee_id
+        where 1 =1
+        and pf.status_cd = '0'
+        <if test="configName !=null and configName != ''">
+            and t.config_name= #{configName}
+        </if>
+        <if test="deadlineTime !=null and deadlineTime != ''">
+            and t.deadline_time= #{deadlineTime}
+        </if>
+        <if test="ownerTel !=null and ownerTel != ''">
+            and t.owner_tel= #{ownerTel}
+        </if>
+        <if test="updateTime !=null and updateTime != ''">
+            and t.update_time= #{updateTime}
+        </if>
+        <if test="oweId !=null and oweId != ''">
+            and t.owe_id= #{oweId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and ct.obj_id= #{ownerId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="amountOwed !=null and amountOwed != ''">
+            and t.amount_owed= #{amountOwed}
+        </if>
+        <if test="payerObjName !=null and payerObjName != ''">
+            and t.payer_obj_name= #{payerObjName}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and ct.party_b= #{ownerName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test='hasOweFee !=null and hasOweFee == "Y"'>
+            and t.amount_owed &gt; 0
+        </if>
+        <if test="configIds !=null">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjIds !=null">
+            and t.payer_obj_id in
+            <foreach collection="payerObjIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 
     <select id="computeReportOweFeeTotalAmount" parameterType="Map" resultType="Map">
         select sum(t.amount_owed) total

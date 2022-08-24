@@ -74,6 +74,12 @@ public interface IReportOweFeeInnerServiceSMO {
     List<ReportOweFeeDto> queryReportAllOweFeesByCar(@RequestBody ReportOweFeeDto reportOweFeeDto);
 
     /**
+     * 查询欠费信息(与车辆关联)
+     */
+    @RequestMapping(value = "/queryReportAllOweFeesByContract", method = RequestMethod.POST)
+    List<ReportOweFeeDto> queryReportAllOweFeesByContract(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
+    /**
      * 计算总欠费
      * @param reportOweFeeDto
      * @return

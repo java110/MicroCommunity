@@ -78,6 +78,13 @@ public interface IReportOweFeeServiceDao {
      * @return
      */
     List<Map> queryReportAllOweFeesByCar(Map beanCovertMap);
+    /**
+     * 查询欠费(与合同关联)
+     *
+     * @param beanCovertMap
+     * @return
+     */
+    List<Map> queryReportAllOweFeesByContract(Map beanCovertMap);
 
     double computeReportOweFeeTotalAmount(Map beanCovertMap);
 

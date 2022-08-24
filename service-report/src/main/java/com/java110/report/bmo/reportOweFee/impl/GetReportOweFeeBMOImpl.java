@@ -183,12 +183,17 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         for (ReportOweFeeDto reportOweFee : allReportOweFeeDtos) {
             ReportOweFeeDto reportOwe = new ReportOweFeeDto();
             reportOwe.setOweId(reportOweFee.getOweId());
-            if (reportOweFee.getPayerObjType().equals("3333")) {
+            if ("3333".equals(reportOweFee.getPayerObjType())) {
                 List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByRoom(reportOwe);
                 reportOweFee.setOweId(reportOweFees.get(0).getOweId());
                 reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
                 reportOweFee.setOwnerTel(reportOweFees.get(0).getOwnerTel());
-            } else if (reportOweFee.getPayerObjType().equals("6666")) {
+            } else if ("6666".equals(reportOweFee.getPayerObjType())) {
+                List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByCar(reportOwe);
+                reportOweFee.setOweId(reportOweFees.get(0).getOweId());
+                reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
+                reportOweFee.setOwnerTel(reportOweFees.get(0).getOwnerTel());
+            }else if ("7777".equals(reportOweFee.getPayerObjType())) {
                 List<ReportOweFeeDto> reportOweFees = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFeesByCar(reportOwe);
                 reportOweFee.setOweId(reportOweFees.get(0).getOweId());
                 reportOweFee.setOwnerName(reportOweFees.get(0).getOwnerName());
@@ -257,6 +262,9 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
             }
             if (!StringUtil.isEmpty(reportOweFeeDto.getOwnerName()) && StringUtil.isEmpty(oldReportOweFeeDto.getOwnerName())) {
                 oldReportOweFeeDto.setOwnerName(reportOweFeeDto.getOwnerName());
+            }
+            if (!StringUtil.isEmpty(reportOweFeeDto.getOwnerTel()) && StringUtil.isEmpty(oldReportOweFeeDto.getOwnerTel())) {
+                oldReportOweFeeDto.setOwnerTel(reportOweFeeDto.getOwnerTel());
             }
             oldReportOweFeeDto.setUpdateTime(reportOweFeeDto.getUpdateTime());
             oldReportOweFeeDto.setConfigName(reportOweFeeDto.getConfigName());

@@ -117,6 +117,20 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
         return reportOweFees;
     }
 
+    /**
+     * 查询欠费(与合同关联)
+     *
+     * @param reportOweFeeDto
+     * @return
+     */
+    @Override
+    public List<ReportOweFeeDto> queryReportAllOweFeesByContract(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFeesByContract(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
+        return reportOweFees;
+    }
+
+
+
     @Override
     public double computeReportOweFeeTotalAmount(@RequestBody ReportOweFeeDto reportOweFeeDto) {
         return reportOweFeeServiceDaoImpl.computeReportOweFeeTotalAmount(BeanConvertUtil.beanCovertMap(reportOweFeeDto));

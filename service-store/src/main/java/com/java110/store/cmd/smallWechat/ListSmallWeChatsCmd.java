@@ -69,7 +69,9 @@ public class ListSmallWeChatsCmd extends Cmd {
         }
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(reqJson.getString("communityId"));
+        if(StringUtil.jsonHasKayAndValue(reqJson,"communityId")) {
+            smallWeChatDto.setObjId(reqJson.getString("communityId"));
+        }
         //smallWeChatDto.setWeChatType(reqJson.getString("wechatType"));
         int count = smallWechatV1InnerServiceSMOImpl.querySmallWechatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
