@@ -7,6 +7,11 @@ import java.util.Date;
 
 public class TempCarPayOrderDto extends PageDto implements Serializable {
 
+    public static final String PAY_TYPE_CARSH = "1";//现金
+    public static final String PAY_TYPE_WECHAT = "2";//微信
+    public static final String PAY_TYPE_ALIPAY = "3";//支付宝
+
+
     private String orderId;
     private String paId;
     private String extPaId;
