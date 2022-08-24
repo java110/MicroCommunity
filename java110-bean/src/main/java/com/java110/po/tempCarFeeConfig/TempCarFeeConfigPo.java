@@ -14,7 +14,7 @@ public class TempCarFeeConfigPo implements Serializable {
     private String ruleId;
     private String communityId;
     private String feeConfigId;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getCarType() {
         return carType;
