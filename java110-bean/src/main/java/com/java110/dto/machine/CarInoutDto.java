@@ -22,6 +22,8 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     public static final String STATE_OUT = "100500";
     public static final String STATE_REPAY = "100600";
 
+    public static final String STATE_IN_FAIL = "100301";
+
 
     private String inTime;
     private String inoutId;

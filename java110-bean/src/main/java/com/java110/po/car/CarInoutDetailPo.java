@@ -22,6 +22,8 @@ public class CarInoutDetailPo implements Serializable {
     private String paId;
     private String statusCd = "0";
 
+    private String remark;
+
     public String getDetailId() {
         return detailId;
     }
@@ -92,5 +94,13 @@ public class CarInoutDetailPo implements Serializable {
 
     public void setPaId(String paId) {
         this.paId = paId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -308,13 +308,19 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param tempCar
      */
     private void carIn(JSONObject reqJson, MachineDto machineDto, int tempCar) {
+        String state = CarInoutDto.STATE_IN;
+        //进场失败记录
+        if(reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))){
+            state = CarInoutDto.STATE_IN_FAIL;
+        }
+
         //保存
         CarInoutPo carInoutPo = new CarInoutPo();
         carInoutPo.setCarNum(reqJson.getString("carNum"));
         carInoutPo.setCommunityId(reqJson.getString("communityId"));
         carInoutPo.setInoutId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         carInoutPo.setInTime(reqJson.getString("inTime"));
-        carInoutPo.setState(CarInoutDto.STATE_IN);
+        carInoutPo.setState(state);
         carInoutPo.setPaId(machineDto.getLocationObjId());
         int flag = carInoutV1InnerServiceSMOImpl.saveCarInout(carInoutPo);
 
@@ -333,6 +339,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
         carInoutDetailPo.setPaId(machineDto.getLocationObjId());
+        carInoutDetailPo.setRemark(reqJson.getString("remark"));
         flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
