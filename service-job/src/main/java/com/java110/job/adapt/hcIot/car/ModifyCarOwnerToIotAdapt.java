@@ -120,8 +120,6 @@ public class ModifyCarOwnerToIotAdapt extends DatabusAdaptImpl {
         ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER});
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        Assert.listOnlyOne(ownerCarDtos, "未找到停车场");
-
         if(ownerCarDtos == null || ownerCarDtos.size() < 1){
             throw new IllegalArgumentException("未找到车辆");
         }

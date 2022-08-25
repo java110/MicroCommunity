@@ -114,8 +114,11 @@ public class DeleteCarOwnerToIotAdapt extends DatabusAdaptImpl {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarId(ownerCarPo.getCarId());
         ownerCarDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER});
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        Assert.listOnlyOne(ownerCarDtos, "未找到停车场");
+        if(ownerCarDtos == null || ownerCarDtos.size() < 1){
+            throw new IllegalArgumentException("未找到车辆");
+        }
 
         //没有车位就不同步了
         if (StringUtil.isEmpty(ownerCarDtos.get(0).getPsId()) || "-1".equals(ownerCarDtos.get(0).getPsId())) {
