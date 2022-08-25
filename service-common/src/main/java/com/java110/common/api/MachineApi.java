@@ -74,8 +74,8 @@ public class MachineApi {
      *
      * @param reqJson
      * @return
-     * @serviceCode /machine/openDoor
-     * @path /app/machine/openDoor
+     * @serviceCode /machine/closeDoor
+     * @path /app/machine/closeDoor
      */
     @RequestMapping(value = "/closeDoor", method = RequestMethod.POST)
     public ResponseEntity<String> closeDoor(@RequestBody JSONObject reqJson,
