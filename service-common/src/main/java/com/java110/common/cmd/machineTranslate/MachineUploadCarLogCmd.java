@@ -165,11 +165,21 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param tempCar
      */
     private void carOut(JSONObject reqJson, MachineDto machineDto, int tempCar) {
+        String paId = "";
+        if(MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())){
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+            if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1){
+                throw new CmdException("岗亭未配置停车场"+machineDto.getLocationObjId());
+            }
+            paId = parkingBoxAreaDtos.get(0).getPaId();
+        }
 
         CarInoutDto carInoutDto = new CarInoutDto();
         carInoutDto.setCommunityId(reqJson.getString("communityId"));
         carInoutDto.setCarNum(reqJson.getString("carNum"));
-        carInoutDto.setPaId(machineDto.getLocationObjId());
+        carInoutDto.setPaId(paId);
         carInoutDto.setStates(new String[]{
                 CarInoutDto.STATE_IN,
                 CarInoutDto.STATE_PAY,
