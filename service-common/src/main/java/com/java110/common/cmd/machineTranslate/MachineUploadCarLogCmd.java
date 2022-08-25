@@ -165,13 +165,21 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param tempCar
      */
     private void carOut(JSONObject reqJson, MachineDto machineDto, int tempCar) {
+
+        String state = CarInoutDto.STATE_OUT;
+        //进场失败记录
+        if (reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))) {
+            state = CarInoutDto.STATE_IN_FAIL;
+        }
+
+
         String paId = "";
-        if(MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())){
+        if (MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())) {
             ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
             parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
             List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
-            if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1){
-                throw new CmdException("岗亭未配置停车场"+machineDto.getLocationObjId());
+            if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+                throw new CmdException("岗亭未配置停车场" + machineDto.getLocationObjId());
             }
             paId = parkingBoxAreaDtos.get(0).getPaId();
         }
@@ -187,13 +195,32 @@ public class MachineUploadCarLogCmd extends Cmd {
         });
         List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
 
+        // 没有进场记录
         if (carInoutDtos == null || carInoutDtos.size() < 1) {
             //可能车辆异常情况 没有 进场 补充进场记录
             reqJson.put("inTime", reqJson.getString("outTime"));
-            carIn(reqJson, machineDto, tempCar);
-            carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+            //carIn(reqJson, machineDto, tempCar);
+            //保存出场明细
+            CarInoutDetailPo carInoutDetailPo = new CarInoutDetailPo();
+            carInoutDetailPo.setCarInout(CarInoutDetailDto.CAR_INOUT_OUT);
+            carInoutDetailPo.setCarNum(reqJson.getString("carNum"));
+            carInoutDetailPo.setCommunityId(reqJson.getString("communityId"));
+            carInoutDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            carInoutDetailPo.setInoutId("-1");
+            carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
+            carInoutDetailPo.setMachineId(machineDto.getMachineId());
+            carInoutDetailPo.setPaId(paId);
+            carInoutDetailPo.setRemark(reqJson.getString("remark"));
+            carInoutDetailPo.setState(state);
+            int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
+            if (flag < 1) {
+                throw new CmdException("保存出记录明细失败");
+            }
+            //出场失败了
+            if (CarInoutDto.STATE_IN_FAIL.equals(state)) {
+                return;
+            }
         }
-
 
         //保存出场明细
         CarInoutDetailPo carInoutDetailPo = new CarInoutDetailPo();
@@ -205,10 +232,17 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
         carInoutDetailPo.setPaId(carInoutDtos.get(0).getPaId());
+        carInoutDetailPo.setRemark(reqJson.getString("remark"));
+        carInoutDetailPo.setState(state);
         int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
             throw new CmdException("保存出记录明细失败");
+        }
+
+        //出场失败了
+        if (CarInoutDto.STATE_IN_FAIL.equals(state)) {
+            return;
         }
 
         //将状态更新为 出场状态
@@ -226,53 +260,53 @@ public class MachineUploadCarLogCmd extends Cmd {
         }
 
         //写支付记录
-        CarInoutPaymentPo carInoutPaymentPo = new CarInoutPaymentPo();
-        carInoutPaymentPo.setPaymentId(GenerateCodeFactory.getGeneratorId("10"));
-        carInoutPaymentPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        carInoutPaymentPo.setInoutId(carInoutDtos.get(0).getInoutId());
-        carInoutPaymentPo.setPaId(carInoutDtos.get(0).getPaId());
-        carInoutPaymentPo.setPayCharge(reqJson.getString("payCharge"));
-        carInoutPaymentPo.setPayType(reqJson.getString("payType"));
-        carInoutPaymentPo.setRealCharge(reqJson.getString("realCharge"));
-        flag = carInoutPaymentV1InnerServiceSMOImpl.saveCarInoutPayment(carInoutPaymentPo);
-        if (flag < 1) {
-            throw new CmdException("更新出场时间失败");
-        }
-
-        //月租车
-        if (tempCar != CAR_TYPE_NO_DATA && tempCar != CAR_TYPE_TEMP) {
-            return;
-        }
-
-        //如果有费用 则缴费
-        boolean hasFee = hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
-
-        double realCharge = Double.parseDouble(carInoutPaymentPo.getRealCharge());
-
-        //有费用 或者 缴费为0 时结束
-        if (hasFee || realCharge == 0) {
-            return;
-        }
-        // 判断是否存在 临时车 虚拟业主
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setCommunityId(reqJson.getString("communityId"));
-        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
-        ownerDto.setOwnerFlag(OwnerDto.OWNER_FLAG_FALSE);
-        ownerDto.setName(TEMP_CAR_OWNER);
-        List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
-        if (ownerDtos == null || ownerDtos.size() < 1) {
-            return;
-        }
-        JSONObject paramIn = new JSONObject();
-        paramIn.put("inTime", carInoutDtos.get(0).getInTime());
-        paramIn.put("carId", reqJson.getString("carId"));
-        paramIn.put("communityId", carInoutDtos.get(0).getCommunityId());
-        paramIn.put("inoutId", carInoutDtos.get(0).getInoutId());
-        paramIn.put("ownerId", ownerDtos.get(0).getMemberId());
-        saveTempCarFee(paramIn, machineDto);
-
-        //再去缴费
-        hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
+//        CarInoutPaymentPo carInoutPaymentPo = new CarInoutPaymentPo();
+//        carInoutPaymentPo.setPaymentId(GenerateCodeFactory.getGeneratorId("10"));
+//        carInoutPaymentPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
+//        carInoutPaymentPo.setInoutId(carInoutDtos.get(0).getInoutId());
+//        carInoutPaymentPo.setPaId(carInoutDtos.get(0).getPaId());
+//        carInoutPaymentPo.setPayCharge(reqJson.getString("payCharge"));
+//        carInoutPaymentPo.setPayType(reqJson.getString("payType"));
+//        carInoutPaymentPo.setRealCharge(reqJson.getString("realCharge"));
+//        flag = carInoutPaymentV1InnerServiceSMOImpl.saveCarInoutPayment(carInoutPaymentPo);
+//        if (flag < 1) {
+//            throw new CmdException("更新出场时间失败");
+//        }
+//
+//        //月租车
+//        if (tempCar != CAR_TYPE_NO_DATA && tempCar != CAR_TYPE_TEMP) {
+//            return;
+//        }
+//
+//        //如果有费用 则缴费
+//        boolean hasFee = hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
+//
+//        double realCharge = Double.parseDouble(carInoutPaymentPo.getRealCharge());
+//
+//        //有费用 或者 缴费为0 时结束
+//        if (hasFee || realCharge == 0) {
+//            return;
+//        }
+//        // 判断是否存在 临时车 虚拟业主
+//        OwnerDto ownerDto = new OwnerDto();
+//        ownerDto.setCommunityId(reqJson.getString("communityId"));
+//        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+//        ownerDto.setOwnerFlag(OwnerDto.OWNER_FLAG_FALSE);
+//        ownerDto.setName(TEMP_CAR_OWNER);
+//        List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
+//        if (ownerDtos == null || ownerDtos.size() < 1) {
+//            return;
+//        }
+//        JSONObject paramIn = new JSONObject();
+//        paramIn.put("inTime", carInoutDtos.get(0).getInTime());
+//        paramIn.put("carId", reqJson.getString("carId"));
+//        paramIn.put("communityId", carInoutDtos.get(0).getCommunityId());
+//        paramIn.put("inoutId", carInoutDtos.get(0).getInoutId());
+//        paramIn.put("ownerId", ownerDtos.get(0).getMemberId());
+//        saveTempCarFee(paramIn, machineDto);
+//
+//        //再去缴费
+//        hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
     }
 
     private boolean hasFeeAndPayFee(CarInoutDto carInoutDto, JSONObject reqJson, CarInoutPo carInoutPo, CarInoutPaymentPo carInoutPaymentPo) {
@@ -326,18 +360,18 @@ public class MachineUploadCarLogCmd extends Cmd {
     private void carIn(JSONObject reqJson, MachineDto machineDto, int tempCar) {
         String state = CarInoutDto.STATE_IN;
         //进场失败记录
-        if(reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))){
+        if (reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))) {
             state = CarInoutDto.STATE_IN_FAIL;
         }
 
         String paId = machineDto.getLocationObjId();
 
-        if(MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())){
+        if (MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())) {
             ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
             parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
             List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
-            if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1){
-                throw new CmdException("岗亭未配置停车场"+machineDto.getLocationObjId());
+            if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+                throw new CmdException("岗亭未配置停车场" + machineDto.getLocationObjId());
             }
             paId = parkingBoxAreaDtos.get(0).getPaId();
         }
@@ -367,6 +401,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
         carInoutDetailPo.setPaId(paId);
+        carInoutDetailPo.setState(state);
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
         flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 

@@ -33,6 +33,7 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     private String statusCd = "0";
 
     private String remark;
+    private String state;
 
 
     public String getInoutId() {
@@ -114,5 +115,15 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Override
+    public String getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(String state) {
+        this.state = state;
     }
 }
