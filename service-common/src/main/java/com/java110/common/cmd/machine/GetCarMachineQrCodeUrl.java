@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
@@ -31,7 +32,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -60,6 +60,7 @@ public class GetCarMachineQrCodeUrl extends Cmd {
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
     @Autowired
     private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
@@ -75,11 +76,15 @@ public class GetCarMachineQrCodeUrl extends Cmd {
         smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-        ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?paId="+ getPaIds(reqJson));
-        if(smallWeChatDtos != null && smallWeChatDtos.size()> 0){
-            ownerUrl += ("&appId="+smallWeChatDtos.get(0).getAppId());
+        ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?paId=" + getPaIds(reqJson));
+        if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
+            ownerUrl += ("&appId=" + smallWeChatDtos.get(0).getAppId());
         }
-        reqJson.put("url",ownerUrl);
+
+        if (reqJson.containsKey("machineId") && !"-1".equals(reqJson.getString("machineId"))) {
+            ownerUrl += ("&machineId=" + reqJson.getString("machineId"));
+        }
+        reqJson.put("url", ownerUrl);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(reqJson));
     }
 

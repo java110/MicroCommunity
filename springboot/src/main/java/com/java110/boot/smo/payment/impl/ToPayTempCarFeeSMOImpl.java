@@ -107,7 +107,10 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         }
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
-        String url = "tempCarFee.queryTempCarFeeOrder?paId=" + paramIn.getString("paId") + "&carNum=" + paramIn.getString("carNum")+"&couponIds="+StringUtils.join(couponIds,",");
+        String url = "tempCarFee.queryTempCarFeeOrder?paId=" + paramIn.getString("paId")
+                + "&carNum=" + paramIn.getString("carNum")
+                + "&machineId=" + paramIn.getString("machineId")
+                +"&couponIds="+StringUtils.join(couponIds,",");
         responseEntity = super.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
