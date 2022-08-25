@@ -56,6 +56,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String CMD_ADD_VISIT = "921";
 
     public static final String CMD_OPEN_DOOR = "5";
+    public static final String CMD_CLOSE_DOOR = "51";
 
     //小区信息
     public static final String TYPE_COMMUNITY = "9988";

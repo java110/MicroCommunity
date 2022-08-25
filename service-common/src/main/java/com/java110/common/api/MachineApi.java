@@ -69,6 +69,28 @@ public class MachineApi {
         return machineOpenDoorBMOImpl.openDoor(reqJson);
     }
 
+    /**
+     * 设备开门功能
+     *
+     * @param reqJson
+     * @return
+     * @serviceCode /machine/openDoor
+     * @path /app/machine/openDoor
+     */
+    @RequestMapping(value = "/closeDoor", method = RequestMethod.POST)
+    public ResponseEntity<String> closeDoor(@RequestBody JSONObject reqJson,
+                                           @RequestHeader(value = "user-id", required = false) String userId) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+        Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
+        Assert.hasKeyAndValue(reqJson, "userRole", "请求报文中未包含用户角色");
+        if (!USER_ROLE_OWNER.equals(reqJson.getString("userRole"))) { //这种为 员工的情况呢
+            reqJson.put("userId", userId);
+        }
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
+        return machineOpenDoorBMOImpl.closeDoor(reqJson);
+    }
+
+
 
     /**
      * 设备二维码

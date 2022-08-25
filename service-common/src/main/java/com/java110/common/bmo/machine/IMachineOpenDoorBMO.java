@@ -27,6 +27,13 @@ public interface IMachineOpenDoorBMO {
      * @return
      */
     ResponseEntity<String> openDoor(JSONObject reqJson);
+    /**
+     * 开门接口类
+     *
+     * @param reqJson 请求报文信息
+     * @return
+     */
+    ResponseEntity<String> closeDoor(JSONObject reqJson);
 
     /**
      * 开门接口类

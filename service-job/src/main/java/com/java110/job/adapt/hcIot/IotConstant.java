@@ -87,6 +87,8 @@ public class IotConstant {
 
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";
+    //开门接口
+    public static final String CLOSE_DOOR = "/extApi/machine/closeDoor";
 
     //手动进出场
     public static final String CUSTOM_CAR_INOUT = "/extApi/machine/customCarInOut";

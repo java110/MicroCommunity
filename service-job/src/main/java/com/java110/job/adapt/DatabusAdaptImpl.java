@@ -55,6 +55,16 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     public ResultVo openDoor(JSONObject paramIn) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+    /**
+     * 开门
+     *
+     * @param paramIn 业务信息
+     * @return
+     */
+    @Override
+    public ResultVo closeDoor(JSONObject paramIn) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
 
     @Override
     public ResultVo getQRcode(JSONObject reqJson) {

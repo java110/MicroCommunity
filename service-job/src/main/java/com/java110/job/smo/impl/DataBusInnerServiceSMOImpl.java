@@ -56,6 +56,12 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         return databusAdaptImpl.openDoor(reqJson);
 
     }
+    @Override
+    public ResultVo closeDoor(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.closeDoor(reqJson);
+
+    }
 
 
     @Override

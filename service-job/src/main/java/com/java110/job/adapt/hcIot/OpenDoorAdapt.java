@@ -137,6 +137,79 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
             machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
         }
     }
+    /**
+     * 开门实现方法
+     *
+     * @param paramIn 业务信息
+     * @return
+     */
+    @Override
+    public ResultVo closeDoor(JSONObject paramIn) {
+
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(paramIn.getString("machineCode"));
+        machineDto.setCommunityId(paramIn.getString("communityId"));
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+
+        Assert.listOnlyOne(machineDtos, "设备不存在");
+        String userId = "";
+        String userName = "";
+
+        if (!"owner".equals(paramIn.getString("userRole"))) {
+            UserDto userDto = new UserDto();
+            userDto.setUserId(paramIn.getString("userId"));
+            List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+            Assert.listOnlyOne(userDtos, "用户不存在");
+            userId = userDtos.get(0).getUserId();
+            userName = userDtos.get(0).getUserName();
+        } else {
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setMemberId(paramIn.getString("userId"));
+            ownerDto.setCommunityId(paramIn.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            userId = ownerDtos.get(0).getMemberId();
+            userName = ownerDtos.get(0).getName();
+        }
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(paramIn.getString("communityId"));
+        machineTranslateDto.setMachineCmd(MachineTranslateDto.CMD_CLOSE_DOOR);
+        machineTranslateDto.setMachineCode(machineDtos.get(0).getMachineCode());
+        machineTranslateDto.setMachineId(machineDtos.get(0).getMachineId());
+        machineTranslateDto.setObjId(userId);
+        machineTranslateDto.setObjName(userName);
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_COMMUNITY);
+        machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+        machineTranslateDto.setRemark("同步物联网系统成功");
+
+        try {
+            JSONObject postParameters = new JSONObject();
+            postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+            postParameters.put("machineCode", paramIn.getString("machineCode"));
+            HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.CLOSE_DOOR), HttpMethod.POST, httpEntity, String.class);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark("关门失败");
+                return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+            }
+            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+            if (!paramOut.containsKey("code") || ResultVo.CODE_OK != paramOut.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(paramOut.getString("msg"));
+            } else {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_SUCCESS);
+                machineTranslateDto.setRemark("同步物联网系统成功");
+            }
+            return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+        } finally {
+            machineTranslateDto.setbId("-1");
+            machineTranslateDto.setObjBId("-1");
+            machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+        }
+    }
 
     /**
      * 开门实现方法

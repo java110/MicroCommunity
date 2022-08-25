@@ -46,6 +46,12 @@ public interface IDatabusAdapt {
      * @param paramIn 业务信息
      */
     ResultVo openDoor(JSONObject paramIn);
+    /**
+     * 开门接口
+     *
+     * @param paramIn 业务信息
+     */
+    ResultVo closeDoor(JSONObject paramIn);
 
 
     ResultVo getQRcode(JSONObject reqJson);

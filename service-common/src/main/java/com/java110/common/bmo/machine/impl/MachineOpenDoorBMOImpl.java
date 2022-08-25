@@ -73,6 +73,34 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         return ResultVo.createResponseEntity(resultVo);
     }
 
+    /**
+     * 开门功能
+     *
+     * @param reqJson 请求报文信息
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> closeDoor(JSONObject reqJson) {
+        //如果是业主 限制开门次数
+        if ("owner".equals(reqJson.getString("userRole"))) {
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setMemberId(reqJson.getString("userId"));
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            if (ownerDtos == null || ownerDtos.size() < 1) {
+                return ResultVo.error("没有权限开门");
+            }
+
+            if (!hasOpenDoorPri(ownerDtos.get(0), reqJson.getString("machineCode"))) {
+                return ResultVo.error("今日开门次数已用完，请联系物业客服人员");
+            }
+        }
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.closeDoor(reqJson);
+        return ResultVo.createResponseEntity(resultVo);
+    }
+
+
+
     private boolean hasOpenDoorPri(OwnerDto ownerDto, String machineCode) {
 
         List<OwnerAttrDto> ownerAttrDtos = ownerDto.getOwnerAttrDtos();
