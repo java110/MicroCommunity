@@ -1,7 +1,9 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
+import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOweFee.IGetReportOweFeeBMO;
 import com.java110.utils.util.DateUtil;
@@ -21,6 +23,10 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
 
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
 
 
     /**
@@ -211,6 +217,10 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         }
 
         //如果费用对象上没有这个费用项时默认写零
+        FeeConfigDto feeConfigDto = null;
+        feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigIds(configIds);
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
         for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
             for (String configId : configIds) {
                 if (hasItem(tmpReportOweFeeDto.getItems(), configId) != null) {
@@ -218,7 +228,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 }
                 ReportOweFeeItemDto reportOweFeeItemDto = new ReportOweFeeItemDto();
                 reportOweFeeItemDto.setConfigId(configId);
-                reportOweFeeItemDto.setFeeName("");
+                reportOweFeeItemDto.setFeeName(getFeeConfigName(feeConfigDtos,configId));
                 reportOweFeeItemDto.setAmountOwed("0");
                 reportOweFeeItemDto.setPayerObjId("");
                 reportOweFeeItemDto.setPayerObjName("");
@@ -226,6 +236,21 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
             }
         }
 
+    }
+
+    private String getFeeConfigName(List<FeeConfigDto> feeConfigDtos, String configId) {
+
+        if(feeConfigDtos == null || feeConfigDtos.size()<1){
+            return "无";
+        }
+
+        for(FeeConfigDto feeConfigDto:feeConfigDtos){
+            if(feeConfigDto.getConfigId().equals(configId)){
+                return feeConfigDto.getFeeName();
+            }
+        }
+
+        return "无";
     }
 
     private void dealItem(ReportOweFeeDto oldReportOweFeeDto, List<ReportOweFeeDto> allReportOweFeeDtos) {
