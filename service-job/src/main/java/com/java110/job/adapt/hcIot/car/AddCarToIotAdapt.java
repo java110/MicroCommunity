@@ -108,10 +108,12 @@ public class AddCarToIotAdapt extends DatabusAdaptImpl {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(ownerCarPo.getCarNum());
         ownerCarDto.setCommunityId(ownerCarPo.getCommunityId());
+        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER});
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        Assert.listOnlyOne(ownerCarDtos, "未找到车辆");
-
+        if(ownerCarDtos == null || ownerCarDtos.size() < 1){
+            throw new IllegalArgumentException("未找到车辆");
+        }
         //没有车位就不同步了
         if (StringUtil.isEmpty(ownerCarDtos.get(0).getPsId()) || "-1".equals(ownerCarDtos.get(0).getPsId())) {
             return;
