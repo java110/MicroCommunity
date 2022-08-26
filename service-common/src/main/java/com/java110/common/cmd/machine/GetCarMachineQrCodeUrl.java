@@ -21,7 +21,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.communitySetting.CommunitySettingDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
@@ -84,6 +86,11 @@ public class GetCarMachineQrCodeUrl extends Cmd {
         if (reqJson.containsKey("machineId") && !"-1".equals(reqJson.getString("machineId"))) {
             ownerUrl += ("&machineId=" + reqJson.getString("machineId"));
         }
+
+        String aliAppId = CommunitySettingFactory.getValue(reqJson.getString("communityId"),"APP_ID");
+       if( !StringUtil.isEmpty(aliAppId)){
+           ownerUrl += ("&aliAppId=" + aliAppId);
+       }
         reqJson.put("url", ownerUrl);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(reqJson));
     }
