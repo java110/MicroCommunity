@@ -74,6 +74,7 @@ public class ServiceConfiguration {
         exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration,");
         exclusions.append("/app/propertyRightRegistration.savePropertyRightRegistration,");
         exclusions.append("/app/system.listSystemInfo,");
+        exclusions.append("/app/car.queryWaitPayFeeTempCar,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
