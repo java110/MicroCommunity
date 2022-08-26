@@ -135,6 +135,10 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         }
 
         //如果费用对象上没有这个费用项时默认写零
+        FeeConfigDto feeConfigDto = null;
+        feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigIds(reportOweFeeDto.getConfigIds());
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
         for (ReportOweFeeDto tmpReportOweFeeDto : oldReportOweFeeDtos) {
             for (String configId : reportOweFeeDto.getConfigIds()) {
                 if (hasItem(tmpReportOweFeeDto.getItems(), configId) != null) {
@@ -142,7 +146,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 }
                 ReportOweFeeItemDto reportOweFeeItemDto = new ReportOweFeeItemDto();
                 reportOweFeeItemDto.setConfigId(configId);
-                reportOweFeeItemDto.setFeeName("");
+                reportOweFeeItemDto.setFeeName(getFeeConfigName(feeConfigDtos,configId));
                 reportOweFeeItemDto.setAmountOwed("0");
                 reportOweFeeItemDto.setPayerObjId("");
                 reportOweFeeItemDto.setPayerObjName("");
