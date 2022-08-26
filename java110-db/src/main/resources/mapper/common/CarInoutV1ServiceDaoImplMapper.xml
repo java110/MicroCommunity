@@ -19,8 +19,9 @@
     <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
         select t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.pa_id,t.pa_id paId,t.car_num,t.car_num
         carNum,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.out_time,t.out_time
-        outTime,td.`name` stateName
+        outTime,td.`name` stateName,max(cid.car_type) carType
         from car_inout t
+        LEFT JOIN car_inout_detail cid on t.inout_id = cid.inout_id and cid.status_cd = '0' and cid.state in ('100300','100400','100600')
         left join t_dict td on t.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
         where 1 =1
         <if test="inTime !=null and inTime != ''">
@@ -41,6 +42,9 @@
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
+        <if test="carType !=null and carType != ''">
+            and cid.car_type= #{carType}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -59,6 +63,7 @@
         <if test="outTime !=null and outTime != ''">
             and t.out_time= #{outTime}
         </if>
+        group by t.in_time,t.inout_id,t.pa_id,t.car_num,t.status_cd,t.state,t.community_id,t.out_time,td.`name`
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

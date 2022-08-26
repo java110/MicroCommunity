@@ -8,9 +8,9 @@
     <!-- 保存车辆进出明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveCarInoutDetailInfo" parameterType="Map">
         insert into car_inout_detail(
-        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state
+        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state,car_type
         ) values (
-        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state}
+        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state},#{carType}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.inout_id,t.inout_id inoutId,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
         machineCode,t.car_inout,t.car_inout carInout,t.pa_id,t.pa_id paId,t.detail_id,t.detail_id
         detailId,t.car_num,t.car_num carNum,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.state,
-        ci.in_time inTime,ci.out_time outTime,max(cip.real_charge) realCharge,ci.pa_id paId,td.name stateName,t.remark
+        ci.in_time inTime,ci.out_time outTime,max(cip.real_charge) realCharge,ci.pa_id paId,td.name stateName,t.remark,t.car_type carType
         from car_inout_detail t
         left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
         left join car_inout_payment cip on cip.inout_id = ci.inout_id and cip.community_id = ci.community_id
@@ -52,6 +52,9 @@
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -92,6 +95,9 @@
         </if>
         <if test="carNum !=null and carNum != ''">
             , t.car_num= #{carNum}
+        </if>
+        <if test="carType !=null and carType != ''">
+            , t.car_type= #{carType}
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
@@ -139,6 +145,9 @@
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carType !=null and carType != ''">
+            and t.car_type= #{carType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

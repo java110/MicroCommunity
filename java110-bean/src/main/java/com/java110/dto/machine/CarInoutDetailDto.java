@@ -17,7 +17,8 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     public static final String CAR_INOUT_IN = "3306";
     public static final String CAR_INOUT_OUT = "3307";
-
+    public static final String CAR_TYPE_TEMP = "1003";
+    public static final String CAR_TYPE_MONTH = "1001";
     private String inoutId;
     private String machineId;
     private String machineCode;
@@ -35,6 +36,7 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     private String remark;
     private String state;
 
+    private String carType;
 
     public String getInoutId() {
         return inoutId;
@@ -126,4 +128,14 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
 }
