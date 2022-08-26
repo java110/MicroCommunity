@@ -146,7 +146,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 }
                 ReportOweFeeItemDto reportOweFeeItemDto = new ReportOweFeeItemDto();
                 reportOweFeeItemDto.setConfigId(configId);
-                reportOweFeeItemDto.setFeeName(getFeeConfigName(feeConfigDtos,configId));
+                reportOweFeeItemDto.setConfigName(getFeeConfigName(feeConfigDtos,configId));
                 reportOweFeeItemDto.setAmountOwed("0");
                 reportOweFeeItemDto.setPayerObjId("");
                 reportOweFeeItemDto.setPayerObjName("");
@@ -232,7 +232,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
                 }
                 ReportOweFeeItemDto reportOweFeeItemDto = new ReportOweFeeItemDto();
                 reportOweFeeItemDto.setConfigId(configId);
-                reportOweFeeItemDto.setFeeName(getFeeConfigName(feeConfigDtos,configId));
+                reportOweFeeItemDto.setConfigName(getFeeConfigName(feeConfigDtos,configId));
                 reportOweFeeItemDto.setAmountOwed("0");
                 reportOweFeeItemDto.setPayerObjId("");
                 reportOweFeeItemDto.setPayerObjName("");
