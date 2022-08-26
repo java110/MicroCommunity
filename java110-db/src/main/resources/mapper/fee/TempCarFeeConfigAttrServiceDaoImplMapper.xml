@@ -79,8 +79,10 @@
     <select id="getTempCarFeeConfigAttrInfo" parameterType="Map" resultType="Map">
         select t.attr_id,t.attr_id attrId,t.create_time,t.create_time createTime,t.config_id,t.config_id
         configId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.value,
-        t.community_id,t.community_id communityId
+        t.community_id,t.community_id communityId,tcfrs.spec_name specName
         from temp_car_fee_config_attr t
+        left join temp_car_fee_config tcfc on t.config_id = tcfc.config_id and tcfc.status_cd = '0'
+        LEFT JOIN temp_car_fee_rule_spec tcfrs on tcfc.rule_id = tcfrs.rule_id and t.spec_cd = tcfrs.spec_id
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}

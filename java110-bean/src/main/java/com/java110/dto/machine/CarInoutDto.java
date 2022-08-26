@@ -45,6 +45,10 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String areaNum;
+    private String feeName;
+    private String feeConfigId;
+
 
     public String getInoutId() {
         return inoutId;
@@ -166,5 +170,29 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public String getAreaNum() {
+        return areaNum;
+    }
+
+    public void setAreaNum(String areaNum) {
+        this.areaNum = areaNum;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getFeeConfigId() {
+        return feeConfigId;
+    }
+
+    public void setFeeConfigId(String feeConfigId) {
+        this.feeConfigId = feeConfigId;
     }
 }
