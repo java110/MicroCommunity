@@ -16,7 +16,7 @@ import java.util.Date;
 public class OwnerCarOpenUserDto extends PageDto implements Serializable {
 
     public static final String OPEN_TYPE_WECHAT = "WECHAT";
-    public static final String OPEN_TYPE_ALIPAY = "ALI";
+    public static final String OPEN_TYPE_ALIPAY = "ALIPAY";
 
     private String openId;
     private String nickname;
