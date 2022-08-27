@@ -13,6 +13,7 @@ import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
 import com.java110.utils.cache.CommonCache;
@@ -38,11 +39,7 @@ import java.util.List;
 public class NotifyTempCarFeeOrderCmd extends Cmd {
 
     @Autowired
-    private IGetTempCarFeeRules getTempCarFeeRulesImpl;
-    @Autowired
-    private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
-    @Autowired
-    private ICouponUserDetailV1InnerServiceSMO couponUserDetailV1InnerServiceSMOImpl;
+    private ITempCarFeeCreateOrderV1InnerServiceSMO tempCarFeeCreateOrderV1InnerServiceSMOImpl;
     //{"amount":20.0,"payType":"2","orderId":"19c4321c-b5d5-405f-b2ff-20e86a2e7f3e",
     // "payTime":"2021-10-17 17:29:54","paId":"102021101160020175","carNum":"青A88888","oId":"102021101724760012"}
     @Override
@@ -53,59 +50,6 @@ public class NotifyTempCarFeeOrderCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String paramIn = CommonCache.getAndRemoveValue("queryTempCarFeeOrder" + reqJson.getString("oId"));
-        if (StringUtil.isEmpty(paramIn)) {
-            throw new CmdException("已经处理过了 再不处理");
-        }
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-        paramObj.putAll(reqJson);
-        System.out.println("获取到内存中的数据了++++++++++++==》"+paramObj.toJSONString());
-        modifyCouponUser(paramObj);
-        TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(paramObj, TempCarPayOrderDto.class);
-        ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
-        cmdDataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    private void modifyCouponUser(JSONObject paramObj) {
-        if (!paramObj.containsKey("couponPrice") || paramObj.getDouble("couponPrice") <= 0) {
-            return;
-        }
-        //FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
-        CouponUserDto couponUserDto = null;
-        JSONArray couponUserDtos = paramObj.getJSONArray("couponUserDtos");
-        CouponUserDto couponUser = null;
-        for (int accountIndex = 0; accountIndex < couponUserDtos.size(); accountIndex++) {
-            couponUser = BeanConvertUtil.covertBean(couponUserDtos.getJSONObject(accountIndex), CouponUserDto.class);
-            couponUserDto = new CouponUserDto();
-            couponUserDto.setCouponId(couponUser.getCouponId());
-            couponUserDto.setState(CouponUserDto.COUPON_STATE_RUN);
-            List<CouponUserDto> couponUserDtos1 = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
-            if (couponUserDtos1 == null || couponUserDtos1.size() < 1) {
-                throw new CmdException("优惠券被使用");
-            }
-            CouponUserPo couponUserPo = new CouponUserPo();
-            couponUserPo.setState(CouponUserDto.COUPON_STATE_STOP);
-            couponUserPo.setCouponId(couponUser.getCouponId());
-            int fage = couponUserV1InnerServiceSMOImpl.updateCouponUser(couponUserPo);
-            if (fage < 1) {
-                throw new CmdException("更新优惠卷信息失败");
-            }
-            CouponUserDetailPo couponUserDetailPo = new CouponUserDetailPo();
-            couponUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
-            couponUserDetailPo.setCouponId(couponUser.getCouponId());
-            couponUserDetailPo.setUserId(couponUser.getUserId());
-            couponUserDetailPo.setCouponName(couponUser.getCouponName());
-            couponUserDetailPo.setUserName(couponUser.getUserName());
-            couponUserDetailPo.setObjId(paramObj.getString("carNum"));
-            couponUserDetailPo.setObjType("车辆");
-            couponUserDetailPo.setOrderId(paramObj.getString("oId"));
-            fage = couponUserDetailV1InnerServiceSMOImpl.saveCouponUserDetail(couponUserDetailPo);
-            if (fage < 1) {
-                throw new CmdException("新增优惠卷使用记录信息失败");
-            }
-        }
-
-        paramObj.put("remark", paramObj.getString("remark") + "-优惠劵抵扣" + paramObj.getDouble("couponPrice") + "元");
-
+        cmdDataFlowContext.setResponseEntity(tempCarFeeCreateOrderV1InnerServiceSMOImpl.notifyOrder(reqJson));
     }
 }
