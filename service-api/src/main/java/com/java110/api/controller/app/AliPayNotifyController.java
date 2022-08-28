@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Action;
 import java.util.Map;
 
+// 支付宝 文档 https://opendocs.alipay.com/support/01rbcv
 @RestController
 @RequestMapping(path = "/app/alipay/notify")
 public class AliPayNotifyController extends BaseController {
@@ -44,7 +44,7 @@ public class AliPayNotifyController extends BaseController {
         String sign = params.get("sign");
         System.out.println(sign);
 
-        paramIn.put("resultInfo",request.getQueryString());
+        paramIn.put("resultInfo", request.getQueryString());
 
 
         // 收到通知后记得返回SUCCESS
