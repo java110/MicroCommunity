@@ -15,4 +15,12 @@ public interface ITempCarFeeToNotifySMO {
      * @return
      */
     public ResponseEntity<String> toNotify(String param,HttpServletRequest request);
+
+    /**
+     * 支付宝支付
+     * @param param
+     * @param request
+     * @return
+     */
+    ResponseEntity<String> aliPayToNotify(String param,HttpServletRequest request);
 }

@@ -2,13 +2,18 @@ package com.java110.acct.cmd.alipay;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradeCreateRequest;
+import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
-import com.java110.core.context.IPageData;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.CallApiServiceFactory;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -17,22 +22,20 @@ import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Java110Cmd(serviceCode = "alipay.payTempCarFee")
 public class PayTempCarFeeCmd extends Cmd {
@@ -71,15 +74,7 @@ public class PayTempCarFeeCmd extends Cmd {
 
         Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
         reqJson.put("communityId", parkingAreaDtos.get(0).getCommunityId());
-        SmallWeChatDto smallWeChatDto = getSmallWechat( reqJson);
 
-        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
-            smallWeChatDto = new SmallWeChatDto();
-            smallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppId"));
-            smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppSecret"));
-            smallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
-            smallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key"));
-        }
         JSONArray couponList = reqJson.getJSONArray("couponList");
         List<String> couponIds = new ArrayList<String>();
         if (couponList != null && couponList.size() > 0) {
@@ -92,15 +87,15 @@ public class PayTempCarFeeCmd extends Cmd {
         reqJson.put("userId", "-1");
 
         JSONObject paramIn = new JSONObject();
-        paramIn.put("paId",reqJson.getString("paId"));
-        paramIn.put("carNum",reqJson.getString("carNum"));
-        paramIn.put("machineId",reqJson.getString("machineId"));
-        paramIn.put("couponIds",StringUtils.join(couponIds, ","));
+        paramIn.put("paId", reqJson.getString("paId"));
+        paramIn.put("carNum", reqJson.getString("carNum"));
+        paramIn.put("machineId", reqJson.getString("machineId"));
+        paramIn.put("couponIds", StringUtils.join(couponIds, ","));
         responseEntity = tempCarFeeCreateOrderV1InnerServiceSMOImpl.createOrder(paramIn);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(responseEntity);
-            return ;
+            return;
         }
         JSONObject orderInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         if (orderInfo.getIntValue("code") != 0) {
@@ -121,33 +116,30 @@ public class PayTempCarFeeCmd extends Cmd {
                 param.put("code", "101");
                 param.put("msg", "扣费为0回调失败");
                 context.setResponseEntity(new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK));
-                return ;
+                return;
             }
             param.put("code", "100");
             param.put("msg", "扣费为0回调成功");
             context.setResponseEntity(new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK));
-            return ;
+            return;
         }
         String openId = reqJson.getString("openId");
-        String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_ADAPT);
-        //payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAY_ADAPT : payAdapt;
-        //支付适配器
-//        IPayAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPayAdapt.class);
-//        Map result = tPayAdapt.java110Payment(outRestTemplate, paramIn.getString("feeName"), paramIn.getString("tradeType"),
-//                orderId, money, openId, smallWeChatDto, wechatAuthProperties.getTempCarFeeNotifyUrl());
-   //     responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
-//        if (!"0".equals(result.get("code"))) {
-//            context.setResponseEntity(responseEntity);
-//            return ;
-//        }
-//        JSONObject saveFees = new JSONObject();
-//        saveFees.put("orderId", paramIn.getString("inoutId"));
-//        saveFees.put("carNum", paramIn.getString("carNum"));
-//        saveFees.put("amount", money);
-//        saveFees.put("paId", paramIn.getString("paId"));
-//        saveFees.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-//        saveFees.put("payType", "2");
-//        CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+        ResultVo result = doAlipay(reqJson, paramIn.getString("feeName"), orderId, money, openId);
+
+        responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
+        if (!"0".equals(result.getCode())) {
+            return;
+        }
+        JSONObject saveFees = new JSONObject();
+        saveFees.put("orderId", paramIn.getString("inoutId"));
+        saveFees.put("carNum", paramIn.getString("carNum"));
+        saveFees.put("amount", money);
+        saveFees.put("paId", paramIn.getString("paId"));
+        saveFees.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        saveFees.put("payType", "2");
+        CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+        CommonCache.setValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE_COMMUNITY + orderId, reqJson.getString("communityId"), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         //记录openId 和车辆关系 以免每次 输入 车牌号麻烦
         OwnerCarOpenUserPo ownerCarOpenUserPo = new OwnerCarOpenUserPo();
         ownerCarOpenUserPo.setCarNum(reqJson.getString("carNum"));
@@ -157,6 +149,36 @@ public class PayTempCarFeeCmd extends Cmd {
         ownerCarOpenUserPo.setOpenType(OwnerCarOpenUserDto.OPEN_TYPE_ALIPAY);
         ownerCarOpenUserPo.setOpenUserId(GenerateCodeFactory.getGeneratorId("10"));
         ownerCarOpenUserV1InnerServiceSMOImpl.saveOwnerCarOpenUser(ownerCarOpenUserPo);
+    }
+
+    private ResultVo doAlipay(JSONObject reqJson, String feeName, String orderId, double money, String openId) {
+        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
+                CommunitySettingFactory.getValue(reqJson.getString("communityId"), "APP_ID"),
+                CommunitySettingFactory.getRemark(reqJson.getString("communityId"), "APP_PRIVATE_KEY"),
+                "json",
+                "UTF-8",
+                CommunitySettingFactory.getRemark(reqJson.getString("communityId"), "ALIPAY_PUBLIC_KEY"),
+                "RSA2");
+        AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+        request.setNotifyUrl(MappingCache.getValue("ALIPAY", "temp"));
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("out_trade_no", orderId);
+        bizContent.put("total_amount", money);
+        bizContent.put("subject", feeName);
+        bizContent.put("buyer_id", openId);
+        bizContent.put("timeout_express", "10m");
+        request.setBizContent(bizContent.toString());
+        AlipayTradeCreateResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK,orderId);
+            } else {
+                return new ResultVo(ResultVo.CODE_ERROR, response.getMsg());
+            }
+        } catch (AlipayApiException e) {
+            throw new CmdException("支付宝下单失败" + e);
+        }
     }
 
     private SmallWeChatDto getSmallWechat(JSONObject paramIn) {
