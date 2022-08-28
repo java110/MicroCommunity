@@ -122,7 +122,7 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
             return carInoutDtos;
         }
         TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
-        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDto.getConfigId());
+        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDtos.get(0).getConfigId());
         tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
 
         List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
