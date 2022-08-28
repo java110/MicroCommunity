@@ -52,6 +52,7 @@ public class TempCarFeeFactory {
 
         //支付时间是否超过15分钟
         Date payTime = null;
+        double min = 0.0;
         try {
             //不是支付完成 状态
             if (CarInoutDto.STATE_PAY.equals(carInoutDto.getState())) {
@@ -66,7 +67,10 @@ public class TempCarFeeFactory {
             }
             Date nowTime = DateUtil.getCurrentDate();
             //支付完成超过15分钟
-            return (nowTime.getTime() - payTime.getTime()) / (60 * 1000);
+            min = (nowTime.getTime() - payTime.getTime()) / (60 * 1000);
+
+            return new Double(Math.ceil(min)).longValue();
+            //return (nowTime.getTime() - payTime.getTime()) / (60 * 1000);
         } catch (ParseException e) {
             e.printStackTrace();
         }
