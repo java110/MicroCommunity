@@ -75,6 +75,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/propertyRightRegistration.savePropertyRightRegistration,");
         exclusions.append("/app/system.listSystemInfo,");
         exclusions.append("/app/car.queryWaitPayFeeTempCar,");
+        exclusions.append("/app/alipay.payTempCarFee,");
+        exclusions.append("/app/alipay/notify/receive,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
