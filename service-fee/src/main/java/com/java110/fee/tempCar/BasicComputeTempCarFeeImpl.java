@@ -42,7 +42,7 @@ public class BasicComputeTempCarFeeImpl extends BaseComputeTempCarFee {
 
 
         //获取停车时间
-        long min = TempCarFeeFactory.getTempCarMin(carInoutDto);
+        long min = TempCarFeeFactory.getTempCarCeilMin(carInoutDto);
 
         int freeMin = TempCarFeeFactory.getAttrValueInt(tempCarFeeConfigAttrDtos, SPEC_CD_5600012001);
 
