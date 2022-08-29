@@ -182,6 +182,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         if (MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())) {
             ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
             parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
+            parkingBoxAreaDto.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
             List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
             if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
                 throw new CmdException("岗亭未配置停车场" + machineDto.getLocationObjId());
@@ -376,6 +377,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         if (MachineDto.MACHINE_TYPE_CAR.equals(machineDto.getMachineTypeCd())) {
             ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
             parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
+            parkingBoxAreaDto.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
             List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
             if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
                 throw new CmdException("岗亭未配置停车场" + machineDto.getLocationObjId());
