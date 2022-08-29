@@ -67,7 +67,7 @@ public class TempCarFeeFactory {
             }
             Date nowTime = DateUtil.getCurrentDate();
             //支付完成超过15分钟
-            min = (nowTime.getTime() - payTime.getTime()) / (60 * 1000);
+            min = (nowTime.getTime() - payTime.getTime()) / (60 * 1000* 1.00);
 
             return new Double(Math.ceil(min)).longValue();
             //return (nowTime.getTime() - payTime.getTime()) / (60 * 1000);
