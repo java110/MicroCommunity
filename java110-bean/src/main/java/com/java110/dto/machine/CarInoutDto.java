@@ -48,6 +48,7 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     private String areaNum;
     private String feeName;
     private String feeConfigId;
+    private String configId;
 
 
     public String getInoutId() {
@@ -194,5 +195,13 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
 }
