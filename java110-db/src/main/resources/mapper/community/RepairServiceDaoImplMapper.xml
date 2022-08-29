@@ -531,7 +531,7 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10002','10003','10004','10009','11000','12000')
+        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
@@ -596,7 +596,7 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10002','10003','10004','10009','11000','12000')
+        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
         <if test="staffId != null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
