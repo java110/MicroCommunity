@@ -82,6 +82,9 @@ public class CustomCarInOutCmd extends Cmd {
             return;
         }
 
+        Assert.hasKeyAndValue(reqJson,"payType","未包含支付方式");
+        Assert.hasKeyAndValue(reqJson,"amount","未包含支付金额");
+
         CarInoutDto carInoutDto = new CarInoutDto();
         carInoutDto.setCarNum(reqJson.getString("carNum"));
         carInoutDto.setStates(new String[]{
@@ -115,7 +118,7 @@ public class CustomCarInOutCmd extends Cmd {
             tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
             tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
             tempCarPayOrderDto.setOrderId(reqJson.getString("inoutId"));
-            tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("payCharge")));
+            tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("amount")));
             tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
             //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
             ResultVo resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
