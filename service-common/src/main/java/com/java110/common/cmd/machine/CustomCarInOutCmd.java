@@ -78,13 +78,6 @@ public class CustomCarInOutCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含车牌号");
         Assert.hasKeyAndValue(reqJson, "type", "请求报文中未包含类型");
 
-        if("1101".equals(reqJson.getString("type"))) {
-            return;
-        }
-
-        Assert.hasKeyAndValue(reqJson,"payType","未包含支付方式");
-        Assert.hasKeyAndValue(reqJson,"amount","未包含支付金额");
-
         CarInoutDto carInoutDto = new CarInoutDto();
         carInoutDto.setCarNum(reqJson.getString("carNum"));
         carInoutDto.setStates(new String[]{
@@ -93,9 +86,19 @@ public class CustomCarInOutCmd extends Cmd {
         });
         int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
 
-        if(count < 1){
-            throw new CmdException("车辆未入场");
+        if(!"1101".equals(reqJson.getString("type"))) {
+            Assert.hasKeyAndValue(reqJson,"payType","未包含支付方式");
+            Assert.hasKeyAndValue(reqJson,"amount","未包含支付金额");
+            if(count < 1){
+                throw new CmdException("车辆未入场");
+            }
+        }else{
+            if(count > 0){
+                throw new CmdException("车辆已经在场，请先出场");
+            }
         }
+
+
 
     }
 
@@ -113,15 +116,27 @@ public class CustomCarInOutCmd extends Cmd {
             if(parkingBoxAreaDtos == null  || parkingBoxAreaDtos.size()< 1){
                 throw new CmdException("未包含停车场信息");
             }
-
             TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
             tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
             tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
-            tempCarPayOrderDto.setOrderId(reqJson.getString("inoutId"));
+            ResultVo resultVo = dataBusInnerServiceSMOImpl.getTempCarFeeOrder(tempCarPayOrderDto);
+            if(resultVo.getCode() != ResultVo.CODE_OK){
+                throw new CmdException(resultVo.getMsg());
+            }
+
+            JSONObject orderInfo = JSONObject.parseObject(resultVo.getData().toString());
+
+             tempCarPayOrderDto = new TempCarPayOrderDto();
+            tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
+            tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
+            tempCarPayOrderDto.setOrderId(orderInfo.getString("inoutId"));
             tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("amount")));
             tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
             //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
-            ResultVo resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
+             resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
+            if(resultVo.getCode() != ResultVo.CODE_OK){
+                throw new CmdException(resultVo.getMsg());
+            }
         }
         ResponseEntity<String> responseEntity = machineOpenDoorBMOImpl.customCarInOut(reqJson);
         cmdDataFlowContext.setResponseEntity(responseEntity);
