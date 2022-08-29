@@ -38,6 +38,8 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     private String carType;
 
+    private String configId;
+
     public String getInoutId() {
         return inoutId;
     }
@@ -138,4 +140,11 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
         this.carType = carType;
     }
 
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
 }

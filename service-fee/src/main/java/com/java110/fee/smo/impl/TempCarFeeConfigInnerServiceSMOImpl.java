@@ -113,22 +113,24 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
 
     @Override
     public List<CarInoutDto> computeTempCarFee(@RequestBody List<CarInoutDto> carInoutDtos) {
-        TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
-        tempCarFeeConfigDto.setPaId(carInoutDtos.get(0).getPaId());
-        tempCarFeeConfigDto.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        List<TempCarFeeConfigDto> tempCarFeeConfigDtos = queryTempCarFeeConfigs(tempCarFeeConfigDto);
-
-        if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) {
-            return carInoutDtos;
-        }
-        TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
-        tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDtos.get(0).getConfigId());
-        tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
-
-        List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
-        IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
         for (CarInoutDto carInoutDto : carInoutDtos) {
             try {
+                TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
+                tempCarFeeConfigDto.setPaId(carInoutDto.getPaId());
+                tempCarFeeConfigDto.setCommunityId(carInoutDto.getCommunityId());
+                List<TempCarFeeConfigDto> tempCarFeeConfigDtos = queryTempCarFeeConfigs(tempCarFeeConfigDto);
+
+                if (tempCarFeeConfigDtos == null || tempCarFeeConfigDtos.size() < 1) {
+                    continue;
+                }
+                TempCarFeeConfigAttrDto tempCarFeeConfigAttrDto = new TempCarFeeConfigAttrDto();
+                tempCarFeeConfigAttrDto.setConfigId(tempCarFeeConfigDtos.get(0).getConfigId());
+                tempCarFeeConfigAttrDto.setCommunityId(tempCarFeeConfigDto.getCommunityId());
+
+                List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrDtos = tempCarFeeConfigAttrInnerServiceSMOImpl.queryTempCarFeeConfigAttrs(tempCarFeeConfigAttrDto);
+                IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
+
+
                 TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                 carInoutDto.setMin(result.getMin());
                 carInoutDto.setHours(result.getHours());
