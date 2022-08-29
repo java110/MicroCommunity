@@ -129,7 +129,7 @@ public class CustomCarInOutCmd extends Cmd {
              tempCarPayOrderDto = new TempCarPayOrderDto();
             tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
             tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
-            tempCarPayOrderDto.setOrderId(orderInfo.getString("inoutId"));
+            tempCarPayOrderDto.setOrderId(orderInfo.getString("orderId"));
             tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("amount")));
             tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
             //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
