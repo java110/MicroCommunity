@@ -17,13 +17,16 @@ package com.java110.common.cmd.machine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.common.dao.ICarInoutV1ServiceDao;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -65,12 +68,31 @@ public class CustomCarInOutCmd extends Cmd {
     @Autowired
     private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含设备信息");
         Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含车牌号");
         Assert.hasKeyAndValue(reqJson, "type", "请求报文中未包含类型");
+
+        if("1101".equals(reqJson.getString("type"))) {
+            return;
+        }
+
+        CarInoutDto carInoutDto = new CarInoutDto();
+        carInoutDto.setCarNum(reqJson.getString("carNum"));
+        carInoutDto.setStates(new String[]{
+                CarInoutDto.STATE_IN,
+                CarInoutDto.STATE_REPAY
+        });
+        int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
+
+        if(count < 1){
+            throw new CmdException("车辆未入场");
+        }
 
     }
 
