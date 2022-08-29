@@ -8,8 +8,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -19,6 +21,7 @@ import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -51,6 +54,9 @@ public class SaveOwnerCarCmd extends Cmd {
     @Autowired
     private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICarInoutInnerServiceSMO carInoutInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
@@ -76,11 +82,35 @@ public class SaveOwnerCarCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
         ownerCarDto.setCarNum(reqJson.getString("carNum"));
-        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER}); // 临时车除外
+        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY, OwnerCarDto.CAR_TYPE_MEMBER}); // 临时车除外
         int count = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
 
         if (count > 0) {
             throw new IllegalArgumentException("车辆已存在");
+        }
+
+        //判断临时车 是否在场
+        String parkingIn = MappingCache.getValue("TEMP_CAR_IN_PARKING");
+
+        if (!"ON".equals(parkingIn)) {
+            return;
+        }
+
+        ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarNum(reqJson.getString("carNum"));
+        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_TEMP}); // 临时车除外
+        count = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
+        if (count < 1) {
+            return;
+        }
+
+        CarInoutDto carInoutDto = new CarInoutDto();
+        carInoutDto.setCarNum(reqJson.getString("carNum"));
+        carInoutDto.setStates(new String[]{CarInoutDto.STATE_PAY, CarInoutDto.STATE_IN, CarInoutDto.STATE_REPAY});
+        List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(carInoutDto);
+        if (carInoutDtos != null && carInoutDtos.size() > 0) {
+            throw new CmdException("车辆在场，请出场后再办理月租车");
         }
     }
 

@@ -21,12 +21,22 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -48,6 +58,13 @@ public class CustomCarInOutCmd extends Cmd {
     @Autowired
     private IMachineOpenDoorBMO machineOpenDoorBMOImpl;
 
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
@@ -60,6 +77,27 @@ public class CustomCarInOutCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        //出场时 先 补充费用信息
+        if(!"1101".equals(reqJson.getString("type"))) {
+
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+            parkingBoxAreaDto.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+
+            if(parkingBoxAreaDtos == null  || parkingBoxAreaDtos.size()< 1){
+                throw new CmdException("未包含停车场信息");
+            }
+
+            TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
+            tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
+            tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
+            tempCarPayOrderDto.setOrderId(reqJson.getString("inoutId"));
+            tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("payCharge")));
+            tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
+            //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
+            ResultVo resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
+        }
         ResponseEntity<String> responseEntity = machineOpenDoorBMOImpl.customCarInOut(reqJson);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }

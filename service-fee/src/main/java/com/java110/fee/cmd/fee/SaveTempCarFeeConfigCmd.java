@@ -81,7 +81,7 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         payFeeConfigPo.setAdditionalAmount("0");
         payFeeConfigPo.setBillType(FeeConfigDto.BILL_TYPE_YEAR);
         payFeeConfigPo.setCommunityId(reqJson.getString("communityId"));
-        payFeeConfigPo.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_TEMP_CAR);
+        payFeeConfigPo.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         payFeeConfigPo.setComputingFormulaText("");
         payFeeConfigPo.setConfigId(reqJson.getString("feeConfigId"));
         payFeeConfigPo.setEndTime(reqJson.getString("endTime"));
