@@ -55,7 +55,7 @@ public class Basic2ComputeTempCarFeeImpl extends BaseComputeTempCarFee {
         double curMoney = 0.0;
 
         //免费时间中
-        if (min < freeMin && !TempCarFeeFactory.judgeFinishPayTempCarFee(carInoutDto)) {
+        if (min <= freeMin && !TempCarFeeFactory.judgeFinishPayTempCarFee(carInoutDto)) {
             return new TempCarFeeResult(carInoutDto.getCarNum(), 0.0, maxFeeMoney, baseMoney);
         }
 
