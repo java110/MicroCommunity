@@ -82,6 +82,9 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER), HttpMethod.POST, httpEntity, String.class);
+        System.out.println("缴费通知"+IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER));
+        System.out.println("请求报文"+postParameters.toJSONString());
+        System.out.println("返回报文"+responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
