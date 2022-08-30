@@ -2,6 +2,7 @@ package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -11,6 +12,7 @@ import com.java110.dto.UnitDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.po.room.RoomPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -81,12 +83,15 @@ public class SaveRoomCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         if ("0".equals(reqJson.getString("unitNum"))) { // 处理为商铺
             reqJson.put("roomType", RoomDto.ROOM_TYPE_SHOPS);
         } else {
             reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
         }
+
+
         reqJson.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
         reqJson.put("userId", context.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
         RoomPo roomPo = BeanConvertUtil.covertBean(reqJson, RoomPo.class);

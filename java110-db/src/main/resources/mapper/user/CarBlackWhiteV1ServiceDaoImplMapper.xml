@@ -5,120 +5,127 @@
 <mapper namespace="carBlackWhiteV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <insert id="saveCarBlackWhiteInfo" parameterType="Map">
         insert into car_black_white(
-black_white,pa_id,car_num,start_time,end_time,community_id,bw_id
-) values (
-#{blackWhite},#{paId},#{carNum},#{startTime},#{endTime},#{communityId},#{bwId}
-)
+        black_white,pa_id,car_num,start_time,end_time,community_id,bw_id
+        ) values (
+        #{blackWhite},#{paId},#{carNum},#{startTime},#{endTime},#{communityId},#{bwId}
+        )
     </insert>
-
 
 
     <!-- 查询车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <select id="getCarBlackWhiteInfo" parameterType="Map" resultType="Map">
-        select  t.black_white,t.black_white blackWhite,t.pa_id,t.pa_id paId,t.car_num,t.car_num carNum,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.bw_id,t.bw_id bwId 
-from car_black_white t 
-where 1 =1 
-<if test="blackWhite !=null and blackWhite != ''">
-   and t.black_white= #{blackWhite}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bwId !=null and bwId != ''">
-   and t.bw_id= #{bwId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.black_white,t.black_white blackWhite,t.pa_id,t.pa_id paId,t.car_num,t.car_num
+        carNum,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
+        endTime,t.community_id,t.community_id communityId,t.bw_id,t.bw_id bwId
+        from car_black_white t
+        where 1 =1
+        <if test="blackWhite !=null and blackWhite != ''">
+            and t.black_white= #{blackWhite}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="validity !=null and validity != ''">
+            and t.end_time &gt; now()
+            and t.start_time &lt; now()
+        </if>
+        <if test="bwId !=null and bwId != ''">
+            and t.bw_id= #{bwId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <update id="updateCarBlackWhiteInfo" parameterType="Map">
-        update  car_black_white t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="blackWhite !=null and blackWhite != ''">
-, t.black_white= #{blackWhite}
-</if> 
-<if test="paId !=null and paId != ''">
-, t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-, t.car_num= #{carNum}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="endTime !=null and endTime != ''">
-, t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="bwId !=null and bwId != ''">
-and t.bw_id= #{bwId}
-</if> 
+        update car_black_white t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="blackWhite !=null and blackWhite != ''">
+            , t.black_white= #{blackWhite}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="bwId !=null and bwId != ''">
+            and t.bw_id= #{bwId}
+        </if>
 
     </update>
 
     <!-- 查询车辆黑白名单数量 add by wuxw 2018-07-03 -->
-     <select id="queryCarBlackWhitesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from car_black_white t 
-where 1 =1 
-<if test="blackWhite !=null and blackWhite != ''">
-   and t.black_white= #{blackWhite}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bwId !=null and bwId != ''">
-   and t.bw_id= #{bwId}
-</if> 
+    <select id="queryCarBlackWhitesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_black_white t
+        where 1 =1
+        <if test="blackWhite !=null and blackWhite != ''">
+            and t.black_white= #{blackWhite}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="validity !=null and validity != ''">
+            and t.end_time &gt; now()
+            and t.start_time &lt; now()
+        </if>
 
 
-     </select>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bwId !=null and bwId != ''">
+            and t.bw_id= #{bwId}
+        </if>
+
+
+    </select>
 
 </mapper>

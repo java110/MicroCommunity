@@ -23,6 +23,8 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     public static final String STATE_REPAY = "100600";
 
     public static final String STATE_IN_FAIL = "100301";
+    public static final String CAR_TYPE_MONTH = "1001";
+    public static final String CAR_TYPE_TEMP = "1003";
 
 
     private String inTime;

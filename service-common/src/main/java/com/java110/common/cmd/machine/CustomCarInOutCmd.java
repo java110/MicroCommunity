@@ -17,18 +17,21 @@ package com.java110.common.cmd.machine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
+import com.java110.common.dao.ICarBlackWhiteServiceDao;
 import com.java110.common.dao.ICarInoutV1ServiceDao;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -71,6 +74,9 @@ public class CustomCarInOutCmd extends Cmd {
     @Autowired
     private ICarInoutV1InnerServiceSMO carInoutV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
@@ -86,6 +92,7 @@ public class CustomCarInOutCmd extends Cmd {
         });
         int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
 
+        //出场
         if(!"1101".equals(reqJson.getString("type"))) {
             Assert.hasKeyAndValue(reqJson,"payType","未包含支付方式");
             Assert.hasKeyAndValue(reqJson,"amount","未包含支付金额");
@@ -95,6 +102,13 @@ public class CustomCarInOutCmd extends Cmd {
         }else{
             if(count > 0){
                 throw new CmdException("车辆已经在场，请先出场");
+            }
+            //进场时 判断是否为黑名单
+            CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
+            carBlackWhiteDto.setCarNum(reqJson.getString("carNum"));
+            count =  carBlackWhiteV1InnerServiceSMOImpl.queryCarBlackWhitesCount(carBlackWhiteDto);
+            if(count > 0){
+                throw new CmdException("黑名单车辆禁止入场");
             }
         }
 

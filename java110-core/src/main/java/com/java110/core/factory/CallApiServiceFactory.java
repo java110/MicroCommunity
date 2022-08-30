@@ -2,6 +2,7 @@ package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.Environment;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.log.LoggerFactory;
@@ -25,11 +26,13 @@ import java.util.Map;
 public class CallApiServiceFactory {
 
     private static final String URL_API = "http://api-service/api/";
+    private static final String URL_BOOT_API = "http://127.0.0.1:8008/api/";
     //日志
     private static Logger logger = LoggerFactory.getLogger(CallApiServiceFactory.class);
 
     @Autowired
     private RestTemplate restTemplate;
+
 
     /**
      * 查询
@@ -142,6 +145,10 @@ public class CallApiServiceFactory {
 
         String url = URL_API + serviceCode;
         RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        if (Environment.isStartBootWay()) {
+            url = URL_BOOT_API + serviceCode;
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        }
 
 
         ResponseEntity<String> responseEntity = callCenterService(restTemplate, pd, JSONObject.toJSONString(param), url, HttpMethod.POST);
@@ -183,10 +190,16 @@ public class CallApiServiceFactory {
     public static <T> List<T> getForApis(IPageData pd, T param, String serviceCode, Class<T> t) {
 
         String url = URL_API + serviceCode;
+        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+
+        if (Environment.isStartBootWay()) {
+            url = URL_BOOT_API + serviceCode;
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        }
+
         if (param != null) {
             url += mapToUrlParam(BeanConvertUtil.beanCovertMap(param));
         }
-        RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
 
         ResponseEntity<String> responseEntity = callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
 
@@ -239,6 +252,7 @@ public class CallApiServiceFactory {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);
+
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下

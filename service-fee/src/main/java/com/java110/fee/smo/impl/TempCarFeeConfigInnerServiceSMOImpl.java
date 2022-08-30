@@ -134,7 +134,11 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
                 TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                 carInoutDto.setMin(result.getMin());
                 carInoutDto.setHours(result.getHours());
-                carInoutDto.setPayCharge(result.getPayCharge() + "");
+                if(CarInoutDto.CAR_TYPE_MONTH.equals(carInoutDto.getCarType())){
+                    carInoutDto.setPayCharge( "0.00");
+                }else {
+                    carInoutDto.setPayCharge(result.getPayCharge() + "");
+                }
             } catch (Exception e) {
                 logger.error("临时车算费失败", e);
             }

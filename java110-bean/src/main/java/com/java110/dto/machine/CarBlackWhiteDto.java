@@ -29,6 +29,8 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     private String[] paIds;
     private String paNum;
 
+    private String validity;
+
 
     private Date createTime;
 
@@ -130,5 +132,13 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
 
     public void setPaIds(String[] paIds) {
         this.paIds = paIds;
+    }
+
+    public String getValidity() {
+        return validity;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
     }
 }
