@@ -87,9 +87,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="inoutId !=null and inoutId != ''">
-            , t.inout_id= #{inoutId}
-        </if>
+
         <if test="machineId !=null and machineId != ''">
             , t.machine_id= #{machineId}
         </if>
@@ -117,6 +115,9 @@
         where 1=1
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
         </if>
 
     </update>
