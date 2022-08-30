@@ -76,4 +76,6 @@ public interface ICarInoutPaymentV1ServiceDao {
     int queryCarInoutPaymentsCount(Map info);
 
     List<Map> queryCarInoutPaymentMarjor(Map info);
+
+    List<Map>  queryCarInoutPaymentSummary(Map info);
 }

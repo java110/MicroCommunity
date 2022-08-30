@@ -35,6 +35,8 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     private String stateName;
     private String inTime;
 
+    private String boxId;
+
 
     private Date createTime;
 
@@ -43,6 +45,13 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
 
+    public String getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(String boxId) {
+        this.boxId = boxId;
+    }
 
     public String getRealCharge() {
         return realCharge;

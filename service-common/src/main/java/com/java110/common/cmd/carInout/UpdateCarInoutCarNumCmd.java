@@ -25,6 +25,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.po.car.CarInoutDetailPo;
 import com.java110.po.car.CarInoutPo;
 import com.java110.utils.exception.CmdException;
@@ -59,11 +60,24 @@ public class UpdateCarInoutCarNumCmd extends Cmd {
     @Autowired
     private ICarInoutDetailV1InnerServiceSMO carInoutDetailV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "inoutId", "inoutId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
         Assert.hasKeyAndValue(reqJson, "carNum", "车牌号不能为空");
+
+        CarInoutDto carInoutDto = new CarInoutDto();
+        carInoutDto.setCarNum(reqJson.getString("carNum"));
+        carInoutDto.setCommunityId(reqJson.getString("communityId"));
+        carInoutDto.setStates(new String[]{CarInoutDto.STATE_IN,CarInoutDto.STATE_REPAY});
+        List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+
+       if(carInoutDtos != null && carInoutDtos.size() > 0){
+           throw new CmdException("车牌已进场");
+       }
 
     }
 
@@ -77,6 +91,13 @@ public class UpdateCarInoutCarNumCmd extends Cmd {
         List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
 
         Assert.listOnlyOne(carInoutDtos,"进出明细不存在");
+
+        carInoutDto = carInoutDtos.get(0);
+        carInoutDto.setOldCarNum(carInoutDto.getCarNum());
+        carInoutDto.setCarNum(reqJson.getString("carNum"));
+
+        //调用物理网 修改 车牌号
+        dataBusInnerServiceSMOImpl.updateCarInoutCarNum(carInoutDto);
 
         CarInoutPo carInoutPo = new CarInoutPo();
         carInoutPo.setInoutId(reqJson.getString("inoutId"));
@@ -95,6 +116,9 @@ public class UpdateCarInoutCarNumCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
+
+
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

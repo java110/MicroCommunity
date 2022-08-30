@@ -123,6 +123,12 @@ public class CarInoutPaymentV1ServiceDaoImpl extends BaseServiceDao implements I
         return businessCarInoutPaymentInfos;
     }
 
+    public List<Map>  queryCarInoutPaymentSummary(Map info) throws DAOException{
+        logger.debug("查询 queryCarInoutPaymentSummary 入参 info : {}",info);
+        List<Map> businessCarInoutPaymentInfos = sqlSessionTemplate.selectList("carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentSummary",info);
+        return businessCarInoutPaymentInfos;
+    }
+
 
 
 }

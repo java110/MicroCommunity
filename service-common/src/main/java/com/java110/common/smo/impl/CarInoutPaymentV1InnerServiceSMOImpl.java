@@ -91,5 +91,10 @@ public class CarInoutPaymentV1InnerServiceSMOImpl extends BaseServiceSMO impleme
     public List<CarInoutPaymentDto> queryCarInoutPaymentMarjor(@RequestBody CarInoutPaymentDto carInoutPaymentDto){
         return BeanConvertUtil.covertBeanList(carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentMarjor(BeanConvertUtil.beanCovertMap(carInoutPaymentDto)),CarInoutPaymentDto.class);
     }
+    @Override
+    public List<CarInoutPaymentDto> queryCarInoutPaymentSummary(@RequestBody CarInoutPaymentDto carInoutPaymentDto){
+        return BeanConvertUtil.covertBeanList(carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentSummary(BeanConvertUtil.beanCovertMap(carInoutPaymentDto)),CarInoutPaymentDto.class);
+    }
+
 
 }

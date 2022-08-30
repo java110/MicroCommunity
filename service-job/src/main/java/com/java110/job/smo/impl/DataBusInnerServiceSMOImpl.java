@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.businessDatabus.BusinessDatabusDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
@@ -88,6 +89,9 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         return databusAdaptImpl.heartbeatVideo(reqJson);
     }
 
+
+
+
     @Override
     public ResultVo restartMachine(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_START_MACHINE_PROTOCOL, IDatabusAdapt.class);
@@ -106,6 +110,12 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public ResultVo getTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.getTempCarFeeOrder(tempCarPayOrderDto);
+    }
+
+    @Override
+    public ResultVo updateCarInoutCarNum(@RequestBody CarInoutDto carInoutDto) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.updateCarInoutCarNum(carInoutDto);
     }
 
     @Override

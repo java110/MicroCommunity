@@ -85,6 +85,9 @@ public class IotConstant {
     //删除车辆
     public static final String DELETE_CAR_BLACK_WHITE_URL = "/extApi/car/deleteBlackWhite";
 
+    //修改车牌
+    public static final String UPDATE_CAR_INOUT_CAR_NUM = "/extApi/car/updateCarInoutCarNum";
+
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";
     //开门接口
@@ -109,6 +112,8 @@ public class IotConstant {
 
     //查询临时停车费订单
     public static final String GET_TEMP_CAR_FEE_ORDER = "/extApi/fee/getTempCarFeeOrder";
+
+
 
     //查询临时停车费订单
     public static final String NOTIFY_TEMP_CAR_FEE_ORDER = "/extApi/fee/notifyTempCarFeeOrder";

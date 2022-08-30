@@ -18,6 +18,7 @@ package com.java110.job.adapt;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
@@ -119,6 +120,17 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     public ResultVo getTempCarFeeOrder(TempCarPayOrderDto tempCarPayOrderDto) {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
+    /**
+     * 修改在场车辆车牌号
+     *
+     * @param carInoutDto
+     * @return
+     */
+    @Override
+    public ResultVo updateCarInoutCarNum(CarInoutDto carInoutDto) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
 
     /**
      * 查询 临时车待支付订单

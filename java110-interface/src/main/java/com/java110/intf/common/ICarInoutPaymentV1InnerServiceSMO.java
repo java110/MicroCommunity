@@ -67,4 +67,7 @@ public interface ICarInoutPaymentV1InnerServiceSMO {
     int queryCarInoutPaymentsCount(@RequestBody CarInoutPaymentDto carInoutPaymentDto);
     @RequestMapping(value = "/queryCarInoutPaymentMarjor", method = RequestMethod.POST)
     List<CarInoutPaymentDto> queryCarInoutPaymentMarjor(@RequestBody CarInoutPaymentDto carInoutPaymentDto);
+
+    @RequestMapping(value = "/queryCarInoutPaymentSummary", method = RequestMethod.POST)
+    List<CarInoutPaymentDto> queryCarInoutPaymentSummary(@RequestBody CarInoutPaymentDto carInoutPaymentDto);
 }

@@ -30,6 +30,7 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     private String inTime;
     private String inoutId;
     private String carNum;
+    private String oldCarNum;
     private String state;
     private String stateName;
     private String[] states;
@@ -224,5 +225,13 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getOldCarNum() {
+        return oldCarNum;
+    }
+
+    public void setOldCarNum(String oldCarNum) {
+        this.oldCarNum = oldCarNum;
     }
 }
