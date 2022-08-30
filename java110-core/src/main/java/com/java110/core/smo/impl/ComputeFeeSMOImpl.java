@@ -800,6 +800,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 endCalender.setTime(feeDto.getImportFeeEndTime());
             }
         } else if(FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())){
+            if(feeDto.getDeadlineTime() == null){
+                throw new IllegalArgumentException("间接性费用未设置结束时间");
+            }
             if ((endCalender.getTime()).after(feeDto.getDeadlineTime())) {
                 endCalender.setTime(feeDto.getDeadlineTime());
             }
