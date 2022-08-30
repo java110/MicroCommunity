@@ -20,6 +20,7 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     public static final String PAY_TYPE_ALIPAY = "1";
 
     private String realCharge;
+    private String realChargeTotal;
     private String inoutId;
     private String payType;
     private String paymentId;
@@ -27,6 +28,7 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     private String[] paIds;
     private String communityId;
     private String payCharge;
+    private String payChargeTotal;
     private String payTime;
     private String carNum;
     private String payTypeName;
@@ -37,6 +39,9 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String startTime;
+    private String endTime;
 
 
     public String getRealCharge() {
@@ -158,5 +163,37 @@ public class CarInoutPaymentDto extends PageDto implements Serializable {
 
     public void setPaIds(String[] paIds) {
         this.paIds = paIds;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRealChargeTotal() {
+        return realChargeTotal;
+    }
+
+    public void setRealChargeTotal(String realChargeTotal) {
+        this.realChargeTotal = realChargeTotal;
+    }
+
+    public String getPayChargeTotal() {
+        return payChargeTotal;
+    }
+
+    public void setPayChargeTotal(String payChargeTotal) {
+        this.payChargeTotal = payChargeTotal;
     }
 }

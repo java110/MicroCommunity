@@ -65,6 +65,12 @@
         <if test="outTime !=null and outTime != ''">
             and t.out_time= #{outTime}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.in_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.in_time &lt; #{endTime}
+        </if>
         group by t.in_time,t.inout_id,t.pa_id,t.car_num,t.status_cd,t.state,t.community_id,t.out_time,td.`name`,pa.num,tcfc.fee_name,tcfc.config_id
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -144,6 +150,12 @@
         </if>
         <if test="outTime !=null and outTime != ''">
             and t.out_time= #{outTime}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.in_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.in_time &lt; #{endTime}
         </if>
 
 

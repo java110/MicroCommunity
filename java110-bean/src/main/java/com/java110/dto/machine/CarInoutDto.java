@@ -52,6 +52,9 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     private String feeConfigId;
     private String configId;
 
+    private String startTime;
+    private String endTime;
+
 
     public String getInoutId() {
         return inoutId;
@@ -205,5 +208,21 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

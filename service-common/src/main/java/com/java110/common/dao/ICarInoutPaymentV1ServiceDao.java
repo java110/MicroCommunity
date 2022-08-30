@@ -16,6 +16,7 @@
 package com.java110.common.dao;
 
 
+import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
@@ -74,4 +75,5 @@ public interface ICarInoutPaymentV1ServiceDao {
      */
     int queryCarInoutPaymentsCount(Map info);
 
+    List<Map> queryCarInoutPaymentMarjor(Map info);
 }

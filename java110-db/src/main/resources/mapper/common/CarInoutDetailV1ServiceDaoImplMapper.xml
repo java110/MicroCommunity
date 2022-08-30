@@ -65,6 +65,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
         group by t.inout_id,t.machine_id,t.machine_code,t.car_inout,t.pa_id,t.detail_id,t.car_num,t.status_cd,t.community_id,
         ci.in_time ,ci.out_time ,ci.pa_id ,td.name,t.remark,pa.num ,tcfc.fee_name ,tcfc.config_id
         order by t.create_time desc
@@ -157,6 +163,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
         </if>
 
 

@@ -77,6 +77,20 @@ public class ListCarInoutPaymentCmd extends Cmd {
             carInoutPaymentDtos = new ArrayList<>();
         }
 
+        if(carInoutPaymentDtos != null && carInoutPaymentDtos.size()>0){
+            List<CarInoutPaymentDto> tempCarInoutPaymentDtos = carInoutPaymentV1InnerServiceSMOImpl.queryCarInoutPaymentMarjor(carInoutPaymentDto);
+            for(CarInoutPaymentDto carInoutPaymentDto1: carInoutPaymentDtos){
+                carInoutPaymentDto1.setPayChargeTotal(tempCarInoutPaymentDtos.get(0).getPayChargeTotal());
+                carInoutPaymentDto1.setRealChargeTotal(tempCarInoutPaymentDtos.get(0).getRealChargeTotal());
+            }
+        }else{
+            for(CarInoutPaymentDto carInoutPaymentDto1: carInoutPaymentDtos){
+                carInoutPaymentDto1.setPayChargeTotal("0");
+                carInoutPaymentDto1.setRealChargeTotal("0");
+            }
+        }
+
+
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, carInoutPaymentDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);

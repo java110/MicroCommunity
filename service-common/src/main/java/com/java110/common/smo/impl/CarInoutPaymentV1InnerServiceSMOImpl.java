@@ -26,6 +26,8 @@ import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -85,5 +87,9 @@ public class CarInoutPaymentV1InnerServiceSMOImpl extends BaseServiceSMO impleme
     @Override
     public int queryCarInoutPaymentsCount(@RequestBody CarInoutPaymentDto carInoutPaymentDto) {
         return carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentsCount(BeanConvertUtil.beanCovertMap(carInoutPaymentDto));    }
+    @Override
+    public List<CarInoutPaymentDto> queryCarInoutPaymentMarjor(@RequestBody CarInoutPaymentDto carInoutPaymentDto){
+        return BeanConvertUtil.covertBeanList(carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentMarjor(BeanConvertUtil.beanCovertMap(carInoutPaymentDto)),CarInoutPaymentDto.class);
+    }
 
 }

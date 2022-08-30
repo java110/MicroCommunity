@@ -108,5 +108,21 @@ public class CarInoutPaymentV1ServiceDaoImpl extends BaseServiceDao implements I
         return Integer.parseInt(businessCarInoutPaymentInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询车辆支付信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryCarInoutPaymentMarjor(Map info) throws DAOException {
+        logger.debug("查询 queryCarInoutPaymentMarjor 入参 info : {}",info);
+
+        List<Map> businessCarInoutPaymentInfos = sqlSessionTemplate.selectList("carInoutPaymentV1ServiceDaoImpl.queryCarInoutPaymentMarjor",info);
+
+        return businessCarInoutPaymentInfos;
+    }
+
+
 
 }

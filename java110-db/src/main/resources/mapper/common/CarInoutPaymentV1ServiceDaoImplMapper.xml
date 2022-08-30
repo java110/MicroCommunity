@@ -56,6 +56,12 @@
         <if test="payCharge !=null and payCharge != ''">
             and t.pay_charge= #{payCharge}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -133,8 +139,55 @@
         <if test="payCharge !=null and payCharge != ''">
             and t.pay_charge= #{payCharge}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
 
 
     </select>
+    <select id="queryCarInoutPaymentMarjor" parameterType="Map" resultType="Map">
+        select sum(t.real_charge) realChargeTotal,sum(t.pay_charge) payChargeTotal
+        from car_inout_payment t
+        where 1 =1
+        <if test="realCharge !=null and realCharge != ''">
+            and t.real_charge= #{realCharge}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
+        <if test="paymentId !=null and paymentId != ''">
+            and t.payment_id= #{paymentId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="paIds !=null ">
+            and t.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payCharge !=null and payCharge != ''">
+            and t.pay_charge= #{payCharge}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
 
+    </select>
 </mapper>
