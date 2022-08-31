@@ -2,6 +2,7 @@ package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -60,6 +61,7 @@ public class UploadOwnerPhotoCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
             FileDto fileDto = new FileDto();
