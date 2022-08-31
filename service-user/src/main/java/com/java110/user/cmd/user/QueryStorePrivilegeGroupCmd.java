@@ -7,7 +7,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.store.StoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -28,6 +30,10 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -38,19 +44,25 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
         String storeId = context.getReqHeaders().get("store-id");
+        String communityId = context.getReqHeaders().get("communityId");
 
         if(StringUtil.isEmpty(userId)){
             userId = reqJson.getString("userId");
         }
+        // 判断是不是管理员，管理员反馈 物业 的所角色
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户不存在");
         String storeTypeCd = "";
         if(!reqJson.containsKey("storeTypeCd") || StringUtil.isEmpty(reqJson.getString("storeTypeCd"))) {
-
             StoreDto storeDto = new StoreDto();
             storeDto.setStoreId(storeId);
             storeDto.setPage(1);
             storeDto.setRow(1);
             List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
-
             Assert.listOnlyOne(storeDtos, "商户不存在");
             storeTypeCd = storeDtos.get(0).getStoreTypeCd();
         }else{
@@ -62,6 +74,9 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
         JSONObject param = new JSONObject();
         param.put("storeId", storeId);
         param.put("storeTypeCd", storeTypeCd);
+        if(!UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())){
+            param.put("communityId", communityId);
+        }
         dataQuery.setRequestParams(param);
         queryServiceSMOImpl.commonQueryService(dataQuery);
         ResponseEntity<String> privilegeGroup = dataQuery.getResponseEntity();

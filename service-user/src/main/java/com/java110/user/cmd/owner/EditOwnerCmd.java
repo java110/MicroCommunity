@@ -8,11 +8,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
@@ -35,9 +33,6 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.editOwner")
 public class EditOwnerCmd extends Cmd {
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
@@ -143,15 +138,6 @@ public class EditOwnerCmd extends Cmd {
 //            throw new IllegalArgumentException("手机号输入不正确！");
 //        }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("ownerPhoto"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("ownerPhotoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
             editOwnerPhoto(reqJson);
         }
         editOwner(reqJson);
@@ -237,8 +223,8 @@ public class EditOwnerCmd extends Cmd {
             businessUnit.put("relTypeCd", "10000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", paramInJson.getString("memberId"));
-            businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+            businessUnit.put("fileRealName", paramInJson.getString("ownerPhoto"));
+            businessUnit.put("fileSaveName", paramInJson.getString("ownerPhoto"));
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             if (flag < 1) {
@@ -249,8 +235,8 @@ public class EditOwnerCmd extends Cmd {
 
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+        businessUnit.put("fileRealName", paramInJson.getString("ownerPhoto"));
+        businessUnit.put("fileSaveName", paramInJson.getString("ownerPhoto"));
         FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
         flag = fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
         if (flag < 1) {

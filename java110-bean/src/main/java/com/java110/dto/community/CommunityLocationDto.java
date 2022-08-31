@@ -15,20 +15,29 @@ import java.util.Date;
  **/
 public class CommunityLocationDto extends PageDto implements Serializable {
 
-
     private String locationName;
-    private String locationId;
-    private String locationType;
-    private String communityId;
-    private String locationTypeName;
-    private String locationObjId;
-    private String locationObjName;
 
+    private String locationId;
+
+    private String locationType;
+
+    private String communityId;
+
+    private String locationTypeName;
+
+    private String locationObjId;
+
+    private String locationObjName;
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private String unitNum;
+
+    private String floorId;
+
+    private String floorNum;
 
     public String getLocationName() {
         return locationName;
@@ -61,7 +70,6 @@ public class CommunityLocationDto extends PageDto implements Serializable {
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -101,5 +109,29 @@ public class CommunityLocationDto extends PageDto implements Serializable {
 
     public void setLocationObjName(String locationObjName) {
         this.locationObjName = locationObjName;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
     }
 }

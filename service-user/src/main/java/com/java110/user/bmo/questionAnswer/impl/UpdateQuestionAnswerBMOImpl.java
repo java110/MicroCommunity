@@ -2,9 +2,7 @@ package com.java110.user.bmo.questionAnswer.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
@@ -24,9 +22,6 @@ public class UpdateQuestionAnswerBMOImpl implements IUpdateQuestionAnswerBMO {
 
     @Autowired
     private IQuestionAnswerInnerServiceSMO questionAnswerInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -69,14 +64,8 @@ public class UpdateQuestionAnswerBMOImpl implements IUpdateQuestionAnswerBMO {
                     fileRel.setRelTypeCd("28000");
                     for (String photo : photos) {
                         fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                        FileDto fileDto = new FileDto();
-                        fileDto.setCommunityId("-1");
-                        fileDto.setContext(photo);
-                        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                        fileDto.setFileName(fileDto.getFileId());
-                        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                        fileRel.setFileRealName(fileName);
-                        fileRel.setFileSaveName(fileName);
+                        fileRel.setFileRealName(photo);
+                        fileRel.setFileSaveName(photo);
                         flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
                         if (flag < 1) {
                             throw new CmdException("保存数据失败");
@@ -93,14 +82,8 @@ public class UpdateQuestionAnswerBMOImpl implements IUpdateQuestionAnswerBMO {
                 fileRel.setRelTypeCd("28000");
                 for (String photo : photos) {
                     fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                    FileDto fileDto = new FileDto();
-                    fileDto.setCommunityId("-1");
-                    fileDto.setContext(photo);
-                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                    fileDto.setFileName(fileDto.getFileId());
-                    String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                    fileRel.setFileRealName(fileName);
-                    fileRel.setFileSaveName(fileName);
+                    fileRel.setFileRealName(photo);
+                    fileRel.setFileSaveName(photo);
                     flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
                     if (flag < 1) {
                         throw new CmdException("保存数据失败");

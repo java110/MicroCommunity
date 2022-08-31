@@ -37,7 +37,7 @@ public class GetApplyRoomDiscountBMOImpl implements IGetApplyRoomDiscountBMO {
         List<ApplyRoomDiscountDto> applyRoomDiscountDtos = new ArrayList<>();
         if (count > 0) {
             List<ApplyRoomDiscountDto> applyRoomDiscounts = applyRoomDiscountInnerServiceSMOImpl.queryApplyRoomDiscounts(applyRoomDiscountDto);
-            String imgUrl = MappingCache.getValue("IMG_PATH");
+//            String imgUrl = MappingCache.getValue("IMG_PATH");
             for (ApplyRoomDiscountDto applyRoomDiscount : applyRoomDiscounts) {
                 FileRelDto fileRelDto = new FileRelDto();
                 fileRelDto.setObjId(applyRoomDiscount.getArdId());
@@ -45,9 +45,9 @@ public class GetApplyRoomDiscountBMOImpl implements IGetApplyRoomDiscountBMO {
                 List<String> urls = new ArrayList<>();
                 for (FileRelDto fileRel : fileRelDtos) {
                     if (!StringUtil.isEmpty(fileRel.getFileRealName()) && fileRel.getRelTypeCd().equals("19000")) {
-                        urls.add(imgUrl + fileRel.getFileRealName());
-                    }else if (!StringUtil.isEmpty(fileRel.getFileRealName()) && fileRel.getRelTypeCd().equals("21000")) {
-                        urls.add(imgUrl + fileRel.getFileRealName());
+                        urls.add(fileRel.getFileRealName());
+                    } else if (!StringUtil.isEmpty(fileRel.getFileRealName()) && fileRel.getRelTypeCd().equals("21000")) {
+                        urls.add(fileRel.getFileRealName());
                     }
                 }
                 applyRoomDiscount.setUrls(urls);

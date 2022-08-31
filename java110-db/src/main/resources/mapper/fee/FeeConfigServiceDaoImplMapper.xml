@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="feeConfigServiceDaoImpl">
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFeeConfigInfo" parameterType="Map">
-        insert into business_pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,square_price,is_default,operate,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text,deduct_from
-        ) values (
-        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{squarePrice},#{isDefault},#{operate},#{configId},
-        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType},#{paymentCd},#{paymentCycle},
-        #{computingFormulaText},#{deductFrom}
-        )
+        insert into business_pay_fee_config(fee_type_cd, computing_formula, additional_amount, square_price, is_default,
+                                            operate, config_id, fee_flag, fee_name,
+                                            start_time, end_time, community_id, b_id, bill_type, payment_cd,
+                                            payment_cycle, computing_formula_text, deduct_from)
+        values (#{feeTypeCd}, #{computingFormula}, #{additionalAmount}, #{squarePrice}, #{isDefault}, #{operate},
+                #{configId},
+                #{feeFlag}, #{feeName}, #{startTime}, #{endTime}, #{communityId}, #{bId}, #{billType}, #{paymentCd},
+                #{paymentCycle},
+                #{computingFormulaText}, #{deductFrom})
     </insert>
 
     <!-- 查询费用配置信息（Business） add by wuxw 2018-07-03 -->
@@ -23,7 +23,8 @@
         squarePrice,t.is_default,t.is_default isDefault,t.operate,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag
         feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType,
-        t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom
+        t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text
+        computingFormulaText,t.deduct_from,t.deduct_from deductFrom
         from business_pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -134,21 +135,18 @@
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
-        t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from deductFrom,td4.name computingFormulaName
-        from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3,t_dict td4
-        where 1 =1
-        and t.fee_type_cd = td1.status_cd
-        and td1.table_name = 'pay_fee_config'
-        and td1.table_columns = 'fee_type_cd'
-        and t.fee_flag = td2.status_cd
-        and td2.table_name = 'pay_fee_config'
-        and td2.table_columns = 'fee_flag'
-        and t.bill_type = td3.status_cd
-        and td3.table_name = 'pay_fee_config'
-        and td3.table_columns = 'bill_type'
-        and t.computing_formula = td4.status_cd
-        and td4.table_name = 'pay_fee_config'
-        and td4.table_columns = 'computing_formula'
+        t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from
+        deductFrom,td4.name computingFormulaName
+        from pay_fee_config t
+        left join t_dict td1 on t.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
+        td1.table_columns = 'fee_type_cd'
+        left join t_dict td2 on t.fee_flag = td2.status_cd and td2.table_name = 'pay_fee_config' and td2.table_columns =
+        'fee_flag'
+        left join t_dict td3 on t.bill_type = td3.status_cd and td3.table_name = 'pay_fee_config' and td3.table_columns
+        = 'bill_type'
+        left join t_dict td4 on t.computing_formula = td4.status_cd and td4.table_name = 'pay_fee_config' and
+        td4.table_columns = 'computing_formula'
+        where 1 = 1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
         </if>
@@ -279,17 +277,16 @@
     <!-- 查询费用配置数量 add by wuxw 2018-07-03 -->
     <select id="queryFeeConfigsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
-        where 1 =1
-        and t.fee_type_cd = td1.status_cd
-        and td1.table_name = 'pay_fee_config'
-        and td1.table_columns = 'fee_type_cd'
-        and t.fee_flag = td2.status_cd
-        and td2.table_name = 'pay_fee_config'
-        and td2.table_columns = 'fee_flag'
-        and t.bill_type = td3.status_cd
-        and td3.table_name = 'pay_fee_config'
-        and td3.table_columns = 'bill_type'
+        from pay_fee_config t
+        left join t_dict td1 on t.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
+        td1.table_columns = 'fee_type_cd'
+        left join t_dict td2 on t.fee_flag = td2.status_cd and td2.table_name = 'pay_fee_config' and td2.table_columns =
+        'fee_flag'
+        left join t_dict td3 on t.bill_type = td3.status_cd and td3.table_name = 'pay_fee_config' and td3.table_columns
+        = 'bill_type'
+        left join t_dict td4 on t.computing_formula = td4.status_cd and td4.table_name = 'pay_fee_config' and
+        td4.table_columns = 'computing_formula'
+        where 1 = 1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
         </if>
@@ -348,12 +345,12 @@
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfig" parameterType="Map">
-        insert into pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
-        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle,computing_formula_text,deduct_from
-        ) values (
-        #{feeTypeCd},#{computingFormula},#{additionalAmount},'0',#{squarePrice},#{isDefault},#{configId},
-        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},'-1',#{billType},#{paymentCd},#{paymentCycle},#{computingFormulaText},#{deductFrom}
-        )
+        insert into pay_fee_config(fee_type_cd, computing_formula, additional_amount, status_cd, square_price,
+                                   is_default, config_id, fee_flag, fee_name,
+                                   start_time, end_time, community_id, b_id, bill_type, payment_cd, payment_cycle,
+                                   computing_formula_text, deduct_from)
+        values (#{feeTypeCd}, #{computingFormula}, #{additionalAmount}, '0', #{squarePrice}, #{isDefault}, #{configId},
+                #{feeFlag}, #{feeName}, #{startTime}, #{endTime}, #{communityId}, '-1', #{billType}, #{paymentCd},
+                #{paymentCycle}, #{computingFormulaText}, #{deductFrom})
     </insert>
 </mapper>

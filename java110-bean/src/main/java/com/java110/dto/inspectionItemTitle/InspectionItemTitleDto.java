@@ -28,7 +28,6 @@ public class InspectionItemTitleDto extends PageDto implements Serializable {
     private String communityId;
     private String seq;
 
-
     private Date createTime;
 
     private String statusCd = "0";

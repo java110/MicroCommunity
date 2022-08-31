@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
 import com.java110.po.parkingBox.ParkingBoxPo;
@@ -34,6 +36,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -58,19 +62,24 @@ public class SaveParkingBoxAreaCmd extends Cmd {
     @Autowired
     private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "boxId", "请求报文中未包含boxId");
         Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "defaultArea", "请求报文中未包含defaultArea");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(reqJson.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listIsNull(parkingAreaDtos, "停车场重复，请重新添加！");
         String defaultArea = reqJson.getString("defaultArea");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
             ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
@@ -78,18 +87,15 @@ public class SaveParkingBoxAreaCmd extends Cmd {
             tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
             parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
         }
-
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         parkingBoxAreaPo.setBaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.saveParkingBoxArea(parkingBoxAreaPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
         ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
         parkingBoxPo.setBoxId(reqJson.getString("boxId"));
         parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

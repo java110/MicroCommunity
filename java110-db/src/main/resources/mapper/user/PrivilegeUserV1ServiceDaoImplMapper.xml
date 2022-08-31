@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="privilegeUserV1ServiceDaoImpl">
 
-
     <!-- 保存用户权限信息 add by wuxw 2018-07-03 -->
     <insert id="savePrivilegeUserInfo" parameterType="Map">
-        insert into p_privilege_user(
-        privilege_flag,pu_id,p_id,store_id,user_id
-        ) values (
-        #{privilegeFlag},#{puId},#{pId},#{storeId},#{userId}
-        )
+        insert into p_privilege_user(privilege_flag, pu_id, p_id, store_id, user_id)
+        values (#{privilegeFlag}, #{puId}, #{pId}, #{storeId}, #{userId})
     </insert>
-
 
     <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
     <select id="getPrivilegeUserInfo" parameterType="Map" resultType="Map">
         select t.privilege_flag,t.privilege_flag privilegeFlag,t.pu_id,t.pu_id puId,t.p_id,t.p_id
         pId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_id,t.user_id userId
         <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
-        ,pg.`name` roleName
+            ,pg.`name` roleName
         </if>
         from p_privilege_user t
         <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
-        left join p_privilege_group pg on t.p_id = pg.pg_id  and pg.status_cd = '0'
+            left join p_privilege_group pg on t.p_id = pg.pg_id and pg.status_cd = '0'
         </if>
         where 1 =1
         <if test="privilegeFlag !=null and privilegeFlag != ''">
@@ -49,9 +43,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改用户权限信息 add by wuxw 2018-07-03 -->
     <update id="updatePrivilegeUserInfo" parameterType="Map">
@@ -75,7 +67,6 @@
         <if test="puId !=null and puId != ''">
             and t.pu_id= #{puId}
         </if>
-
     </update>
 
     <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
@@ -83,7 +74,7 @@
         select count(1) count
         from p_privilege_user t
         <if test='privilegeFlag == "1"  and userId != null and userId != ""'>
-            left join p_privilege_group pg on t.p_id = pg.pg_id  and pg.status_cd = '0'
+            left join p_privilege_group pg on t.p_id = pg.pg_id and pg.status_cd = '0'
         </if>
         where 1 =1
         <if test="privilegeFlag !=null and privilegeFlag != ''">
@@ -170,18 +161,28 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
+
     <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
     <select id="queryStaffsNoRoleCount" parameterType="Map" resultType="Map">
         select count(1) count
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         left join p_privilege_user pu on t.user_id = pu.user_id and pu.status_cd = '0' and pu.privilege_flag = '1' and pu.p_id = #{pId}
+        <if test="orgIds != null and orgIds.length > 0">
+            LEFT JOIN u_org_staff_rel uosr on t.user_id=uosr.staff_id
+        </if>
         where t.status_cd = '0'
         and pu.pu_id is null
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            and uosr.org_id in
+            <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            AND uosr.status_cd = '0'
         </if>
         and su.store_id = #{storeId}
     </select>
@@ -195,17 +196,25 @@
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         left join p_privilege_user pu on t.user_id = pu.user_id and pu.status_cd = '0' and pu.privilege_flag = '1' and pu.p_id = #{pId}
+        <if test="orgIds != null and orgIds.length > 0">
+            LEFT JOIN u_org_staff_rel uosr on t.user_id=uosr.staff_id
+        </if>
         where t.status_cd = '0'
         and pu.pu_id is null
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            and uosr.org_id in
+            <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            AND uosr.status_cd = '0'
         </if>
         and su.store_id = #{storeId}
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 </mapper>

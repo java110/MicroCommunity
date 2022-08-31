@@ -53,6 +53,14 @@ public class ListStorehousesCmd extends Cmd {
             }
             storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
         }
+
+        BasePrivilegeDto basePrivilegeDto1 = new BasePrivilegeDto();
+        basePrivilegeDto1.setResource("/viewHiddenWarehouse");
+        basePrivilegeDto1.setUserId(userId);
+        List<Map> viewHiddenWarehousePrivileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto1);
+        if (viewHiddenWarehousePrivileges.size() == 0) {
+            storehouseDto.setIsShow("true");
+        }
         if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("0")) {//调拨申请查看所有仓库
             storehouseDto.setShObjIds(null);
         }

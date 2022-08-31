@@ -47,4 +47,12 @@ public interface IOrgStaffRelInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOrgInfoByStaffIds", method = RequestMethod.POST)
     List<OrgStaffRelDto> queryOrgInfoByStaffIds(@RequestBody OrgStaffRelDto orgStaffRelDto);
+    /**
+     * <p>查询部门公司信息</p>
+     *
+     * @param orgStaffRelDto 员工ids
+     * @return OrgStaffRelDto 对象数据
+     */
+    @RequestMapping(value = "/queryOrgInfoByStaffIdsNew", method = RequestMethod.POST)
+    List<OrgStaffRelDto> queryOrgInfoByStaffIdsNew(@RequestBody OrgStaffRelDto orgStaffRelDto);
 }

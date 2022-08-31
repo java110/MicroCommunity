@@ -6,10 +6,8 @@ import com.java110.community.bmo.applyRoomDiscountRecord.IGetApplyRoomDiscountRe
 import com.java110.community.bmo.applyRoomDiscountRecord.ISaveApplyRoomDiscountRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.applyRoomDiscountRecord.ApplyRoomDiscountRecordDto;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
@@ -33,9 +31,6 @@ public class ApplyRoomDiscountRecordApi {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -140,14 +135,8 @@ public class ApplyRoomDiscountRecordApi {
             //19000表示装修图片
             fileRelPo.setRelTypeCd("19000");
             for (String photo : photos) {
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }

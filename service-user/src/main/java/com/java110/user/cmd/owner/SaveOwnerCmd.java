@@ -9,15 +9,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
@@ -40,18 +37,11 @@ public class SaveOwnerCmd extends Cmd {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
-
     @Autowired
     private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
 
     @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
-    @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
@@ -139,30 +129,19 @@ public class SaveOwnerCmd extends Cmd {
             }
         }
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("ownerPhoto"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("ownerPhotoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
-
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "10000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", reqJson.getString("memberId"));
-            businessUnit.put("fileRealName", reqJson.getString("ownerPhotoId"));
-            businessUnit.put("fileSaveName", reqJson.getString("fileSaveName"));
+            businessUnit.put("fileRealName", reqJson.getString("ownerPhoto"));
+            businessUnit.put("fileSaveName", reqJson.getString("ownerPhoto"));
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             if (flag < 1) {
                 throw new CmdException("保存业主房屋关系失败");
             }
         }
-
         dealOwnerAttr(reqJson, cmdDataFlowContext);
     }
 

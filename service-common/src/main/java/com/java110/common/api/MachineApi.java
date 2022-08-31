@@ -10,12 +10,9 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
-import com.java110.utils.constant.KafkaConstant;
-import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +27,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/machine")
 public class MachineApi {
+
     private static Logger logger = LoggerFactory.getLogger(MachineApi.class);
 
     private static final String USER_ROLE_OWNER = "owner";
+
     @Autowired
     private IMachineOpenDoorBMO machineOpenDoorBMOImpl;
 

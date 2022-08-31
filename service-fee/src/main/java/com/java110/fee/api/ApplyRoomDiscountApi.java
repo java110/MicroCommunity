@@ -10,8 +10,6 @@ import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.dto.applyRoomDiscountType.ApplyRoomDiscountTypeDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
-import com.java110.dto.file.FileDto;
-import com.java110.fee.bmo.account.ISaveAccountBMO;
 import com.java110.fee.bmo.account.IUpdateAccountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IAuditApplyRoomDiscountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IDeleteApplyRoomDiscountBMO;
@@ -22,13 +20,10 @@ import com.java110.fee.bmo.applyRoomDiscountType.IDeleteApplyRoomDiscountTypeBMO
 import com.java110.fee.bmo.applyRoomDiscountType.IGetApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.ISaveApplyRoomDiscountTypeBMO;
 import com.java110.fee.bmo.applyRoomDiscountType.IUpdateApplyRoomDiscountTypeBMO;
-import com.java110.intf.acct.IAccountInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeDiscountRuleInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
 import com.java110.po.file.FileRelPo;
@@ -94,19 +89,7 @@ public class ApplyRoomDiscountApi {
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
     @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
-
-    @Autowired
-    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
-
-    @Autowired
-    private ISaveAccountBMO saveAccountBMOImpl;
-
-    @Autowired
     private IUpdateAccountBMO updateAccountBMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -190,14 +173,8 @@ public class ApplyRoomDiscountApi {
             //19000表示装修图片
             fileRelPo.setRelTypeCd("19000");
             for (String photo : photos) {
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }

@@ -3,6 +3,7 @@ package com.java110.dto.file;
 import java.io.Serializable;
 
 public class FileDto implements Serializable {
+
     private String fileId;
 
     private String fileName;
@@ -11,12 +12,13 @@ public class FileDto implements Serializable {
 
     private String context;
 
-
     private String statusCd;
 
     private String suffix;
 
     private String fileSaveName;
+
+    private String flag;
 
     public String getFileId() {
         return fileId;
@@ -74,4 +76,11 @@ public class FileDto implements Serializable {
         this.fileSaveName = fileSaveName;
     }
 
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
 }

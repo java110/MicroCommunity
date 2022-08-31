@@ -173,6 +173,13 @@
         <if test="staffName !=null and staffName != ''">
             and t.name like concat('%', #{staffName},'%')
         </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            and osr.org_id in
+            <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
     </select>
 
     <select id="queryStaffsNoInOrg" parameterType="Map" resultType="Map">
@@ -186,6 +193,12 @@
         and (osr.org_id != #{orgId} or osr.org_id is null)
         <if test="staffName !=null and staffName != ''">
             and t.name like concat('%', #{staffName},'%')
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            and osr.org_id in
+            <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

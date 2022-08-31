@@ -16,9 +16,9 @@ import java.util.List;
 public class UserDto extends PageDto implements Serializable {
 
     public static final String LEVEL_CD_MALL = "03";//商城用户
-    public static final String LEVEL_CD_ADMIN = "00";//商城用户
-    public static final String LEVEL_CD_STAFF = "01";//商城用户
-    public static final String LEVEL_CD_USER = "02";//商城用户
+    public static final String LEVEL_CD_ADMIN = "00";//系统管理员
+    public static final String LEVEL_CD_STAFF = "01";//员工
+    public static final String LEVEL_CD_USER = "02";//普通用户
 
     private String userId;
     private String[] userIds;
@@ -54,6 +54,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String orgId;
 
+    private String[] orgIds;
+
     private String staffName;
 
     private String staffId;
@@ -85,6 +87,10 @@ public class UserDto extends PageDto implements Serializable {
     private String score;
 
     private String userFlag;
+
+    private String relId;
+
+    private List<String> urls;
 
     public String getUserId() {
         return userId;
@@ -364,5 +370,29 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setRelCdName(String relCdName) {
         this.relCdName = relCdName;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public String getRelId() {
+        return relId;
+    }
+
+    public void setRelId(String relId) {
+        this.relId = relId;
+    }
+
+    public String[] getOrgIds() {
+        return orgIds;
+    }
+
+    public void setOrgIds(String[] orgIds) {
+        this.orgIds = orgIds;
     }
 }

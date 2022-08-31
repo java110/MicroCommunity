@@ -5,7 +5,6 @@ import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.user.bmo.questionAnswer.IGetQuestionAnswerBMO;
-import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,6 @@ public class GetQuestionAnswerBMOImpl implements IGetQuestionAnswerBMO {
         List<QuestionAnswerDto> questionAnswerDtos = new ArrayList<>();
         if (count > 0) {
             List<QuestionAnswerDto> questionAnswers = questionAnswerInnerServiceSMOImpl.queryQuestionAnswers(questionAnswerDto);
-            String imgUrl = MappingCache.getValue("IMG_PATH");
             for (QuestionAnswerDto questionAnswer : questionAnswers) {
                 List<String> fileUrls = new ArrayList<>();
                 FileRelDto fileRelDto = new FileRelDto();
@@ -42,7 +40,7 @@ public class GetQuestionAnswerBMOImpl implements IGetQuestionAnswerBMO {
                 List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
                 if (fileRelDtos != null && fileRelDtos.size() > 0) {
                     for (FileRelDto fileRel : fileRelDtos) {
-                        fileUrls.add(imgUrl + fileRel.getFileRealName());
+                        fileUrls.add(fileRel.getFileRealName());
                     }
                 }
                 questionAnswer.setFileUrls(fileUrls);

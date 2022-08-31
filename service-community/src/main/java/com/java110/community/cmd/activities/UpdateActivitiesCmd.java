@@ -22,15 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.community.IActivitiesInnerServiceSMO;
 import com.java110.intf.community.IActivitiesV1InnerServiceSMO;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.po.file.FileRelPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -41,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-
 
 /**
  * 类表述：更新
@@ -56,17 +51,13 @@ import java.util.List;
 @Java110Cmd(serviceCode = "activities.updateActivities")
 public class UpdateActivitiesCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateActivitiesCmd.class);
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+    private static Logger logger = LoggerFactory.getLogger(UpdateActivitiesCmd.class);
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Autowired
     private IActivitiesV1InnerServiceSMO activitiesV1InnerServiceSMOImpl;
-    @Autowired
-    private IActivitiesInnerServiceSMO activitiesInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -78,65 +69,45 @@ public class UpdateActivitiesCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写活动内容");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
-
     }
-
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("headerImg"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
-            reqJson.put("headerImg", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
-
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setRelTypeCd("70000");
             fileRelDto.setObjId(reqJson.getString("activitiesId"));
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-
             if (fileRelDtos == null || fileRelDtos.size() == 0) {
                 FileRelPo fileRelPo = new FileRelPo();
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
                 fileRelPo.setFileRealName(reqJson.getString("headerImg"));
-                fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
+                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
                 fileRelPo.setObjId(reqJson.getString("activitiesId"));
                 fileRelPo.setSaveWay("table");
                 fileRelPo.setRelTypeCd("70000");
                 int flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-                if(flag < 1){
+                if (flag < 1) {
                     throw new CmdException("保存广告失败");
                 }
             } else {
                 FileRelPo fileRelPo = new FileRelPo();
                 fileRelPo.setFileRelId(fileRelDtos.get(0).getFileRelId());
                 fileRelPo.setFileRealName(reqJson.getString("headerImg"));
-                fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
+                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
                 fileRelPo.setObjId(reqJson.getString("activitiesId"));
                 int flag = fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
-                if(flag < 1){
+                if (flag < 1) {
                     throw new CmdException("保存广告失败");
                 }
             }
-
         }
-
         ActivitiesPo activitiesPo = BeanConvertUtil.covertBean(reqJson, ActivitiesPo.class);
         int flag = activitiesV1InnerServiceSMOImpl.updateActivities(activitiesPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

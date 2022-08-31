@@ -7,7 +7,9 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -37,6 +39,9 @@ public class QueryOwnersCmd extends Cmd {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
@@ -65,6 +70,18 @@ public class QueryOwnersCmd extends Cmd {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", reqJson.getString("userId"));
             for (OwnerDto ownerDto : ownerDtoList) {
+                //查询照片
+                FileRelDto fileRelDto = new FileRelDto();
+                fileRelDto.setObjId(ownerDto.getOwnerId());
+                fileRelDto.setRelTypeCd("10000"); //业主照片
+                List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+                if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                    List<String> urls = new ArrayList<>();
+                    for (FileRelDto fileRel : fileRelDtos) {
+                        urls.add(fileRel.getFileRealName());
+                    }
+                    ownerDto.setUrls(urls);
+                }
                 //对业主身份证号隐藏处理
                 String idCard = ownerDto.getIdCard();
                 if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
@@ -97,7 +114,7 @@ public class QueryOwnersCmd extends Cmd {
         if (!roomName.contains("-")) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
-        String[] params = roomName.split("-",3);
+        String[] params = roomName.split("-", 3);
         if (params.length != 3) {
             throw new IllegalArgumentException("房屋格式错误,请写入如 楼栋-单元-房屋 格式");
         }
@@ -114,14 +131,14 @@ public class QueryOwnersCmd extends Cmd {
     /**
      * 根据条件查询
      *
-     * @param reqJson         查询信息
+     * @param reqJson            查询信息
      * @param cmdDataFlowContext 上下文
      */
     private void queryByCondition(JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
         //获取当前用户id
         String ownerTypeCd = reqJson.getString("ownerTypeCd");
         OwnerDto tmpOwnerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
-        if(!StringUtil.isEmpty(ownerTypeCd) && ownerTypeCd.contains(",")){
+        if (!StringUtil.isEmpty(ownerTypeCd) && ownerTypeCd.contains(",")) {
             tmpOwnerDto.setOwnerTypeCd("");
             tmpOwnerDto.setOwnerTypeCds(ownerTypeCd.split(","));
         }

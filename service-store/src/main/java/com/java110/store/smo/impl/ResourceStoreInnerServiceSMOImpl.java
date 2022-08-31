@@ -63,8 +63,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             if (fileRelDtos != null && fileRelDtos.size() > 0) {
                 List<String> fileUrls = new ArrayList<>();
                 for (FileRelDto fileRel : fileRelDtos) {
-                    String url = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
-                    fileUrls.add(url);
+                    fileUrls.add(fileRel.getFileRealName());
                 }
                 resourceStoreDto.setFileUrls(fileUrls);
             }

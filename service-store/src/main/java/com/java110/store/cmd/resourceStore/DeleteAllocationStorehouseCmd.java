@@ -69,7 +69,7 @@ public class DeleteAllocationStorehouseCmd extends Cmd {
         if (!StringUtil.isEmpty(state) && state.equals("1200")) { //1200表示调拨申请状态
             deleteAllocationStorehouse(reqJson);
         } else {
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的调拨订单已经状态已改变，无法进行取消操作！！");
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的调拨订单状态已改变，无法进行取消操作！！");
             context.setResponseEntity(responseEntity);
             return;
         }
@@ -85,6 +85,7 @@ public class DeleteAllocationStorehouseCmd extends Cmd {
         int flag = 0;
         for (AllocationStorehouseDto tmpAllocationStorehouseDto : allocationStorehouseDtos) {
             AllocationStorehousePo allocationStorehousePo = BeanConvertUtil.covertBean(tmpAllocationStorehouseDto, AllocationStorehousePo.class);
+            allocationStorehousePo.setStatusCd("1");
             flag = allocationStorehouseV1InnerServiceSMOImpl.deleteAllocationStorehouse(allocationStorehousePo);
 
             if (flag < 1) {
@@ -135,6 +136,7 @@ public class DeleteAllocationStorehouseCmd extends Cmd {
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
         allocationStorehouseApplyPo.setApplyId(allocationStorehouseDto.getApplyId());
         allocationStorehouseApplyPo.setStoreId(allocationStorehouseDto.getStoreId());
+        allocationStorehouseApplyPo.setStatusCd("1");
         flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
         if (flag < 1) {
             throw new CmdException("修改失败");

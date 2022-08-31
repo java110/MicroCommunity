@@ -12,6 +12,7 @@ import com.java110.dto.roleCommunity.RoleCommunityDto;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
+import com.java110.intf.user.IRoleCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -34,6 +35,10 @@ public class ListStaffRolesCmd extends Cmd {
     @Autowired
     private IOrgV1InnerServiceSMO orgV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含 员工信息");
@@ -52,6 +57,14 @@ public class ListStaffRolesCmd extends Cmd {
         List<PrivilegeUserDto> roles = null;
         if (count > 0) {
             roles = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUsers(privilegeUserDto);
+            for (PrivilegeUserDto privilegeUserDto1 : roles) {
+                RoleCommunityDto roleCommunityDto=new RoleCommunityDto();
+                roleCommunityDto.setRoleId(privilegeUserDto1.getpId());
+                roleCommunityDto.setRow(Integer.valueOf("999"));
+                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(roleCommunityDto);
+                privilegeUserDto1.setRoleCommunityDtoList(roleCommunityDtos);
+            }
+
 
         } else {
             roles = new ArrayList<>();

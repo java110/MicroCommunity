@@ -18,13 +18,11 @@ import com.java110.dto.communitySetting.CommunitySettingDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.roomRenovation.RoomRenovationDto;
 import com.java110.dto.roomRenovationDetail.RoomRenovationDetailDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.intf.community.IRoomRenovationInnerServiceSMO;
@@ -93,9 +91,6 @@ public class RoomRenovationApi {
 
     @Autowired
     private IGetRoomRenovationRecordBMO getRoomRenovationRecordBMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IDeleteRoomRenovationRecordBMO deleteRoomRenovationRecordBMOImpl;
@@ -449,14 +444,8 @@ public class RoomRenovationApi {
             //19000表示装修图片
             fileRelPo.setRelTypeCd("19000");
             for (String photo : photos) {
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }

@@ -3,17 +3,13 @@ package com.java110.user.cmd.user;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
@@ -34,8 +30,6 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "user.staff.modify")
 public class UserStaffModifyCmd extends Cmd {
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -53,7 +47,7 @@ public class UserStaffModifyCmd extends Cmd {
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
     @Autowired
-    private IStoreUserV1InnerServiceSMO  storeUserV1InnerServiceSMOImpl;
+    private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -67,14 +61,6 @@ public class UserStaffModifyCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setRelTypeCd("12000");
             fileRelDto.setObjId(reqJson.getString("userId"));
@@ -85,8 +71,8 @@ public class UserStaffModifyCmd extends Cmd {
                 businessUnit.put("relTypeCd", "12000");
                 businessUnit.put("saveWay", "table");
                 businessUnit.put("objId", reqJson.getString("userId"));
-                businessUnit.put("fileRealName", fileDto.getFileId());
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", reqJson.getString("photo"));
+                businessUnit.put("fileSaveName", reqJson.getString("photo"));
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 int flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
@@ -95,8 +81,8 @@ public class UserStaffModifyCmd extends Cmd {
             } else {
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-                businessUnit.put("fileRealName", fileDto.getFileId());
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", reqJson.getString("photo"));
+                businessUnit.put("fileSaveName", reqJson.getString("photo"));
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 int flag = fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
                 if (flag < 1) {

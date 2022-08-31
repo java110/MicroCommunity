@@ -222,6 +222,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                         Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
                         //获取赠送月份
                         String specValue = feeDiscountSpecDtos.get(0).getSpecValue();
+                        BigDecimal value = new BigDecimal(specValue);
                         FeeDiscountSpecDto feeDiscountSpec = new FeeDiscountSpecDto();
                         feeDiscountSpec.setDiscountId(payFeeConfigDiscount.getDiscountId());
                         feeDiscountSpec.setSpecId(SPEC_MONTH);
@@ -235,17 +236,18 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                         if (flag == 1) { //月份discountMonth大于周期cycle，无法享受赠送规则
                             continue;
                         }
-                        FeeDto feeDto2 = new FeeDto();
-                        feeDto2.setFeeId(feeDtos.get(0).getFeeId());
-                        List<FeeDto> fees = feeInnerServiceSMOImpl.queryFees(feeDto2);
-                        Assert.listOnlyOne(fees, "查询费用表错误");
+//                        FeeDto feeDto2 = new FeeDto();
+//                        feeDto2.setFeeId(feeDtos.get(0).getFeeId());
+//                        List<FeeDto> fees = feeInnerServiceSMOImpl.queryFees(feeDto2);
+//                        Assert.listOnlyOne(fees, "查询费用表错误");
+                        int monthNum = cycle.add(value).intValue();
                         //获取费用开始时间
-                        Date endTime = fees.get(0).getEndTime();
-                        if (endTime.equals(startTime)) {
-                            continue;
-                        }
+                        Date endTime = feeDtos.get(0).getEndTime();
+//                        if (endTime.equals(startTime)) {
+//                            continue;
+//                        }
                         cal.setTime(endTime);
-                        cal.add(Calendar.MONTH, -Integer.parseInt(specValue));
+                        cal.add(Calendar.MONTH, -monthNum);
                         PayFeePo payFeePo = new PayFeePo();
                         payFeePo.setFeeId(feeDtos.get(0).getFeeId());
                         payFeePo.setEndTime(simpleDateFormat.format(cal.getTime()));

@@ -131,12 +131,17 @@ public class ActivitiesRuleApi {
      * @path /app/activitiesRule/queryActivitiesRule
      */
     @RequestMapping(value = "/queryActivitiesRule", method = RequestMethod.GET)
-    public ResponseEntity<String> queryActivitiesRule(
-            @RequestHeader(value = "store-id", required = false) String storeId,
-            @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row) {
+    public ResponseEntity<String> queryActivitiesRule(@RequestHeader(value = "store-id", required = false) String storeId,
+                                                      @RequestParam(value = "ruleType", required = false) String ruleType,
+                                                      @RequestParam(value = "ruleName", required = false) String ruleName,
+                                                      @RequestParam(value = "activitiesObj", required = false) String activitiesObj,
+                                                      @RequestParam(value = "communityId") String communityId,
+                                                      @RequestParam(value = "page") int page,
+                                                      @RequestParam(value = "row") int row) {
         ActivitiesRuleDto activitiesRuleDto = new ActivitiesRuleDto();
+        activitiesRuleDto.setRuleType(ruleType);
+        activitiesRuleDto.setRuleName(ruleName);
+        activitiesRuleDto.setActivitiesObj(activitiesObj);
         activitiesRuleDto.setPage(page);
         activitiesRuleDto.setRow(row);
         activitiesRuleDto.setObjIds(new String[]{storeId, communityId});

@@ -84,11 +84,17 @@ public class DeleteFeeCmd extends Cmd {
         PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
 
         int flag = payFeeV1InnerServiceSMOImpl.deletePayFee(payFeePo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("删除失败");
+        }
 
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessUnit, PayFeeDetailPo.class);
-        int flag2 = payFeeDetailV1InnerServiceSMOImpl.deletePayFeeDetailNew(payFeeDetailPo);
-        if (flag < 1 || flag2 < 1) {
-            throw new IllegalArgumentException("删除失败");
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(payFeeDetailPo, FeeDetailDto.class));
+        if(feeDetailDtos != null && feeDetailDtos.size() > 0) {
+            int flag2 = payFeeDetailV1InnerServiceSMOImpl.deletePayFeeDetailNew(payFeeDetailPo);
+            if (flag2 < 1) {
+                throw new IllegalArgumentException("删除失败");
+            }
         }
     }
 }

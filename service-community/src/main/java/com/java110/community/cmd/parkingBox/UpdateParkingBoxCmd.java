@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-
 /**
  * 类表述：更新
  * 服务编码：parkingBox.updateParkingBox
@@ -55,8 +54,8 @@ import java.util.List;
 public class UpdateParkingBoxCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateParkingBoxCmd.class);
-    public static final String CODE_PREFIX_ID = "10";
 
+    public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
     private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
@@ -71,33 +70,26 @@ public class UpdateParkingBoxCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "boxId", "boxId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         ParkingBoxPo parkingBoxPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxPo.class);
         int flag = parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         if (!reqJson.containsKey("paId") || StringUtil.isEmpty(reqJson.getString("paId"))) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
-            return ;
+            return;
         }
-
         //判断停车场是否存在
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
         parkingAreaDto.setPaId(reqJson.getString("paId"));
         parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
         List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-
         Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
-
         ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
         parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
         parkingBoxAreaDto.setPaId(parkingAreaDtos.get(0).getPaId());
@@ -107,18 +99,17 @@ public class UpdateParkingBoxCmd extends Cmd {
         parkingBoxAreaPo.setBoxId(parkingBoxPo.getBoxId());
         parkingBoxAreaPo.setPaId(parkingAreaDtos.get(0).getPaId());
         parkingBoxAreaPo.setCommunityId(parkingAreaDtos.get(0).getCommunityId());
-        if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
+        if (parkingBoxAreaDtos == null || parkingBoxAreaDtos.size() < 1) {
             parkingBoxAreaPo.setBaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             parkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
             flag = parkingBoxAreaV1InnerServiceSMOImpl.saveParkingBoxArea(parkingBoxAreaPo);
-        }else{
+        } else {
             parkingBoxAreaPo.setBaId(parkingBoxAreaDtos.get(0).getBaId());
             flag = parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAreaPo);
         }
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

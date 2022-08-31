@@ -2,6 +2,7 @@ package com.java110.community.bmo.communitySetting.impl;
 
 import com.java110.community.bmo.communitySetting.IDeleteCommunitySettingBMO;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.po.communitySetting.CommunitySettingPo;
 import com.java110.vo.ResultVo;
@@ -23,7 +24,8 @@ public class DeleteCommunitySettingBMOImpl implements IDeleteCommunitySettingBMO
     public ResponseEntity<String> delete(CommunitySettingPo communitySettingPo) {
 
         int flag = communitySettingInnerServiceSMOImpl.deleteCommunitySetting(communitySettingPo);
-
+        //将结果写入缓存
+        CommunitySettingFactory.deleteCommunitySetting(communitySettingPo);
         if (flag > 0) {
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }

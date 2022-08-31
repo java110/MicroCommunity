@@ -38,7 +38,7 @@ import org.springframework.util.MultiValueMap;
 public class RestartMachineAdapt extends DatabusAdaptImpl {
 
     @Autowired
-    RestTemplate outRestTemplate;
+    private RestTemplate outRestTemplate;
 
     @Override
     public ResultVo restartMachine(JSONObject paramIn) {

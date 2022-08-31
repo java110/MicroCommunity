@@ -33,6 +33,7 @@ import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +86,16 @@ public class DeletePurchaseApplyCmd extends Cmd {
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
         if (purchaseApplyDtos.size() != 1) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "采购申请单出现多条或者未找到采购申请单！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        if (!"1000".equals(purchaseApplyDtos.get(0).getState()) && PurchaseApplyDto.RES_ORDER_TYPE_ENTER.equals(purchaseApplyDtos.get(0).getResOrderType())) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的采购申请订单状态已改变，无法进行取消操作！");
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        if (!"1000".equals(purchaseApplyDtos.get(0).getState()) && PurchaseApplyDto.RES_ORDER_TYPE_OUT.equals(purchaseApplyDtos.get(0).getResOrderType()) ) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您的物品领用订单状态已改变，无法进行取消操作！");
             context.setResponseEntity(responseEntity);
             return;
         }

@@ -37,6 +37,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
 
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
+
     @Autowired
     private CosUploadTemplate cosUploadTemplate;
 
@@ -47,7 +48,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         String fileName = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
 
-        if ( OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
+        if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ossUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                     java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
@@ -61,9 +62,10 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
             String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
             String ftpPath = java110Properties.getFtpPath();
+
             fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
-                    ftpPort, ftpUserName,
-                    ftpUserPassword, ftpPath);
+                        ftpPort, ftpUserName,
+                        ftpUserPassword, ftpPath);
         }
         return fileName;
     }
@@ -85,7 +87,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             context = ossUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                     java110Properties.getFtpUserPassword());
-        }else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
+        } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
             context = cosUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                     java110Properties.getFtpUserPassword());

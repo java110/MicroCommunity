@@ -2,8 +2,6 @@ package com.java110.user.bmo.questionAnswer.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
@@ -22,9 +20,6 @@ public class SaveQuestionAnswerBMOImpl implements ISaveQuestionAnswerBMO {
 
     @Autowired
     private IQuestionAnswerInnerServiceSMO questionAnswerInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -53,14 +48,8 @@ public class SaveQuestionAnswerBMOImpl implements ISaveQuestionAnswerBMO {
                 //28000表示问卷图片
                 fileRelPo.setRelTypeCd("28000");
                 for (String photo : photos) {
-                    FileDto fileDto = new FileDto();
-                    fileDto.setCommunityId("-1");
-                    fileDto.setContext(photo);
-                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                    fileDto.setFileName(fileDto.getFileId());
-                    String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                    fileRelPo.setFileRealName(fileName);
-                    fileRelPo.setFileSaveName(fileName);
+                    fileRelPo.setFileRealName(photo);
+                    fileRelPo.setFileSaveName(photo);
                     fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 }
             }

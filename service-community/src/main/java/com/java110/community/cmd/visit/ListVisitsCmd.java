@@ -28,13 +28,11 @@ public class ListVisitsCmd extends Cmd {
     @Autowired
     private IVisitInnerServiceSMO visitInnerServiceSMOImpl;
 
-
     //键
     public static final String CAR_FREE_TIME = "CAR_FREE_TIME";
 
     //键
     public static final String VISIT_NUMBER = "VISIT_NUMBER";
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -57,14 +55,13 @@ public class ListVisitsCmd extends Cmd {
         } else {
             VisitDto visitDto = BeanConvertUtil.covertBean(reqJson, VisitDto.class);
             int count = visitInnerServiceSMOImpl.queryVisitsCount(visitDto);
-
             List<ApiVisitDataVo> visits = new ArrayList<>();
             if (count > 0) {
                 List<VisitDto> visitDtos = visitInnerServiceSMOImpl.queryVisits(visitDto);
                 for (VisitDto visit : visitDtos) {
                     ApiVisitDataVo apiVisitDataVo = BeanConvertUtil.covertBean(visit, ApiVisitDataVo.class);
                     if (!StringUtil.isEmpty(visit.getFileSaveName())) {
-                        apiVisitDataVo.setUrl("/callComponent/download/getFile/file?fileId=" + visit.getFileSaveName() + "&communityId=-1");
+                        apiVisitDataVo.setUrl(visit.getFileSaveName());
                     }
                     visits.add(apiVisitDataVo);
                 }

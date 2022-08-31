@@ -5,7 +5,6 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
-import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IUploadVedioSMO;
 import com.java110.utils.cache.MappingCache;
@@ -32,6 +31,7 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
 
     @Autowired
     private Java110Properties java110Properties;
+
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
 

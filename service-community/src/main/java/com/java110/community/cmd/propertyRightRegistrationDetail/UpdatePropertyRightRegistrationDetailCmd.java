@@ -23,9 +23,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IPropertyRightRegistrationDetailV1InnerServiceSMO;
 import com.java110.intf.community.IPropertyRightRegistrationV1InnerServiceSMO;
@@ -59,15 +57,11 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdatePropertyRightRegistrationDetailCmd.class);
 
-
     @Autowired
     private IPropertyRightRegistrationDetailV1InnerServiceSMO propertyRightRegistrationDetailV1InnerServiceSMOImpl;
 
     @Autowired
     private IPropertyRightRegistrationV1InnerServiceSMO propertyRightRegistrationV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -76,7 +70,6 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "prrId", "prrId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
@@ -176,14 +169,8 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
             fileRelPo.setRelTypeCd("60000");
             for (String photo : idCardPhotos) {
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }
@@ -205,14 +192,8 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
             fileRelPo.setRelTypeCd("25000");
             for (String photo : housePurchasePhotos) {
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }
@@ -234,14 +215,8 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
             fileRelPo.setRelTypeCd("26000");
             for (String photo : repairPhotos) {
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }
@@ -263,14 +238,8 @@ public class UpdatePropertyRightRegistrationDetailCmd extends Cmd {
             fileRelPo.setRelTypeCd("27000");
             for (String photo : deedTaxPhotos) {
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }
         }

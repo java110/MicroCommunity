@@ -95,10 +95,10 @@ public class ListPropertyRightRegistrationDetailCmd extends Cmd {
                         for (FileRelDto fileRel : fileRelDtos) {
                             if (!StringUtil.isEmpty(fileRel.getFileRealName())) {  //身份证图片
                                 if (!StringUtil.isEmpty(propertyRightRegistrationDetail.getIdCardUrl())) {
-                                    idCardUrl = propertyRightRegistrationDetail.getIdCardUrl() + "," + "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    idCardUrl = propertyRightRegistrationDetail.getIdCardUrl() + "," + fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setIdCardUrl(idCardUrl);
                                 } else {
-                                    idCardUrl = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    idCardUrl = fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setIdCardUrl(idCardUrl);
                                 }
                             }
@@ -116,10 +116,10 @@ public class ListPropertyRightRegistrationDetailCmd extends Cmd {
                         for (FileRelDto fileRel : fileRelDtos) {
                             if (!StringUtil.isEmpty(fileRel.getFileRealName())) { //购房合同图片
                                 if (!StringUtil.isEmpty(propertyRightRegistrationDetail.getHousePurchaseUrl())) {
-                                    housePurchaseUrl = propertyRightRegistrationDetail.getHousePurchaseUrl() + "," + "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    housePurchaseUrl = propertyRightRegistrationDetail.getHousePurchaseUrl() + "," + fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setHousePurchaseUrl(housePurchaseUrl);
                                 } else {
-                                    housePurchaseUrl = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    housePurchaseUrl = fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setHousePurchaseUrl(housePurchaseUrl);
                                 }
                             }
@@ -137,10 +137,10 @@ public class ListPropertyRightRegistrationDetailCmd extends Cmd {
                         for (FileRelDto fileRel : fileRelDtos) {
                             if (!StringUtil.isEmpty(fileRel.getFileRealName())) { //维修基金图片
                                 if (!StringUtil.isEmpty(propertyRightRegistrationDetail.getRepairUrl())) {
-                                    repairUrl = propertyRightRegistrationDetail.getRepairUrl() + "," + "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    repairUrl = propertyRightRegistrationDetail.getRepairUrl() + "," + fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setRepairUrl(repairUrl);
                                 } else {
-                                    repairUrl = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    repairUrl = fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setRepairUrl(repairUrl);
                                 }
                             }
@@ -158,10 +158,10 @@ public class ListPropertyRightRegistrationDetailCmd extends Cmd {
                         for (FileRelDto fileRel : fileRelDtos) {
                             if (!StringUtil.isEmpty(fileRel.getFileRealName())) { //契税图片
                                 if (!StringUtil.isEmpty(propertyRightRegistrationDetail.getDeedTaxUrl())) {
-                                    deedTaxUrl = propertyRightRegistrationDetail.getDeedTaxUrl() + "," + "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    deedTaxUrl = propertyRightRegistrationDetail.getDeedTaxUrl() + "," + fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setDeedTaxUrl(deedTaxUrl);
                                 } else {
-                                    deedTaxUrl = "/callComponent/download/getFile/file?fileId=" + fileRel.getFileRealName() + "&communityId=-1";
+                                    deedTaxUrl = fileRel.getFileRealName();
                                     propertyRightRegistrationDetail.setDeedTaxUrl(deedTaxUrl);
                                 }
                             }

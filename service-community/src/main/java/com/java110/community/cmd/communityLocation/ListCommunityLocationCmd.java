@@ -17,26 +17,29 @@ package com.java110.community.cmd.communityLocation;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.FloorDto;
+import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityLocationDto;
 import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
-import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
+import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -51,12 +54,16 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "communityLocation.listCommunityLocations")
 public class ListCommunityLocationCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListCommunityLocationCmd.class);
-    @Autowired
-    private ICommunityLocationV1InnerServiceSMO communityLocationV1InnerServiceSMOImpl;
+    private static Logger logger = LoggerFactory.getLogger(ListCommunityLocationCmd.class);
 
     @Autowired
     private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -67,15 +74,31 @@ public class ListCommunityLocationCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-
         CommunityLocationDto communityLocationDto = BeanConvertUtil.covertBean(reqJson, CommunityLocationDto.class);
 
         int count = communityLocationInnerServiceSMOImpl.queryCommunityLocationsCount(communityLocationDto);
 
-        List<CommunityLocationDto> communityLocationDtos = null;
+        List<CommunityLocationDto> communityLocationDtos = new ArrayList<>();
 
         if (count > 0) {
-            communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+            List<CommunityLocationDto> communityLocations = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+            for (CommunityLocationDto communityLocation : communityLocations) {
+                if (!StringUtil.isEmpty(communityLocation.getLocationType()) && communityLocation.getLocationType().equals("2000")
+                        && !StringUtil.isEmpty(communityLocation.getLocationObjId()) && !communityLocation.getLocationObjId().equals("-1")) { //单元
+                    UnitDto unitDto = new UnitDto();
+                    unitDto.setUnitId(communityLocation.getLocationObjId());
+                    List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+                    Assert.listOnlyOne(unitDtos, "查询单元错误");
+                    communityLocation.setFloorId(unitDtos.get(0).getFloorId());
+                    communityLocation.setUnitNum(unitDtos.get(0).getUnitNum());
+                    FloorDto floorDto = new FloorDto();
+                    floorDto.setFloorId(unitDtos.get(0).getFloorId());
+                    List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+                    Assert.listOnlyOne(floorDtos, "查询楼栋错误");
+                    communityLocation.setFloorNum(floorDtos.get(0).getFloorNum());
+                }
+                communityLocationDtos.add(communityLocation);
+            }
         } else {
             communityLocationDtos = new ArrayList<>();
         }

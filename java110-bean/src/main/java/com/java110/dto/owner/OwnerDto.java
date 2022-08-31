@@ -82,6 +82,7 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String msg;
 
+    private List<String> urls;
 
     public String getSex() {
         return sex;
@@ -403,5 +404,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }

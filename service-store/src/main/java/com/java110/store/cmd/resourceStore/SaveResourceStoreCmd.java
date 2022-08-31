@@ -22,9 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
@@ -67,9 +65,6 @@ public class SaveResourceStoreCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -101,8 +96,6 @@ public class SaveResourceStoreCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(reqJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
@@ -130,14 +123,8 @@ public class SaveResourceStoreCmd extends Cmd {
             fileRelPo.setRelTypeCd("22000");
             for (String photo : photos) {
                 fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRelPo.setFileRealName(fileName);
-                fileRelPo.setFileSaveName(fileName);
+                fileRelPo.setFileRealName(photo);
+                fileRelPo.setFileSaveName(photo);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
                     throw new CmdException("保存数据失败");

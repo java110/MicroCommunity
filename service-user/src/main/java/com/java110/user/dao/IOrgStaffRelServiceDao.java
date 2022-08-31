@@ -81,4 +81,6 @@ public interface IOrgStaffRelServiceDao {
 
     List<OrgStaffRelDto> queryOrgInfoByStaffIds(Map info);
 
+    List<OrgStaffRelDto> queryOrgInfoByStaffIdsNew(Map info);
+
 }

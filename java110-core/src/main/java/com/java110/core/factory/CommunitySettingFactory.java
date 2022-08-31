@@ -2,6 +2,7 @@ package com.java110.core.factory;
 
 import com.java110.dto.communitySetting.CommunitySettingDto;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
+import com.java110.po.communitySetting.CommunitySettingPo;
 import com.java110.utils.cache.BaseCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.SerializeUtil;
@@ -125,6 +126,23 @@ public class CommunitySettingFactory extends BaseCache {
         try {
             redis = getJedis();
             redis.set((communitySettingDto.getCommunityId() + "_" + communitySettingDto.getSettingKey() + "_community_setting").getBytes(), SerializeUtil.serialize(communitySettingDto));
+        } finally {
+            if (redis != null) {
+                redis.close();
+            }
+        }
+    }
+
+    /**
+     * 手工保存数据
+     *
+     * @param communitySettingDto
+     */
+    public static void deleteCommunitySetting(CommunitySettingPo communitySettingPo) {
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.del((communitySettingPo.getCommunityId() + "_" + communitySettingPo.getSettingKey() + "_community_setting").getBytes());
         } finally {
             if (redis != null) {
                 redis.close();

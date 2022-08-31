@@ -28,12 +28,12 @@ import java.util.List;
 @Java110Cmd(serviceCode = "fee.saveTempCarFeeConfig")
 public class SaveTempCarFeeConfigCmd extends Cmd {
 
-
     @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
     @Autowired
     private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
     @Autowired
     private ITempCarFeeConfigV1InnerServiceSMO tempCarFeeConfigV1InnerServiceSMOImpl;
 
@@ -49,13 +49,11 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-
         //查询停车场编号
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
         parkingAreaDto.setPaId(reqJson.getString("paId"));
         parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
         List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-
         Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
         reqJson.put("areaNum", parkingAreaDtos.get(0).getNum());
     }

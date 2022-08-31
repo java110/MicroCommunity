@@ -132,5 +132,11 @@ public class OrgStaffRelServiceDaoImpl extends BaseServiceDao implements IOrgSta
         return orgStaffRelDtoList;
     }
 
+    @Override
+    public List<OrgStaffRelDto> queryOrgInfoByStaffIdsNew(Map info) {
+        List<OrgStaffRelDto> orgStaffRelDtoList = sqlSessionTemplate.selectList("orgStaffRelServiceDaoImpl.queryOrgInfoByStaffIdNew", info);
+        return orgStaffRelDtoList;
+    }
+
 
 }

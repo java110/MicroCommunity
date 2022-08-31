@@ -16,7 +16,7 @@
 package com.java110.po.parkingBox;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2021-10-18 00:10:40 mail: 928255095@qq.com
@@ -28,69 +28,86 @@ import java.util.Date;
 public class ParkingBoxPo implements Serializable {
 
     private String yelowCarIn;
-private String fee;
-private String tempCarIn;
-private String boxName;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String blueCarIn;
-private String boxId;
-public String getYelowCarIn() {
+    private String fee;
+    private String tempCarIn;
+    private String boxName;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String blueCarIn;
+    private String boxId;
+
+    public String getYelowCarIn() {
         return yelowCarIn;
     }
-public void setYelowCarIn(String yelowCarIn) {
+
+    public void setYelowCarIn(String yelowCarIn) {
         this.yelowCarIn = yelowCarIn;
     }
-public String getFee() {
+
+    public String getFee() {
         return fee;
     }
-public void setFee(String fee) {
+
+    public void setFee(String fee) {
         this.fee = fee;
     }
-public String getTempCarIn() {
+
+    public String getTempCarIn() {
         return tempCarIn;
     }
-public void setTempCarIn(String tempCarIn) {
+
+    public void setTempCarIn(String tempCarIn) {
         this.tempCarIn = tempCarIn;
     }
-public String getBoxName() {
+
+    public String getBoxName() {
         return boxName;
     }
-public void setBoxName(String boxName) {
+
+    public void setBoxName(String boxName) {
         this.boxName = boxName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getBlueCarIn() {
+
+    public String getBlueCarIn() {
         return blueCarIn;
     }
-public void setBlueCarIn(String blueCarIn) {
+
+    public void setBlueCarIn(String blueCarIn) {
         this.blueCarIn = blueCarIn;
     }
-public String getBoxId() {
+
+    public String getBoxId() {
         return boxId;
     }
-public void setBoxId(String boxId) {
+
+    public void setBoxId(String boxId) {
         this.boxId = boxId;
     }
-
 
 
 }

@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
  * 类表述：更新
  * 服务编码：parkingBoxArea.updateParkingBoxArea
@@ -49,7 +48,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UpdateParkingBoxAreaCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateParkingBoxAreaCmd.class);
-
 
     @Autowired
     private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
@@ -69,22 +67,19 @@ public class UpdateParkingBoxAreaCmd extends Cmd {
         String defaultArea = reqJson.getString("defaultArea");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
             ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
+            tmpParkingBoxAreaPo.setBaId(reqJson.getString("baId"));
             tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
             tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
             parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
         }
-
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAreaPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
         parkingBoxPo.setBoxId(reqJson.getString("boxId"));
         parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

@@ -413,6 +413,16 @@
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
         </if>
+        <if test="applyOrderIds !=null ">
+            and t.apply_order_id in
+            <foreach open="(" close=")"
+                     separator="," collection="applyOrderIds" item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name like concat('%',#{userName},'%')
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>

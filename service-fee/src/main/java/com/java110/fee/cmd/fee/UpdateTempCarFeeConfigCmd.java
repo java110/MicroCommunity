@@ -40,7 +40,6 @@ public class UpdateTempCarFeeConfigCmd extends Cmd {
     @Autowired
     private ITempCarFeeConfigAttrV1InnerServiceSMO tempCarFeeConfigAttrV1InnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "configId", "configId不能为空");

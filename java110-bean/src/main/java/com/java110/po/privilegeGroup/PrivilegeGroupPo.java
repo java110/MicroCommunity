@@ -17,6 +17,7 @@ package com.java110.po.privilegeGroup;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-08-13 00:14:11 mail: 928255095@qq.com
@@ -28,55 +29,68 @@ import java.util.Date;
 public class PrivilegeGroupPo implements Serializable {
 
     private String pgId;
-private String domain;
-private String name;
-private String description;
-private String statusCd = "0";
-private String storeId;
-private String roleType;
-public String getPgId() {
+    private String domain;
+    private String name;
+    private String description;
+    private String statusCd = "0";
+    private String storeId;
+    private String roleType;
+
+    public String getPgId() {
         return pgId;
     }
-public void setPgId(String pgId) {
+
+    public void setPgId(String pgId) {
         this.pgId = pgId;
     }
-public String getDomain() {
+
+    public String getDomain() {
         return domain;
     }
-public void setDomain(String domain) {
+
+    public void setDomain(String domain) {
         this.domain = domain;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getDescription() {
+
+    public String getDescription() {
         return description;
     }
-public void setDescription(String description) {
+
+    public void setDescription(String description) {
         this.description = description;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getRoleType() {
+
+    public String getRoleType() {
         return roleType;
     }
-public void setRoleType(String roleType) {
+
+    public void setRoleType(String roleType) {
         this.roleType = roleType;
     }
-
 
 
 }

@@ -29,8 +29,13 @@ public class DeleteStaffOrgRelCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setOrgId(reqJson.getString("orgId"));
         orgStaffRelDto.setStaffId(reqJson.getString("userId"));
+        //组织关系数
+        List<OrgStaffRelDto> orgStaffRelDtos1 = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+        if (orgStaffRelDtos1.size() < 2) {
+            throw new CmdException("至少保留一个组织关系，暂时无法删除！");
+        }
+        orgStaffRelDto.setRelId(reqJson.getString("relId"));
         List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
         if (orgStaffRelDtos == null || orgStaffRelDtos.size() < 1) {
             throw new CmdException("关系不存在");

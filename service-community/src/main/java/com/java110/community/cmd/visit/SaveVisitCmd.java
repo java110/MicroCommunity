@@ -2,17 +2,14 @@ package com.java110.community.cmd.visit;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
@@ -25,7 +22,6 @@ import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.VisitPo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -36,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -50,9 +45,6 @@ public class SaveVisitCmd extends Cmd {
 
     @Autowired
     private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -87,14 +79,11 @@ public class SaveVisitCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "visitGender", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "phoneNumber", "必填，请填写访客联系方式");
         Assert.hasKeyAndValue(reqJson, "visitTime", "必填，请填写访客拜访时间");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         String userId = context.getReqHeaders().get("user-id");
-
         reqJson.put("vId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_vId));
         //是否需要审核
         String isNeedReviewFlag = CommunitySettingFactory.getValue(reqJson.getString("communityId"), IS_NEED_REVIEW);
@@ -126,7 +115,7 @@ public class SaveVisitCmd extends Cmd {
             newTime.setTime(time);
             newTime.add(Calendar.MINUTE, Integer.parseInt(freeTime));//日期加上分钟
             Date newDate = newTime.getTime();
-            String finishFreeTime = DateUtil.getFormatTimeString(newDate,DateUtil.DATE_FORMATE_STRING_A);
+            String finishFreeTime = DateUtil.getFormatTimeString(newDate, DateUtil.DATE_FORMATE_STRING_A);
             reqJson.put("freeTime", finishFreeTime);
             if (!StringUtils.isEmpty(isNeedReviewFlag) && isNeedReviewFlag.equals("false")) { //不需要审核就随机自动分配车位
                 //获取小区配置里配置的停车场id
@@ -202,7 +191,6 @@ public class SaveVisitCmd extends Cmd {
                 reqJson.put("psId", "-1");
             }
         }
-
         String result = "";
         if (existCar) {
             result = "访客信息登记成功,车辆已经存在预约，请您在预约到期后，再次进行车辆预约，谢谢！";
@@ -216,23 +204,13 @@ public class SaveVisitCmd extends Cmd {
         reqJson.put("stateRemark", result);
         addVisit(reqJson);
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("photoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
-
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("fileRelId", "-1");
             businessUnit.put("relTypeCd", "11000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", reqJson.getString("vId"));
-            businessUnit.put("fileRealName", fileDto.getFileId());
-            businessUnit.put("fileSaveName", fileName);
+            businessUnit.put("fileRealName", reqJson.getString("photo"));
+            businessUnit.put("fileSaveName", reqJson.getString("photo"));
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         }
@@ -298,7 +276,7 @@ public class SaveVisitCmd extends Cmd {
     /**
      * 添加小区信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void addVisit(JSONObject paramInJson) {
@@ -307,8 +285,8 @@ public class SaveVisitCmd extends Cmd {
         businessVisit.putAll(paramInJson);
 
         VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
-        int flag =visitV1InnerServiceSMOImpl.saveVisit(visitPo);
-        if(flag <1){
+        int flag = visitV1InnerServiceSMOImpl.saveVisit(visitPo);
+        if (flag < 1) {
             throw new CmdException("保存访客失败");
         }
     }

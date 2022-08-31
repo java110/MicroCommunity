@@ -74,17 +74,14 @@ public class SaveParkingBoxCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "fee", "请求报文中未包含fee");
         Assert.hasKeyAndValue(reqJson, "blueCarIn", "请求报文中未包含blueCarIn");
         Assert.hasKeyAndValue(reqJson, "yelowCarIn", "请求报文中未包含yelowCarIn");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         ParkingBoxPo parkingBoxPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxPo.class);
         parkingBoxPo.setBoxId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = parkingBoxV1InnerServiceSMOImpl.saveParkingBox(parkingBoxPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
@@ -92,22 +89,18 @@ public class SaveParkingBoxCmd extends Cmd {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
-
         //判断停车场是否存在
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
         parkingAreaDto.setPaId(reqJson.getString("paId"));
         parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
         List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-
         Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
-
         ParkingBoxAreaPo parkingBoxAreaPo = new ParkingBoxAreaPo();
         parkingBoxAreaPo.setBaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         parkingBoxAreaPo.setBoxId(parkingBoxPo.getBoxId());
         parkingBoxAreaPo.setPaId(parkingAreaDtos.get(0).getPaId());
         parkingBoxAreaPo.setCommunityId(parkingAreaDtos.get(0).getCommunityId());
         parkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
-
         flag = parkingBoxAreaV1InnerServiceSMOImpl.saveParkingBoxArea(parkingBoxAreaPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");

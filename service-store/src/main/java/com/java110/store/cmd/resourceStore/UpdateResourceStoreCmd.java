@@ -6,10 +6,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
@@ -34,9 +32,6 @@ public class UpdateResourceStoreCmd extends Cmd {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -100,15 +95,8 @@ public class UpdateResourceStoreCmd extends Cmd {
                 fileRel.setRelTypeCd("22000");
                 for (String photo : photos) {
                     fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                    FileDto fileDto = new FileDto();
-                    fileDto.setCommunityId("-1");
-                    fileDto.setContext(photo);
-                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                    fileDto.setFileName(fileDto.getFileId());
-                    String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                    fileRel.setFileRealName(fileName);
-                    fileRel.setFileSaveName(fileName);
-                    /*fileRelInnerServiceSMOImpl.saveFileRel(fileRel);*/
+                    fileRel.setFileRealName(photo);
+                    fileRel.setFileSaveName(photo);
                     flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
                     if (flag < 1) {
                         throw new CmdException("保存数据失败");
@@ -125,14 +113,8 @@ public class UpdateResourceStoreCmd extends Cmd {
             fileRel.setRelTypeCd("22000");
             for (String photo : photos) {
                 fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                FileDto fileDto = new FileDto();
-                fileDto.setCommunityId("-1");
-                fileDto.setContext(photo);
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                fileRel.setFileRealName(fileName);
-                fileRel.setFileSaveName(fileName);
+                fileRel.setFileRealName(photo);
+                fileRel.setFileSaveName(photo);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
                 if (flag < 1) {
                     throw new CmdException("保存数据失败");

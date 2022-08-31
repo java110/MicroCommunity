@@ -11,14 +11,12 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
@@ -57,7 +55,6 @@ import java.util.List;
 @Java110Cmd(serviceCode = "ownerRepair.repairFinish")
 public class RepairFinishCmd extends Cmd {
 
-
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
 
@@ -66,9 +63,6 @@ public class RepairFinishCmd extends Cmd {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMO;
@@ -415,8 +409,8 @@ public class RepairFinishCmd extends Cmd {
                 repairUserPo.setStaffId(ownerId);
                 repairUserPo.setStaffName(ownerName);
             }
-            repairUserPo.setPreStaffId(userId);
-            repairUserPo.setPreStaffName(userName);
+            repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
+            repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
             repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
             repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_PAY_USER);
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
@@ -429,22 +423,13 @@ public class RepairFinishCmd extends Cmd {
         if (reqJson.containsKey("beforeRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("beforeRepairPhotos"))) {
             JSONArray beforeRepairPhotos = reqJson.getJSONArray("beforeRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < beforeRepairPhotos.size(); _photoIndex++) {
-                FileDto fileDto = new FileDto();
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                fileDto.setContext(beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
-                fileDto.setSuffix("jpeg");
-                fileDto.setCommunityId(reqJson.getString("communityId"));
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                reqJson.put("ownerPhotoId", fileDto.getFileId());
-                reqJson.put("fileSaveName", fileName);
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
                 businessUnit.put("relTypeCd", FileRelDto.BEFORE_REPAIR_PHOTOS);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", reqJson.getString("repairId"));
-                businessUnit.put("fileRealName", fileName);
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                businessUnit.put("fileSaveName", beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
@@ -456,22 +441,13 @@ public class RepairFinishCmd extends Cmd {
         if (reqJson.containsKey("afterRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("afterRepairPhotos"))) {
             JSONArray afterRepairPhotos = reqJson.getJSONArray("afterRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < afterRepairPhotos.size(); _photoIndex++) {
-                FileDto fileDto = new FileDto();
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                fileDto.setContext(afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
-                fileDto.setSuffix("jpeg");
-                fileDto.setCommunityId(reqJson.getString("communityId"));
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                reqJson.put("ownerFinishPhotoId", fileDto.getFileId());
-                reqJson.put("fileFinishSaveName", fileName);
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
                 businessUnit.put("relTypeCd", FileRelDto.AFTER_REPAIR_PHOTOS);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", reqJson.getString("repairId"));
-                businessUnit.put("fileRealName", fileName);
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                businessUnit.put("fileSaveName", afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
@@ -531,6 +507,7 @@ public class RepairFinishCmd extends Cmd {
             feePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             feePo.setState(FeeDto.STATE_DOING);
             feePo.setUserId(userId);
+            feePo.setbId("-1");
 
             flag = payFeeV1InnerServiceSMOImpl.savePayFee(feePo);
             if (flag < 1) {

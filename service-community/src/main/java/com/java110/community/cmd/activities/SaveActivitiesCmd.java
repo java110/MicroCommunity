@@ -18,21 +18,15 @@ package com.java110.community.cmd.activities;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.activitiesType.ActivitiesTypeDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.file.FileDto;
-import com.java110.dto.org.OrgCommunityDto;
-import com.java110.dto.org.OrgDto;
-import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.roleCommunity.RoleCommunityDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
 import com.java110.intf.community.IActivitiesV1InnerServiceSMO;
@@ -41,12 +35,10 @@ import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.po.file.FileRelPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.vo.ResultVo;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +67,6 @@ public class SaveActivitiesCmd extends Cmd {
 
     @Autowired
     private IActivitiesV1InnerServiceSMO activitiesV1InnerServiceSMOImpl;
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IActivitiesTypeInnerServiceSMO activitiesTypeInnerServiceSMOImpl;
@@ -85,32 +75,19 @@ public class SaveActivitiesCmd extends Cmd {
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Autowired
-    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
-
-    @Autowired
-    private IOrgCommunityInnerServiceSMO orgCommunityInnerServiceSMOImpl;
-
-    @Autowired
-    private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
-
-
-    @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-
     @Autowired
     private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -126,26 +103,24 @@ public class SaveActivitiesCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
-
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setPage(1);
         userDto.setRow(1);
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
-        Assert.listOnlyOne(userDtos,"用户不存在");
-        reqJson.put("userId",userDtos.get(0).getUserId());
-        reqJson.put("userName",userDtos.get(0).getName());
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        reqJson.put("userId", userDtos.get(0).getUserId());
+        reqJson.put("userName", userDtos.get(0).getName());
 
         if (!reqJson.containsKey("isMoreCommunity") || "N".equals(reqJson.getString("isMoreCommunity"))) {
             addActivities(cmdDataFlowContext, reqJson);
             return;
         }
 
-        reqJson.put("storeId",storeId);
+        reqJson.put("storeId", storeId);
         List<ApiCommunityDataVo> communityDataVos = getCommunitys(reqJson);
 
         if (communityDataVos == null || communityDataVos.size() < 1) {
@@ -222,7 +197,6 @@ public class SaveActivitiesCmd extends Cmd {
             } else {
                 communitys = new ArrayList<>();
             }
-
         }
         return communitys;
     }
@@ -230,26 +204,15 @@ public class SaveActivitiesCmd extends Cmd {
     public void addActivities(ICmdDataFlowContext context, JSONObject reqJson) {
         reqJson.put("activitiesId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_activitiesId));
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("headerImg"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
-            reqJson.put("headerImg", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
-
             FileRelPo fileRelPo = new FileRelPo();
             fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             fileRelPo.setFileRealName(reqJson.getString("headerImg"));
-            fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
+            fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
             fileRelPo.setObjId(reqJson.getString("activitiesId"));
             fileRelPo.setSaveWay("table");
             fileRelPo.setRelTypeCd("70000");
             int flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-            if(flag < 1){
+            if (flag < 1) {
                 throw new CmdException("保存广告失败");
             }
         }
@@ -258,9 +221,8 @@ public class SaveActivitiesCmd extends Cmd {
         activitiesPo.setLikeCount("0");
         activitiesPo.setCollectCount("0");
         activitiesPo.setState("11000");
-
         int flag = activitiesV1InnerServiceSMOImpl.saveActivities(activitiesPo);
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("保存广告失败");
         }
     }

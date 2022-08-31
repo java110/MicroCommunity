@@ -1,6 +1,7 @@
 package com.java110.vo.api.staff;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ApiStaffDataVo implements Serializable {
 
@@ -47,6 +48,10 @@ public class ApiStaffDataVo implements Serializable {
     private String relCdName;
 
     private String parentTwoOrgId;
+
+    private String relId;
+
+    private List<String> urls;
 
     public String getUserId() {
         return userId;
@@ -230,5 +235,21 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setParentTwoOrgId(String parentTwoOrgId) {
         this.parentTwoOrgId = parentTwoOrgId;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public String getRelId() {
+        return relId;
+    }
+
+    public void setRelId(String relId) {
+        this.relId = relId;
     }
 }

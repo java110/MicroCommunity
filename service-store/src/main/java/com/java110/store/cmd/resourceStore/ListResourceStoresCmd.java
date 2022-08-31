@@ -60,6 +60,13 @@ public class ListResourceStoresCmd extends Cmd {
             //resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
             resourceStoreDto.setShObjId(reqJson.getString("communityId"));
         }
+        BasePrivilegeDto basePrivilegeDto1 = new BasePrivilegeDto();
+        basePrivilegeDto1.setResource("/viewHiddenWarehouse");
+        basePrivilegeDto1.setUserId(userId);
+        List<Map> viewHiddenWarehousePrivileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto1);
+        if (viewHiddenWarehousePrivileges.size() == 0) {
+            resourceStoreDto.setIsShow("true");
+        }
         int count = resourceStoreInnerServiceSMOImpl.queryResourceStoresCount(resourceStoreDto);
         List<ApiResourceStoreDataVo> resourceStores = new ArrayList<>();
         //计算总价(小计)

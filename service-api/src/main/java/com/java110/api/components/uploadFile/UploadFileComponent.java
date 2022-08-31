@@ -15,11 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Component("uploadFile")
 public class UploadFileComponent {
 
-
     @Autowired
     private IAddFileSMO addFileSMOImpl;
-
-
 
     /**
      * 上传图片

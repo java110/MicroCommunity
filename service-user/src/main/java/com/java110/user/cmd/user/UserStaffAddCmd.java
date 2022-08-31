@@ -8,9 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
@@ -36,7 +34,6 @@ import java.util.List;
 @Java110Cmd(serviceCode = "user.staff.add")
 public class UserStaffAddCmd extends Cmd {
 
-
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
@@ -47,9 +44,6 @@ public class UserStaffAddCmd extends Cmd {
     private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
 
     @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
-    @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
     @Autowired
@@ -57,7 +51,6 @@ public class UserStaffAddCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         if (!reqJson.containsKey("storeId")) {
             String storeId = context.getReqHeaders().get("store-id");
             reqJson.put("storeId", storeId);
@@ -71,7 +64,6 @@ public class UserStaffAddCmd extends Cmd {
         userDto.setLevelCd("01"); //员工
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
         Assert.listIsNull(users, "员工手机号不能重复，请重新输入");
-
     }
 
     @Override
@@ -95,22 +87,13 @@ public class UserStaffAddCmd extends Cmd {
         addStaffOrg(reqJson);
         int flag = 0;
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("photoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "12000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", userId);
-            businessUnit.put("fileRealName", fileDto.getFileId());
-            businessUnit.put("fileSaveName", fileName);
+            businessUnit.put("fileRealName", reqJson.getString("photo"));
+            businessUnit.put("fileSaveName", reqJson.getString("photo"));
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             if (flag < 1) {
