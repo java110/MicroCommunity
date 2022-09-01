@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import com.java110.utils.util.DateUtil;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -19,13 +20,9 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
 
-        Date startTime = DateUtil.getDateFromStringA("2022-08-29 11:47:20");
-        Date endTime = DateUtil.getDateFromStringA("2022-08-29 11:48:21");
-
-
-
-       double min = (endTime.getTime() - startTime.getTime()) / (60 * 1000* 1.00);
-
-        System.out.println(new Double(Math.ceil(min)).longValue());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH,-1);
+        System.out.println(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_B));
+        System.out.println(DateUtil.getAddDayStringB(new Date(),1));
     }
 }

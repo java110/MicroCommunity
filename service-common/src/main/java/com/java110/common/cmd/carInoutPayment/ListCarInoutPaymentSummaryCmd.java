@@ -77,7 +77,7 @@ public class ListCarInoutPaymentSummaryCmd extends Cmd {
             carInoutPaymentDto.setStartTime(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_B));
         }
         if(StringUtil.isEmpty(carInoutPaymentDto.getEndTime())){
-            carInoutPaymentDto.setEndTime(DateUtil.getFormatTimeString(new Date(),DateUtil.DATE_FORMATE_STRING_B) + " 23:59:59");
+            carInoutPaymentDto.setEndTime(DateUtil.getAddDayStringB(new Date(),1));
         }else{
             Date endTime = DateUtil.getDateFromStringB(carInoutPaymentDto.getEndTime());
             carInoutPaymentDto.setEndTime(DateUtil.getAddDayStringB(endTime,1));

@@ -26,6 +26,7 @@ import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -67,6 +69,12 @@ public class ListCarInoutPaymentCmd extends Cmd {
 
         CarInoutPaymentDto carInoutPaymentDto = BeanConvertUtil.covertBean(reqJson, CarInoutPaymentDto.class);
         carInoutPaymentDto.setPaIds(getPaIds(reqJson));
+
+        if(!StringUtil.isEmpty(carInoutPaymentDto.getEndTime())){
+            Date endTime = DateUtil.getDateFromStringB(carInoutPaymentDto.getEndTime());
+            carInoutPaymentDto.setEndTime(DateUtil.getAddDayStringB(endTime,1));
+        }
+
         int count = carInoutPaymentV1InnerServiceSMOImpl.queryCarInoutPaymentsCount(carInoutPaymentDto);
 
         List<CarInoutPaymentDto> carInoutPaymentDtos = null;
