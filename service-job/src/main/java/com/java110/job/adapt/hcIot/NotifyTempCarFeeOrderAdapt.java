@@ -74,6 +74,7 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         postParameters.put("extPaId", tempCarPayOrderDto.getPaId());
         postParameters.put("orderId", tempCarPayOrderDto.getOrderId());
         postParameters.put("amount", tempCarPayOrderDto.getAmount());
+        postParameters.put("payCharge", tempCarPayOrderDto.getPayCharge());
         postParameters.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("payType", tempCarPayOrderDto.getPayType());
         if(!StringUtil.isEmpty(tempCarPayOrderDto.getMachineId())) {

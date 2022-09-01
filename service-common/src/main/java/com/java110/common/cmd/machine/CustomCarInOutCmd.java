@@ -145,6 +145,7 @@ public class CustomCarInOutCmd extends Cmd {
             tempCarPayOrderDto.setPaId(parkingBoxAreaDtos.get(0).getPaId());
             tempCarPayOrderDto.setOrderId(orderInfo.getString("orderId"));
             tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("amount")));
+            tempCarPayOrderDto.setPayCharge(Double.parseDouble(reqJson.getString("payCharge")));
             tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
             //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
              resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
