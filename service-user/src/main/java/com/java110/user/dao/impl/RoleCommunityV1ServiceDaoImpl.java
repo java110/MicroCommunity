@@ -15,16 +15,13 @@
  */
 package com.java110.user.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.core.log.LoggerFactory;
 import com.java110.user.dao.IRoleCommunityV1ServiceDao;
+import com.java110.utils.exception.DAOException;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -43,19 +40,17 @@ public class RoleCommunityV1ServiceDaoImpl extends BaseServiceDao implements IRo
     private static Logger logger = LoggerFactory.getLogger(RoleCommunityV1ServiceDaoImpl.class);
 
 
-
-
-
     /**
      * 保存项目授权信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public int saveRoleCommunityInfo(Map info) throws DAOException {
-        logger.debug("保存 saveRoleCommunityInfo 入参 info : {}",info);
+        logger.debug("保存 saveRoleCommunityInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("roleCommunityV1ServiceDaoImpl.saveRoleCommunityInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("roleCommunityV1ServiceDaoImpl.saveRoleCommunityInfo", info);
 
         return saveFlag;
     }
@@ -63,15 +58,16 @@ public class RoleCommunityV1ServiceDaoImpl extends BaseServiceDao implements IRo
 
     /**
      * 查询项目授权信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getRoleCommunityInfo(Map info) throws DAOException {
-        logger.debug("查询 getRoleCommunityInfo 入参 info : {}",info);
+        logger.debug("查询 getRoleCommunityInfo 入参 info : {}", info);
 
-        List<Map> businessRoleCommunityInfos = sqlSessionTemplate.selectList("roleCommunityV1ServiceDaoImpl.getRoleCommunityInfo",info);
+        List<Map> businessRoleCommunityInfos = sqlSessionTemplate.selectList("roleCommunityV1ServiceDaoImpl.getRoleCommunityInfo", info);
 
         return businessRoleCommunityInfos;
     }
@@ -79,26 +75,28 @@ public class RoleCommunityV1ServiceDaoImpl extends BaseServiceDao implements IRo
 
     /**
      * 修改项目授权信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public int updateRoleCommunityInfo(Map info) throws DAOException {
-        logger.debug("修改 updateRoleCommunityInfo 入参 info : {}",info);
+        logger.debug("修改 updateRoleCommunityInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("roleCommunityV1ServiceDaoImpl.updateRoleCommunityInfo",info);
+        int saveFlag = sqlSessionTemplate.update("roleCommunityV1ServiceDaoImpl.updateRoleCommunityInfo", info);
 
         return saveFlag;
     }
 
-     /**
+    /**
      * 查询项目授权数量
+     *
      * @param info 项目授权信息
      * @return 项目授权数量
      */
     @Override
     public int queryRoleCommunitysCount(Map info) {
-        logger.debug("查询 queryRoleCommunitysCount 入参 info : {}",info);
+        logger.debug("查询 queryRoleCommunitysCount 入参 info : {}", info);
 
         List<Map> businessRoleCommunityInfos = sqlSessionTemplate.selectList("roleCommunityV1ServiceDaoImpl.queryRoleCommunitysCount", info);
         if (businessRoleCommunityInfos.size() < 1) {
