@@ -6,10 +6,13 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
@@ -30,7 +33,8 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "user.staff.modify")
 public class UserStaffModifyCmd extends Cmd {
-
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
@@ -61,13 +65,26 @@ public class UserStaffModifyCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+
+            if(reqJson.getString("photo").length()> 200){
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(reqJson.getString("photo"));
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
+                reqJson.put("photo",fileName);
+            }
+
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setRelTypeCd("12000");
             fileRelDto.setObjId(reqJson.getString("userId"));
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
             if (fileRelDtos == null || fileRelDtos.size() == 0) {
                 JSONObject businessUnit = new JSONObject();
-                businessUnit.put("fileRelId", "-1");
+                businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
                 businessUnit.put("relTypeCd", "12000");
                 businessUnit.put("saveWay", "table");
                 businessUnit.put("objId", reqJson.getString("userId"));
