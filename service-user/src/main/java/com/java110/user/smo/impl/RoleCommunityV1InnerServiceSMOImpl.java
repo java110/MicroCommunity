@@ -86,4 +86,22 @@ public class RoleCommunityV1InnerServiceSMOImpl extends BaseServiceSMO implement
     public int queryRoleCommunitysCount(@RequestBody RoleCommunityDto roleCommunityDto) {
         return roleCommunityV1ServiceDaoImpl.queryRoleCommunitysCount(BeanConvertUtil.beanCovertMap(roleCommunityDto));    }
 
+    @Override
+    public int queryRoleCommunitysNameCount(@RequestBody RoleCommunityDto roleCommunityDto) {
+        return roleCommunityV1ServiceDaoImpl.queryRoleCommunitysNameCount(BeanConvertUtil.beanCovertMap(roleCommunityDto));    }
+
+
+    @Override
+    public List<RoleCommunityDto> queryRoleCommunitysName(@RequestBody RoleCommunityDto roleCommunityDto) {
+        int page = roleCommunityDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roleCommunityDto.setPage((page - 1) * roleCommunityDto.getRow());
+        }
+
+        List<RoleCommunityDto> roleCommunitys = BeanConvertUtil.covertBeanList(roleCommunityV1ServiceDaoImpl.queryRoleCommunitysName(BeanConvertUtil.beanCovertMap(roleCommunityDto)), RoleCommunityDto.class);
+
+        return roleCommunitys;
+    }
+
 }

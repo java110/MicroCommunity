@@ -103,9 +103,9 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
         }else{
             RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
             orgCommunityDto.setStaffId(userDtos.get(0).getUserId());
-            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysCount(orgCommunityDto);
+            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysNameCount(orgCommunityDto);
             if (count > 0) {
-                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(orgCommunityDto);
+                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysName(orgCommunityDto);
                 communitys = BeanConvertUtil.covertBeanList(roleCommunityDtos, ApiCommunityDataVo.class);
                 for (RoleCommunityDto tmpOrgCommunityDto : roleCommunityDtos) {
                     for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {

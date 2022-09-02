@@ -107,4 +107,67 @@
 
     </select>
 
+    <select id="queryRoleCommunitysNameCount" parameterType="Map" resultType="Map">
+        select count(distinct(t.community_id)) count
+        from u_role_community t
+        <if test="staffId != null and staffId != ''">
+            left join p_privilege_group pg on t.role_id = pg.pg_id and pg.status_cd = '0'
+            left join p_privilege_user pu on pu.p_id = pg.pg_id and pu.privilege_flag = '1' and pu.status_cd = '0'
+        </if>
+        where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and pu.user_id = #{staffId}
+        </if>
+        <if test="roleId !=null and roleId != ''">
+            and t.role_id= #{roleId}
+        </if>
+        <if test="rcId !=null and rcId != ''">
+            and t.rc_id= #{rcId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+
+    </select>
+
+    <select id="queryRoleCommunitysName" parameterType="Map" resultType="Map">
+        select distinct t.community_id,t.community_id communityId,t.community_name communityName
+        from u_role_community t
+        <if test="staffId != null and staffId != ''">
+            left join p_privilege_group pg on t.role_id = pg.pg_id and pg.status_cd = '0'
+            left join p_privilege_user pu on pu.p_id = pg.pg_id and pu.privilege_flag = '1' and pu.status_cd = '0'
+        </if>
+        where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and pu.user_id = #{staffId}
+        </if>
+        <if test="roleId !=null and roleId != ''">
+            and t.role_id= #{roleId}
+        </if>
+        <if test="rcId !=null and rcId != ''">
+            and t.rc_id= #{rcId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
 </mapper>

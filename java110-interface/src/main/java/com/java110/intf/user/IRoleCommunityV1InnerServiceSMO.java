@@ -65,4 +65,8 @@ public interface IRoleCommunityV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoleCommunitysCount", method = RequestMethod.POST)
     int queryRoleCommunitysCount(@RequestBody RoleCommunityDto roleCommunityDto);
+    @RequestMapping(value = "/queryRoleCommunitysNameCount", method = RequestMethod.POST)
+    int queryRoleCommunitysNameCount(@RequestBody RoleCommunityDto orgCommunityDto);
+    @RequestMapping(value = "/queryRoleCommunitysName", method = RequestMethod.POST)
+    List<RoleCommunityDto> queryRoleCommunitysName(@RequestBody RoleCommunityDto orgCommunityDto);
 }
