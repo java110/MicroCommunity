@@ -375,9 +375,9 @@
         <if test="communityName != null and communityName != '' and needCommunityInfo == true">
             and sc.name like concat('%',#{communityName},'%')
         </if>
-        <if test="needCommunityInfo == true">
-            group by ms.community_id
-        </if>
+<!--        <if test="needCommunityInfo == true">-->
+<!--            group by ms.community_id-->
+<!--        </if>-->
         order by ms.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
@@ -469,9 +469,9 @@
         <if test="communityName != null and communityName != '' and needCommunityInfo == true">
             and sc.name like concat('%',#{communityName},'%')
         </if>
-        <if test="needCommunityInfo == true">
-            group by ms.community_id
-        </if>
+<!--        <if test="needCommunityInfo == true">-->
+<!--            group by ms.community_id-->
+<!--        </if>-->
 
     </select>
 
@@ -550,7 +550,7 @@
                 #{item}
             </foreach>
         </if>
-        group by t.community_id
+<!--        group by t.community_id-->
         order by t.create_time ASC
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
