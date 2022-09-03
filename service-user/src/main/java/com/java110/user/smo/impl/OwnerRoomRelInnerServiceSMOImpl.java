@@ -47,17 +47,17 @@ public class OwnerRoomRelInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         List<OwnerRoomRelDto> ownerRoomRels = BeanConvertUtil.covertBeanList(ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo(BeanConvertUtil.beanCovertMap(ownerRoomRelDto)), OwnerRoomRelDto.class);
 
-        if (ownerRoomRels == null || ownerRoomRels.size() == 0) {
-            return ownerRoomRels;
-        }
-
-        String[] userIds = getUserIds(ownerRoomRels);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (OwnerRoomRelDto ownerRoomRel : ownerRoomRels) {
-            refreshOwnerRoomRel(ownerRoomRel, users);
-        }
+//        if (ownerRoomRels == null || ownerRoomRels.size() == 0) {
+//            return ownerRoomRels;
+//        }
+//
+//        String[] userIds = getUserIds(ownerRoomRels);
+//        //根据 userId 查询用户信息
+//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+//
+//        for (OwnerRoomRelDto ownerRoomRel : ownerRoomRels) {
+//            refreshOwnerRoomRel(ownerRoomRel, users);
+//        }
         return ownerRoomRels;
     }
 

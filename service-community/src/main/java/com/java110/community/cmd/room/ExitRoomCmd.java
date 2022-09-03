@@ -20,6 +20,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -69,6 +70,10 @@ public class ExitRoomCmd extends Cmd {
 
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
+        }
+
+        if(StringUtil.isEmpty(ownerRoomRelDtos.get(0).getRelId())){
+            throw new CmdException("未包含关系");
         }
 
 
