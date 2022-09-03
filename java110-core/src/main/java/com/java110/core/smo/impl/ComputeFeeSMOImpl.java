@@ -1713,6 +1713,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     private BigDecimal computeRoomCustomizeFormula(FeeDto feeDto, RoomDto roomDto) {
 
         String value = feeDto.getComputingFormulaText();
+
+        if(StringUtil.isEmpty(value)){
+            return new BigDecimal(0);
+        }
+
         value = value.replace("\n", "")
                 .replace("\r", "")
                 .trim();
