@@ -322,24 +322,24 @@ public class PayFeePreCmd extends Cmd {
                     redepositAmount = amount;
                 }
                 //更新账户信息
-                AccountPo accountPo = new AccountPo();
-                accountPo.setAcctId(tmpAccountDto.getAcctId());
-                accountPo.setAmount(integralAmount.toString());
-                accountInnerServiceSMOImpl.updateAccount(accountPo);
+//                AccountPo accountPo = new AccountPo();
+//                accountPo.setAcctId(tmpAccountDto.getAcctId());
+//                accountPo.setAmount(integralAmount.toString());
+//                accountInnerServiceSMOImpl.updateAccount(accountPo);
                 //生成账户详情
-                AccountDetailPo accountDetailPo = new AccountDetailPo();
-                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-                accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
-                accountDetailPo.setDetailType("2002"); //1001 转入 2002 转出
-                accountDetailPo.setRelAcctId("-1");
-                accountDetailPo.setAmount(redepositAmount.toString());
-                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-                accountDetailPo.setObjId(tmpAccountDto.getObjId());
-                accountDetailPo.setOrderId("-1");
-                accountDetailPo.setbId("-1");
-                accountDetailPo.setRemark("手机端积分抵扣");
-                accountDetailPo.setCreateTime(new Date());
-                accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+//                AccountDetailPo accountDetailPo = new AccountDetailPo();
+//                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+//                accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
+//                accountDetailPo.setDetailType("2002"); //1001 转入 2002 转出
+//                accountDetailPo.setRelAcctId("-1");
+//                accountDetailPo.setAmount(redepositAmount.toString());
+//                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+//                accountDetailPo.setObjId(tmpAccountDto.getObjId());
+//                accountDetailPo.setOrderId("-1");
+//                accountDetailPo.setbId("-1");
+//                accountDetailPo.setRemark("手机端积分抵扣");
+//                accountDetailPo.setCreateTime(new Date());
+//                accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
                 //计算积分换算的金额
                 BigDecimal divide = redepositAmount.divide(deductionProportion);
                 BigDecimal dedAmount = new BigDecimal(deductionAmount);
@@ -361,11 +361,11 @@ public class PayFeePreCmd extends Cmd {
                     feeAccountDetailPo.setAmount(multiply.toString()); //积分抵扣金额
                 }
                 reqJson.put("receivedMoney", divide);
-                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-                feeAccountDetailPo.setDetailId(accountDetailPo.getDetailId());
-                feeAccountDetailPo.setCommunityId(reqJson.getString("communityId"));
-                feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+//                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+//                feeAccountDetailPo.setDetailId(accountDetailPo.getDetailId());
+//                feeAccountDetailPo.setCommunityId(reqJson.getString("communityId"));
+//                feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+//                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
                 money = divide;
             } else if (!StringUtil.isEmpty(tmpAccountDto.getAcctType()) && tmpAccountDto.getAcctType().equals("2003")) { //现金账户
                 //账户金额
@@ -398,32 +398,32 @@ public class PayFeePreCmd extends Cmd {
                     redepositAmount = amount;
                 }
                 //更新账户信息
-                AccountPo accountPo = new AccountPo();
-                accountPo.setAcctId(tmpAccountDto.getAcctId());
-                accountPo.setAmount(integralAmount.toString());
-                accountInnerServiceSMOImpl.updateAccount(accountPo);
+//                AccountPo accountPo = new AccountPo();
+//                accountPo.setAcctId(tmpAccountDto.getAcctId());
+//                accountPo.setAmount(integralAmount.toString());
+//                accountInnerServiceSMOImpl.updateAccount(accountPo);
                 //生成账户详情
-                AccountDetailPo accountDetailPo = new AccountDetailPo();
-                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-                accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
-                accountDetailPo.setDetailType("2002"); //1001 转入 2002 转出
-                accountDetailPo.setRelAcctId("-1");
-                accountDetailPo.setAmount(redepositAmount.toString());
-                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-                accountDetailPo.setObjId(tmpAccountDto.getObjId());
-                accountDetailPo.setOrderId("-1");
-                accountDetailPo.setbId("-1");
-                accountDetailPo.setRemark("手机端现金账户抵扣");
-                accountDetailPo.setCreateTime(new Date());
-                accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+//                AccountDetailPo accountDetailPo = new AccountDetailPo();
+//                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+//                accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
+//                accountDetailPo.setDetailType("2002"); //1001 转入 2002 转出
+//                accountDetailPo.setRelAcctId("-1");
+//                accountDetailPo.setAmount(redepositAmount.toString());
+//                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+//                accountDetailPo.setObjId(tmpAccountDto.getObjId());
+//                accountDetailPo.setOrderId("-1");
+//                accountDetailPo.setbId("-1");
+//                accountDetailPo.setRemark("手机端现金账户抵扣");
+//                accountDetailPo.setCreateTime(new Date());
+//                accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
                 //生成抵扣明细记录
-                FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
-                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-                feeAccountDetailPo.setDetailId(accountDetailPo.getDetailId());
-                feeAccountDetailPo.setCommunityId(reqJson.getString("communityId"));
-                feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                feeAccountDetailPo.setAmount(redepositAmount.toString()); //积分抵扣金额
-                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+//                FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+//                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+//                feeAccountDetailPo.setDetailId(accountDetailPo.getDetailId());
+//                feeAccountDetailPo.setCommunityId(reqJson.getString("communityId"));
+//                feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+//                feeAccountDetailPo.setAmount(redepositAmount.toString()); //积分抵扣金额
+//                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
                 money = money.add(redepositAmount);
                 /*int flag2 = money.compareTo(amount);
                 if (flag2 == 1) { //剩余金额大于现金账户
