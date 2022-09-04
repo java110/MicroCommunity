@@ -152,6 +152,15 @@ public class MachineUploadCarLogCmd extends Cmd {
             reqJson.put("carId", ownerCarDtos.get(0).getCarId());
             tempCar = ownerCarDtos.get(0).getLeaseType();
             tempCarName = ownerCarDtos.get(0).getLeaseTypeName();
+            if(ownerCarDtos.size()>1){
+                for(OwnerCarDto tmpOwnerCarDto : ownerCarDtos){
+                    if(OwnerCarDto.LEASE_TYPE_TEMP.equals(tmpOwnerCarDto.getLeaseType())){
+                       continue;
+                    }
+                    tempCar = tmpOwnerCarDto.getLeaseType();
+                    tempCarName = tmpOwnerCarDto.getLeaseTypeName();
+                }
+            }
         }
 
 
@@ -437,7 +446,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
         if(CAR_TYPE_NO_DATA.equals(tempCar)){
             carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
-            carInoutDetailPo.setCarTypeName(OwnerCarDto.LEASE_TYPE_TEMP);
+            carInoutDetailPo.setCarTypeName("临时车");
             //检查是否为黑白名单
             CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
             carBlackWhiteDto.setCarNum(reqJson.getString("carNum"));

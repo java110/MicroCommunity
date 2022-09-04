@@ -109,7 +109,7 @@ public class UpdateCarInoutCarNumCmd extends Cmd {
         }
 
         CarInoutDetailPo carInoutDetailPo = new CarInoutDetailPo();
-        carInoutDetailPo.setInoutId(reqJson.getString(reqJson.getString("inoutId")));
+        carInoutDetailPo.setInoutId(reqJson.getString("inoutId"));
         carInoutDetailPo.setCarNum(reqJson.getString("carNum"));
 
         flag =  carInoutDetailV1InnerServiceSMOImpl.updateCarInoutDetail(carInoutDetailPo);
