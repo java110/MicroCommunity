@@ -1,5 +1,6 @@
 package com.java110.db;
 
+import com.java110.utils.util.StringUtil;
 import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlShardingDataSourceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,19 @@ public class DataSourceConfig {
 
         String configString = new String(getYmlFile(path), "UTF-8");
         configString = configString.replaceAll("\\$\\{mysqlpwd\\}", env.getProperty("mysqlpwd"));
+
+        String mysqlPort = StringUtil.isEmpty(env.getProperty("mysqlport")) ? "3306" : env.getProperty("mysqlport");
+        configString = configString.replaceAll("\\$\\{mysqlport\\}", mysqlPort);
+
+        String dbttname = StringUtil.isEmpty(env.getProperty("dbttname")) ? "TT" : env.getProperty("dbttname");
+        String dbttuser = StringUtil.isEmpty(env.getProperty("dbttuser")) ? "TT" : env.getProperty("dbttuser");
+        String dbhcname = StringUtil.isEmpty(env.getProperty("dbhcname")) ? "hc_community" : env.getProperty("dbhcname");
+        String dbhcuser = StringUtil.isEmpty(env.getProperty("dbhcuser")) ? "hc_community" : env.getProperty("dbhcuser");
+
+        configString = configString.replaceAll("\\$\\{dbttname\\}", dbttname)
+                .replaceAll("\\$\\{dbttuser\\}", dbttuser)
+                .replaceAll("\\$\\{dbhcname\\}", dbhcname)
+                .replaceAll("\\$\\{dbhcuser\\}", dbhcuser);
 
         return YamlShardingDataSourceFactory.createDataSource(configString.getBytes("UTF-8"));
     }
