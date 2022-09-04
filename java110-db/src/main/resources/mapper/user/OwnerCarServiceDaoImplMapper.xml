@@ -131,7 +131,8 @@
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
-        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType
+        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType,
+        t3.name leaseTypeName
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
@@ -139,6 +140,7 @@
         t.community_id
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd = #{statusCd}

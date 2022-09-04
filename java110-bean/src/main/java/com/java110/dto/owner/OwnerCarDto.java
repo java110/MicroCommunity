@@ -86,6 +86,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String leaseType;
 
+    private String leaseTypeName;
+
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
 
@@ -432,5 +434,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLeaseType(String leaseType) {
         this.leaseType = leaseType;
+    }
+
+    public String getLeaseTypeName() {
+        return leaseTypeName;
+    }
+
+    public void setLeaseTypeName(String leaseTypeName) {
+        this.leaseTypeName = leaseTypeName;
     }
 }
