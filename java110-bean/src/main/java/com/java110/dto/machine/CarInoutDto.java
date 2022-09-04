@@ -42,6 +42,7 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
     private long min;
 
     private String carType;
+    private String carTypeName;
 
 
     private Date createTime;
@@ -233,5 +234,13 @@ public class CarInoutDto extends CarInoutPaymentDto implements Serializable {
 
     public void setOldCarNum(String oldCarNum) {
         this.oldCarNum = oldCarNum;
+    }
+
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
     }
 }

@@ -63,7 +63,7 @@ public class MachineUploadCarLogCmd extends Cmd {
     public static final int CAR_TYPE_MONTH = 1001; //月租车
     public static final int CAR_TYPE_SUB = 1; //成员车辆
     public static final int CAR_TYPE_TEMP = 1003; //临时车辆
-    public static final int CAR_TYPE_NO_DATA = 3; //没有数据
+    public static final String CAR_TYPE_NO_DATA = "3"; //没有数据
 
     public static final String TEMP_CAR_OWNER = "临时车车主";
 
@@ -121,7 +121,7 @@ public class MachineUploadCarLogCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         //是否是临时车
-        int tempCar = CAR_TYPE_MONTH;
+        String tempCar = OwnerCarDto.LEASE_TYPE_TEMP;
 
 
         //查询设备信息
@@ -143,13 +143,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             tempCar = CAR_TYPE_NO_DATA;
         } else {
             reqJson.put("carId", ownerCarDtos.get(0).getCarId());
-            if (OwnerCarDto.CAR_TYPE_TEMP.equals(ownerCarDtos.get(0).getCarTypeCd())) {
-                tempCar = CAR_TYPE_TEMP;
-            }
-            // 月租车过期 后就是临时车
-            if (ownerCarDtos.get(0).getEndTime().before(DateUtil.getCurrentDate())) {
-                tempCar = CAR_TYPE_TEMP;
-            }
+            tempCar = ownerCarDtos.get(0).getLeaseType();
         }
 
 
@@ -169,7 +163,7 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param machineDto
      * @param tempCar
      */
-    private void carOut(JSONObject reqJson, MachineDto machineDto, int tempCar) {
+    private void carOut(JSONObject reqJson, MachineDto machineDto, String tempCar) {
 
         String state = CarInoutDto.STATE_OUT;
         //进场失败记录
@@ -218,7 +212,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             carInoutDetailPo.setPaId(paId);
             carInoutDetailPo.setRemark(reqJson.getString("remark"));
             carInoutDetailPo.setState(state);
-            carInoutDetailPo.setCarType(tempCar == CAR_TYPE_NO_DATA ? CAR_TYPE_TEMP + "" : tempCar + "");
+            carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar) ? OwnerCarDto.LEASE_TYPE_TEMP + "" : tempCar + "");
             int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
             if (flag < 1) {
                 throw new CmdException("保存出记录明细失败");
@@ -241,7 +235,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setPaId(carInoutDtos.get(0).getPaId());
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
         carInoutDetailPo.setState(state);
-        carInoutDetailPo.setCarType(tempCar == CAR_TYPE_NO_DATA ? CAR_TYPE_TEMP + "" : tempCar + "");
+        carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar) ? OwnerCarDto.LEASE_TYPE_TEMP : tempCar + "");
         int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
@@ -365,7 +359,7 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param machineDto
      * @param tempCar
      */
-    private void carIn(JSONObject reqJson, MachineDto machineDto, int tempCar) {
+    private void carIn(JSONObject reqJson, MachineDto machineDto, String tempCar) {
         String state = CarInoutDto.STATE_IN;
         //进场失败记录
         if (reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))) {
@@ -412,14 +406,14 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setPaId(paId);
         carInoutDetailPo.setState(state);
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
-        carInoutDetailPo.setCarType(tempCar == CAR_TYPE_NO_DATA ? CAR_TYPE_TEMP + "" : tempCar + "");
+        carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar)?OwnerCarDto.LEASE_TYPE_TEMP:tempCar);
         flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
             throw new CmdException("保存入记录明细失败");
         }
         //月租车
-        if (tempCar != CAR_TYPE_NO_DATA && tempCar != CAR_TYPE_TEMP) {
+        if (!OwnerCarDto.LEASE_TYPE_TEMP.equals(tempCar)) {
             return;
         }
 
@@ -441,7 +435,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         } else {
             reqJson.put("ownerId", ownerDtos.get(0).getMemberId());
         }
-        if (tempCar == CAR_TYPE_NO_DATA) {
+        if (CAR_TYPE_NO_DATA.equals(tempCar)) {
             saveTempCar(reqJson, machineDto);
         }
 
@@ -591,6 +585,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         ownerCarPo.setRemark("临时车 物联网同步");
         ownerCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         ownerCarPo.setUserId("-1");
+        ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_TEMP);
         int flag = ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
 
         if (flag < 1) {

@@ -33,6 +33,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public static final String LEASE_TYPE_INNER = "I"; //内部车
     public static final String LEASE_TYPE_NO_MONEY = "NM"; //免费车
 
+    public static final String LEASE_TYPE_TEMP = "T";//临时车
+
     private String carColor;
     private String carBrand;
     private String carType;

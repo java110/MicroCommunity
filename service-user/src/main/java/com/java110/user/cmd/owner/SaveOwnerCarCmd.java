@@ -117,7 +117,7 @@ public class SaveOwnerCarCmd extends Cmd {
             reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
         }
 
-        if (OwnerCarDto.LEASE_TYPE_SALE.equals(reqJson.getString("leaseType"))) {
+        if (!OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
             reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
             reqJson.put("endTime", "2037-01-01");
         }
