@@ -1,0 +1,75 @@
+dataSources:
+  ds0: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dev.db.java110.com:${mysqlport}/${dbhcname}?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: ${dbhcuser}
+    password: ${mysqlpwd}
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+  #  ds0_slave0: !!com.alibaba.druid.pool.DruidDataSource
+  #    driverClassName: com.mysql.jdbc.Driver
+  #    url: jdbc:mysql://dev.db.java110.com:${mysqlport}/${dbttname}?useUnicode=true&characterEncoding=utf-8
+  #    username: ${dbttuser}
+  #    password: TT@12345678
+  #    connectionTimeoutMilliseconds: 30000
+  #    idleTimeoutMilliseconds: 60000
+  #    maxPoolSize: 50
+  #    minPoolSize: 1
+  #    maintenanceIntervalMilliseconds: 30000
+  ds1: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dev.db.java110.com:${mysqlport}/${dbttname}?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: ${dbttuser}
+    password: ${mysqlpwd}
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+#  ds1_slave0: !!com.alibaba.druid.pool.DruidDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://dev.db.java110.com:${mysqlport}/${dbttname}?useUnicode=true&characterEncoding=utf-8
+#    username: ${dbttuser}
+#    password: TT@12345678
+#    connectionTimeoutMilliseconds: 30000
+#    idleTimeoutMilliseconds: 60000
+#    maxPoolSize: 50
+#    minPoolSize: 1
+#    maintenanceIntervalMilliseconds: 30000
+
+shardingRule:
+  tables:
+    business_xxx:
+      actualDataNodes: ds${0..1}.business_community
+      databaseStrategy:
+        inline:
+          shardingColumn: community_id
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+
+  bindingTables:
+    - business_xxx
+
+  defaultDataSourceName: ds1
+  defaultDatabaseStrategy:
+    none:
+  defaultTableStrategy:
+    none:
+
+#  masterSlaveRules:
+#    ms_ds0:
+#     masterDataSourceName: ds0
+#     slaveDataSourceNames:
+#       - ds0_slave0
+#     loadBalanceAlgorithmType: ROUND_ROBIN
+#   ms_ds1:
+#     masterDataSourceName: ds1
+#     slaveDataSourceNames:
+#       - ds1_slave0
+#     loadBalanceAlgorithmType: ROUND_ROBIN
+props:
+  sql.show: true
