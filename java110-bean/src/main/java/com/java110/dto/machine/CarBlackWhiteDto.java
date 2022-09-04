@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CarBlackWhiteDto extends PageDto implements Serializable {
 
+    public static final String BLACK_WHITE_BLACK = "1111"; //黑名单
+    public static final String BLACK_WHITE_WHITE = "2222"; //黑名单
+
     private String blackWhite;
     private String blackWhiteName;
     private String carNum;
@@ -35,6 +38,8 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+
 
 
     public String getBlackWhite() {
@@ -141,4 +146,6 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     public void setValidity(String validity) {
         this.validity = validity;
     }
+
+
 }

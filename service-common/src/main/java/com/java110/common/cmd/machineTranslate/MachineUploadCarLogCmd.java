@@ -11,6 +11,7 @@ import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
@@ -29,6 +30,7 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
+import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.CarInoutDetailPo;
@@ -109,6 +111,9 @@ public class MachineUploadCarLogCmd extends Cmd {
     @Autowired
     private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineCode", "必填，请填写设备编码");
@@ -122,6 +127,7 @@ public class MachineUploadCarLogCmd extends Cmd {
 
         //是否是临时车
         String tempCar = OwnerCarDto.LEASE_TYPE_TEMP;
+        String tempCarName ="临时车";
 
 
         //查询设备信息
@@ -141,17 +147,19 @@ public class MachineUploadCarLogCmd extends Cmd {
         //说明是临时车
         if (ownerCarDtos == null || ownerCarDtos.size() == 0) {
             tempCar = CAR_TYPE_NO_DATA;
+            tempCarName = "临时车";
         } else {
             reqJson.put("carId", ownerCarDtos.get(0).getCarId());
             tempCar = ownerCarDtos.get(0).getLeaseType();
+            tempCarName = ownerCarDtos.get(0).getLeaseTypeName();
         }
 
 
         //进场处理
         if (MachineDto.DIRECTION_IN.equals(machineDtos.get(0).getDirection())) {
-            carIn(reqJson, machineDtos.get(0), tempCar);
+            carIn(reqJson, machineDtos.get(0), tempCar,tempCarName);
         } else {
-            carOut(reqJson, machineDtos.get(0), tempCar);
+            carOut(reqJson, machineDtos.get(0), tempCar,tempCarName);
         }
 
     }
@@ -163,7 +171,7 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param machineDto
      * @param tempCar
      */
-    private void carOut(JSONObject reqJson, MachineDto machineDto, String tempCar) {
+    private void carOut(JSONObject reqJson, MachineDto machineDto, String tempCar,String tempCarName) {
 
         String state = CarInoutDto.STATE_OUT;
         //进场失败记录
@@ -235,7 +243,28 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setPaId(carInoutDtos.get(0).getPaId());
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
         carInoutDetailPo.setState(state);
-        carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar) ? OwnerCarDto.LEASE_TYPE_TEMP : tempCar + "");
+        if(CAR_TYPE_NO_DATA.equals(tempCar)){
+            carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
+            carInoutDetailPo.setCarTypeName(OwnerCarDto.LEASE_TYPE_TEMP);
+            //检查是否为黑白名单
+            CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
+            carBlackWhiteDto.setCarNum(reqJson.getString("carNum"));
+            carBlackWhiteDto.setPaId(carInoutDtos.get(0).getPaId());
+            carBlackWhiteDto.setValidity("Y");
+            List<CarBlackWhiteDto> carBlackWhiteDtos = carBlackWhiteV1InnerServiceSMOImpl.queryCarBlackWhites(carBlackWhiteDto);
+            if(carBlackWhiteDtos != null && carBlackWhiteDtos.size() >0 ){
+                if(CarBlackWhiteDto.BLACK_WHITE_BLACK.equals(carBlackWhiteDtos.get(0).getBlackWhite())){
+                    carInoutDetailPo.setCarType("B");
+                    carInoutDetailPo.setCarTypeName("黑名单");
+                }else{
+                    carInoutDetailPo.setCarType("W");
+                    carInoutDetailPo.setCarTypeName("白名单");
+                }
+            }
+        }else{
+            carInoutDetailPo.setCarType(tempCar);
+            carInoutDetailPo.setCarTypeName(tempCarName);
+        }
         int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {
@@ -359,7 +388,7 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param machineDto
      * @param tempCar
      */
-    private void carIn(JSONObject reqJson, MachineDto machineDto, String tempCar) {
+    private void carIn(JSONObject reqJson, MachineDto machineDto, String tempCar,String tempCarName) {
         String state = CarInoutDto.STATE_IN;
         //进场失败记录
         if (reqJson.containsKey("state") && "5".equals(reqJson.getString("state"))) {
@@ -406,7 +435,28 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setPaId(paId);
         carInoutDetailPo.setState(state);
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
-        carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar)?OwnerCarDto.LEASE_TYPE_TEMP:tempCar);
+        if(CAR_TYPE_NO_DATA.equals(tempCar)){
+            carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
+            carInoutDetailPo.setCarTypeName(OwnerCarDto.LEASE_TYPE_TEMP);
+            //检查是否为黑白名单
+            CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
+            carBlackWhiteDto.setCarNum(reqJson.getString("carNum"));
+            carBlackWhiteDto.setPaId(paId);
+            carBlackWhiteDto.setValidity("Y");
+            List<CarBlackWhiteDto> carBlackWhiteDtos = carBlackWhiteV1InnerServiceSMOImpl.queryCarBlackWhites(carBlackWhiteDto);
+            if(carBlackWhiteDtos != null && carBlackWhiteDtos.size() >0 ){
+                if(CarBlackWhiteDto.BLACK_WHITE_BLACK.equals(carBlackWhiteDtos.get(0).getBlackWhite())){
+                    carInoutDetailPo.setCarType("B");
+                    carInoutDetailPo.setCarTypeName("黑名单");
+                }else{
+                    carInoutDetailPo.setCarType("W");
+                    carInoutDetailPo.setCarTypeName("白名单");
+                }
+            }
+        }else{
+            carInoutDetailPo.setCarType(tempCar);
+            carInoutDetailPo.setCarTypeName(tempCarName);
+        }
         flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
 
         if (flag < 1) {

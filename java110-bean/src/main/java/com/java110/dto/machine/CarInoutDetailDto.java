@@ -1,7 +1,5 @@
 package com.java110.dto.machine;
 
-import com.java110.dto.PageDto;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,7 +26,6 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     private String communityId;
 
 
-
     private Date createTime;
 
     private String statusCd = "0";
@@ -37,6 +34,7 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     private String state;
 
     private String carType;
+    private String carTypeName;
 
     private String configId;
 
@@ -146,5 +144,15 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    @Override
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    @Override
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
     }
 }

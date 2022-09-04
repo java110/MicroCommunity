@@ -8,9 +8,9 @@
     <!-- 保存车辆进出明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveCarInoutDetailInfo" parameterType="Map">
         insert into car_inout_detail(
-        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state,car_type
+        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state,car_type,car_type_name
         ) values (
-        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state},#{carType}
+        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state},#{carType},#{carTypeName}
         )
     </insert>
 
@@ -21,14 +21,13 @@
         machineCode,t.car_inout,t.car_inout carInout,t.pa_id,t.pa_id paId,t.detail_id,t.detail_id
         detailId,t.car_num,t.car_num carNum,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.state,
         ci.in_time inTime,ci.out_time outTime,max(cip.real_charge) realCharge,ci.pa_id paId,td.name stateName,t.remark,t.car_type carType
-        ,pa.num areaNum,tcfc.fee_name feeName,tcfc.config_id configId,td2.`name` carTypeName
+        ,pa.num areaNum,tcfc.fee_name feeName,tcfc.config_id configId,t.car_type_name carTypeName
         from car_inout_detail t
         left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
         left join car_inout_payment cip on cip.inout_id = ci.inout_id and cip.community_id = ci.community_id
         left join t_dict td on t.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
         left join parking_area pa on ci.pa_id = pa.pa_id and pa.status_cd = '0'
         left join temp_car_fee_config tcfc on pa.pa_id = tcfc.pa_id and tcfc.status_cd = '0'
-        LEFT JOIN t_dict td2 on t.car_type = td2.status_cd and td2.table_name = 'owner_car' and td2.table_columns = 'lease_type'
         where 1 =1
         <if test="inoutId !=null and inoutId != ''">
             and t.inout_id= #{inoutId}
@@ -73,7 +72,7 @@
             and t.create_time &lt; #{endTime}
         </if>
         group by t.inout_id,t.machine_id,t.machine_code,t.car_inout,t.pa_id,t.detail_id,t.car_num,t.status_cd,t.community_id,
-        ci.in_time ,ci.out_time ,ci.pa_id ,td.name,t.remark,pa.num ,tcfc.fee_name ,tcfc.config_id,t.create_time,td2.name,td.name,t.state,t.car_type
+        ci.in_time ,ci.out_time ,ci.pa_id ,td.name,t.remark,pa.num ,tcfc.fee_name ,tcfc.config_id,t.create_time,t.car_type_name,td.name,t.state,t.car_type
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -106,6 +105,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             , t.car_type= #{carType}
+        </if>
+        <if test="carTypeName !=null and carTypeName != ''">
+            , t.car_type_name= #{carTypeName}
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}

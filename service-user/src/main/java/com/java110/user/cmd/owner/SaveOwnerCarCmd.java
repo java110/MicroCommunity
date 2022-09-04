@@ -67,7 +67,6 @@ public class SaveOwnerCarCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-        Assert.jsonObjectHaveKey(reqJson, "carNumType", "未包含carNumType");
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");

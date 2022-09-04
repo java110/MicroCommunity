@@ -29,6 +29,8 @@ public class CarInoutDetailPo implements Serializable {
 
     private String carType;
 
+    private String carTypeName;
+
     public String getDetailId() {
         return detailId;
     }
@@ -123,5 +125,13 @@ public class CarInoutDetailPo implements Serializable {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
     }
 }
