@@ -28,11 +28,13 @@ import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,6 +85,15 @@ public class EditOwnerCarCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        if (!reqJson.containsKey("leaseType")) {
+            reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
+        }
+
+        if (OwnerCarDto.LEASE_TYPE_SALE.equals(reqJson.getString("leaseType"))) {
+            reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
+            reqJson.put("endTime", "2037-01-01");
+        }
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(reqJson, OwnerCarPo.class);
         int flag = ownerCarV1InnerServiceSMOImpl.updateOwnerCar(ownerCarPo);

@@ -8,9 +8,9 @@
     <!-- 保存车辆信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarInfo" parameterType="Map">
         insert into owner_car(car_brand, car_num, ps_id, remark, owner_id, car_type_cd, user_id, car_id, car_color,
-                              car_type, start_time, end_time, state, community_id, member_id, b_id)
+                              car_type, start_time, end_time, state, community_id, member_id, b_id,lease_type)
         values (#{carBrand}, #{carNum}, #{psId}, #{remark}, #{ownerId}, #{carTypeCd}, #{userId}, #{carId}, #{carColor},
-                #{carType}, #{startTime}, #{endTime}, #{state}, #{communityId}, #{memberId}, '-1')
+                #{carType}, #{startTime}, #{endTime}, #{state}, #{communityId}, #{memberId}, '-1',#{leaseType})
     </insert>
 
 
@@ -20,7 +20,7 @@
         psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.car_type_cd,t.car_type_cd
         carTypeCd,t.user_id,t.user_id userId,t.car_id,t.car_id carId,t.car_color,t.car_color
         carColor,t.car_type,t.car_type carType,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.community_id,t.community_id communityId,t.member_id,t.member_id memberId
+        endTime,t.state,t.community_id,t.community_id communityId,t.member_id,t.member_id memberId,t.lease_type leaseType
         from owner_car t
         where 1 =1
         <if test="carBrand !=null and carBrand != ''">
@@ -40,6 +40,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            and t.lease_type= #{leaseType}
         </if>
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}
@@ -118,6 +121,9 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
+        <if test="leaseType !=null and leaseType != ''">
+            , t.lease_type= #{leaseType}
+        </if>
         where 1=1
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -158,6 +164,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            and t.lease_type= #{leaseType}
         </if>
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}

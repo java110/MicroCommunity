@@ -35,6 +35,8 @@ public class OwnerCarPo implements Serializable {
     private String memberId;
     private String statusCd = "0";
 
+    private String leaseType;
+
 
     public String getCarId() {
         return carId;
@@ -170,5 +172,13 @@ public class OwnerCarPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getLeaseType() {
+        return leaseType;
+    }
+
+    public void setLeaseType(String leaseType) {
+        this.leaseType = leaseType;
     }
 }

@@ -22,14 +22,14 @@ import com.java110.po.car.OwnerCarPo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.saveOwnerCar")
@@ -73,10 +73,6 @@ public class SaveOwnerCarCmd extends Cmd {
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
 
-        if (!"H".equals(reqJson.getString("carNumType"))
-                && !"S".equals(reqJson.getString("carNumType"))) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "请求报文中sellOrFire值错误 ，出售为S 出租为H");
-        }
 
         //校验车牌号是否存在
         OwnerCarDto ownerCarDto = new OwnerCarDto();
@@ -117,6 +113,14 @@ public class SaveOwnerCarCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        if (!reqJson.containsKey("leaseType")) {
+            reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
+        }
+
+        if (OwnerCarDto.LEASE_TYPE_SALE.equals(reqJson.getString("leaseType"))) {
+            reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
+            reqJson.put("endTime", "2037-01-01");
+        }
         JSONObject businessOwnerCar = new JSONObject();
         businessOwnerCar.putAll(reqJson);
         businessOwnerCar.put("memberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));
@@ -132,6 +136,8 @@ public class SaveOwnerCarCmd extends Cmd {
         }
         //添加车辆属性
         dealOwnerCarAttr(reqJson, ownerCarPo);
+
+
         int flag = ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
         if (flag < 1) {
             throw new CmdException("保存车辆属性失败");

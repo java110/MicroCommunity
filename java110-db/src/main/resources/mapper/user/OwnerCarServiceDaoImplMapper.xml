@@ -21,7 +21,7 @@
         carType,t.operate,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.owner_id,t.owner_id
         ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId,t.community_id,t.community_id
         communityId,t.start_time,t.end_time,t.state,t.start_time startTime,t.end_time endTime,t.car_type_cd,
-        t.car_type_cd carTypeCd,t.member_id,t.member_id memberId
+        t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,t.lease_type leaseType
         from business_owner_car t
         where 1 =1
         <if test="carColor !=null and carColor != ''">
@@ -50,6 +50,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            and t.lease_type= #{leaseType}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -128,7 +131,7 @@
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
-        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum
+        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
@@ -187,6 +190,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            and t.lease_type= #{leaseType}
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and bow.name like '%${ownerName}%'
@@ -259,6 +265,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             , t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            , t.lease_type= #{leaseType}
         </if>
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
@@ -344,6 +353,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="leaseType !=null and leaseType != ''">
+            and t.lease_type= #{leaseType}
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and bow.name like '%${ownerName}%'

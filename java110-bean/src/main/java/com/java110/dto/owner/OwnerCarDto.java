@@ -1,7 +1,6 @@
 package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.RoomAttrDto;
 import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 
 import java.io.Serializable;
@@ -28,6 +27,11 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public static final String CAR_TYPE_TEMP = "1003"; //临时车
 
     public static final String CAR_TYPE_CD_TEMP = "1003";
+
+    public static final String LEASE_TYPE_MONTH = "H"; // 月租车
+    public static final String LEASE_TYPE_SALE = "S"; // 出售车
+    public static final String LEASE_TYPE_INNER = "I"; //内部车
+    public static final String LEASE_TYPE_NO_MONEY = "NM"; //免费车
 
     private String carColor;
     private String carBrand;
@@ -79,6 +83,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String unitNum;
     private String roomNum;
     private String oweAmount;
+
+    private String leaseType;
 
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
@@ -418,5 +424,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setOwnerCarAttrDto(List<OwnerCarAttrDto> ownerCarAttrDto) {
         this.ownerCarAttrDto = ownerCarAttrDto;
+    }
+
+    public String getLeaseType() {
+        return leaseType;
+    }
+
+    public void setLeaseType(String leaseType) {
+        this.leaseType = leaseType;
     }
 }
