@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dataPrivilegeV1ServiceDaoImpl">
+
+
+    <!-- 保存数据权限信息 add by wuxw 2018-07-03 -->
+    <insert id="saveDataPrivilegeInfo" parameterType="Map">
+        insert into data_privilege(
+        code,dp_id,name,remark,community_id
+        ) values (
+        #{code},#{dpId},#{name},#{remark},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询数据权限信息 add by wuxw 2018-07-03 -->
+    <select id="getDataPrivilegeInfo" parameterType="Map" resultType="Map">
+        select t.code,t.dp_id,t.dp_id dpId,t.name,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId
+        from data_privilege t
+        where 1 =1
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="dpId !=null and dpId != ''">
+            and t.dp_id= #{dpId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改数据权限信息 add by wuxw 2018-07-03 -->
+    <update id="updateDataPrivilegeInfo" parameterType="Map">
+        update data_privilege t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="code !=null and code != ''">
+            , t.code= #{code}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="dpId !=null and dpId != ''">
+            and t.dp_id= #{dpId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询数据权限数量 add by wuxw 2018-07-03 -->
+    <select id="queryDataPrivilegesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from data_privilege t
+        where 1 =1
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="dpId !=null and dpId != ''">
+            and t.dp_id= #{dpId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
