@@ -42,7 +42,7 @@
             </foreach>
         </if>
         <if test="carNum !=null and carNum != ''">
-            and t.car_num= #{carNum}
+            and t.car_num like concat('%',#{carNum},'%')
         </if>
         <if test="carType !=null and carType != ''">
             and cid.car_type= #{carType}
@@ -131,7 +131,7 @@
             </foreach>
         </if>
         <if test="carNum !=null and carNum != ''">
-            and t.car_num= #{carNum}
+            and t.car_num like concat('%',#{carNum},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
