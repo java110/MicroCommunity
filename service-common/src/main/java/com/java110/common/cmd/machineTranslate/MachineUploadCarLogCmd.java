@@ -254,7 +254,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setState(state);
         if(CAR_TYPE_NO_DATA.equals(tempCar)){
             carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
-            carInoutDetailPo.setCarTypeName(OwnerCarDto.LEASE_TYPE_TEMP);
+            carInoutDetailPo.setCarTypeName("临时车");
             //检查是否为黑白名单
             CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
             carBlackWhiteDto.setCarNum(reqJson.getString("carNum"));
