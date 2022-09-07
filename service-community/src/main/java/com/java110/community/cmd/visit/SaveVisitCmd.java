@@ -7,9 +7,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
@@ -60,6 +62,9 @@ public class SaveVisitCmd extends Cmd {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     //键
     public static final String IS_NEED_REVIEW = "IS_NEED_REVIEW";
@@ -204,8 +209,19 @@ public class SaveVisitCmd extends Cmd {
         reqJson.put("stateRemark", result);
         addVisit(reqJson);
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+            if(reqJson.getString("photo").length()>512){ //说明是图片
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(reqJson.getString("photo"));
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+                reqJson.put("photo", fileName);
+
+            }
             JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "11000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", reqJson.getString("vId"));
