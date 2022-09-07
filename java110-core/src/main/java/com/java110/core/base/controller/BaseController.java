@@ -65,24 +65,22 @@ public class BaseController extends AppBase {
                 String[] value = (String[]) readOnlyMap.get(key);
 //                String[] value = (String[]) readOnlyMap.get(key);
                 if (value.length > 1) {
-                    headers.put(key, value[0]);
                     for (int j = 0; j < value.length; j++) {
                         queryString.append(key);
                         queryString.append("=");
                         queryString.append(value[j]);
                         queryString.append("&");
                     }
-
                 } else {
-                    if(!hasValidHeader(key.toLowerCase())){
-                        continue;
-                    }
-                    headers.put(key, value[0]);
                     queryString.append(key);
                     queryString.append("=");
                     queryString.append(value[0]);
                     queryString.append("&");
                 }
+                if(!hasValidHeader(key.toLowerCase())){
+                    continue;
+                }
+                headers.put(key, value[0]);
             }
         }
 
