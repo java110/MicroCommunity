@@ -59,6 +59,9 @@
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -161,6 +164,9 @@
         </if>
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
