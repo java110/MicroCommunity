@@ -74,6 +74,9 @@ public class BaseController extends AppBase {
                     }
 
                 } else {
+                    if(!hasValidHeader(key.toLowerCase())){
+                        continue;
+                    }
                     headers.put(key, value[0]);
                     queryString.append(key);
                     queryString.append("=");
@@ -91,6 +94,30 @@ public class BaseController extends AppBase {
         }
 
     }
+
+    private boolean hasValidHeader(String key) {
+        if("app-id".equals(key) || "app_id".equals(key)){
+            return true;
+        }
+        if("transaction-id".equals(key) || "transaction_id".equals(key)){
+            return true;
+        }
+        if("req-time".equals(key) || "req_time".equals(key)){
+            return true;
+        }
+        if("sign".equals(key)){
+            return true;
+        }
+        if("user-id".equals(key) || "user_id".equals(key)){
+            return true;
+        }
+        if("java110-lang".equals(key)){
+            return true;
+        }
+
+        return false;
+    }
+
 
     public static Map<String, String> getParameterStringMap(HttpServletRequest request) {
         Map<String, String[]> properties = request.getParameterMap();//把请求参数封装到Map<String, String[]>中
