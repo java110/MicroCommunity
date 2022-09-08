@@ -174,14 +174,14 @@ public class AttendanceClassApi {
         attendanceClassesTaskDto.setStoreId(storeId);
         attendanceClassesTaskDto.setClassId(classId);
         attendanceClassesTaskDto.setStaffName(staffName);
+        attendanceClassesTaskDto.setStaffId(staffId);
         if (!StringUtil.isEmpty(date)) {
-            Date reqDate = DateUtil.getDateFromString(date, DateUtil.DATE_FORMATE_STRING_B);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(reqDate);
-            attendanceClassesTaskDto.setTaskYear(calendar.get(Calendar.YEAR) + "");
-            attendanceClassesTaskDto.setTaskMonth((calendar.get(Calendar.MONTH) + 1) + "");
-            attendanceClassesTaskDto.setTaskDay(calendar.get(Calendar.DAY_OF_MONTH) + "");
+            String[] dates = date.split("-");
+            attendanceClassesTaskDto.setTaskYear(dates[0] + "");
+            attendanceClassesTaskDto.setTaskMonth(dates[1] + "");
+            if (dates.length == 3) {
+                attendanceClassesTaskDto.setTaskDay(dates[2] + "");
+            }
         }
         return getAttendanceClassesTaskBMOImpl.get(attendanceClassesTaskDto);
     }
@@ -284,6 +284,7 @@ public class AttendanceClassApi {
             @RequestParam int row,
             @RequestParam(name = "classesId", required = false) String classesId,
             @RequestParam(name = "staffName", required = false) String staffName,
+            @RequestParam(name = "staffId", required = false) String staffId,
             @RequestParam(name = "date", required = false) String date,
             @RequestParam(name = "departmentId", required = false) String departmentId
     ) throws Exception {
@@ -293,6 +294,7 @@ public class AttendanceClassApi {
         attendanceClassesTaskDto.setRow(row);
         attendanceClassesTaskDto.setClassId(classesId);
         attendanceClassesTaskDto.setStaffName(staffName);
+        attendanceClassesTaskDto.setStaffId(staffId);
         attendanceClassesTaskDto.setStoreId(storeId);
 
         if (!StringUtil.isEmpty(date)) {
