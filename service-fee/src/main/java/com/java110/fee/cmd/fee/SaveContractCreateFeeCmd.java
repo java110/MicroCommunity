@@ -29,6 +29,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -211,8 +212,8 @@ public class SaveContractCreateFeeCmd extends Cmd {
         paramOut.put("totalRoom", contractDtos.size());
         paramOut.put("successRoom", contractDtos.size() - failRooms);
         paramOut.put("errorRoom", failRooms);
-        responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
+
+        context.setResponseEntity( ResultVo.createResponseEntity(paramOut));
     }
 
 
