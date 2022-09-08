@@ -8,9 +8,9 @@
     <!-- 保存考勤任务信息 add by wuxw 2018-07-03 -->
     <insert id="saveAttendanceClassesTaskInfo" parameterType="Map">
         insert into attendance_classes_task(
-        class_id,task_month,task_day,state,store_id,task_year,task_id,staff_id
+        class_id,task_month,task_day,state,store_id,task_year,task_id,staff_id,staff_name
         ) values (
-        #{classId},#{taskMonth},#{taskDay},#{state},#{storeId},#{taskYear},#{taskId},#{staffId}
+        #{classId},#{taskMonth},#{taskDay},#{state},#{storeId},#{taskYear},#{taskId},#{staffId},#{staffName}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getAttendanceClassesTaskInfo" parameterType="Map" resultType="Map">
         select t.class_id,t.class_id classId,t.task_month,t.task_month taskMonth,t.task_day,t.task_day
         taskDay,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id storeId,t.task_year,t.task_year
-        taskYear,t.task_id,t.task_id taskId,t.staff_id,t.staff_id staffId,ac.classes_name classesName,ac.classes_obj_name classObjName,
+        taskYear,t.task_id,t.task_id taskId,t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,ac.classes_name classesName,ac.classes_obj_name classObjName,
         td.name stateName
         from attendance_classes_task t
         LEFT JOIN attendance_classes ac on t.class_id = ac.classes_id and ac.status_cd = '0'
@@ -51,6 +51,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name like concat('%',#{staffName},'%')
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -86,6 +89,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             , t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
         </if>
         where 1=1
         <if test="taskId !=null and taskId != ''">
@@ -125,6 +131,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name like concat('%',#{staffName},'%')
         </if>
 
 

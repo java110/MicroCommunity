@@ -3,9 +3,11 @@ package com.java110.common.bmo.attendanceClassesTask.impl;
 import com.java110.common.bmo.attendanceClassesTask.ISaveAttendanceClassesTaskBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.Assert;
@@ -27,6 +29,9 @@ public class SaveAttendanceClassesTaskBMOImpl implements ISaveAttendanceClassesT
     @Autowired
     private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -46,6 +51,18 @@ public class SaveAttendanceClassesTaskBMOImpl implements ISaveAttendanceClassesT
         Assert.listOnlyOne(attendanceClassesDtos, "班组不存在");
 
         attendanceClassesTaskPo.setStoreId(attendanceClassesDtos.get(0).getStoreId());
+
+        //查询员工信息
+        UserDto userDto = new UserDto();
+        userDto.setUserId(attendanceClassesTaskPo.getStaffId());
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含员工");
+
+        attendanceClassesTaskPo.setStaffName(userDtos.get(0).getName());
+
         int flag = attendanceClassesTaskInnerServiceSMOImpl.saveAttendanceClassesTask(attendanceClassesTaskPo);
 
         for (AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo : attendanceClassesTaskDetailPos) {

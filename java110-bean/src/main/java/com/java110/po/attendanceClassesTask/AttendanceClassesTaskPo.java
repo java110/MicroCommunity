@@ -14,6 +14,8 @@ public class AttendanceClassesTaskPo implements Serializable {
     private String taskId;
     private String staffId;
 
+    private String staffName;
+
     public String getClassId() {
         return classId;
     }
@@ -86,5 +88,11 @@ public class AttendanceClassesTaskPo implements Serializable {
         this.staffId = staffId;
     }
 
+    public String getStaffName() {
+        return staffName;
+    }
 
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
 }

@@ -166,12 +166,14 @@ public class AttendanceClassApi {
                                                              @RequestParam(value = "row") int row,
                                                              @RequestParam(value = "classId", required = false) String classId,
                                                              @RequestParam(value = "staffId", required = false) String staffId,
+                                                             @RequestParam(value = "staffName", required = false) String staffName,
                                                              @RequestParam(name = "date", required = false) String date) throws Exception {
         AttendanceClassesTaskDto attendanceClassesTaskDto = new AttendanceClassesTaskDto();
         attendanceClassesTaskDto.setPage(page);
         attendanceClassesTaskDto.setRow(row);
         attendanceClassesTaskDto.setStoreId(storeId);
         attendanceClassesTaskDto.setClassId(classId);
+        attendanceClassesTaskDto.setStaffName(staffName);
         if (!StringUtil.isEmpty(date)) {
             Date reqDate = DateUtil.getDateFromString(date, DateUtil.DATE_FORMATE_STRING_B);
 
