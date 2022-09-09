@@ -32,6 +32,7 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     private String remark;
     private String state;
+    private String inState;
 
     private String carType;
     private String carTypeName;
@@ -154,5 +155,13 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
     @Override
     public void setCarTypeName(String carTypeName) {
         this.carTypeName = carTypeName;
+    }
+
+    public String getInState() {
+        return inState;
+    }
+
+    public void setInState(String inState) {
+        this.inState = inState;
     }
 }

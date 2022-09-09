@@ -165,7 +165,7 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
         IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
         for (CarInoutDetailDto carInoutDto : carInoutDtos) {
             try {
-                if (CarInoutDetailDto.CAR_INOUT_IN.equals(carInoutDto.getCarInout())) {
+                if (CarInoutDetailDto.CAR_INOUT_IN.equals(carInoutDto.getCarInout())  && !CarInoutDetailDto.STATE_OUT.equals(carInoutDto.getInState())) {
                     TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                     carInoutDto.setMin(result.getMin());
                     carInoutDto.setHours(result.getHours());
