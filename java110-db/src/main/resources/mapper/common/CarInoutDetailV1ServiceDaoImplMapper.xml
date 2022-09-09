@@ -8,9 +8,9 @@
     <!-- 保存车辆进出明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveCarInoutDetailInfo" parameterType="Map">
         insert into car_inout_detail(
-        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state,car_type,car_type_name
+        inout_id,machine_id,machine_code,car_inout,pa_id,detail_id,car_num,community_id,remark,state,car_type,car_type_name,photo_jpg
         ) values (
-        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state},#{carType},#{carTypeName}
+        #{inoutId},#{machineId},#{machineCode},#{carInout},#{paId},#{detailId},#{carNum},#{communityId},#{remark},#{state},#{carType},#{carTypeName},#{photoJpg}
         )
     </insert>
 
@@ -21,7 +21,7 @@
         machineCode,t.car_inout,t.car_inout carInout,t.pa_id,t.pa_id paId,t.detail_id,t.detail_id
         detailId,t.car_num,t.car_num carNum,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.state,
         ci.in_time inTime,ci.out_time outTime,max(cip.real_charge) realCharge,ci.pa_id paId,td.name stateName,t.remark,t.car_type carType
-        ,pa.num areaNum,tcfc.fee_name feeName,tcfc.config_id configId,t.car_type_name carTypeName,ci.state inState
+        ,pa.num areaNum,tcfc.fee_name feeName,tcfc.config_id configId,t.car_type_name carTypeName,ci.state inState,t.photo_jpg photoJpg
         from car_inout_detail t
         left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
         left join car_inout_payment cip on cip.inout_id = ci.inout_id and cip.community_id = ci.community_id
@@ -118,6 +118,9 @@
         </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
+        </if>
+        <if test="photoJpg !=null and photoJpg != ''">
+            , t.photo_jpg= #{photoJpg}
         </if>
         where 1=1
         <if test="detailId !=null and detailId != ''">

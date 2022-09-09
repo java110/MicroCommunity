@@ -251,6 +251,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
         carInoutDetailPo.setPaId(carInoutDtos.get(0).getPaId());
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
+        carInoutDetailPo.setPhotoJpg(reqJson.getString("photoJpg"));
         carInoutDetailPo.setState(state);
         if(CAR_TYPE_NO_DATA.equals(tempCar)){
             carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
@@ -444,6 +445,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setPaId(paId);
         carInoutDetailPo.setState(state);
         carInoutDetailPo.setRemark(reqJson.getString("remark"));
+        carInoutDetailPo.setPhotoJpg(reqJson.getString("photoJpg"));
         if(CAR_TYPE_NO_DATA.equals(tempCar)){
             carInoutDetailPo.setCarType(OwnerCarDto.LEASE_TYPE_TEMP);
             carInoutDetailPo.setCarTypeName("临时车");
@@ -472,7 +474,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             throw new CmdException("保存入记录明细失败");
         }
         //月租车
-        if (!OwnerCarDto.LEASE_TYPE_TEMP.equals(tempCar)) {
+        if (!OwnerCarDto.LEASE_TYPE_TEMP.equals(carInoutDetailPo.getCarType())) {
             return;
         }
 
