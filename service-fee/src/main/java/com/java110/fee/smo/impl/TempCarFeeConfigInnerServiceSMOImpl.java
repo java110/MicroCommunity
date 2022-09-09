@@ -2,6 +2,7 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.TempCarFeeResult;
 import com.java110.dto.machine.CarInoutDetailDto;
@@ -18,7 +19,6 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,9 +134,9 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
                 TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                 carInoutDto.setMin(result.getMin());
                 carInoutDto.setHours(result.getHours());
-                if(CarInoutDto.CAR_TYPE_MONTH.equals(carInoutDto.getCarType())){
-                    carInoutDto.setPayCharge( "0.00");
-                }else {
+                if (CarInoutDto.CAR_TYPE_MONTH.equals(carInoutDto.getCarType())) {
+                    carInoutDto.setPayCharge("0.00");
+                } else {
                     carInoutDto.setPayCharge(result.getPayCharge() + "");
                 }
             } catch (Exception e) {
@@ -165,7 +165,16 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
         IComputeTempCarFee computeTempCarFee = ApplicationContextFactory.getBean(tempCarFeeConfigDtos.get(0).getRuleId(), IComputeTempCarFee.class);
         for (CarInoutDetailDto carInoutDto : carInoutDtos) {
             try {
-                if (CarInoutDetailDto.CAR_INOUT_IN.equals(carInoutDto.getCarInout())  && !CarInoutDetailDto.STATE_OUT.equals(carInoutDto.getInState())) {
+                if (CarInoutDetailDto.CAR_INOUT_IN.equals(carInoutDto.getCarInout())
+                        && !CarInoutDetailDto.STATE_OUT.equals(carInoutDto.getInState())
+                ) {
+                    //进场失败
+                    if (CarInoutDetailDto.STATE_IN_FAIL.equals(carInoutDto.getInState())) {
+                        carInoutDto.setMin(0);
+                        carInoutDto.setHours(0);
+                        carInoutDto.setPayCharge(0 + "");
+                        continue;
+                    }
                     TempCarFeeResult result = computeTempCarFee.computeTempCarFee(carInoutDto, tempCarFeeConfigDtos.get(0), tempCarFeeConfigAttrDtos);
                     carInoutDto.setMin(result.getMin());
                     carInoutDto.setHours(result.getHours());
