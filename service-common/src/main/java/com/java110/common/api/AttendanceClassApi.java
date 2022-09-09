@@ -29,8 +29,8 @@ import com.java110.common.bmo.attendanceLog.IDeleteAttendanceLogBMO;
 import com.java110.common.bmo.attendanceLog.IGetAttendanceLogBMO;
 import com.java110.common.bmo.attendanceLog.ISaveAttendanceLogBMO;
 import com.java110.common.bmo.attendanceLog.IUpdateAttendanceLogBMO;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
 import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
@@ -375,12 +375,20 @@ public class AttendanceClassApi {
      */
     @RequestMapping(value = "/queryAttendanceLog", method = RequestMethod.GET)
     public ResponseEntity<String> queryAttendanceLog(@RequestHeader(value = "store-id") String storeId,
+                                                     @RequestParam(name = "staffName", required = false) String staffName,
+                                                     @RequestParam(name = "staffId", required = false) String staffId,
+                                                     @RequestParam(name = "date", required = false) String date,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) {
         AttendanceLogDto attendanceLogDto = new AttendanceLogDto();
         attendanceLogDto.setPage(page);
         attendanceLogDto.setRow(row);
         attendanceLogDto.setStoreId(storeId);
+        attendanceLogDto.setStaffId(staffId);
+        attendanceLogDto.setStaffName(staffName);
+
+        attendanceLogDto.setClockTime(date);
+
         return getAttendanceLogBMOImpl.get(attendanceLogDto);
     }
 
