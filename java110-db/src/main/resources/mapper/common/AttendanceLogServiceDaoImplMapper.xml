@@ -112,7 +112,7 @@
             and t.staff_id= #{staffId}
         </if>
         <if test="clockTime !=null and clockTime != ''">
-            and t.clock_time= #{clockTime}
+            and DATE_FORMAT(t.clock_time,'%Y-%m-%d')= #{clockTime}
         </if>
 
 
