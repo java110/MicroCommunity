@@ -182,7 +182,13 @@ public class TempCarFeeConfigInnerServiceSMOImpl extends BaseServiceSMO implemen
                 } else {
                     //获取停车时间
                     Date stateDate = DateUtil.getDateFromString(carInoutDto.getInTime(), DateUtil.DATE_FORMATE_STRING_A);
-                    Date endDate = DateUtil.getDateFromString(carInoutDto.getOutTime(), DateUtil.DATE_FORMATE_STRING_A);
+                    Date endDate = null;
+                    if(carInoutDto.getOutTime() == null){
+                        endDate = DateUtil.getCurrentDate();
+                    }else{
+                        endDate = DateUtil.getDateFromString(carInoutDto.getOutTime(), DateUtil.DATE_FORMATE_STRING_A);
+                    }
+
                     long min = (endDate.getTime() - stateDate.getTime()) / (60 * 1000);
                     long hours = min / 60; //因为两者都是整数，你得到一个int
                     long minutes = min % 60;
