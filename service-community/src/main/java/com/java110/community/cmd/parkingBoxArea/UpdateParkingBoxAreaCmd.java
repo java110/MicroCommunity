@@ -67,7 +67,7 @@ public class UpdateParkingBoxAreaCmd extends Cmd {
         String defaultArea = reqJson.getString("defaultArea");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
             ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
-            tmpParkingBoxAreaPo.setBaId(reqJson.getString("baId"));
+            //tmpParkingBoxAreaPo.setBaId(reqJson.getString("baId"));
             tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
             tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
             parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);

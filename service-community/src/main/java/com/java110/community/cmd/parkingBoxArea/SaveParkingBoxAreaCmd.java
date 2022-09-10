@@ -71,15 +71,16 @@ public class SaveParkingBoxAreaCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "defaultArea", "请求报文中未包含defaultArea");
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(reqJson.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listOnlyOne(parkingAreaDtos, "停车场不存在！");
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
-        parkingAreaDto.setPaId(reqJson.getString("paId"));
-        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-        Assert.listIsNull(parkingAreaDtos, "停车场重复，请重新添加！");
+
         String defaultArea = reqJson.getString("defaultArea");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
             ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
