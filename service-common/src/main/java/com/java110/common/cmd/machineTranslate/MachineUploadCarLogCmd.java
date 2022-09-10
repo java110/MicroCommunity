@@ -230,6 +230,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             carInoutDetailPo.setRemark(reqJson.getString("remark"));
             carInoutDetailPo.setState(state);
             carInoutDetailPo.setCarType(CAR_TYPE_NO_DATA.equals(tempCar) ? OwnerCarDto.LEASE_TYPE_TEMP + "" : tempCar + "");
+            carInoutDetailPo.setCarTypeName(CAR_TYPE_NO_DATA.equals(tempCar) ? "临时车" : tempCarName);
             int flag = carInoutDetailV1InnerServiceSMOImpl.saveCarInoutDetail(carInoutDetailPo);
             if (flag < 1) {
                 throw new CmdException("保存出记录明细失败");
