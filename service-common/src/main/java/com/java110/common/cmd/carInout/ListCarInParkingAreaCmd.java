@@ -21,13 +21,16 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -63,6 +66,9 @@ public class ListCarInParkingAreaCmd extends Cmd {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private ICarInoutPaymentV1InnerServiceSMO carInoutPaymentV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -81,6 +87,7 @@ public class ListCarInParkingAreaCmd extends Cmd {
 
         if (count > 0) {
             carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+            freshPayTime(carInoutDtos);
             carInoutDtos = computeCarInouts(carInoutDtos);
         } else {
             carInoutDtos = new ArrayList<>();
@@ -91,6 +98,31 @@ public class ListCarInParkingAreaCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 输入最新的支付时间
+     * @param carInoutDtos
+     */
+    private void freshPayTime(List<CarInoutDto> carInoutDtos) {
+        for(CarInoutDto carInoutDto : carInoutDtos){
+            if(CarInoutDto.STATE_PAY.equals(carInoutDto.getState()) || CarInoutDto.STATE_REPAY.equals(carInoutDto.getState())){
+
+                //查询 支付记录 刷新payTime
+                CarInoutPaymentDto carInoutPaymentDto = new CarInoutPaymentDto();
+                carInoutPaymentDto.setInoutId(carInoutDto.getInoutId());
+                carInoutPaymentDto.setPage(1);
+                carInoutPaymentDto.setRow(1);
+               List<CarInoutPaymentDto> carInoutPaymentDtos =  carInoutPaymentV1InnerServiceSMOImpl.queryCarInoutPayments(carInoutPaymentDto);
+
+               if(carInoutPaymentDtos == null || carInoutPaymentDtos.size() < 1){
+                   carInoutDto.setPayTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                   continue;
+               }
+
+               carInoutDto.setPayTime(carInoutPaymentDtos.get(0).getPayTime());
+            }
+        }
     }
 
     private String[] getPaIds(JSONObject reqJson) {

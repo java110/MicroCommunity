@@ -163,6 +163,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test="paIds !=null">
+            and pa.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>

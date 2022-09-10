@@ -45,6 +45,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String communityId;
     private String psId;
     private String[] psIds;
+    private String[] paIds;
     private String remark;
     private String ownerId;
     private String userId;
@@ -444,5 +445,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLeaseTypeName(String leaseTypeName) {
         this.leaseTypeName = leaseTypeName;
+    }
+
+    public String[] getPaIds() {
+        return paIds;
+    }
+
+    public void setPaIds(String[] paIds) {
+        this.paIds = paIds;
     }
 }

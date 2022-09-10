@@ -138,10 +138,21 @@ public class MachineUploadCarLogCmd extends Cmd {
 
         Assert.listOnlyOne(machineDtos, "设备不存在");
 
+        List<String> paIds = new ArrayList<>();
+        ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+        parkingBoxAreaDto.setBoxId(machineDto.getLocationObjId());
+        List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+        if (parkingBoxAreaDtos != null && parkingBoxAreaDtos.size() >0) {
+            for(ParkingBoxAreaDto parkingBoxAreaDto1 : parkingBoxAreaDtos){
+                paIds.add(parkingBoxAreaDto1.getPaId());
+            }
+        }
+
         //查询车辆
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(reqJson.getString("carNum"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setPaIds(paIds.toArray(new String[paIds.size()]));
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         //说明是临时车

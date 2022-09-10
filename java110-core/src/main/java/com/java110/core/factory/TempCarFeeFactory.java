@@ -55,7 +55,7 @@ public class TempCarFeeFactory {
         double min = 0.0;
         try {
             //不是支付完成 状态
-            if (CarInoutDto.STATE_PAY.equals(carInoutDto.getState())) {
+            if (CarInoutDto.STATE_PAY.equals(carInoutDto.getState()) || CarInoutDto.STATE_REPAY.equals(carInoutDto.getState())) {
 
                 try {
                     payTime = DateUtil.getDateFromString(carInoutDto.getPayTime(), DateUtil.DATE_FORMATE_STRING_A);
