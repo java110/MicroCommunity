@@ -107,4 +107,7 @@ public interface IDataBusInnerServiceSMO {
     ResultVo heartbeatVideo(@RequestBody JSONObject reqJson);
     @RequestMapping(value = "/updateCarInoutCarNum", method = RequestMethod.POST)
     ResultVo updateCarInoutCarNum(@RequestBody CarInoutDto carInoutDto);
+
+    @RequestMapping(value = "/getManualOpenDoorLogs", method = RequestMethod.POST)
+    ResultVo getManualOpenDoorLogs(@RequestBody JSONObject reqJson);
 }

@@ -103,5 +103,22 @@ public class GetTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
     }
 
+    /**
+     * 修改在场车辆车牌号
+     *
+     * @param reqJson
+     * @return
+     */
+    @Override
+    public ResultVo getManualOpenDoorLogs(JSONObject reqJson)  {
+        reqJson.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(reqJson.toJSONString(), getHeaders(outRestTemplate));
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.GET_MANUAL_OPEN_DOOR_LOGS), HttpMethod.POST, httpEntity, String.class);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+    }
 
 }

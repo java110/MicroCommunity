@@ -131,6 +131,17 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
+    /**
+     * 修改在场车辆车牌号
+     *
+     * @param reqJson
+     * @return
+     */
+    @Override
+    public ResultVo getManualOpenDoorLogs(JSONObject reqJson) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
 
     /**
      * 查询 临时车待支付订单

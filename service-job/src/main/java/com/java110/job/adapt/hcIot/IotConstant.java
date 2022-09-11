@@ -87,6 +87,8 @@ public class IotConstant {
 
     //修改车牌
     public static final String UPDATE_CAR_INOUT_CAR_NUM = "/extApi/car/updateCarInoutCarNum";
+    //修改车牌
+    public static final String GET_MANUAL_OPEN_DOOR_LOGS = "/extApi/machine/getManualOpenDoorLogs";
 
     //开门接口
     public static final String OPEN_DOOR = "/extApi/machine/openDoor";

@@ -85,4 +85,6 @@ public interface IDatabusAdapt {
     ResultVo heartbeatVideo(JSONObject reqJson);
 
     ResultVo updateCarInoutCarNum(CarInoutDto carInoutDto);
+
+    ResultVo getManualOpenDoorLogs(JSONObject reqJson);
 }

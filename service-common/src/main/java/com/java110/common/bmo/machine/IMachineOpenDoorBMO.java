@@ -64,4 +64,11 @@ public interface IMachineOpenDoorBMO {
      * @return
      */
     ResponseEntity<String> customCarInOut(JSONObject reqJson);
+
+    /**
+     * 查询手工开闸记录
+     * @param reqJson
+     * @return
+     */
+    ResponseEntity<String> getManualOpenDoorLogs(JSONObject reqJson);
 }

@@ -114,6 +114,9 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
             JSONObject postParameters = new JSONObject();
             postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
             postParameters.put("machineCode", paramIn.getString("machineCode"));
+            postParameters.put("extStaffId", userId);
+            postParameters.put("staffName", userName);
+
             HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
             ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.OPEN_DOOR), HttpMethod.POST, httpEntity, String.class);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -137,6 +140,7 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
             machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
         }
     }
+
     /**
      * 开门实现方法
      *

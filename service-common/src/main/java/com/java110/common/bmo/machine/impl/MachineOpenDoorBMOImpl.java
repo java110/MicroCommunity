@@ -173,4 +173,10 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         ResultVo resultVo = dataBusInnerServiceSMOImpl.customCarInOut(reqJson);
         return ResultVo.createResponseEntity(resultVo);
     }
+
+    @Override
+    public ResponseEntity<String> getManualOpenDoorLogs(JSONObject reqJson) {
+        ResultVo resultVo = dataBusInnerServiceSMOImpl.getManualOpenDoorLogs(reqJson);
+        return ResultVo.createResponseEntity(resultVo);
+    }
 }
