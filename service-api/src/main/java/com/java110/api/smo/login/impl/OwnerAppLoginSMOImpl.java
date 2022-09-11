@@ -445,7 +445,7 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
 
             openUrl = WechatConstant.OPEN_AUTH
                     .replace("APPID", smallWeChatDto.getAppId())
-                    .replace("SCOPE", "snsapi_userinfo")
+                    .replace("SCOPE", "snsapi_base")
                     .replace(
                             "REDIRECT_URL",
                             URLEncoder
