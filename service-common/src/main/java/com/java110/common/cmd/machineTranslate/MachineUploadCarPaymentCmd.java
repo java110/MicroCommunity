@@ -35,7 +35,9 @@ import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -154,18 +156,9 @@ public class MachineUploadCarPaymentCmd extends Cmd {
             throw new CmdException("更新费用失败");
         }
 
-        CarInoutPo carInoutPo = new CarInoutPo();
-        carInoutPo.setPaId(carInoutDtos.get(0).getPaId());
-        carInoutPo.setInoutId(carInoutDtos.get(0).getInoutId());
-        carInoutPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
-        carInoutPo.setState(CarInoutDto.STATE_PAY);
-        flag = carInoutV1InnerServiceSMOImpl.updateCarInout(carInoutPo);
+        CarInoutPo carInoutPo = updateCarInoutState(reqJson,machineDto,carInoutDtos.get(0));
 
-        if (flag < 1) {
-            throw new CmdException("更新出场时间失败");
-        }
-
-                //如果有费用 则缴费
+        //如果有费用 则缴费
         boolean hasFee = hasFeeAndPayFee(carInoutPo, carInoutPaymentPo);
 
         double realCharge = Double.parseDouble(carInoutPaymentPo.getRealCharge());
@@ -202,10 +195,46 @@ public class MachineUploadCarPaymentCmd extends Cmd {
         paramIn.put("communityId", carInoutDtos.get(0).getCommunityId());
         paramIn.put("inoutId", carInoutDtos.get(0).getInoutId());
         paramIn.put("ownerId", ownerDtos.get(0).getMemberId());
-        saveTempCarFee(paramIn, machineDto,carInoutDtos.get(0));
+        saveTempCarFee(paramIn, machineDto, carInoutDtos.get(0));
 
         //再去缴费
         hasFeeAndPayFee(carInoutPo, carInoutPaymentPo);
+    }
+
+    private CarInoutPo updateCarInoutState(JSONObject reqJson,MachineDto machineDto,CarInoutDto carInoutDto) {
+        int flag;
+
+        String requestId = DistributedLock.getLockUUID();
+        String key = "updateInoutState_" + carInoutDto.getInoutId();
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+
+            CarInoutDto newCarInoutDto = new CarInoutDto();
+            newCarInoutDto.setCommunityId(reqJson.getString("communityId"));
+            newCarInoutDto.setCarNum(reqJson.getString("carNum"));
+            newCarInoutDto.setPaId(machineDto.getLocationObjId());
+            newCarInoutDto.setStates(new String[]{
+                    CarInoutDto.STATE_IN,
+                    CarInoutDto.STATE_REPAY
+            });
+            List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(newCarInoutDto);
+            if(carInoutDtos == null || carInoutDtos.size()<1){
+                return BeanConvertUtil.covertBean(carInoutDto,CarInoutPo.class);
+            }
+            CarInoutPo carInoutPo = new CarInoutPo();
+            carInoutPo.setInoutId(carInoutDto.getInoutId());
+            carInoutPo.setPaId(carInoutDto.getPaId());
+            carInoutPo.setCommunityId(carInoutDto.getCommunityId());
+            carInoutPo.setState(CarInoutDto.STATE_PAY);
+            flag = carInoutV1InnerServiceSMOImpl.updateCarInout(carInoutPo);
+            if (flag < 1) {
+                throw new CmdException("更新出场时间失败");
+            }
+            return carInoutPo;
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
+
     }
 
     private boolean hasFeeAndPayFee(CarInoutPo carInoutPo, CarInoutPaymentPo carInoutPaymentPo) {
@@ -232,11 +261,11 @@ public class MachineUploadCarPaymentCmd extends Cmd {
 
         PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        if(CarInoutPaymentDto.PAY_TYPE_CRASH.equals(carInoutPaymentPo.getPayType())) {
+        if (CarInoutPaymentDto.PAY_TYPE_CRASH.equals(carInoutPaymentPo.getPayType())) {
             payFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_CRASH);
-        }else if(CarInoutPaymentDto.PAY_TYPE_WECHAT.equals(carInoutPaymentPo.getPayType())){
+        } else if (CarInoutPaymentDto.PAY_TYPE_WECHAT.equals(carInoutPaymentPo.getPayType())) {
             payFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_WECHAT_QRCODE);
-        }else{
+        } else {
             payFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_ALI_QRCODE);
         }
         FeeDto feeDto = feeDtos.get(0);
@@ -255,8 +284,7 @@ public class MachineUploadCarPaymentCmd extends Cmd {
         return true;
     }
 
-    private void saveTempCarFee(JSONObject reqJson, MachineDto machineDto,CarInoutDto carInoutDto) {
-
+    private void saveTempCarFee(JSONObject reqJson, MachineDto machineDto, CarInoutDto carInoutDto) {
 
 
         //创建费用
