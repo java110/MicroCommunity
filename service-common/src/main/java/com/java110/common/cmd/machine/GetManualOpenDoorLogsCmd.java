@@ -75,6 +75,7 @@ public class GetManualOpenDoorLogsCmd extends Cmd {
 
 
 
+        reqJson.put("extCommunityId",reqJson.getString("communityId"));
         ResponseEntity<String> responseEntity = machineOpenDoorBMOImpl.getManualOpenDoorLogs(reqJson);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
