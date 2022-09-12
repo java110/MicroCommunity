@@ -3,19 +3,21 @@ package com.java110.core.event.cmd;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.center.DataFlowListenerOrderComparator;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.CmdListenerDto;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
+import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.BusinessException;
-import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ExceptionUtil;
 import org.slf4j.Logger;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -147,7 +149,7 @@ public class ServiceCmdEventPublishing {
      * @param event
      * @param asyn  A 表示异步处理
      */
-    public static void multicastEvent(String serviceCode, final CmdEvent event, String asyn) throws ParseException {
+    public static void multicastEvent(String serviceCode, final CmdEvent event, String asyn) throws Exception {
         List<ServiceCmdListener> listeners = getListeners(serviceCode);
         //这里判断 serviceCode + httpMethod 的侦听，如果没有注册直接报错。
         if (listeners == null || listeners.size() == 0) {
@@ -164,7 +166,7 @@ public class ServiceCmdEventPublishing {
                     public void run() {
                         try {
                             invokeListener(listener, event);
-                        } catch (ParseException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -196,7 +198,7 @@ public class ServiceCmdEventPublishing {
      * @since 4.1
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) throws ParseException {
+    protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) throws Exception {
         try {
             //        //这里处理业务逻辑数据
             ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
@@ -211,8 +213,8 @@ public class ServiceCmdEventPublishing {
 
             //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
             //   listener.cmd(event);
-        } catch (CmdException | ParseException e) {
-            LoggerEngine.error("发布侦听失败", e);
+        } catch (Throwable e) {
+            LoggerEngine.error("发布侦听失败" + e);
             throw e;
         }
     }

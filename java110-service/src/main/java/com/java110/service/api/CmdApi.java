@@ -1,22 +1,17 @@
 package com.java110.service.api;
 
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.factory.DataTransactionFactory;
-import com.java110.core.trace.Java110TraceLog;
-import com.java110.service.context.DataQuery;
-import com.java110.service.context.DataQueryFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
+import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ICmdServiceSMO;
-import com.java110.service.smo.IQueryServiceSMO;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.util.Assert;
-import com.java110.vo.ResultVo;
-import io.swagger.annotations.Api;
+import com.java110.utils.util.ExceptionUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +37,9 @@ public class CmdApi extends BaseController {
     @Autowired
     private ICmdServiceSMO cmdServiceSMOImpl;
 
+    @Autowired
+    ISaveSystemErrorSMO saveSystemErrorSMOImpl;
+
 
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.POST)
     public ResponseEntity<String> service(@PathVariable String service,
@@ -57,6 +55,11 @@ public class CmdApi extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             responseEntity = cmdServiceSMOImpl.cmd(postInfo, headers);
         } catch (Throwable e) {
+            LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+            logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+            logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_CMD);
+            logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+            saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -97,6 +100,7 @@ public class CmdApi extends BaseController {
         logger.debug("cmd：{} 返回信息为：{}", action, responseEntity);
         return responseEntity;
     }
+
     /**
      * 获取请求信息
      *
