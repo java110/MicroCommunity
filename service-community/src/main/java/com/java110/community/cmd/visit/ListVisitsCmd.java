@@ -46,8 +46,11 @@ public class ListVisitsCmd extends Cmd {
                 && "initAddVisitParameter".equals(reqJson.getString("addVisitType"))) {
             //预约车免费时长
             String freeTime = CommunitySettingFactory.getValue(reqJson.getString("communityId"), CAR_FREE_TIME);
-            //预约车免费次数
-            int number = Integer.parseInt(CommunitySettingFactory.getValue(reqJson.getString("communityId"), VISIT_NUMBER));
+            String numStr = CommunitySettingFactory.getValue(reqJson.getString("communityId"), VISIT_NUMBER);
+            int number = 999;
+            if(StringUtil.isInteger(numStr)){
+                number = Integer.parseInt(numStr);
+            }
             Map initAddVisitParameter = new HashMap();
             initAddVisitParameter.put("freeTime", freeTime);
             initAddVisitParameter.put("freeTimes", number);
