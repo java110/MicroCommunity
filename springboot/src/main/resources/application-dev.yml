@@ -1,9 +1,10 @@
 jedis:
   pool:
     config:
-      maxTotal: 100
-      maxIdle: 20
-      maxWaitMillis: 20000
+      maxTotal: 300
+      maxIdle: 50
+      minIdle: 20
+      maxWaitMillis: 3000
     host: dev.redis.java110.com
     port: 6379
     timeout: 3000
@@ -43,9 +44,9 @@ spring:
     password: hc
     pool:
       max-active: 300
-      max-wait: 10000
-      max-idle: 100
-      min-idle: 0
+      max-wait: 3000
+      max-idle: 50
+      min-idle: 20
       timeout: 0
 
 feign:

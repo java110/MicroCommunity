@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
 
-<!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
     <!-- 控制台输出 -->
     <appender name="STDOUT_FILE" class="ch.qos.logback.core.ConsoleAppender">
@@ -64,30 +64,27 @@
     <logger name="org.springframework" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="com.java110.api" level="ERROR">
-        <appender-ref ref="STDOUT_FILE"/>
-    </logger>
     <logger name="com.java110.order" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <!--myibatis log configure-->
-    <logger name="com.apache.ibatis" level="ERROR">
+    <logger name="com.apache.ibatis" level="DEBUG">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="org.mybatis" level="ERROR">
+    <logger name="org.mybatis" level="DEBUG">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="druid.sql.Statement" level="ERROR">
+    <logger name="druid.sql.Statement" level="DEBUG">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="druid.sql.ResultSet" level="ERROR">
+    <logger name="druid.sql.ResultSet" level="DEBUG">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
 
-    <logger name="com.java110" level="ERROR">
+    <logger name="com.java110" level="DEBUG">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 

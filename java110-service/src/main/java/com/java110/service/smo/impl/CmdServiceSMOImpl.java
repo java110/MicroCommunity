@@ -94,7 +94,7 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
      * @param cmdDataFlowContext
      * @throws BusinessException
      */
-    private void invokeBusinessSystem(ICmdDataFlowContext cmdDataFlowContext) throws BusinessException {
+    private void invokeBusinessSystem(ICmdDataFlowContext cmdDataFlowContext) throws Exception {
         ServiceCmdEventPublishing.multicastEvent(cmdDataFlowContext);
     }
 

@@ -108,7 +108,7 @@ public class ServiceCmdEventPublishing {
      *
      * @param cmdDataFlowContext
      */
-    public static void multicastEvent(ICmdDataFlowContext cmdDataFlowContext) throws BusinessException {
+    public static void multicastEvent(ICmdDataFlowContext cmdDataFlowContext) throws Exception {
         Assert.notNull(cmdDataFlowContext.getServiceCode(), "当前没有可处理的业务信息！");
         multicastEvent(cmdDataFlowContext.getServiceCode(), cmdDataFlowContext, null);
     }
@@ -120,7 +120,7 @@ public class ServiceCmdEventPublishing {
      * @param serviceCode
      * @param dataFlowContext
      */
-    public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext) throws BusinessException {
+    public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext) throws Exception {
         multicastEvent(serviceCode, dataFlowContext, null);
     }
 
@@ -130,14 +130,15 @@ public class ServiceCmdEventPublishing {
      * @param serviceCode
      * @param dataFlowContext 这个订单信息，以便于 侦听那边需要用
      */
-    public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext, String asyn) throws BusinessException {
+    public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext, String asyn) throws Exception {
         try {
             CmdEvent targetDataFlowEvent = new CmdEvent(serviceCode, dataFlowContext);
 
             multicastEvent(serviceCode, targetDataFlowEvent, asyn);
         } catch (Exception e) {
             logger.error("发布侦听失败，失败原因为：", e);
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, e.getMessage());
+            //throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, e.getMessage());
+            throw e;
         }
 
     }
