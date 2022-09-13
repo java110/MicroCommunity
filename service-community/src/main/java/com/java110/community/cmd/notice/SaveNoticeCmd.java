@@ -100,6 +100,12 @@ public class SaveNoticeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "startTime", "必选，请填写开始时间 ");
         Assert.hasKeyAndValue(reqJson, "endTime", "必选，请填写结束时间 ");
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+
+        reqJson.put("userId",userId);
+        reqJson.put("storeId",storeId);
+
     }
 
     @Override
