@@ -188,9 +188,6 @@
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
