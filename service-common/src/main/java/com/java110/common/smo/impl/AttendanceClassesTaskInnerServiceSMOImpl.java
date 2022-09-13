@@ -91,29 +91,6 @@ public class AttendanceClassesTaskInnerServiceSMOImpl extends BaseServiceSMO imp
             return;
         }
 
-        if (attendanceClassesTasks.size() > 20) {
-            return;
-        }
-
-        List<String> staffIds = new ArrayList<>();
-
-        for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
-            staffIds.add(attendanceClassesTaskDto.getStaffId());
-        }
-
-        List<UserDto> userDtos = userInnerServiceSMOImpl.getUserInfo(staffIds.toArray(new String[staffIds.size()]));
-
-        if (userDtos != null && userDtos.size() > 0) {
-            for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
-                for (UserDto userDto : userDtos) {
-                    if (attendanceClassesTaskDto.getStaffId().equals(userDto.getUserId())) {
-                        attendanceClassesTaskDto.setStaffName(userDto.getName());
-                        continue;
-                    }
-                }
-            }
-        }
-
         List<String> taskIds = new ArrayList<>();
 
         for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
