@@ -168,7 +168,7 @@ public class SaveNoticeCmd extends Cmd {
             }
         } else {
             RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
-            orgCommunityDto.setStaffId(userDtos.get(0).getStaffId());
+            orgCommunityDto.setStaffId(userDtos.get(0).getUserId());
             count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysCount(orgCommunityDto);
             if (count > 0) {
                 List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(orgCommunityDto);
