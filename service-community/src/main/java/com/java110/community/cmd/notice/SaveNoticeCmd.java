@@ -154,7 +154,7 @@ public class SaveNoticeCmd extends Cmd {
 
         int count = 0;
         if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
-            CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
+            CommunityDto communityDto = new CommunityDto();
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
             if (reqJson.containsKey("communityName")) {
