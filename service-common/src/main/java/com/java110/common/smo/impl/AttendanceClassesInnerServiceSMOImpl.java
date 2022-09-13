@@ -72,7 +72,9 @@ public class AttendanceClassesInnerServiceSMOImpl extends BaseServiceSMO impleme
         for (AttendanceClassesDto attendanceClassesDto : attendanceClassess) {
             tmpAttendanceClassesAttrDto = new ArrayList<>();
             for (AttendanceClassesAttrDto attendanceClassesAttrDto1 : attendanceClassesAttrDtos) {
-                tmpAttendanceClassesAttrDto.add(attendanceClassesAttrDto1);
+                if(attendanceClassesDto.getClassesId().equals(attendanceClassesAttrDto1.getClassesId())) {
+                    tmpAttendanceClassesAttrDto.add(attendanceClassesAttrDto1);
+                }
             }
             attendanceClassesDto.setAttrs(tmpAttendanceClassesAttrDto);
         }
