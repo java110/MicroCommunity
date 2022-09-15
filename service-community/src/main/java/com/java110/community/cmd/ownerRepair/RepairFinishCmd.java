@@ -11,12 +11,14 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
@@ -96,6 +98,9 @@ public class RepairFinishCmd extends Cmd {
 
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -423,13 +428,23 @@ public class RepairFinishCmd extends Cmd {
         if (reqJson.containsKey("beforeRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("beforeRepairPhotos"))) {
             JSONArray beforeRepairPhotos = reqJson.getJSONArray("beforeRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < beforeRepairPhotos.size(); _photoIndex++) {
+                String photo = beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo");
+                if(photo.length()> 512){
+                    FileDto fileDto = new FileDto();
+                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                    fileDto.setFileName(fileDto.getFileId());
+                    fileDto.setContext(reqJson.getString("photo"));
+                    fileDto.setSuffix("jpeg");
+                    fileDto.setCommunityId(reqJson.getString("communityId"));
+                    photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+                }
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
                 businessUnit.put("relTypeCd", FileRelDto.BEFORE_REPAIR_PHOTOS);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", reqJson.getString("repairId"));
-                businessUnit.put("fileRealName", beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
-                businessUnit.put("fileSaveName", beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                businessUnit.put("fileRealName", photo);
+                businessUnit.put("fileSaveName", photo);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
@@ -441,13 +456,23 @@ public class RepairFinishCmd extends Cmd {
         if (reqJson.containsKey("afterRepairPhotos") && !StringUtils.isEmpty(reqJson.getString("afterRepairPhotos"))) {
             JSONArray afterRepairPhotos = reqJson.getJSONArray("afterRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < afterRepairPhotos.size(); _photoIndex++) {
+                String photo = afterRepairPhotos.getJSONObject(_photoIndex).getString("photo");
+                if(photo.length()> 512){
+                    FileDto fileDto = new FileDto();
+                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                    fileDto.setFileName(fileDto.getFileId());
+                    fileDto.setContext(reqJson.getString("photo"));
+                    fileDto.setSuffix("jpeg");
+                    fileDto.setCommunityId(reqJson.getString("communityId"));
+                    photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+                }
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
                 businessUnit.put("relTypeCd", FileRelDto.AFTER_REPAIR_PHOTOS);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", reqJson.getString("repairId"));
-                businessUnit.put("fileRealName", afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
-                businessUnit.put("fileSaveName", afterRepairPhotos.getJSONObject(_photoIndex).getString("photo"));
+                businessUnit.put("fileRealName", photo);
+                businessUnit.put("fileSaveName", photo);
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {
