@@ -16,6 +16,11 @@ import java.util.List;
  **/
 public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
+    //考勤状态，10000未考勤 20000 考勤中 30000考勤完成
+    public static final String STATE_WAIT = "10000";
+    public static final String STATE_DOING = "20000";
+    public static final String STATE_FINISH = "30000";
+
     private String classId;
     private String taskMonth;
     private String taskDay;

@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class AttendanceClassesTaskDetailDto extends PageDto implements Serializable {
 
+    //打卡状态 10000未考勤  30000正常考勤 40000 迟到 50000早退 60000 免考勤 70000 补考勤
+    public static final String STATE_REPLENISH = "70000";//补考勤
+    public static final String STATE_WAIT = "10000";//补考勤
+
     private String checkTime;
     private String detailId;
     private String specCd;
@@ -22,6 +26,9 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     private String remark;
     private String facePath;
     private String state;
+
+    private String[] states;
+
     private String stateName;
     private String storeId;
     private String value;
@@ -146,5 +153,13 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }
