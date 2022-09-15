@@ -1145,6 +1145,16 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("7007".equals(computingFormula)) { //自定义公式
+                if (roomDto == null) {
+                    roomDto = new RoomDto();
+                    roomDto.setRoomId(feeDto.getPayerObjId());
+                    roomDto.setCommunityId(feeDto.getCommunityId());
+                    List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                    if (roomDtos == null || roomDtos.size() != 1) {
+                        throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据 roomId=" + feeDto.getPayerObjId());
+                    }
+                    roomDto = roomDtos.get(0);
+                }
                 feePrice = computeRoomCustomizeFormula(feeDto, roomDto);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {

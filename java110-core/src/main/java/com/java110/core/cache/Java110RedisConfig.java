@@ -64,6 +64,7 @@ public class Java110RedisConfig extends CachingConfigurerSupport  {
         config.setMaxIdle(maxIdle);
         config.setMaxWaitMillis(maxWaitMillis);
 
+
         return config;
     }
 
