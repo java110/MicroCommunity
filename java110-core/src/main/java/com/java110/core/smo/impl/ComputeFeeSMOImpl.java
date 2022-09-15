@@ -1745,12 +1745,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             value = value.replace("F", roomDto.getFloorArea());
         } else if (value.contains("U")) { //处理单元
             value = value.replace("U", roomDto.getUnitArea());
-        } else if (value.contains("R")) { //处理 房屋面积
-            value = value.replace("R", roomDto.getBuiltUpArea());
-        } else if (value.contains("X")) {// 处理 房屋系数
-            value = value.replace("X", roomDto.getFeeCoefficient());
-        } else if (value.contains("L")) {//处理房屋层数
-            value = value.replace("L", roomDto.getLayer());
         } else if (value.contains("RL")){
             List<RoomAttrDto> roomAttrDtos = roomDto.getRoomAttrDto();
             if(roomAttrDtos != null && roomAttrDtos.size() > 0){
@@ -1758,6 +1752,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     value = value.replace("RL"+roomAttrDto.getSpecCd(), roomAttrDto.getValue());
                 }
             }
+        } else if (value.contains("R")) { //处理 房屋面积
+            value = value.replace("R", roomDto.getBuiltUpArea());
+        } else if (value.contains("X")) {// 处理 房屋系数
+            value = value.replace("X", roomDto.getFeeCoefficient());
+        } else if (value.contains("L")) {//处理房屋层数
+            value = value.replace("L", roomDto.getLayer());
         }
 
         ScriptEngineManager manager = new ScriptEngineManager();
