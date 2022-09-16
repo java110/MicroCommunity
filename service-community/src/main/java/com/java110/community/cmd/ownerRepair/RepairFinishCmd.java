@@ -433,7 +433,7 @@ public class RepairFinishCmd extends Cmd {
                     FileDto fileDto = new FileDto();
                     fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                     fileDto.setFileName(fileDto.getFileId());
-                    fileDto.setContext(reqJson.getString("photo"));
+                    fileDto.setContext(photo);
                     fileDto.setSuffix("jpeg");
                     fileDto.setCommunityId(reqJson.getString("communityId"));
                     photo = fileInnerServiceSMOImpl.saveFile(fileDto);
@@ -461,7 +461,7 @@ public class RepairFinishCmd extends Cmd {
                     FileDto fileDto = new FileDto();
                     fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                     fileDto.setFileName(fileDto.getFileId());
-                    fileDto.setContext(reqJson.getString("photo"));
+                    fileDto.setContext(photo);
                     fileDto.setSuffix("jpeg");
                     fileDto.setCommunityId(reqJson.getString("communityId"));
                     photo = fileInnerServiceSMOImpl.saveFile(fileDto);
