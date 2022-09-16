@@ -30,6 +30,7 @@
         <module>service-dev</module>
         <module>springboot</module>
         <module>java110-boot</module>
+        <module>java110-doc</module>
 
     </modules>
 
