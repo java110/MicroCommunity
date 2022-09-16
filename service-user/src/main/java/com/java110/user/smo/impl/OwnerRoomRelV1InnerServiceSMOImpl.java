@@ -46,6 +46,7 @@ public class OwnerRoomRelV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
 
     @Override
+    @Java110Transactional
     public int saveOwnerRoomRel(@RequestBody OwnerRoomRelPo ownerRoomRelPo) {
         int saveFlag = ownerRoomRelV1ServiceDaoImpl.saveOwnerRoomRelInfo(BeanConvertUtil.beanCovertMap(ownerRoomRelPo));
         return saveFlag;
