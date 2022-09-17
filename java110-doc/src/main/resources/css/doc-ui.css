@@ -1,0 +1,21 @@
+.left{
+    width:300px;
+
+}
+.right{
+    width:100%
+}
+
+a{
+    color: #ffffff;
+    font-weight: 600;
+    padding: 14px 20px 0px 25px;
+    display: block;
+}
+.nav-second-level li a {
+    color: rgb(153, 153, 153);
+    padding: 14px 10px 0px 10px;
+    padding-left: 52px;
+    font-size:14px;
+    text-decoration:none
+}
