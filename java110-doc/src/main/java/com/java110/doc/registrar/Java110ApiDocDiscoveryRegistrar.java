@@ -12,6 +12,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -22,10 +23,7 @@ import java.beans.Introspector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * api 文档 注入类
@@ -112,15 +110,21 @@ public class Java110ApiDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                             .getAnnotationAttributes(
                     Java110RequestMappingsDoc.class.getCanonicalName());
 
-                    attributes.get("mappingsDocs");
+                    List<Map<String,Object>> mappingAttrs = (List<Map<String,Object>>)attributes.get("mappingsDocs");
 
-
-
+                    List<RequestMappingsDocDto> mappingsDocDtos = new ArrayList<>();
+                    RequestMappingsDocDto requestMappingsDocDto = null;
+                    for(Map<String,Object> mappingAttr : mappingAttrs){
+                        requestMappingsDocDto = new RequestMappingsDocDto(mappingAttr.get("name").toString(),mappingAttr.get("resource").toString(),
+                                Integer.parseInt(mappingAttr.get("seq").toString()),mappingAttr.get("url").toString(),mappingAttr.get("startWay").toString()
+                                );
+                        mappingsDocDtos.add(requestMappingsDocDto);
+                    }
 
                     /*BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);
                     BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);*/
                     Method method = cmdPublishClass.getMethod("setApiDoc", ApiDocDto.class, List.class);
-                    method.invoke(null,apiDocDto,null);
+                    method.invoke(null,apiDocDto,mappingsDocDtos);
                 }
             }
         }

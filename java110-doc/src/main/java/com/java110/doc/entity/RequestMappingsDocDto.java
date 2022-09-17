@@ -14,6 +14,18 @@ public class RequestMappingsDocDto implements Serializable {
 
     private String startWay;
 
+
+    public RequestMappingsDocDto() {
+    }
+
+    public RequestMappingsDocDto(String name, String resource, int seq, String url, String startWay) {
+        this.name = name;
+        this.resource = resource;
+        this.seq = seq;
+        this.url = url;
+        this.startWay = startWay;
+    }
+
     public String getName() {
         return name;
     }
