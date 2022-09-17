@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Java110RequestMappingsDoc {
 
-    Java110RequestMappingDoc[] mappingsDocs() default @Java110RequestMappingDoc(resource = "",ur = "");
+    Java110RequestMappingDoc[] mappingsDocs() default @Java110RequestMappingDoc(name="",resource = "",url = "");
 }

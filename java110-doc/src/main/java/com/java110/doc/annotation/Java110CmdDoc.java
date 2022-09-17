@@ -40,6 +40,8 @@ public @interface Java110CmdDoc {
      */
     String url();
 
+    String resource();
+
     String author() default "";
 
 

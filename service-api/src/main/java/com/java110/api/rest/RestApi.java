@@ -41,17 +41,17 @@ import java.util.Map;
 
 @Java110RequestMappingsDoc(
         mappingsDocs = {
-                @Java110RequestMappingDoc(name="账户中心",resource = "acct",url="http://service-acct"),
-                @Java110RequestMappingDoc(name="通用中心",resource = "common",url="http://service-common"),
-                @Java110RequestMappingDoc(name="小区中心",resource = "community",url="http://service-community"),
-                @Java110RequestMappingDoc(name="开发中心",resource = "dev",url="http://service-dev"),
-                @Java110RequestMappingDoc(name="费用中心",resource = "fee",url="http://service-fee"),
-                @Java110RequestMappingDoc(name="定时任务",resource = "job",url="http://service-job"),
-                @Java110RequestMappingDoc(name="oa",resource = "oa",url="http://service-oa"),
-                @Java110RequestMappingDoc(name="订单中心",resource = "order",url="http://service-order"),
-                @Java110RequestMappingDoc(name="报表中心",resource = "report",url="http://service-report"),
-                @Java110RequestMappingDoc(name="商户中心",resource = "store",url="http://service-store"),
-                @Java110RequestMappingDoc(name="用户中心",resource = "user",url="http://service-user"),
+                @Java110RequestMappingDoc(name="账户中心",resource = "acct",url="http://service-acct/acctDoc"),
+                @Java110RequestMappingDoc(name="通用中心",resource = "common",url="http://service-common/commonDoc"),
+                @Java110RequestMappingDoc(name="小区中心",resource = "community",url="http://service-community/communityDoc"),
+                @Java110RequestMappingDoc(name="开发中心",resource = "dev",url="http://service-dev/devDoc"),
+                @Java110RequestMappingDoc(name="费用中心",resource = "fee",url="http://service-fee/feeDoc"),
+                @Java110RequestMappingDoc(name="定时任务",resource = "job",url="http://service-job/jobDoc"),
+                @Java110RequestMappingDoc(name="oa",resource = "oa",url="http://service-oa/oaDoc"),
+                @Java110RequestMappingDoc(name="订单中心",resource = "order",url="http://service-order/orderDoc"),
+                @Java110RequestMappingDoc(name="报表中心",resource = "report",url="http://service-report/reportDoc"),
+                @Java110RequestMappingDoc(name="商户中心",resource = "store",url="http://service-store/storeDoc"),
+                @Java110RequestMappingDoc(name="用户中心",resource = "user",url="http://service-user/userDoc"),
         }
 )
 public class RestApi extends BaseController {
