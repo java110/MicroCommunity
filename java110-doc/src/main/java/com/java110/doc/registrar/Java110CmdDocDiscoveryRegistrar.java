@@ -1,8 +1,8 @@
 package com.java110.doc.registrar;
 
-import com.java110.doc.annotation.Java110ApiDoc;
 import com.java110.doc.annotation.Java110CmdDoc;
 import com.java110.doc.annotation.Java110CmdDocDiscovery;
+import com.java110.doc.entity.CmdDocDto;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -28,20 +28,20 @@ import java.util.Set;
  * api 文档 注入类
  * Created by wuxw on 2018/7/2.
  */
-public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegistrar,ResourceLoaderAware, BeanClassLoaderAware {
+public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, BeanClassLoaderAware {
 
     private ResourceLoader resourceLoader;
 
     private ClassLoader classLoader;
 
-    public Java110CmdDocDiscoveryRegistrar(){
+    public Java110CmdDocDiscoveryRegistrar() {
 
     }
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         try {
-            registerListener(importingClassMetadata,registry);
+            registerListener(importingClassMetadata, registry);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -63,6 +63,7 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
 
     /**
      * 注册侦听
+     *
      * @param metadata
      * @param registry
      */
@@ -74,14 +75,14 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
         Map<String, Object> attrs = metadata
                 .getAnnotationAttributes(Java110CmdDocDiscovery.class.getName());
 
-        Object cmdPublishClassObj =  attrs.get("cmdPublishClass");
+        Object cmdPublishClassObj = attrs.get("cmdDocClass");
 
         //Assert.notNull(cmdPublishClassObj,"Java110CmdDiscovery 没有配置 cmdPublishClass 属性");
 
         Class<?> cmdPublishClass = (Class<?>) cmdPublishClassObj;
 
         AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(
-                Java110ApiDoc.class);
+                Java110CmdDoc.class);
 
         scanner.addIncludeFilter(annotationTypeFilter);
         basePackages = getBasePackages(metadata);
@@ -95,19 +96,27 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                     AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                     AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
 
-
                     Map<String, Object> attributes = annotationMetadata
                             .getAnnotationAttributes(
                                     Java110CmdDoc.class.getCanonicalName());
 
-                    String beanName = getListenerName(attributes,beanDefinition);
-                    String serviceCode = attributes.get("serviceCode").toString();
+                    String beanName = getListenerName(attributes, beanDefinition);
+                    CmdDocDto cmdDocDto = new CmdDocDto();
+                    cmdDocDto.setCmdClass(candidateComponent.getClass());
+                    cmdDocDto.setDescription(attributes.get("description").toString());
+                    cmdDocDto.setAuthor(attributes.get("author").toString());
+                    cmdDocDto.setResource(attributes.get("resource").toString());
+                    cmdDocDto.setTitle(attributes.get("title").toString());
+                    cmdDocDto.setUrl(attributes.get("url").toString());
+                    cmdDocDto.setVersion(attributes.get("version").toString());
+                    cmdDocDto.setHttpMethod(attributes.get("httpMethod").toString());
+                    cmdDocDto.setServiceCode(attributes.get("serviceCode").toString());
 
 
                     /*BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);
                     BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);*/
-//                    Method method = cmdPublishClass.getMethod("addListener", CmdListenerDto.class);
-//                    method.invoke(null,new CmdListenerDto(beanName,serviceCode));
+                    Method method = cmdPublishClass.getMethod("addCmdDoc", CmdDocDto.class);
+                    method.invoke(null, cmdDocDto);
                 }
             }
         }
@@ -131,8 +140,7 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                                     beanDefinition.getMetadata().getClassName(),
                                     Java110CmdDocDiscoveryRegistrar.this.classLoader);
                             return !target.isAnnotation();
-                        }
-                        catch (Exception ex) {
+                        } catch (Exception ex) {
                             this.logger.error(
                                     "Could not load target class: "
                                             + beanDefinition.getMetadata().getClassName(),
@@ -173,11 +181,12 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
 
     /**
      * 获取名称
+     *
      * @param listeners
      * @param beanDefinition
      * @return
      */
-    private String getListenerName(Map<String, Object> listeners,AnnotatedBeanDefinition beanDefinition) {
+    private String getListenerName(Map<String, Object> listeners, AnnotatedBeanDefinition beanDefinition) {
         if (listeners == null) {
             String shortClassName = ClassUtils.getShortName(beanDefinition.getBeanClassName());
             return Introspector.decapitalize(shortClassName);

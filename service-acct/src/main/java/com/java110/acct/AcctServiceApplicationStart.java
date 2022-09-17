@@ -6,6 +6,10 @@ import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.doc.annotation.Java110ApiDocDiscovery;
+import com.java110.doc.annotation.Java110CmdDocDiscovery;
+import com.java110.doc.registrar.ApiDocCmdPublishing;
+import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -43,6 +47,9 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.acct.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store",
         "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.user"})
+
+//文档
+@Java110CmdDocDiscovery(basePackages = {"com.java110.acct.cmd"},cmdDocClass = ApiDocCmdPublishing.class)
 public class AcctServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(AcctServiceApplicationStart.class);

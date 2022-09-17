@@ -15,6 +15,8 @@ public @interface Java110CmdDoc {
      */
     String title();
 
+    String serviceCode();
+
     /**
      * description api
      * @return

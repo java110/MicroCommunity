@@ -41,8 +41,9 @@ import java.util.Map;
         description = "登录功能 主要用于 员工 或者管理员登录使用",
         httpMethod = "post",
         url = "/app/login.pcUserLogin",
-        resource = "user",
-        author = "吴学文"
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "login.pcUserLogin"
 )
 
 @Java110ParamsDoc(params = {

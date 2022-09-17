@@ -96,7 +96,6 @@ public class Java110ApiDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                     AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                     AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
 
-
                     Map<String, Object> attributes = annotationMetadata
                             .getAnnotationAttributes(
                                     Java110ApiDoc.class.getCanonicalName());

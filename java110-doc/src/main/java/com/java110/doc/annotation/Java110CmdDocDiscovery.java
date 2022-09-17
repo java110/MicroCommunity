@@ -20,5 +20,5 @@ public @interface Java110CmdDocDiscovery {
 
     String[] value() default {};
 
-    Class<?> cmdPublishClass();
+    Class<?> cmdDocClass();
 }

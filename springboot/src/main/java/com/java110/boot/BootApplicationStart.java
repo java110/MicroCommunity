@@ -22,6 +22,10 @@ import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.trace.Java110FeignClientInterceptor;
 import com.java110.core.trace.Java110RestTemplateInterceptor;
+import com.java110.doc.annotation.Java110ApiDocDiscovery;
+import com.java110.doc.annotation.Java110CmdDocDiscovery;
+import com.java110.doc.registrar.ApiDocCmdPublishing;
+import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.intf.dev.ICacheV1InnerServiceSMO;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -110,6 +114,22 @@ import java.util.concurrent.TimeUnit;
                 "com.java110.user.cmd"
         })
 @EnableAsync
+//文档
+@Java110ApiDocDiscovery(basePackages = {"com.java110.api.rest"},apiDocClass = ApiDocPublishing.class)
+@Java110CmdDocDiscovery(basePackages = {
+        "com.java110.acct.cmd",
+        "com.java110.common.cmd",
+        "com.java110.community.cmd",
+        "com.java110.dev.cmd",
+        "com.java110.fee.cmd",
+        "com.java110.job.cmd",
+        "com.java110.oa.cmd",
+        "com.java110.order.cmd",
+        "com.java110.report.cmd",
+        "com.java110.store.cmd",
+        "com.java110.user.cmd"
+},
+        cmdDocClass = ApiDocCmdPublishing.class)
 public class BootApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(BootApplicationStart.class);
