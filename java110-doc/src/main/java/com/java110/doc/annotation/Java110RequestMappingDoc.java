@@ -13,6 +13,8 @@ public @interface Java110RequestMappingDoc {
 
     String resource() ;
 
+    int seq() default 1;
+
     String url();
 
     String startWay() default "cloud";

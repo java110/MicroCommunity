@@ -7,6 +7,8 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
@@ -22,19 +24,46 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 保存编码映射处理类
+ * 用户登录 功能
+ * 请求地址为/app/login.pcUserLogin
  */
+
+@Java110CmdDoc(title = "用户登录",
+        description = "登录功能 主要用于 员工 或者管理员登录使用",
+        httpMethod = "post",
+        url = "/app/login.pcUserLogin",
+        resource = "user",
+        author = "吴学文"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "username", length = 30, remark = "用户名，物业系统分配"),
+        @Java110ParamDoc(name = "passwd", length = 30, remark = "密码，物业系统分配"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'username':'wuxw','passwd':'admin'}",
+        resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
+)
 @Java110Cmd(serviceCode = "login.pcUserLogin")
 public class PcUserLoginCmd extends Cmd {
     private final static Logger logger = LoggerFactory.getLogger(PcUserLoginCmd.class);
