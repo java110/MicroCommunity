@@ -13,11 +13,9 @@ import java.lang.annotation.Target;
 public @interface Java110ResponseDoc {
 
 
-    /**
-     * request param
-     *
-     * parent|name|type|length|detail|example
-     * @return
-     */
-    String[] params();
+    Java110HeaderDoc[] headers() default @Java110HeaderDoc(name = "");
+
+    Java110ParamDoc[] params() default @Java110ParamDoc(name = "");
+
+
 }

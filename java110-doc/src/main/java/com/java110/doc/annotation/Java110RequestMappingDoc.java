@@ -7,11 +7,13 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Java110HeaderDoc {
+public @interface Java110RequestMappingDoc {
 
     String name();
 
-    String defaultValue() default "";
+    String resource() ;
 
-    String description() default "";
+    String url();
+
+    String startWay() default "cloud";
 }

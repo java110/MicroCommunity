@@ -7,11 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Java110HeaderDoc {
+public @interface Java110ExampleDoc {
 
-    String name();
+    String reqBody() default "";
 
-    String defaultValue() default "";
-
-    String description() default "";
+    String resBody() default "";
 }

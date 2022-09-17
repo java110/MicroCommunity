@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.log.LoggerFactory;
+import com.java110.doc.annotation.Java110ApiDoc;
+import com.java110.doc.annotation.Java110RequestMappingDoc;
+import com.java110.doc.annotation.Java110RequestMappingsDoc;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.vo.ResultVo;
@@ -29,6 +32,28 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/api")
 @Api(value = "对外统一提供服务接口服务")
+@Java110ApiDoc(
+        title = "HC小区管理系统api接口文档",
+        description = "HC小区管理系统api接口文档",
+        company="Java110工作室",
+        version = "v1.4"
+)
+
+@Java110RequestMappingsDoc(
+        mappingsDocs = {
+                @Java110RequestMappingDoc(name="账户中心",resource = "acct",url="http://service-acct"),
+                @Java110RequestMappingDoc(name="通用中心",resource = "common",url="http://service-common"),
+                @Java110RequestMappingDoc(name="小区中心",resource = "community",url="http://service-community"),
+                @Java110RequestMappingDoc(name="开发中心",resource = "dev",url="http://service-dev"),
+                @Java110RequestMappingDoc(name="费用中心",resource = "fee",url="http://service-fee"),
+                @Java110RequestMappingDoc(name="定时任务",resource = "job",url="http://service-job"),
+                @Java110RequestMappingDoc(name="oa",resource = "oa",url="http://service-oa"),
+                @Java110RequestMappingDoc(name="订单中心",resource = "order",url="http://service-order"),
+                @Java110RequestMappingDoc(name="报表中心",resource = "report",url="http://service-report"),
+                @Java110RequestMappingDoc(name="商户中心",resource = "store",url="http://service-store"),
+                @Java110RequestMappingDoc(name="用户中心",resource = "user",url="http://service-user"),
+        }
+)
 public class RestApi extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(RestApi.class);
