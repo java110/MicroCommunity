@@ -21,6 +21,8 @@ import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.log.LoggerFactory;
+import com.java110.doc.annotation.Java110ApiDocDiscovery;
+import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
 import okhttp3.ConnectionPool;
@@ -91,6 +93,9 @@ import java.util.concurrent.TimeUnit;
 })
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableAsync
+
+//文档
+@Java110ApiDocDiscovery(basePackages = {"com.java110.api.rest"},apiDocClass = ApiDocPublishing.class)
 public class ApiApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
