@@ -202,7 +202,7 @@ public class DocController {
             headers.add(header);
         }
 
-        param.put("header",headers);
+        param.put("headers",headers);
 
 
         Java110ParamDoc[] java110ParamDocs = java110ParamsDoc.params();
@@ -211,12 +211,12 @@ public class DocController {
         JSONObject p = null;
         for(Java110ParamDoc java110ParamDoc : java110ParamDocs){
             p = new JSONObject();
-            header.put("name",java110ParamDoc.name());
-            header.put("defaultValue",java110ParamDoc.defaultValue());
-            header.put("remark",java110ParamDoc.remark());
-            header.put("type",java110ParamDoc.type());
-            header.put("length",java110ParamDoc.length());
-            header.put("parentNodeName",java110ParamDoc.parentNodeName());
+            p.put("name",java110ParamDoc.name());
+            p.put("defaultValue",java110ParamDoc.defaultValue());
+            p.put("remark",java110ParamDoc.remark());
+            p.put("type",java110ParamDoc.type());
+            p.put("length",java110ParamDoc.length());
+            p.put("parentNodeName",java110ParamDoc.parentNodeName());
             params.add(p);
         }
         param.put("reqParam",params);

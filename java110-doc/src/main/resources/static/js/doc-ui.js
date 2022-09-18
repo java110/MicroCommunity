@@ -14,7 +14,7 @@
             content: {
                 title:'',
                 url:'',
-                method:'',
+                httpMethod:'',
                 headers:[],
                 reqParam:[],
                 resParam:[],
@@ -34,8 +34,8 @@
                         }
                     }
                     //发送get请求
-                //Vue.http.get('/doc/api', _param)
-                Vue.http.get('mock/api.json', _param)
+                Vue.http.get('/doc/api', _param)
+                //Vue.http.get('mock/api.json', _param)
                 .then(function(res) {
                     _that.docInfo = res.data.api;
                     _that.menus = res.data.mappings;
@@ -72,8 +72,8 @@
                };
 
                //发送get请求
-              //Vue.http.get('/doc/api/pageContent', _param)
-               Vue.http.get('mock/pages.json', _param)
+             Vue.http.get('/doc/api/pageContent', _param)
+                //Vue.http.get('mock/page.json', _param)
               .then(function(res) {
                        _that.content = res.data;
                    },
@@ -92,8 +92,8 @@
                 };
 
                 //发送get请求
-               //Vue.http.get('/doc/api/page', _param)
-                Vue.http.get('mock/pages.json', _param)
+               Vue.http.get('/doc/api/page', _param)
+                 //Vue.http.get('mock/pages.json', _param)
                .then(function(res) {
                         _that.pages = res.data;
                         if (_that.pages.length < 1) {

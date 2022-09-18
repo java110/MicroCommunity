@@ -1,0 +1,90 @@
+{
+  "resParam": [
+    {
+      "defaultValue": "0",
+      "name": "code",
+      "length": 11,
+      "remark": "返回编号，0 成功 其他失败",
+      "parentNodeName": "-",
+      "type": "int"
+    },
+    {
+      "defaultValue": "成功",
+      "name": "msg",
+      "length": 250,
+      "remark": "描述",
+      "parentNodeName": "-",
+      "type": "String"
+    },
+    {
+      "defaultValue": "",
+      "name": "data",
+      "length": 0,
+      "remark": "有效数据",
+      "parentNodeName": "-",
+      "type": "Object"
+    },
+    {
+      "defaultValue": "",
+      "name": "userId",
+      "length": 0,
+      "remark": "用户ID",
+      "parentNodeName": "data",
+      "type": "String"
+    },
+    {
+      "defaultValue": "",
+      "name": "token",
+      "length": 0,
+      "remark": "临时票据",
+      "parentNodeName": "data",
+      "type": "String"
+    }
+  ],
+  "resource": "userDoc",
+  "serviceCode": "login.pcUserLogin",
+  "author": "吴学文",
+  "description": "登录功能 主要用于 员工 或者管理员登录使用",
+  "reqParam": [
+    {},
+    {}
+  ],
+  "httpMethod": "post",
+  "title": "用户登录",
+  "version": "v1.0",
+  "url": "/app/login.pcUserLogin",
+  "resBody": "{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}",
+  "reqBody": "{'username':'wuxw','passwd':'admin'}",
+  "header": [
+    {
+      "defaultValue": "通过dev账户分配应用",
+      "name": "APP-ID",
+      "description": "应用APP-ID"
+    },
+    {
+      "defaultValue": "uuid",
+      "name": "TRANSACTION-ID",
+      "description": "交易流水号"
+    },
+    {
+      "defaultValue": "20220917120915",
+      "name": "REQ-TIME",
+      "description": "请求时间 YYYYMMDDhhmmss"
+    },
+    {
+      "defaultValue": "zh-cn",
+      "name": "JAVA110-LANG",
+      "description": "语言中文"
+    },
+    {
+      "defaultValue": "",
+      "name": "passwd",
+      "length": 30,
+      "description": "调用用户ID 一般写-1",
+      "remark": "密码，物业系统分配",
+      "parentNodeName": "-",
+      "type": "String"
+    }
+  ],
+  "cmdClass": "com.java110.user.cmd.login.PcUserLoginCmd"
+}
