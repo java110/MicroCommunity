@@ -109,11 +109,11 @@ public class Java110ApiDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                             .getAnnotationAttributes(
                     Java110RequestMappingsDoc.class.getCanonicalName());
 
-                    List<Map<String,Object>> mappingAttrs = (List<Map<String,Object>>)attributes.get("mappingsDocs");
+                    AnnotationAttributes[] mappingAttrs = (AnnotationAttributes[])attributes.get("mappingsDocs");
 
                     List<RequestMappingsDocDto> mappingsDocDtos = new ArrayList<>();
                     RequestMappingsDocDto requestMappingsDocDto = null;
-                    for(Map<String,Object> mappingAttr : mappingAttrs){
+                    for(AnnotationAttributes mappingAttr : mappingAttrs){
                         requestMappingsDocDto = new RequestMappingsDocDto(mappingAttr.get("name").toString(),mappingAttr.get("resource").toString(),
                                 Integer.parseInt(mappingAttr.get("seq").toString()),mappingAttr.get("url").toString(),mappingAttr.get("startWay").toString()
                                 );

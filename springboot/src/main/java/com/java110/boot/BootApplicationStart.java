@@ -92,6 +92,7 @@ import java.util.concurrent.TimeUnit;
         "com.java110.report",
         "com.java110.store",
         "com.java110.user",
+        "com.java110.doc",
         "com.java110.boot"
 },
         exclude = {LiquibaseAutoConfiguration.class,

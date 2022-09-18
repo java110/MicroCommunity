@@ -16,6 +16,7 @@ public class Java110TraceConfigurer extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
     }
 
     @Override
