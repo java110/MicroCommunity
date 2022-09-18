@@ -11,7 +11,16 @@
             menus: [],
             pages: [],
             curMenuName: '',
-            logo: '',
+            content: {
+                title:'',
+                url:'',
+                method:'',
+                headers:[],
+                reqParam:[],
+                resParam:[],
+                reqBody:'',
+                resBody:''
+            },
         },
         mounted: function() {
             this.getDocumentAndMenus();
@@ -50,11 +59,28 @@
                 this.curMenuName = _menu.name;
                 this._activeMenu(_menu.name);
                 this._listDocumentPages(_menu);
-                console.log('123123')
             },
 
-            _gotoPage: function(){
-                console.log('_gotoPage')
+            _gotoPage: function(_page){
+               let _that  = this;
+               let _param = {
+                   params: {
+                       name: this.curMenuName,
+                       serviceCode:_page.serviceCode,
+                       resource:_page.resource
+                   }
+               };
+
+               //发送get请求
+              //Vue.http.get('/doc/api/pageContent', _param)
+               Vue.http.get('mock/pages.json', _param)
+              .then(function(res) {
+                       _that.content = res.data;
+                   },
+                   function (errInfo, error) {
+                       console.log('请求失败处理');
+                   }
+               );
             },
             _listDocumentPages: function (_menu) {
                 let _that  = this;
