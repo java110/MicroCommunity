@@ -93,7 +93,11 @@
 
                 //发送get请求
                Vue.http.get('/doc/api/page', _param)
+<<<<<<< HEAD
                  //Vue.http.get('mock/pages.json', _param)
+=======
+               // Vue.http.get('mock/pages.json', _param)
+>>>>>>> cd8657e2dcffe17efd02cd055f8e6dfd6d703c96
                .then(function(res) {
                         _that.pages = res.data;
                         if (_that.pages.length < 1) {
