@@ -53,14 +53,14 @@
             </ul>
         </div>
         <div class="margin-left right white-bg border-radius doc-interface">
-            <h3 class="">登录接口</h3>
+            <h3 class="">{{content.title}}</h3>
             <div class="doc-margin-top" >
                 <div class="doc-title">1、请求地址：</div>
-                <div >http://127.0.0.1:8008/app/login.userPcLogin</div>
+                <div >{{content.url}}</div>
             </div>
             <div class="doc-margin-top" >
                 <div class="doc-title">2、请求方式：</div>
-                <div >POST</div>
+                <div >{{content.method}}</div>
             </div>
             <div class="doc-margin-top" >
                 <div class="doc-title">3、请求头信息：</div>
@@ -74,20 +74,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th>1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                            </tr>
-                            <tr>
-                                <th>2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                            </tr>
-                            <tr>
-                                <th>3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
+                            <tr v-for="(item,index) in content.headers">
+                                <th>{{item.name}}</th>
+                                <td>{{item.defaultValue}}</td>
+                                <td>{{item.description}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -109,36 +99,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th>2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th>3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
+                        <tr v-for="(item,index) in content.reqParam">
+                            <th>{{item.parentNodeName}}</th>
+                            <td>{{item.name}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.length}}</td>
+                            <td>{{item.defaultValue}}</td>
+                            <td>{{item.remark}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="highlight">
                     <div>请求报文：</div>
-                    <div>{"111":"BB"}</div>
+                    <div>{{content.reqBody}}</div>
                 </div>
             </div>
 
@@ -157,37 +131,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th>2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th>3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
+                        <tr v-for="(item,index) in content.resParam">
+                            <th>{{item.parentNodeName}}</th>
+                            <td>{{item.name}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.length}}</td>
+                            <td>{{item.defaultValue}}</td>
+                            <td>{{item.remark}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="highlight">
-                <div>请求报文：</div>
-                <div>{"111":"BB"}</div>
+                <div>返回报文：</div>
+                <div>{{content.resBody}}</div>
             </div>
 
         </div>

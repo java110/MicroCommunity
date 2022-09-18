@@ -1,10 +1,15 @@
 package com.java110.user;
 
+import com.java110.doc.annotation.Java110HeaderDoc;
+import com.java110.doc.annotation.Java110ParamsDoc;
+import com.java110.user.cmd.login.PcUserLoginCmd;
 import com.java110.utils.util.DateUtil;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,12 +40,15 @@ public class AppTest
 
 
     public void testSplit(){
-        String a= "1-1-1-1001";
-        String[] as = a.split("-",3);
+        Class clazz = PcUserLoginCmd.class;
 
-        for(String aa :as){
-            System.out.println(aa);
-        }
+
+        Java110ParamsDoc java110ParamsDoc = AnnotationUtils.findAnnotation(clazz,Java110ParamsDoc.class);
+
+        Java110HeaderDoc[] java110HeaderDocs = java110ParamsDoc.headers();
+
+        System.out.println(123);
+
     }
 
     /**

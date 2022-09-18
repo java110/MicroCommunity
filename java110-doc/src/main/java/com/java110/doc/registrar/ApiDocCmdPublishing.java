@@ -40,4 +40,20 @@ public class ApiDocCmdPublishing {
 
         return retCmdDocDto;
     }
+
+
+    public static CmdDocDto getCmdDocs(String resource,String serviceCode) {
+
+        if (cmdDocs.size() < 1) {
+            return null;
+        }
+
+        for (CmdDocDto cmdDocDto : cmdDocs) {
+            if (cmdDocDto.getResource().equals(resource) && cmdDocDto.getServiceCode().equals(serviceCode)) {
+                return cmdDocDto;
+            }
+        }
+
+        return null;
+    }
 }
