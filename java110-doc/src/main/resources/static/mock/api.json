@@ -1,0 +1,87 @@
+{
+  "mappings": [
+    {
+      "name": "用户中心",
+      "resource": "userDoc",
+      "seq": 1,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/userDoc"
+    },
+    {
+      "name": "账户中心",
+      "resource": "acct",
+      "seq": 2,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/acctDoc"
+    },
+    {
+      "name": "通用中心",
+      "resource": "common",
+      "seq": 3,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/commonDoc"
+    },
+    {
+      "name": "小区中心",
+      "resource": "community",
+      "seq": 4,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/communityDoc"
+    },
+    {
+      "name": "开发中心",
+      "resource": "dev",
+      "seq": 5,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/devDoc"
+    },
+    {
+      "name": "费用中心",
+      "resource": "fee",
+      "seq": 6,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/feeDoc"
+    },
+    {
+      "name": "定时任务",
+      "resource": "job",
+      "seq": 7,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/jobDoc"
+    },
+    {
+      "name": "oa",
+      "resource": "oa",
+      "seq": 8,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/oaDoc"
+    },
+    {
+      "name": "订单中心",
+      "resource": "order",
+      "seq": 9,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/orderDoc"
+    },
+    {
+      "name": "报表中心",
+      "resource": "report",
+      "seq": 10,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/reportDoc"
+    },
+    {
+      "name": "商户中心",
+      "resource": "store",
+      "seq": 11,
+      "startWay": "cloud",
+      "url": "http://127.0.0.1:8008/storeDoc"
+    }
+  ],
+  "api": {
+    "company": "Java110工作室",
+    "description": "HC小区管理系统api接口文档",
+    "title": "HC小区管理系统api接口文档",
+    "version": "v1.4"
+  }
+}

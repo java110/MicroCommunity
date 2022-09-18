@@ -4,7 +4,6 @@ import com.java110.doc.entity.CmdDocDto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 文档 发布类
@@ -24,5 +23,21 @@ public class ApiDocCmdPublishing {
      */
     public static void addCmdDoc(CmdDocDto doc) {
         cmdDocs.add(doc);
+    }
+
+
+    public static List<CmdDocDto> getCmdDocs(String resource) {
+        List<CmdDocDto> retCmdDocDto = new ArrayList<>();
+        if (cmdDocs.size() < 1) {
+            return retCmdDocDto;
+        }
+
+        for (CmdDocDto cmdDocDto : cmdDocs) {
+            if (cmdDocDto.getResource().equals(resource)) {
+                retCmdDocDto.add(cmdDocDto);
+            }
+        }
+
+        return retCmdDocDto;
     }
 }

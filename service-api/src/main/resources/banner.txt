@@ -12,4 +12,4 @@ _________                   __                   _________                      
  \______  / \___  >|___|  /|__|   \___  >|__|  /_______  / \___  >|__|     \_/  |__| \___  >\___  >
         \/      \/      \/            \/               \/      \/                        \/     \/
 
- java110 CenterService starting, more information scan https://github.com/java110/MicroCommunity
+ java110 ApiService starting, more information scan https://github.com/java110/MicroCommunity

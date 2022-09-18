@@ -1,0 +1,13 @@
+[
+  {
+    "author": "吴学文",
+    "cmdClass": "org.springframework.context.annotation.ScannedGenericBeanDefinition",
+    "description": "登录功能 主要用于 员工 或者管理员登录使用",
+    "httpMethod": "post",
+    "resource": "userDoc",
+    "serviceCode": "login.pcUserLogin",
+    "title": "用户登录",
+    "url": "/app/login.pcUserLogin",
+    "version": "v1.0"
+  }
+]

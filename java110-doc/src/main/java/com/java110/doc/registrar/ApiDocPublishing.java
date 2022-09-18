@@ -27,4 +27,12 @@ public class ApiDocPublishing {
         ApiDocPublishing.apiDocDto = apiDocDto;
         ApiDocPublishing.mappingsDocDtos = mappingsDocDtos;
     }
+
+    public static ApiDocDto getApiDocDto(){
+        return ApiDocPublishing.apiDocDto;
+    }
+
+    public static List<RequestMappingsDocDto> getMappingsDocDtos(){
+        return ApiDocPublishing.mappingsDocDtos;
+    }
 }

@@ -19,3 +19,35 @@ a{
     font-size:14px;
     text-decoration:none
 }
+
+.doc-interface{
+    padding:35px;
+}
+
+.doc-title{
+    color: #777;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom:10px;
+}
+
+.doc-margin-top{
+    margin-top:35px;
+}
+
+.highlight{
+    background-color: #f8f9fa;
+    padding:10px;
+    border-radius: 10px;
+}
+
+.nav>li.active {
+    border-left: 4px solid #19aa8d;
+}
+
+.metismenu .collapse.in {
+    display: block;
+}
+.metismenu .collapse {
+    display: none;
+}

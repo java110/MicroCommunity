@@ -33,23 +33,23 @@ import java.util.Map;
 @Java110ApiDoc(
         title = "HC小区管理系统api接口文档",
         description = "HC小区管理系统api接口文档",
-        company="Java110工作室",
+        company = "Java110工作室",
         version = "v1.4"
 )
 
 @Java110RequestMappingsDoc(
         mappingsDocs = {
-                @Java110RequestMappingDoc(name="用户中心",resource = "user",url="http://127.0.0.1:8008/userDoc",seq = 1),
-                @Java110RequestMappingDoc(name="账户中心",resource = "acct",url="http://127.0.0.1:8008/acctDoc",seq = 2),
-                @Java110RequestMappingDoc(name="通用中心",resource = "common",url="http://127.0.0.1:8008/commonDoc",seq = 3),
-                @Java110RequestMappingDoc(name="小区中心",resource = "community",url="http://127.0.0.1:8008/communityDoc",seq = 4),
-                @Java110RequestMappingDoc(name="开发中心",resource = "dev",url="http://127.0.0.1:8008/devDoc",seq = 5),
-                @Java110RequestMappingDoc(name="费用中心",resource = "fee",url="http://127.0.0.1:8008/feeDoc",seq = 6),
-                @Java110RequestMappingDoc(name="定时任务",resource = "job",url="http://127.0.0.1:8008/jobDoc",seq = 7),
-                @Java110RequestMappingDoc(name="oa",resource = "oa",url="http://127.0.0.1:8008/oaDoc",seq = 8),
-                @Java110RequestMappingDoc(name="订单中心",resource = "order",url="http://127.0.0.1:8008/orderDoc",seq = 9),
-                @Java110RequestMappingDoc(name="报表中心",resource = "report",url="http://127.0.0.1:8008/reportDoc",seq = 10),
-                @Java110RequestMappingDoc(name="商户中心",resource = "store",url="http://127.0.0.1:8008/storeDoc",seq = 11),
+                @Java110RequestMappingDoc(name = "用户中心", resource = "userDoc", url = "http://127.0.0.1:8008", seq = 1, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "账户中心", resource = "acctDoc", url = "http://127.0.0.1:8008", seq = 2, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "通用中心", resource = "commonDoc", url = "http://127.0.0.1:8008", seq = 3, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "小区中心", resource = "communityDoc", url = "http://127.0.0.1:8008", seq = 4, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "开发中心", resource = "devDoc", url = "http://127.0.0.1:8008", seq = 5, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "费用中心", resource = "feeDoc", url = "http://127.0.0.1:8008", seq = 6, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "定时任务", resource = "jobDoc", url = "http://127.0.0.1:8008", seq = 7, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "oa", resource = "oaDoc", url = "http://127.0.0.1:8008", seq = 8, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "订单中心", resource = "orderDoc", url = "http://127.0.0.1:8008", seq = 9, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "报表中心", resource = "reportDoc", url = "http://127.0.0.1:8008", seq = 10, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "商户中心", resource = "storeDoc", url = "http://127.0.0.1:8008", seq = 11, startWay = "boot"),
         }
 )
 public class RestApi extends BaseController {
@@ -62,7 +62,6 @@ public class RestApi extends BaseController {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
-
 
 
     /**
@@ -343,9 +342,6 @@ public class RestApi extends BaseController {
 
         return responseEntity;
     }
-
-
-
 
 
     public IApiServiceSMO getApiServiceSMOImpl() {

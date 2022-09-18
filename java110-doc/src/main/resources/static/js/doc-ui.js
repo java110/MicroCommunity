@@ -1,9 +1,87 @@
+(function(vc) {
+    var vm = new Vue({
+        el: '#component',
+        data: {
+            docInfo:{
+                title:'',
+                description:'',
+                version:'',
+                company:''
+           },
+            menus: [],
+            pages: [],
+            curMenuName: '',
+            logo: '',
+        },
+        mounted: function() {
+            this.getDocumentAndMenus();
+        },
+        methods: {
+            getDocumentAndMenus: function(_catalog) {
+                let _that = this;
+                let _param = {
+                        params: {
 
+                        }
+                    }
+                    //发送get请求
+                //Vue.http.get('/doc/api', _param)
+                Vue.http.get('mock/api.json', _param)
+                .then(function(res) {
+                    _that.docInfo = res.data.api;
+                    _that.menus = res.data.mappings;
+                    _that.switchMenu(_that.menus[0])
+                }, function(res) {
 
-switchMenu = function(){
-    console.log('123123')
-}
+                });
+            },
+            _activeMenu: function (_menuName) {
+               this.menus.forEach(item => {
+                    item.active = false;
+                    if (_menuName == item.name) {
+                        item.active = true;
+                    }
+                });
 
-_gotoPage= function(){
-    console.log('_gotoPage')
-}
+                console.log(this.menus)
+            },
+             switchMenu: function(_menu){
+                this.pages = [];
+                this.curMenuName = _menu.name;
+                this._activeMenu(_menu.name);
+                this._listDocumentPages(_menu);
+                console.log('123123')
+            },
+
+            _gotoPage: function(){
+                console.log('_gotoPage')
+            },
+            _listDocumentPages: function (_menu) {
+                let _that  = this;
+                let _param = {
+                    params: {
+                        name: _menu.name,
+                        resource:_menu.resource
+                    }
+                };
+
+                //发送get请求
+               //Vue.http.get('/doc/api/page', _param)
+                Vue.http.get('mock/pages.json', _param)
+               .then(function(res) {
+                        _that.pages = res.data;
+                        if (_that.pages.length < 1) {
+                            return;
+                        }
+                        _that._gotoPage(res.data[0]);
+                    },
+                    function (errInfo, error) {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
+        },
+
+    });
+
+})(window.vc)

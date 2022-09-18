@@ -116,7 +116,7 @@ import java.util.concurrent.TimeUnit;
         })
 @EnableAsync
 //文档
-@Java110ApiDocDiscovery(basePackages = {"com.java110.api.rest"},apiDocClass = ApiDocPublishing.class)
+@Java110ApiDocDiscovery(basePackages = {"com.java110.boot.rest"},apiDocClass = ApiDocPublishing.class)
 @Java110CmdDocDiscovery(basePackages = {
         "com.java110.acct.cmd",
         "com.java110.common.cmd",
