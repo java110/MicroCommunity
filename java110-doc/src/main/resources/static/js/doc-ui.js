@@ -66,8 +66,8 @@
                 };
 
                 //发送get请求
-               //Vue.http.get('/doc/api/page', _param)
-                Vue.http.get('mock/pages.json', _param)
+               Vue.http.get('/doc/api/page', _param)
+               // Vue.http.get('mock/pages.json', _param)
                .then(function(res) {
                         _that.pages = res.data;
                         if (_that.pages.length < 1) {
