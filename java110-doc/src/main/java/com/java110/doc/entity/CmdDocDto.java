@@ -44,7 +44,7 @@ public class CmdDocDto implements Serializable {
 
     private String author;
 
-    private Class<?> cmdClass;
+    private String cmdClass;
 
     private String serviceCode;
 
@@ -104,11 +104,11 @@ public class CmdDocDto implements Serializable {
         this.author = author;
     }
 
-    public Class<?> getCmdClass() {
+    public String getCmdClass() {
         return cmdClass;
     }
 
-    public void setCmdClass(Class<?> cmdClass) {
+    public void setCmdClass(String cmdClass) {
         this.cmdClass = cmdClass;
     }
 

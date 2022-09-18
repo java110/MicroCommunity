@@ -134,7 +134,13 @@ public class DocController {
 
         JSONObject param = JSONObject.parseObject(JSONObject.toJSONString(cmdDocDto));
 
-        Class clazz = cmdDocDto.getCmdClass();
+
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(cmdDocDto.getCmdClass());
+        } catch (ClassNotFoundException e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.OK);
+        }
 
 
         doJava110ParamsDoc(clazz,param);

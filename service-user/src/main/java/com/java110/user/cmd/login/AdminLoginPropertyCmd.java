@@ -7,6 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userLogin.UserLoginDto;
@@ -28,6 +29,38 @@ import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
+@Java110CmdDoc(title = "运营团队admin登录到物业账号",
+        description = "在admin账号下可以登录到管理的物业系统账号下",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/login.adminLoginProperty",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "login.adminLoginProperty"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "username", length = 30, remark = "需要登录的用户"),
+        @Java110ParamDoc(name = "userId", length = 30, remark = "需要登录的用户ID"),
+        @Java110ParamDoc(name = "curPasswd", length = 30, remark = "当前用户密码"),
+        @Java110ParamDoc(name = "curUserName", length = 64, remark = "当前用户"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'username':'admin','userId':'123','curPassWd':'admin','curUserName':'18909711443'}",
+        resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
+)
 
 @Java110Cmd(serviceCode = "login.adminLoginProperty")
 public class AdminLoginPropertyCmd extends Cmd {

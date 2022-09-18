@@ -40,7 +40,7 @@ import java.util.Map;
 @Java110CmdDoc(title = "用户登录",
         description = "登录功能 主要用于 员工 或者管理员登录使用",
         httpMethod = "post",
-        url = "/app/login.pcUserLogin",
+        url = "http://{ip}:{port}/app/login.pcUserLogin",
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "login.pcUserLogin"

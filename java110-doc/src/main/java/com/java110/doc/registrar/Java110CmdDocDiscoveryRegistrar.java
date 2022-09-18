@@ -102,13 +102,8 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
 
                     String beanName = getListenerName(attributes, beanDefinition);
                     CmdDocDto cmdDocDto = new CmdDocDto();
-                    Class<?> clazz = null;
-                    try {
-                        clazz = Class.forName(beanDefinition.getBeanClassName());
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    cmdDocDto.setCmdClass(clazz);
+
+                    cmdDocDto.setCmdClass(beanDefinition.getBeanClassName());
                     cmdDocDto.setDescription(attributes.get("description").toString());
                     cmdDocDto.setAuthor(attributes.get("author").toString());
                     cmdDocDto.setResource(attributes.get("resource").toString());
