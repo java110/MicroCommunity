@@ -177,7 +177,9 @@ public class QueryStaffInfosCmd extends Cmd {
                 OrgDto org = new OrgDto();
                 org.setOrgId(tmpOrgStaffRelDto.getOrgId());
                 List<OrgDto> orgs = orgV1InnerServiceSMOImpl.queryOrgs(org);
-                Assert.listOnlyOne(orgs, "查询组织表错误！");
+                if(orgs == null || orgs.size() < 1){
+                    continue;
+                }
                 apiStaffDataVo.setOrgId(tmpOrgStaffRelDto.getOrgId());
                 apiStaffDataVo.setParentTwoOrgId(orgs.get(0).getParentOrgId());
             }

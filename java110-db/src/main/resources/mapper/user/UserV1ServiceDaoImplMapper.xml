@@ -184,7 +184,7 @@
 
     <select id="queryStaffsNoInOrg" parameterType="Map" resultType="Map">
         select DISTINCT t.address,t.sex,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.level_cd,t.level_cd
-        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age
+        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age,t.create_time
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         LEFT JOIN u_org_staff_rel osr on su.user_id = osr.staff_id and osr.status_cd = '0'
