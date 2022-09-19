@@ -44,7 +44,7 @@ import java.util.Map;
                 @Java110RequestMappingDoc(name="用户中心",resource = "userDoc",url="http://service-user",seq = 1),
                 @Java110RequestMappingDoc(name="账户中心",resource = "acctDoc",url="http://service-acct",seq = 2),
                 @Java110RequestMappingDoc(name="通用中心",resource = "commonDoc",url="http://service-common",seq = 3),
-                @Java110RequestMappingDoc(name="小区中心",resource = "communityDoc",url="http://service-community",seq = 4),
+                @Java110RequestMappingDoc(name="资产中心",resource = "communityDoc",url="http://service-community",seq = 4),
                 @Java110RequestMappingDoc(name="开发中心",resource = "devDoc",url="http://service-dev",seq = 5),
                 @Java110RequestMappingDoc(name="费用中心",resource = "feeDoc",url="http://service-fee",seq = 6),
                 @Java110RequestMappingDoc(name="定时任务",resource = "jobDoc",url="http://service-job",seq = 7),
