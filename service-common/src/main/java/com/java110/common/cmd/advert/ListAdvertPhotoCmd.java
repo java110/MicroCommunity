@@ -108,7 +108,6 @@ public class ListAdvertPhotoCmd extends Cmd {
                 }else{
                     photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
                 }
-                photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
                 photoAndVideo.put("seq", tmpAdvertItemDto.getSeq());
                 photoAndVideo.put("advertType", advertDto.getAdvertType());
                 photoAndVideo.put("pageUrl", advertDto.getPageUrl());
