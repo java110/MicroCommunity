@@ -5,132 +5,129 @@
 <mapper namespace="wechatMenuV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存微信菜单信息 add by wuxw 2018-07-03 -->
     <insert id="saveWechatMenuInfo" parameterType="Map">
         insert into wechat_menu(
-pagepath,parent_menu_id,app_id,menu_level,menu_name,menu_type,menu_value,seq,wechat_menu_id,community_id
-) values (
-#{pagepath},#{parentMenuId},#{appId},#{menuLevel},#{menuName},#{menuType},#{menuValue},#{seq},#{wechatMenuId},#{communityId}
-)
+        pagepath,parent_menu_id,app_id,menu_level,menu_name,menu_type,menu_value,seq,wechat_menu_id,community_id
+        ) values (
+        #{pagepath},#{parentMenuId},#{appId},#{menuLevel},#{menuName},#{menuType},#{menuValue},#{seq},#{wechatMenuId},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询微信菜单信息 add by wuxw 2018-07-03 -->
     <select id="getWechatMenuInfo" parameterType="Map" resultType="Map">
-        select  t.pagepath,t.parent_menu_id,t.parent_menu_id parentMenuId,t.app_id,t.app_id appId,t.menu_level,t.menu_level menuLevel,t.menu_name,t.menu_name menuName,t.menu_type,t.menu_type menuType,t.menu_value,t.menu_value menuValue,t.seq,t.wechat_menu_id,t.wechat_menu_id wechatMenuId 
-from wechat_menu t 
-where 1 =1 
-<if test="pagepath !=null and pagepath != ''">
-   and t.pagepath= #{pagepath}
-</if> 
-<if test="parentMenuId !=null and parentMenuId != ''">
-   and t.parent_menu_id= #{parentMenuId}
-</if> 
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="menuLevel !=null and menuLevel != ''">
-   and t.menu_level= #{menuLevel}
-</if> 
-<if test="menuName !=null and menuName != ''">
-   and t.menu_name= #{menuName}
-</if> 
-<if test="menuType !=null and menuType != ''">
-   and t.menu_type= #{menuType}
-</if> 
-<if test="menuValue !=null and menuValue != ''">
-   and t.menu_value= #{menuValue}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="wechatMenuId !=null and wechatMenuId != ''">
-   and t.wechat_menu_id= #{wechatMenuId}
-</if> 
-order by t.seq asc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.pagepath,t.parent_menu_id,t.parent_menu_id parentMenuId,t.app_id,t.app_id
+        appId,t.menu_level,t.menu_level menuLevel,t.menu_name,t.menu_name menuName,t.menu_type,t.menu_type
+        menuType,t.menu_value,t.menu_value menuValue,t.seq,t.wechat_menu_id,t.wechat_menu_id wechatMenuId
+        from wechat_menu t
+        where t.status_cd='0'
+        <if test="pagepath !=null and pagepath != ''">
+            and t.pagepath= #{pagepath}
+        </if>
+        <if test="parentMenuId !=null and parentMenuId != ''">
+            and t.parent_menu_id= #{parentMenuId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="menuLevel !=null and menuLevel != ''">
+            and t.menu_level= #{menuLevel}
+        </if>
+        <if test="menuName !=null and menuName != ''">
+            and t.menu_name= #{menuName}
+        </if>
+        <if test="menuType !=null and menuType != ''">
+            and t.menu_type= #{menuType}
+        </if>
+        <if test="menuValue !=null and menuValue != ''">
+            and t.menu_value= #{menuValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="wechatMenuId !=null and wechatMenuId != ''">
+            and t.wechat_menu_id= #{wechatMenuId}
+        </if>
+        order by t.seq asc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改微信菜单信息 add by wuxw 2018-07-03 -->
     <update id="updateWechatMenuInfo" parameterType="Map">
-        update  wechat_menu t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="pagepath !=null and pagepath != ''">
-, t.pagepath= #{pagepath}
-</if> 
-<if test="parentMenuId !=null and parentMenuId != ''">
-, t.parent_menu_id= #{parentMenuId}
-</if> 
-<if test="appId !=null and appId != ''">
-, t.app_id= #{appId}
-</if> 
-<if test="menuLevel !=null and menuLevel != ''">
-, t.menu_level= #{menuLevel}
-</if> 
-<if test="menuName !=null and menuName != ''">
-, t.menu_name= #{menuName}
-</if> 
-<if test="menuType !=null and menuType != ''">
-, t.menu_type= #{menuType}
-</if> 
-<if test="menuValue !=null and menuValue != ''">
-, t.menu_value= #{menuValue}
-</if> 
-<if test="seq !=null and seq != ''">
-, t.seq= #{seq}
-</if> 
- where 1=1 <if test="wechatMenuId !=null and wechatMenuId != ''">
-and t.wechat_menu_id= #{wechatMenuId}
-</if> 
+        update wechat_menu t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="pagepath !=null and pagepath != ''">
+            , t.pagepath= #{pagepath}
+        </if>
+        <if test="parentMenuId !=null and parentMenuId != ''">
+            , t.parent_menu_id= #{parentMenuId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            , t.app_id= #{appId}
+        </if>
+        <if test="menuLevel !=null and menuLevel != ''">
+            , t.menu_level= #{menuLevel}
+        </if>
+        <if test="menuName !=null and menuName != ''">
+            , t.menu_name= #{menuName}
+        </if>
+        <if test="menuType !=null and menuType != ''">
+            , t.menu_type= #{menuType}
+        </if>
+        <if test="menuValue !=null and menuValue != ''">
+            , t.menu_value= #{menuValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="wechatMenuId !=null and wechatMenuId != ''">
+            and t.wechat_menu_id= #{wechatMenuId}
+        </if>
 
     </update>
 
     <!-- 查询微信菜单数量 add by wuxw 2018-07-03 -->
-     <select id="queryWechatMenusCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from wechat_menu t 
-where 1 =1 
-<if test="pagepath !=null and pagepath != ''">
-   and t.pagepath= #{pagepath}
-</if> 
-<if test="parentMenuId !=null and parentMenuId != ''">
-   and t.parent_menu_id= #{parentMenuId}
-</if> 
-<if test="appId !=null and appId != ''">
-   and t.app_id= #{appId}
-</if> 
-<if test="menuLevel !=null and menuLevel != ''">
-   and t.menu_level= #{menuLevel}
-</if> 
-<if test="menuName !=null and menuName != ''">
-   and t.menu_name= #{menuName}
-</if> 
-<if test="menuType !=null and menuType != ''">
-   and t.menu_type= #{menuType}
-</if> 
-<if test="menuValue !=null and menuValue != ''">
-   and t.menu_value= #{menuValue}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="wechatMenuId !=null and wechatMenuId != ''">
-   and t.wechat_menu_id= #{wechatMenuId}
-</if> 
+    <select id="queryWechatMenusCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from wechat_menu t
+        where 1 =1
+        <if test="pagepath !=null and pagepath != ''">
+            and t.pagepath= #{pagepath}
+        </if>
+        <if test="parentMenuId !=null and parentMenuId != ''">
+            and t.parent_menu_id= #{parentMenuId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="menuLevel !=null and menuLevel != ''">
+            and t.menu_level= #{menuLevel}
+        </if>
+        <if test="menuName !=null and menuName != ''">
+            and t.menu_name= #{menuName}
+        </if>
+        <if test="menuType !=null and menuType != ''">
+            and t.menu_type= #{menuType}
+        </if>
+        <if test="menuValue !=null and menuValue != ''">
+            and t.menu_value= #{menuValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="wechatMenuId !=null and wechatMenuId != ''">
+            and t.wechat_menu_id= #{wechatMenuId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
