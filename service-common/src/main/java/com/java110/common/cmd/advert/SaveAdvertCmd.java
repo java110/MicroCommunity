@@ -166,15 +166,17 @@ public class SaveAdvertCmd extends Cmd {
     public void addAdvertItemPhoto(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext, String photo) {
         String itemTypeCd = "";
         String url = "";
-        FileDto fileDto = new FileDto();
-        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-        fileDto.setFileName(fileDto.getFileId());
-        fileDto.setContext(photo);
-        fileDto.setSuffix("jpeg");
-        fileDto.setCommunityId(paramInJson.getString("communityId"));
-        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-        paramInJson.put("fileSaveName", fileName);
-        paramInJson.put("advertPhotoId", fileDto.getFileId());
+        if(photo.length()> 512) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(photo);
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(paramInJson.getString("communityId"));
+            photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+        }
+        paramInJson.put("fileSaveName", photo);
+        paramInJson.put("advertPhotoId", photo);
         itemTypeCd = "8888";
         /*        url = fileDto.getFileId();*/
         AdvertItemPo advertItemPo = new AdvertItemPo();
@@ -182,7 +184,7 @@ public class SaveAdvertCmd extends Cmd {
         advertItemPo.setAdvertItemId("-1");
         advertItemPo.setCommunityId(paramInJson.getString("communityId"));
         advertItemPo.setItemTypeCd(itemTypeCd);
-        advertItemPo.setUrl(fileName);
+        advertItemPo.setUrl(photo);
         advertItemPo.setSeq("1");
         int flag = advertItemV1InnerServiceSMOImpl.saveAdvertItem(advertItemPo);
         if(flag < 1){
