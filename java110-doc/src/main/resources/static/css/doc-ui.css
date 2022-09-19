@@ -9,7 +9,7 @@
 a{
     color: #ffffff;
     font-weight: 600;
-    padding: 14px 20px 0px 25px;
+    padding: 0px 20px 14px 25px;
     display: block;
 }
 .nav-second-level li a {
@@ -50,4 +50,8 @@ a{
 }
 .metismenu .collapse {
     display: none;
+}
+
+.nav-label{
+    font-size:14px;
 }

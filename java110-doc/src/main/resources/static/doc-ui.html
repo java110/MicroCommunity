@@ -40,7 +40,7 @@
                     </div>
                 </li>
 
-                <li  style="width:100%" :class="{ active: item.active }" v-for="(item,index) in menus" :key="item.name">
+                <li  style="width:100%" class="margin-top" :class="{ active: item.active }" v-for="(item,index) in menus" :key="item.name">
                     <a  href="javascript:void(0)" @click="switchMenu(item)">
                         <span class="nav-label" style="color: #777;">{{item.name}}</span>
                     </a>
