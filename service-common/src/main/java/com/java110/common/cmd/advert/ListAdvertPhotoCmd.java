@@ -96,16 +96,23 @@ public class ListAdvertPhotoCmd extends Cmd {
 
             for (AdvertItemDto tmpAdvertItemDto : advertItemDtos) {
                 //照片
-                if ("8888".equals(tmpAdvertItemDto.getItemTypeCd())) {
-                    photoAndVideo = new JSONObject();
-                    photoAndVideo.put("suffix", "JPEG");
-                    //photoAndVideo.put("url", "/callComponent/download/getFile/file?fileId=" + tmpAdvertItemDto.getUrl() + "&communityId=" + advertDto.getCommunityId());
-                    photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
-                    photoAndVideo.put("seq", tmpAdvertItemDto.getSeq());
-                    photoAndVideo.put("advertType", advertDto.getAdvertType());
-                    photoAndVideo.put("pageUrl", advertDto.getPageUrl());
-                    advertPhotoAndVideos.add(photoAndVideo);
+                if (!"8888".equals(tmpAdvertItemDto.getItemTypeCd())) {
+                    continue;
                 }
+
+                photoAndVideo = new JSONObject();
+                photoAndVideo.put("suffix", "JPEG");
+                //photoAndVideo.put("url", "/callComponent/download/getFile/file?fileId=" + tmpAdvertItemDto.getUrl() + "&communityId=" + advertDto.getCommunityId());
+                if(tmpAdvertItemDto.getUrl().startsWith("http")){
+                    photoAndVideo.put("url", tmpAdvertItemDto.getUrl());
+                }else{
+                    photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
+                }
+                photoAndVideo.put("url", imgUrl + tmpAdvertItemDto.getUrl());
+                photoAndVideo.put("seq", tmpAdvertItemDto.getSeq());
+                photoAndVideo.put("advertType", advertDto.getAdvertType());
+                photoAndVideo.put("pageUrl", advertDto.getPageUrl());
+                advertPhotoAndVideos.add(photoAndVideo);
             }
         }
 
