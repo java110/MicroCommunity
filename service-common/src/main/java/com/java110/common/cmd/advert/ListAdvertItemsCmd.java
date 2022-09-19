@@ -22,6 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.advert.AdvertItemDto;
 import com.java110.intf.common.IAdvertItemInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -73,7 +74,7 @@ public class ListAdvertItemsCmd extends Cmd {
 
         if (count > 0) {
             List<AdvertItemDto> advertItemDtos = advertItemInnerServiceSMOImpl.queryAdvertItems(advertItemDto);
-            //refreshAdvertUrl(advertItemDtos);
+            refreshAdvertUrl(advertItemDtos);
             advertItems = BeanConvertUtil.covertBeanList(advertItemDtos, ApiAdvertItemDataVo.class);
         } else {
             advertItems = new ArrayList<>();
@@ -92,9 +93,10 @@ public class ListAdvertItemsCmd extends Cmd {
     }
 
     private void refreshAdvertUrl(List<AdvertItemDto> advertItemDtos) {
+        String imgUrl = MappingCache.getValue("IMG_PATH");
         for(AdvertItemDto advertItemDto : advertItemDtos){
             if("8888".equals(advertItemDto.getItemTypeCd())){
-                advertItemDto.setUrl("/callComponent/download/getFile/file?fileId=" + advertItemDto.getUrl() + "&communityId=" + advertItemDto.getCommunityId());
+                advertItemDto.setUrl(imgUrl + advertItemDto.getUrl());
             }
         }
     }
