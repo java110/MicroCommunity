@@ -24,6 +24,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IAdvertItemV1InnerServiceSMO;
 import com.java110.intf.common.IAdvertV1InnerServiceSMO;
@@ -44,6 +45,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
+@Java110CmdDoc(title = "发布广告",
+        description = "主要用于给业主端物业员工端发送广告",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/advert.saveAdvert",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "advert.saveAdvert"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "adName", length = 64, remark = "广告名称不能为空"),
+        @Java110ParamDoc(name = "adTypeCd", length = 12, remark = "投放位置 2000 业主首页 4000 员工首页"),
+        @Java110ParamDoc(name = "classify", length = 12, remark = "广告分类，9001 物流 9002 餐饮 9003 旅游 "),
+        @Java110ParamDoc(name = "locationTypeCd", length = 12, remark = "固定值 1000 "),
+        @Java110ParamDoc(name = "locationObjId", length = 12, remark = "固定值 -1 "),
+        @Java110ParamDoc(name = "seq", length = 12, remark = "顺序 "),
+        @Java110ParamDoc(name = "startTime", length = 12, remark = "开始时间 YYYY-MM-DD "),
+        @Java110ParamDoc(name = "endTime", length = 12, remark = "结束时间 YYYY-MM-DD"),
+        @Java110ParamDoc(name = "photos", length = 1024, remark = "图片"),
+
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"advertId\":\"\",\"adName\":\"123\",\"adTypeCd\":\"20000\",\"classify\":\"9001\",\"locationTypeCd\":\"1000\",\"locationObjId\":\"-1\",\"seq\":\"1\",\"startTime\":\"2022-09-01 00:00:00\",\"endTime\":\"2022-12-14 05:25:00\",\"advertType\":\"1\",\"pageUrl\":\"11\",\"floorId\":\"\",\"floorNum\":\"\",\"floorName\":\"\",\"unitId\":\"\",\"unitName\":\"\",\"roomId\":\"\",\"photos\":[{\"url\":\"https://jinlintong.oss-cn-zhangjiakou.aliyuncs.com/hc/img/20220919/223ef6f0-5207-47f1-88cf-99deaad482ce.jpg\",\"fileId\":\"img/20220919/223ef6f0-5207-47f1-88cf-99deaad482ce.jpg\"}],\"viewType\":\"8888\",\"vedioName\":\"\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：保存
  * 服务编码：advert.saveAdvert
