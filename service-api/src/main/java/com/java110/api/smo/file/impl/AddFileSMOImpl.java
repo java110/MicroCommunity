@@ -43,27 +43,15 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
         if (uploadFile.getSize() > 2 * 1024 * 1024) {
             throw new IllegalArgumentException("上传文件超过两兆");
         }
-
-        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(paramIn, "suffix", "必填，请填写文件类型");
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.SAVE_FILE);
-
-        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         InputStream is = uploadFile.getInputStream();
         String fileContext = Base64Convert.ioToBase64(is);
         paramIn.put("context", fileContext);
         paramIn.put("fileName", uploadFile.getOriginalFilename());
 
         FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
-
+        fileDto.setCommunityId("-1");
         fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-//        String file = paramIn.getString("fileName");
-//        if (file.contains("mp4") || file.contains("MP4") || file.contains("AVI") || file.contains("avi")
-//                || file.contains("WMV") || file.contains("wmv")) {
-//            fileDto.setFlag("");
-//        } else {
-//            fileDto.setFlag("0");
-//        }
 
         String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
 
@@ -73,12 +61,6 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
         outParam.put("url", imgUrl + fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
-
-//        String apiUrl = "file.saveFile" ;
-
-//        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-//                apiUrl,
-//                HttpMethod.POST);
         return responseEntity;
     }
 

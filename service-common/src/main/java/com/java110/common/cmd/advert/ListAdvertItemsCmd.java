@@ -95,7 +95,7 @@ public class ListAdvertItemsCmd extends Cmd {
     private void refreshAdvertUrl(List<AdvertItemDto> advertItemDtos) {
         String imgUrl = MappingCache.getValue("IMG_PATH");
         for(AdvertItemDto advertItemDto : advertItemDtos){
-            if("8888".equals(advertItemDto.getItemTypeCd())){
+            if("8888".equals(advertItemDto.getItemTypeCd()) && !advertItemDto.getUrl().startsWith("http")){
                 advertItemDto.setUrl(imgUrl + advertItemDto.getUrl());
             }
         }
