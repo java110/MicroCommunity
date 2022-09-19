@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.advert.AdvertDto;
@@ -26,6 +27,40 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+@Java110CmdDoc(title = "查询广告",
+        description = "主要用于给业主端物业员工端发送广告",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/advert.listAdverts",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "advert.listAdverts"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11,remark = "行数"),
+        @Java110ParamDoc(name = "advertId", length = 30, remark = "广告编号 "),
+        @Java110ParamDoc(name = "adTypeCd", length = 12, remark = "投放位置 2000 业主首页 4000 员工首页"),
+
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "adverts", type = "Object", length = 250, defaultValue = "-", remark = "数据"),
+                @Java110ParamDoc(parentNodeName = "adverts",name = "advertId", type = "String", length = 250,  remark = "广告编号"),
+                @Java110ParamDoc(parentNodeName = "adverts",name = "adName", type = "String", length = 250,  remark = "广告名称"),
+                @Java110ParamDoc(parentNodeName = "adverts",name = "startTime", length = 12, remark = "开始时间  "),
+                @Java110ParamDoc(parentNodeName = "adverts",name = "endTime", length = 12, remark = "结束时间 "),
+
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/advert.listAdverts?adName=&adTypeCd=&classify=&state=&locationTypeCd=&page=1&row=10",
+        resBody="{\"adverts\":[{\"adName\":\"123456\",\"adTypeCd\":\"20000\",\"advertId\":\"962022091922110006\",\"advertType\":\"2\",\"classify\":\"9006\",\"classifyName\":\"互联网\",\"communityId\":\"9999\",\"createTime\":\"2022-09-19 11:26:47\",\"endTime\":\"2023-03-24 11:55:00\",\"locationObjId\":\"-1\",\"locationObjName\":\"员工首页\",\"locationTypeCd\":\"4000\",\"pageUrl\":\"http://taobao.com\",\"seq\":\"2\",\"startTime\":\"2022-09-19 11:25:40\",\"state\":\"1000\",\"stateName\":\"未审核\",\"viewType\":\"8888\"}],\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+)
 @Java110Cmd(serviceCode = "advert.listAdverts")
 public class ListAdvertsCmd extends Cmd {
 
