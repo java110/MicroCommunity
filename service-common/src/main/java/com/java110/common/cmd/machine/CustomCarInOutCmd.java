@@ -137,8 +137,9 @@ public class CustomCarInOutCmd extends Cmd {
             if(resultVo.getCode() != ResultVo.CODE_OK){
                 throw new CmdException(resultVo.getMsg());
             }
-
-            JSONObject orderInfo = JSONObject.parseObject(resultVo.getData().toString());
+            String data = JSONObject.toJSONString(resultVo.getData());
+            JSONObject orderInfo = JSONObject.parseObject(data);
+            //JSONObject orderInfo = JSONObject.parseObject(resultVo.getData().toString());
 
              tempCarPayOrderDto = new TempCarPayOrderDto();
             tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
