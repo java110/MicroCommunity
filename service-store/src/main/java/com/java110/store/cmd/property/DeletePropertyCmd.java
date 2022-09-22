@@ -22,6 +22,7 @@ import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
@@ -38,6 +39,33 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
+
+
+@Java110CmdDoc(title = "删除物业公司",
+        description = "主要提供给外系统删除物业公司",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/property.deleteProperty",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "property.deleteProperty"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "storeId", length = 30, remark = "物业编号"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"storeId\":\"102022083062960025\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：删除

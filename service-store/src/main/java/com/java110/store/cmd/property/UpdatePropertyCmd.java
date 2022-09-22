@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
@@ -38,6 +39,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 
+@Java110CmdDoc(title = "修改物业公司",
+        description = "主要提供给外系统修改物业公司",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/property.updateProperty",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "property.updateProperty"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "storeId", length = 30, remark = "物业编号"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "物业名称"),
+        @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "物业管理员电话 作为管理员账号密码 添加后请及时修改密码"),
+        @Java110ParamDoc(name = "address", length = 11, remark = "公司地址"),
+        @Java110ParamDoc(name = "corporation", length = 11, remark = "法人"),
+        @Java110ParamDoc(name = "foundingTime", length = 11, remark = "成立日期"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"storeId\":\"102022083062960025\",\"name\":\"培训物业公司\",\"address\":\"培训物业公司\",\"tel\":\"18909715555\",\"corporation\":\"无\",\"foundingTime\":\"2022-08-01\",\"nearByLandmarks\":\"123\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：更新
  * 服务编码：store.updateStore

@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
@@ -37,6 +38,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@Java110CmdDoc(title = "查询物业公司",
+        description = "主要提供给外系统查询物业公司",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/property.listProperty",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "property.listProperty"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "storeId", length = 30, remark = "物业编号"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "物业名称"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "物业电话"),
+        @Java110ParamDoc(name = "page",type="int", length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row",type="int", length = 11, remark = "行数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", length = 0, defaultValue = "成功", remark = "数据节点"),
+                @Java110ParamDoc(parentNodeName = "data", name = "storeId", length = 30, remark = "物业编号"),
+                @Java110ParamDoc(parentNodeName = "data", name = "name", length = 64, remark = "物业名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
+                @Java110ParamDoc(parentNodeName = "data", name = "tel", length = 11, remark = "物业管理员电话 作为管理员账号密码 添加后请及时修改密码"),
+                @Java110ParamDoc(parentNodeName = "data", name = "address", length = 11, remark = "公司地址"),
+                @Java110ParamDoc(parentNodeName = "data", name = "corporation", length = 11, remark = "法人"),
+                @Java110ParamDoc(parentNodeName = "data", name = "foundingTime", length = 11, remark = "成立日期"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/property.listProperty?storeId=&name=&tel=&page=1&row=10",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：查询
  * 服务编码：store.listStore

@@ -78,9 +78,12 @@ import java.util.List;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "name", length = 30, remark = "物业名称"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "物业名称"),
         @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
         @Java110ParamDoc(name = "tel", length = 11, remark = "物业管理员电话 作为管理员账号密码 添加后请及时修改密码"),
+        @Java110ParamDoc(name = "address", length = 11, remark = "公司地址"),
+        @Java110ParamDoc(name = "corporation", length = 11, remark = "法人"),
+        @Java110ParamDoc(name = "foundingTime", length = 11, remark = "成立日期"),
         @Java110ParamDoc(name = "communityIds", type = "Array" ,length = 0, remark = "分配小区"),
         @Java110ParamDoc(parentNodeName = "communityIds",name = "-", type = "String" ,length = 0, remark = "小区ID"),
         @Java110ParamDoc(name = "groupIds", type = "Array" ,length = 0, remark = "分配菜单组"),
