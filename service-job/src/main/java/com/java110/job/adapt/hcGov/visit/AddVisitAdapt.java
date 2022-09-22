@@ -118,7 +118,7 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
             } else {
                 businessVisits = (JSONArray) bObj;
             }
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessVisits.add(data);
             }

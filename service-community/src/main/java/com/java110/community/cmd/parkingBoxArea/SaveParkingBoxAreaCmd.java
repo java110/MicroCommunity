@@ -81,12 +81,26 @@ public class SaveParkingBoxAreaCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+        parkingBoxAreaDto.setPaId(reqJson.getString("paId"));
+        parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+        List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+        Assert.listIsNull(parkingBoxAreaDtos, "停车场重复，请重新添加！");
         String defaultArea = reqJson.getString("defaultArea");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(defaultArea)) {
-            ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
-            tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
-            tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
-            parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
+            ParkingBoxAreaDto parkingBoxArea = new ParkingBoxAreaDto();
+            parkingBoxArea.setBoxId(reqJson.getString("boxId"));
+            parkingBoxArea.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
+            List<ParkingBoxAreaDto> parkingBoxAreas = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxArea);
+            if (parkingBoxAreas != null && parkingBoxAreas.size() > 0) {
+                for (ParkingBoxAreaDto parkingBox : parkingBoxAreas) {
+                    ParkingBoxAreaPo tmpParkingBoxAreaPo = new ParkingBoxAreaPo();
+                    tmpParkingBoxAreaPo.setBaId(parkingBox.getBaId());
+                    tmpParkingBoxAreaPo.setBoxId(reqJson.getString("boxId"));
+                    tmpParkingBoxAreaPo.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
+                    parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(tmpParkingBoxAreaPo);
+                }
+            }
         }
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         parkingBoxAreaPo.setBaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));

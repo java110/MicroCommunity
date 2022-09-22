@@ -38,28 +38,20 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         InspectionTaskDetailDto inspectionTaskDetailDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDetailDto.class);
-
         int count = inspectionTaskDetailInnerServiceSMOImpl.queryInspectionTaskDetailsCount(inspectionTaskDetailDto);
-
         List<ApiInspectionTaskDetailDataVo> inspectionTaskDetails = null;
-
         if (count > 0) {
             inspectionTaskDetails = BeanConvertUtil.covertBeanList(inspectionTaskDetailInnerServiceSMOImpl.queryInspectionTaskDetails(inspectionTaskDetailDto), ApiInspectionTaskDetailDataVo.class);
             refreshPhotos(inspectionTaskDetails);
         } else {
             inspectionTaskDetails = new ArrayList<>();
         }
-
         ApiInspectionTaskDetailVo apiInspectionTaskDetailVo = new ApiInspectionTaskDetailVo();
-
         apiInspectionTaskDetailVo.setTotal(count);
         apiInspectionTaskDetailVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiInspectionTaskDetailVo.setInspectionTaskDetails(inspectionTaskDetails);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionTaskDetailVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private void refreshPhotos(List<ApiInspectionTaskDetailDataVo> inspectionTaskDetails) {
@@ -75,12 +67,10 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
             photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
-                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + inspectionTaskDetail.getCommunityId());
+                photoVo.setUrl(tmpFileRelDto.getFileRealName());
                 photoVos.add(photoVo);
             }
-
             inspectionTaskDetail.setPhotos(photoVos);
-
         }
     }
 }

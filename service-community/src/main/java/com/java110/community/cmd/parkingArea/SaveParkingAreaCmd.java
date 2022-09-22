@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.intf.community.IParkingAreaAttrV1InnerServiceSMO;
 import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.po.parking.ParkingAreaPo;
@@ -16,6 +17,8 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Java110Cmd(serviceCode = "parkingArea.saveParkingArea")
 public class SaveParkingAreaCmd extends Cmd {
@@ -29,11 +32,9 @@ public class SaveParkingAreaCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "num", "必填，请填写停车场编号");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择停车场类型");
-
         //属性校验
         Assert.judgeAttrValue(reqJson);
     }
@@ -42,12 +43,15 @@ public class SaveParkingAreaCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         addParkingArea(reqJson);
-
         dealAttr(reqJson);
     }
 
     public void addParkingArea(JSONObject paramInJson) {
-
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setNum(paramInJson.getString("num"));
+        parkingAreaDto.setCommunityId(paramInJson.getString("communityId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listIsNull(parkingAreaDtos, "停车场编号重复，请重新添加！");
         JSONObject businessParkingArea = new JSONObject();
         businessParkingArea.putAll(paramInJson);
         businessParkingArea.put("paId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_paId));
@@ -71,7 +75,6 @@ public class SaveParkingAreaCmd extends Cmd {
         if (attrs.size() < 1) {
             return;
         }
-
 
         JSONObject attr = null;
         int flag = 0;

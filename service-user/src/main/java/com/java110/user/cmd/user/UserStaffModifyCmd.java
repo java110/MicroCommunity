@@ -33,8 +33,10 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "user.staff.modify")
 public class UserStaffModifyCmd extends Cmd {
+
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 

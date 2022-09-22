@@ -68,8 +68,9 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
     public ResponseEntity<String> savePhotoFile(IPageData pd) {
 
         String images = pd.getReqData();
+        JSONObject imageObj=JSONObject.parseObject(images);
         JSONObject paramIn = new JSONObject();
-        paramIn.put("context", images);
+        paramIn.put("context", imageObj.getString("uploadFile"));
         paramIn.put("fileName", "upload.jpg");
 
         FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);

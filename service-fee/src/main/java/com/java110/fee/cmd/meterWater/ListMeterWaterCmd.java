@@ -18,18 +18,15 @@ package com.java110.fee.cmd.meterWater;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
-import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -37,13 +34,14 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.meterWater.MeterWaterDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -58,7 +56,8 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "meterWater.listMeterWaters")
 public class ListMeterWaterCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMeterWaterCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMeterWaterCmd.class);
+
     @Autowired
     private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
 
@@ -79,7 +78,6 @@ public class ListMeterWaterCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         MeterWaterDto meterWaterDto = BeanConvertUtil.covertBean(reqJson, MeterWaterDto.class);
         ResultVo resultVo = null;
         if (!freshFeeDtoParam(meterWaterDto, reqJson)) {
@@ -126,7 +124,7 @@ public class ListMeterWaterCmd extends Cmd {
         }
 
         if (MeterWaterDto.PAYER_OBJ_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
-            String[] nums = roomNum.split("-",3);
+            String[] nums = roomNum.split("-", 3);
             if (nums.length != 3) {
                 return false;
             }
@@ -143,7 +141,7 @@ public class ListMeterWaterCmd extends Cmd {
             meterWaterDto.setObjId(roomDtos.get(0).getRoomId());
 
         } else {
-            String[] nums = roomNum.split("-",2);
+            String[] nums = roomNum.split("-", 2);
             if (nums.length != 2) {
                 return false;
             }

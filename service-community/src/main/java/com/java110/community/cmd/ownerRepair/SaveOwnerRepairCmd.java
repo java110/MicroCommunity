@@ -9,12 +9,10 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
@@ -43,9 +41,6 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "ownerRepair.saveOwnerRepair")
 public class SaveOwnerRepairCmd extends Cmd {
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
@@ -157,22 +152,14 @@ public class SaveOwnerRepairCmd extends Cmd {
         if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                FileDto fileDto = new FileDto();
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                fileDto.setContext(photos.getJSONObject(_photoIndex).getString("photo"));
-                fileDto.setSuffix("jpeg");
-                fileDto.setCommunityId(reqJson.getString("communityId"));
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                reqJson.put("ownerPhotoId", fileDto.getFileId());
-                reqJson.put("fileSaveName", fileName);
+                Object _photo = photos.get(_photoIndex);
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
                 businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", businessOwnerRepair.getString("repairId"));
-                businessUnit.put("fileRealName", fileName);
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", _photo.toString());
+                businessUnit.put("fileSaveName", _photo.toString());
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
                 if (flag < 1) {

@@ -35,7 +35,6 @@ public class ListStaffRolesCmd extends Cmd {
     @Autowired
     private IOrgV1InnerServiceSMO orgV1InnerServiceSMOImpl;
 
-
     @Autowired
     private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
 

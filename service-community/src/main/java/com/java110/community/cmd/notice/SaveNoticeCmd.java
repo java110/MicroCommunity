@@ -24,9 +24,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.notice.NoticeDto;
-import com.java110.dto.org.OrgCommunityDto;
-import com.java110.dto.org.OrgDto;
-import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.roleCommunity.RoleCommunityDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
@@ -70,21 +67,10 @@ public class SaveNoticeCmd extends Cmd {
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Autowired
-    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
-
-    @Autowired
-    private IOrgCommunityInnerServiceSMO orgCommunityInnerServiceSMOImpl;
-
-    @Autowired
-    private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
-
-    @Autowired
     private INoticeV1InnerServiceSMO noticeV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
@@ -105,24 +91,29 @@ public class SaveNoticeCmd extends Cmd {
 
         reqJson.put("userId",userId);
         reqJson.put("storeId",storeId);
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         if (!reqJson.containsKey("isAll") || StringUtil.isEmpty(reqJson.getString("isAll")) || "N".equals(reqJson.getString("isAll"))) {
             addNotice(reqJson);
             return;
         }
-
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         reqJson.put("storeId", storeId);
-
         //查询当前员工 的小区
-
         List<ApiCommunityDataVo> communitys = getStoreCommunity(reqJson);
+        /*List<ApiCommunityDataVo> communitys = null;
+        if (reqJson.containsKey("isAll") && !StringUtil.isEmpty(reqJson.getString("isAll")) && reqJson.getString("isAll").equals("N")) {
+            communitys = getStoreCommunity(reqJson);
+        } else if (reqJson.getString("isAll").equals("Y")) {
+            CommunityDto communityDto = new CommunityDto();
+            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+            communitys = BeanConvertUtil.covertBeanList(communityDtos, ApiCommunityDataVo.class);
+        } else {
+            communitys = new ArrayList<>();
+        }*/
         for (ApiCommunityDataVo apiCommunityDataVo : communitys) {
             reqJson.put("communityId", apiCommunityDataVo.getCommunityId());
             if (reqJson.containsKey("objType") && "001".equals(reqJson.getString("objType"))) {
@@ -130,8 +121,6 @@ public class SaveNoticeCmd extends Cmd {
             }
             addNotice(reqJson);
         }
-
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
@@ -142,21 +131,18 @@ public class SaveNoticeCmd extends Cmd {
         userDto.setPage(1);
         userDto.setRow(1);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户不存在");
-
         //校验商户是否存在;
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreId(reqJson.getString("storeId"));
         List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
-
         Assert.listOnlyOne(storeDtos, "商户不存在");
-
         int count = 0;
         if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
             CommunityDto communityDto = new CommunityDto();
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
+            communityDto.setState("1100"); //1000 待审核  1100 审核通过  1200 审核拒绝
             if (reqJson.containsKey("communityName")) {
                 communityDto.setName(reqJson.getString("communityName"));
             }
@@ -183,13 +169,11 @@ public class SaveNoticeCmd extends Cmd {
             } else {
                 communitys = new ArrayList<>();
             }
-
         }
         return communitys;
     }
 
     public void addNotice(JSONObject paramInJson) {
-
         JSONObject businessNotice = new JSONObject();
         businessNotice.putAll(paramInJson);
         if (!paramInJson.containsKey("state")) {

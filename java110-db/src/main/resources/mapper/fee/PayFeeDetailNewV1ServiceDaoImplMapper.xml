@@ -6,12 +6,12 @@
     <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeDetailNewInfo" parameterType="Map">
         insert into pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,start_time,received_amount,state,end_time,community_id,fee_id,b_id
+        prime_rate,detail_id,receivable_amount,cycles,remark,start_time,received_amount,state,end_time,community_id,fee_id,b_id,payable_amount
         <if test="createTime != null">
             ,create_time
         </if>
         ) values (
-        #{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime},#{communityId},#{feeId},#{bId}
+        #{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime},#{communityId},#{feeId},#{bId},#{payableAmount}
         <if test="createTime != null">
             ,#{createTime}
         </if>
@@ -24,7 +24,7 @@
         detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.cycles,t.remark,t.status_cd,t.status_cd
         statusCd,t.start_time,t.start_time startTime,t.received_amount,t.received_amount
         receivedAmount,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.fee_id,t.fee_id
-        feeId
+        feeId,t.payable_amount,t.payable_amount payableAmount
         from pay_fee_detail t
         where 1 =1
         <if test="primeRate !=null and primeRate != ''">
@@ -50,6 +50,9 @@
         </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="payableAmount !=null and payableAmount != ''">
+            and t.payable_amount= #{payableAmount}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -92,6 +95,9 @@
         </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="payableAmount !=null and payableAmount != ''">
+            , t.payable_amount= #{payableAmount}
         </if>
         <if test="state !=null and state != ''">
             , t.state= #{state}
@@ -145,6 +151,9 @@
         </if>
         <if test="receivedAmount !=null and receivedAmount != ''">
             and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="payableAmount !=null and payableAmount != ''">
+            and t.payable_amount= #{payableAmount}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

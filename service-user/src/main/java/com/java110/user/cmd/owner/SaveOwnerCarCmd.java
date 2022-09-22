@@ -67,11 +67,20 @@ public class SaveOwnerCarCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
 
+        //检查车位是否是空闲状态
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setPsId(reqJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
+        //获取车位状态
+        String state = parkingSpaceDtos.get(0).getState();
+        if (StringUtil.isEmpty(state) || !state.equals("F")) {
+            throw new IllegalArgumentException("该车位不是空闲状态！");
+        }
 
         //校验车牌号是否存在
         OwnerCarDto ownerCarDto = new OwnerCarDto();
@@ -157,8 +166,8 @@ public class SaveOwnerCarCmd extends Cmd {
         JSONObject businessParkingSpace = new JSONObject();
 
         businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
-        businessParkingSpace.put("state", reqJson.getString("carNumType"));
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
+        parkingSpacePo.setState("H"); //S 出售  H 出租  F 空闲
         flag = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
         if (flag < 1) {
             throw new CmdException("修改车位状态失败");

@@ -188,7 +188,6 @@ public class PayFeeCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject paramObj) throws CmdException {
-
         logger.debug("paramObj : {}", paramObj);
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
@@ -196,9 +195,11 @@ public class PayFeeCmd extends Cmd {
         try {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
+            feeDetail.put("payableAmount", feeDetail.getString("receivableAmount"));
             JSONObject fee = modifyFee(paramObj);
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
+            payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
             //判断是否有赠送规则
             hasDiscount(paramObj, payFeePo, payFeeDetailPo);
             //判断选择的账号
@@ -356,6 +357,7 @@ public class PayFeeCmd extends Cmd {
 
     /**
      * 改造赠送逻辑 if 嵌套有点多 优化
+     *
      * @param paramObj
      * @param payFeePo
      * @param payFeeDetailPo
@@ -627,7 +629,6 @@ public class PayFeeCmd extends Cmd {
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
-
             //出租递增问题处理
             if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeDto.getComputingFormula())) {
                 computeFeeSMOImpl.dealRentRateCycle(feeDto, cycles.doubleValue());

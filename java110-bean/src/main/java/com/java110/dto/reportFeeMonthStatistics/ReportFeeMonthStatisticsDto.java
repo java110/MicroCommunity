@@ -24,6 +24,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String objName;
     private String objNameNum;
     private String receivedAmount;
+    private String payableAmount;
     private String feeYear;
     private String feeMonth;
     private String feeId;
@@ -741,5 +742,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setGiftAmount(String giftAmount) {
         this.giftAmount = giftAmount;
+    }
+
+    public String getPayableAmount() {
+        return payableAmount;
+    }
+
+    public void setPayableAmount(String payableAmount) {
+        this.payableAmount = payableAmount;
     }
 }

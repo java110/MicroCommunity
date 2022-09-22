@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
 import com.java110.intf.community.IInspectionItemTitleV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionItemTitleValueV1InnerServiceSMO;
 import com.java110.po.inspectionItemTitle.InspectionItemTitlePo;
@@ -36,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 
 /**
  * 类表述：更新
@@ -51,7 +53,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UpdateInspectionItemTitleCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateInspectionItemTitleCmd.class);
-
 
     @Autowired
     private IInspectionItemTitleV1InnerServiceSMO inspectionItemTitleV1InnerServiceSMOImpl;
@@ -75,7 +76,6 @@ public class UpdateInspectionItemTitleCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         InspectionItemTitlePo inspectionItemTitlePo = BeanConvertUtil.covertBean(reqJson, InspectionItemTitlePo.class);
         int flag = inspectionItemTitleV1InnerServiceSMOImpl.updateInspectionItemTitle(inspectionItemTitlePo);
 
@@ -87,13 +87,17 @@ public class UpdateInspectionItemTitleCmd extends Cmd {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
             return;
         }
-        InspectionItemTitleValuePo deleteInspectionItemTitleValuePo = new InspectionItemTitleValuePo();
-        deleteInspectionItemTitleValuePo.setTitleId(inspectionItemTitlePo.getTitleId());
-        flag = inspectionItemTitleValueV1InnerServiceSMOImpl.deleteInspectionItemTitleValue(deleteInspectionItemTitleValuePo);
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+        InspectionItemTitleValueDto inspectionItemTitleValueDto = new InspectionItemTitleValueDto();
+        inspectionItemTitleValueDto.setTitleId(reqJson.getString("titleId"));
+        List<InspectionItemTitleValueDto> inspectionItemTitleValueDtos = inspectionItemTitleValueV1InnerServiceSMOImpl.queryInspectionItemTitleValues(inspectionItemTitleValueDto);
+        if (inspectionItemTitleValueDtos != null && inspectionItemTitleValueDtos.size() > 0) {
+            InspectionItemTitleValuePo deleteInspectionItemTitleValuePo = new InspectionItemTitleValuePo();
+            deleteInspectionItemTitleValuePo.setTitleId(inspectionItemTitlePo.getTitleId());
+            flag = inspectionItemTitleValueV1InnerServiceSMOImpl.deleteInspectionItemTitleValue(deleteInspectionItemTitleValuePo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
-
         JSONArray titleValues = reqJson.getJSONArray("titleValues");
         InspectionItemTitleValuePo reportInfoSettingTitleValuePo = null;
         for (int titleValueIndex = 0; titleValueIndex < titleValues.size(); titleValueIndex++) {

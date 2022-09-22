@@ -465,7 +465,10 @@
 
     <!-- 查询员工总量 -->
     <select id="getStaffCount" parameterType="Map" resultType="Map">
-        select count(*) count from(select count(1) count
+        <if test="orgIds != null and orgIds.length > 0">
+        select count(*) count from(
+        </if>
+        select count(1) count
         from u_user u
         inner join s_store_user su on su.user_id = u.user_id
         <if test="(orgId !=null and orgId != '')||(orgIds != null and orgIds.length > 0)">
@@ -511,7 +514,10 @@
             </foreach>
             and uosr.status_cd =0
             GROUP BY u.user_id
-        </if>)a
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            )a
+        </if>
     </select>
 
     <!-- 查询员工总量 -->

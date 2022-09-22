@@ -18,6 +18,7 @@ public class ListFeeObjCmd extends Cmd {
 
     @Autowired
     private IQueryOweFee queryOweFeeImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
@@ -35,7 +36,7 @@ public class ListFeeObjCmd extends Cmd {
         if (reqJson.containsKey("custEndTime") && !StringUtil.isEmpty(reqJson.getString("custEndTime"))) {
             feeDto.setCustEndTime(reqJson.getString("custEndTime"));
         }
-        ResponseEntity<String> result =  queryOweFeeImpl.listFeeObj(feeDto);
+        ResponseEntity<String> result = queryOweFeeImpl.listFeeObj(feeDto);
         context.setResponseEntity(result);
     }
 }

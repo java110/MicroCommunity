@@ -5,6 +5,7 @@ import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -15,6 +16,7 @@ import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsTotalDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
@@ -41,7 +43,6 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     private static final Logger logger = LoggerFactory.getLogger(GetReportFeeMonthStatisticsBMOImpl.class);
 
-
     private int MAX_ROWS = 500;  // 最大行数
 
     @Autowired
@@ -62,12 +63,14 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
     /**
      * @param reportFeeMonthStatisticsDto
      * @return 订单服务能够接受的报文
      */
     public ResponseEntity<String> get(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-
 
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeMonthStatisticssCount(reportFeeMonthStatisticsDto);
 
@@ -493,6 +496,12 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             Double totalLateFee = 0.0;
             List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+                FeeDetailDto feeDetailDto = new FeeDetailDto();
+                feeDetailDto.setDetailId(reportFeeMonthStatistics.getDetailId());
+                List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+                Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误");
+                reportFeeMonthStatistics.setReceivableAmount(feeDetailDtos.get(0).getReceivableAmount());
+                reportFeeMonthStatistics.setPayableAmount(feeDetailDtos.get(0).getPayableAmount());
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
                 //实收金额

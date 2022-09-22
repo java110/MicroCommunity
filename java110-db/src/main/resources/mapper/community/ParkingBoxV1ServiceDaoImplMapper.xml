@@ -97,6 +97,8 @@
     <select id="queryParkingBoxsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from parking_box t
+        left join parking_box_area pba on t.box_id = pba.box_id and pba.default_area = 'T' and pba.status_cd ='0'
+        left join parking_area pa on pba.pa_id = pa.pa_id and pa.community_id = t.community_id and pa.status_cd = '0'
         where 1 =1
         <if test="yelowCarIn !=null and yelowCarIn != ''">
             and t.yelow_car_in= #{yelowCarIn}
@@ -125,8 +127,6 @@
         <if test="boxId !=null and boxId != ''">
             and t.box_id= #{boxId}
         </if>
-
-
     </select>
 
 </mapper>
