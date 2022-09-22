@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
@@ -66,6 +67,37 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+
+@Java110CmdDoc(title = "添加物业公司",
+        description = "主要提供给外系统添加物业公司",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/property.saveProperty",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "property.saveProperty"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "name", length = 30, remark = "物业名称"),
+        @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "物业管理员电话 作为管理员账号密码 添加后请及时修改密码"),
+        @Java110ParamDoc(name = "communityIds", type = "Array" ,length = 0, remark = "分配小区"),
+        @Java110ParamDoc(parentNodeName = "communityIds",name = "-", type = "String" ,length = 0, remark = "小区ID"),
+        @Java110ParamDoc(name = "groupIds", type = "Array" ,length = 0, remark = "分配菜单组"),
+        @Java110ParamDoc(parentNodeName = "groupIds",name = "-", type = "String" ,length = 0, remark = "菜单组ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"name\":\"api物业\",\"address\":\"api物业\",\"tel\":\"18909711449\",\"corporation\":\"无\",\"foundingTime\":\"2022-09-01\",\"nearbyLandmarks\":\"国投广场\",\"groupIds\":[\"802021080609660006\",\"802021012591650002\",\"802020101628950105\",\"802020092468300217\",\"802020091723050020\",\"802020020977260001\",\"802020012374230001\",\"802019110855900043\",\"802019103010680005\",\"802019102057730004\",\"802019091604450001\",\"800201907017\",\"800201906011\",\"800201904009\",\"800201904008\",\"800201904007\",\"800201904006\",\"800201904005\",\"800201904004\",\"800201906010\",\"800201904002\",\"800201904001\",\"802022052412780003\",\"802021080609660006\",\"802021012591650002\",\"802020101628950105\",\"802020092468300217\",\"802020091723050020\",\"802020020977260001\",\"802020012374230001\",\"802019110855900043\",\"802019103010680005\",\"802019102057730004\",\"802019091604450001\",\"800201907017\",\"800201906011\",\"800201904009\",\"800201904008\",\"800201904007\",\"800201904006\",\"800201904005\",\"800201904004\",\"800201906010\",\"800201904002\",\"800201904001\"],\"communityIds\":[\"2022092200930358\"]}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：保存
  * 服务编码：store.saveStore
