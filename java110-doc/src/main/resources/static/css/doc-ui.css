@@ -55,3 +55,8 @@ a{
 .nav-label{
     font-size:14px;
 }
+
+.example-width{
+    max-width: 900px;
+    overflow: overlay;
+}
