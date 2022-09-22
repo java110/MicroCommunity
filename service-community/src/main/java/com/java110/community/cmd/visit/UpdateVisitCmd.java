@@ -168,8 +168,8 @@ public class UpdateVisitCmd extends Cmd {
             return;
         }
         //审核通过且有车位就更新车位状态
-        if (reqJson.containsKey("state") && !StringUtil.isEmpty(reqJson.getString("state")) && reqJson.getString("state").equals("1")
-                && reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")
+        if (reqJson.containsKey("state") && "1".equals(reqJson.getString("state"))
+                && "1".equals(reqJson.getString("flag"))
                 && !existCar) {
             ParkingSpaceDto parkingSpace = new ParkingSpaceDto();
             parkingSpace.setPsId(reqJson.getString("psId"));
