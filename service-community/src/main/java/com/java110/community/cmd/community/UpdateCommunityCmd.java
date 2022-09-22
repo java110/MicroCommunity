@@ -23,6 +23,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -33,6 +34,39 @@ import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+@Java110CmdDoc(title = "修改小区",
+        description = "主要提供给外系统修改小区",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/community.updateCommunity",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "community.updateCommunity"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区编码"),
+        @Java110ParamDoc(name = "address", length = 30, remark = "小区地址"),
+        @Java110ParamDoc(name = "cityCode", length = 12, remark = "地区编码"),
+        @Java110ParamDoc(name = "feePrice", type = "int",length = 11, remark = "小区收费价格"),
+        @Java110ParamDoc(name = "mapX", length = 12, remark = "经度"),
+        @Java110ParamDoc(name = "mapY", length = 12, remark = "纬度"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
+        @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
+        @Java110ParamDoc(name = "payFeeMonth", type = "int",length = 11, remark = "小区收费周期"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "小区客服电话"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"communityId\":\"2022092293190329\",\"name\":\"api接口小区1\",\"address\":\"天津省天津市和平区api接口小区\",\"nearbyLandmarks\":\"23\",\"cityCode\":\"120101\",\"mapX\":\"101.33\",\"mapY\":\"101.33\",\"payFeeMonth\":12,\"feePrice\":0,\"tel\":\"18909711443\",\"attrs\":[{\"domain\":\"COMMON\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"required\":\"Y\",\"row\":0,\"specCd\":\"9329000004\",\"specHoldplace\":\"必填，请填写社区编码\",\"specId\":\"9329000004\",\"specName\":\"社区编码\",\"specShow\":\"Y\",\"specType\":\"2233\",\"specValueType\":\"1001\",\"statusCd\":\"0\",\"tableName\":\"building_community_attr\",\"total\":0,\"value\":\"123123\",\"values\":[],\"attrId\":\"112022092280950341\"}]}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：更新
  * 服务编码：community.updateCommunity
