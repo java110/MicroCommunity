@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>api document ui</title>
-    <link href='css/bootstrap.min.css'  rel='stylesheet' type='text/css'/>
-    <link href='css/vc.css'  rel='stylesheet' type='text/css'/>
-    <link href='css/doc-ui.css'  rel='stylesheet' type='text/css'/>
+    <link href='css/bootstrap.min.css' rel='stylesheet' type='text/css'/>
+    <link href='css/vc.css' rel='stylesheet' type='text/css'/>
+    <link href='css/doc-ui.css' rel='stylesheet' type='text/css'/>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src='js/vue.min.js' type='text/javascript'></script>
@@ -40,8 +40,9 @@
                     </div>
                 </li>
 
-                <li  style="width:100%" class="margin-top" :class="{ active: item.active }" v-for="(item,index) in menus" :key="item.name">
-                    <a  href="javascript:void(0)" @click="switchMenu(item)">
+                <li style="width:100%" class="margin-top" :class="{ active: item.active }" v-for="(item,index) in menus"
+                    :key="item.name">
+                    <a href="javascript:void(0)" @click="switchMenu(item)">
                         <span class="nav-label" style="color: #777;">{{item.name}}</span>
                     </a>
                     <ul class="nav nav-second-level collapse" :class="{in: item.active}">
@@ -54,37 +55,37 @@
         </div>
         <div class="margin-left right white-bg border-radius doc-interface">
             <h3 class="">{{content.title}}</h3>
-            <div class="doc-margin-top" >
+            <div class="doc-margin-top">
                 <div class="doc-title">1、请求地址：</div>
-                <div >{{content.url}}</div>
+                <div>{{content.url}}</div>
             </div>
-            <div class="doc-margin-top" >
+            <div class="doc-margin-top">
                 <div class="doc-title">2、请求方式：</div>
-                <div >{{content.httpMethod}}</div>
+                <div>{{content.httpMethod}}</div>
             </div>
-            <div class="doc-margin-top" >
+            <div class="doc-margin-top">
                 <div class="doc-title">3、请求头信息：</div>
                 <div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th scope="col">名称</th>
-                                <th scope="col">默认值</th>
-                                <th scope="col">描述</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item,index) in content.headers">
-                                <th>{{item.name}}</th>
-                                <td>{{item.defaultValue}}</td>
-                                <td>{{item.description}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">名称</th>
+                            <th scope="col">默认值</th>
+                            <th scope="col">描述</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item,index) in content.headers">
+                            <th>{{item.name}}</th>
+                            <td>{{item.defaultValue}}</td>
+                            <td>{{item.description}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="doc-margin-top" >
+            <div class="doc-margin-top">
                 <div class="doc-title">4、请求信息：</div>
                 <div>
                     <table class="table table-bordered">
@@ -116,7 +117,7 @@
                 </div>
             </div>
 
-            <div class="doc-margin-top" >
+            <div class="doc-margin-top">
                 <div class="doc-title">5、返回信息：</div>
                 <div>
                     <table class="table table-bordered">
@@ -155,6 +156,6 @@
 
 </div>
 <!--<script src="js/vcFramework.js"></script>-->
-<script src='js/doc-ui.js' ></script>
+<script src='js/doc-ui.js'></script>
 </body>
 </html>
