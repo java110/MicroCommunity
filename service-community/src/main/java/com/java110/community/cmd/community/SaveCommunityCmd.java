@@ -24,6 +24,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
@@ -34,6 +35,40 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
+@Java110CmdDoc(title = "添加小区",
+        description = "主要提供给外系统添加小区",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/community.saveCommunity",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "community.saveCommunity"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "address", length = 30, remark = "小区地址"),
+        @Java110ParamDoc(name = "cityCode", length = 12, remark = "地区编码"),
+        @Java110ParamDoc(name = "feePrice", type = "int",length = 11, remark = "小区收费价格"),
+        @Java110ParamDoc(name = "mapX", length = 12, remark = "经度"),
+        @Java110ParamDoc(name = "mapY", length = 12, remark = "纬度"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
+        @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
+        @Java110ParamDoc(name = "payFeeMonth", type = "int",length = 11, remark = "小区收费周期"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "小区客服电话"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"name\":\"api接口小区\",\"address\":\"天津省天津市和平区api接口小区\",\"tmpAddress\":\"api接口小区\",\"areaAddress\":\"天津省天津市和平区\",\"nearbyLandmarks\":\"23\",\"tel\":\"18909711443\",\"cityCode\":\"120101\",\"mapX\":\"101.33\",\"mapY\":\"101.33\",\"attrs\":[{\"domain\":\"COMMON\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"required\":\"Y\",\"row\":0,\"specCd\":\"9329000004\",\"specHoldplace\":\"必填，请填写社区编码\",\"specId\":\"9329000004\",\"specName\":\"社区编码\",\"specShow\":\"Y\",\"specType\":\"2233\",\"specValueType\":\"1001\",\"statusCd\":\"0\",\"tableName\":\"building_community_attr\",\"total\":0,\"value\":\"123123\",\"values\":[]}],\"payFeeMonth\":12,\"feePrice\":0}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：保存
