@@ -598,11 +598,11 @@
         t.create_time createTime,
         t.room_id roomId
         FROM
-        business_building_owner_room_rel t
+        building_owner_room_rel t
         INNER JOIN building_owner bo ON t.owner_id = bo.owner_id AND bo.status_cd = '0' AND bo.community_id =
         #{communityId}
         WHERE
-        t.operate = 'ADD'
+        bo.owner_type_cd = '1001'
         AND t.room_id = #{roomId}
         ORDER BY
         t.create_time DESC
@@ -613,12 +613,11 @@
 
     <select id="queryOwnerLogsCountByRoom" parameterType="Map" resultType="Map">
         select COUNT(1) count
-        from business_building_owner_room_rel t
-            inner join building_owner bo
+        from building_owner_room_rel t
+        inner join building_owner bo
         on t.owner_id = bo.owner_id and bo.status_cd = '0' and bo.community_id = #{communityId}
-        where t.operate = 'ADD'
-          and t.room_id = #{roomId}
-        order by t.create_time desc
+        where bo.owner_type_cd = '1001'
+        and t.room_id = #{roomId}
     </select>
 
 </mapper>

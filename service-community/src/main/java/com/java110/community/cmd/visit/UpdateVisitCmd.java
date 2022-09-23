@@ -27,7 +27,6 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +47,6 @@ public class UpdateVisitCmd extends Cmd {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
-
     @Autowired
     private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
 
@@ -58,7 +56,6 @@ public class UpdateVisitCmd extends Cmd {
     //键
     public static final String ASCRIPTION_CAR_AREA_ID = "ASCRIPTION_CAR_AREA_ID";
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "vId", "访客记录ID不能为空");
@@ -66,16 +63,12 @@ public class UpdateVisitCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "visitGender", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(reqJson, "phoneNumber", "必填，请填写访客联系方式");
         Assert.hasKeyAndValue(reqJson, "visitTime", "必填，请填写访客拜访时间");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
-
         String userId = context.getReqHeaders().get("user-id");
-
-//是否有空闲车位
+        //是否有空闲车位
         boolean freeSpace = false;
         //是否存在车辆
         boolean existCar = false;
@@ -102,9 +95,8 @@ public class UpdateVisitCmd extends Cmd {
             newTime.setTime(time);
             newTime.add(Calendar.MINUTE, Integer.parseInt(freeTime));//日期加上分钟
             Date newDate = newTime.getTime();
-            String finishFreeTime = DateUtil.getFormatTimeString(newDate,DateUtil.DATE_FORMATE_STRING_A);
+            String finishFreeTime = DateUtil.getFormatTimeString(newDate, DateUtil.DATE_FORMATE_STRING_A);
             reqJson.put("freeTime", finishFreeTime);
-
             //获取小区配置里配置的停车场id
             String parkingAreaId = CommunitySettingFactory.getValue(reqJson.getString("communityId"), ASCRIPTION_CAR_AREA_ID);
             if (StringUtil.isEmpty(parkingAreaId)) { //如果没有配置停车场id，就随便分配该小区下一个空闲车位
@@ -194,6 +186,7 @@ public class UpdateVisitCmd extends Cmd {
             ownerCarPo.setState(OwnerCarDto.STATE_NORMAL); //1001 正常状态，2002 车位释放欠费状态  3003 车位释放
             ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_TEMP); //1001 业主车辆 1002 成员车辆 1003 临时车
             ownerCarPo.setMemberId(reqJson.getString("ownerId"));
+            ownerCarPo.setLeaseType("R"); //H 月租车  S 出售车  I 内部车  NM 免费车  R 预约车
             ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             //添加车辆属性
             OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();
@@ -215,7 +208,7 @@ public class UpdateVisitCmd extends Cmd {
     /**
      * 添加小区信息
      *
-     * @param paramInJson     接口调用放传入入参
+     * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void updateVisit(JSONObject paramInJson) {
@@ -224,8 +217,8 @@ public class UpdateVisitCmd extends Cmd {
         businessVisit.putAll(paramInJson);
 
         VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
-        int flag =visitV1InnerServiceSMOImpl.updateVisit(visitPo);
-        if(flag <1){
+        int flag = visitV1InnerServiceSMOImpl.updateVisit(visitPo);
+        if (flag < 1) {
             throw new CmdException("修改访客失败");
         }
     }

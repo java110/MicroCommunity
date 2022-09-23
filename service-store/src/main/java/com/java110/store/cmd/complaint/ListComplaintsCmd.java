@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "complaint.listComplaints")
-public class ListComplaintsCmd extends Cmd{
+public class ListComplaintsCmd extends Cmd {
 
     @Autowired
     private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
@@ -37,6 +37,7 @@ public class ListComplaintsCmd extends Cmd{
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
+
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
@@ -49,10 +50,9 @@ public class ListComplaintsCmd extends Cmd{
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
-
         String roomId = reqJson.getString("roomId");
         if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
-            String[] values = roomId.split("-",3);
+            String[] values = roomId.split("-", 3);
             if (values.length == 3) {
                 RoomDto roomDto = new RoomDto();
                 roomDto.setFloorNum(values[0]);
@@ -64,11 +64,8 @@ public class ListComplaintsCmd extends Cmd{
                 complaintDto.setRoomId(roomDtos.get(0).getRoomId());
             }
         }
-
         int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
-
         List<ApiComplaintDataVo> complaints = null;
-
         if (count > 0) {
             List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
             complaintDtos = freshCurrentUser(complaintDtos);
@@ -77,17 +74,12 @@ public class ListComplaintsCmd extends Cmd{
         } else {
             complaints = new ArrayList<>();
         }
-
         ApiComplaintVo apiComplaintVo = new ApiComplaintVo();
-
         apiComplaintVo.setTotal(count);
         apiComplaintVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiComplaintVo.setComplaints(complaints);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiComplaintVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private List<ComplaintDto> freshCurrentUser(List<ComplaintDto> complaintDtos) {
@@ -96,7 +88,6 @@ public class ListComplaintsCmd extends Cmd{
             complaintDto = complaintUserInnerServiceSMOImpl.getTaskCurrentUser(complaintDto);
             tmpComplaintDtos.add(complaintDto);
         }
-
         return tmpComplaintDtos;
     }
 
@@ -104,7 +95,6 @@ public class ListComplaintsCmd extends Cmd{
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
         for (ApiComplaintDataVo complaintDataVo : complaints) {
-
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(complaintDataVo.getComplaintId());
             fileRelDto.setRelTypeCd("13000");
@@ -112,11 +102,10 @@ public class ListComplaintsCmd extends Cmd{
             photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
-                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + complaintDataVo.getCommunityId());
+                photoVo.setUrl(tmpFileRelDto.getFileRealName());
                 photoVos.add(photoVo);
             }
             complaintDataVo.setPhotos(photoVos);
         }
     }
-
 }

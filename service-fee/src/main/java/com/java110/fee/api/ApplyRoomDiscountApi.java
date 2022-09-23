@@ -268,6 +268,9 @@ public class ApplyRoomDiscountApi {
             BigDecimal cashBackAmount = new BigDecimal("0.00");//返现总金额
             for (int i = 0; i < discounts.size(); i++) {
                 JSONObject discountObject = discounts.getJSONObject(i);
+                if (!reqJson.getString("discountId").equals(discountObject.getString("discountId"))) {
+                    continue;
+                }
                 JSONArray feeDiscountSpecs = discountObject.getJSONArray("feeDiscountSpecs");
                 //获取规则id
                 String ruleId = discounts.getJSONObject(i).getString("ruleId");

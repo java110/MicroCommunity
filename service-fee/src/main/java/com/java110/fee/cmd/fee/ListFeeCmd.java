@@ -13,6 +13,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
@@ -22,6 +23,7 @@ import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -74,6 +76,9 @@ public class ListFeeCmd extends Cmd {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -95,7 +100,7 @@ public class ListFeeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-            String[] roomNums = reqJson.getString("roomNum").split("-",3);
+            String[] roomNums = reqJson.getString("roomNum").split("-", 3);
             if (roomNums == null || roomNums.length != 3) {
                 throw new IllegalArgumentException("房屋编号格式错误！");
             }
@@ -128,11 +133,22 @@ public class ListFeeCmd extends Cmd {
         }
 
         FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
-
-        int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
-
         List<ApiFeeDataVo> fees = new ArrayList<>();
-
+        if (reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))) {
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(reqJson.getString("payerObjId"));
+            ownerRoomRelDto.setOwnerId(reqJson.getString("ownerId"));
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+                ApiFeeVo apiFeeVo = new ApiFeeVo();
+                apiFeeVo.setTotal(0);
+                apiFeeVo.setRecords((int) Math.ceil((double) 0 / (double) reqJson.getInteger("row")));
+                apiFeeVo.setFees(fees);
+                ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
+                cmdDataFlowContext.setResponseEntity(responseEntity);
+            }
+        }
+        int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
         if (count > 0) {
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);//查询费用项目
             computeFeePrice(feeDtos);//计算费用

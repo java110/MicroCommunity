@@ -99,6 +99,9 @@
         select count(1) count
         from wechat_menu t
         where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
         <if test="pagepath !=null and pagepath != ''">
             and t.pagepath= #{pagepath}
         </if>

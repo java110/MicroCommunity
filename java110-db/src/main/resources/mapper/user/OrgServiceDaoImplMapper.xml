@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="orgServiceDaoImpl">
 
@@ -51,9 +50,7 @@
         <if test="allowOperation !=null and allowOperation != ''">
             and t.allow_operation= #{allowOperation}
         </if>
-
     </select>
-
 
     <!-- 保存组织信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOrgInfoInstance" parameterType="Map">
@@ -91,9 +88,7 @@
         <if test="allowOperation !=null and allowOperation != ''">
             and t.allow_operation= #{allowOperation}
         </if>
-
     </insert>
-
 
     <!-- 查询组织信息 add by wuxw 2018-07-03 -->
     <select id="getOrgInfo" parameterType="Map" resultType="Map">
@@ -153,7 +148,6 @@
         </if>
     </select>
 
-
     <!-- 修改组织信息 add by wuxw 2018-07-03 -->
     <update id="updateOrgInfoInstance" parameterType="Map">
         update u_org t set t.status_cd = #{statusCd}
@@ -188,7 +182,6 @@
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
-
     </update>
 
     <!-- 查询组织数量 add by wuxw 2018-07-03 -->
@@ -239,11 +232,8 @@
         <if test="allowOperation !=null and allowOperation != ''">
             and t.allow_operation= #{allowOperation}
         </if>
-        <if test="orgId !=null and orgId != ''">
-            and t.org_id= #{orgId}
-        </if>
-
     </select>
+
     <!-- 查询上级组织信息 -->
     <select id="getParentOrgInfo" parameterType="Map" resultType="Map">
         <![CDATA[
@@ -273,5 +263,4 @@
           AND o.`store_id` = #{storeId}
         ]]>
     </select>
-
 </mapper>

@@ -58,7 +58,6 @@ public class QueryOwnerCarsCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         int row = reqJson.getInteger("row");
-
         if (reqJson.containsKey("num") && !StringUtil.isEmpty(reqJson.getString("num"))) {
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setAreaNum(reqJson.getString("areaNum"));
@@ -70,7 +69,6 @@ public class QueryOwnerCarsCmd extends Cmd {
                 cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;
             }
-
             reqJson.put("psId", parkingSpaceDtos.get(0).getPsId());
         }
         OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
@@ -78,15 +76,12 @@ public class QueryOwnerCarsCmd extends Cmd {
             ownerCarDto.setCarTypeCd("");
             ownerCarDto.setCarTypeCds(reqJson.getString("carTypeCds").split(","));
         }
-
         //查询总记录数
         int total = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
 //        int count = 0;
         List<OwnerCarDto> ownerCarDtoList = null;
-
         if (total > 0) {
             ownerCarDtoList = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
             //小区20条时刷房屋和车位信息
             if (row < 20) {
                 freshPs(ownerCarDtoList);
@@ -110,17 +105,14 @@ public class QueryOwnerCarsCmd extends Cmd {
                 }
             }
         }
-
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerCarDtoList);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void freshPs(List<OwnerCarDto> ownerCarDtoList) {
-
         if (ownerCarDtoList == null || ownerCarDtoList.size() < 1) {
             return;
         }
-
         List<String> psIds = new ArrayList<>();
         for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
             if (StringUtil.isEmpty(ownerCarDto.getPsId())) {
@@ -128,12 +120,10 @@ public class QueryOwnerCarsCmd extends Cmd {
             }
             psIds.add(ownerCarDto.getPsId());
         }
-
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(ownerCarDtoList.get(0).getCommunityId());
         parkingSpaceDto.setPsIds(psIds.toArray(new String[psIds.size()]));
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
         for (ParkingSpaceDto tmpParkingSpaceDto : parkingSpaceDtos) {
             for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
                 if (tmpParkingSpaceDto.getPsId().equals(ownerCarDto.getPsId())) {
@@ -151,12 +141,9 @@ public class QueryOwnerCarsCmd extends Cmd {
      * @param ownerCarDtos
      */
     private void freshRoomInfo(List<OwnerCarDto> ownerCarDtos) {
-
         for (OwnerCarDto ownerCarDto : ownerCarDtos) {
-
             doFreshRoomInfo(ownerCarDto);
         }
-
     }
 
     /**
@@ -167,18 +154,15 @@ public class QueryOwnerCarsCmd extends Cmd {
     private void doFreshRoomInfo(OwnerCarDto ownerCarDto) {
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setOwnerId(ownerCarDto.getOwnerId());
-
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             ownerCarDto.setRoomName("-");
             return;
         }
-
         List<String> roomIds = new ArrayList<>();
         for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
             roomIds.add(tOwnerRoomRelDto.getRoomId());
         }
-
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(ownerCarDto.getCommunityId());
         roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
@@ -187,7 +171,6 @@ public class QueryOwnerCarsCmd extends Cmd {
         for (RoomDto tRoomDto : roomDtos) {
             roomName += (tRoomDto.getFloorNum() + "栋" + tRoomDto.getUnitNum() + "单元" + tRoomDto.getRoomNum() + "室" + "/");
         }
-
         roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
         ownerCarDto.setRoomName(roomName);
     }

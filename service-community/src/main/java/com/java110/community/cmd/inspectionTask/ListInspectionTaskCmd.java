@@ -22,12 +22,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.inspectionPlan.InspectionTaskDto;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
-import com.java110.intf.community.IInspectionTaskV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskDataVo;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskVo;
 import org.slf4j.Logger;
@@ -38,7 +36,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 类表述：查询
@@ -54,6 +51,7 @@ import java.util.List;
 public class ListInspectionTaskCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListInspectionTaskCmd.class);
+
     @Autowired
     private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
 

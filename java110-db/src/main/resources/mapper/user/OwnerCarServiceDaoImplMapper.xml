@@ -132,10 +132,11 @@
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
         t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType,
-        t3.name leaseTypeName
+        t3.name leaseTypeName,t4.name carTypeCdName
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
         left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
         t.community_id
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'

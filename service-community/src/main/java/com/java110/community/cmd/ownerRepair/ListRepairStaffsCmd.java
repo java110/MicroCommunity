@@ -28,7 +28,6 @@ public class ListRepairStaffsCmd extends Cmd {
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
 
-
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
 
@@ -46,7 +45,6 @@ public class ListRepairStaffsCmd extends Cmd {
 
         int count = repairUserInnerServiceSMOImpl.queryRepairUsersCount(repairUserDto);
 
-
         List<RepairUserDto> repairUserDtos = null;
         if (count > 0) {
             repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
@@ -57,9 +55,7 @@ public class ListRepairStaffsCmd extends Cmd {
 
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, repairUserDtos);
 
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private void refreshRepairUser(List<RepairUserDto> repairUserDtos) {
@@ -84,7 +80,7 @@ public class ListRepairStaffsCmd extends Cmd {
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 if (tmpFileRelDto.getRelTypeCd().equals("14000")) {  //维修图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + repairUserDto.getCommunityId());
+                    photoVo.setUrl(tmpFileRelDto.getFileRealName());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     photoVos.add(photoVo);
                 } else {

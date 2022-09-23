@@ -89,9 +89,6 @@ public class QueryStaffInfosCmd extends Cmd {
     @Autowired
     private IOrgStaffRelInnerServiceSMO iOrgStaffRelInnerServiceSMO;
 
-
-
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "page", "请求报文中未包含page节点");
@@ -107,8 +104,6 @@ public class QueryStaffInfosCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         UserDto userDto = BeanConvertUtil.covertBean(reqJson, UserDto.class);
         String userId = context.getReqHeaders().get("user-id");
-
-
         // 判断是不是管理员，管理员反馈 物业 的所角色
         UserDto userDto1 = new UserDto();
         userDto1.setUserId(userId);
@@ -139,11 +134,8 @@ public class QueryStaffInfosCmd extends Cmd {
                 }
             }
         }
-
         int count = userInnerServiceSMOImpl.getStaffCount(userDto);
-
         List<ApiStaffDataVo> staffs = new ArrayList<>();
-
         if (count > 0) {
             List<ApiStaffDataVo> staffList = BeanConvertUtil.covertBeanList(userInnerServiceSMOImpl.getStaffs(userDto), ApiStaffDataVo.class);
             for (ApiStaffDataVo apiStaffDataVo : staffList) {
@@ -165,15 +157,11 @@ public class QueryStaffInfosCmd extends Cmd {
         } else {
             staffs = new ArrayList<>();
         }
-
         ApiStaffVo apiStaffVo = new ApiStaffVo();
-
         apiStaffVo.setTotal(count);
         apiStaffVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiStaffVo.setStaffs(staffs);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStaffVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
 
@@ -181,12 +169,10 @@ public class QueryStaffInfosCmd extends Cmd {
         if (staffs == null || staffs.size() < 1) {
             return;
         }
-
         List<String> staffIds = new ArrayList<>();
         for (ApiStaffDataVo apiStaffDataVo : staffs) {
             staffIds.add(apiStaffDataVo.getUserId());
         }
-
         OrgDto orgDto = new OrgDto();
         orgDto.setStoreId(storeId);
         List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
@@ -197,11 +183,9 @@ public class QueryStaffInfosCmd extends Cmd {
         orgStaffRelDto.setStaffIds(staffIds.toArray(new String[staffIds.size()]));
         orgStaffRelDto.setStoreId(storeId);
         List<OrgStaffRelDto> orgStaffRels = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-
         if (orgStaffRels == null || orgStaffRels.size() < 1) {
             return;
         }
-
         for (ApiStaffDataVo apiStaffDataVo : staffs) {
             for (OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRels) {
                 if (!apiStaffDataVo.getUserId().equals(tmpOrgStaffRelDto.getStaffId())) {
@@ -217,19 +201,14 @@ public class QueryStaffInfosCmd extends Cmd {
                 apiStaffDataVo.setParentTwoOrgId(orgs.get(0).getParentOrgId());
             }
         }
-
         for (ApiStaffDataVo apiStaffDataVo : staffs) {
             if (StringUtil.isEmpty(apiStaffDataVo.getOrgId())) {
                 continue;
             }
             apiStaffDataVo.setParentOrgId(apiStaffDataVo.getOrgId());
-
             findParents(apiStaffDataVo, orgDtos, null, 0);
-
         }
-
     }
-
 
     private void findParents(ApiStaffDataVo apiStaffDataVo, List<OrgDto> orgDtos, OrgDto curOrgDto, int orgDeep) {
         for (OrgDto orgDto : orgDtos) {
@@ -237,14 +216,11 @@ public class QueryStaffInfosCmd extends Cmd {
             if (!apiStaffDataVo.getParentOrgId().equals(orgDto.getOrgId())) { // 他自己跳过
                 continue;
             }
-
             //如果到一级 就结束
             if (OrgDto.ORG_LEVEL_STORE.equals(apiStaffDataVo.getOrgLevel())) {
                 continue;
             }
-
             apiStaffDataVo.setParentOrgId(orgDto.getParentOrgId());
-
             if (StringUtil.isEmpty(apiStaffDataVo.getOrgName())) {
                 apiStaffDataVo.setOrgName(orgDto.getOrgName());
                 continue;
@@ -252,25 +228,19 @@ public class QueryStaffInfosCmd extends Cmd {
             apiStaffDataVo.setOrgName(orgDto.getOrgName() + " / " + apiStaffDataVo.getOrgName());
             apiStaffDataVo.setOrgLevel(orgDto.getOrgLevel());
         }
-
         if (curOrgDto != null && OrgDto.ORG_LEVEL_STORE.equals(curOrgDto.getOrgLevel())) {
             return;
         }
-
         if (curOrgDto != null && curOrgDto.getParentOrgId().equals(curOrgDto.getOrgId())) {
             return;
         }
-
         if (curOrgDto != null && "-1".equals(curOrgDto.getParentOrgId())) {
             return;
         }
-
         orgDeep += 1;
-
         if (orgDeep > 20) {
             return;
         }
-
         findParents(apiStaffDataVo, orgDtos, curOrgDto, orgDeep);
     }
 
@@ -280,7 +250,6 @@ public class QueryStaffInfosCmd extends Cmd {
      * @param staffs
      */
     private void refreshInitials(List<ApiStaffDataVo> staffs) {
-
         for (ApiStaffDataVo staffDataVo : staffs) {
             if (StringUtil.isEmpty(staffDataVo.getName())) {
                 continue;
@@ -313,7 +282,6 @@ public class QueryStaffInfosCmd extends Cmd {
                     orgDto1.setOrgId(orgDto.getParentOrgId());
                     List<OrgDto> orgDtoList1 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto1);
                     findCompany(haveOrgList, orgDtoList1);
-
                     //下一个级别
                     if (!"2".equals(orgDto.getOrgLevel())) {
                         OrgDto orgDto3 = new OrgDto();
@@ -323,13 +291,8 @@ public class QueryStaffInfosCmd extends Cmd {
                             haveOrgList.add(orgDto4.getOrgId());
                         }
                     }
-
                 }
-
             }
         }
-
-
     }
-
 }

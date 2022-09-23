@@ -25,18 +25,14 @@ public class SaveReportInfoBackCityBMOImpl implements ISaveReportInfoBackCityBMO
      */
     @Java110Transactional
     public ResponseEntity<String> save(ReportInfoBackCityPo reportInfoBackCityPo) {
-
         if(StringUtil.isEmpty(reportInfoBackCityPo.getUserId())){
             reportInfoBackCityPo.setUserId("-1");
         }
-
         reportInfoBackCityPo.setBackId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_backId));
         int flag = reportInfoBackCityInnerServiceSMOImpl.saveReportInfoBackCity(reportInfoBackCityPo);
-
         if (flag > 0) {
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
-
         return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
     }
 

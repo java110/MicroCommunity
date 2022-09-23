@@ -18,6 +18,7 @@ public class PayFeeDetailPo implements Serializable {
     private String cycles;
     private String receivableAmount;
     private String receivedAmount;
+    private String payableAmount;
     private String primeRate;
     private String remark;
     private String startTime;
@@ -138,5 +139,13 @@ public class PayFeeDetailPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getPayableAmount() {
+        return payableAmount;
+    }
+
+    public void setPayableAmount(String payableAmount) {
+        this.payableAmount = payableAmount;
     }
 }

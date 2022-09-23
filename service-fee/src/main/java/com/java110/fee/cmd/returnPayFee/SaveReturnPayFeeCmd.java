@@ -109,6 +109,7 @@ public class SaveReturnPayFeeCmd extends Cmd {
         returnPayFeePo.setCycles((reqJson.getDouble("cycles") * -1)+"");
         returnPayFeePo.setReceivableAmount((reqJson.getDouble("receivableAmount") * -1)+"");
         returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivedAmount") * -1)+"");
+        returnPayFeePo.setPrimeRate("7"); //退费默认方式为转账
         int flag = returnPayFeeV1InnerServiceSMOImpl.saveReturnPayFee(returnPayFeePo);
 
         if (flag < 1) {

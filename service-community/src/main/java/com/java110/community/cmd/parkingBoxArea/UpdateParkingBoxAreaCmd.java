@@ -34,6 +34,8 @@ import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * 类表述：更新
  * 服务编码：parkingBoxArea.updateParkingBoxArea
@@ -76,6 +78,19 @@ public class UpdateParkingBoxAreaCmd extends Cmd {
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAreaPo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+        ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+        parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+        List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+        if (parkingBoxAreaDtos != null && parkingBoxAreaDtos.size() > 0) {
+            for (ParkingBoxAreaDto parkingBoxArea : parkingBoxAreaDtos) {
+                if (!parkingBoxArea.getBaId().equals(reqJson.getString("baId"))) {
+                    ParkingBoxAreaPo parkingBoxAre = new ParkingBoxAreaPo();
+                    parkingBoxAre.setBaId(parkingBoxArea.getBaId());
+                    parkingBoxAre.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_FALSE);
+                    parkingBoxAreaV1InnerServiceSMOImpl.updateParkingBoxArea(parkingBoxAre);
+                }
+            }
         }
         ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
         parkingBoxPo.setBoxId(reqJson.getString("boxId"));

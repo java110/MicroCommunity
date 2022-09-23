@@ -112,12 +112,11 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
             } else {
                 businessVisits = (JSONArray) bObj;
             }
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessVisits.add(data);
             }
         }
-
         for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
             JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
             if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")) {

@@ -44,6 +44,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String cycles;
     private String remark;
     private String receivedAmount;
+    private String payableAmount;
     private String communityId;
     private String feeId;
     private String bId;
@@ -140,7 +141,6 @@ public class FeeDetailDto extends PageDto implements Serializable {
     public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -340,5 +340,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
         this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
+    }
+
+    public String getPayableAmount() {
+        return payableAmount;
+    }
+
+    public void setPayableAmount(String payableAmount) {
+        this.payableAmount = payableAmount;
     }
 }

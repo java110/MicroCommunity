@@ -6,7 +6,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -30,6 +32,9 @@ public class QueryOwnerMembersCmd extends Cmd {
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -62,6 +67,14 @@ public class QueryOwnerMembersCmd extends Cmd {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     owner.setLink(link);
                 }
+            }
+        }
+        for (OwnerDto ownerdto : ownerDtoList) {
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(ownerdto.getMemberId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            if(fileRelDtos != null && fileRelDtos.size() > 0){
+                ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
             }
         }
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();

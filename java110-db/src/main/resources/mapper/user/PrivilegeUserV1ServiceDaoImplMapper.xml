@@ -165,6 +165,9 @@
 
     <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
     <select id="queryStaffsNoRoleCount" parameterType="Map" resultType="Map">
+        <if test="orgIds != null and orgIds.length > 0">
+        select count(*) count from (
+        </if>
         select count(1) count
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
@@ -177,14 +180,18 @@
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
         </if>
+        and su.store_id = #{storeId}
         <if test="orgIds != null and orgIds.length > 0">
             and uosr.org_id in
             <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
             AND uosr.status_cd = '0'
+            group by t.user_id
         </if>
-        and su.store_id = #{storeId}
+        <if test="orgIds != null and orgIds.length > 0">
+            )a
+        </if>
     </select>
 
     <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
@@ -204,14 +211,15 @@
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
         </if>
+        and su.store_id = #{storeId}
         <if test="orgIds != null and orgIds.length > 0">
             and uosr.org_id in
             <foreach collection="orgIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
             AND uosr.status_cd = '0'
+            group by t.user_id
         </if>
-        and su.store_id = #{storeId}
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

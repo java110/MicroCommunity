@@ -9,9 +9,14 @@ import com.java110.report.bmo.reportInfoBackCity.ISaveReportInfoBackCityBMO;
 import com.java110.report.bmo.reportInfoBackCity.IUpdateReportInfoBackCityBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 @RestController
@@ -38,12 +43,21 @@ public class ReportInfoBackCityApi {
      */
     @RequestMapping(value = "/saveReportInfoBackCity", method = RequestMethod.POST)
     public ResponseEntity<String> saveReportInfoBackCity(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-
-
         ReportInfoBackCityPo reportInfoBackCityPo = BeanConvertUtil.covertBean(reqJson, ReportInfoBackCityPo.class);
         return saveReportInfoBackCityBMOImpl.save(reportInfoBackCityPo);
+        /*//正则匹配身份证号是否是正确的，15位或者17位数字+数字/x/X
+        if (reqJson.containsKey("idCard") && !StringUtil.isEmpty(reqJson.getString("idCard"))) {
+            if (reqJson.getString("idCard").matches("^\\d{15}|\\d{17}[\\dxX]$")) {
+                ReportInfoBackCityPo reportInfoBackCityPo = BeanConvertUtil.covertBean(reqJson, ReportInfoBackCityPo.class);
+                return saveReportInfoBackCityBMOImpl.save(reportInfoBackCityPo);
+            } else {
+                throw new IllegalArgumentException("身份证号格式不对！");
+            }
+        } else {
+            ReportInfoBackCityPo reportInfoBackCityPo = BeanConvertUtil.covertBean(reqJson, ReportInfoBackCityPo.class);
+            return saveReportInfoBackCityBMOImpl.save(reportInfoBackCityPo);
+        }*/
     }
 
     /**

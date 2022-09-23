@@ -32,6 +32,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public static final String LEASE_TYPE_SALE = "S"; // 出售车
     public static final String LEASE_TYPE_INNER = "I"; //内部车
     public static final String LEASE_TYPE_NO_MONEY = "NM"; //免费车
+    public static final String LEASE_TYPE_RESERVE = "R"; //预约车
 
     public static final String LEASE_TYPE_TEMP = "T";//临时车
 
@@ -79,6 +80,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String bId;
     private String carTypeCd;
+    private String carTypeCdName;
     private String[] carTypeCds;
     private String memberId;
     private String unitId;
@@ -165,7 +167,6 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public void setCarId(String carId) {
         this.carId = carId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -453,5 +454,12 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setPaIds(String[] paIds) {
         this.paIds = paIds;
+    }
+    public String getCarTypeCdName() {
+        return carTypeCdName;
+    }
+
+    public void setCarTypeCdName(String carTypeCdName) {
+        this.carTypeCdName = carTypeCdName;
     }
 }

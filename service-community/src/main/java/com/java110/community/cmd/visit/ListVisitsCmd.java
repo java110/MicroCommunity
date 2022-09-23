@@ -54,9 +54,14 @@ public class ListVisitsCmd extends Cmd {
             Map initAddVisitParameter = new HashMap();
             initAddVisitParameter.put("freeTime", freeTime);
             initAddVisitParameter.put("freeTimes", number);
+            //业主端获取访客登记相关配置参数
             responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(initAddVisitParameter), HttpStatus.OK);
         } else {
             VisitDto visitDto = BeanConvertUtil.covertBean(reqJson, VisitDto.class);
+            if (reqJson.containsKey("channel") && !StringUtil.isEmpty(reqJson.getString("channel"))
+                    && "PC".equals(reqJson.getString("channel"))) {
+                visitDto.setUserId("");
+            }
             int count = visitInnerServiceSMOImpl.queryVisitsCount(visitDto);
             List<ApiVisitDataVo> visits = new ArrayList<>();
             if (count > 0) {

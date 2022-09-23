@@ -656,7 +656,10 @@ public class ContractApi {
      * @path /app/contract/queryContractTypeSpec
      */
     @RequestMapping(value = "/queryContractTypeSpec", method = RequestMethod.GET)
-    public ResponseEntity<String> queryContractTypeSpec(@RequestHeader(value = "store-id") String storeId,
+    public ResponseEntity<String> queryContractTypeSpec(@RequestParam(value = "specName", required = false) String specName,
+                                                        @RequestParam(value = "specShow", required = false) String specShow,
+                                                        @RequestParam(value = "specCd", required = false) String specCd,
+                                                        @RequestHeader(value = "store-id") String storeId,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row,
                                                         @RequestParam(value = "contractTypeId") String contractTypeId) {
@@ -665,6 +668,9 @@ public class ContractApi {
         contractTypeSpecDto.setRow(row);
         contractTypeSpecDto.setStoreId(storeId);
         contractTypeSpecDto.setContractTypeId(contractTypeId);
+        contractTypeSpecDto.setSpecName(specName);
+        contractTypeSpecDto.setSpecShow(specShow);
+        contractTypeSpecDto.setSpecCd(specCd);
         return getContractTypeSpecBMOImpl.get(contractTypeSpecDto);
     }
 

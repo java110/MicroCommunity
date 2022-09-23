@@ -65,25 +65,14 @@ public class SaveComplaintCmd extends Cmd{
         if (reqJson.containsKey("photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
-
-                JSONObject photoObj = photos.getJSONObject(photoIndex);
-                FileDto fileDto = new FileDto();
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                fileDto.setContext(photoObj.getString("photo"));
-                fileDto.setSuffix("jpeg");
-                fileDto.setCommunityId(reqJson.getString("communityId"));
-                String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-                reqJson.put("ownerPhotoId", fileDto.getFileId());
-                reqJson.put("fileSaveName", fileName);
-
+                Object photoObj = photos.get(photoIndex);
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", "-1");
                 businessUnit.put("relTypeCd", "13000");
                 businessUnit.put("saveWay", "table");
                 businessUnit.put("objId", reqJson.getString("complaintId"));
-                businessUnit.put("fileRealName", fileDto.getFileId());
-                businessUnit.put("fileSaveName", fileName);
+                businessUnit.put("fileRealName", photoObj.toString());
+                businessUnit.put("fileSaveName", photoObj.toString());
                 FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             }

@@ -48,6 +48,7 @@ import java.util.List;
  */
 @Java110Cmd(serviceCode = "parkingBoxArea.deleteParkingBoxArea")
 public class DeleteParkingBoxAreaCmd extends Cmd {
+
     private static Logger logger = LoggerFactory.getLogger(DeleteParkingBoxAreaCmd.class);
 
     @Autowired
@@ -60,8 +61,6 @@ public class DeleteParkingBoxAreaCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "baId", "baId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
-
     }
 
     @Override
@@ -71,22 +70,18 @@ public class DeleteParkingBoxAreaCmd extends Cmd {
         parkingBoxAreaDto.setBaId(reqJson.getString("baId"));
         parkingBoxAreaDto.setCommunityId(reqJson.getString("communityId"));
         List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
-
         Assert.listOnlyOne(parkingBoxAreaDtos, "数据不存在");
         if (ParkingBoxAreaDto.DEFAULT_AREA_TRUE.equals(parkingBoxAreaDtos.get(0).getDefaultArea())) {
             throw new CmdException("默认停车场不能删除");
         }
         ParkingBoxAreaPo parkingBoxAreaPo = BeanConvertUtil.covertBean(reqJson, ParkingBoxAreaPo.class);
         int flag = parkingBoxAreaV1InnerServiceSMOImpl.deleteParkingBoxArea(parkingBoxAreaPo);
-
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
-
         ParkingBoxPo parkingBoxPo = new ParkingBoxPo();
         parkingBoxPo.setBoxId(reqJson.getString("boxId"));
         parkingBoxV1InnerServiceSMOImpl.updateParkingBox(parkingBoxPo);
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

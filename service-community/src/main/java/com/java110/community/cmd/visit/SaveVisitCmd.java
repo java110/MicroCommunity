@@ -256,6 +256,7 @@ public class SaveVisitCmd extends Cmd {
             ownerCarPo.setState(OwnerCarDto.STATE_NORMAL); //1001 正常状态，2002 车位释放欠费状态  3003 车位释放
             ownerCarPo.setCarTypeCd(OwnerCarDto.CAR_TYPE_TEMP); //1001 业主车辆 1002 成员车辆 1003 临时车
             ownerCarPo.setMemberId(reqJson.getString("ownerId"));
+            ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_RESERVE); //H 月租车   S 出售车   I 内部车   NM 免费车   R 预约车
             ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             //添加车辆属性
             OwnerCarAttrPo ownerCarAttrPo = new OwnerCarAttrPo();

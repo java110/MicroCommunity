@@ -30,7 +30,7 @@ public class InspectionTaskPo implements Serializable {
     private String taskType;
 
     private String state;
-    private String statusCd;
+    private String statusCd = "0";
 
     public String getTaskId() {
         return taskId;

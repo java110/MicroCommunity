@@ -7,12 +7,9 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.inspectionPlan.InspectionTaskDetailDto;
 import com.java110.dto.inspectionPlan.InspectionTaskDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailV1InnerServiceSMO;
@@ -36,10 +33,8 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "inspectionTaskDetail.updateInspectionTaskDetail")
 public class UpdateInspectionTaskDetailCmd extends Cmd {
-    private static Logger logger = LoggerFactory.getLogger(UpdateInspectionTaskDetailCmd.class);
 
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+    private static Logger logger = LoggerFactory.getLogger(UpdateInspectionTaskDetailCmd.class);
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -108,38 +103,27 @@ public class UpdateInspectionTaskDetailCmd extends Cmd {
 
     private void dealPhotos(JSONObject reqJson) {
         JSONArray photos = reqJson.getJSONArray("photos");
-        JSONObject photo = null;
         for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
-            photo = photos.getJSONObject(photoIndex);
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(photo.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("photoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
-
+            Object photo = photos.get(photoIndex);
+            reqJson.put("fileName", photo.toString());
             addPhoto(reqJson);
         }
     }
 
     /**
-     * 添加物业费用
+     * 添加图片
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
     public void addPhoto(JSONObject paramInJson) {
-
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "90000");
         businessUnit.put("saveWay", "ftp");
         businessUnit.put("objId", paramInJson.getString("taskDetailId"));
-        businessUnit.put("fileRealName", paramInJson.getString("photoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+        businessUnit.put("fileRealName", paramInJson.getString("fileName"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileName"));
         FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
         int flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
         if (flag < 1) {
@@ -170,8 +154,6 @@ public class UpdateInspectionTaskDetailCmd extends Cmd {
         Date date = new Date();
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf1.format(date);
-        System.out.println(currentDate);
-
 
         //获取巡检点的巡检点时间限制
         String inspectionStartTime = "";
@@ -224,8 +206,13 @@ public class UpdateInspectionTaskDetailCmd extends Cmd {
         int flag = inspectionTaskDetailV1InnerServiceSMOImpl.updateInspectionTaskDetail(inspectionTaskDetailPoPo);
 
         if (flag < 1) {
-            throw new CmdException("保存明细失败");
+            throw new CmdException("更新任务明细失败");
         }
+        //巡检完成后更改巡检任务表状态
+        InspectionTaskDto inspectionTask= new InspectionTaskDto();
+        inspectionTask.setTaskId(inspectionTaskDetailPoPo.getTaskId());
+        inspectionTask.setState(inspectionTaskDetailPoPo.getState());
+        inspectionTaskInnerServiceSMOImpl.updateInspectionTask(inspectionTask);
     }
 
     /**
