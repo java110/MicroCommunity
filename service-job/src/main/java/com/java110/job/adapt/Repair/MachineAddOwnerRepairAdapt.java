@@ -107,7 +107,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
     private void doDealOwnerRepair(Business business, JSONObject businessOwnerRepair) {
 
         RepairDto repairDto = new RepairDto();
-        repairDto.setbId(businessOwnerRepair.getString("repairId"));
+        repairDto.setRepairId(businessOwnerRepair.getString("repairId"));
         repairDto.setStatusCd("0");
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         //获取报修类型

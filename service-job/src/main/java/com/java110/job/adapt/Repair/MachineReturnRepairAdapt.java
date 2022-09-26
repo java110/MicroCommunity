@@ -26,6 +26,7 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -87,8 +88,41 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) throws Exception {
+
+        JSONObject data = business.getData();
+        JSONArray businessRepairUsers = new JSONArray();
+        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
+        if (data.containsKey(RepairUserPo.class.getSimpleName())) {
+            Object bObj = data.get(RepairUserPo.class.getSimpleName());
+
+            if (bObj instanceof JSONObject) {
+                businessRepairUsers.add(bObj);
+            } else if (bObj instanceof List) {
+                businessRepairUsers = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+            } else {
+                businessRepairUsers = (JSONArray) bObj;
+            }
+
+        } else {
+            if (data instanceof JSONObject) {
+                businessRepairUsers.add(data);
+            }
+        }
+
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessRepairUsers.size(); bOwnerRepairIndex++) {
+            JSONObject businessRepairUser = businessRepairUsers.getJSONObject(bOwnerRepairIndex);
+            doDealOwnerRepair(business, businessRepairUser);
+        }
+
+
+    }
+
+    private void doDealOwnerRepair(Business business, JSONObject businessRepairUser) {
+
+
         RepairUserDto repairUserDto = new RepairUserDto();
-        repairUserDto.setbId(business.getbId());
+        repairUserDto.setRuId(businessRepairUser.getString("ruId"));
         repairUserDto.setStatusCd("0");
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
         Assert.listOnlyOne(repairUserDtos, "当前用户没有需要处理订单");
@@ -152,15 +186,17 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             String time = format.format(endTime);
             //获取价格
             String price = "";
-            for (Business bus : businesses) {
-                if (bus.getBusinessTypeCd().equals("600100030001")) {  //保存费用信息
-                    JSONObject data = bus.getData();
-                    JSONArray jsonArray = data.getJSONArray("PayFeePo");
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    PayFeePo payFeePo = BeanConvertUtil.covertBean(jsonObject, PayFeePo.class);
-                    price = payFeePo.getAmount();
-                }
-            }
+            //这里建议查询 报修所在费用的 固定费
+
+//            for (Business bus : businesses) {
+//                if (bus.getBusinessTypeCd().equals("600100030001")) {  //保存费用信息
+//                    JSONObject data = bus.getData();
+//                    JSONArray jsonArray = data.getJSONArray("PayFeePo");
+//                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+//                    PayFeePo payFeePo = BeanConvertUtil.covertBean(jsonObject, PayFeePo.class);
+//                    price = payFeePo.getAmount();
+//                }
+//            }
             paramIn.put("repairName", repairName);
             paramIn.put("repairObjName", repairObjName);
             paramIn.put("context", context);

@@ -1,6 +1,7 @@
 package com.java110.job.adapt.Repair;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
@@ -28,6 +29,8 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.po.owner.RepairPoolPo;
+import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.StringUtil;
@@ -87,8 +90,40 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
+
+        JSONObject data = business.getData();
+        JSONArray businessRepairUsers = new JSONArray();
+        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
+        if (data.containsKey(RepairUserPo.class.getSimpleName())) {
+            Object bObj = data.get(RepairUserPo.class.getSimpleName());
+
+            if (bObj instanceof JSONObject) {
+                businessRepairUsers.add(bObj);
+            } else if (bObj instanceof List) {
+                businessRepairUsers = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+            } else {
+                businessRepairUsers = (JSONArray) bObj;
+            }
+
+        } else {
+            if (data instanceof JSONObject) {
+                businessRepairUsers.add(data);
+            }
+        }
+
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessRepairUsers.size(); bOwnerRepairIndex++) {
+            JSONObject businessRepairUser = businessRepairUsers.getJSONObject(bOwnerRepairIndex);
+            doDealOwnerRepair(business, businessRepairUser);
+        }
+
+
+    }
+
+    private void doDealOwnerRepair(Business business, JSONObject businessRepairUser) {
+
         RepairUserDto repairUserDto = new RepairUserDto();
-        repairUserDto.setbId(business.getbId());
+        repairUserDto.setRuId(businessRepairUser.getString("ruId"));
         repairUserDto.setStatusCd("0");
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
         //获取员工处理状态(10001 处理中；10002 结单；10003 退单；10004 转单；10005 提交)
