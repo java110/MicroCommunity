@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  * add by wuxw 2020/5/25
  **/
-@ServerEndpoint("/ws/parkingArea/{boxId}/{clientId}")
+@ServerEndpoint("/ws/parkingArea/{paId}/{clientId}")
 @Component
 public class ParkingAreaWebsocket {
 
@@ -50,16 +50,16 @@ public class ParkingAreaWebsocket {
      */
     private String clientId = "";
 
-    private String boxId = "";
+    private String paId = "";
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("clientId") String clientId, @PathParam("boxId") String boxId) {
+    public void onOpen(Session session, @PathParam("clientId") String clientId, @PathParam("paId") String paId) {
         this.session = session;
         this.clientId = clientId;
-        this.boxId = boxId;
+        this.paId = paId;
         if (webSocketMap.containsKey(clientId)) {
             webSocketMap.remove(clientId);
             webSocketMap.put(clientId, this);
@@ -101,7 +101,7 @@ public class ParkingAreaWebsocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws Exception {
-        logger.info("用户消息:" + boxId + ",客户端：" + clientId + ",报文:" + message);
+        logger.info("用户消息:" + paId + ",客户端：" + clientId + ",报文:" + message);
         //可以群发消息
         //消息保存到数据库、redis
         if (StringUtil.isEmpty(message)) {
@@ -146,10 +146,10 @@ public class ParkingAreaWebsocket {
     /**
      * 发送设备监控信息
      */
-    public static void sendInfo(String message, String boxId) throws IOException {
-        logger.info("发送消息到:" + boxId + "，报文:" + message);
+    public static void sendInfo(String message, String paId) throws IOException {
+        logger.info("发送消息到:" + paId + "，报文:" + message);
         for (ParkingAreaWebsocket server : webSocketMap.values()) {
-            if (boxId.equals(server.boxId)) {
+            if (paId.equals(server.paId)) {
                 webSocketMap.get(server.clientId).sendMessage(message);
             }
         }

@@ -3,6 +3,7 @@ package com.java110.api.kafka;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.websocket.MessageWebsocket;
 import com.java110.api.websocket.ParkingAreaWebsocket;
+import com.java110.api.websocket.ParkingBoxWebsocket;
 import com.java110.core.base.controller.BaseController;
 import com.java110.utils.constant.KafkaConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -53,7 +54,8 @@ public class FrontServiceKafka extends BaseController {
         JSONObject param = null;
         try {
             param = JSONObject.parseObject(record.value().toString());
-            ParkingAreaWebsocket.sendInfo(param.toJSONString(), param.getString("extBoxId"));
+            ParkingBoxWebsocket.sendInfo(param.toJSONString(), param.getString("extBoxId"));
+            ParkingAreaWebsocket.sendInfo(param.toJSONString(), param.getString("extPaId"));
         } catch (Exception e) {
             logger.error("发送消息失败", e);
         } finally {

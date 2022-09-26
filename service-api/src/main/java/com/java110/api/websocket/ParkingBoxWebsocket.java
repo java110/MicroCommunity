@@ -1,4 +1,4 @@
-package com.java110.boot.websocket;
+package com.java110.api.websocket;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.log.LoggerFactory;
@@ -22,11 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  * add by wuxw 2020/5/25
  **/
-@ServerEndpoint("/ws/parkingArea/{paId}/{clientId}")
+@ServerEndpoint("/ws/parkingBox/{boxId}/{clientId}")
 @Component
-public class ParkingAreaWebsocket {
+public class ParkingBoxWebsocket {
 
-    private static Logger logger = LoggerFactory.getLogger(ParkingAreaWebsocket.class);
+    private static Logger logger = LoggerFactory.getLogger(ParkingBoxWebsocket.class);
 
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -35,7 +35,7 @@ public class ParkingAreaWebsocket {
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
      */
-    private static ConcurrentHashMap<String, ParkingAreaWebsocket> webSocketMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, ParkingBoxWebsocket> webSocketMap = new ConcurrentHashMap<>();
 
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
@@ -50,16 +50,16 @@ public class ParkingAreaWebsocket {
      */
     private String clientId = "";
 
-    private String paId = "";
+    private String boxId = "";
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("clientId") String clientId, @PathParam("paId") String paId) {
+    public void onOpen(Session session, @PathParam("clientId") String clientId, @PathParam("boxId") String boxId) {
         this.session = session;
         this.clientId = clientId;
-        this.paId = paId;
+        this.boxId = boxId;
         if (webSocketMap.containsKey(clientId)) {
             webSocketMap.remove(clientId);
             webSocketMap.put(clientId, this);
@@ -101,7 +101,7 @@ public class ParkingAreaWebsocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws Exception {
-        logger.info("用户消息:" + paId + ",客户端：" + clientId + ",报文:" + message);
+        logger.info("用户消息:" + boxId + ",客户端：" + clientId + ",报文:" + message);
         //可以群发消息
         //消息保存到数据库、redis
         if (StringUtil.isEmpty(message)) {
@@ -146,10 +146,10 @@ public class ParkingAreaWebsocket {
     /**
      * 发送设备监控信息
      */
-    public static void sendInfo(String message, String paId) throws IOException {
-        logger.info("发送消息到:" + paId + "，报文:" + message);
-        for (ParkingAreaWebsocket server : webSocketMap.values()) {
-            if (paId.equals(server.paId)) {
+    public static void sendInfo(String message, String boxId) throws IOException {
+        logger.info("发送消息到:" + boxId + "，报文:" + message);
+        for (ParkingBoxWebsocket server : webSocketMap.values()) {
+            if (boxId.equals(server.boxId)) {
                 webSocketMap.get(server.clientId).sendMessage(message);
             }
         }
@@ -160,10 +160,10 @@ public class ParkingAreaWebsocket {
     }
 
     public static synchronized void addOnlineCount() {
-        ParkingAreaWebsocket.onlineCount++;
+        ParkingBoxWebsocket.onlineCount++;
     }
 
     public static synchronized void subOnlineCount() {
-        ParkingAreaWebsocket.onlineCount--;
+        ParkingBoxWebsocket.onlineCount--;
     }
 }
