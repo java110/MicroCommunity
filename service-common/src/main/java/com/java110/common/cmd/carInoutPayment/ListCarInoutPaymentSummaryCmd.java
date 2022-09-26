@@ -62,7 +62,12 @@ public class ListCarInoutPaymentSummaryCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "boxId", "未包含岗亭信息");
+        if(reqJson.containsKey("boxId")) {
+            Assert.hasKeyAndValue(reqJson, "boxId", "未包含岗亭信息");
+        }else{
+            Assert.hasKeyAndValue(reqJson, "paId", "未包含停车场");
+
+        }
     }
 
     @Override
@@ -70,6 +75,7 @@ public class ListCarInoutPaymentSummaryCmd extends Cmd {
 
         CarInoutPaymentDto carInoutPaymentDto = BeanConvertUtil.covertBean(reqJson, CarInoutPaymentDto.class);
         carInoutPaymentDto.setBoxId(reqJson.getString("boxId"));
+        carInoutPaymentDto.setPaId(reqJson.getString("paId"));
 
         if(StringUtil.isEmpty(carInoutPaymentDto.getStartTime())){
             Calendar calendar = Calendar.getInstance();

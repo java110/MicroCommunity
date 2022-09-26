@@ -69,7 +69,11 @@ public class ListCarInoutDetailCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CarInoutDetailDto carInoutDetailDto = BeanConvertUtil.covertBean(reqJson, CarInoutDetailDto.class);
-        carInoutDetailDto.setPaIds(getPaIds(reqJson));
+        if(reqJson.containsKey("boxId")) {
+            carInoutDetailDto.setPaIds(getPaIds(reqJson));
+        }else{
+            carInoutDetailDto.setPaId(reqJson.getString("paId"));
+        }
         int count = carInoutDetailV1InnerServiceSMOImpl.queryCarInoutDetailsCount(carInoutDetailDto);
 
         List<CarInoutDetailDto> carInoutDetailDtos = null;

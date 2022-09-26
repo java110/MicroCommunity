@@ -68,7 +68,11 @@ public class ListCarInoutPaymentCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CarInoutPaymentDto carInoutPaymentDto = BeanConvertUtil.covertBean(reqJson, CarInoutPaymentDto.class);
-        carInoutPaymentDto.setPaIds(getPaIds(reqJson));
+        if(reqJson.containsKey("boxId")) {
+            carInoutPaymentDto.setPaIds(getPaIds(reqJson));
+        }else{
+            carInoutPaymentDto.setPaId(reqJson.getString("paId"));
+        }
 
         if(!StringUtil.isEmpty(carInoutPaymentDto.getEndTime())){
             Date endTime = DateUtil.getDateFromStringB(carInoutPaymentDto.getEndTime());

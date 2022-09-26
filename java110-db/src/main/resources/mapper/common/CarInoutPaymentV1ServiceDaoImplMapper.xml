@@ -194,10 +194,17 @@
     <select id="queryCarInoutPaymentSummary" parameterType="Map" resultType="Map">
         select DATE_FORMAT(t.create_time,'%Y-%m-%d') createTime,sum(real_charge) realChargeTotal
         from car_inout_payment t
+          <if test="boxId != null and boxId != ''">
         LEFT JOIN parking_area pa on t.pa_id = pa.pa_id and pa.status_cd = '0'
         LEFT join parking_box_area pba on pa.pa_id = pba.pa_id and pba.status_cd = '0'
+          </if>
         where t.status_cd = '0'
-        and pba.box_id = #{boxId}
+        <if test="boxId != null and boxId != ''">
+            and pba.box_id = #{boxId}
+        </if>
+        <if test="paId != null and paId != ''">
+            and t.pa_id = #{paId}
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt; #{startTime}
         </if>

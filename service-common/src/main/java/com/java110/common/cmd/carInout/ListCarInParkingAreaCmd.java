@@ -73,14 +73,22 @@ public class ListCarInParkingAreaCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "boxId", "未包含岗亭信息");
+        if(reqJson.containsKey("boxId")) {
+            Assert.hasKeyAndValue(reqJson, "boxId", "未包含岗亭信息");
+        }else{
+            Assert.hasKeyAndValue(reqJson, "paId", "未包含停车场信息");
+        }
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         CarInoutDto carInoutDto = BeanConvertUtil.covertBean(reqJson, CarInoutDto.class);
         carInoutDto.setStates(new String[]{CarInoutDto.STATE_IN, CarInoutDto.STATE_PAY, CarInoutDto.STATE_REPAY});
-        carInoutDto.setPaIds(getPaIds(reqJson));
+        if(reqJson.containsKey("boxId")) {
+            carInoutDto.setPaIds(getPaIds(reqJson));
+        }else{
+            carInoutDto.setPaId(reqJson.getString("paId"));
+        }
         int count = carInoutV1InnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
 
         List<CarInoutDto> carInoutDtos = null;
