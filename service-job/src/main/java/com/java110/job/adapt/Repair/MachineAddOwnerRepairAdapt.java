@@ -1,6 +1,7 @@
 package com.java110.job.adapt.Repair;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.CommunityMemberDto;
@@ -22,6 +23,8 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.po.car.OwnerCarPo;
+import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -71,8 +74,40 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
+
+        JSONObject data = business.getData();
+        JSONArray businessOwnerRepairs = new JSONArray();
+        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
+        if (data.containsKey(RepairPoolPo.class.getSimpleName())) {
+            Object bObj = data.get(RepairPoolPo.class.getSimpleName());
+
+            if (bObj instanceof JSONObject) {
+                businessOwnerRepairs.add(bObj);
+            } else if (bObj instanceof List) {
+                businessOwnerRepairs = JSONArray.parseArray(JSONObject.toJSONString(bObj));
+            } else {
+                businessOwnerRepairs = (JSONArray) bObj;
+            }
+
+        } else {
+            if (data instanceof JSONObject) {
+                businessOwnerRepairs.add(data);
+            }
+        }
+
+        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+        for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessOwnerRepairs.size(); bOwnerRepairIndex++) {
+            JSONObject businessOwnerRepair = businessOwnerRepairs.getJSONObject(bOwnerRepairIndex);
+            doDealOwnerRepair(business, businessOwnerRepair);
+        }
+
+
+    }
+
+    private void doDealOwnerRepair(Business business, JSONObject businessOwnerRepair) {
+
         RepairDto repairDto = new RepairDto();
-        repairDto.setbId(business.getbId());
+        repairDto.setbId(businessOwnerRepair.getString("repairId"));
         repairDto.setStatusCd("0");
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         //获取报修类型
