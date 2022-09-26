@@ -152,8 +152,8 @@ public class ListParkingAreaMachinesCmd extends Cmd {
         int count = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
 
         if (count > 0) {
-            List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-            refreshMachineLocation(machineDtos);
+            machines = machineInnerServiceSMOImpl.queryMachines(machineDto);
+            refreshMachineLocation(machines);
         } else {
             machines = new ArrayList<>();
         }
