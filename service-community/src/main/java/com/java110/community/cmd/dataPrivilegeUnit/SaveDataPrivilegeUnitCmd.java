@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.dataPrivilegeUnit;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -55,11 +56,9 @@ public class SaveDataPrivilegeUnitCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "dpId", "请求报文中未包含dpId");
-Assert.hasKeyAndValue(reqJson, "floorNum", "请求报文中未包含floorNum");
-Assert.hasKeyAndValue(reqJson, "floorId", "请求报文中未包含floorId");
-Assert.hasKeyAndValue(reqJson, "unitNum", "请求报文中未包含unitNum");
-Assert.hasKeyAndValue(reqJson, "unitId", "请求报文中未包含unitId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+        Assert.hasKey(reqJson,"units","不包含单元");
 
     }
 
@@ -67,12 +66,21 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       DataPrivilegeUnitPo dataPrivilegeUnitPo = BeanConvertUtil.covertBean(reqJson, DataPrivilegeUnitPo.class);
-        dataPrivilegeUnitPo.setDpUnitId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = dataPrivilegeUnitV1InnerServiceSMOImpl.saveDataPrivilegeUnit(dataPrivilegeUnitPo);
+        DataPrivilegeUnitPo dataPrivilegeUnitPo = BeanConvertUtil.covertBean(reqJson, DataPrivilegeUnitPo.class);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+        JSONArray units = reqJson.getJSONArray("units");
+
+        for(int unitIndex = 0 ; unitIndex < units.size(); unitIndex++) {
+            dataPrivilegeUnitPo.setDpUnitId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            dataPrivilegeUnitPo.setUnitId(units.getJSONObject(unitIndex).getString("unitId"));
+            dataPrivilegeUnitPo.setUnitNum(units.getJSONObject(unitIndex).getString("unitNum"));
+            dataPrivilegeUnitPo.setFloorId(units.getJSONObject(unitIndex).getString("floorId"));
+            dataPrivilegeUnitPo.setFloorNum(units.getJSONObject(unitIndex).getString("floorNum"));
+            int flag = dataPrivilegeUnitV1InnerServiceSMOImpl.saveDataPrivilegeUnit(dataPrivilegeUnitPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
