@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.dataPrivilegeStaff;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -55,22 +56,33 @@ public class SaveDataPrivilegeStaffCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "dpId", "请求报文中未包含dpId");
-Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
-Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
+        Assert.hasKey(reqJson, "staffs", "未包含员工信息");
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+
+        if(staffs == null || staffs.size()<1){
+            throw new CmdException("未包含员工");
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       DataPrivilegeStaffPo dataPrivilegeStaffPo = BeanConvertUtil.covertBean(reqJson, DataPrivilegeStaffPo.class);
-        dataPrivilegeStaffPo.setDpsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = dataPrivilegeStaffV1InnerServiceSMOImpl.saveDataPrivilegeStaff(dataPrivilegeStaffPo);
+        DataPrivilegeStaffPo dataPrivilegeStaffPo = BeanConvertUtil.covertBean(reqJson, DataPrivilegeStaffPo.class);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+
+        for(int staffIndex = 0 ; staffIndex < staffs.size(); staffIndex++) {
+            dataPrivilegeStaffPo.setDpsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            dataPrivilegeStaffPo.setStaffId(staffs.getJSONObject(staffIndex).getString("staffId"));
+            dataPrivilegeStaffPo.setStaffName(staffs.getJSONObject(staffIndex).getString("staffName"));
+            int flag = dataPrivilegeStaffV1InnerServiceSMOImpl.saveDataPrivilegeStaff(dataPrivilegeStaffPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
