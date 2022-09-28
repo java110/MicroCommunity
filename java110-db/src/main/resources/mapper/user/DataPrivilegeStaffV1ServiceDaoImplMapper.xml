@@ -19,8 +19,9 @@
     <select id="getDataPrivilegeStaffInfo" parameterType="Map" resultType="Map">
         select t.dps_id,t.dps_id dpsId,t.dp_id,t.dp_id dpId,t.staff_name,t.staff_name
         staffName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.staff_id,t.staff_id staffId
+        communityId,t.staff_id,t.staff_id staffId,u.tel,u.email,u.address,u.sex
         from data_privilege_staff t
+        left join u_user u on t.staff_id = u.user_id and u.status_cd = '0'
         where 1 =1
         <if test="dpsId !=null and dpsId != ''">
             and t.dps_id= #{dpsId}

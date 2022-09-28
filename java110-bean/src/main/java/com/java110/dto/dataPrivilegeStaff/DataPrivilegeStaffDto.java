@@ -21,6 +21,10 @@ public class DataPrivilegeStaffDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private String staffId;
+    private String tel;
+    private String email;
+    private String address;
+    private String sex;
 
     private String storeId;
 
@@ -101,5 +105,37 @@ public class DataPrivilegeStaffDto extends PageDto implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
