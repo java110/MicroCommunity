@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dataPrivilegeUnitV1ServiceDaoImpl">
+
+
+    <!-- 保存系统配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveDataPrivilegeUnitInfo" parameterType="Map">
+        insert into data_privilege_unit(
+        floor_id,dp_unit_id,dp_id,unit_num,unit_id,remark,community_id,floor_num
+        ) values (
+        #{floorId},#{dpUnitId},#{dpId},#{unitNum},#{unitId},#{remark},#{communityId},#{floorNum}
+        )
+    </insert>
+
+
+    <!-- 查询系统配置信息 add by wuxw 2018-07-03 -->
+    <select id="getDataPrivilegeUnitInfo" parameterType="Map" resultType="Map">
+        select t.floor_id,t.floor_id floorId,t.dp_unit_id,t.dp_unit_id dpUnitId,t.dp_id,t.dp_id
+        dpId,t.unit_num,t.unit_num unitNum,t.unit_id,t.unit_id unitId,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.floor_num,t.floor_num floorNum
+        from data_privilege_unit t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="dpUnitId !=null and dpUnitId != ''">
+            and t.dp_unit_id= #{dpUnitId}
+        </if>
+        <if test="dpId !=null and dpId != ''">
+            and t.dp_id= #{dpId}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改系统配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateDataPrivilegeUnitInfo" parameterType="Map">
+        update data_privilege_unit t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            , t.floor_id= #{floorId}
+        </if>
+        <if test="dpId !=null and dpId != ''">
+            , t.dp_id= #{dpId}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            , t.unit_num= #{unitNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            , t.unit_id= #{unitId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="floorNum !=null and floorNum != ''">
+            , t.floor_num= #{floorNum}
+        </if>
+        where 1=1
+        <if test="dpUnitId !=null and dpUnitId != ''">
+            and t.dp_unit_id= #{dpUnitId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询系统配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryDataPrivilegeUnitsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from data_privilege_unit t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="dpUnitId !=null and dpUnitId != ''">
+            and t.dp_unit_id= #{dpUnitId}
+        </if>
+        <if test="dpId !=null and dpId != ''">
+            and t.dp_id= #{dpId}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+
+
+    </select>
+
+</mapper>
