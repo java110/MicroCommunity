@@ -1,6 +1,7 @@
 package com.java110.dto.dataPrivilegeUnit;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,13 +16,13 @@ import java.util.Date;
 public class DataPrivilegeUnitDto extends PageDto implements Serializable {
 
     private String floorId;
-private String dpUnitId;
-private String dpId;
-private String unitNum;
-private String unitId;
-private String remark;
-private String communityId;
-private String floorNum;
+    private String dpUnitId;
+    private String dpId;
+    private String unitNum;
+    private String unitId;
+    private String remark;
+    private String communityId;
+    private String floorNum;
 
 
     private Date createTime;
@@ -32,49 +33,64 @@ private String floorNum;
     public String getFloorId() {
         return floorId;
     }
-public void setFloorId(String floorId) {
+
+    public void setFloorId(String floorId) {
         this.floorId = floorId;
     }
-public String getDpUnitId() {
+
+    public String getDpUnitId() {
         return dpUnitId;
     }
-public void setDpUnitId(String dpUnitId) {
+
+    public void setDpUnitId(String dpUnitId) {
         this.dpUnitId = dpUnitId;
     }
-public String getDpId() {
+
+    public String getDpId() {
         return dpId;
     }
-public void setDpId(String dpId) {
+
+    public void setDpId(String dpId) {
         this.dpId = dpId;
     }
-public String getUnitNum() {
+
+    public String getUnitNum() {
         return unitNum;
     }
-public void setUnitNum(String unitNum) {
+
+    public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
     }
-public String getUnitId() {
+
+    public String getUnitId() {
         return unitId;
     }
-public void setUnitId(String unitId) {
+
+    public void setUnitId(String unitId) {
         this.unitId = unitId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFloorNum() {
+
+    public String getFloorNum() {
         return floorNum;
     }
-public void setFloorNum(String floorNum) {
+
+    public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
     }
 

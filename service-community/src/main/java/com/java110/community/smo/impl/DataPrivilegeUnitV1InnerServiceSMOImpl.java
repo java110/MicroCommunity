@@ -17,6 +17,7 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IDataPrivilegeUnitV1ServiceDao;
+import com.java110.dto.UnitDto;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.dto.dataPrivilegeUnit.DataPrivilegeUnitDto;
 import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
@@ -85,5 +86,27 @@ public class DataPrivilegeUnitV1InnerServiceSMOImpl extends BaseServiceSMO imple
     @Override
     public int queryDataPrivilegeUnitsCount(@RequestBody DataPrivilegeUnitDto dataPrivilegeUnitDto) {
         return dataPrivilegeUnitV1ServiceDaoImpl.queryDataPrivilegeUnitsCount(BeanConvertUtil.beanCovertMap(dataPrivilegeUnitDto));    }
+
+    @Override
+    public int queryUnitsNotInDataPrivilegeCount(@RequestBody DataPrivilegeUnitDto dataPrivilegeUnitDto) {
+        return dataPrivilegeUnitV1ServiceDaoImpl.queryUnitsNotInDataPrivilegeCount(BeanConvertUtil.beanCovertMap(dataPrivilegeUnitDto));
+    }
+
+    @Override
+    public List<UnitDto> queryUnitsNotInDataPrivilege(@RequestBody DataPrivilegeUnitDto dataPrivilegeUnitDto) {
+        //校验是否传了 分页信息
+
+        int page = dataPrivilegeUnitDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            dataPrivilegeUnitDto.setPage((page - 1) * dataPrivilegeUnitDto.getRow());
+        }
+
+        List<UnitDto> unitDtos = BeanConvertUtil.covertBeanList(
+                dataPrivilegeUnitV1ServiceDaoImpl.queryUnitsNotInDataPrivilege(BeanConvertUtil.beanCovertMap(dataPrivilegeUnitDto)),
+                UnitDto.class);
+
+        return unitDtos;
+    }
 
 }

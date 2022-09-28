@@ -128,4 +128,44 @@
 
     </select>
 
+    <select id="queryUnitsNotInDataPrivilegeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_unit t
+        inner join f_floor f on t.floor_id = f.floor_id  and f.status_cd = '0'
+        left join data_privilege_unit dp on t.unit_id = dp.unit_id and dp.status_cd = '0' and dp.community_id = f.community_id and dp.dp_id = #{dpId}
+        where t.status_cd = '0'
+        and f.community_id = #{communityId}
+        and dp.dp_id is null
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num= #{floorNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+
+
+    </select>
+
+    <!-- 查询系统配置信息 add by wuxw 2018-07-03 -->
+    <select id="queryUnitsNotInDataPrivilege" parameterType="Map" resultType="Map">
+        select f.floor_num floorNum,t.floor_id floorId,t.unit_id unitId,t.unit_num unitNum
+        from building_unit t
+        inner join f_floor f on t.floor_id = f.floor_id  and f.status_cd = '0'
+        left join data_privilege_unit dp on t.unit_id = dp.unit_id and dp.status_cd = '0' and dp.community_id = f.community_id and dp.dp_id = #{dpId}
+        where t.status_cd = '0'
+        and f.community_id = #{communityId}
+        and dp.dp_id is null
+        <if test="floorNum !=null and floorNum != ''">
+            and f.floor_num= #{floorNum}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
 </mapper>

@@ -74,4 +74,7 @@ public interface IDataPrivilegeUnitV1ServiceDao {
      */
     int queryDataPrivilegeUnitsCount(Map info);
 
+    int queryUnitsNotInDataPrivilegeCount(Map info);
+
+    List<Map> queryUnitsNotInDataPrivilege(Map map);
 }

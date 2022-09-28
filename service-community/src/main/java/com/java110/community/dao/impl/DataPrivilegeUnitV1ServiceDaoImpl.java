@@ -108,5 +108,26 @@ public class DataPrivilegeUnitV1ServiceDaoImpl extends BaseServiceDao implements
         return Integer.parseInt(businessDataPrivilegeUnitInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryUnitsNotInDataPrivilegeCount(Map info) {
+        logger.debug("查询 queryUnitsNotInDataPrivilegeCount 入参 info : {}",info);
+
+        List<Map> businessDataPrivilegeUnitInfos = sqlSessionTemplate.selectList("dataPrivilegeUnitV1ServiceDaoImpl.queryUnitsNotInDataPrivilegeCount", info);
+        if (businessDataPrivilegeUnitInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessDataPrivilegeUnitInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryUnitsNotInDataPrivilege(Map info) {
+        logger.debug("修改 queryUnitsNotInDataPrivilege 入参 info : {}",info);
+
+        List<Map> unitDtos = sqlSessionTemplate.selectList("dataPrivilegeUnitV1ServiceDaoImpl.queryUnitsNotInDataPrivilege",info);
+
+        return unitDtos;
+    }
+
 
 }
