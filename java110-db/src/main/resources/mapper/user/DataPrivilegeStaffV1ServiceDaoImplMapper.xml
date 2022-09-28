@@ -110,4 +110,41 @@
 
     </select>
 
+    <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
+    <select id="queryStaffsNotInDataPrivilegeCount" parameterType="Map" resultType="Map">
+
+        select count(1) count
+        from u_user t
+        inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
+        left join data_privilege_staff pu on t.user_id = pu.staff_id and pu.status_cd = '0' and pu.dp_id = #{dpId}
+        where t.status_cd = '0'
+        and pu.dp_id is null
+        <if test="userName !=null and userName != ''">
+            and t.name like concat('%', #{userName},'%')
+        </if>
+        and su.store_id = #{storeId}
+
+    </select>
+
+    <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
+    <select id="queryStaffsNotInDataPrivilege" parameterType="Map" resultType="Map">
+        select
+        t.user_id,t.user_id userId,
+        t.address,t.sex,t.user_id,t.user_id userId,t.level_cd,t.level_cd
+        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.email,t.age
+        from u_user t
+        inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
+        left join data_privilege_staff pu on t.user_id = pu.staff_id and pu.status_cd = '0' and pu.dp_id = #{dpId}
+        where t.status_cd = '0'
+        and pu.dp_id is null
+        <if test="userName !=null and userName != ''">
+            and t.name like concat('%', #{userName},'%')
+        </if>
+        and su.store_id = #{storeId}
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>

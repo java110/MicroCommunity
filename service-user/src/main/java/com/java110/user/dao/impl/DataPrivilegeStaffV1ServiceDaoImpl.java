@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.dao.impl;
+package com.java110.user.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.community.dao.IDataPrivilegeStaffV1ServiceDao;
+import com.java110.user.dao.IDataPrivilegeStaffV1ServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -106,6 +102,27 @@ public class DataPrivilegeStaffV1ServiceDaoImpl extends BaseServiceDao implement
         }
 
         return Integer.parseInt(businessDataPrivilegeStaffInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public int queryStaffsNotInDataPrivilegeCount(Map info) {
+        logger.debug("查询 queryStaffsNotInDataPrivilegeCount 入参 info : {}",info);
+
+        List<Map> businessDataPrivilegeStaffInfos = sqlSessionTemplate.selectList("dataPrivilegeStaffV1ServiceDaoImpl.queryStaffsNotInDataPrivilegeCount", info);
+        if (businessDataPrivilegeStaffInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessDataPrivilegeStaffInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryStaffsNotInDataPrivilege(Map info) {
+        logger.debug("查询 queryStaffsNotInDataPrivilege 入参 info : {}",info);
+
+        List<Map> datas = sqlSessionTemplate.selectList("dataPrivilegeStaffV1ServiceDaoImpl.queryStaffsNotInDataPrivilege",info);
+
+        return datas;
     }
 
 

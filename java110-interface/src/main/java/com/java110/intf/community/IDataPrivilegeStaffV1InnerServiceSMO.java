@@ -17,6 +17,8 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.dto.user.StaffDto;
+import com.java110.dto.user.UserDto;
 import com.java110.po.dataPrivilegeStaff.DataPrivilegeStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +35,7 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/dataPrivilegeStaffV1Api")
 public interface IDataPrivilegeStaffV1InnerServiceSMO {
 
@@ -65,4 +67,10 @@ public interface IDataPrivilegeStaffV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryDataPrivilegeStaffsCount", method = RequestMethod.POST)
     int queryDataPrivilegeStaffsCount(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto);
+
+    @RequestMapping(value = "/queryStaffsNotInDataPrivilegeCount", method = RequestMethod.POST)
+    int queryStaffsNotInDataPrivilegeCount(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto);
+
+    @RequestMapping(value = "/queryStaffsNotInDataPrivilege", method = RequestMethod.POST)
+    List<UserDto> queryStaffsNotInDataPrivilege(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto);
 }

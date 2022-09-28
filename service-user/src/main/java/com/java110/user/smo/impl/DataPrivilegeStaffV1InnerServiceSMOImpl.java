@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.smo.impl;
+package com.java110.user.smo.impl;
 
 
-import com.java110.community.dao.IDataPrivilegeStaffV1ServiceDao;
+import com.java110.user.dao.IDataPrivilegeStaffV1ServiceDao;
 import com.java110.intf.community.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.po.dataPrivilegeStaff.DataPrivilegeStaffPo;
@@ -85,5 +85,27 @@ public class DataPrivilegeStaffV1InnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int queryDataPrivilegeStaffsCount(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto) {
         return dataPrivilegeStaffV1ServiceDaoImpl.queryDataPrivilegeStaffsCount(BeanConvertUtil.beanCovertMap(dataPrivilegeStaffDto));    }
+
+    @Override
+    public int queryStaffsNotInDataPrivilegeCount(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto) {
+        return dataPrivilegeStaffV1ServiceDaoImpl.queryStaffsNotInDataPrivilegeCount(BeanConvertUtil.beanCovertMap(dataPrivilegeStaffDto));
+    }
+
+    @Override
+    public List<UserDto> queryStaffsNotInDataPrivilege(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto) {
+
+        int page = dataPrivilegeStaffDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            dataPrivilegeStaffDto.setPage((page - 1) * dataPrivilegeStaffDto.getRow());
+        }
+
+        List<UserDto> privilegeUsers = BeanConvertUtil.covertBeanList(
+                dataPrivilegeStaffV1ServiceDaoImpl.queryStaffsNotInDataPrivilege(BeanConvertUtil.beanCovertMap(dataPrivilegeStaffDto))
+                , UserDto.class);
+
+        return privilegeUsers;
+
+    }
 
 }

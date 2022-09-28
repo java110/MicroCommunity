@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.dao;
+package com.java110.user.dao;
 
 
 import com.java110.utils.exception.DAOException;
@@ -74,4 +74,7 @@ public interface IDataPrivilegeStaffV1ServiceDao {
      */
     int queryDataPrivilegeStaffsCount(Map info);
 
+    int queryStaffsNotInDataPrivilegeCount(Map map);
+
+    List<Map> queryStaffsNotInDataPrivilege(Map map);
 }
