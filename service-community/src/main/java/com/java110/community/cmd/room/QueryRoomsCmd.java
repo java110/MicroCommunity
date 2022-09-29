@@ -10,11 +10,9 @@ import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IMenuInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
@@ -84,6 +82,9 @@ public class QueryRoomsCmd extends Cmd {
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Autowired
+    private IDataPrivilegeUnitV1InnerServiceSMO dataPrivilegeUnitV1InnerServiceSMOImpl;
+
+    @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     protected static final int MAX_ROW = 10000;
@@ -126,6 +127,15 @@ public class QueryRoomsCmd extends Cmd {
 //                roomDto.setRoomNumLike("");
 //            }
 //        }
+
+        //员工数据权限
+        String staffId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
+        dataPrivilegeStaffDto.setStaffId(staffId);
+        String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
+
+
+
         String roomId = "";
         String unitId = "";
         if (reqJson.containsKey("flag") && "0".equals(reqJson.getString("flag"))
@@ -141,6 +151,9 @@ public class QueryRoomsCmd extends Cmd {
                     UnitDto unitDto = new UnitDto();
                     unitDto.setFloorId(floor.getFloorId());
                     unitDto.setUnitNum(reqJson.getString("unitNum"));
+                    if(unitIds != null && unitIds.length>0){
+                        unitDto.setUnitIds(unitIds);
+                    }
                     List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
                     if (unitDtos != null && unitDtos.size() > 0) {
                         for (UnitDto unit : unitDtos) {
@@ -197,6 +210,11 @@ public class QueryRoomsCmd extends Cmd {
             }
         }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
+
+        //员工是否 有权限查询
+        if(unitIds != null && unitIds.length>0){
+            roomDto.setUnitIds(unitIds);
+        }
         //查询总记录数
         int total = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
         apiRoomVo.setTotal(total);

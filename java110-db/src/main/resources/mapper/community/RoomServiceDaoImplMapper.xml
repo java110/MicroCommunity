@@ -173,6 +173,12 @@
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -288,6 +294,12 @@
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -352,6 +364,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -429,6 +447,12 @@
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -492,6 +516,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -561,6 +591,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -633,6 +669,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -726,6 +768,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="unitNum !=null and unitNum != ''">
             and u.unit_num= #{unitNum}
@@ -864,6 +912,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

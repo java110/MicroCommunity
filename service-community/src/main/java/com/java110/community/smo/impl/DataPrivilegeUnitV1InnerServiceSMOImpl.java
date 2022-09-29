@@ -27,6 +27,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -116,6 +117,10 @@ public class DataPrivilegeUnitV1InnerServiceSMOImpl extends BaseServiceSMO imple
 
     @Override
     public String[] queryDataPrivilegeUnitsByStaff(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto) {
+
+        if(StringUtil.isEmpty(dataPrivilegeStaffDto.getStaffId())){
+            return new String[0];
+        }
 
         List<DataPrivilegeStaffDto> dataPrivilegeStaffDtos = dataPrivilegeStaffV1InnerServiceSMOImpl.queryDataPrivilegeStaffs(dataPrivilegeStaffDto);
 
