@@ -261,6 +261,12 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="unitNum !=null and unitNum != ''">
             and bu.unit_num= #{unitNum}
         </if>

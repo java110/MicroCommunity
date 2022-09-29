@@ -17,6 +17,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.UnitDto;
+import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.dto.dataPrivilegeUnit.DataPrivilegeUnitDto;
 import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -72,4 +73,7 @@ public interface IDataPrivilegeUnitV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryUnitsNotInDataPrivilege", method = RequestMethod.POST)
     List<UnitDto> queryUnitsNotInDataPrivilege(@RequestBody DataPrivilegeUnitDto dataPrivilegeUnitDto);
+
+    @RequestMapping(value = "/queryDataPrivilegeUnitsByStaff", method = RequestMethod.POST)
+    String[] queryDataPrivilegeUnitsByStaff(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto);
 }

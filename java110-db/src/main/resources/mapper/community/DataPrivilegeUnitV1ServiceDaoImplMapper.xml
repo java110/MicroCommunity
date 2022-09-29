@@ -31,6 +31,12 @@
         <if test="dpId !=null and dpId != ''">
             and t.dp_id= #{dpId}
         </if>
+        <if test="dpIds !=null">
+            and t.dp_id in
+            <foreach collection="dpIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>

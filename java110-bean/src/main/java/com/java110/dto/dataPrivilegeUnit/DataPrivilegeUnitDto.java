@@ -18,6 +18,7 @@ public class DataPrivilegeUnitDto extends PageDto implements Serializable {
     private String floorId;
     private String dpUnitId;
     private String dpId;
+    private String[] dpIds;
     private String unitNum;
     private String unitId;
     private String remark;
@@ -109,5 +110,13 @@ public class DataPrivilegeUnitDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getDpIds() {
+        return dpIds;
+    }
+
+    public void setDpIds(String[] dpIds) {
+        this.dpIds = dpIds;
     }
 }

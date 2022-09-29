@@ -18,6 +18,8 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IDataPrivilegeUnitV1ServiceDao;
 import com.java110.dto.UnitDto;
+import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.intf.community.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.dto.dataPrivilegeUnit.DataPrivilegeUnitDto;
 import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
@@ -45,6 +47,9 @@ public class DataPrivilegeUnitV1InnerServiceSMOImpl extends BaseServiceSMO imple
 
     @Autowired
     private IDataPrivilegeUnitV1ServiceDao dataPrivilegeUnitV1ServiceDaoImpl;
+
+    @Autowired
+    private IDataPrivilegeStaffV1InnerServiceSMO dataPrivilegeStaffV1InnerServiceSMOImpl;
 
 
     @Override
@@ -107,6 +112,36 @@ public class DataPrivilegeUnitV1InnerServiceSMOImpl extends BaseServiceSMO imple
                 UnitDto.class);
 
         return unitDtos;
+    }
+
+    @Override
+    public String[] queryDataPrivilegeUnitsByStaff(@RequestBody DataPrivilegeStaffDto dataPrivilegeStaffDto) {
+
+        List<DataPrivilegeStaffDto> dataPrivilegeStaffDtos = dataPrivilegeStaffV1InnerServiceSMOImpl.queryDataPrivilegeStaffs(dataPrivilegeStaffDto);
+
+        if(dataPrivilegeStaffDtos == null || dataPrivilegeStaffDtos.size()<1){
+            return new String[0];
+        }
+
+        List<String> dpIds = new ArrayList<>();
+
+        for(DataPrivilegeStaffDto dataPrivilegeStaffDto1 : dataPrivilegeStaffDtos){
+            dpIds.add(dataPrivilegeStaffDto1.getDpId());
+        }
+
+        DataPrivilegeUnitDto dataPrivilegeUnitDto = new DataPrivilegeUnitDto();
+        dataPrivilegeUnitDto.setDpIds(dpIds.toArray(new String[dpIds.size()]));
+        List<DataPrivilegeUnitDto> dataPrivilegeUnitDtos = queryDataPrivilegeUnits(dataPrivilegeUnitDto);
+
+        if(dataPrivilegeUnitDtos == null || dataPrivilegeUnitDtos.size()<1){
+            return new String[0];
+        }
+        List<String> unitIds = new ArrayList<>();
+        for(DataPrivilegeUnitDto dataPrivilegeUnitDto1 : dataPrivilegeUnitDtos){
+            unitIds.add(dataPrivilegeUnitDto1.getUnitId());
+        }
+
+        return unitIds.toArray(new String[unitIds.size()]);
     }
 
 }

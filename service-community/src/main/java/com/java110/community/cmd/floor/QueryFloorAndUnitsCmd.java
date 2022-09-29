@@ -6,6 +6,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.UnitDto;
+import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -23,6 +25,9 @@ public class QueryFloorAndUnitsCmd extends Cmd {
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
+    @Autowired
+    private IDataPrivilegeUnitV1InnerServiceSMO dataPrivilegeUnitV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
@@ -39,6 +44,16 @@ public class QueryFloorAndUnitsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         UnitDto unitDto = BeanConvertUtil.covertBean(reqJson, UnitDto.class);
         unitDto.setUserId("");
+
+        //查询 员工是否有配置 授权单元
+        String staffId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
+        dataPrivilegeStaffDto.setStaffId(staffId);
+        String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
+
+        if(unitIds != null && unitIds.length>0){
+            unitDto.setUnitIds(unitIds);
+        }
 
         List<UnitDto> unitDtoList = floorInnerServiceSMOImpl.queryFloorAndUnits(unitDto);
 
