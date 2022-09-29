@@ -109,6 +109,12 @@
         <if test="unitId !=null and unitId != ''">
             and t.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null">
+            and t.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="unitNum !=null and unitNum != ''">
             and t.unit_num= #{unitNum}
         </if>
