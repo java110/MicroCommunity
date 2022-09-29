@@ -397,7 +397,10 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by t.fee_year,t.fee_month
+        group by t.fee_year,t.fee_month,t.create_time createTime
+        <if test="configIds !=null">
+         ,t.config_id configId
+        </if>
         <if test="configIds !=null">
             ,t.config_id
         </if>
