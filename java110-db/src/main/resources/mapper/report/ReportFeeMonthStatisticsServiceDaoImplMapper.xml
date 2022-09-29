@@ -1946,7 +1946,10 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by fdr.discount_small_type
+        group by pfc.fee_name,f.floor_num,bu.unit_num ,br.room_num ,oc.car_num ,
+        pf.payer_obj_type ,t.start_time ,t.end_time ,t.create_time ,
+        t.receivable_amount ,t.received_amount ,pfa.`value`
+        ,t.prime_rate,d.name ,fdr.discount_small_type ,fdr.rule_name,pfdd.discount_price
         order by t.create_time desc
     </select>
 
