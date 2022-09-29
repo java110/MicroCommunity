@@ -5,7 +5,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
+import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -28,6 +30,9 @@ public class QueryReportFeeSummaryDetailCmd extends Cmd {
     @Autowired
     private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
 
+    @Autowired
+    private IDataPrivilegeUnitV1InnerServiceSMO dataPrivilegeUnitV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未传入小区信息");
@@ -45,6 +50,15 @@ public class QueryReportFeeSummaryDetailCmd extends Cmd {
         }
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
         reportFeeMonthStatisticsDto.setConfigIds(configIds);
+
+        String staffId = context.getReqHeaders().get("user-id");
+        DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
+        dataPrivilegeStaffDto.setStaffId(staffId);
+        String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
+
+        if(unitIds != null && unitIds.length>0){
+            reportFeeMonthStatisticsDto.setUnitIds(unitIds);
+        }
 
 
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryDetailCount(reportFeeMonthStatisticsDto);

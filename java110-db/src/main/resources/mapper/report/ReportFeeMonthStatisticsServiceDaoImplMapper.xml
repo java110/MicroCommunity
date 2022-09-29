@@ -286,6 +286,12 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
         </if>
@@ -355,6 +361,12 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
         </if>
@@ -421,6 +433,12 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
         </if>
@@ -485,6 +503,12 @@
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
         </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}
         </if>
@@ -548,6 +572,12 @@
         </if>
         <if test="unitId !=null and unitId != ''">
             and bu.unit_id= #{unitId}
+        </if>
+        <if test="unitIds !=null ">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="floorId !=null and floorId != ''">
             and f.floor_id = #{floorId}

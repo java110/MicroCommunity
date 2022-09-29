@@ -41,6 +41,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String floorId;
     private String floorNum;
     private String unitId;
+    private String[] unitIds;
     private String unitNum;
     private String roomId;
     private String roomNum;
@@ -750,5 +751,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setPayableAmount(String payableAmount) {
         this.payableAmount = payableAmount;
+    }
+
+    public String[] getUnitIds() {
+        return unitIds;
+    }
+
+    public void setUnitIds(String[] unitIds) {
+        this.unitIds = unitIds;
     }
 }
