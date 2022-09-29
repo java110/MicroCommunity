@@ -136,7 +136,7 @@ public class Java110MybatisInterceptor implements Interceptor {
     private void dealUpdateSql(MappedStatement mappedStatement, Object parameter, String sql, Map<String, Object> sqlValue) {
         //RestTemplate restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
 
-        String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set")).trim();
+        String tmpTable = sql.substring(sql.indexOf("update") + 6, sql.indexOf("set ")).trim();
 
         String tmpTableHasT = tmpTable;
 
