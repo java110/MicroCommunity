@@ -73,7 +73,7 @@ public class ListCarInParkingAreaCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        if(reqJson.containsKey("boxId")) {
+        if(reqJson.containsKey("boxId") && !StringUtil.isEmpty(reqJson.getString("boxId"))) {
             Assert.hasKeyAndValue(reqJson, "boxId", "未包含岗亭信息");
         }else{
             Assert.hasKeyAndValue(reqJson, "paId", "未包含停车场信息");
