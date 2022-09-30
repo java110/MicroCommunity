@@ -5,165 +5,169 @@
 <mapper namespace="communitySpacePersonV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存小区场地预约信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunitySpacePersonInfo" parameterType="Map">
         insert into community_space_person(
-receivable_amount,pay_way,remark,received_amount,person_name,space_id,csp_id,appointment_time,person_id,state,person_tel,community_id
-) values (
-#{receivableAmount},#{payWay},#{remark},#{receivedAmount},#{personName},#{spaceId},#{cspId},#{appointmentTime},#{personId},#{state},#{personTel},#{communityId}
-)
+        receivable_amount,pay_way,remark,received_amount,person_name,space_id,csp_id,appointment_time,person_id,state,person_tel,community_id
+        ) values (
+        #{receivableAmount},#{payWay},#{remark},#{receivedAmount},#{personName},#{spaceId},#{cspId},#{appointmentTime},#{personId},#{state},#{personTel},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询小区场地预约信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpacePersonInfo" parameterType="Map" resultType="Map">
-        select  t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way payWay,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.person_name,t.person_name personName,t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.appointment_time,t.appointment_time appointmentTime,t.person_id,t.person_id personId,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId 
-from community_space_person t 
-where 1 =1 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="payWay !=null and payWay != ''">
-   and t.pay_way= #{payWay}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="personName !=null and personName != ''">
-   and t.person_name= #{personName}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="cspId !=null and cspId != ''">
-   and t.csp_id= #{cspId}
-</if> 
-<if test="appointmentTime !=null and appointmentTime != ''">
-   and t.appointment_time= #{appointmentTime}
-</if> 
-<if test="personId !=null and personId != ''">
-   and t.person_id= #{personId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="personTel !=null and personTel != ''">
-   and t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way
+        payWay,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
+        receivedAmount,t.person_name,t.person_name personName,t.space_id,t.space_id spaceId,t.csp_id,t.csp_id
+        cspId,t.appointment_time,t.appointment_time appointmentTime,t.person_id,t.person_id
+        personId,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,td.name stateName,td1.name payWayName,
+        cs.name spaceName,t.create_time createTime
+        from community_space_person t
+        left join community_space cs on t.space_id = cs.space_id and cs.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'community_space_person' and td.table_columns = 'state'
+        left join t_dict td1 on t.pay_way = td1.status_cd and td1.table_name = 'community_space_person' and td1.table_columns = 'pay_way'
+
+        where 1 =1
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            and t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改小区场地预约信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunitySpacePersonInfo" parameterType="Map">
-        update  community_space_person t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-, t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="payWay !=null and payWay != ''">
-, t.pay_way= #{payWay}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-, t.received_amount= #{receivedAmount}
-</if> 
-<if test="personName !=null and personName != ''">
-, t.person_name= #{personName}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-, t.space_id= #{spaceId}
-</if> 
-<if test="appointmentTime !=null and appointmentTime != ''">
-, t.appointment_time= #{appointmentTime}
-</if> 
-<if test="personId !=null and personId != ''">
-, t.person_id= #{personId}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="personTel !=null and personTel != ''">
-, t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="cspId !=null and cspId != ''">
-and t.csp_id= #{cspId}
-</if> 
+        update community_space_person t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            , t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            , t.space_id= #{spaceId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            , t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
+        </if>
 
     </update>
 
     <!-- 查询小区场地预约数量 add by wuxw 2018-07-03 -->
-     <select id="queryCommunitySpacePersonsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from community_space_person t 
-where 1 =1 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="payWay !=null and payWay != ''">
-   and t.pay_way= #{payWay}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="personName !=null and personName != ''">
-   and t.person_name= #{personName}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="cspId !=null and cspId != ''">
-   and t.csp_id= #{cspId}
-</if> 
-<if test="appointmentTime !=null and appointmentTime != ''">
-   and t.appointment_time= #{appointmentTime}
-</if> 
-<if test="personId !=null and personId != ''">
-   and t.person_id= #{personId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="personTel !=null and personTel != ''">
-   and t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryCommunitySpacePersonsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_space_person t
+        where 1 =1
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            and t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

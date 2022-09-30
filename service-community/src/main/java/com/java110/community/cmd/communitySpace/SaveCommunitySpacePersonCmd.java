@@ -22,15 +22,55 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
+import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
+@Java110CmdDoc(title = "预约场地",
+        description = "系统中的预约场地",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/communitySpace.saveCommunitySpacePerson",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "communitySpace.saveCommunitySpacePerson"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "分页页数"),
+        @Java110ParamDoc(name = "row",type = "int", length = 11, remark = "分页行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "appointmentDate", length = 30, remark = "预约日期 YYYY-MM-DD"),
+        @Java110ParamDoc(name = "appointmentTime", length = 30, remark = "预约时间 HH24:MI"),
+        @Java110ParamDoc(name = "payWay", length = 12, remark = "支付方式"),
+        @Java110ParamDoc(name = "personName", length = 64, remark = "预约人"),
+        @Java110ParamDoc(name = "personTel", length = 30, remark = "预约人电话"),
+        @Java110ParamDoc(name = "receivableAmount", length = 30, remark = "应收金额"),
+        @Java110ParamDoc(name = "receivedAmount", length = 30, remark = "实收金额"),
+        @Java110ParamDoc(name = "spaceId", length = 30, remark = "场地ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"spaceId\":\"102022093043260007\",\"personName\":\"wuxw\",\"personTel\":\"18909711443\",\"appointmentTime\":\"01:00\",\"receivableAmount\":\"10\",\"receivedAmount\":\"10\",\"payWay\":\"2\",\"state\":\"S\",\"remark\":\"123\",\"appointmentDate\":\"2022-09-01\",\"communityId\":\"2022081539020475\"}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 
 /**
  * 类表述：保存
@@ -62,7 +102,6 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
     }
 
@@ -70,8 +109,13 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+
+
         CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
         communitySpacePersonPo.setCspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        if(StringUtil.isEmpty(communitySpacePersonPo.getState())){
+            communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_W);
+        }
         int flag = communitySpacePersonV1InnerServiceSMOImpl.saveCommunitySpacePerson(communitySpacePersonPo);
 
         if (flag < 1) {

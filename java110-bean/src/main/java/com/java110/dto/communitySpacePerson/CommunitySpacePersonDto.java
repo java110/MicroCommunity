@@ -1,6 +1,7 @@
 package com.java110.dto.communitySpacePerson;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,18 +15,26 @@ import java.util.Date;
  **/
 public class CommunitySpacePersonDto extends PageDto implements Serializable {
 
+    public static final String STATE_S = "预约成功";
+    public static final String STATE_F = "预约失败";
+    public static final String STATE_W = "待审核";
+    public static final String STATE_WP = "待支付";
+
     private String receivableAmount;
-private String payWay;
-private String remark;
-private String receivedAmount;
-private String personName;
-private String spaceId;
-private String cspId;
-private String appointmentTime;
-private String personId;
-private String state;
-private String personTel;
-private String communityId;
+    private String payWay;
+    private String payWayName;
+    private String remark;
+    private String receivedAmount;
+    private String personName;
+    private String spaceId;
+    private String spaceName;
+    private String cspId;
+    private String appointmentTime;
+    private String personId;
+    private String state;
+    private String stateName;
+    private String personTel;
+    private String communityId;
 
 
     private Date createTime;
@@ -36,73 +45,96 @@ private String communityId;
     public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getPayWay() {
+
+    public String getPayWay() {
         return payWay;
     }
-public void setPayWay(String payWay) {
+
+    public void setPayWay(String payWay) {
         this.payWay = payWay;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getPersonName() {
+
+    public String getPersonName() {
         return personName;
     }
-public void setPersonName(String personName) {
+
+    public void setPersonName(String personName) {
         this.personName = personName;
     }
-public String getSpaceId() {
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getCspId() {
+
+    public String getCspId() {
         return cspId;
     }
-public void setCspId(String cspId) {
+
+    public void setCspId(String cspId) {
         this.cspId = cspId;
     }
-public String getAppointmentTime() {
+
+    public String getAppointmentTime() {
         return appointmentTime;
     }
-public void setAppointmentTime(String appointmentTime) {
+
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getPersonTel() {
+
+    public String getPersonTel() {
         return personTel;
     }
-public void setPersonTel(String personTel) {
+
+    public void setPersonTel(String personTel) {
         this.personTel = personTel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -121,5 +153,29 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPayWayName() {
+        return payWayName;
+    }
+
+    public void setPayWayName(String payWayName) {
+        this.payWayName = payWayName;
+    }
+
+    public String getSpaceName() {
+        return spaceName;
+    }
+
+    public void setSpaceName(String spaceName) {
+        this.spaceName = spaceName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
