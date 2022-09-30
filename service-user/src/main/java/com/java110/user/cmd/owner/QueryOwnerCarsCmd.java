@@ -154,6 +154,8 @@ public class QueryOwnerCarsCmd extends Cmd {
     private void doFreshRoomInfo(OwnerCarDto ownerCarDto) {
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setOwnerId(ownerCarDto.getOwnerId());
+        ownerRoomRelDto.setPage(1);
+        ownerRoomRelDto.setRow(3); //只展示3个房屋以内 不然页面太乱
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             ownerCarDto.setRoomName("-");
