@@ -1,8 +1,11 @@
 package com.java110.dto.communitySpace;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.communitySpaceOpenTime.CommunitySpaceOpenTimeDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,73 +18,92 @@ import java.util.Date;
 public class CommunitySpaceDto extends PageDto implements Serializable {
 
     private String adminName;
-private String spaceId;
-private String name;
-private String startTime;
-private String tel;
-private String endTime;
-private String state;
-private String communityId;
-private String feeMoney;
+    private String spaceId;
+    private String name;
+    private String startTime;
+    private String tel;
+    private String endTime;
+    private String state;
+    private String communityId;
+    private String feeMoney;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private List<CommunitySpaceOpenTimeDto> openTimes;
+
 
     public String getAdminName() {
         return adminName;
     }
-public void setAdminName(String adminName) {
+
+    public void setAdminName(String adminName) {
         this.adminName = adminName;
     }
-public String getSpaceId() {
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeMoney() {
+
+    public String getFeeMoney() {
         return feeMoney;
     }
-public void setFeeMoney(String feeMoney) {
+
+    public void setFeeMoney(String feeMoney) {
         this.feeMoney = feeMoney;
     }
 
@@ -100,5 +122,13 @@ public void setFeeMoney(String feeMoney) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<CommunitySpaceOpenTimeDto> getOpenTimes() {
+        return openTimes;
+    }
+
+    public void setOpenTimes(List<CommunitySpaceOpenTimeDto> openTimes) {
+        this.openTimes = openTimes;
     }
 }

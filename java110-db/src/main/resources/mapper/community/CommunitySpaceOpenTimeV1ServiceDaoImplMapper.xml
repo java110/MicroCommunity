@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communitySpaceOpenTimeV1ServiceDaoImpl">
+
+
+    <!-- 保存场地开放时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunitySpaceOpenTimeInfo" parameterType="Map">
+        insert into community_space_open_time(
+        space_id,hours,is_open,time_id,community_id
+        ) values (
+        #{spaceId},#{hours},#{isOpen},#{timeId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 保存场地开放时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunitySpaceOpenTimesInfo" parameterType="Map">
+        insert into community_space_open_time(
+        space_id,hours,is_open,time_id,community_id
+        ) values
+        <foreach collection="openTimes" item="item" separator=",">
+            (#{item.spaceId},#{item.hours},#{item.isOpen},#{item.timeId},#{item.communityId})
+        </foreach>
+    </insert>
+
+
+    <!-- 查询场地开放时间信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunitySpaceOpenTimeInfo" parameterType="Map" resultType="Map">
+        select t.space_id,t.space_id spaceId,t.hours,t.is_open,t.is_open isOpen,t.time_id,t.time_id
+        timeId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        from community_space_open_time t
+        where 1 =1
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            and t.is_open= #{isOpen}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改场地开放时间信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunitySpaceOpenTimeInfo" parameterType="Map">
+        update community_space_open_time t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            , t.space_id= #{spaceId}
+        </if>
+        <if test="hours !=null and hours != ''">
+            , t.hours= #{hours}
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            , t.is_open= #{isOpen}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+
+    </update>
+
+    <!-- 查询场地开放时间数量 add by wuxw 2018-07-03 -->
+    <select id="queryCommunitySpaceOpenTimesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_space_open_time t
+        where 1 =1
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            and t.is_open= #{isOpen}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
