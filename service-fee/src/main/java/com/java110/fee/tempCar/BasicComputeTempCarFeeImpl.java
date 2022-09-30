@@ -33,7 +33,7 @@ public class BasicComputeTempCarFeeImpl extends BaseComputeTempCarFee {
     public static final String SPEC_CD_5600012005 = "5600012005";
     public static final String SPEC_CD_5600012006 = "5600012006";
     public static final String SPEC_CD_5600012007 = "5600012007";
-    public static final String SPEC_CD_5600012008 = "5600012006";
+    public static final String SPEC_CD_5600012008 = "5600012008";
     public static final String SPEC_CD_5600012009 = "5600012009";
 
     @Override
