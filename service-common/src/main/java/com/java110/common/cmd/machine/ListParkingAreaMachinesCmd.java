@@ -149,6 +149,7 @@ public class ListParkingAreaMachinesCmd extends Cmd {
         MachineDto machineDto = new MachineDto();
         machineDto.setLocationObjIds(boxIds.toArray(new String[boxIds.size()]));
         machineDto.setCommunityId(reqJson.getString("communityId"));
+        machineDto.setDirection(reqJson.getString("direction"));
         int count = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
 
         if (count > 0) {
