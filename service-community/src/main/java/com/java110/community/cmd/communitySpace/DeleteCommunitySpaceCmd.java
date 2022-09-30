@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 类表述：删除
  * 服务编码：communitySpace.deleteCommunitySpace
  * 请求路劲：/app/communitySpace.DeleteCommunitySpace
- * add by 吴学文 at 2022-09-30 10:21:28 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-09-30 10:29:06 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下

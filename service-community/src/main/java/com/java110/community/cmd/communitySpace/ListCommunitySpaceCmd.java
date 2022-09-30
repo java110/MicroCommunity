@@ -17,29 +17,32 @@ package com.java110.community.cmd.communitySpace;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.communitySpace.CommunitySpaceDto;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
+import com.java110.po.communitySpace.CommunitySpacePo;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.java110.dto.communitySpace.CommunitySpaceDto;
+import java.util.List;
+import java.util.ArrayList;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * 类表述：查询
  * 服务编码：communitySpace.listCommunitySpace
  * 请求路劲：/app/communitySpace.ListCommunitySpace
- * add by 吴学文 at 2022-09-30 10:21:28 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-09-30 10:29:06 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -48,7 +51,7 @@ import java.util.List;
 @Java110Cmd(serviceCode = "communitySpace.listCommunitySpace")
 public class ListCommunitySpaceCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListCommunitySpaceCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(ListCommunitySpaceCmd.class);
     @Autowired
     private ICommunitySpaceV1InnerServiceSMO communitySpaceV1InnerServiceSMOImpl;
 
@@ -60,22 +63,22 @@ public class ListCommunitySpaceCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        CommunitySpaceDto communitySpaceDto = BeanConvertUtil.covertBean(reqJson, CommunitySpaceDto.class);
+           CommunitySpaceDto communitySpaceDto = BeanConvertUtil.covertBean(reqJson, CommunitySpaceDto.class);
 
-        int count = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpacesCount(communitySpaceDto);
+           int count = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpacesCount(communitySpaceDto);
 
-        List<CommunitySpaceDto> communitySpaceDtos = null;
+           List<CommunitySpaceDto> communitySpaceDtos = null;
 
-        if (count > 0) {
-            communitySpaceDtos = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpaces(communitySpaceDto);
-        } else {
-            communitySpaceDtos = new ArrayList<>();
-        }
+           if (count > 0) {
+               communitySpaceDtos = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpaces(communitySpaceDto);
+           } else {
+               communitySpaceDtos = new ArrayList<>();
+           }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, communitySpaceDtos);
+           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, communitySpaceDtos);
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-        cmdDataFlowContext.setResponseEntity(responseEntity);
+           cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
