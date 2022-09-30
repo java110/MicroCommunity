@@ -40,7 +40,7 @@ public interface ICommunitySpaceOpenTimeV1InnerServiceSMO {
 
     @RequestMapping(value = "/saveCommunitySpaceOpenTime", method = RequestMethod.POST)
     public int saveCommunitySpaceOpenTime(@RequestBody  CommunitySpaceOpenTimePo communitySpaceOpenTimePo);
-    @RequestMapping(value = "/saveCommunitySpaceOpenTime", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveCommunitySpaceOpenTimes", method = RequestMethod.POST)
     public int saveCommunitySpaceOpenTimes(@RequestBody  List<CommunitySpaceOpenTimePo> communitySpaceOpenTimePos);
 
     @RequestMapping(value = "/updateCommunitySpaceOpenTime", method = RequestMethod.POST)

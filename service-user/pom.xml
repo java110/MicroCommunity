@@ -21,42 +21,4 @@
             <artifactId>java110-service</artifactId>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>service-user</finalName>
-	        <plugins>
-	            <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-dependency-plugin</artifactId>
-	                <version>2.10</version>
-	                <executions>
-	                    <execution>
-	                        <id>unpack</id>
-	                        <phase>generate-resources</phase>
-	                        <goals>
-	                            <goal>unpack</goal>
-	                        </goals>
-	                        <configuration>
-	                            <artifactItems>
-	                                <artifactItem>
-	                                    <groupId>com.java110</groupId>
-	                                    <artifactId>java110-interface</artifactId>
-	                                    <version>${microcommunity.version}</version>
-	                                    <type>jar</type>
-	                                    <overWrite>true</overWrite>
-	                                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
-	                                </artifactItem>
-	                            </artifactItems>
-	                        </configuration>
-	                    </execution>
-	                </executions>
-	            </plugin>
-	            <plugin>
-	                <groupId>org.springframework.boot</groupId>
-	                <artifactId>spring-boot-maven-plugin</artifactId>
-	                <configuration>
-	                    <mainClass>com.java110.user.UserServiceApplicationStart</mainClass>
-	                </configuration>
-	            </plugin>
-	        </plugins>
-    </build>
 </project>
