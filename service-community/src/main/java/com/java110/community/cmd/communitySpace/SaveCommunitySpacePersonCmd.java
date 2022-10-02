@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.communitySpace;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -24,8 +25,10 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
+import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -92,6 +95,9 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
     @Autowired
     private ICommunitySpacePersonV1InnerServiceSMO communitySpacePersonV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "spaceId", "请求报文中未包含spaceId");
@@ -120,6 +126,31 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        if(!reqJson.containsKey("openTimes")){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+
+        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+
+        if(openTimes == null || openTimes.size() <1){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+        CommunitySpacePersonTimePo communitySpacePersonTimePo = null;
+        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+            if("N".equals(openTimes.getJSONObject(timeIndex).getString("isOpen"))){
+                continue;
+            }
+            communitySpacePersonTimePo = new CommunitySpacePersonTimePo();
+            communitySpacePersonTimePo.setCommunityId(communitySpacePersonPo.getCommunityId());
+            communitySpacePersonTimePo.setCspId(communitySpacePersonPo.getCspId());
+            communitySpacePersonTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
+            communitySpacePersonTimePo.setSpaceId(communitySpacePersonPo.getSpaceId());
+            communitySpacePersonTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            communitySpacePersonTimeV1InnerServiceSMOImpl.saveCommunitySpacePersonTime(communitySpacePersonTimePo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

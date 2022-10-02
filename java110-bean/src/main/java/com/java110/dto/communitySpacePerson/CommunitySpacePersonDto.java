@@ -1,9 +1,11 @@
 package com.java110.dto.communitySpacePerson;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -36,8 +38,11 @@ public class CommunitySpacePersonDto extends PageDto implements Serializable {
     private String personTel;
     private String communityId;
 
+    private List<CommunitySpacePersonTimeDto> times;
+
 
     private Date createTime;
+
 
     private String statusCd = "0";
 
@@ -177,5 +182,13 @@ public class CommunitySpacePersonDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public List<CommunitySpacePersonTimeDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<CommunitySpacePersonTimeDto> times) {
+        this.times = times;
     }
 }

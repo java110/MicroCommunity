@@ -1,6 +1,7 @@
 package com.java110.dto.communitySpacePersonTime;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class CommunitySpacePersonTimeDto extends PageDto implements Serializable {
 
     private String spaceId;
-private String cspId;
-private String hours;
-private String timeId;
-private String communityId;
+    private String cspId;
+    private String[] cspIds;
+    private String hours;
+    private String timeId;
+    private String communityId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String communityId;
     public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getCspId() {
+
+    public String getCspId() {
         return cspId;
     }
-public void setCspId(String cspId) {
+
+    public void setCspId(String cspId) {
         this.cspId = cspId;
     }
-public String getHours() {
+
+    public String getHours() {
         return hours;
     }
-public void setHours(String hours) {
+
+    public void setHours(String hours) {
         this.hours = hours;
     }
-public String getTimeId() {
+
+    public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -72,5 +83,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getCspIds() {
+        return cspIds;
+    }
+
+    public void setCspIds(String[] cspIds) {
+        this.cspIds = cspIds;
     }
 }

@@ -20,8 +20,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.communitySpace.CommunitySpaceDto;
+import com.java110.dto.communitySpaceOpenTime.CommunitySpaceOpenTimeDto;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
+import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -52,6 +57,9 @@ public class ListCommunitySpacePersonCmd extends Cmd {
     @Autowired
     private ICommunitySpacePersonV1InnerServiceSMO communitySpacePersonV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -68,6 +76,7 @@ public class ListCommunitySpacePersonCmd extends Cmd {
 
         if (count > 0) {
             communitySpacePersonDtos = communitySpacePersonV1InnerServiceSMOImpl.queryCommunitySpacePersons(communitySpacePersonDto);
+            refreshOpenTimes(communitySpacePersonDtos);
         } else {
             communitySpacePersonDtos = new ArrayList<>();
         }
@@ -77,5 +86,35 @@ public class ListCommunitySpacePersonCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshOpenTimes(List<CommunitySpacePersonDto> communitySpacePersonDtos) {
+
+        if (communitySpacePersonDtos == null || communitySpacePersonDtos.size() < 1) {
+            return;
+        }
+
+        List<String> cspIds = new ArrayList<>();
+
+        for (CommunitySpacePersonDto communitySpaceDto : communitySpacePersonDtos) {
+            cspIds.add(communitySpaceDto.getCspId());
+        }
+
+        CommunitySpacePersonTimeDto communitySpaceOpenTimeDto = new CommunitySpacePersonTimeDto();
+        communitySpaceOpenTimeDto.setCspIds(cspIds.toArray(new String[cspIds.size()]));
+        List<CommunitySpacePersonTimeDto> communitySpacePersonTimeDtos
+                = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimes(communitySpaceOpenTimeDto);
+
+        List<CommunitySpacePersonTimeDto> tmpCommunitySpaceOpenTimeDtos = null;
+        for (CommunitySpacePersonDto communitySpaceDto : communitySpacePersonDtos) {
+            tmpCommunitySpaceOpenTimeDtos = new ArrayList<>();
+            for (CommunitySpacePersonTimeDto tmpCommunitySpacePersonTimeDto : communitySpacePersonTimeDtos) {
+                if (tmpCommunitySpacePersonTimeDto.getCspId().equals(communitySpaceDto.getCspId())) {
+                    tmpCommunitySpaceOpenTimeDtos.add(tmpCommunitySpacePersonTimeDto);
+                }
+            }
+            communitySpaceDto.setTimes(tmpCommunitySpaceOpenTimeDtos);
+        }
+
     }
 }
