@@ -28,6 +28,9 @@ public class CommunitySpaceOpenTimeDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
+    private String appointmentTime;
+
+
     public String getSpaceId() {
         return spaceId;
     }
@@ -91,5 +94,13 @@ public class CommunitySpaceOpenTimeDto extends PageDto implements Serializable {
 
     public void setSpaceIds(String[] spaceIds) {
         this.spaceIds = spaceIds;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
     }
 }

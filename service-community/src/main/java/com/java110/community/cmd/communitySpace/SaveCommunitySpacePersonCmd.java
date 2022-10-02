@@ -61,6 +61,9 @@ import org.springframework.beans.factory.annotation.Autowired;
         @Java110ParamDoc(name = "receivableAmount", length = 30, remark = "应收金额"),
         @Java110ParamDoc(name = "receivedAmount", length = 30, remark = "实收金额"),
         @Java110ParamDoc(name = "spaceId", length = 30, remark = "场地ID"),
+        @Java110ParamDoc(name = "openTimes",type="Array", length = 30, remark = "场地ID"),
+        @Java110ParamDoc(parentNodeName = "openTimes",name = "hours", length = 30, remark = "预约时间"),
+
 })
 
 @Java110ResponseDoc(
