@@ -25,6 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
@@ -108,6 +109,34 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+        if(!reqJson.containsKey("openTimes")){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+
+        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+
+        if(openTimes == null || openTimes.size() <1){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+        CommunitySpacePersonTimeDto communitySpacePersonTimeDto = null;
+        int flag = 0;
+        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+            if("N".equals(openTimes.getJSONObject(timeIndex).getString("isOpen"))){
+                continue;
+            }
+            communitySpacePersonTimeDto = new CommunitySpacePersonTimeDto();
+            communitySpacePersonTimeDto.setCommunityId(reqJson.getString("communityId"));
+            communitySpacePersonTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
+            communitySpacePersonTimeDto.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
+            communitySpacePersonTimeDto.setSpaceId(reqJson.getString("spaceId"));
+            flag = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimesCount(communitySpacePersonTimeDto);
+            if(flag > 0){
+                throw new CmdException(reqJson.getString("appointmentTime")+","+openTimes.getJSONObject(timeIndex).getString("hours")+"已经被预约");
+            }
+        }
 
     }
 

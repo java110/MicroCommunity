@@ -82,7 +82,11 @@
     <select id="queryCommunitySpacePersonTimesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from community_space_person_time t
+        left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
         where 1 =1
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and csp.appointment_time= #{appointmentTime}
+        </if>
         <if test="spaceId !=null and spaceId != ''">
             and t.space_id= #{spaceId}
         </if>

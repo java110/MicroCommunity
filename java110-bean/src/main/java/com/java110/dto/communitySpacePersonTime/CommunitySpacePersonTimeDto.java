@@ -22,6 +22,8 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
     private String timeId;
     private String communityId;
 
+    private String appointmentTime;
+
 
     private Date createTime;
 
@@ -91,5 +93,13 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
 
     public void setCspIds(String[] cspIds) {
         this.cspIds = cspIds;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
     }
 }
