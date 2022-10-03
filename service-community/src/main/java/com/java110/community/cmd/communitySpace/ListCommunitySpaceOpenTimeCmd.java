@@ -60,7 +60,6 @@ public class ListCommunitySpaceOpenTimeCmd extends Cmd{
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-        Assert.hasKeyAndValue(reqJson,"spaceId","场地ID");
         Assert.hasKeyAndValue(reqJson,"appointmentTime","预约时间");
         Assert.hasKeyAndValue(reqJson,"communityId","小区ID");
     }
@@ -70,6 +69,7 @@ public class ListCommunitySpaceOpenTimeCmd extends Cmd{
 
         CommunitySpaceOpenTimeDto communitySpaceOpenTimeDto = new CommunitySpaceOpenTimeDto();
         communitySpaceOpenTimeDto.setSpaceId(reqJson.getString("spaceId"));
+        communitySpaceOpenTimeDto.setVenueId(reqJson.getString("venueId"));
         communitySpaceOpenTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
         List<CommunitySpaceOpenTimeDto> communitySpaceOpenTimeDtos = communitySpaceOpenTimeV1InnerServiceSMOImpl.queryCommunitySpaceOpenTimes(communitySpaceOpenTimeDto);
 
