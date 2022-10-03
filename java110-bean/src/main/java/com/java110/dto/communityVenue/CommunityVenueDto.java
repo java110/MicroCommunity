@@ -1,6 +1,7 @@
 package com.java110.dto.communityVenue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,9 @@ import java.util.Date;
 public class CommunityVenueDto extends PageDto implements Serializable {
 
     private String venueId;
-private String name;
-private String remark;
-private String communityId;
+    private String name;
+    private String remark;
+    private String communityId;
 
 
     private Date createTime;
@@ -28,25 +29,32 @@ private String communityId;
     public String getVenueId() {
         return venueId;
     }
-public void setVenueId(String venueId) {
+
+    public void setVenueId(String venueId) {
         this.venueId = venueId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
