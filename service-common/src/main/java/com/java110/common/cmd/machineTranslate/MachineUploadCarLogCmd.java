@@ -372,8 +372,8 @@ public class MachineUploadCarLogCmd extends Cmd {
             });
             List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(newCarInoutDto);
 
-            if(carInoutDtos == null || carInoutDtos.size()<1){
-                return ;
+            if (carInoutDtos == null || carInoutDtos.size() < 1) {
+                return;
             }
 
             CarInoutPo carInoutPo = new CarInoutPo();
@@ -671,6 +671,16 @@ public class MachineUploadCarLogCmd extends Cmd {
      * @param machineDto
      */
     private void saveTempCar(JSONObject reqJson, MachineDto machineDto) {
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarNum(reqJson.getString("carNum"));
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
+            reqJson.put("carId", ownerCarDtos.get(0).getCarId());
+            return;
+        }
 
         OwnerCarPo ownerCarPo = new OwnerCarPo();
         ownerCarPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
