@@ -323,10 +323,12 @@ public class PayOweFeeCmd extends Cmd {
         businessFeeDetail.put("cycles", cycles.doubleValue());
         businessFeeDetail.put("receivableAmount", paramInJson.getString("receivedAmount"));
         businessFeeDetail.put("receivedAmount", paramInJson.getString("receivedAmount"));
+        businessFeeDetail.put("payableAmount", paramInJson.getString("receivedAmount"));
         businessFeeDetail.put("endTime", paramInJson.getString("endTime"));
         paramInJson.put("feeInfo", feeDto);
         paramInJson.put("cycles", cycles.doubleValue());
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
+
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
         if (flag < 1) {
