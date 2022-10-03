@@ -56,7 +56,7 @@
         <if test="feeMoney !=null and feeMoney != ''">
             and t.fee_money= #{feeMoney}
         </if>
-        order by t.create_time desc
+        order by t.create_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
