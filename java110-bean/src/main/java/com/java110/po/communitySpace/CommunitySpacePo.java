@@ -17,6 +17,7 @@ package com.java110.po.communitySpace;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-09-30 10:29:06 mail: 928255095@qq.com
@@ -28,76 +29,103 @@ import java.util.Date;
 public class CommunitySpacePo implements Serializable {
 
     private String adminName;
-private String spaceId;
-private String name;
-private String startTime;
-private String tel;
-private String statusCd = "0";
-private String endTime;
-private String state;
-private String communityId;
-private String feeMoney;
-public String getAdminName() {
+    private String spaceId;
+    private String name;
+    private String startTime;
+    private String tel;
+    private String statusCd = "0";
+    private String endTime;
+    private String state;
+    private String communityId;
+    private String feeMoney;
+    private String venueId;
+
+    public String getAdminName() {
         return adminName;
     }
-public void setAdminName(String adminName) {
+
+    public void setAdminName(String adminName) {
         this.adminName = adminName;
     }
-public String getSpaceId() {
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeMoney() {
+
+    public String getFeeMoney() {
         return feeMoney;
     }
-public void setFeeMoney(String feeMoney) {
+
+    public void setFeeMoney(String feeMoney) {
         this.feeMoney = feeMoney;
     }
 
 
+    public String getVenueId() {
+        return venueId;
+    }
 
+    public void setVenueId(String venueId) {
+        this.venueId = venueId;
+    }
 }

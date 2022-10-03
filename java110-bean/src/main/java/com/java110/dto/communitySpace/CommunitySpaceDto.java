@@ -27,6 +27,7 @@ public class CommunitySpaceDto extends PageDto implements Serializable {
     private String communityId;
     private String feeMoney;
 
+    private String venueId;
 
     private Date createTime;
 
@@ -130,5 +131,13 @@ public class CommunitySpaceDto extends PageDto implements Serializable {
 
     public void setOpenTimes(List<CommunitySpaceOpenTimeDto> openTimes) {
         this.openTimes = openTimes;
+    }
+
+    public String getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(String venueId) {
+        this.venueId = venueId;
     }
 }
