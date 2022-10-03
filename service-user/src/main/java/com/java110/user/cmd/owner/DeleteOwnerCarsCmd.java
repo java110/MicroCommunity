@@ -80,9 +80,9 @@ public class DeleteOwnerCarsCmd extends Cmd {
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setPsId(reqJson.getString("psId"));
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
-            if (!StringUtil.isEmpty(parkingSpaceDtos.get(0).getParkingType()) && parkingSpaceDtos.get(0).getParkingType().equals("2")
-                    && !StringUtil.isEmpty(reqJson.getString("carTypeCd")) && reqJson.getString("carTypeCd").equals("1001")) { //子母车位
+            if (parkingSpaceDtos != null && parkingSpaceDtos.size()> 0 &&
+                    "2".equals(parkingSpaceDtos.get(0).getParkingType())
+                    && "1001".equals(reqJson.getString("carTypeCd"))) { //子母车位
                 OwnerCarDto ownerCarDto = new OwnerCarDto();
                 ownerCarDto.setCarId(reqJson.getString("carId"));
                 ownerCarDto.setPsId(reqJson.getString("psId"));
