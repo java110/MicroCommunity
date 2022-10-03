@@ -366,6 +366,7 @@ public class PayBatchFeeCmd extends Cmd {
         cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
+        businessFeeDetail.put("payableAmount", tmpReceivableAmount);
 
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);

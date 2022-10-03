@@ -410,6 +410,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
         businessFeeDetail.put("receivedAmount", paramInJson.getString("receivedAmount"));
+        businessFeeDetail.put("payableAmount", paramInJson.getString("receivableAmount"));
 
         PayFeeDetailPo payFeeDetail = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
         payFeeDetail.setbId("-1");
