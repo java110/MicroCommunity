@@ -126,6 +126,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         ownerCarDto.setCommunityId(parkingSpaceApplyPo.getCommunityId());
+        ownerCarDto.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         String catId = "";
         OwnerCarPo ownerCarPo = new OwnerCarPo();
