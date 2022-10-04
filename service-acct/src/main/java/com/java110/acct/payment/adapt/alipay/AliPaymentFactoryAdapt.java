@@ -1,6 +1,12 @@
-package com.java110.acct.payment.adapt.chinaUms;
+package com.java110.acct.payment.adapt.alipay;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeCreateRequest;
+import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.ChinaUmsFactory;
@@ -8,14 +14,19 @@ import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
+import com.java110.vo.ResultVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,40 +35,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
- * 富友 支付
- * 此实现方式为  通过 富友支付 去下单不直接去掉微信
- * <p>
- * 商户调用此接口则用户可使用支付宝或微信进行支付。
- * 本接口支持： 微信公众号、 微信小程序、 微信 APP， 支付宝服务窗等
- * <p>
- * <p>
- * 说明：信息通过 http 或 https 形式 post 请求递交给前置系统，编码必须为 UTF-8
- * Json 格式参数名：如下表
- * 参数值：如下表
- * 测试地址： https://aipaytest.fuioupay.com/aggregatePay/wxPreCreate
- * 生产地址： https://aipay.fuioupay.com/aggregatePay/wxPreCreate
- * 生产地址 2： https://aipay-xs.fuioupay.com/aggregatePay/wxPreCreate
- * <p>
- * 该接口常应用于聚合二维码（静态二维码、统一收款码、台卡等不同叫法），用户扫二维码进入微信公众号/支付宝服务窗
- * /QQJS 页面，页面调此接口生成订单，接受订单参数后调起官方支付接口支付。详见公众号/服务窗对接流程
- * 步骤 1：用户通过支付宝(服务窗)、微信(公众号)进入到商户 H5 页面，或者是通过扫描台卡进入。
- * 步骤 2：用户选择商品、输入支付金额等进行下单支付
- * 步骤 3：商户将订单信息发送给富友，返回支付信息(用于调起支付宝、微信的参数)。
- * 步骤 4：商户拿到支付信息后调起微信或者支付宝进行支付
- * 步骤 5：支付结果以回调(2.5)的方式通知到商户
+ * 支付宝支付
+ *
  *
  * @desc add by 吴学文 15:33
  */
-@Service("chinaUmsPaymentFactory")
-public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
+@Service("aliPaymentFactory")
+public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChinaUmsPaymentFactoryAdapt.class);
+    private static final Logger logger = LoggerFactory.getLogger(AliPaymentFactoryAdapt.class);
 
 
     //微信支付
@@ -79,13 +68,6 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     public static final String TRADE_TYPE_APP = "APP";
 
 
-    //微信支付
-    public static final String PAY_UNIFIED_ORDER_URL = "https://api-mop.chinaums.com/v1/netpay/wx/unified-order";
-
-
-    private static final String VERSION = "1.0";
-
-
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
 
@@ -97,6 +79,10 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     private RestTemplate outRestTemplate;
 
 
+    @Autowired
+    private ITempCarFeeCreateOrderV1InnerServiceSMO tempCarFeeCreateOrderV1InnerServiceSMOImpl;
+
+
     @Override
     public Map java110Payment(PaymentOrderDto paymentOrderDto, JSONObject reqJson, ICmdDataFlowContext context) throws Exception {
 
@@ -105,8 +91,8 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
-        String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/chinaums/992020011134400001";
+        String communityId = reqJson.getString("communityId");
+        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/common/992020011134400001";
 
         String openId = reqJson.getString("openId");
 
@@ -136,104 +122,104 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), paymentOrderDto.getMoney());
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
-        JSONObject resMap = null;
+        ResultVo resMap = null;
         resMap = this.java110UnifieldOrder(paymentOrderDto.getName(),
                 paymentOrderDto.getOrderId(),
-                tradeType,
+                communityId,
                 payAmount,
                 openId,
                 smallWeChatDto,
                 notifyUrl
         );
 
-        if ("SUCCESS".equals(resMap.getString("errCode"))) {
-            if (TRADE_TYPE_JSAPI.equals(tradeType)) {
-                resultMap.putAll(JSONObject.toJavaObject(JSONObject.parseObject(resMap.getString("jsPayRequest")), Map.class));
-                resultMap.put("sign",resultMap.get("paySign"));
-            } else if (TRADE_TYPE_APP.equals(tradeType)) {
-                resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-                resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("partnerid", smallWeChatDto.getMchId());
-                resultMap.put("prepayid", resMap.getString("session_id"));
-                //resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
-            } else if (TRADE_TYPE_NATIVE.equals(tradeType)) {
-                resultMap.put("prepayId", resMap.getString("session_id"));
-                resultMap.put("codeUrl", resMap.getString("qr_code"));
-            }
+        if (ResultVo.CODE_OK==resMap.getCode()) {
+                resultMap.put("orderId", resMap.getData().toString());
             resultMap.put("code", "0");
             resultMap.put("msg", "下单成功");
             logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
         } else {
-            resultMap.put("code", resMap.getString("errCode"));
-            resultMap.put("msg", resMap.getString("errMsg"));
-            logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.get("errMsg"));
+            resultMap.put("code", resMap.getCode()+"");
+            resultMap.put("msg", resMap.getMsg());
+            logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.getMsg());
         }
         return resultMap;
     }
 
 
-    private JSONObject java110UnifieldOrder(String feeName, String orderNum,
-                                            String tradeType, double payAmount, String openid,
+    private ResultVo java110UnifieldOrder(String feeName, String orderNum,
+                                            String communityId, double payAmount, String openId,
                                             SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
-        if (feeName.length() > 127) {
-            feeName = feeName.substring(0, 126);
+        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
+                CommunitySettingFactory.getValue(communityId, "APP_ID"),
+                CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
+                "json",
+                "UTF-8",
+                CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"),
+                "RSA2");
+        AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+        request.setNotifyUrl(MappingCache.getValue("ALIPAY", "temp"));
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("out_trade_no", orderNum);
+        bizContent.put("total_amount", payAmount);
+        bizContent.put("subject", feeName);
+        bizContent.put("buyer_id", openId);
+        bizContent.put("timeout_express", "10m");
+        request.setBizContent(bizContent.toString());
+        AlipayTradeCreateResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK,orderNum);
+            } else {
+                return new ResultVo(ResultVo.CODE_ERROR, response.getMsg());
+            }
+        } catch (AlipayApiException e) {
+            throw new CmdException("支付宝下单失败" + e);
         }
-        JSONObject paramMap = new JSONObject();
-        paramMap.put("requestTimestamp", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        paramMap.put("mid", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
-        paramMap.put("tid", "CV5EW7IM"); //终端号
-        paramMap.put("instMid", "YUEDANDEFAULT");
-        paramMap.put("merOrderId", "11WP"+orderNum);
-        paramMap.put("totalAmount", PayUtil.moneyToIntegerStr(payAmount));
-        paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
-        paramMap.put("tradeType", tradeType);
-        paramMap.put("subopenId", openid);
-        paramMap.put("subAppId", smallWeChatDto.getAppId());
-
-        logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        headers.add("Authorization", ChinaUmsFactory.getAccessToken(smallWeChatDto));
-        HttpEntity httpEntity = new HttpEntity(paramMap.toJSONString(), headers);
-        ResponseEntity<String> responseEntity = outRestTemplate.exchange(
-                PAY_UNIFIED_ORDER_URL, HttpMethod.POST, httpEntity, String.class);
-
-        logger.debug("统一下单返回" + responseEntity);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
-        }
-        return JSONObject.parseObject(responseEntity.getBody());
     }
 
 
     @Override
     public PaymentOrderDto java110NotifyPayment(String param) {
+        JSONObject reqJson = JSONObject.parseObject(param);
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
+        Assert.jsonObjectHaveKey(reqJson, "out_trade_no", "请求报文中未包含订单信息");
+        Assert.jsonObjectHaveKey(reqJson, "sign", "请求报文中未包含签名信息");
 
-        JSONObject resJson = new JSONObject();
-        resJson.put("errCode", "INTERNAL_ERROR");
-        resJson.put("errMsg", "失败");
-        try {
-            JSONObject map = JSONObject.parseObject(param);
-            logger.info("【银联支付回调】 回调数据： \n" + map);
-            //更新数据
-            int result = confirmPayFee(map, paymentOrderDto);
-            if (result > 0) {
-                //支付成功
-                resJson.put("errCode", "SUCCESS");
-                resJson.put("errMsg", "成功");
+        String communityId = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_TEMP_CAR_FEE_COMMUNITY + reqJson.getString("out_trade_no"));
+
+        String resultInfo = reqJson.getString("resultInfo");
+        String[] temp = resultInfo.split("&");
+        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        //把拆分数据放在map集合内
+        for (int i = 0; i < temp.length; i++) {
+            String[] arr = temp[i].split("=", 2); //通过"="号分割成2个数据
+            String[] tempAagin = new String[arr.length]; //再开辟一个数组用来接收分割后的数据
+            for (int j = 0; j < arr.length; j++) {
+                tempAagin[j] = arr[j];
             }
-        } catch (Exception e) {
-            logger.error("通知失败", e);
-            resJson.put("result_msg", "鉴权失败");
+            map.put(tempAagin[0], tempAagin[1]);
         }
-        paymentOrderDto.setResponseEntity(new ResponseEntity<String>(resJson.toJSONString(), HttpStatus.OK));
+        System.out.println(map);
+        boolean signVerified = false;
+        try {
+            signVerified = AlipaySignature.rsaCheckV1(map,
+                    CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY")
+                    , "UTF-8", "RSA2");
+        } catch (AlipayApiException e) {
+            throw new RuntimeException(e);
+        }
+        if (!signVerified) {
+            throw new CmdException("签名失败");
+        }
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("oId", reqJson.getString("out_trade_no"));
+        ResponseEntity responseEntity = tempCarFeeCreateOrderV1InnerServiceSMOImpl.notifyOrder(paramIn);
+        paymentOrderDto.setResponseEntity(responseEntity);
         return paymentOrderDto;
     }
 

@@ -16,10 +16,7 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.PayUtil;
+import com.java110.utils.util.*;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,21 +106,26 @@ public class FuiouPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String tradeType = reqJson.getString("tradeType");
         String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/wechat/992020011134400001";
 
-        String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
-        if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {
-            appType = OwnerAppUserDto.APP_TYPE_WECHAT;
-        } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) {
-            appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
-        } else {
-            appType = OwnerAppUserDto.APP_TYPE_APP;
+        String openId = reqJson.getString("openId");
+
+        if(StringUtil.isEmpty(openId)) {
+            String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
+            if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {
+                appType = OwnerAppUserDto.APP_TYPE_WECHAT;
+            } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) {
+                appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
+            } else {
+                appType = OwnerAppUserDto.APP_TYPE_APP;
+            }
+
+            OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+            ownerAppUserDto.setUserId(userId);
+            ownerAppUserDto.setAppType(appType);
+            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+            Assert.listOnlyOne(ownerAppUserDtos, "未找到开放账号信息");
+            openId = ownerAppUserDtos.get(0).getOpenId();
         }
-
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setUserId(userId);
-        ownerAppUserDto.setAppType(appType);
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-
-        Assert.listOnlyOne(ownerAppUserDtos, "未找到开放账号信息");
 
 
         logger.debug("【小程序支付】 统一下单开始, 订单编号=" + paymentOrderDto.getOrderId());
@@ -137,7 +139,7 @@ public class FuiouPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 paymentOrderDto.getOrderId(),
                 tradeType,
                 payAmount,
-                ownerAppUserDtos.get(0).getOpenId(),
+                openId,
                 smallWeChatDto,
                 notifyUrl
         );

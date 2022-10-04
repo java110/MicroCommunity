@@ -36,6 +36,7 @@ import java.util.Map;
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "business",length = 64, remark = "支付场景，比如场地预约 为 venueReservation"),
+        @Java110ParamDoc(name = "payAdapt",length = 64, remark = "支付适配器，非必填"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
         @Java110ParamDoc(name = "tradeType", length = 30, remark = "支付类型 NATIVE JSAPI APP"),
         @Java110ParamDoc(name = "...", length = 30, remark = "其他参数根据相应接口协议传"),
@@ -113,6 +114,10 @@ public class UnifiedPaymentCmd extends Cmd{
         // 3.0 寻找当前支付适配器
         String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
         payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAYMENT_ADAPT : payAdapt;
+
+        if(reqJson.containsKey("payAdapt") && !StringUtil.isEmpty(reqJson.getString("payAdapt"))){
+            payAdapt = reqJson.getString("payAdapt");
+        }
 
         IPaymentFactoryAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPaymentFactoryAdapt.class);
 
