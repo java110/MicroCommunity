@@ -146,6 +146,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
             ownerCarPo.setState("1001");
             ownerCarPo.setUserId(userId);
             ownerCarPo.setRemark("车位申请，系统自动写入");
+            ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
             flag = ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             if (flag < 1) {
                 throw new CmdException("更新数据失败");
