@@ -25,6 +25,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
@@ -61,18 +62,18 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
     /**
      * 通知类
-     * @param param 数据对象分享
+     * @param notifyPaymentOrderDto 数据对象分享
      * @return
      */
     @Override
-    public ResponseEntity<String> notifyPayment(@RequestBody String param) {
+    public ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto) {
 
         String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
         payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_PAYMENT_NOTIFY_ADAPT : payNotifyAdapt;
 //支付适配器IPayNotifyAdapt
         logger.debug("适配器：" + payNotifyAdapt);
         IPaymentFactoryAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPaymentFactoryAdapt.class);
-        PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(param);
+        PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto.getParam());
         logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
 
         if(StringUtil.isEmpty(paymentOrderDto.getOrderId())){
@@ -88,6 +89,8 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
         if(paymentBusiness == null){
             throw new CmdException("当前支付业务不支持");
         }
+
+        paymentOrderDto.setAppId(notifyPaymentOrderDto.getAppId());
 
         //2.0 相应业务 下单 返回 单号 ，金额，
         paymentBusiness.notifyPayment(paymentOrderDto,reqJson);

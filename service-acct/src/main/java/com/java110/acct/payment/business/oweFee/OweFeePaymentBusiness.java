@@ -1,128 +1,202 @@
-package com.java110.acct.payment.business.venue;
+package com.java110.acct.payment.business.oweFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
+import com.java110.core.factory.CallApiServiceFactory;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.communitySpace.CommunitySpaceDto;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
-import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
 import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
+import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 场地预约
+ * 欠费缴费
  */
-@Service("venueReservation")
-public class VenueReservationPaymentBusiness implements IPaymentBusiness{
+@Service("oweFee")
+public class OweFeePaymentBusiness implements IPaymentBusiness{
 
-    @Autowired
-    private ICommunitySpaceV1InnerServiceSMO communitySpaceV1InnerServiceSMOImpl;
+
+
+    private final static Logger logger = LoggerFactory.getLogger(OweFeePaymentBusiness.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
 
-    @Autowired
-    private ICommunitySpacePersonV1InnerServiceSMO communitySpacePersonV1InnerServiceSMOImpl;
+    //域
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+
+    //键
+    public static final String TOTAL_FEE_PRICE = "TOTAL_FEE_PRICE";
+
+    //键
+    public static final String RECEIVED_AMOUNT_SWITCH = "RECEIVED_AMOUNT_SWITCH";
+
+    //禁用电脑端提交收费按钮
+    public static final String OFFLINE_PAY_FEE_SWITCH = "OFFLINE_PAY_FEE_SWITCH";
 
     @Autowired
-    private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
 
     @Override
     public PaymentOrderDto unified(JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "spaceId", "请求报文中未包含spaceId");
-        Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
-        Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
-        Assert.hasKeyAndValue(reqJson, "appointmentTime", "请求报文中未包含appointmentTime");
-        Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
-        Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
-        Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        String ownerId = reqJson.getString("ownerId");
+        String roomId = reqJson.getString("roomId");
 
-        if(!reqJson.containsKey("openTimes")){
-            throw new IllegalArgumentException("未包含 预约时间") ;
+        String payObjType = "3333";
+        if (reqJson.containsKey("payObjType")) {
+            payObjType = reqJson.getString("payObjType");
         }
 
-        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+        FeeDto feeDto = new FeeDto();
+        if(!StringUtil.isEmpty(ownerId)){
+            feeDto.setOwnerId(ownerId);
+        }else {
+            feeDto.setPayerObjId(roomId);
+            feeDto.setPayerObjType(payObjType);
+        }
+        feeDto.setCommunityId(reqJson.getString("communityId"));
 
-        if(openTimes == null || openTimes.size() <1){
-            throw new IllegalArgumentException("未包含 预约时间") ;
+
+        //查询费用信息arrearsEndTime
+        feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+        feeDto.setState(FeeDto.STATE_DOING);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            throw new IllegalArgumentException("未包含欠费费用");
         }
 
-        CommunitySpaceDto communitySpaceDto = new CommunitySpaceDto();
-        List<CommunitySpaceDto> communitySpaceDtos = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpaces(communitySpaceDto);
-
-        Assert.listOnlyOne(communitySpaceDtos,"场地不存在");
-
-        int openTime = 0;
-
-        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
-            if("N".equals(openTimes.getJSONObject(timeIndex).getString("isOpen"))){
-                continue;
+        String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);
+        if (StringUtil.isEmpty(val)) {
+            val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
+        }
+        List<FeeDto> tmpFeeDtos = new ArrayList<>();
+        double money = 0.0;
+        BigDecimal tmpMoney = new BigDecimal(money);
+        BigDecimal feePrice = null;
+        for (FeeDto tmpFeeDto : feeDtos) {
+            try {
+                computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
+                //如果金额为0 就排除
+                //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                tmpFeeDto.setVal(val);
+                if (tmpFeeDto.getFeePrice() > 0) {
+                    tmpFeeDtos.add(tmpFeeDto);
+                    feePrice = new BigDecimal(tmpFeeDto.getFeePrice());
+                    tmpMoney = tmpMoney.add(feePrice);
+                }
+            } catch (Exception e) {
+                logger.error("可能费用资料有问题导致算费失败", e);
             }
-            openTime += 1;
         }
 
-        BigDecimal money = new BigDecimal(openTime).multiply(new BigDecimal(communitySpaceDtos.get(0).getFeeMoney())).setScale(2,BigDecimal.ROUND_HALF_UP);
+        String feeName = getFeeName(feeDtos.get(0));
+
+        String orderId = GenerateCodeFactory.getOId();
+
+        money = tmpMoney.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
-        paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
-        paymentOrderDto.setMoney(money.doubleValue());
-        paymentOrderDto.setName("预约"+communitySpaceDtos.get(0).getName()+"费用");
+        paymentOrderDto.setOrderId(orderId);
+        paymentOrderDto.setMoney(money);
+        paymentOrderDto.setName(feeName+"欠费费用");
+
+        JSONObject saveFees = new JSONObject();
+        saveFees.put("orderId", orderId);
+        saveFees.put("money", money);
+        saveFees.put("roomId", roomId);
+        saveFees.put("communityId", reqJson.getString("communityId"));
+        saveFees.put("fees", tmpFeeDtos);
+        CommonCache.setValue(FeeDto.REDIS_PAY_OWE_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         return paymentOrderDto;
     }
 
     @Override
     public void notifyPayment(PaymentOrderDto paymentOrderDto, JSONObject reqJson) {
 
-        CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
-        communitySpacePersonPo.setCspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        if(StringUtil.isEmpty(communitySpacePersonPo.getState())){
-            communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_W);
-        }
-        int flag = communitySpacePersonV1InnerServiceSMOImpl.saveCommunitySpacePerson(communitySpacePersonPo);
+        String order = CommonCache.getAndRemoveValue(FeeDto.REDIS_PAY_OWE_FEE + paymentOrderDto.getOrderId());
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+        JSONObject paramIn = JSONObject.parseObject(order);
+        paramIn.put("oId", paymentOrderDto.getOrderId());
+        freshFees(paramIn);
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "fee.payOweFee", JSONObject.class, "-1");
+
+    }
+
+
+    private void freshFees(JSONObject paramIn) {
+        if (!paramIn.containsKey("fees")) {
+            return;
         }
 
-        if(!reqJson.containsKey("openTimes")){
-            return ;
-        }
-
-        JSONArray openTimes = reqJson.getJSONArray("openTimes");
-
-        if(openTimes == null || openTimes.size() <1){
-            return ;
-        }
-        CommunitySpacePersonTimePo communitySpacePersonTimePo = null;
-        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
-            if("N".equals(openTimes.getJSONObject(timeIndex).getString("isOpen"))){
-                continue;
+        JSONArray fees = paramIn.getJSONArray("fees");
+        JSONObject fee = null;
+        for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
+            fee = fees.getJSONObject(feeIndex);
+            if (fee.containsKey("deadlineTime")) {
+                fee.put("startTime", fee.getString("endTime"));
+                fee.put("endTime", fee.getString("deadlineTime"));
+                fee.put("receivedAmount", fee.getString("feePrice"));
+                fee.put("state", "");
             }
-            communitySpacePersonTimePo = new CommunitySpacePersonTimePo();
-            communitySpacePersonTimePo.setCommunityId(communitySpacePersonPo.getCommunityId());
-            communitySpacePersonTimePo.setCspId(communitySpacePersonPo.getCspId());
-            communitySpacePersonTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
-            communitySpacePersonTimePo.setSpaceId(communitySpacePersonPo.getSpaceId());
-            communitySpacePersonTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-            communitySpacePersonTimeV1InnerServiceSMOImpl.saveCommunitySpacePersonTime(communitySpacePersonTimePo);
+        }
+    }
+
+    private String getFeeName(FeeDto feeDto) {
+        //查询小区名称
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(feeDto.getCommunityId());
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+
+        List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
         }
 
+        for (FeeAttrDto feeAttrDto : feeAttrDtos) {
+            if (FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())) {
+                return communityDtos.get(0).getName() + "-" + feeAttrDto.getValue() + "-" + feeDto.getFeeName();
+            }
+        }
+
+        return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
     }
 }

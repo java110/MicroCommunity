@@ -17,6 +17,7 @@ package com.java110.intf.acct;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,9 +40,9 @@ public interface INotifyPaymentV1InnerServiceSMO {
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param reqJson 数据对象分享
+     * @param notifyPaymentOrderDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/notifyPayment", method = RequestMethod.POST)
-    public ResponseEntity<String> notifyPayment(@RequestBody String reqJson);
+    public ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto);
 }

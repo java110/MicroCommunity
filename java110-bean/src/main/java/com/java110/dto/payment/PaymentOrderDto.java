@@ -17,6 +17,8 @@ public class PaymentOrderDto implements Serializable{
 
     private String name;
 
+    private String appId;
+
 
     private ResponseEntity<String> responseEntity;
 
@@ -52,5 +54,13 @@ public class PaymentOrderDto implements Serializable{
 
     public void setResponseEntity(ResponseEntity<String> responseEntity) {
         this.responseEntity = responseEntity;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }

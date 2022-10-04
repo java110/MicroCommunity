@@ -2,6 +2,7 @@ package com.java110.api.controller.app.payment;
 
 import com.java110.api.controller.app.PaymentController;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class NotifyPaymentController {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(postInfo);
+        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,postInfo));
 
     }
 }

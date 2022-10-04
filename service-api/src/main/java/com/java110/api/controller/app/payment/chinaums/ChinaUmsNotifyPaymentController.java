@@ -3,6 +3,7 @@ package com.java110.api.controller.app.payment.chinaums;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class ChinaUmsNotifyPaymentController extends BaseController{
         paramIn.put("preSign", preStr);
         paramIn.put("sign", sign);
 
-        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(paramIn.toJSONString());
+        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,paramIn.toJSONString()));
 
     }
 

@@ -1,11 +1,9 @@
-package com.java110.acct.payment.adapt.fuiou;
+package com.java110.acct.payment.adapt.pingan;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CommunitySettingFactory;
-import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
@@ -20,7 +18,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
-import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -33,34 +30,19 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * 富友 支付
- * 此实现方式为  通过 富友支付 去下单不直接去掉微信
- * <p>
- * 商户调用此接口则用户可使用支付宝或微信进行支付。
- * 本接口支持： 微信公众号、 微信小程序、 微信 APP， 支付宝服务窗等
- * <p>
- * <p>
- * 说明：信息通过 http 或 https 形式 post 请求递交给前置系统，编码必须为 UTF-8
- * Json 格式参数名：如下表
- * 参数值：如下表
- * 测试地址： https://aipaytest.fuioupay.com/aggregatePay/wxPreCreate
- * 生产地址： https://aipay.fuioupay.com/aggregatePay/wxPreCreate
- * 生产地址 2： https://aipay-xs.fuioupay.com/aggregatePay/wxPreCreate
- * <p>
- * 该接口常应用于聚合二维码（静态二维码、统一收款码、台卡等不同叫法），用户扫二维码进入微信公众号/支付宝服务窗
- * /QQJS 页面，页面调此接口生成订单，接受订单参数后调起官方支付接口支付。详见公众号/服务窗对接流程
- * 步骤 1：用户通过支付宝(服务窗)、微信(公众号)进入到商户 H5 页面，或者是通过扫描台卡进入。
- * 步骤 2：用户选择商品、输入支付金额等进行下单支付
- * 步骤 3：商户将订单信息发送给富友，返回支付信息(用于调起支付宝、微信的参数)。
- * 步骤 4：商户拿到支付信息后调起微信或者支付宝进行支付
- * 步骤 5：支付结果以回调(2.5)的方式通知到商户
+ *
+ * 平安支付 第三方支付对接
+ *
+ * 使用请先到 平安支付 获取相关配置信息
+ *
+ * https://www.pingan.com/
  *
  * @desc add by 吴学文 15:33
  */
-@Service("fuiouPaymentFactory")
-public class FuiouPaymentFactoryAdapt implements IPaymentFactoryAdapt {
+@Service("panganPaymentFactory")
+public class PinganPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
-    private static final Logger logger = LoggerFactory.getLogger(FuiouPaymentFactoryAdapt.class);
+    private static final Logger logger = LoggerFactory.getLogger(PinganPaymentFactoryAdapt.class);
 
 
     //微信支付
@@ -81,7 +63,7 @@ public class FuiouPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     public static final String TRADE_TYPE_MWEB = "MWEB";
     public static final String TRADE_TYPE_APP = "APP";
 
-    public static final String PAY_UNIFIED_ORDER_URL = "https://aipay.fuioupay.com/aggregatePay/wxPreCreate";
+    public static final String PAY_UNIFIED_ORDER_URL = "https://aipay.pingan.com/aggregatePay/wxPreCreate";
 
 
     private static final String VERSION = "1.0";
