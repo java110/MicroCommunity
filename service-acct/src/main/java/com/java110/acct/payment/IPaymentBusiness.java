@@ -1,6 +1,7 @@
 package com.java110.acct.payment;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.dto.payment.PaymentOrderDto;
 
 /**
@@ -14,7 +15,7 @@ public interface IPaymentBusiness {
      * @param reqJson
      * @return
      */
-    PaymentOrderDto unified(JSONObject reqJson);
+    PaymentOrderDto unified(ICmdDataFlowContext context,JSONObject reqJson);
 
     /**
      * 支付完通知接口

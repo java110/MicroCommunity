@@ -3,6 +3,7 @@ package com.java110.acct.payment.business.oweFee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -73,7 +74,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
 
 
     @Override
-    public PaymentOrderDto unified(JSONObject reqJson) {
+    public PaymentOrderDto unified(ICmdDataFlowContext context,JSONObject reqJson) {
 
         String ownerId = reqJson.getString("ownerId");
         String roomId = reqJson.getString("roomId");

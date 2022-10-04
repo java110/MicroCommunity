@@ -3,6 +3,7 @@ package com.java110.acct.payment.business.venue;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.communitySpace.CommunitySpaceDto;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
@@ -43,7 +44,7 @@ public class VenueReservationPaymentBusiness implements IPaymentBusiness{
     private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
 
     @Override
-    public PaymentOrderDto unified(JSONObject reqJson) {
+    public PaymentOrderDto unified(ICmdDataFlowContext context,JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "spaceId", "请求报文中未包含spaceId");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");

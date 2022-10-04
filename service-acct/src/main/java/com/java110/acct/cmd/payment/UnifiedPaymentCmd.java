@@ -96,7 +96,7 @@ public class UnifiedPaymentCmd extends Cmd{
         }
 
         //2.0 相应业务 下单 返回 单号 ，金额，
-        PaymentOrderDto paymentOrderDto =  paymentBusiness.unified(reqJson);
+        PaymentOrderDto paymentOrderDto =  paymentBusiness.unified(context,reqJson);
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}",JSONObject.toJSONString(paymentOrderDto));
 
