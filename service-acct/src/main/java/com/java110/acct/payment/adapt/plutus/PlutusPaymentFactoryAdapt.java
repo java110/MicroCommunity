@@ -36,7 +36,6 @@ import java.util.TreeMap;
  * http://open.plutuspay.com/index.html
  * 支付厂家类
  * <p>
- * 微信官方原生 支付实现类
  */
 @Service("plutusPaymentFactory")
 public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
