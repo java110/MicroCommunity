@@ -10,6 +10,7 @@ import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
 import com.java110.job.adapt.fee.asyn.IPayFeeDetailToMonth;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -49,9 +50,12 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 
         Date startTime = null;
         Date endTime = null;
+        Date createTime = null;
         try {
-            startTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("startTime"), DateUtil.DATE_FORMATE_STRING_A);
-            endTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("endTime"), DateUtil.DATE_FORMATE_STRING_A);
+            startTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
+            endTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+            createTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("createTime"), DateUtil.DATE_FORMATE_STRING_B);
+
         } catch (ParseException e) {
             throw new IllegalArgumentException("时间格式错误");
         }
@@ -74,11 +78,27 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         Calendar calendar = Calendar.getInstance();
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo = null;
         BigDecimal discountAmount = new BigDecimal(0.0);
+
+        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
+            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
+        }else{
+            commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
+        }
+
+
+        payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
+
+    }
+
+    private void commonPropertyCode(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date createTime, double maxMonth, Double feePrice, BigDecimal priRecDec, List<PayFeeDetailMonthPo> payFeeDetailMonthPos, Calendar calendar) {
+        BigDecimal discountAmount;
+        PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
+
+
         for (int month = 0; month < maxMonth; month++) {
             calendar.setTime(startTime);
             calendar.add(Calendar.MONTH, month);
             discountAmount = new BigDecimal(feePrice).subtract(priRecDec).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-
             tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
             tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
             tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
@@ -92,9 +112,48 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
         }
+    }
 
-        payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
+    private void bailefuPropertyCode(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date createTime, double maxMonth, Double feePrice, BigDecimal priRecDec, List<PayFeeDetailMonthPo> payFeeDetailMonthPos, Calendar calendar) {
+        BigDecimal discountAmount;
+        PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
+        Calendar startTimeCal = Calendar.getInstance();
+        startTimeCal.setTime(startTime);
+        startTimeCal.set(Calendar.DAY_OF_MONTH, 1);
+        startTime = startTimeCal.getTime();
 
+        Calendar createTimeCal = Calendar.getInstance();
+        createTimeCal.setTime(createTime);
+        createTimeCal.set(Calendar.DAY_OF_MONTH, 1);
+        createTime = createTimeCal.getTime();
+
+        BigDecimal oweFee = new BigDecimal(0);
+
+        for (int month = 0; month < maxMonth; month++) {
+            calendar.setTime(startTime);
+            calendar.add(Calendar.MONTH, month);
+            discountAmount = new BigDecimal(feePrice).subtract(priRecDec).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
+            tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
+            tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
+            tmpPayFeeDetailMonthPo.setDetailId(businessPayFeeDetail.getString("detailId"));
+            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
+            tmpPayFeeDetailMonthPo.setDiscountAmount(discountAmount.doubleValue() + "");
+            tmpPayFeeDetailMonthPo.setMonthId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_monthId));
+            tmpPayFeeDetailMonthPo.setReceivableAmount(feePrice + "");
+            if (calendar.getTime().getTime() < createTime.getTime()) {
+                tmpPayFeeDetailMonthPo.setReceivedAmount("0");
+                oweFee = oweFee.add(priRecDec);
+            } else if (calendar.getTime().getTime() < createTime.getTime()) {
+                oweFee = oweFee.add(priRecDec);
+                tmpPayFeeDetailMonthPo.setReceivedAmount(oweFee.doubleValue() + "");
+            } else {
+                tmpPayFeeDetailMonthPo.setReceivedAmount(priRecDec.doubleValue() + "");
+            }
+            tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
+            payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
+        }
     }
 
 }
