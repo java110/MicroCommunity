@@ -42,7 +42,7 @@ import java.util.List;
         url = "http://{ip}:{port}/app/purchase/resourceEnter",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "/purchase/resourceEnter"
+        serviceCode = "purchase.resourceEnter"
 )
 
 @Java110ParamsDoc(params = {
