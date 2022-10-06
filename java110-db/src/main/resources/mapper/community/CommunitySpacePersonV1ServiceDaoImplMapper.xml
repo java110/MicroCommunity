@@ -50,6 +50,9 @@
         <if test="spaceId !=null and spaceId != ''">
             and t.space_id= #{spaceId}
         </if>
+        <if test="venueId !=null and venueId != ''">
+            and cs.venue_id= #{venueId}
+        </if>
         <if test="cspId !=null and cspId != ''">
             and t.csp_id= #{cspId}
         </if>
@@ -126,6 +129,7 @@
     <select id="queryCommunitySpacePersonsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from community_space_person t
+        left join community_space cs on t.space_id = cs.space_id and cs.status_cd = '0'
         where 1 =1
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}
@@ -147,6 +151,9 @@
         </if>
         <if test="spaceId !=null and spaceId != ''">
             and t.space_id= #{spaceId}
+        </if>
+        <if test="venueId !=null and venueId != ''">
+            and cs.venue_id= #{venueId}
         </if>
         <if test="cspId !=null and cspId != ''">
             and t.csp_id= #{cspId}

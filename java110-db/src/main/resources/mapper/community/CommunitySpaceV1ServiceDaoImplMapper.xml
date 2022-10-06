@@ -5,138 +5,145 @@
 <mapper namespace="communitySpaceV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存小区场地信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunitySpaceInfo" parameterType="Map">
         insert into community_space(
-admin_name,space_id,name,start_time,tel,end_time,state,community_id,fee_money
-) values (
-#{adminName},#{spaceId},#{name},#{startTime},#{tel},#{endTime},#{state},#{communityId},#{feeMoney}
-)
+        admin_name,space_id,name,start_time,tel,end_time,state,community_id,fee_money,venue_id
+        ) values (
+        #{adminName},#{spaceId},#{name},#{startTime},#{tel},#{endTime},#{state},#{communityId},#{feeMoney},#{venueId}
+        )
     </insert>
-
 
 
     <!-- 查询小区场地信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpaceInfo" parameterType="Map" resultType="Map">
-        select  t.admin_name,t.admin_name adminName,t.space_id,t.space_id spaceId,t.name,t.start_time,t.start_time startTime,t.tel,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.fee_money,t.fee_money feeMoney 
-from community_space t 
-where 1 =1 
-<if test="adminName !=null and adminName != ''">
-   and t.admin_name= #{adminName}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="feeMoney !=null and feeMoney != ''">
-   and t.fee_money= #{feeMoney}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.admin_name,t.admin_name adminName,t.space_id,t.space_id spaceId,t.name,t.start_time,t.start_time
+        startTime,t.tel,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
+        endTime,t.state,t.community_id,t.community_id communityId,t.fee_money,t.fee_money feeMoney,t.venue_id venueId
+        from community_space t
+        where 1 =1
+        <if test="adminName !=null and adminName != ''">
+            and t.admin_name= #{adminName}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
+
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeMoney !=null and feeMoney != ''">
+            and t.fee_money= #{feeMoney}
+        </if>
+        order by t.create_time
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改小区场地信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunitySpaceInfo" parameterType="Map">
-        update  community_space t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="adminName !=null and adminName != ''">
-, t.admin_name= #{adminName}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="tel !=null and tel != ''">
-, t.tel= #{tel}
-</if> 
-<if test="endTime !=null and endTime != ''">
-, t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="feeMoney !=null and feeMoney != ''">
-, t.fee_money= #{feeMoney}
-</if> 
- where 1=1 <if test="spaceId !=null and spaceId != ''">
-and t.space_id= #{spaceId}
-</if> 
+        update community_space t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="adminName !=null and adminName != ''">
+            , t.admin_name= #{adminName}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeMoney !=null and feeMoney != ''">
+            , t.fee_money= #{feeMoney}
+        </if>
+        where 1=1
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
 
     </update>
 
     <!-- 查询小区场地数量 add by wuxw 2018-07-03 -->
-     <select id="queryCommunitySpacesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from community_space t 
-where 1 =1 
-<if test="adminName !=null and adminName != ''">
-   and t.admin_name= #{adminName}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="feeMoney !=null and feeMoney != ''">
-   and t.fee_money= #{feeMoney}
-</if> 
+    <select id="queryCommunitySpacesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_space t
+        where 1 =1
+        <if test="adminName !=null and adminName != ''">
+            and t.admin_name= #{adminName}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeMoney !=null and feeMoney != ''">
+            and t.fee_money= #{feeMoney}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

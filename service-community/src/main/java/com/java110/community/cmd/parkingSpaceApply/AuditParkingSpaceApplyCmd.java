@@ -126,6 +126,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         ownerCarDto.setCommunityId(parkingSpaceApplyPo.getCommunityId());
+        ownerCarDto.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         String catId = "";
         OwnerCarPo ownerCarPo = new OwnerCarPo();
@@ -146,6 +147,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
             ownerCarPo.setState("1001");
             ownerCarPo.setUserId(userId);
             ownerCarPo.setRemark("车位申请，系统自动写入");
+            ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
             flag = ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             if (flag < 1) {
                 throw new CmdException("更新数据失败");

@@ -16,6 +16,7 @@ import java.util.Date;
 public class CommunitySpaceOpenTimeDto extends PageDto implements Serializable {
 
     private String spaceId;
+    private String venueId;
     private String[] spaceIds;
     private String hours;
     private String isOpen;
@@ -102,5 +103,13 @@ public class CommunitySpaceOpenTimeDto extends PageDto implements Serializable {
 
     public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
+    }
+
+    public String getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(String venueId) {
+        this.venueId = venueId;
     }
 }

@@ -112,6 +112,7 @@ public class UpdateParkingSpaceApplyCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         ownerCarDto.setCommunityId(parkingSpaceApplyPo.getCommunityId());
+        ownerCarDto.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         String catId = "";
         if (ownerCarDtos == null || ownerCarDtos.size() < 1) {

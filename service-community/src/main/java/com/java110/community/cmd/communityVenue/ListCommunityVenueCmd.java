@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.community.ICommunityVenueV1InnerServiceSMO;
 import com.java110.po.communityVenue.CommunityVenuePo;
 import com.java110.utils.exception.CmdException;
@@ -37,6 +38,37 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+@Java110CmdDoc(title = "查询场馆",
+        description = "查询系统中的查询场馆",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/communityVenue.ListCommunityVenue",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "communityVenue.ListCommunityVenue"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page", type = "int", length = 11, remark = "分页页数"),
+        @Java110ParamDoc(name = "row", type = "int", length = 11, remark = "分页行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data", name = "communityId", type = "String", remark = "小区ID"),
+                @Java110ParamDoc(parentNodeName = "data", name = "name", type = "String", remark = "场地名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "venueId", type = "String", remark = "场馆编号"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody = "http://{ip}:{port}/app/communityVenue.ListCommunityVenue?communityId=2022081539020475&page=1&row=10",
+        resBody = "{\"code\":0,\"data\":[{\"name\":\"无需文\",\"communityId\":\"2022081539020475\",\"venueId\":\"102022093043260007\"}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":2}"
+)
 
 /**
  * 类表述：查询
@@ -58,6 +90,8 @@ public class ListCommunityVenueCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+
+        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区ID");
     }
 
     @Override
