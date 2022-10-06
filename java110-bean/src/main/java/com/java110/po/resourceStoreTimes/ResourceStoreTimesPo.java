@@ -17,6 +17,7 @@ package com.java110.po.resourceStoreTimes;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-06 21:26:56 mail: 928255095@qq.com
@@ -28,55 +29,68 @@ import java.util.Date;
 public class ResourceStoreTimesPo implements Serializable {
 
     private String price;
-private String applyOrderId;
-private String statusCd = "0";
-private String storeId;
-private String stock;
-private String resId;
-private String timesId;
-public String getPrice() {
+    private String applyOrderId;
+    private String statusCd = "0";
+    private String storeId;
+    private String stock;
+    private String resId;
+    private String timesId;
+
+    public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getApplyOrderId() {
+
+    public String getApplyOrderId() {
         return applyOrderId;
     }
-public void setApplyOrderId(String applyOrderId) {
+
+    public void setApplyOrderId(String applyOrderId) {
         this.applyOrderId = applyOrderId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getStock() {
+
+    public String getStock() {
         return stock;
     }
-public void setStock(String stock) {
+
+    public void setStock(String stock) {
         this.stock = stock;
     }
-public String getResId() {
+
+    public String getResId() {
         return resId;
     }
-public void setResId(String resId) {
+
+    public void setResId(String resId) {
         this.resId = resId;
     }
-public String getTimesId() {
+
+    public String getTimesId() {
         return timesId;
     }
-public void setTimesId(String timesId) {
+
+    public void setTimesId(String timesId) {
         this.timesId = timesId;
     }
-
 
 
 }

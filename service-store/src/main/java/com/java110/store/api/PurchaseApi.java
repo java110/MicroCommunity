@@ -104,31 +104,32 @@ public class PurchaseApi {
         return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
     }
 
-    @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
-    public ResponseEntity<String> resourceEnter(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
-        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
-        purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
-        purchaseApplyDto.setStatusCd("0");
-        List<PurchaseApplyDto> purchaseApplyDtoList = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
-        if(purchaseApplyDtoList!=null && PurchaseApplyDto.STATE_AUDITED.equals(purchaseApplyDtoList.get(0).getState())){
-            throw new IllegalArgumentException("该订单已经处理，请刷新确认订单状态！");
-        }
-        JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
-        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-        for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
-            JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
-            Assert.hasKeyAndValue(purchaseApplyDetail, "purchaseQuantity", "采购数量未填写");
-            Assert.hasKeyAndValue(purchaseApplyDetail, "price", "采购单价未填写");
-            Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
-            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
-            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-        }
-        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
-        purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
-        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return resourceEnterBMOImpl.enter(purchaseApplyPo);
-    }
+    //调整为cmd 模式
+//    @RequestMapping(value = "/resourceEnter", method = RequestMethod.POST)
+//    public ResponseEntity<String> resourceEnter(@RequestBody JSONObject reqJson) {
+//        Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
+//        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+//        purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
+//        purchaseApplyDto.setStatusCd("0");
+//        List<PurchaseApplyDto> purchaseApplyDtoList = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
+//        if(purchaseApplyDtoList!=null && PurchaseApplyDto.STATE_AUDITED.equals(purchaseApplyDtoList.get(0).getState())){
+//            throw new IllegalArgumentException("该订单已经处理，请刷新确认订单状态！");
+//        }
+//        JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
+//        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
+//        for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
+//            JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
+//            Assert.hasKeyAndValue(purchaseApplyDetail, "purchaseQuantity", "采购数量未填写");
+//            Assert.hasKeyAndValue(purchaseApplyDetail, "price", "采购单价未填写");
+//            Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
+//            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
+//            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
+//        }
+//        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+//        purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
+//        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
+//        return resourceEnterBMOImpl.enter(purchaseApplyPo);
+//    }
 
     /**
      * 直接入库操作
