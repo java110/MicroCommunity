@@ -1,4 +1,4 @@
-package com.java110.dto.resourceResourceStoreTimesTimes;
+package com.java110.dto.resourceStoreTimes;
 
 import com.java110.dto.PageDto;
 import java.io.Serializable;

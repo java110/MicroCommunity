@@ -16,8 +16,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.resourceResourceStoreTimesTimes.ResourceStoreTimesDto;
-import com.java110.po.resourceResourceStoreTimesTimes.ResourceStoreTimesPo;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +39,7 @@ public interface IResourceStoreTimesV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveResourceStoreTimes", method = RequestMethod.POST)
-    public int saveResourceStoreTimes(@RequestBody  ResourceStoreTimesPo resourceResourceStoreTimesTimesPo);
+    public int saveResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceResourceStoreTimesTimesPo);
 
     @RequestMapping(value = "/updateResourceStoreTimes", method = RequestMethod.POST)
     public int updateResourceStoreTimes(@RequestBody  ResourceStoreTimesPo resourceResourceStoreTimesTimesPo);
