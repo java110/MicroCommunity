@@ -1,0 +1,83 @@
+package com.java110.dto.resourceResourceStoreTimesTimes;
+
+import com.java110.dto.PageDto;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 物品次数数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class ResourceStoreTimesDto extends PageDto implements Serializable {
+
+    private String price;
+private String applyOrderId;
+private String storeId;
+private String stock;
+private String resId;
+private String timesId;
+
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    public String getPrice() {
+        return price;
+    }
+public void setPrice(String price) {
+        this.price = price;
+    }
+public String getApplyOrderId() {
+        return applyOrderId;
+    }
+public void setApplyOrderId(String applyOrderId) {
+        this.applyOrderId = applyOrderId;
+    }
+public String getStoreId() {
+        return storeId;
+    }
+public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+public String getStock() {
+        return stock;
+    }
+public void setStock(String stock) {
+        this.stock = stock;
+    }
+public String getResId() {
+        return resId;
+    }
+public void setResId(String resId) {
+        this.resId = resId;
+    }
+public String getTimesId() {
+        return timesId;
+    }
+public void setTimesId(String timesId) {
+        this.timesId = timesId;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}
