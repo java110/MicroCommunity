@@ -151,7 +151,7 @@ public class ResourceOutCmd extends Cmd {
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
 
             //加入 从库存中扣减
-            subResourceStoreTimesStock(purchaseApplyDetailPo.getResId(), purchaseApplyDetailPo.getPurchaseQuantity());
+            subResourceStoreTimesStock(resourceStores.get(0).getResCode(), purchaseApplyDetailPo.getPurchaseQuantity());
 
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
@@ -233,13 +233,13 @@ public class ResourceOutCmd extends Cmd {
 
     /**
      * 从times中扣减
-     * @param resId
+     * @param resCode
      * @param applyQuantity
      */
-    private void subResourceStoreTimesStock(String resId, String applyQuantity) {
+    private void subResourceStoreTimesStock(String resCode, String applyQuantity) {
 
         ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
-        resourceStoreTimesDto.setResId(resId);
+        resourceStoreTimesDto.setResCode(resCode);
         resourceStoreTimesDto.setHasStock("Y");
         List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
 

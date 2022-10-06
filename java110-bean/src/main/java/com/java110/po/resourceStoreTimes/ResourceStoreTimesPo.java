@@ -33,7 +33,7 @@ public class ResourceStoreTimesPo implements Serializable {
     private String statusCd = "0";
     private String storeId;
     private String stock;
-    private String resId;
+    private String resCode;
     private String timesId;
 
     public String getPrice() {
@@ -76,12 +76,12 @@ public class ResourceStoreTimesPo implements Serializable {
         this.stock = stock;
     }
 
-    public String getResId() {
-        return resId;
+    public String getResCode() {
+        return resCode;
     }
 
-    public void setResId(String resId) {
-        this.resId = resId;
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
 
     public String getTimesId() {

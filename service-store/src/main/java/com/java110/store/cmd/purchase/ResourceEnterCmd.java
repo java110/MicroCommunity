@@ -153,7 +153,7 @@ public class ResourceEnterCmd extends Cmd{
             resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
             resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
             resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
-            resourceStoreTimesPo.setResId(purchaseApplyDetailPo.getResId());
+            resourceStoreTimesPo.setResCode(resourceStoreDtos.get(0).getResCode());
             resourceStoreTimesPo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
             resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);

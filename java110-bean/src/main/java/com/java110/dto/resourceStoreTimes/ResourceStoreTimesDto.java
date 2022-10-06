@@ -21,7 +21,7 @@ public class ResourceStoreTimesDto extends PageDto implements Serializable {
     private String stock;
 
     private String hasStock;
-    private String resId;
+    private String resCode;
     private String timesId;
 
 
@@ -62,12 +62,12 @@ public class ResourceStoreTimesDto extends PageDto implements Serializable {
         this.stock = stock;
     }
 
-    public String getResId() {
-        return resId;
+    public String getResCode() {
+        return resCode;
     }
 
-    public void setResId(String resId) {
-        this.resId = resId;
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
 
     public String getTimesId() {
