@@ -36,7 +36,7 @@ import java.util.List;
  * 请求地址为/app/purchase/resourceEnter
  */
 
-@Java110CmdDoc(title = "采购人员入库",
+@Java110CmdDoc(title = "采购入库",
         description = "主要用于 采购人员入库",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/purchase/resourceEnter",
@@ -48,10 +48,10 @@ import java.util.List;
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "applyOrderId", length = 30, remark = "采购申请单订单ID"),
         @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array",length = 30, remark = "采购物品信息"),
-        @Java110ParamDoc(parentNodeName = "-", name = "purchaseQuantity", type = "Int",length = 30, remark = "数量"),
-        @Java110ParamDoc(parentNodeName = "-", name = "price", type = "String",length = 30, remark = "价格"),
-        @Java110ParamDoc(parentNodeName = "-", name = "id", type = "String",length = 30, remark = "采购明细ID"),
-        @Java110ParamDoc(parentNodeName = "-", name = "resId", type = "String",length = 30, remark = "物品ID"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int",length = 30, remark = "数量"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "price", type = "String",length = 30, remark = "价格"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String",length = 30, remark = "采购明细ID"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String",length = 30, remark = "物品ID"),
 })
 
 @Java110ResponseDoc(
