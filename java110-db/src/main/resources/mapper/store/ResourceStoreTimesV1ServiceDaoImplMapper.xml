@@ -18,7 +18,8 @@
     <!-- 查询物品次数信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreTimesInfo" parameterType="Map" resultType="Map">
         select t.price,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.stock,t.res_code,t.res_code resCode,t.times_id,t.times_id timesId
+        statusCd,t.store_id,t.store_id storeId,t.stock,t.res_code,t.res_code resCode,t.times_id,t.times_id timesId,
+        (t.price * t.stock) totalPrice
         from resource_store_times t
         where 1 =1
         <if test="price !=null and price != ''">

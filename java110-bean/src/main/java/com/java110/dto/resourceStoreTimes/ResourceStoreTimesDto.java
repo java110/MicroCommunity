@@ -16,6 +16,7 @@ import java.util.Date;
 public class ResourceStoreTimesDto extends PageDto implements Serializable {
 
     private String price;
+    private String totalPrice;
     private String applyOrderId;
     private String storeId;
     private String stock;
@@ -101,5 +102,13 @@ public class ResourceStoreTimesDto extends PageDto implements Serializable {
 
     public void setHasStock(String hasStock) {
         this.hasStock = hasStock;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
