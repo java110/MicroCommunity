@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
@@ -23,6 +24,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+
+@Java110CmdDoc(title = "查询组织",
+        description = "主要用于添加员工时的组织ID 可以通过此接口查询， 此接口返回为树形接口，请其他系统用树形的方式展示数据，具体请参考物业系统组织架构展示方式",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/org.listOrgTree",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "org.listOrgTree"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "orgId", length = 30, remark = "组织ID，非必填"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "allOrgName", type = "String", remark = "组织名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "id", type = "String", remark = "组织ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "children", type = "Array", remark = "子节点"),
+                @Java110ParamDoc(parentNodeName = "children",name = "allOrgName", type = "String", remark = "组织名称"),
+                @Java110ParamDoc(parentNodeName = "children",name = "id", type = "String", remark = "组织ID"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/org.listOrgTree",
+        resBody="{\"code\":0,\"data\":{\"allOrgName\":\"演示物业\",\"children\":[{\"allOrgName\":\"演示物业 / 软件部\",\"icon\":\"/img/org.png\",\"id\":\"102022091988250052\",\"parentId\":\"842022081548770433\",\"text\":\"软件部\"}],\"icon\":\"/img/org.png\",\"id\":\"842022081548770433\",\"parentId\":\"-1\",\"text\":\"演示物业\"},\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+)
 
 @Java110Cmd(serviceCode = "org.listOrgTree")
 public class ListOrgTreeCmd extends Cmd {
