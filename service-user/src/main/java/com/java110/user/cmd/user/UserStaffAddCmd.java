@@ -34,7 +34,7 @@ import java.util.List;
 
 
 @Java110CmdDoc(title = "添加员工",
-        description = "外部系统通过添加员工接口 添加员工",
+        description = "外部系统通过添加员工接口 添加员工，注意需要物业管理员账号登录，因为不需要传storeId 是根据管理员登录信息获取的",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/user.staff.add",
         resource = "userDoc",
@@ -50,7 +50,7 @@ import java.util.List;
         @Java110ParamDoc(name = "email", length = 64, remark = "邮箱"),
         @Java110ParamDoc(name = "tel", length = 11, remark = "手机号"),
         @Java110ParamDoc(name = "address", length = 64, remark = "地址"),
-        @Java110ParamDoc(name = "relCd", length = 64, remark = "岗位,{\"description\":\"普通员工\",\"id\":0,\"name\":\"普通员工\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"1000\",\"total\":0},{\"description\":\"部门经理\",\"id\":0,\"name\":\"部门经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"2000\",\"total\":0},{\"description\":\"部门副经理\",\"id\":0,\"name\":\"部门副经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"3000\",\"total\":0},{\"description\":\"部门组长\",\"id\":0,\"name\":\"部门组长\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"4000\",\"total\":0},{\"description\":\"分公司总经理\",\"id\":0,\"name\":\"分公司总经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"5000\",\"total\":0},{\"description\":\"分公司副总经理\",\"id\":0,\"name\":\"分公司副总经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"6000\",\"total\":0},{\"description\":\"总经理助理\",\"id\":0,\"name\":\"总经理助理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"7000\",\"total\":0},{\"description\":\"总公司总经理\",\"id\":0,\"name\":\"总公司总经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"8000\",\"total\":0},{\"description\":\"总公司副总经理\",\"id\":0,\"name\":\"总公司副总经理\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"9000\",\"total\":0}"),
+        @Java110ParamDoc(name = "relCd", length = 64, remark = "岗位,普通员工 1000 部门经理 2000 部门副经理 3000 部门组长 4000 分公司总经理 5000 分公司副总经理 6000 总经理助理 7000 总公司总经理 8000 总公司副总经理 9000"),
 })
 
 @Java110ResponseDoc(

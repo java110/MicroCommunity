@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.privilegeUser.PrivilegeUserDto;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.intf.community.IRepairTypeUserInnerServiceSMO;
@@ -23,6 +24,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.util.List;
+
+
+@Java110CmdDoc(title = "删除员工",
+        description = "外部系统通过删除员工接口 删除员工 注意需要物业管理员账号登录，因为不需要传storeId 是根据管理员登录信息获取的",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/user.staff.delete",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "user.staff.delete"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "userId", length = 30, remark = "员工ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"userId\":\"123123\"}",
+        resBody="{'code':0,'msg':'成功'"
+)
 
 @Java110Cmd(serviceCode = "user.staff.delete")
 public class UserStaffDeleteCmd extends Cmd {

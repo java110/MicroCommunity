@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
@@ -24,6 +25,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+
+
+@Java110CmdDoc(title = "重置密码",
+        description = "外部系统通过重置员工接口 重置员工密码，注意需要物业管理员账号登录，因为不需要传storeId 是根据管理员登录信息获取的",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/user.resetStaffPwd",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "user.resetStaffPwd"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "staffId", length = 30, remark = "员工ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "pwd", type = "String", length = 250,  remark = "密码"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{staffId: \"302022081831710053\"}",
+        resBody="{\"msg\":\"成功\",\"code\":0,\"pwd\":\"004117\"}"
+)
 
 @Java110Cmd(serviceCode = "user.resetStaffPwd")
 public class ResetStaffPwdCmd extends Cmd {
