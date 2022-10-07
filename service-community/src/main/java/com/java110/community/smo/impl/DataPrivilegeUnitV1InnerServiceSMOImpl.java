@@ -19,7 +19,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IDataPrivilegeUnitV1ServiceDao;
 import com.java110.dto.UnitDto;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
-import com.java110.intf.community.IDataPrivilegeStaffV1InnerServiceSMO;
+import com.java110.intf.user.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.dto.dataPrivilegeUnit.DataPrivilegeUnitDto;
 import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
