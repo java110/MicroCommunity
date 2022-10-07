@@ -40,16 +40,16 @@ import java.util.Map;
 @Java110RequestMappingsDoc(
         mappingsDocs = {
                 @Java110RequestMappingDoc(name = "用户中心", resource = "userDoc", url = "http://127.0.0.1:8008", seq = 1, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "账户中心", resource = "acctDoc", url = "http://127.0.0.1:8008", seq = 2, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "通用中心", resource = "commonDoc", url = "http://127.0.0.1:8008", seq = 3, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "资产中心", resource = "communityDoc", url = "http://127.0.0.1:8008", seq = 4, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "开发中心", resource = "devDoc", url = "http://127.0.0.1:8008", seq = 5, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "费用中心", resource = "feeDoc", url = "http://127.0.0.1:8008", seq = 6, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "定时任务", resource = "jobDoc", url = "http://127.0.0.1:8008", seq = 7, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "oa", resource = "oaDoc", url = "http://127.0.0.1:8008", seq = 8, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "订单中心", resource = "orderDoc", url = "http://127.0.0.1:8008", seq = 9, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "报表中心", resource = "reportDoc", url = "http://127.0.0.1:8008", seq = 10, startWay = "boot"),
-                @Java110RequestMappingDoc(name = "商户中心", resource = "storeDoc", url = "http://127.0.0.1:8008", seq = 11, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "资产中心", resource = "communityDoc", url = "http://127.0.0.1:8008", seq = 2, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "商户中心", resource = "storeDoc", url = "http://127.0.0.1:8008", seq = 3, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "账户中心", resource = "acctDoc", url = "http://127.0.0.1:8008", seq = 4, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "通用中心", resource = "commonDoc", url = "http://127.0.0.1:8008", seq = 5, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "开发中心", resource = "devDoc", url = "http://127.0.0.1:8008", seq = 6, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "费用中心", resource = "feeDoc", url = "http://127.0.0.1:8008", seq = 7, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "定时任务", resource = "jobDoc", url = "http://127.0.0.1:8008", seq = 8, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "oa", resource = "oaDoc", url = "http://127.0.0.1:8008", seq = 9, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "订单中心", resource = "orderDoc", url = "http://127.0.0.1:8008", seq = 10, startWay = "boot"),
+                @Java110RequestMappingDoc(name = "报表中心", resource = "reportDoc", url = "http://127.0.0.1:8008", seq = 11, startWay = "boot"),
         }
 )
 public class RestApi extends BaseController {

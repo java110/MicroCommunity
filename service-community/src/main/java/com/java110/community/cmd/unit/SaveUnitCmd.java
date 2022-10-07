@@ -7,6 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.FloorDto;
 import com.java110.dto.UnitDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
@@ -18,6 +19,37 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
+@Java110CmdDoc(title = "添加单元",
+        description = "用于外系统添加单元信息功能",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/unit.saveUnit",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "unit.saveUnit"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "floorId", length = 30, remark = "楼栋ID"),
+        @Java110ParamDoc(name = "unitNum", length = 30, remark = "单元"),
+        @Java110ParamDoc(name = "layerCount", length = 30, remark = "楼层"),
+        @Java110ParamDoc(name = "lift", length = 30, remark = "1010 有电梯 2020 无电梯"),
+        @Java110ParamDoc(name = "unitArea", length = 30, remark = "面积"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"floorId\":\"732022081690440002\",\"unitNum\":\"2\",\"layerCount\":\"2\",\"lift\":\"1010\",\"remark\":\"2\",\"communityId\":\"2022081539020475\",\"unitArea\":\"2\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 @Java110Cmd(serviceCode = "unit.saveUnit")
 public class SaveUnitCmd extends Cmd {

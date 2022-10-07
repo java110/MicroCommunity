@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
@@ -19,6 +20,34 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
+
+@Java110CmdDoc(title = "删除单元",
+        description = "用于外系统删除单元信息功能",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/unit.deleteUnit",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "unit.deleteUnit"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "unitId", length = 30, remark = "单元ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"unitId\":\"123123\",\"communityId\":\"2022081539020475\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 @Java110Cmd(serviceCode = "unit.deleteUnit")
 public class DeleteUnitCmd extends Cmd {
