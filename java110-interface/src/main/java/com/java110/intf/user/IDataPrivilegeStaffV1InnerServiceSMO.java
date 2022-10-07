@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.intf.community;
+package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
-import com.java110.dto.user.StaffDto;
 import com.java110.dto.user.UserDto;
 import com.java110.po.dataPrivilegeStaff.DataPrivilegeStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
