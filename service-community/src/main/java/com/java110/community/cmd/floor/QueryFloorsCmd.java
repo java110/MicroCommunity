@@ -46,7 +46,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{'username':'wuxw','passwd':'admin'}",
+        reqBody="http://{ip}:{port}/app/floor.queryFloors?page=1&row=10&communityId=123123",
         resBody="{'code':0,'msg':'成功','apiFloorDataVoList':[{'floorId':'123123','floorNum':'123213'}]}"
 )
 
