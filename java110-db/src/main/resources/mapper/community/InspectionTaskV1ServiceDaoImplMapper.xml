@@ -79,6 +79,9 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -203,6 +206,9 @@
         </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
 
 
