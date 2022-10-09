@@ -138,6 +138,9 @@
         <if test="actUserId !=null and actUserId != ''">
             , t.act_user_id= #{actUserId}
         </if>
+        <if test="state !=null and state != ''">
+        , t.state= #{state}
+    </if>
         where 1=1
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}

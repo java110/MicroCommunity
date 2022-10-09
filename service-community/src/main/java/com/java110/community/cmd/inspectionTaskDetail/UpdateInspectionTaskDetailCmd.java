@@ -209,10 +209,10 @@ public class UpdateInspectionTaskDetailCmd extends Cmd {
             throw new CmdException("更新任务明细失败");
         }
         //巡检完成后更改巡检任务表状态
-        InspectionTaskDto inspectionTask= new InspectionTaskDto();
-        inspectionTask.setTaskId(inspectionTaskDetailPoPo.getTaskId());
-        inspectionTask.setState(inspectionTaskDetailPoPo.getState());
-        inspectionTaskInnerServiceSMOImpl.updateInspectionTask(inspectionTask);
+//        InspectionTaskDto inspectionTask= new InspectionTaskDto();
+//        inspectionTask.setTaskId(inspectionTaskDetailPoPo.getTaskId());
+//        inspectionTask.setState(inspectionTaskDetailPoPo.getState());
+//        inspectionTaskInnerServiceSMOImpl.updateInspectionTask(inspectionTask);
     }
 
     /**
