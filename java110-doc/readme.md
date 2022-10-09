@@ -148,3 +148,40 @@ reqBody 请求报文
 
 resBody 返回报文
 
+
+### demo
+
+/**
+ * 用户登录 功能
+ * 请求地址为/app/login.pcUserLogin
+ */
+
+@Java110CmdDoc(title = "用户登录",
+        description = "登录功能 主要用于 员工 或者管理员登录使用",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/login.pcUserLogin",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "login.pcUserLogin"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "username", length = 30, remark = "用户名，物业系统分配"),
+        @Java110ParamDoc(name = "passwd", length = 30, remark = "密码，物业系统分配"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'username':'wuxw','passwd':'admin'}",
+        resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
+)
+

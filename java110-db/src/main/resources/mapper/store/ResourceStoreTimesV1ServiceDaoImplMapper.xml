@@ -2,114 +2,117 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="resourceResourceStoreTimesTimesV1ServiceDaoImpl">
-
-
-
+<mapper namespace="resourceStoreTimesV1ServiceDaoImpl">
 
 
     <!-- 保存物品次数信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreTimesInfo" parameterType="Map">
         insert into resource_store_times(
-price,apply_order_id,store_id,stock,res_id,times_id
-) values (
-#{price},#{applyOrderId},#{storeId},#{stock},#{resId},#{timesId}
-)
+        price,apply_order_id,store_id,stock,res_code,times_id
+        ) values (
+        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId}
+        )
     </insert>
-
 
 
     <!-- 查询物品次数信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreTimesInfo" parameterType="Map" resultType="Map">
-        select  t.price,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.res_id,t.res_id resId,t.times_id,t.times_id timesId 
-from resource_store_times t 
-where 1 =1 
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="applyOrderId !=null and applyOrderId != ''">
-   and t.apply_order_id= #{applyOrderId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
-<if test="timesId !=null and timesId != ''">
-   and t.times_id= #{timesId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.price,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.stock,t.res_code,t.res_code resCode,t.times_id,
+        t.times_id timesId,t.create_time createTime,(t.price * t.stock) totalPrice
+        from resource_store_times t
+        where 1 =1
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="hasStock !=null and hasStock != ''">
+            and t.stock > 0
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改物品次数信息 add by wuxw 2018-07-03 -->
     <update id="updateResourceStoreTimesInfo" parameterType="Map">
-        update  resource_store_times t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="price !=null and price != ''">
-, t.price= #{price}
-</if> 
-<if test="applyOrderId !=null and applyOrderId != ''">
-, t.apply_order_id= #{applyOrderId}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-, t.stock= #{stock}
-</if> 
-<if test="resId !=null and resId != ''">
-, t.res_id= #{resId}
-</if> 
- where 1=1 <if test="timesId !=null and timesId != ''">
-and t.times_id= #{timesId}
-</if> 
+        update resource_store_times t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            , t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            , t.res_code= #{resCode}
+        </if>
+        where 1=1
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
+        </if>
 
     </update>
 
     <!-- 查询物品次数数量 add by wuxw 2018-07-03 -->
-     <select id="queryResourceStoreTimessCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from resource_store_times t 
-where 1 =1 
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="applyOrderId !=null and applyOrderId != ''">
-   and t.apply_order_id= #{applyOrderId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
-<if test="timesId !=null and timesId != ''">
-   and t.times_id= #{timesId}
-</if> 
+    <select id="queryResourceStoreTimessCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from resource_store_times t
+        where 1 =1
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="hasStock !=null and hasStock != ''">
+            and t.stock > 0
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
@@ -30,6 +31,39 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
+
+@Java110CmdDoc(title = "添加员工",
+        description = "外部系统通过添加员工接口 添加员工，注意需要物业管理员账号登录，因为不需要传storeId 是根据管理员登录信息获取的",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/user.staff.add",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "user.staff.add"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "orgId", length = 30, remark = "组织ID"),
+        @Java110ParamDoc(name = "orgName", length = 64, remark = "组织名称"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
+        @Java110ParamDoc(name = "sex", length = 64, remark = "性别 0女 1男"),
+        @Java110ParamDoc(name = "email", length = 64, remark = "邮箱"),
+        @Java110ParamDoc(name = "tel", length = 11, remark = "手机号"),
+        @Java110ParamDoc(name = "address", length = 64, remark = "地址"),
+        @Java110ParamDoc(name = "relCd", length = 64, remark = "岗位,普通员工 1000 部门经理 2000 部门副经理 3000 部门组长 4000 分公司总经理 5000 分公司副总经理 6000 总经理助理 7000 总公司总经理 8000 总公司副总经理 9000"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
+        resBody="{'code':0,'msg':'成功'"
+)
 
 @Java110Cmd(serviceCode = "user.staff.add")
 public class UserStaffAddCmd extends Cmd {

@@ -37,7 +37,7 @@ import java.util.Map;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Service("resourceResourceStoreTimesTimesV1ServiceDaoImpl")
+@Service("resourceStoreTimesV1ServiceDaoImpl")
 public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implements IResourceStoreTimesV1ServiceDao {
 
     private static Logger logger = LoggerFactory.getLogger(ResourceStoreTimesV1ServiceDaoImpl.class);
@@ -55,7 +55,7 @@ public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implement
     public int saveResourceStoreTimesInfo(Map info) throws DAOException {
         logger.debug("保存 saveResourceStoreTimesInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("resourceResourceStoreTimesTimesV1ServiceDaoImpl.saveResourceStoreTimesInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("resourceStoreTimesV1ServiceDaoImpl.saveResourceStoreTimesInfo",info);
 
         return saveFlag;
     }
@@ -71,7 +71,7 @@ public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implement
     public List<Map> getResourceStoreTimesInfo(Map info) throws DAOException {
         logger.debug("查询 getResourceStoreTimesInfo 入参 info : {}",info);
 
-        List<Map> businessResourceStoreTimesInfos = sqlSessionTemplate.selectList("resourceResourceStoreTimesTimesV1ServiceDaoImpl.getResourceStoreTimesInfo",info);
+        List<Map> businessResourceStoreTimesInfos = sqlSessionTemplate.selectList("resourceStoreTimesV1ServiceDaoImpl.getResourceStoreTimesInfo",info);
 
         return businessResourceStoreTimesInfos;
     }
@@ -86,7 +86,7 @@ public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implement
     public int updateResourceStoreTimesInfo(Map info) throws DAOException {
         logger.debug("修改 updateResourceStoreTimesInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("resourceResourceStoreTimesTimesV1ServiceDaoImpl.updateResourceStoreTimesInfo",info);
+        int saveFlag = sqlSessionTemplate.update("resourceStoreTimesV1ServiceDaoImpl.updateResourceStoreTimesInfo",info);
 
         return saveFlag;
     }
@@ -100,7 +100,7 @@ public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implement
     public int queryResourceStoreTimessCount(Map info) {
         logger.debug("查询 queryResourceStoreTimessCount 入参 info : {}",info);
 
-        List<Map> businessResourceStoreTimesInfos = sqlSessionTemplate.selectList("resourceResourceStoreTimesTimesV1ServiceDaoImpl.queryResourceStoreTimessCount", info);
+        List<Map> businessResourceStoreTimesInfos = sqlSessionTemplate.selectList("resourceStoreTimesV1ServiceDaoImpl.queryResourceStoreTimessCount", info);
         if (businessResourceStoreTimesInfos.size() < 1) {
             return 0;
         }

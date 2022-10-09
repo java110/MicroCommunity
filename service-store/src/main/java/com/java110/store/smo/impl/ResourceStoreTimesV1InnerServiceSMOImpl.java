@@ -16,10 +16,10 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.store.dao.IResourceStoreTimesV1ServiceDao;
 import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
-import com.java110.dto.resourceResourceStoreTimesTimes.ResourceStoreTimesDto;
-import com.java110.po.resourceResourceStoreTimesTimes.ResourceStoreTimesPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -47,7 +47,7 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
 
     @Override
-    public int saveResourceStoreTimes(@RequestBody  ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
+    public int saveResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
         int saveFlag = resourceResourceStoreTimesTimesV1ServiceDaoImpl.saveResourceStoreTimesInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesPo));
         return saveFlag;
     }

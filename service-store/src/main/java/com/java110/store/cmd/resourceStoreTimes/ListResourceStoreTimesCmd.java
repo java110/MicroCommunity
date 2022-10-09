@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
@@ -39,7 +40,40 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 类表述：查询
+ * 查询物品进货明细 功能
+ */
+
+@Java110CmdDoc(title = "查询物品进货明细",
+        description = "主要用于 查询物品进货明细",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/resourceStoreTimes.listResourceStoreTimes",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "resourceStoreTimes.listResourceStoreTimes"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "resCode", length = 30, remark = "物品编号"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", length = 0, remark = "数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "resCode", type = "String", length = 30,  remark = "物品编号"),
+                @Java110ParamDoc(parentNodeName = "data",name = "price", type = "String", length = 30,  remark = "价格"),
+                @Java110ParamDoc(parentNodeName = "data",name = "stock", type = "String", length = 30,  remark = "库存"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/resourceStoreTimes.listResourceStoreTimes?resCode=123123",
+        resBody="{'code':0,'msg':'成功','data':[{'resCode':'123','price':'1.2','stock':'12'}]}"
+)
+
+/**
+ * 类表述：查询物品进货明细
  * 服务编码：resourceStoreTimes.listResourceStoreTimes
  * 请求路劲：/app/resourceStoreTimes.ListResourceStoreTimes
  * add by 吴学文 at 2022-10-06 21:26:56 mail: 928255095@qq.com
@@ -64,6 +98,10 @@ public class ListResourceStoreTimesCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            ResourceStoreTimesDto resourceStoreTimesDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreTimesDto.class);
+
+           String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+
+           resourceStoreTimesDto.setStoreId(storeId);
 
            int count = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimessCount(resourceStoreTimesDto);
 

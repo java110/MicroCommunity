@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.FloorDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -17,6 +18,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+
+
+@Java110CmdDoc(title = "查询楼栋",
+        description = "用于外系统查询楼栋信息功能",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/floor.queryFloors",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "floor.queryFloors"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "apiFloorDataVoList", type = "Array", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "apiFloorDataVoList",name = "floorId", type = "String", remark = "楼栋ID"),
+                @Java110ParamDoc(parentNodeName = "apiFloorDataVoList",name = "floorNum", type = "String", remark = "楼栋编号"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/floor.queryFloors?page=1&row=10&communityId=123123",
+        resBody="{'code':0,'msg':'成功','apiFloorDataVoList':[{'floorId':'123123','floorNum':'123213'}]}"
+)
 
 @Java110Cmd(serviceCode = "floor.queryFloors")
 public class QueryFloorsCmd extends Cmd {

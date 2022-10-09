@@ -1,6 +1,7 @@
-package com.java110.dto.resourceResourceStoreTimesTimes;
+package com.java110.dto.resourceStoreTimes;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,14 @@ import java.util.Date;
 public class ResourceStoreTimesDto extends PageDto implements Serializable {
 
     private String price;
-private String applyOrderId;
-private String storeId;
-private String stock;
-private String resId;
-private String timesId;
+    private String totalPrice;
+    private String applyOrderId;
+    private String storeId;
+    private String stock;
+
+    private String hasStock;
+    private String resCode;
+    private String timesId;
 
 
     private Date createTime;
@@ -30,37 +34,48 @@ private String timesId;
     public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getApplyOrderId() {
+
+    public String getApplyOrderId() {
         return applyOrderId;
     }
-public void setApplyOrderId(String applyOrderId) {
+
+    public void setApplyOrderId(String applyOrderId) {
         this.applyOrderId = applyOrderId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getStock() {
+
+    public String getStock() {
         return stock;
     }
-public void setStock(String stock) {
+
+    public void setStock(String stock) {
         this.stock = stock;
     }
-public String getResId() {
-        return resId;
+
+    public String getResCode() {
+        return resCode;
     }
-public void setResId(String resId) {
-        this.resId = resId;
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
-public String getTimesId() {
+
+    public String getTimesId() {
         return timesId;
     }
-public void setTimesId(String timesId) {
+
+    public void setTimesId(String timesId) {
         this.timesId = timesId;
     }
 
@@ -79,5 +94,21 @@ public void setTimesId(String timesId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getHasStock() {
+        return hasStock;
+    }
+
+    public void setHasStock(String hasStock) {
+        this.hasStock = hasStock;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

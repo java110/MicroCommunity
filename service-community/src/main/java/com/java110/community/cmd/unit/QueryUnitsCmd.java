@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.UnitDto;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
@@ -19,6 +20,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+
+
+@Java110CmdDoc(title = "查询单元",
+        description = "用于外系统查询单元信息功能",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/unit.queryUnits",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "unit.queryUnits"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "floorId", length = 30, remark = "楼栋ID"),
+        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "unitId", type = "String", length = 30,  remark = "单元ID"),
+                @Java110ParamDoc(name = "unitNum",  type = "String", length = 250,  remark = "单元编号"),
+                @Java110ParamDoc(name = "seq",  type = "int", length = 11,  remark = "排序"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/unit.queryUnits?page=1&row=10&communityId=123123&floorId=123",
+        resBody="{'unitId':'123123','unitNum':'123123','seq':1}"
+)
 
 @Java110Cmd(serviceCode = "unit.queryUnits")
 public class QueryUnitsCmd extends Cmd {

@@ -22,7 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.community.IDataPrivilegeStaffV1InnerServiceSMO;
+import com.java110.intf.user.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

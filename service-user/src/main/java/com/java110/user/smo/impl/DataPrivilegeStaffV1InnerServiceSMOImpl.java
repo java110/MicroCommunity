@@ -17,7 +17,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.user.dao.IDataPrivilegeStaffV1ServiceDao;
-import com.java110.intf.community.IDataPrivilegeStaffV1InnerServiceSMO;
+import com.java110.intf.user.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
 import com.java110.po.dataPrivilegeStaff.DataPrivilegeStaffPo;
 import com.java110.utils.util.BeanConvertUtil;
