@@ -151,16 +151,16 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             tmpImportCustomCreateFeeDtos.add(importCustomCreateFeeDtos.get(roomIndex));
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 // 处理房屋费用
-                doImportRoomCreateFee(importCustomCreateFeeDtos, batchId, result);
-                doImportCarCreateFee(importCustomCreateFeeDtos, batchId, result);
+                doImportRoomCreateFee(tmpImportCustomCreateFeeDtos, batchId, result);
+                doImportCarCreateFee(tmpImportCustomCreateFeeDtos, batchId, result);
 
                 tmpImportCustomCreateFeeDtos = new ArrayList<>();
             }
         }
         if (tmpImportCustomCreateFeeDtos != null && tmpImportCustomCreateFeeDtos.size() > 0) {
 
-            doImportRoomCreateFee(importCustomCreateFeeDtos, batchId, result);
-            doImportCarCreateFee(importCustomCreateFeeDtos, batchId, result);
+            doImportRoomCreateFee(tmpImportCustomCreateFeeDtos, batchId, result);
+            doImportCarCreateFee(tmpImportCustomCreateFeeDtos, batchId, result);
 
         }
 
