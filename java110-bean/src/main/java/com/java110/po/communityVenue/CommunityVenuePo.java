@@ -16,7 +16,7 @@
 package com.java110.po.communityVenue;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-03 03:05:16 mail: 928255095@qq.com
@@ -28,41 +28,68 @@ import java.util.Date;
 public class CommunityVenuePo implements Serializable {
 
     private String venueId;
-private String name;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-public String getVenueId() {
+    private String name;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+
+    private String startTime;
+
+    private String endTime;
+
+    public String getVenueId() {
         return venueId;
     }
-public void setVenueId(String venueId) {
+
+    public void setVenueId(String venueId) {
         this.venueId = venueId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 }

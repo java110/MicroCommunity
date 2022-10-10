@@ -5,93 +5,95 @@
 <mapper namespace="communityVenueV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存场馆信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityVenueInfo" parameterType="Map">
         insert into community_venue(
-venue_id,name,remark,community_id
-) values (
-#{venueId},#{name},#{remark},#{communityId}
-)
+        venue_id,name,remark,community_id,start_time,end_time
+        ) values (
+        #{venueId},#{name},#{remark},#{communityId},#{startTime},#{endTime}
+        )
     </insert>
-
 
 
     <!-- 查询场馆信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityVenueInfo" parameterType="Map" resultType="Map">
-        select  t.venue_id,t.venue_id venueId,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId 
-from community_venue t 
-where 1 =1 
-<if test="venueId !=null and venueId != ''">
-   and t.venue_id= #{venueId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.venue_id,t.venue_id venueId,t.name,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.start_time startTime,t.end_time endTime
+        from community_venue t
+        where 1 =1
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改场馆信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunityVenueInfo" parameterType="Map">
-        update  community_venue t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="venueId !=null and venueId != ''">
-and t.venue_id= #{venueId}
-</if> 
+        update community_venue t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time = #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time = #{endTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
 
     </update>
 
     <!-- 查询场馆数量 add by wuxw 2018-07-03 -->
-     <select id="queryCommunityVenuesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from community_venue t 
-where 1 =1 
-<if test="venueId !=null and venueId != ''">
-   and t.venue_id= #{venueId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryCommunityVenuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_venue t
+        where 1 =1
+        <if test="venueId !=null and venueId != ''">
+            and t.venue_id= #{venueId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

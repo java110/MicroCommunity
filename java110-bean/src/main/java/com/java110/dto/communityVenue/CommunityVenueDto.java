@@ -25,6 +25,10 @@ public class CommunityVenueDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String startTime;
+
+    private String endTime;
+
 
     public String getVenueId() {
         return venueId;
@@ -73,5 +77,21 @@ public class CommunityVenueDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
