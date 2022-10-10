@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingCouponV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存停车卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingCouponInfo" parameterType="Map">
+        insert into parking_coupon(
+type_cd,name,pa_id,coupon_id,community_id,value,value_price
+) values (
+#{typeCd},#{name},#{paId},#{couponId},#{communityId},#{value},#{valuePrice}
+)
+    </insert>
+
+
+
+    <!-- 查询停车卷信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingCouponInfo" parameterType="Map" resultType="Map">
+        select  t.type_cd,t.type_cd typeCd,t.name,t.pa_id,t.pa_id paId,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.community_id,t.community_id communityId,t.value,t.value_price,t.value_price valuePrice 
+from parking_coupon t 
+where 1 =1 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="paId !=null and paId != ''">
+   and t.pa_id= #{paId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="couponId !=null and couponId != ''">
+   and t.coupon_id= #{couponId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+<if test="valuePrice !=null and valuePrice != ''">
+   and t.value_price= #{valuePrice}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改停车卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingCouponInfo" parameterType="Map">
+        update  parking_coupon t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="paId !=null and paId != ''">
+, t.pa_id= #{paId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+, t.value= #{value}
+</if> 
+<if test="valuePrice !=null and valuePrice != ''">
+, t.value_price= #{valuePrice}
+</if> 
+ where 1=1 <if test="couponId !=null and couponId != ''">
+and t.coupon_id= #{couponId}
+</if> 
+
+    </update>
+
+    <!-- 查询停车卷数量 add by wuxw 2018-07-03 -->
+     <select id="queryParkingCouponsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from parking_coupon t 
+where 1 =1 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="paId !=null and paId != ''">
+   and t.pa_id= #{paId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="couponId !=null and couponId != ''">
+   and t.coupon_id= #{couponId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="value !=null and value != ''">
+   and t.value= #{value}
+</if> 
+<if test="valuePrice !=null and valuePrice != ''">
+   and t.value_price= #{valuePrice}
+</if> 
+
+
+     </select>
+
+</mapper>
