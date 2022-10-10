@@ -8,11 +8,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IComplaintV1InnerServiceSMO;
 import com.java110.po.complaint.ComplaintPo;
 import com.java110.po.file.FileRelPo;
@@ -21,6 +23,8 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Java110Cmd(serviceCode = "complaint.saveComplaint")
 public class SaveComplaintCmd extends Cmd{
@@ -37,9 +41,12 @@ public class SaveComplaintCmd extends Cmd{
     @Autowired
     private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
+//        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择投诉类型");
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请选择房屋编号");
         Assert.hasKeyAndValue(reqJson, "complaintName", "必填，请填写投诉人");
@@ -47,12 +54,21 @@ public class SaveComplaintCmd extends Cmd{
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写投诉内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
+
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(reqJson.getString("communityId"));
+        communityMemberDto.setMemberTypeCd("390001200002");
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+
+        Assert.listOnlyOne(communityMemberDtos,"小区未入驻");
+        reqJson.put("storeId",communityMemberDtos.get(0).getMemberId());
         reqJson.put("startUserId", reqJson.getString("userId"));
         reqJson.put("complaintId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_complaintId));
         reqJson.put("state", "10001");
