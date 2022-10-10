@@ -21,16 +21,21 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parkingCoupon.ParkingCouponDto;
 import com.java110.intf.acct.IParkingCouponV1InnerServiceSMO;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.po.parkingCoupon.ParkingCouponPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 /**
@@ -52,6 +57,9 @@ public class UpdateParkingCouponCmd extends Cmd {
     @Autowired
     private IParkingCouponV1InnerServiceSMO parkingCouponV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "couponId", "couponId不能为空");
@@ -66,6 +74,15 @@ public class UpdateParkingCouponCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         ParkingCouponPo parkingCouponPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponPo.class);
+
+        if(StringUtil.isEmpty(parkingCouponPo.getPaId())) {
+            ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+            parkingAreaDto.setPaId(parkingCouponPo.getPaId());
+            List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+            Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+            parkingCouponPo.setPaName(parkingAreaDtos.get(0).getNum());
+        }
+
         int flag = parkingCouponV1InnerServiceSMOImpl.updateParkingCoupon(parkingCouponPo);
 
         if (flag < 1) {

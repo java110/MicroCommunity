@@ -22,8 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parkingCoupon.ParkingCouponDto;
 import com.java110.intf.acct.IParkingCouponV1InnerServiceSMO;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.po.parkingCoupon.ParkingCouponPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -32,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -53,19 +57,20 @@ public class SaveParkingCouponCmd extends Cmd {
     @Autowired
     private IParkingCouponV1InnerServiceSMO parkingCouponV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "typeCd", "请求报文中未包含typeCd");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
-        if(ParkingCouponDto.TYPE_CD_FREE.equals(reqJson.getString("typeCd"))){
-            reqJson.put("value","9999");
+        if (ParkingCouponDto.TYPE_CD_FREE.equals(reqJson.getString("typeCd"))) {
+            reqJson.put("value", "9999");
         }
         Assert.hasKeyAndValue(reqJson, "value", "请求报文中未包含value");
         Assert.hasKeyAndValue(reqJson, "valuePrice", "请求报文中未包含valuePrice");
-
-
 
 
     }
@@ -76,6 +81,15 @@ public class SaveParkingCouponCmd extends Cmd {
 
         ParkingCouponPo parkingCouponPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponPo.class);
         parkingCouponPo.setCouponId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(parkingCouponPo.getPaId());
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+
+        Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+
+        parkingCouponPo.setPaName(parkingAreaDtos.get(0).getNum());
+
         int flag = parkingCouponV1InnerServiceSMOImpl.saveParkingCoupon(parkingCouponPo);
 
         if (flag < 1) {

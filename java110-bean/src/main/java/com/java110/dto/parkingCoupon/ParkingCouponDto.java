@@ -20,9 +20,12 @@ public class ParkingCouponDto extends PageDto implements Serializable {
     public static final String TYPE_CD_DISCOUNT = "3003";
     public static final String TYPE_CD_FREE = "4004";
 
+
     private String typeCd;
+    private String typeCdName;
     private String name;
     private String paId;
+    private String paName;
     private String couponId;
     private String communityId;
     private String value;
@@ -105,5 +108,21 @@ public class ParkingCouponDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
+    }
+
+    public String getPaName() {
+        return paName;
+    }
+
+    public void setPaName(String paName) {
+        this.paName = paName;
     }
 }
