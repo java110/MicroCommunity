@@ -1,6 +1,7 @@
 package com.java110.dto.storeShopCommunity;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,17 +15,19 @@ import java.util.Date;
  **/
 public class StoreShopCommunityDto extends PageDto implements Serializable {
 
+    public static final String STATE_SUCCESS = "24002";
+
     private String address;
-private String cityCode;
-private String codeName;
-private String communityName;
-private String startTime;
-private String shopId;
-private String endTime;
-private String state;
-private String communityId;
-private String message;
-private String scId;
+    private String cityCode;
+    private String codeName;
+    private String communityName;
+    private String startTime;
+    private String shopId;
+    private String endTime;
+    private String state;
+    private String communityId;
+    private String message;
+    private String scId;
 
 
     private Date createTime;
@@ -35,67 +38,88 @@ private String scId;
     public String getAddress() {
         return address;
     }
-public void setAddress(String address) {
+
+    public void setAddress(String address) {
         this.address = address;
     }
-public String getCityCode() {
+
+    public String getCityCode() {
         return cityCode;
     }
-public void setCityCode(String cityCode) {
+
+    public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
     }
-public String getCodeName() {
+
+    public String getCodeName() {
         return codeName;
     }
-public void setCodeName(String codeName) {
+
+    public void setCodeName(String codeName) {
         this.codeName = codeName;
     }
-public String getCommunityName() {
+
+    public String getCommunityName() {
         return communityName;
     }
-public void setCommunityName(String communityName) {
+
+    public void setCommunityName(String communityName) {
         this.communityName = communityName;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getShopId() {
+
+    public String getShopId() {
         return shopId;
     }
-public void setShopId(String shopId) {
+
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMessage() {
+
+    public String getMessage() {
         return message;
     }
-public void setMessage(String message) {
+
+    public void setMessage(String message) {
         this.message = message;
     }
-public String getScId() {
+
+    public String getScId() {
         return scId;
     }
-public void setScId(String scId) {
+
+    public void setScId(String scId) {
         this.scId = scId;
     }
 

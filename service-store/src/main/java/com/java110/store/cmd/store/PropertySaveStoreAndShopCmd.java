@@ -9,10 +9,13 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.shop.ShopDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
 import com.java110.intf.acct.IAccountBondObjInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
@@ -25,6 +28,7 @@ import com.java110.po.shop.ShopPo;
 import com.java110.po.store.StorePo;
 import com.java110.po.store.StoreUserPo;
 import com.java110.po.storeShop.StoreShopPo;
+import com.java110.po.storeShopCommunity.StoreShopCommunityPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
@@ -34,6 +38,7 @@ import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -78,11 +83,16 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
     @Autowired
     private IAccountBondObjInnerServiceSMO accountBondObjInnerServiceSMOImpl;
 
+    @Autowired
+    private IStoreShopCommunityV1InnerServiceSMO storeShopCommunityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "shopName", "未包含商铺名称");
-        Assert.hasKeyAndValue(reqJson, "areaCode", "未包含地区");
         Assert.hasKeyAndValue(reqJson, "link", "未包含手机号");
         Assert.hasKeyAndValue(reqJson, "password", "未包含密码");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
@@ -91,6 +101,15 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(reqJson.getString("communityId"));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        Assert.listOnlyOne(communityDtos,"小区不存在");
+        reqJson.put("communityName",communityDtos.get(0).getName());
+        reqJson.put("areaCode",communityDtos.get(0).getAreaCode());
 
         StoreDto storeDto = new StoreDto();
         storeDto.setTel(reqJson.getString("link"));
@@ -224,8 +243,32 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
         //保存商铺
         saveShop(storePo, reqJson);
 
+        // 关联 小区和商铺
+        saveShopCommunity(reqJson);
+
         //开户
         addAccountDto(storePo, reqJson);
+    }
+
+    private void saveShopCommunity(JSONObject reqJson) {
+
+        StoreShopCommunityPo storeShopCommunityPo = new StoreShopCommunityPo();
+        storeShopCommunityPo.setAddress("无");
+        storeShopCommunityPo.setCityCode(reqJson.getString("areaCode"));
+        storeShopCommunityPo.setCodeName("无");
+        storeShopCommunityPo.setCommunityId(reqJson.getString("communityId"));
+        storeShopCommunityPo.setCommunityName(reqJson.getString("communityName"));
+        storeShopCommunityPo.setEndTime("2050-01-01");
+        storeShopCommunityPo.setMessage("物业添加");
+        storeShopCommunityPo.setScId(GenerateCodeFactory.getGeneratorId("10"));
+        storeShopCommunityPo.setShopId(reqJson.getString("shopId"));
+        storeShopCommunityPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        storeShopCommunityPo.setState(StoreShopCommunityDto.STATE_SUCCESS);
+        int flag = storeShopCommunityV1InnerServiceSMOImpl.saveStoreShopCommunity(storeShopCommunityPo);
+
+        if(flag < 1){
+            throw new IllegalArgumentException("小区关联商铺失败");
+        }
     }
 
 

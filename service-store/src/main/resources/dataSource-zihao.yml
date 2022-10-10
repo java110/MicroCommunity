@@ -44,15 +44,18 @@ dataSources:
 
 shardingRule:
   tables:
-    business_xxx:
-      actualDataNodes: ds${0..1}.business_community
+    s_shop:
+      actualDataNodes: ds0.s_shop
       databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
+        none:
+    s_shop_community:
+      actualDataNodes: ds0.s_shop_community
+      databaseStrategy:
+        none:
 
   bindingTables:
-    - business_xxx
+    - s_shop
+    - s_shop_community
 
   defaultDataSourceName: ds1
   defaultDatabaseStrategy:
