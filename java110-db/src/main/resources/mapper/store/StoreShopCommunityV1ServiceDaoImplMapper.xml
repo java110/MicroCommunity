@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeShopCommunityV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存小区店铺信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreShopCommunityInfo" parameterType="Map">
+        insert into s_shop_community(
+address,city_code,code_name,community_name,start_time,shop_id,end_time,state,community_id,message,sc_id
+) values (
+#{address},#{cityCode},#{codeName},#{communityName},#{startTime},#{shopId},#{endTime},#{state},#{communityId},#{message},#{scId}
+)
+    </insert>
+
+
+
+    <!-- 查询小区店铺信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreShopCommunityInfo" parameterType="Map" resultType="Map">
+        select  t.address,t.city_code,t.city_code cityCode,t.code_name,t.code_name codeName,t.community_name,t.community_name communityName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id shopId,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.message,t.sc_id,t.sc_id scId 
+from s_shop_community t 
+where 1 =1 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+   and t.city_code= #{cityCode}
+</if> 
+<if test="codeName !=null and codeName != ''">
+   and t.code_name= #{codeName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shopId !=null and shopId != ''">
+   and t.shop_id= #{shopId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="message !=null and message != ''">
+   and t.message= #{message}
+</if> 
+<if test="scId !=null and scId != ''">
+   and t.sc_id= #{scId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区店铺信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreShopCommunityInfo" parameterType="Map">
+        update  s_shop_community t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="address !=null and address != ''">
+, t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+, t.city_code= #{cityCode}
+</if> 
+<if test="codeName !=null and codeName != ''">
+, t.code_name= #{codeName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+, t.community_name= #{communityName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="shopId !=null and shopId != ''">
+, t.shop_id= #{shopId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="message !=null and message != ''">
+, t.message= #{message}
+</if> 
+ where 1=1 <if test="scId !=null and scId != ''">
+and t.sc_id= #{scId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区店铺数量 add by wuxw 2018-07-03 -->
+     <select id="queryStoreShopCommunitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from s_shop_community t 
+where 1 =1 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="cityCode !=null and cityCode != ''">
+   and t.city_code= #{cityCode}
+</if> 
+<if test="codeName !=null and codeName != ''">
+   and t.code_name= #{codeName}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="shopId !=null and shopId != ''">
+   and t.shop_id= #{shopId}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="message !=null and message != ''">
+   and t.message= #{message}
+</if> 
+<if test="scId !=null and scId != ''">
+   and t.sc_id= #{scId}
+</if> 
+
+
+     </select>
+
+</mapper>
