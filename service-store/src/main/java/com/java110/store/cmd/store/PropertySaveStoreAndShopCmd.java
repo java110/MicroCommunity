@@ -240,6 +240,7 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
         privilegeUserPo.setStoreId(storePo.getStoreId());
         privilegeUserPo.setUserId(userPo.getUserId());
         privilegeUserPo.setpId(defaultPrivilege);
+        privilegeUserPo.setPuId(GenerateCodeFactory.getGeneratorId("10"));
 
         flag = privilegeUserV1InnerServiceSMOImpl.savePrivilegeUser(privilegeUserPo);
         if (flag < 1) {
