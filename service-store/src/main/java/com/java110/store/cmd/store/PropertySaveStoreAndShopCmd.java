@@ -16,6 +16,8 @@ import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
 import com.java110.intf.acct.IAccountBondObjInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.mall.IShopCommunityInnerServiceSMO;
+import com.java110.intf.mall.IShopInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
@@ -24,13 +26,11 @@ import com.java110.po.account.AccountPo;
 import com.java110.po.org.OrgPo;
 import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.privilegeUser.PrivilegeUserPo;
-import com.java110.po.shop.ShopPo;
 import com.java110.po.store.StorePo;
 import com.java110.po.store.StoreUserPo;
 import com.java110.po.storeShop.StoreShopPo;
 import com.java110.po.storeShopCommunity.StoreShopCommunityPo;
 import com.java110.po.user.UserPo;
-import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.StoreUserRelConstant;
@@ -39,7 +39,6 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -75,7 +74,7 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
     private IPrivilegeUserV1InnerServiceSMO privilegeUserV1InnerServiceSMOImpl;
 
     @Autowired
-    private IStoreShopV1InnerServiceSMO shopInnerServiceSMOImpl;
+    private IStoreShopV1InnerServiceSMO storeShopV1InnerServiceSMOImpl;
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
@@ -88,6 +87,13 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+
+    @Autowired(required = false)
+    private IShopInnerServiceSMO shopInnerServiceSMOImpl;
+
+    @Autowired(required = false)
+    private IShopCommunityInnerServiceSMO shopCommunityInnerServiceSMOImpl;
 
 
     @Override
@@ -107,9 +113,9 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
         communityDto.setCommunityId(reqJson.getString("communityId"));
         List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
 
-        Assert.listOnlyOne(communityDtos,"小区不存在");
-        reqJson.put("communityName",communityDtos.get(0).getName());
-        reqJson.put("areaCode",communityDtos.get(0).getAreaCode());
+        Assert.listOnlyOne(communityDtos, "小区不存在");
+        reqJson.put("communityName", communityDtos.get(0).getName());
+        reqJson.put("areaCode", communityDtos.get(0).getAreaCode());
 
         StoreDto storeDto = new StoreDto();
         storeDto.setTel(reqJson.getString("link"));
@@ -264,9 +270,13 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
         storeShopCommunityPo.setShopId(reqJson.getString("shopId"));
         storeShopCommunityPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         storeShopCommunityPo.setState(StoreShopCommunityDto.STATE_SUCCESS);
-        int flag = storeShopCommunityV1InnerServiceSMOImpl.saveStoreShopCommunity(storeShopCommunityPo);
-
-        if(flag < 1){
+        int flag = 0;
+        if ("ON".equals(MappingCache.getValue("HAS_HC_MALL"))) {
+            flag = shopCommunityInnerServiceSMOImpl.saveShopCommunity(storeShopCommunityPo);
+        } else {
+            flag = storeShopCommunityV1InnerServiceSMOImpl.saveStoreShopCommunity(storeShopCommunityPo);
+        }
+        if (flag < 1) {
             throw new IllegalArgumentException("小区关联商铺失败");
         }
     }
@@ -313,7 +323,12 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
 
         shopPo.setState(ShopDto.STATE_Y);
         //shopPo.setState(ShopDto.STATE_B);
-        int flag = shopInnerServiceSMOImpl.saveStoreShop(shopPo);
+        int flag = 0;
+        if ("ON".equals(MappingCache.getValue("HAS_HC_MALL"))) {
+            flag = shopInnerServiceSMOImpl.saveShop(shopPo);
+        } else {
+            flag = storeShopV1InnerServiceSMOImpl.saveStoreShop(shopPo);
+        }
         if (flag < 1) {
             throw new CmdException("保存商铺失败");
         }
