@@ -115,7 +115,7 @@ public class PropertySaveStoreAndShopCmd extends Cmd {
 
         Assert.listOnlyOne(communityDtos, "小区不存在");
         reqJson.put("communityName", communityDtos.get(0).getName());
-        reqJson.put("areaCode", communityDtos.get(0).getAreaCode());
+        reqJson.put("areaCode", communityDtos.get(0).getCityCode());
 
         StoreDto storeDto = new StoreDto();
         storeDto.setTel(reqJson.getString("link"));
