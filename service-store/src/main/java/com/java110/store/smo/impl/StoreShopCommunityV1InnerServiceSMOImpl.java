@@ -16,6 +16,7 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.shopCommunity.ShopCommunityDto;
 import com.java110.store.dao.IStoreShopCommunityV1ServiceDao;
 import com.java110.intf.store.IStoreShopCommunityV1InnerServiceSMO;
 import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
@@ -66,7 +67,7 @@ public class StoreShopCommunityV1InnerServiceSMOImpl extends BaseServiceSMO impl
     }
 
     @Override
-    public List<StoreShopCommunityDto> queryStoreShopCommunitys(@RequestBody  StoreShopCommunityDto storeShopCommunityDto) {
+    public List<ShopCommunityDto> queryStoreShopCommunitys(@RequestBody  StoreShopCommunityDto storeShopCommunityDto) {
 
         //校验是否传了 分页信息
 
@@ -76,7 +77,7 @@ public class StoreShopCommunityV1InnerServiceSMOImpl extends BaseServiceSMO impl
             storeShopCommunityDto.setPage((page - 1) * storeShopCommunityDto.getRow());
         }
 
-        List<StoreShopCommunityDto> storeShopCommunitys = BeanConvertUtil.covertBeanList(storeShopCommunityV1ServiceDaoImpl.getStoreShopCommunityInfo(BeanConvertUtil.beanCovertMap(storeShopCommunityDto)), StoreShopCommunityDto.class);
+        List<ShopCommunityDto> storeShopCommunitys = BeanConvertUtil.covertBeanList(storeShopCommunityV1ServiceDaoImpl.getStoreShopCommunityInfo(BeanConvertUtil.beanCovertMap(storeShopCommunityDto)), ShopCommunityDto.class);
 
         return storeShopCommunitys;
     }

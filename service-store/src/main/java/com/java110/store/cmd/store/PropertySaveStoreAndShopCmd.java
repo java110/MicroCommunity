@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.shop.ShopDto;
@@ -42,6 +43,35 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
+
+@Java110CmdDoc(title = "物业公司添加商户和商铺功能",
+        description = "此接口目前主要计划用于停车卷相关使用",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/store.propertySaveStoreAndShop",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "store.propertySaveStoreAndShop"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "shopName", length = 30, remark = "商铺名称 商家名称和商铺名称一致，如果需求需要不一致"),
+        @Java110ParamDoc(name = "link", length = 30, remark = "管理员手机号"),
+        @Java110ParamDoc(name = "password", length = 30, remark = "登录密码"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"shopName\":\"测试商家\",\"link\":\"18909714444\",\"password\":\"123456\",\"communityId\":\"2022081539020475\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 物业公司添加 商户和商铺功能

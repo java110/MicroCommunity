@@ -16,6 +16,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.shopCommunity.ShopCommunityDto;
 import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
 import com.java110.po.storeShopCommunity.StoreShopCommunityPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -55,7 +56,7 @@ public interface IStoreShopCommunityV1InnerServiceSMO {
      * @return StoreShopCommunityDto 对象数据
      */
     @RequestMapping(value = "/queryStoreShopCommunitys", method = RequestMethod.POST)
-    List<StoreShopCommunityDto> queryStoreShopCommunitys(@RequestBody StoreShopCommunityDto storeShopCommunityDto);
+    List<ShopCommunityDto> queryStoreShopCommunitys(@RequestBody StoreShopCommunityDto storeShopCommunityDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
