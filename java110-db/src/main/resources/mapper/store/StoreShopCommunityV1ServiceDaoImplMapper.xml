@@ -20,8 +20,10 @@
         select t.address,t.city_code,t.city_code cityCode,t.code_name,t.code_name
         codeName,t.community_name,t.community_name communityName,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id shopId,t.end_time,t.end_time
-        endTime,t.state,t.community_id,t.community_id communityId,t.message,t.sc_id,t.sc_id scId
+        endTime,t.state,t.community_id,t.community_id communityId,t.message,t.sc_id,t.sc_id scId,
+        s.shop_name shopName,s.return_link returnLink
         from s_shop_community t
+        left join s_shop s on t.shop_id = s.shop_id and s.status_cd = '0'
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}

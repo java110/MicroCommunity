@@ -40,6 +40,8 @@ public class ShopCommunityDto extends ShopDto implements Serializable {
     private String statusCd = "0";
     private String rangeName;
 
+    private String returnTel;
+
 
     public String getCommunityName() {
         return communityName;
@@ -176,5 +178,13 @@ public class ShopCommunityDto extends ShopDto implements Serializable {
 
     public void setCodeName(String codeName) {
         this.codeName = codeName;
+    }
+
+    public String getReturnTel() {
+        return returnTel;
+    }
+
+    public void setReturnTel(String returnTel) {
+        this.returnTel = returnTel;
     }
 }
