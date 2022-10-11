@@ -13,32 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.po.parkingCouponShop;
+package com.java110.po.parkingCouponOrder;
 
 import java.io.Serializable;
 
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
- * add by 吴学文 at 2022-10-10 16:43:42 mail: 928255095@qq.com
+ * add by 吴学文 at 2022-10-11 16:24:05 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public class ParkingCouponShopPo implements Serializable {
+public class ParkingCouponOrderPo implements Serializable {
 
     private String quantity;
+    private String orderId;
     private String paName;
-    private String paId;
     private String shopName;
-    private String couponShopId;
-    private String communityName;
-    private String startTime;
+    private String receivableAmount;
+    private String remark;
     private String statusCd = "0";
-    private String shopId;
-    private String endTime;
+    private String receivedAmount;
     private String couponId;
+    private String price;
+    private String paId;
+    private String communityName;
+    private String shopId;
     private String communityId;
+
+    private String payType;
 
     public String getQuantity() {
         return quantity;
@@ -46,6 +50,14 @@ public class ParkingCouponShopPo implements Serializable {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public String getPaName() {
@@ -56,14 +68,6 @@ public class ParkingCouponShopPo implements Serializable {
         this.paName = paName;
     }
 
-    public String getPaId() {
-        return paId;
-    }
-
-    public void setPaId(String paId) {
-        this.paId = paId;
-    }
-
     public String getShopName() {
         return shopName;
     }
@@ -72,28 +76,20 @@ public class ParkingCouponShopPo implements Serializable {
         this.shopName = shopName;
     }
 
-    public String getCouponShopId() {
-        return couponShopId;
+    public String getReceivableAmount() {
+        return receivableAmount;
     }
 
-    public void setCouponShopId(String couponShopId) {
-        this.couponShopId = couponShopId;
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
     }
 
-    public String getCommunityName() {
-        return communityName;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setCommunityName(String communityName) {
-        this.communityName = communityName;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getStatusCd() {
@@ -104,20 +100,12 @@ public class ParkingCouponShopPo implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getShopId() {
-        return shopId;
+    public String getReceivedAmount() {
+        return receivedAmount;
     }
 
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setReceivedAmount(String receivedAmount) {
+        this.receivedAmount = receivedAmount;
     }
 
     public String getCouponId() {
@@ -128,6 +116,38 @@ public class ParkingCouponShopPo implements Serializable {
         this.couponId = couponId;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
     public String getCommunityId() {
         return communityId;
     }
@@ -136,5 +156,11 @@ public class ParkingCouponShopPo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getPayType() {
+        return payType;
+    }
 
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 }
