@@ -26,6 +26,7 @@ public class ParkingCouponShopDto extends PageDto implements Serializable {
     private String[] shopIds;
     private String endTime;
     private String couponId;
+    private String couponName;
     private String communityId;
 
 
@@ -145,5 +146,13 @@ public class ParkingCouponShopDto extends PageDto implements Serializable {
 
     public void setShopIds(String[] shopIds) {
         this.shopIds = shopIds;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 }

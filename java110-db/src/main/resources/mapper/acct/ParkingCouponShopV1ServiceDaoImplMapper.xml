@@ -20,8 +20,9 @@
         select t.quantity,t.pa_name,t.pa_name paName,t.pa_id,t.pa_id paId,t.shop_name,t.shop_name
         shopName,t.coupon_shop_id,t.coupon_shop_id couponShopId,t.community_name,t.community_name
         communityName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.shop_id,t.shop_id
-        shopId,t.end_time,t.end_time endTime,t.coupon_id,t.coupon_id couponId,t.community_id,t.community_id communityId
+        shopId,t.end_time,t.end_time endTime,t.coupon_id,t.coupon_id couponId,t.community_id,t.community_id communityId,pc.`name` couponName
         from parking_coupon_shop t
+        left join parking_coupon pc on t.coupon_id =  pc.coupon_id and pc.status_cd = '0'
         where 1 =1
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
