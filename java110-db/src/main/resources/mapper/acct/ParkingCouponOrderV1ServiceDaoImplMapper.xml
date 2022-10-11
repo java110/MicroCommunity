@@ -21,8 +21,10 @@
         shopName,t.receivable_amount,t.receivable_amount receivableAmount,t.remark,t.status_cd,t.status_cd
         statusCd,t.received_amount,t.received_amount receivedAmount,t.coupon_id,t.coupon_id
         couponId,t.price,t.pa_id,t.pa_id paId,t.community_name,t.community_name communityName,t.shop_id,t.shop_id
-        shopId,t.community_id,t.community_id communityId,t.pay_type payType
+        shopId,t.community_id,t.community_id communityId,t.pay_type payType,pc.`name` couponName,td.name payTypeName
         from parking_coupon_order t
+        left join parking_coupon pc on t.coupon_id = pc.coupon_id and pc.status_cd = '0'
+        left join t_dict td on t.pay_type = td.status_cd and td.table_name = 'parking_coupon_order' and td.table_columns = 'pay_type'
         where 1 =1
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}

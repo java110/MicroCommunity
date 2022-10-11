@@ -36,6 +36,10 @@ public class ParkingCouponOrderDto extends PageDto implements Serializable {
 
     private String payType;
 
+    private String payTypeName;
+
+    private String couponName;
+
 
     public String getQuantity() {
         return quantity;
@@ -164,5 +168,21 @@ public class ParkingCouponOrderDto extends PageDto implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getPayTypeName() {
+        return payTypeName;
+    }
+
+    public void setPayTypeName(String payTypeName) {
+        this.payTypeName = payTypeName;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 }
