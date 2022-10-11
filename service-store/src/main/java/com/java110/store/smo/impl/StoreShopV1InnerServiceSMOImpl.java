@@ -16,6 +16,7 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.shop.ShopDto;
 import com.java110.store.dao.IStoreShopV1ServiceDao;
 import com.java110.intf.store.IStoreShopV1InnerServiceSMO;
 import com.java110.dto.storeShop.StoreShopDto;
@@ -66,7 +67,7 @@ public class StoreShopV1InnerServiceSMOImpl extends BaseServiceSMO implements IS
     }
 
     @Override
-    public List<StoreShopDto> queryStoreShops(@RequestBody  StoreShopDto storeShopDto) {
+    public List<ShopDto> queryStoreShops(@RequestBody  StoreShopDto storeShopDto) {
 
         //校验是否传了 分页信息
 
@@ -76,7 +77,7 @@ public class StoreShopV1InnerServiceSMOImpl extends BaseServiceSMO implements IS
             storeShopDto.setPage((page - 1) * storeShopDto.getRow());
         }
 
-        List<StoreShopDto> storeShops = BeanConvertUtil.covertBeanList(storeShopV1ServiceDaoImpl.getStoreShopInfo(BeanConvertUtil.beanCovertMap(storeShopDto)), StoreShopDto.class);
+        List<ShopDto> storeShops = BeanConvertUtil.covertBeanList(storeShopV1ServiceDaoImpl.getStoreShopInfo(BeanConvertUtil.beanCovertMap(storeShopDto)), ShopDto.class);
 
         return storeShops;
     }
