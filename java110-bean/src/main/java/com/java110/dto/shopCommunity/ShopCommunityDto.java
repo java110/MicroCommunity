@@ -42,6 +42,8 @@ public class ShopCommunityDto extends ShopDto implements Serializable {
 
     private String returnTel;
 
+    private String parkingCouponCount;
+
 
     public String getCommunityName() {
         return communityName;
@@ -186,5 +188,13 @@ public class ShopCommunityDto extends ShopDto implements Serializable {
 
     public void setReturnTel(String returnTel) {
         this.returnTel = returnTel;
+    }
+
+    public String getParkingCouponCount() {
+        return parkingCouponCount;
+    }
+
+    public void setParkingCouponCount(String parkingCouponCount) {
+        this.parkingCouponCount = parkingCouponCount;
     }
 }

@@ -65,4 +65,12 @@ public interface IParkingCouponShopV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryParkingCouponShopsCount", method = RequestMethod.POST)
     int queryParkingCouponShopsCount(@RequestBody ParkingCouponShopDto parkingCouponShopDto);
+
+    /**
+     * 按 商铺id shopId 查询 各个商铺的停车卷数量
+     * @param parkingCouponShopDto
+     * @return
+     */
+    @RequestMapping(value = "/queryParkingCouponShopStatistics", method = RequestMethod.POST)
+    List<ParkingCouponShopDto> queryParkingCouponShopStatistics(@RequestBody ParkingCouponShopDto parkingCouponShopDto);
 }

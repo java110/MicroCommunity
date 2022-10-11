@@ -6,8 +6,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.parkingCouponShop.ParkingCouponShopDto;
 import com.java110.dto.shopCommunity.ShopCommunityDto;
 import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
+import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;
 import com.java110.intf.mall.IShopCommunityInnerServiceSMO;
 import com.java110.intf.store.IStoreShopCommunityV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
@@ -58,6 +60,9 @@ public class ListCommunityStoreShopCmd extends Cmd {
     @Autowired
     private IStoreShopCommunityV1InnerServiceSMO storeShopCommunityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingCouponShopV1InnerServiceSMO parkingCouponShopV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -87,11 +92,48 @@ public class ListCommunityStoreShopCmd extends Cmd {
             }
         }
 
+
+        freshParkingCoupon(storeShopCommunityDtos);
+
+
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, storeShopCommunityDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void freshParkingCoupon(List<ShopCommunityDto> storeShopCommunityDtos) {
+        /**
+         * 刷入停车卷数
+         */
+        if (storeShopCommunityDtos == null || storeShopCommunityDtos.size() < 1) {
+            return;
+        }
+
+        if (storeShopCommunityDtos.size() > 20) {
+            return;
+        }
+
+        List<String> shopIds = new ArrayList<>();
+
+        for (ShopCommunityDto shopCommunityDto : storeShopCommunityDtos) {
+            shopIds.add(shopCommunityDto.getShopId());
+        }
+
+        ParkingCouponShopDto parkingCouponShopDto = new ParkingCouponShopDto();
+        parkingCouponShopDto.setShopIds(shopIds.toArray(new String[shopIds.size()]));
+        List<ParkingCouponShopDto> parkingCouponShopDtos = parkingCouponShopV1InnerServiceSMOImpl.queryParkingCouponShopStatistics(parkingCouponShopDto);
+
+        for (ShopCommunityDto shopCommunityDto : storeShopCommunityDtos) {
+            for (ParkingCouponShopDto parkingCouponShopDto1 : parkingCouponShopDtos) {
+                if (!parkingCouponShopDto1.getShopId().equals(shopCommunityDto.getShopId())) {
+                    continue;
+                }
+
+                shopCommunityDto.setParkingCouponCount(parkingCouponShopDto1.getQuantity());
+            }
+        }
     }
 }

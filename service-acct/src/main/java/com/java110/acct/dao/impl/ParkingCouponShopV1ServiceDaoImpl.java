@@ -108,5 +108,19 @@ public class ParkingCouponShopV1ServiceDaoImpl extends BaseServiceDao implements
         return Integer.parseInt(businessParkingCouponShopInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 根据shopId 统计 店铺 停车卷数量
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryParkingCouponShopStatistics(Map info) {
+        logger.debug("查询 queryParkingCouponShopStatistics 入参 info : {}",info);
+
+        List<Map> businessParkingCouponShopInfos = sqlSessionTemplate.selectList("parkingCouponShopV1ServiceDaoImpl.queryParkingCouponShopStatistics",info);
+
+        return businessParkingCouponShopInfos;
+    }
+
 
 }

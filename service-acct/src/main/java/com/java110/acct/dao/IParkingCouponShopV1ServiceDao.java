@@ -74,4 +74,5 @@ public interface IParkingCouponShopV1ServiceDao {
      */
     int queryParkingCouponShopsCount(Map info);
 
+    List<Map>  queryParkingCouponShopStatistics(Map info);
 }

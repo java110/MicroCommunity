@@ -86,4 +86,16 @@ public class ParkingCouponShopV1InnerServiceSMOImpl extends BaseServiceSMO imple
     public int queryParkingCouponShopsCount(@RequestBody ParkingCouponShopDto parkingCouponShopDto) {
         return parkingCouponShopV1ServiceDaoImpl.queryParkingCouponShopsCount(BeanConvertUtil.beanCovertMap(parkingCouponShopDto));    }
 
+    /**
+     * 按 商铺id shopId 查询 各个商铺的停车卷数量
+     * @param parkingCouponShopDto
+     * @return
+     */
+    @Override
+    public List<ParkingCouponShopDto> queryParkingCouponShopStatistics(@RequestBody ParkingCouponShopDto parkingCouponShopDto) {
+        List<ParkingCouponShopDto> parkingCouponShops = BeanConvertUtil.covertBeanList(parkingCouponShopV1ServiceDaoImpl.queryParkingCouponShopStatistics(BeanConvertUtil.beanCovertMap(parkingCouponShopDto)), ParkingCouponShopDto.class);
+
+        return parkingCouponShops;
+    }
+
 }
