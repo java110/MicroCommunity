@@ -523,7 +523,7 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
         repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType,t.create_time
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
