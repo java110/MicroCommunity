@@ -20,14 +20,23 @@
         select t.give_way,t.give_way giveWay,t.car_num,t.car_num carNum,t.coupon_shop_id,t.coupon_shop_id
         couponShopId,t.remark,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.pcc_id,t.pcc_id
         pccId,t.type_cd,t.type_cd typeCd,t.pa_id,t.pa_id paId,t.start_time,t.start_time startTime,t.shop_id,t.shop_id
-        shopId,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.value
+        shopId,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.value,td.name stateName,td1.name giveWayName,
+        td2.name stateName,t.create_time createTime,pcs.pa_name paName ,pcs.shop_name shopName,pc.`name` couponName
         from parking_coupon_car t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'parking_coupon_car' and td.table_columns = 'state'
+        left join t_dict td1 on t.give_way = td1.status_cd and td1.table_name = 'parking_coupon_car' and td1.table_columns = 'give_way'
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'parking_coupon_car' and td2.table_columns = 'give_way'
+        left join parking_coupon_shop pcs on t.coupon_shop_id = pcs.coupon_shop_id and pcs.status_cd = '0'
+        left join parking_coupon pc on t.coupon_id = pc.coupon_id and pc.status_cd = '0'
         where 1 =1
         <if test="giveWay !=null and giveWay != ''">
             and t.give_way= #{giveWay}
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
         </if>
         <if test="couponShopId !=null and couponShopId != ''">
             and t.coupon_shop_id= #{couponShopId}
@@ -40,6 +49,9 @@
         </if>
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
+        </if>
+        <if test="couponNameLike !=null and couponNameLike != ''">
+            and pc.`name` like concat('%',#{couponNameLike},'%')
         </if>
         <if test="pccId !=null and pccId != ''">
             and t.pcc_id= #{pccId}
@@ -55,6 +67,9 @@
         </if>
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and pcs.shop_name like concat('%',#{shopNameLike},'%')
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -132,12 +147,20 @@
     <select id="queryParkingCouponCarsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from parking_coupon_car t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'parking_coupon_car' and td.table_columns = 'state'
+        left join t_dict td1 on t.give_way = td1.status_cd and td1.table_name = 'parking_coupon_car' and td1.table_columns = 'give_way'
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'parking_coupon_car' and td2.table_columns = 'give_way'
+        left join parking_coupon_shop pcs on t.coupon_shop_id = pcs.coupon_shop_id and pcs.status_cd = '0'
+        left join parking_coupon pc on t.coupon_id = pc.coupon_id and pc.status_cd = '0'
         where 1 =1
         <if test="giveWay !=null and giveWay != ''">
             and t.give_way= #{giveWay}
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
         </if>
         <if test="couponShopId !=null and couponShopId != ''">
             and t.coupon_shop_id= #{couponShopId}
@@ -150,6 +173,9 @@
         </if>
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
+        </if>
+        <if test="couponNameLike !=null and couponNameLike != ''">
+            and pc.`name` like concat('%',#{couponNameLike},'%')
         </if>
         <if test="pccId !=null and pccId != ''">
             and t.pcc_id= #{pccId}
@@ -165,6 +191,9 @@
         </if>
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and pcs.shop_name like concat('%',#{shopNameLike},'%')
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
