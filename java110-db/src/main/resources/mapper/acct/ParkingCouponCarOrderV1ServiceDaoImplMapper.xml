@@ -5,138 +5,154 @@
 <mapper namespace="parkingCouponCarOrderV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存停车卷核销信息 add by wuxw 2018-07-03 -->
     <insert id="saveParkingCouponCarOrderInfo" parameterType="Map">
         insert into parking_coupon_car_order(
-pcc_id,machine_id,order_id,pa_id,car_num,remark,community_id,car_out_id,machine_name
-) values (
-#{pccId},#{machineId},#{orderId},#{paId},#{carNum},#{remark},#{communityId},#{carOutId},#{machineName}
-)
+        pcc_id,machine_id,order_id,pa_id,car_num,remark,community_id,car_out_id,machine_name
+        ) values (
+        #{pccId},#{machineId},#{orderId},#{paId},#{carNum},#{remark},#{communityId},#{carOutId},#{machineName}
+        )
     </insert>
-
 
 
     <!-- 查询停车卷核销信息 add by wuxw 2018-07-03 -->
     <select id="getParkingCouponCarOrderInfo" parameterType="Map" resultType="Map">
-        select  t.pcc_id,t.pcc_id pccId,t.machine_id,t.machine_id machineId,t.order_id,t.order_id orderId,t.pa_id,t.pa_id paId,t.car_num,t.car_num carNum,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.car_out_id,t.car_out_id carOutId,t.machine_name,t.machine_name machineName 
-from parking_coupon_car_order t 
-where 1 =1 
-<if test="pccId !=null and pccId != ''">
-   and t.pcc_id= #{pccId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="carOutId !=null and carOutId != ''">
-   and t.car_out_id= #{carOutId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.pcc_id,t.pcc_id pccId,t.machine_id,t.machine_id machineId,t.order_id,t.order_id orderId,t.pa_id,t.pa_id
+        paId,t.car_num,t.car_num carNum,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.car_out_id,t.car_out_id carOutId,t.machine_name,t.machine_name machineName,pcs.pa_name paName,
+        pcs.shop_name shopName,pc.`name` couponName
+        from parking_coupon_car_order t
+        left join parking_coupon_car pcc on t.pcc_id = pcc.pcc_id and pcc.status_cd = '0'
+        left join parking_coupon_shop pcs on pcc.coupon_shop_id = pcs.coupon_shop_id and pcs.status_cd = '0'
+        left join parking_coupon pc on pcc.coupon_id = pc.coupon_id and pc.status_cd = '0'
+        where 1 =1
+        <if test="pccId !=null and pccId != ''">
+            and t.pcc_id= #{pccId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and pcs.shop_name like concat('%',#{shopNameLike},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="carOutId !=null and carOutId != ''">
+            and t.car_out_id= #{carOutId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改停车卷核销信息 add by wuxw 2018-07-03 -->
     <update id="updateParkingCouponCarOrderInfo" parameterType="Map">
-        update  parking_coupon_car_order t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="pccId !=null and pccId != ''">
-, t.pcc_id= #{pccId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-, t.machine_id= #{machineId}
-</if> 
-<if test="paId !=null and paId != ''">
-, t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-, t.car_num= #{carNum}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="carOutId !=null and carOutId != ''">
-, t.car_out_id= #{carOutId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-, t.machine_name= #{machineName}
-</if> 
- where 1=1 <if test="orderId !=null and orderId != ''">
-and t.order_id= #{orderId}
-</if> 
+        update parking_coupon_car_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="pccId !=null and pccId != ''">
+            , t.pcc_id= #{pccId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="carOutId !=null and carOutId != ''">
+            , t.car_out_id= #{carOutId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
 
     </update>
 
     <!-- 查询停车卷核销数量 add by wuxw 2018-07-03 -->
-     <select id="queryParkingCouponCarOrdersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from parking_coupon_car_order t 
-where 1 =1 
-<if test="pccId !=null and pccId != ''">
-   and t.pcc_id= #{pccId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="paId !=null and paId != ''">
-   and t.pa_id= #{paId}
-</if> 
-<if test="carNum !=null and carNum != ''">
-   and t.car_num= #{carNum}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="carOutId !=null and carOutId != ''">
-   and t.car_out_id= #{carOutId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
+    <select id="queryParkingCouponCarOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_coupon_car_order t
+        left join parking_coupon_car pcc on t.pcc_id = pcc.pcc_id and pcc.status_cd = '0'
+        left join parking_coupon_shop pcs on pcc.coupon_shop_id = pcs.coupon_shop_id and pcs.status_cd = '0'
+        left join parking_coupon pc on pcc.coupon_id = pc.coupon_id and pc.status_cd = '0'
+        where 1 =1
+        <if test="pccId !=null and pccId != ''">
+            and t.pcc_id= #{pccId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
+        </if>
+        <if test="shopNameLike !=null and shopNameLike != ''">
+            and pcs.shop_name like concat('%',#{shopNameLike},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="carOutId !=null and carOutId != ''">
+            and t.car_out_id= #{carOutId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

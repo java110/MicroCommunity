@@ -1,6 +1,7 @@
 package com.java110.dto.parkingCouponCarOrder;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,18 @@ import java.util.Date;
 public class ParkingCouponCarOrderDto extends PageDto implements Serializable {
 
     private String pccId;
-private String machineId;
-private String orderId;
-private String paId;
-private String carNum;
-private String remark;
-private String communityId;
-private String carOutId;
-private String machineName;
+    private String machineId;
+    private String orderId;
+    private String paId;
+    private String paName;
+    private String carNum;
+    private String remark;
+    private String communityId;
+    private String carOutId;
+    private String machineName;
+
+    private String couponName;
+    private String shopName;
 
 
     private Date createTime;
@@ -30,58 +35,60 @@ private String machineName;
     private String statusCd = "0";
 
 
-    public String getPccId() {
-        return pccId;
-    }
-public void setPccId(String pccId) {
-        this.pccId = pccId;
-    }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getPaId() {
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCarOutId() {
-        return carOutId;
-    }
-public void setCarOutId(String carOutId) {
-        this.carOutId = carOutId;
-    }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
 
@@ -100,5 +107,45 @@ public void setMachineName(String machineName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaName() {
+        return paName;
+    }
+
+    public void setPaName(String paName) {
+        this.paName = paName;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getPccId() {
+        return pccId;
+    }
+
+    public void setPccId(String pccId) {
+        this.pccId = pccId;
+    }
+
+    public String getCarOutId() {
+        return carOutId;
+    }
+
+    public void setCarOutId(String carOutId) {
+        this.carOutId = carOutId;
     }
 }

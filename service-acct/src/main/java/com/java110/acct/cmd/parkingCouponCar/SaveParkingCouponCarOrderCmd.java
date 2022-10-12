@@ -28,9 +28,9 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,12 +55,12 @@ public class SaveParkingCouponCarOrderCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "pccId", "请求报文中未包含pccId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
-Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
-Assert.hasKeyAndValue(reqJson, "machineName", "请求报文中未包含machineName");
-Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
-Assert.hasKeyAndValue(reqJson, "carOutId", "请求报文中未包含carOutId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
+        Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
+        Assert.hasKeyAndValue(reqJson, "machineName", "请求报文中未包含machineName");
+        Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
+        Assert.hasKeyAndValue(reqJson, "carOutId", "请求报文中未包含carOutId");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "carOutId", "请求报文中未包含carOutId");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ParkingCouponCarOrderPo parkingCouponCarOrderPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponCarOrderPo.class);
+        ParkingCouponCarOrderPo parkingCouponCarOrderPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponCarOrderPo.class);
         parkingCouponCarOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = parkingCouponCarOrderV1InnerServiceSMOImpl.saveParkingCouponCarOrder(parkingCouponCarOrderPo);
 
