@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingCouponCarV1ServiceDaoImpl">
+
+
+    <!-- 保存车辆停车卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingCouponCarInfo" parameterType="Map">
+        insert into parking_coupon_car(
+        give_way,car_num,coupon_shop_id,remark,coupon_id,pcc_id,type_cd,pa_id,start_time,shop_id,state,end_time,community_id,value
+        ) values (
+        #{giveWay},#{carNum},#{couponShopId},#{remark},#{couponId},#{pccId},#{typeCd},#{paId},#{startTime},#{shopId},#{state},#{endTime},#{communityId},#{value}
+        )
+    </insert>
+
+
+    <!-- 查询车辆停车卷信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingCouponCarInfo" parameterType="Map" resultType="Map">
+        select t.give_way,t.give_way giveWay,t.car_num,t.car_num carNum,t.coupon_shop_id,t.coupon_shop_id
+        couponShopId,t.remark,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.pcc_id,t.pcc_id
+        pccId,t.type_cd,t.type_cd typeCd,t.pa_id,t.pa_id paId,t.start_time,t.start_time startTime,t.shop_id,t.shop_id
+        shopId,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.value
+        from parking_coupon_car t
+        where 1 =1
+        <if test="giveWay !=null and giveWay != ''">
+            and t.give_way= #{giveWay}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="couponShopId !=null and couponShopId != ''">
+            and t.coupon_shop_id= #{couponShopId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="pccId !=null and pccId != ''">
+            and t.pcc_id= #{pccId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改车辆停车卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingCouponCarInfo" parameterType="Map">
+        update parking_coupon_car t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="giveWay !=null and giveWay != ''">
+            , t.give_way= #{giveWay}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="couponShopId !=null and couponShopId != ''">
+            , t.coupon_shop_id= #{couponShopId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            , t.coupon_id= #{couponId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            , t.type_cd= #{typeCd}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            , t.shop_id= #{shopId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="pccId !=null and pccId != ''">
+            and t.pcc_id= #{pccId}
+        </if>
+
+    </update>
+
+    <!-- 查询车辆停车卷数量 add by wuxw 2018-07-03 -->
+    <select id="queryParkingCouponCarsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_coupon_car t
+        where 1 =1
+        <if test="giveWay !=null and giveWay != ''">
+            and t.give_way= #{giveWay}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="couponShopId !=null and couponShopId != ''">
+            and t.coupon_shop_id= #{couponShopId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="pccId !=null and pccId != ''">
+            and t.pcc_id= #{pccId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>
