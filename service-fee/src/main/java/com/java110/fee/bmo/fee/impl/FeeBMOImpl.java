@@ -462,18 +462,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFee.putAll(feeMap);
         // business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
-        PayFeePo payFee = BeanConvertUtil.covertBean(businessFee, PayFeePo.class);
-        int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFee);
-        if (flag < 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
-        }
-        //为停车费单独处理
-        paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
-        paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
-        paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
 
         // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
-        if (FeeFlagTypeConstant.CYCLE.equals(feeInfo.getFeeFlag())) {
+        if (!FeeFlagTypeConstant.ONETIME.equals(feeInfo.getFeeFlag()) ) {
             //这里 容错五天时间
             Date configEndTime = feeInfo.getConfigEndTime();
             Calendar calendar = Calendar.getInstance();
@@ -485,6 +476,18 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
                 businessFee.put("endTime", feeInfo.getConfigEndTime());
             }
         }
+
+        PayFeePo payFee = BeanConvertUtil.covertBean(businessFee, PayFeePo.class);
+        int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFee);
+        if (flag < 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
+        }
+        //为停车费单独处理
+        paramInJson.put("carFeeEndTime", feeInfo.getEndTime());
+        paramInJson.put("carPayerObjType", feeInfo.getPayerObjType());
+        paramInJson.put("carPayerObjId", feeInfo.getPayerObjId());
+
+
         return paramInJson;
     }
 
