@@ -463,17 +463,37 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessFee.putAll(feeMap);
         // business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
+        Date maxEndTime = feeInfo.getDeadlineTime();
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
+            maxEndTime = feeInfo.getConfigEndTime();
+        }
+
+        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeInfo.getFeeFlag())) {
+            maxEndTime = feeInfo.getMaxEndTime();
+        }
+
+        //如果间歇性费用没有设置结束时间 则取费用项的
+        if (maxEndTime == null) {
+            maxEndTime = feeInfo.getConfigEndTime();
+        }
+
+        //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
+        if (maxEndTime != null) {
+            if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
+                throw new IllegalArgumentException("缴费超过了 费用项结束时间");
+            }
+        }
+
         // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
-        if (!FeeFlagTypeConstant.ONETIME.equals(feeInfo.getFeeFlag()) ) {
+        if (!FeeFlagTypeConstant.ONETIME.equals(feeInfo.getFeeFlag())) {
             //这里 容错五天时间
-            Date configEndTime = feeInfo.getConfigEndTime();
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(configEndTime);
+            calendar.setTime(maxEndTime);
             calendar.add(Calendar.DAY_OF_MONTH, -5);
-            configEndTime = calendar.getTime();
-            if (feeInfo.getEndTime().after(configEndTime)) {
-                businessFee.put("state", FeeStateConstant.END);
-                businessFee.put("endTime", feeInfo.getConfigEndTime());
+            maxEndTime = calendar.getTime();
+            if (feeInfo.getEndTime().after(maxEndTime)) {
+                businessFee.put("state", FeeDto.STATE_FINISH);
+                businessFee.put("endTime", maxEndTime);
             }
         }
 
