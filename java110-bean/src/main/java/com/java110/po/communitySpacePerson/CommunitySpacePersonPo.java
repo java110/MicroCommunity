@@ -16,7 +16,7 @@
 package com.java110.po.communitySpacePerson;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-09-30 11:36:52 mail: 928255095@qq.com
@@ -28,97 +28,122 @@ import java.util.Date;
 public class CommunitySpacePersonPo implements Serializable {
 
     private String receivableAmount;
-private String payWay;
-private String remark;
-private String statusCd = "0";
-private String receivedAmount;
-private String personName;
-private String spaceId;
-private String cspId;
-private String appointmentTime;
-private String personId;
-private String state;
-private String personTel;
-private String communityId;
-public String getReceivableAmount() {
+    private String payWay;
+    private String remark;
+    private String statusCd = "0";
+    private String receivedAmount;
+    private String personName;
+    private String spaceId;
+    private String cspId;
+    private String appointmentTime;
+    private String personId;
+    private String state;
+    private String personTel;
+    private String communityId;
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getPayWay() {
+
+    public String getPayWay() {
         return payWay;
     }
-public void setPayWay(String payWay) {
+
+    public void setPayWay(String payWay) {
         this.payWay = payWay;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getPersonName() {
+
+    public String getPersonName() {
         return personName;
     }
-public void setPersonName(String personName) {
+
+    public void setPersonName(String personName) {
         this.personName = personName;
     }
-public String getSpaceId() {
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getCspId() {
+
+    public String getCspId() {
         return cspId;
     }
-public void setCspId(String cspId) {
+
+    public void setCspId(String cspId) {
         this.cspId = cspId;
     }
-public String getAppointmentTime() {
+
+    public String getAppointmentTime() {
         return appointmentTime;
     }
-public void setAppointmentTime(String appointmentTime) {
+
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getPersonTel() {
+
+    public String getPersonTel() {
         return personTel;
     }
-public void setPersonTel(String personTel) {
+
+    public void setPersonTel(String personTel) {
         this.personTel = personTel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }
