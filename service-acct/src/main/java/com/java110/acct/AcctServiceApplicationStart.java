@@ -49,7 +49,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.user"})
 
 //文档
-@Java110CmdDocDiscovery(basePackages = {"com.java110.acct.cmd","com.java110.payment.business"},cmdDocClass = ApiDocCmdPublishing.class)
+@Java110CmdDocDiscovery(basePackages = {"com.java110.acct.cmd","com.java110.acct.payment.business"},cmdDocClass = ApiDocCmdPublishing.class)
 public class AcctServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(AcctServiceApplicationStart.class);
