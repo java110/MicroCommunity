@@ -62,6 +62,7 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
     /**
      * 通知类
+     *
      * @param notifyPaymentOrderDto 数据对象分享
      * @return
      */
@@ -76,24 +77,24 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
         PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto.getParam());
         logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
 
-        if(StringUtil.isEmpty(paymentOrderDto.getOrderId())){
+        if (StringUtil.isEmpty(paymentOrderDto.getOrderId())) {
             return paymentOrderDto.getResponseEntity();
         }
 
-        String paramIn = CommonCache.getAndRemoveValue("unifiedPayment_"+paymentOrderDto.getOrderId());
+        String paramIn = CommonCache.getAndRemoveValue("unifiedPayment_" + paymentOrderDto.getOrderId());
 
         JSONObject reqJson = JSONObject.parseObject(paramIn);
 
         IPaymentBusiness paymentBusiness = ApplicationContextFactory.getBean(reqJson.getString("business"), IPaymentBusiness.class);
 
-        if(paymentBusiness == null){
+        if (paymentBusiness == null) {
             throw new CmdException("当前支付业务不支持");
         }
 
         paymentOrderDto.setAppId(notifyPaymentOrderDto.getAppId());
 
         //2.0 相应业务 下单 返回 单号 ，金额，
-        paymentBusiness.notifyPayment(paymentOrderDto,reqJson);
+        paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
 
 
         return paymentOrderDto.getResponseEntity();

@@ -3,14 +3,18 @@ package com.java110.acct.payment.adapt.wechat;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
@@ -68,6 +72,10 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -201,6 +209,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
         }
+        doSaveOnlinePay(smallWeChatDto,openid,orderNum,feeName,payAmount, OnlinePayDto.STATE_WAIT, "待支付");
         return PayUtil.xmlStrToMap(responseEntity.getBody());
     }
 
@@ -273,6 +282,8 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String outTradeNo = map.get("out_trade_no").toString();
         paymentOrderDto.setOrderId(outTradeNo);
+
+        doUpdateOnlinePay(outTradeNo, OnlinePayDto.STATE_COMPILE, "支付成功");
         return 1;
     }
 
@@ -296,6 +307,31 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         }
 
         return BeanConvertUtil.covertBean(smallWeChatDtos.get(0), SmallWeChatDto.class);
+    }
+
+
+    private void doUpdateOnlinePay(String orderId, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setState(state);
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
+    }
+
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId,String feeName, double money, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setAppId(smallWeChatDto.getAppId());
+        onlinePayPo.setMchId(smallWeChatDto.getMchId());
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOpenId(openId);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        onlinePayPo.setPayName(feeName);
+        onlinePayPo.setRefundFee("0");
+        onlinePayPo.setState(state);
+        onlinePayPo.setTotalFee(money + "");
+        onlinePayPo.setTransactionId(orderId);
+        onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 
 }
