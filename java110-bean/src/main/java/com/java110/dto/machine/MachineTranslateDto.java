@@ -53,6 +53,10 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String CMD_UPDATE_ATTENDANCE_CLASSES = "912";
     public static final String CMD_DELETE_ATTENDANCE_CLASSES = "913";
 
+    public static final String CMD_ADD_PARKING_COUPON_CAR = "921";
+    public static final String CMD_UPDATE_PARKING_COUPON_CAR = "922";
+    public static final String CMD_DELETE_PARKING_COUPON_CAR = "923";
+
     public static final String CMD_ADD_VISIT = "921";
 
     public static final String CMD_OPEN_DOOR = "5";
@@ -65,6 +69,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     public static final String TYPE_PARKING_AREA = "2233";
     public static final String TYPE_OWNER_CAR = "4455";
     public static final String TYPE_TEAM_CAR_FEE_CONFIG = "1122";
+    public static final String TYPE_PARK_COUPON_CAR = "1133";
     public static final String TYPE_ATTENDANCE = "1111";
 
 

@@ -122,6 +122,8 @@ public class IotConstant {
 
     //添加车辆
     public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
+    //添加修改停车劵
+    public static final String ADD_UPDATE_PARKING_COUPON_CAR = "/extApi/parkingCouponCar/addOrUpdateParkingCouponCar";
     //修改车辆
     public static final String UPDATE_TEAM_CAR_FEE_CONFIG = "/extApi/fee/updateTempCarFee";
     //删除车辆

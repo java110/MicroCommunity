@@ -21,6 +21,7 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
     private String couponShopId;
     private String remark;
     private String couponId;
+    private String couponName;
     private String pccId;
     private String typeCd;
     private String typeCdName;
@@ -217,5 +218,13 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
 
     public void setShopNameLike(String shopNameLike) {
         this.shopNameLike = shopNameLike;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 }
