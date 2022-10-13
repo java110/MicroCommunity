@@ -24,6 +24,7 @@ import com.java110.api.smo.payment.adapt.ITempCarFeeToNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -141,6 +142,7 @@ public class WechatTempCarFeeToNotifyAdapt extends DefaultAbstractComponentSMO i
         //查询用户ID
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", orderId);
+        paramIn.put("payType", TempCarPayOrderDto.PAY_TYPE_WECHAT);
         String url = "tempCarFee.notifyTempCarFeeOrder";
         /**
          *   postParameters.put("carNum", tempCarPayOrderDto.getCarNum());
