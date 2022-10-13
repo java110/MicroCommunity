@@ -199,4 +199,6 @@ public interface IIotSendAsyn {
      * @param postParameters
      */
     void addParkingCouponCar(JSONObject postParameters);
+
+    void deleteParkingCouponCar(JSONObject postParameters);
 }

@@ -1498,6 +1498,56 @@ public class IotSendAsynImpl implements IIotSendAsyn {
 
     @Override
     @Async
+    public void deleteParkingCouponCar(JSONObject postParameters) {
+
+        MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
+                MachineTranslateDto.CMD_DELETE_PARKING_COUPON_CAR,
+                DEFAULT_MACHINE_CODE,
+                DEFAULT_MACHINE_ID,
+                "extConfigId",
+                "feeName",
+                MachineTranslateDto.TYPE_PARK_COUPON_CAR);
+        ResponseEntity<String> responseEntity = null;
+        String url = IotConstant.getUrl(IotConstant.DELETE_PARKING_COUPON_CAR);
+        try {
+            postParameters.put("taskId", machineTranslateDto.getMachineTranslateId());
+            HttpEntity httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders());
+            responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+            logger.debug("调用HC IOT信息：" + responseEntity);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(responseEntity.getBody());
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+                return;
+            }
+            JSONObject tokenObj = JSONObject.parseObject(responseEntity.getBody());
+
+            if (!tokenObj.containsKey("code") || ResultVo.CODE_OK != tokenObj.getInteger("code")) {
+                machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+                machineTranslateDto.setRemark(tokenObj.getString("msg"));
+                //保存 失败报文
+                saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+                return;
+            }
+        } catch (Exception e) {
+            machineTranslateDto.setState(MachineTranslateDto.STATE_ERROR);
+            machineTranslateDto.setRemark(e.getLocalizedMessage());
+            //保存 失败报文
+            saveTranslateError(machineTranslateDto, postParameters.toJSONString(), responseEntity != null ? responseEntity.getBody() : "", url);
+
+            return;
+        } finally {
+            saveTranslateLog(machineTranslateDto);
+            refreshAccessToken(responseEntity);
+        }
+
+    }
+
+    @Override
+    @Async
     public void updateAttendance(JSONObject postParameters) {
         MachineTranslateDto machineTranslateDto = getMachineTranslateDto(postParameters,
                 MachineTranslateDto.CMD_UPDATE_ATTENDANCE_CLASSES,
