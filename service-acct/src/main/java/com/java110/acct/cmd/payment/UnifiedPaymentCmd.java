@@ -66,7 +66,7 @@ public class UnifiedPaymentCmd extends Cmd{
 
     private static final Logger logger = LoggerFactory.getLogger(UnifiedPaymentCmd.class);
 
-    protected static final String DEFAULT_PAYMENT_ADAPT = "wechatPaymentAdapt";// 默认微信通用支付
+    protected static final String DEFAULT_PAYMENT_ADAPT = "wechatPaymentFactory";// 默认微信通用支付
 
     /**
      * 校验
