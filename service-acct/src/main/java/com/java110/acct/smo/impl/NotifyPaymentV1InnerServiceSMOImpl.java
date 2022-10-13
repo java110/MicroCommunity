@@ -58,7 +58,7 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
     private static final Logger logger = LoggerFactory.getLogger(NotifyPaymentV1InnerServiceSMOImpl.class);
 
-    private static final String DEFAULT_PAYMENT_NOTIFY_ADAPT = "wechatPaymentNotifyAdapt";// 默认微信通用支付
+    private static final String DEFAULT_PAYMENT_NOTIFY_ADAPT = "wechatPaymentFactory";// 默认微信通用支付
 
     /**
      * 通知类
