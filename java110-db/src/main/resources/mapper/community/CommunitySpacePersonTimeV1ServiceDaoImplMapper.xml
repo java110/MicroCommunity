@@ -8,9 +8,9 @@
     <!-- 保存场地预约时间信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunitySpacePersonTimeInfo" parameterType="Map">
         insert into community_space_person_time(
-        space_id,csp_id,hours,time_id,community_id
+        space_id,csp_id,hours,time_id,community_id,state
         ) values (
-        #{spaceId},#{cspId},#{hours},#{timeId},#{communityId}
+        #{spaceId},#{cspId},#{hours},#{timeId},#{communityId},#{state}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询场地预约时间信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpacePersonTimeInfo" parameterType="Map" resultType="Map">
         select t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.hours,t.time_id,t.time_id
-        timeId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        timeId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.state
         from community_space_person_time t
         left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
         where 1 =1
@@ -39,6 +39,9 @@
         </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}
@@ -68,6 +71,9 @@
         </if>
         <if test="cspId !=null and cspId != ''">
             , t.csp_id= #{cspId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state = #{state}
         </if>
         <if test="hours !=null and hours != ''">
             , t.hours= #{hours}
@@ -114,6 +120,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
 
 

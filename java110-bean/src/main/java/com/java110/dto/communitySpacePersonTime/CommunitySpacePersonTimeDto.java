@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CommunitySpacePersonTimeDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT_CONFIRM = "W"; //待核销
+    public static final String STATE_FINISH = "C"; // 核销完成
+
     private String spaceId;
     private String cspId;
     private String[] cspIds;
@@ -23,6 +26,8 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
     private String communityId;
 
     private String appointmentTime;
+
+    private String state;
 
 
     private Date createTime;
@@ -101,5 +106,13 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
 
     public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

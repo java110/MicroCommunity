@@ -16,7 +16,7 @@
 package com.java110.po.communitySpaceConfirmOrder;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-14 15:27:08 mail: 928255095@qq.com
@@ -28,55 +28,68 @@ import java.util.Date;
 public class CommunitySpaceConfirmOrderPo implements Serializable {
 
     private String spaceId;
-private String cspId;
-private String timeId;
-private String orderId;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-public String getSpaceId() {
+    private String cspId;
+    private String timeId;
+    private String orderId;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getCspId() {
+
+    public String getCspId() {
         return cspId;
     }
-public void setCspId(String cspId) {
+
+    public void setCspId(String cspId) {
         this.cspId = cspId;
     }
-public String getTimeId() {
+
+    public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

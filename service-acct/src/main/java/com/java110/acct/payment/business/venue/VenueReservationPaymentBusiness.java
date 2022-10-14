@@ -194,6 +194,7 @@ public class VenueReservationPaymentBusiness implements IPaymentBusiness {
                 communitySpacePersonTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
                 communitySpacePersonTimePo.setSpaceId(communitySpacePersonPo.getSpaceId());
                 communitySpacePersonTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+                communitySpacePersonTimePo.setState(CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM);
                 communitySpacePersonTimeV1InnerServiceSMOImpl.saveCommunitySpacePersonTime(communitySpacePersonTimePo);
             }
         }

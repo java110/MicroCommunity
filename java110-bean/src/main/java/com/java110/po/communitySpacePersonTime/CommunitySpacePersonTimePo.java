@@ -16,7 +16,7 @@
 package com.java110.po.communitySpacePersonTime;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-03 01:12:49 mail: 928255095@qq.com
@@ -28,48 +28,67 @@ import java.util.Date;
 public class CommunitySpacePersonTimePo implements Serializable {
 
     private String spaceId;
-private String cspId;
-private String hours;
-private String timeId;
-private String statusCd = "0";
-private String communityId;
-public String getSpaceId() {
+    private String cspId;
+    private String hours;
+    private String timeId;
+    private String statusCd = "0";
+    private String communityId;
+
+    private String state;
+
+    public String getSpaceId() {
         return spaceId;
     }
-public void setSpaceId(String spaceId) {
+
+    public void setSpaceId(String spaceId) {
         this.spaceId = spaceId;
     }
-public String getCspId() {
+
+    public String getCspId() {
         return cspId;
     }
-public void setCspId(String cspId) {
+
+    public void setCspId(String cspId) {
         this.cspId = cspId;
     }
-public String getHours() {
+
+    public String getHours() {
         return hours;
     }
-public void setHours(String hours) {
+
+    public void setHours(String hours) {
         this.hours = hours;
     }
-public String getTimeId() {
+
+    public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getState() {
+        return state;
+    }
 
-
+    public void setState(String state) {
+        this.state = state;
+    }
 }
