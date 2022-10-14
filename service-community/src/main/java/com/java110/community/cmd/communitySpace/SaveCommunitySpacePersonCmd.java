@@ -151,6 +151,7 @@ public class SaveCommunitySpacePersonCmd extends Cmd {
 
         CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
         communitySpacePersonPo.setCspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        communitySpacePersonPo.setOrderId(GenerateCodeFactory.getGeneratorId("11"));
         if(StringUtil.isEmpty(communitySpacePersonPo.getState())){
             communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_W);
         }

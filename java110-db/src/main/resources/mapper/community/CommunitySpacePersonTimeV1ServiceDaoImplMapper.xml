@@ -20,7 +20,11 @@
         select t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.hours,t.time_id,t.time_id
         timeId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
         from community_space_person_time t
+        left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
         where 1 =1
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and csp.appointment_time = #{appointmentTime}
+        </if>
         <if test="spaceId !=null and spaceId != ''">
             and t.space_id= #{spaceId}
         </if>

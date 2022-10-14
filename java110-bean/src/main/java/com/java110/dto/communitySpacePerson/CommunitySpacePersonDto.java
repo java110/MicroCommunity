@@ -21,6 +21,7 @@ public class CommunitySpacePersonDto extends PageDto implements Serializable {
     public static final String STATE_F = "预约失败";
     public static final String STATE_W = "待审核";
     public static final String STATE_WP = "待支付";
+    public static final String STATE_CL = "取消预约";
 
     private String receivableAmount;
     private String payWay;
@@ -39,6 +40,8 @@ public class CommunitySpacePersonDto extends PageDto implements Serializable {
     private String stateName;
     private String personTel;
     private String communityId;
+
+    private String orderId;
 
     private List<CommunitySpacePersonTimeDto> times;
 
@@ -200,5 +203,13 @@ public class CommunitySpacePersonDto extends PageDto implements Serializable {
 
     public void setVenueId(String venueId) {
         this.venueId = venueId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

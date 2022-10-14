@@ -41,6 +41,8 @@ public class CommunitySpacePersonPo implements Serializable {
     private String personTel;
     private String communityId;
 
+    private String orderId;
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -145,5 +147,11 @@ public class CommunitySpacePersonPo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
 
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }

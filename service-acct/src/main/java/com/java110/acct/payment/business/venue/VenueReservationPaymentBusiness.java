@@ -8,6 +8,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.communitySpace.CommunitySpaceDto;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
@@ -116,6 +117,8 @@ public class VenueReservationPaymentBusiness implements IPaymentBusiness {
 
         JSONArray openTimes = null;
         BigDecimal money = new BigDecimal(0);
+        CommunitySpacePersonTimeDto communitySpaceOpenTimeDto = null;
+        List<CommunitySpacePersonTimeDto> communitySpacePersonTimeDtos = null;
         for (int spaceIndex = 0; spaceIndex < spaces.size(); spaceIndex++) {
             openTimes = spaces.getJSONObject(spaceIndex).getJSONArray("openTimes");
 
@@ -132,6 +135,14 @@ public class VenueReservationPaymentBusiness implements IPaymentBusiness {
             int openTime = 0;
 
             for (int timeIndex = 0; timeIndex < openTimes.size(); timeIndex++) {
+                communitySpaceOpenTimeDto = new CommunitySpacePersonTimeDto();
+                communitySpaceOpenTimeDto.setSpaceId(spaces.getJSONObject(spaceIndex).getString("spaceId"));
+                communitySpaceOpenTimeDto.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
+                communitySpaceOpenTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
+                communitySpacePersonTimeDtos = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimes(communitySpaceOpenTimeDto);
+                if (communitySpacePersonTimeDtos != null && communitySpacePersonTimeDtos.size() > 0) {
+                    throw new IllegalArgumentException(openTimes.getJSONObject(timeIndex).getString("hours") + "已经被预约，不能重复预约");
+                }
                 openTime += 1;
             }
             money = money.add(new BigDecimal(openTime).multiply(new BigDecimal(communitySpaceDtos.get(0).getFeeMoney())).setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -155,6 +166,7 @@ public class VenueReservationPaymentBusiness implements IPaymentBusiness {
             spaceObj = spaces.getJSONObject(spaceIndex);
             CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
             communitySpacePersonPo.setSpaceId(spaceObj.getString("spaceId"));
+            communitySpacePersonPo.setOrderId(paymentOrderDto.getOrderId());
             communitySpacePersonPo.setCspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             if (StringUtil.isEmpty(communitySpacePersonPo.getState())) {
                 communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_W);

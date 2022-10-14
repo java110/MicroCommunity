@@ -21,15 +21,20 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.onlinePay.OnlinePayDto;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
+import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -48,6 +53,9 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
     @Autowired
     private ICommunitySpacePersonV1InnerServiceSMO communitySpacePersonV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cspId", "cspId不能为空");
@@ -59,13 +67,48 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
-        int flag = communitySpacePersonV1InnerServiceSMOImpl.deleteCommunitySpacePerson(communitySpacePersonPo);
+        // 是否线上支付
+        CommunitySpacePersonDto communitySpacePersonDto = new CommunitySpacePersonDto();
+        communitySpacePersonDto.setCspId(reqJson.getString("cspId"));
+        communitySpacePersonDto.setState(CommunitySpacePersonDto.STATE_S);
+        List<CommunitySpacePersonDto> communitySpacePersonDtos = communitySpacePersonV1InnerServiceSMOImpl.queryCommunitySpacePersons(communitySpacePersonDto);
 
-        if (flag < 1) {
-            throw new CmdException("删除数据失败");
+        Assert.listOnlyOne(communitySpacePersonDtos, "预约订单不存在");
+
+        returnOnlinePayMoney(communitySpacePersonDtos);
+
+        for (CommunitySpacePersonDto communitySpacePersonDto1 : communitySpacePersonDtos) {
+            CommunitySpacePersonPo communitySpacePersonPo = new CommunitySpacePersonPo();
+            communitySpacePersonPo.setCspId(communitySpacePersonDto1.getCspId());
+            communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_CL);
+            int flag = communitySpacePersonV1InnerServiceSMOImpl.updateCommunitySpacePerson(communitySpacePersonPo);
+
+            if (flag < 1) {
+                throw new CmdException("删除数据失败");
+            }
         }
 
+
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    /**
+     * 发起退款
+     *
+     * @param communitySpacePersonDtos
+     */
+    private void returnOnlinePayMoney(List<CommunitySpacePersonDto> communitySpacePersonDtos) {
+        OnlinePayDto onlinePayDto = new OnlinePayDto();
+        onlinePayDto.setOrderId(communitySpacePersonDtos.get(0).getOrderId());
+        List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
+        if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
+            return;
+        }
+
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setOrderId(onlinePayDtos.get(0).getOrderId());
+        onlinePayPo.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayPo.setState(OnlinePayDto.STATE_WT);
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 }
