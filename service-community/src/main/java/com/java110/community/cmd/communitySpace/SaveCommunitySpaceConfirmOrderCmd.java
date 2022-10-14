@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.communitySpaceConfirmOrder.CommunitySpaceConfirmOrderDto;
 import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.intf.community.ICommunitySpaceConfirmOrderV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
@@ -112,6 +113,7 @@ public class SaveCommunitySpaceConfirmOrderCmd extends Cmd {
         CommunitySpacePersonTimeDto communitySpacePersonTimeDto = new CommunitySpacePersonTimeDto();
         communitySpacePersonTimeDto.setTimeId(reqJson.getString("timeId"));
         communitySpacePersonTimeDto.setCommunityId(reqJson.getString("communityId"));
+        communitySpacePersonTimeDto.setState(CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM);
         List<CommunitySpacePersonTimeDto> communitySpacePersonTimeDtos = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimes(communitySpacePersonTimeDto);
 
         Assert.listOnlyOne(communitySpacePersonTimeDtos, "未包含预约记录");
@@ -134,7 +136,11 @@ public class SaveCommunitySpaceConfirmOrderCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("核销数据失败");
         }
+        CommunitySpaceConfirmOrderDto communitySpaceConfirmOrderDto = new CommunitySpaceConfirmOrderDto();
+        communitySpaceConfirmOrderDto.setOrderId(communitySpaceConfirmOrderPo.getOrderId());
+        List<CommunitySpaceConfirmOrderDto> communitySpaceConfirmOrderDtos = communitySpaceConfirmOrderV1InnerServiceSMOImpl.queryCommunitySpaceConfirmOrders(communitySpaceConfirmOrderDto);
 
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(communitySpaceConfirmOrderDtos));
     }
 }
