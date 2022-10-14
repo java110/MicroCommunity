@@ -32,7 +32,7 @@ import java.util.List;
         url = "http://{ip}:{port}/app/payment.unifiedPayment",
         resource = "acctDoc",
         author = "吴学文",
-        serviceCode = "payment.unifiedPayment"
+        serviceCode = "payment.unifiedPayment.venueReservation"
 )
 
 @Java110ParamsDoc(params = {
