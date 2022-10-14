@@ -69,6 +69,7 @@ import java.util.concurrent.TimeUnit;
         "com.java110.api",
         "com.java110.core",
         "com.java110.config.properties.code",
+        "com.java110.doc",
 })
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
