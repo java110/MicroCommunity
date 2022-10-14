@@ -62,7 +62,7 @@ import java.util.List;
 
 @Java110ExampleDoc(
         reqBody="{\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
-        resBody="{'code':0,'msg':'成功'"
+        resBody="{'code':0,'msg':'成功'}"
 )
 
 @Java110Cmd(serviceCode = "user.staff.add")
