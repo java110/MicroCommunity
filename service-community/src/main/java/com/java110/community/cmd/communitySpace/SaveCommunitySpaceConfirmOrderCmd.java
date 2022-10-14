@@ -74,7 +74,7 @@ import java.util.List;
                 "       timeId: '123',\n" +
                 "       communityId: '2123123123'\n" +
                 "}",
-        resBody = "{\"code\":0,\"data\":[{\"adminName\":\"无需文\",\"communityId\":\"2022081539020475\",\"endTime\":\"06:10\",\"feeMoney\":\"10.00\",\"name\":\"体育场\",\"page\":-1,\"records\":0,\"row\":0,\"spaceId\":\"102022093043260007\",\"startTime\":\"05:05\",\"state\":\"1001\",\"statusCd\":\"0\",\"tel\":\"18909711443\",\"total\":0,\"openTimes\":[{\"hours\":0,\"Y\"}]}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":2}"
+        resBody = "{\"code\":0,\"data\":[{\"appointmentTime\":\"2022-10-04\",\"communityId\":\"2022081539020475\",\"createTime\":\"2022-10-14 17:51:27\",\"cspId\":\"102022100465470002\",\"hours\":\"0\",\"orderId\":\"102022101460720007\",\"page\":-1,\"personName\":\"张三\",\"personTel\":\"18909711445\",\"records\":0,\"row\":0,\"spaceId\":\"102022100486970002\",\"spaceName\":\"1场地\",\"statusCd\":\"0\",\"timeId\":\"102022100469010004\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
 )
 
 /**
