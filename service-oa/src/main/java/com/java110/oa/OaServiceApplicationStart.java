@@ -48,7 +48,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.oa",
-        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"})
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db","com.java110.doc"})
 @EnableDiscoveryClient
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
         basePackages = {"com.java110.oa.cmd"})

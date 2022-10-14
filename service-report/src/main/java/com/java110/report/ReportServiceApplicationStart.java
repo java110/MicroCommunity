@@ -33,7 +33,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.report",
-        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"},
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db","com.java110.doc"},
         exclude = {LiquibaseAutoConfiguration.class,
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
