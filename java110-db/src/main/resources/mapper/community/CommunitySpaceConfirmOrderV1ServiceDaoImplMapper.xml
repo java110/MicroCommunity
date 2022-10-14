@@ -5,111 +5,133 @@
 <mapper namespace="communitySpaceConfirmOrderV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存场地预约核销信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunitySpaceConfirmOrderInfo" parameterType="Map">
         insert into community_space_confirm_order(
-space_id,csp_id,time_id,order_id,remark,community_id
-) values (
-#{spaceId},#{cspId},#{timeId},#{orderId},#{remark},#{communityId}
-)
+        space_id,csp_id,time_id,order_id,remark,community_id
+        ) values (
+        #{spaceId},#{cspId},#{timeId},#{orderId},#{remark},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询场地预约核销信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpaceConfirmOrderInfo" parameterType="Map" resultType="Map">
-        select  t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.time_id,t.time_id timeId,t.order_id,t.order_id orderId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId 
-from community_space_confirm_order t 
-where 1 =1 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="cspId !=null and cspId != ''">
-   and t.csp_id= #{cspId}
-</if> 
-<if test="timeId !=null and timeId != ''">
-   and t.time_id= #{timeId}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.time_id,t.time_id timeId,t.order_id,t.order_id
+        orderId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        cs.name spaceName,csp.person_name personName,csp.person_tel personTel,csp.appointment_time appointmentTime,
+        cspt.hours,t.create_time createTime
+        from community_space_confirm_order t
+        left join community_space_person_time cspt on t.time_id = cspt.time_id and cspt.status_cd = '0'
+        left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
+        left join community_space cs on csp.space_id = cs.space_id and cs.status_cd = '0'
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and csp.person_name like concat('%',#{personName},'%')
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and csp.person_tel = #{personTel}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and csp.appointment_time = #{appointmentTime}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改场地预约核销信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunitySpaceConfirmOrderInfo" parameterType="Map">
-        update  community_space_confirm_order t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="spaceId !=null and spaceId != ''">
-, t.space_id= #{spaceId}
-</if> 
-<if test="cspId !=null and cspId != ''">
-, t.csp_id= #{cspId}
-</if> 
-<if test="timeId !=null and timeId != ''">
-, t.time_id= #{timeId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="orderId !=null and orderId != ''">
-and t.order_id= #{orderId}
-</if> 
+        update community_space_confirm_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            , t.space_id= #{spaceId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            , t.csp_id= #{cspId}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            , t.time_id= #{timeId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
 
     </update>
 
     <!-- 查询场地预约核销数量 add by wuxw 2018-07-03 -->
-     <select id="queryCommunitySpaceConfirmOrdersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from community_space_confirm_order t 
-where 1 =1 
-<if test="spaceId !=null and spaceId != ''">
-   and t.space_id= #{spaceId}
-</if> 
-<if test="cspId !=null and cspId != ''">
-   and t.csp_id= #{cspId}
-</if> 
-<if test="timeId !=null and timeId != ''">
-   and t.time_id= #{timeId}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryCommunitySpaceConfirmOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_space_confirm_order t
+        left join community_space_person_time cspt on t.time_id = cspt.time_id and cspt.status_cd = '0'
+        left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
+        left join community_space cs on csp.space_id = cs.space_id and cs.status_cd = '0'
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and csp.person_name like concat('%',#{personName},'%')
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and csp.person_tel = #{personTel}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and csp.appointment_time = #{appointmentTime}
+        </if>
+        <if test="spaceId !=null and spaceId != ''">
+            and t.space_id= #{spaceId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
