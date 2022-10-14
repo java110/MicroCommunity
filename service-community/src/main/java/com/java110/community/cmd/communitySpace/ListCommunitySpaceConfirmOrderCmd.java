@@ -70,8 +70,8 @@ import org.slf4j.LoggerFactory;
 )
 
 @Java110ExampleDoc(
-        reqBody = "http://{ip}:{port}/app/communitySpace.listCommunitySpaceConfirmOrder?spaceId=&name=&state=&communityId=2022081539020475&page=1&row=10",
-        resBody = "{\"code\":0,\"data\":[{\"adminName\":\"无需文\",\"communityId\":\"2022081539020475\",\"endTime\":\"06:10\",\"feeMoney\":\"10.00\",\"name\":\"体育场\",\"page\":-1,\"records\":0,\"row\":0,\"spaceId\":\"102022093043260007\",\"startTime\":\"05:05\",\"state\":\"1001\",\"statusCd\":\"0\",\"tel\":\"18909711443\",\"total\":0,\"openTimes\":[{\"hours\":0,\"Y\"}]}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":2}"
+        reqBody = "http://{ip}:{port}/app/communitySpace.listCommunitySpaceConfirmOrder?communityId=2022081539020475&page=1&row=10",
+        resBody = "{\"code\":0,\"data\":[{\"appointmentTime\":\"2022-10-04\",\"communityId\":\"2022081539020475\",\"createTime\":\"2022-10-14 17:34:47\",\"cspId\":\"102022100453340014\",\"hours\":\"10\",\"orderId\":\"102022101485880007\",\"page\":-1,\"personName\":\"王菲菲\",\"personTel\":\"18909761234\",\"records\":0,\"row\":0,\"spaceId\":\"102022100400450043\",\"spaceName\":\"2场地\",\"statusCd\":\"0\",\"timeId\":\"102022100475840016\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
 )
 /**
  * 类表述：查询
