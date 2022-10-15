@@ -34,6 +34,13 @@ public class ParkingCouponShopDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    // typeCd,pc.`value`,pc.value_price valuePrice,td.`name` typeCdName
+
+    private String typeCd;
+    private String value;
+    private String valuePrice;
+    private String typeCdName;
+
 
     public String getQuantity() {
         return quantity;
@@ -154,5 +161,37 @@ public class ParkingCouponShopDto extends PageDto implements Serializable {
 
     public void setCouponName(String couponName) {
         this.couponName = couponName;
+    }
+
+    public String getTypeCd() {
+        return typeCd;
+    }
+
+    public void setTypeCd(String typeCd) {
+        this.typeCd = typeCd;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getValuePrice() {
+        return valuePrice;
+    }
+
+    public void setValuePrice(String valuePrice) {
+        this.valuePrice = valuePrice;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
     }
 }

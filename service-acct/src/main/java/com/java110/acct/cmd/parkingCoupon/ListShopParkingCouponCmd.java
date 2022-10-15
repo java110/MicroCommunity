@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.parkingCouponShop.ParkingCouponShopDto;
 import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -36,6 +37,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@Java110CmdDoc(title = "查询商户停车劵",
+        description = "根据商户ID 查询商户停车劵",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/parkingCoupon.listShopParkingCoupon",
+        resource = "acctDoc",
+        author = "吴学文",
+        serviceCode = "parkingCoupon.listShopParkingCoupon"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row",type = "int", length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "shopId", length = 30, remark = "商铺ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "couponName", type = "String", remark = "优惠券名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "startTime", type = "String", remark = "开始时间"),
+                @Java110ParamDoc(parentNodeName = "data",name = "endTime", type = "String", remark = "结束时间"),
+                @Java110ParamDoc(parentNodeName = "data",name = "paName", type = "String", remark = "停车场名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "paId", type = "String", remark = "停车场ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "quantity", type = "String", remark = "数量"),
+                @Java110ParamDoc(parentNodeName = "data",name = "shopName", type = "String", remark = "商家名称"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/parkingCoupon.listShopParkingCoupon?page=1&row=100&communityId=2022081539020475&shopId=502022101140520018",
+        resBody="{\"code\":0,\"data\":[{\"communityId\":\"2022081539020475\",\"communityName\":\"测试小区\",\"couponId\":\"102022101024650009\",\"couponName\":\"时卡优惠券\",\"couponShopId\":\"102022101112890007\",\"endTime\":\"2050-01-01 00:00:00\",\"paId\":\"102022082382290048\",\"paName\":\"\",\"page\":-1,\"quantity\":\"200\",\"records\":0,\"row\":0,\"shopId\":\"502022101140520018\",\"shopName\":\"测试商家\",\"startTime\":\"2022-10-11 19:01:03\",\"statusCd\":\"0\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+)
 /**
  * 类表述：查询
  * 服务编码：parkingCouponShop.listParkingCouponShop
