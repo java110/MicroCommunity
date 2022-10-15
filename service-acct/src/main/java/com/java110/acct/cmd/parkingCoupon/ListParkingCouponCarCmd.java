@@ -62,14 +62,15 @@ import java.util.List;
                 @Java110ParamDoc(parentNodeName = "data",name = "endTime", type = "String", remark = "结束时间"),
                 @Java110ParamDoc(parentNodeName = "data",name = "paName", type = "String", remark = "停车场名称"),
                 @Java110ParamDoc(parentNodeName = "data",name = "paId", type = "String", remark = "停车场ID"),
-                @Java110ParamDoc(parentNodeName = "data",name = "quantity", type = "String", remark = "数量"),
+                @Java110ParamDoc(parentNodeName = "data",name = "stateName", type = "String", remark = "状态"),
                 @Java110ParamDoc(parentNodeName = "data",name = "shopName", type = "String", remark = "商家名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "carNum", type = "String", remark = "车牌号"),
         }
 )
 
 @Java110ExampleDoc(
         reqBody="http://{ip}:{port}/app/parkingCoupon.listParkingCouponCar?page=1&row=100&communityId=2022081539020475&shopId=502022101140520018",
-        resBody="{\"code\":0,\"data\":[{\"communityId\":\"2022081539020475\",\"communityName\":\"测试小区\",\"couponId\":\"102022101024650009\",\"couponName\":\"时卡优惠券\",\"couponShopId\":\"102022101112890007\",\"endTime\":\"2050-01-01 00:00:00\",\"paId\":\"102022082382290048\",\"paName\":\"\",\"page\":-1,\"quantity\":\"200\",\"records\":0,\"row\":0,\"shopId\":\"502022101140520018\",\"shopName\":\"测试商家\",\"startTime\":\"2022-10-11 19:01:03\",\"statusCd\":\"0\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+        resBody="{\"code\":0,\"data\":[{\"carNum\":\"青A88888\",\"communityId\":\"2022081539020475\",\"couponId\":\"102022101024650009\",\"couponName\":\"时卡优惠券\",\"couponShopId\":\"102022101112890007\",\"createTime\":\"2022-10-15 18:41:33\",\"endTime\":\"2022-10-16 18:41:32\",\"giveWay\":\"2002\",\"paId\":\"102022082382290048\",\"paName\":\"\",\"page\":-1,\"pccId\":\"102022101586160004\",\"records\":0,\"row\":0,\"shopId\":\"502022101140520018\",\"shopName\":\"测试商家\",\"startTime\":\"2022-10-15 18:41:32\",\"state\":\"1001\",\"stateName\":\"未使用\",\"statusCd\":\"0\",\"total\":0,\"typeCd\":\"1001\",\"value\":\"3\"}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
 )
 /**
  * 类表述：查询
