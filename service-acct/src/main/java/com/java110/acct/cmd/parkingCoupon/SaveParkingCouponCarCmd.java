@@ -68,7 +68,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody = "http://{ip}:{port}/app/parkingCoupon.listParkingCoupon?page=1&row=100&communityId=2022081539020475",
+        reqBody = "{\"shopId\":\"502022101140520018\",\"giveWay\":\"2002\",\"carNum\":\"青A88888\",\"couponShopId\":\"102022101112890007\"}",
         resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 
