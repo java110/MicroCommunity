@@ -97,7 +97,7 @@ public class CouponUserV1InnerServiceSMOImpl extends BaseServiceSMO implements I
                 if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
                     couponUser.setIsExpire("Y");
                 }
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
