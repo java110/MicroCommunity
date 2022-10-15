@@ -15,6 +15,10 @@ import java.util.Date;
  **/
 public class ParkingCouponCarDto extends PageDto implements Serializable {
 
+    //状态 1001 未使用 2002 已使用 3003 作废
+    public static final String STATE_WAIT = "1001";
+    public static final String STATE_FINISH = "2002";
+
     private String giveWay;
     private String carNum;
     private String carNumLike;

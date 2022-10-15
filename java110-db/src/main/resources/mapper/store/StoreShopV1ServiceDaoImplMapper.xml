@@ -5,192 +5,205 @@
 <mapper namespace="storeShopV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存店铺信息 add by wuxw 2018-07-03 -->
     <insert id="saveStoreShopInfo" parameterType="Map">
         insert into s_shop(
-shop_desc,return_person,shop_logo,shop_name,store_id,map_y,map_x,send_address,return_address,open_type,area_code,return_link,shop_id,state,shop_type
-) values (
-#{shopDesc},#{returnPerson},#{shopLogo},#{shopName},#{storeId},#{mapY},#{mapX},#{sendAddress},#{returnAddress},#{openType},#{areaCode},#{returnLink},#{shopId},#{state},#{shopType}
-)
+        shop_desc,return_person,shop_logo,shop_name,store_id,map_y,map_x,send_address,return_address,open_type,area_code,return_link,shop_id,state,shop_type
+        ) values (
+        #{shopDesc},#{returnPerson},#{shopLogo},#{shopName},#{storeId},#{mapY},#{mapX},#{sendAddress},#{returnAddress},#{openType},#{areaCode},#{returnLink},#{shopId},#{state},#{shopType}
+        )
     </insert>
-
 
 
     <!-- 查询店铺信息 add by wuxw 2018-07-03 -->
     <select id="getStoreShopInfo" parameterType="Map" resultType="Map">
-        select  t.shop_desc,t.shop_desc shopDesc,t.return_person,t.return_person returnPerson,t.shop_logo,t.shop_logo shopLogo,t.shop_name,t.shop_name shopName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.map_y,t.map_y mapY,t.map_x,t.map_x mapX,t.send_address,t.send_address sendAddress,t.return_address,t.return_address returnAddress,t.open_type,t.open_type openType,t.area_code,t.area_code areaCode,t.return_link,t.return_link returnLink,t.shop_id,t.shop_id shopId,t.state,t.shop_type,t.shop_type shopType 
-from s_shop t 
-where 1 =1 
-<if test="shopDesc !=null and shopDesc != ''">
-   and t.shop_desc= #{shopDesc}
-</if> 
-<if test="returnPerson !=null and returnPerson != ''">
-   and t.return_person= #{returnPerson}
-</if> 
-<if test="shopLogo !=null and shopLogo != ''">
-   and t.shop_logo= #{shopLogo}
-</if> 
-<if test="shopName !=null and shopName != ''">
-   and t.shop_name= #{shopName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="mapY !=null and mapY != ''">
-   and t.map_y= #{mapY}
-</if> 
-<if test="mapX !=null and mapX != ''">
-   and t.map_x= #{mapX}
-</if> 
-<if test="sendAddress !=null and sendAddress != ''">
-   and t.send_address= #{sendAddress}
-</if> 
-<if test="returnAddress !=null and returnAddress != ''">
-   and t.return_address= #{returnAddress}
-</if> 
-<if test="openType !=null and openType != ''">
-   and t.open_type= #{openType}
-</if> 
-<if test="areaCode !=null and areaCode != ''">
-   and t.area_code= #{areaCode}
-</if> 
-<if test="returnLink !=null and returnLink != ''">
-   and t.return_link= #{returnLink}
-</if> 
-<if test="shopId !=null and shopId != ''">
-   and t.shop_id= #{shopId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="shopType !=null and shopType != ''">
-   and t.shop_type= #{shopType}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.shop_desc,t.shop_desc shopDesc,t.return_person,t.return_person returnPerson,t.shop_logo,t.shop_logo
+        shopLogo,t.shop_name,t.shop_name shopName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
+        storeId,t.map_y,t.map_y mapY,t.map_x,t.map_x mapX,t.send_address,t.send_address
+        sendAddress,t.return_address,t.return_address returnAddress,t.open_type,t.open_type
+        openType,t.area_code,t.area_code areaCode,t.return_link,t.return_link returnLink,t.shop_id,t.shop_id
+        shopId,t.state,t.shop_type,t.shop_type shopType
+        from s_shop t
+        where 1 =1
+        <if test="shopDesc !=null and shopDesc != ''">
+            and t.shop_desc= #{shopDesc}
+        </if>
+        <if test="returnPerson !=null and returnPerson != ''">
+            and t.return_person= #{returnPerson}
+        </if>
+        <if test="shopLogo !=null and shopLogo != ''">
+            and t.shop_logo= #{shopLogo}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            and t.shop_name= #{shopName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+        <if test="sendAddress !=null and sendAddress != ''">
+            and t.send_address= #{sendAddress}
+        </if>
+        <if test="returnAddress !=null and returnAddress != ''">
+            and t.return_address= #{returnAddress}
+        </if>
+        <if test="openType !=null and openType != ''">
+            and t.open_type= #{openType}
+        </if>
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="returnLink !=null and returnLink != ''">
+            and t.return_link= #{returnLink}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="shopType !=null and shopType != ''">
+            and t.shop_type= #{shopType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改店铺信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreShopInfo" parameterType="Map">
-        update  s_shop t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="shopDesc !=null and shopDesc != ''">
-, t.shop_desc= #{shopDesc}
-</if> 
-<if test="returnPerson !=null and returnPerson != ''">
-, t.return_person= #{returnPerson}
-</if> 
-<if test="shopLogo !=null and shopLogo != ''">
-, t.shop_logo= #{shopLogo}
-</if> 
-<if test="shopName !=null and shopName != ''">
-, t.shop_name= #{shopName}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="mapY !=null and mapY != ''">
-, t.map_y= #{mapY}
-</if> 
-<if test="mapX !=null and mapX != ''">
-, t.map_x= #{mapX}
-</if> 
-<if test="sendAddress !=null and sendAddress != ''">
-, t.send_address= #{sendAddress}
-</if> 
-<if test="returnAddress !=null and returnAddress != ''">
-, t.return_address= #{returnAddress}
-</if> 
-<if test="openType !=null and openType != ''">
-, t.open_type= #{openType}
-</if> 
-<if test="areaCode !=null and areaCode != ''">
-, t.area_code= #{areaCode}
-</if> 
-<if test="returnLink !=null and returnLink != ''">
-, t.return_link= #{returnLink}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="shopType !=null and shopType != ''">
-, t.shop_type= #{shopType}
-</if> 
- where 1=1 <if test="shopId !=null and shopId != ''">
-and t.shop_id= #{shopId}
-</if> 
+        update s_shop t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="shopDesc !=null and shopDesc != ''">
+            , t.shop_desc= #{shopDesc}
+        </if>
+        <if test="returnPerson !=null and returnPerson != ''">
+            , t.return_person= #{returnPerson}
+        </if>
+        <if test="shopLogo !=null and shopLogo != ''">
+            , t.shop_logo= #{shopLogo}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            , t.shop_name= #{shopName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            , t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            , t.map_x= #{mapX}
+        </if>
+        <if test="sendAddress !=null and sendAddress != ''">
+            , t.send_address= #{sendAddress}
+        </if>
+        <if test="returnAddress !=null and returnAddress != ''">
+            , t.return_address= #{returnAddress}
+        </if>
+        <if test="openType !=null and openType != ''">
+            , t.open_type= #{openType}
+        </if>
+        <if test="areaCode !=null and areaCode != ''">
+            , t.area_code= #{areaCode}
+        </if>
+        <if test="returnLink !=null and returnLink != ''">
+            , t.return_link= #{returnLink}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="shopType !=null and shopType != ''">
+            , t.shop_type= #{shopType}
+        </if>
+        where 1=1
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
 
     </update>
 
     <!-- 查询店铺数量 add by wuxw 2018-07-03 -->
-     <select id="queryStoreShopsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from s_shop t 
-where 1 =1 
-<if test="shopDesc !=null and shopDesc != ''">
-   and t.shop_desc= #{shopDesc}
-</if> 
-<if test="returnPerson !=null and returnPerson != ''">
-   and t.return_person= #{returnPerson}
-</if> 
-<if test="shopLogo !=null and shopLogo != ''">
-   and t.shop_logo= #{shopLogo}
-</if> 
-<if test="shopName !=null and shopName != ''">
-   and t.shop_name= #{shopName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="mapY !=null and mapY != ''">
-   and t.map_y= #{mapY}
-</if> 
-<if test="mapX !=null and mapX != ''">
-   and t.map_x= #{mapX}
-</if> 
-<if test="sendAddress !=null and sendAddress != ''">
-   and t.send_address= #{sendAddress}
-</if> 
-<if test="returnAddress !=null and returnAddress != ''">
-   and t.return_address= #{returnAddress}
-</if> 
-<if test="openType !=null and openType != ''">
-   and t.open_type= #{openType}
-</if> 
-<if test="areaCode !=null and areaCode != ''">
-   and t.area_code= #{areaCode}
-</if> 
-<if test="returnLink !=null and returnLink != ''">
-   and t.return_link= #{returnLink}
-</if> 
-<if test="shopId !=null and shopId != ''">
-   and t.shop_id= #{shopId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="shopType !=null and shopType != ''">
-   and t.shop_type= #{shopType}
-</if> 
+    <select id="queryStoreShopsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_shop t
+        where 1 =1
+        <if test="shopDesc !=null and shopDesc != ''">
+            and t.shop_desc= #{shopDesc}
+        </if>
+        <if test="returnPerson !=null and returnPerson != ''">
+            and t.return_person= #{returnPerson}
+        </if>
+        <if test="shopLogo !=null and shopLogo != ''">
+            and t.shop_logo= #{shopLogo}
+        </if>
+        <if test="shopName !=null and shopName != ''">
+            and t.shop_name= #{shopName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+        <if test="sendAddress !=null and sendAddress != ''">
+            and t.send_address= #{sendAddress}
+        </if>
+        <if test="returnAddress !=null and returnAddress != ''">
+            and t.return_address= #{returnAddress}
+        </if>
+        <if test="openType !=null and openType != ''">
+            and t.open_type= #{openType}
+        </if>
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="returnLink !=null and returnLink != ''">
+            and t.return_link= #{returnLink}
+        </if>
+        <if test="shopId !=null and shopId != ''">
+            and t.shop_id= #{shopId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="shopType !=null and shopType != ''">
+            and t.shop_type= #{shopType}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

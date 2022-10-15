@@ -174,6 +174,8 @@ public class DateUtil {
         return getFormatTimeString(new Date(), pattern);
     }
 
+
+
     public static String getLastTime() {
         return LAST_TIME;
     }
@@ -447,7 +449,7 @@ public class DateUtil {
         System.out.println( "2021-12-07".compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
     }
 
-    public static String getAddDayString(Date date,String pattern,int days) throws ParseException {
+    public static String getAddDayString(Date date,String pattern,int days)  {
         SimpleDateFormat sf = new SimpleDateFormat(pattern);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
