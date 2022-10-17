@@ -30,6 +30,7 @@ import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;
 import com.java110.intf.acct.IParkingCouponV1InnerServiceSMO;
 import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
 import com.java110.po.parkingCouponShop.ParkingCouponShopPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -104,7 +105,13 @@ public class SaveParkingCouponCarCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "shopId", "请求报文中未包含shopId");
         Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
         Assert.hasKeyAndValue(reqJson, "giveWay", "请求报文中未包含giveWay");
+        Assert.hasKeyAndValue(reqJson, "code", "请求报文中未包含临时票据");
 
+        String codeKey = reqJson.getString("shopId") + reqJson.getString("code");
+
+        if (!reqJson.getString("code").equals(CommonCache.getAndRemoveValue(codeKey))) {
+            throw new CmdException("非法操作");
+        }
     }
 
     @Override
@@ -154,7 +161,7 @@ public class SaveParkingCouponCarCmd extends Cmd {
         parkingCouponCarPo.setCouponId(parkingCouponShopDtos.get(0).getCouponId());
         parkingCouponCarPo.setCommunityId(parkingCouponShopDtos.get(0).getCommunityId());
         parkingCouponCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(),DateUtil.DATE_FORMATE_STRING_A,1));
+        parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A, 1));
         parkingCouponCarPo.setPaId(parkingCouponShopDtos.get(0).getPaId());
         parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_WAIT);
         parkingCouponCarPo.setTypeCd(parkingCouponShopDtos.get(0).getTypeCd());

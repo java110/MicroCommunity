@@ -27,6 +27,10 @@ public class SystemInfoDto extends PageDto implements Serializable {
     private String subSystemTitle;
     private String companyName;
     private String mallUrl;
+
+    private String ownerUrl;
+    private String propertyUrl;
+
     private String logoUrl;
     private String propertyTitle;
 
@@ -147,5 +151,21 @@ public class SystemInfoDto extends PageDto implements Serializable {
 
     public void setSystemSimpleTitle(String systemSimpleTitle) {
         this.systemSimpleTitle = systemSimpleTitle;
+    }
+
+    public String getOwnerUrl() {
+        return ownerUrl;
+    }
+
+    public void setOwnerUrl(String ownerUrl) {
+        this.ownerUrl = ownerUrl;
+    }
+
+    public String getPropertyUrl() {
+        return propertyUrl;
+    }
+
+    public void setPropertyUrl(String propertyUrl) {
+        this.propertyUrl = propertyUrl;
     }
 }

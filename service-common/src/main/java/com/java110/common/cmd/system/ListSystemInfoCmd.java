@@ -20,18 +20,20 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.systemInfo.SystemInfoDto;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.systemInfo.SystemInfoDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -47,7 +49,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "system.listSystemInfo")
 public class ListSystemInfoCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListSystemInfoCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListSystemInfoCmd.class);
     @Autowired
     private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
 
@@ -59,22 +61,24 @@ public class ListSystemInfoCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           SystemInfoDto systemInfoDto = BeanConvertUtil.covertBean(reqJson, SystemInfoDto.class);
+        SystemInfoDto systemInfoDto = BeanConvertUtil.covertBean(reqJson, SystemInfoDto.class);
 
-           int count = systemInfoV1InnerServiceSMOImpl.querySystemInfosCount(systemInfoDto);
+        int count = systemInfoV1InnerServiceSMOImpl.querySystemInfosCount(systemInfoDto);
 
-           List<SystemInfoDto> systemInfoDtos = null;
+        List<SystemInfoDto> systemInfoDtos = null;
 
-           if (count > 0) {
-               systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
-           } else {
-               systemInfoDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
+            systemInfoDtos.get(0).setOwnerUrl(MappingCache.getValue("OWNER_WECHAT_URL"));
+            systemInfoDtos.get(0).setPropertyUrl(MappingCache.getValue("STAFF_WECHAT_URL"));
+        } else {
+            systemInfoDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, systemInfoDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, systemInfoDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

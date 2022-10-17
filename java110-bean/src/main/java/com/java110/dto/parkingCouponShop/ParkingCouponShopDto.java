@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class ParkingCouponShopDto extends PageDto implements Serializable {
 
+
+
     private String quantity;
     private String paName;
     private String paId;
