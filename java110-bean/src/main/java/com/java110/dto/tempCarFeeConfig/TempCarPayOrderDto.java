@@ -26,6 +26,8 @@ public class TempCarPayOrderDto extends PageDto implements Serializable {
 
     private String machineId;
 
+    private String[] pccIds;
+
 
     public String getOrderId() {
         return orderId;
@@ -121,5 +123,13 @@ public class TempCarPayOrderDto extends PageDto implements Serializable {
 
     public void setMachineId(String machineId) {
         this.machineId = machineId;
+    }
+
+    public String[] getPccIds() {
+        return pccIds;
+    }
+
+    public void setPccIds(String[] pccIds) {
+        this.pccIds = pccIds;
     }
 }

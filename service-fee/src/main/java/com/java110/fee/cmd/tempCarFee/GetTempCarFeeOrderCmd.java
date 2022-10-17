@@ -10,6 +10,7 @@ import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -43,6 +44,9 @@ public class GetTempCarFeeOrderCmd extends Cmd {
         TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
         tempCarPayOrderDto.setPaId(reqJson.getString("paId"));
         tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
+        if(reqJson.containsKey("pccIds") && !StringUtil.isEmpty(reqJson.getString("pccIds"))){
+            tempCarPayOrderDto.setPccIds(reqJson.getString("pccIds").split(","));
+        }
         ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.getTempCarFeeOrder(tempCarPayOrderDto);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
