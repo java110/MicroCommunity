@@ -74,9 +74,11 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
         JSONObject param = new JSONObject();
         param.put("storeId", storeId);
         param.put("storeTypeCd", storeTypeCd);
-        if(!UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())){
-            param.put("communityId", communityId);
-        }
+        // modify by 吴学文 ，这块设计我感觉不合理呢，如果 我是物业公司管理员 我分配了 A小区管理员 张三 B小区管理李四，
+        // 那么李四就没法再添加角色权限 因为他们添加的权限默认没有关联小区 所以显示不出来 别人认为这个就是个bug
+//        if(!UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())){
+//            param.put("communityId", communityId);
+//        }
         dataQuery.setRequestParams(param);
         queryServiceSMOImpl.commonQueryService(dataQuery);
         ResponseEntity<String> privilegeGroup = dataQuery.getResponseEntity();
