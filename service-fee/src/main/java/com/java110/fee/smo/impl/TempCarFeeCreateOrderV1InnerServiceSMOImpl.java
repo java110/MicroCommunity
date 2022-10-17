@@ -5,13 +5,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.couponUser.CouponUserDto;
+import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.acct.IParkingCouponCarOrderV1InnerServiceSMO;
+import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
+import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
+import com.java110.po.parkingCouponCarOrder.ParkingCouponCarOrderPo;
 import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
@@ -39,12 +44,22 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
     @Autowired
     private ICouponUserDetailV1InnerServiceSMO couponUserDetailV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingCouponCarOrderV1InnerServiceSMO parkingCouponCarOrderV1InnerServiceSMOImpl;
+
+
     @Override
     public ResponseEntity<String> createOrder(@RequestBody JSONObject reqJson) {
 
         TempCarPayOrderDto tempCarPayOrderDto = new TempCarPayOrderDto();
         tempCarPayOrderDto.setPaId(reqJson.getString("paId"));
         tempCarPayOrderDto.setCarNum(reqJson.getString("carNum"));
+        if(reqJson.containsKey("couponIds")&& !StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            tempCarPayOrderDto.setPccIds(reqJson.getString("couponIds").split(","));
+        }
         ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.getTempCarFeeOrder(tempCarPayOrderDto);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -58,9 +73,10 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
         JSONObject fee = orderInfo.getJSONObject("data");
         //double money = fee.getDouble("payCharge");
         BigDecimal money = new BigDecimal(fee.getDouble("payCharge"));
-        //3.0 考虑优惠卷
-        double couponPrice = checkCouponUser(reqJson);
-        money = money.subtract(new BigDecimal(couponPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        //3.0 考虑优惠卷 这里不考虑了 因为 物联网平台已经 考虑过了
+
+        // double couponPrice = checkCouponUser(reqJson);
+        //money = money.subtract(new BigDecimal(couponPrice)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
         double receivedAmount = money.doubleValue();
         //所有 优惠折扣计算完后，如果总金额小于等于0，则返回总扣款为0
@@ -87,81 +103,44 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
         }
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         paramObj.putAll(reqJson);
-        modifyCouponUser(paramObj);
         TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(paramObj, TempCarPayOrderDto.class);
+        dealParkingCouponCar(paramObj,tempCarPayOrderDto);
         ResponseEntity<String> responseEntity = getTempCarFeeRulesImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
         return responseEntity;
     }
 
-    private double checkCouponUser(JSONObject paramObj) {
 
-        BigDecimal couponPrice = new BigDecimal(0.0);
-        String couponIds = paramObj.getString("couponIds");
-        if (couponIds == null || "".equals(couponIds)) {
-            paramObj.put("couponPrice", couponPrice.doubleValue());
-            paramObj.put("couponUserDtos", new JSONArray()); //这里考虑空
-            return couponPrice.doubleValue();
+
+    private void dealParkingCouponCar(JSONObject reqJson,TempCarPayOrderDto tempCarPayOrderDto) {
+        //处理停车劵
+
+        if(!reqJson.containsKey("couponIds") || StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            return ;
         }
 
-        List<String> result = Arrays.asList(couponIds.split(","));
-        CouponUserDto couponUserDto = new CouponUserDto();
-        couponUserDto.setCouponIds(result.toArray(new String[result.size()]));
-        List<CouponUserDto> couponUserDtos = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
-        if (couponUserDtos == null || couponUserDtos.size() < 1) {
-            paramObj.put("couponPrice", couponPrice.doubleValue());
-            return couponPrice.doubleValue();
-        }
-        for (CouponUserDto couponUser : couponUserDtos) {
-            //不计算已过期购物券金额
-            if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
-                couponPrice = couponPrice.add(new BigDecimal(Double.parseDouble(couponUser.getActualPrice())));
-            }
-        }
-        paramObj.put("couponPrice", couponPrice.doubleValue());
-        paramObj.put("couponUserDtos", BeanConvertUtil.beanCovertJSONArray(couponUserDtos));
-        return couponPrice.doubleValue();
-    }
+        String[] pccIds = reqJson.getString("couponIds").split(",");
+        ParkingCouponCarPo parkingCouponCarPo = null;
+        ParkingCouponCarOrderPo parkingCouponCarOrderPo = null;
+        for(String pccId: pccIds){
+            parkingCouponCarPo = new ParkingCouponCarPo();
+            parkingCouponCarPo.setPccId(pccId);
+            parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_FINISH);
+            parkingCouponCarV1InnerServiceSMOImpl.updateParkingCouponCar(parkingCouponCarPo);
 
-    private void modifyCouponUser(JSONObject paramObj) {
-        if (!paramObj.containsKey("couponPrice") || paramObj.getDouble("couponPrice") <= 0) {
-            return;
-        }
-        //FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
-        CouponUserDto couponUserDto = null;
-        JSONArray couponUserDtos = paramObj.getJSONArray("couponUserDtos");
-        CouponUserDto couponUser = null;
-        for (int accountIndex = 0; accountIndex < couponUserDtos.size(); accountIndex++) {
-            couponUser = BeanConvertUtil.covertBean(couponUserDtos.getJSONObject(accountIndex), CouponUserDto.class);
-            couponUserDto = new CouponUserDto();
-            couponUserDto.setCouponId(couponUser.getCouponId());
-            couponUserDto.setState(CouponUserDto.COUPON_STATE_RUN);
-            List<CouponUserDto> couponUserDtos1 = couponUserV1InnerServiceSMOImpl.queryCouponUsers(couponUserDto);
-            if (couponUserDtos1 == null || couponUserDtos1.size() < 1) {
-                throw new CmdException("优惠券被使用");
-            }
-            CouponUserPo couponUserPo = new CouponUserPo();
-            couponUserPo.setState(CouponUserDto.COUPON_STATE_STOP);
-            couponUserPo.setCouponId(couponUser.getCouponId());
-            int fage = couponUserV1InnerServiceSMOImpl.updateCouponUser(couponUserPo);
-            if (fage < 1) {
-                throw new CmdException("更新优惠卷信息失败");
-            }
-            CouponUserDetailPo couponUserDetailPo = new CouponUserDetailPo();
-            couponUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
-            couponUserDetailPo.setCouponId(couponUser.getCouponId());
-            couponUserDetailPo.setUserId(couponUser.getUserId());
-            couponUserDetailPo.setCouponName(couponUser.getCouponName());
-            couponUserDetailPo.setUserName(couponUser.getUserName());
-            couponUserDetailPo.setObjId(paramObj.getString("carNum"));
-            couponUserDetailPo.setObjType("车辆");
-            couponUserDetailPo.setOrderId(paramObj.getString("oId"));
-            fage = couponUserDetailV1InnerServiceSMOImpl.saveCouponUserDetail(couponUserDetailPo);
-            if (fage < 1) {
-                throw new CmdException("新增优惠卷使用记录信息失败");
-            }
+            parkingCouponCarOrderPo = new ParkingCouponCarOrderPo();
+            parkingCouponCarOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId("11"));
+            parkingCouponCarOrderPo.setCarNum(reqJson.getString("carNum"));
+            parkingCouponCarOrderPo.setCarOutId("-1");
+            parkingCouponCarOrderPo.setCommunityId(reqJson.getString("communityId"));
+            parkingCouponCarOrderPo.setMachineId("-1");
+            parkingCouponCarOrderPo.setMachineName("未知");
+            parkingCouponCarOrderPo.setPaId(reqJson.getString("paId"));
+            parkingCouponCarOrderPo.setPccId(pccId);
+            parkingCouponCarOrderPo.setRemark("手机端支付停车劵抵扣");
+
+            parkingCouponCarOrderV1InnerServiceSMOImpl.saveParkingCouponCarOrder(parkingCouponCarOrderPo);
         }
 
-        paramObj.put("remark", paramObj.getString("remark") + "-优惠劵抵扣" + paramObj.getDouble("couponPrice") + "元");
-
+        tempCarPayOrderDto.setPccIds(pccIds);
     }
 }

@@ -1,5 +1,6 @@
 package com.java110.common.cmd.machineTranslate;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -18,7 +19,10 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
+import com.java110.intf.acct.IParkingCouponCarOrderV1InnerServiceSMO;
+import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
@@ -41,10 +45,13 @@ import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
+import com.java110.po.parkingCouponCarOrder.ParkingCouponCarOrderPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.sun.tools.javah.Gen;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -114,6 +121,12 @@ public class MachineUploadCarLogCmd extends Cmd {
 
     @Autowired
     private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingCouponCarOrderV1InnerServiceSMO parkingCouponCarOrderV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -303,54 +316,37 @@ public class MachineUploadCarLogCmd extends Cmd {
 
         updateCarInoutState(reqJson, carInoutDtos.get(0));
 
-        //写支付记录
-//        CarInoutPaymentPo carInoutPaymentPo = new CarInoutPaymentPo();
-//        carInoutPaymentPo.setPaymentId(GenerateCodeFactory.getGeneratorId("10"));
-//        carInoutPaymentPo.setCommunityId(carInoutDtos.get(0).getCommunityId());
-//        carInoutPaymentPo.setInoutId(carInoutDtos.get(0).getInoutId());
-//        carInoutPaymentPo.setPaId(carInoutDtos.get(0).getPaId());
-//        carInoutPaymentPo.setPayCharge(reqJson.getString("payCharge"));
-//        carInoutPaymentPo.setPayType(reqJson.getString("payType"));
-//        carInoutPaymentPo.setRealCharge(reqJson.getString("realCharge"));
-//        flag = carInoutPaymentV1InnerServiceSMOImpl.saveCarInoutPayment(carInoutPaymentPo);
-//        if (flag < 1) {
-//            throw new CmdException("更新出场时间失败");
-//        }
-//
-//        //月租车
-//        if (tempCar != CAR_TYPE_NO_DATA && tempCar != CAR_TYPE_TEMP) {
-//            return;
-//        }
-//
-//        //如果有费用 则缴费
-//        boolean hasFee = hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
-//
-//        double realCharge = Double.parseDouble(carInoutPaymentPo.getRealCharge());
-//
-//        //有费用 或者 缴费为0 时结束
-//        if (hasFee || realCharge == 0) {
-//            return;
-//        }
-//        // 判断是否存在 临时车 虚拟业主
-//        OwnerDto ownerDto = new OwnerDto();
-//        ownerDto.setCommunityId(reqJson.getString("communityId"));
-//        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
-//        ownerDto.setOwnerFlag(OwnerDto.OWNER_FLAG_FALSE);
-//        ownerDto.setName(TEMP_CAR_OWNER);
-//        List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
-//        if (ownerDtos == null || ownerDtos.size() < 1) {
-//            return;
-//        }
-//        JSONObject paramIn = new JSONObject();
-//        paramIn.put("inTime", carInoutDtos.get(0).getInTime());
-//        paramIn.put("carId", reqJson.getString("carId"));
-//        paramIn.put("communityId", carInoutDtos.get(0).getCommunityId());
-//        paramIn.put("inoutId", carInoutDtos.get(0).getInoutId());
-//        paramIn.put("ownerId", ownerDtos.get(0).getMemberId());
-//        saveTempCarFee(paramIn, machineDto);
-//
-//        //再去缴费
-//        hasFeeAndPayFee(carInoutDtos.get(0), reqJson, carInoutPo, carInoutPaymentPo);
+        //处理停车劵
+        if(!reqJson.containsKey("pccIds") || reqJson.getJSONArray("pccIds").size()<1){
+            return ;
+        }
+
+        JSONArray pccIds = reqJson.getJSONArray("pccIds");
+        String pccId = "";
+        ParkingCouponCarPo parkingCouponCarPo = null;
+        ParkingCouponCarOrderPo parkingCouponCarOrderPo = null;
+        for(int pccIdIndex = 0 ;pccIdIndex < pccIds.size();pccIdIndex++){
+            pccId = pccIds.getString(pccIdIndex);
+
+            parkingCouponCarPo = new ParkingCouponCarPo();
+            parkingCouponCarPo.setPccId(pccId);
+            parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_FINISH);
+            parkingCouponCarV1InnerServiceSMOImpl.updateParkingCouponCar(parkingCouponCarPo);
+
+            parkingCouponCarOrderPo = new ParkingCouponCarOrderPo();
+            parkingCouponCarOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId("11"));
+            parkingCouponCarOrderPo.setCarNum(reqJson.getString("carNum"));
+            parkingCouponCarOrderPo.setCarOutId(carInoutDetailPo.getDetailId());
+            parkingCouponCarOrderPo.setCommunityId(reqJson.getString("communityId"));
+            parkingCouponCarOrderPo.setMachineId(machineDto.getMachineId());
+            parkingCouponCarOrderPo.setMachineName(machineDto.getMachineName());
+            parkingCouponCarOrderPo.setPaId(carInoutDtos.get(0).getPaId());
+            parkingCouponCarOrderPo.setPccId(pccId);
+            parkingCouponCarOrderPo.setRemark("车辆出口核销停车劵");
+
+            parkingCouponCarOrderV1InnerServiceSMOImpl.saveParkingCouponCarOrder(parkingCouponCarOrderPo);
+        }
+
     }
 
     private void updateCarInoutState(JSONObject reqJson, CarInoutDto carInoutDto) {
