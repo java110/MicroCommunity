@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
@@ -28,7 +29,6 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,6 @@ public class ListReportCustomComponentDataCmd extends Cmd {
     private IReportCustomComponentV1InnerServiceSMO reportCustomComponentV1InnerServiceSMOImpl;
 
 
-
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
 
@@ -63,8 +62,12 @@ public class ListReportCustomComponentDataCmd extends Cmd {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "componentId", "未包含组件ID");
     }
+
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        reqJson.put("storeId", storeId);
 
         //查询组件是否存在
         ReportCustomComponentDto reportCustomComponentDto = new ReportCustomComponentDto();
