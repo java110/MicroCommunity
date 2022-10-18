@@ -167,6 +167,59 @@ public class FtpUploadTemplate {
     }
 
     /*
+     *文件上传工具方法
+     */
+    public String upload(InputStream inputStream, String server, int port,
+                         String userName, String userPassword, String fileName) {
+        FTPClient ftpClient = null;
+        String ftpPath = "/";
+
+        if(fileName.contains("/")){
+            ftpPath = fileName.substring(0,fileName.lastIndexOf("/"));
+        }
+
+        try {
+            // request.setCharacterEncoding("utf-8");
+
+            ftpClient = new FTPClient();
+            if (!ftpClient.isConnected()) {
+                ftpClient.connect(server, port);
+            }
+            ftpClient.login(userName, userPassword);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            mkDir(ftpClient, ftpPath);// 创建目录
+            // 设置上传目录 must
+            ftpClient.changeWorkingDirectory(ftpPath);
+            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
+                LOCAL_CHARSET = "UTF-8";
+            }
+            //fileName = new String(uploadFile.getOriginalFilename().getBytes(LOCAL_CHARSET), SERVER_CHARSET);
+            /*fileName = id + "-" + fileName;// 构建上传到服务器上的文件名 20-文件名.后缀*/
+            FTPFile[] fs = ftpClient.listFiles(fileName);
+            if (fs.length == 0) {
+                System.out.println("this file not exist ftp");
+            } else if (fs.length == 1) {
+                System.out.println("this file exist ftp");
+                ftpClient.deleteFile(fs[0].getName());
+            }
+            boolean saveFlag = ftpClient.storeFile(fileName, inputStream);
+            if (!saveFlag) {
+                throw new IllegalArgumentException("存储文件失败");
+            }
+        } catch (Exception e) {
+            logger.error("上传文件失败", e);
+            throw new IllegalArgumentException("上传文件失败");
+        } finally {
+            try {
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return fileName;
+    }
+    /*
      *文件下载工具方法
      */
     public byte[] downFileByte(String remotePath, String fileName, String server, int port, String userName, String userPassword) {

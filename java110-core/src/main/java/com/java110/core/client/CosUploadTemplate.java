@@ -110,6 +110,22 @@ public class CosUploadTemplate {
         }
         return fileName;
     }
+    /*
+     *文件上传工具方法
+     */
+    public String upload(InputStream inputStream,  String ftpPath) {
+        COSClient cosClient = null;
+        try {
+            cosClient = COSUtil.getCOSClient();
+            COSUtil.uploadByInputStream(cosClient, inputStream, ftpPath );
+        } catch (Exception e) {
+            // logger.error("上传文件失败", e);
+            throw new IllegalArgumentException("上传文件失败");
+        } finally {
+
+        }
+        return ftpPath;
+    }
 
     /*
      *文件下载工具方法

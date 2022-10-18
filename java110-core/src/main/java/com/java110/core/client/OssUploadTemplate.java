@@ -111,6 +111,20 @@ public class OssUploadTemplate {
         return fileName;
     }
 
+    public String upload(InputStream inputStream,  String ftpPath) {
+        String fileName = "";
+        OSSClient ossClient = null;
+        try {
+            ossClient = OSSUtil.getOSSClient();
+            OSSUtil.uploadByInputStream(ossClient, inputStream, ftpPath);
+        } catch (Exception e) {
+            // logger.error("上传文件失败", e);
+            throw new IllegalArgumentException("上传文件失败");
+        } finally {
+        }
+        return fileName;
+    }
+
     /*
      *文件下载工具方法
      */

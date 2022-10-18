@@ -4,6 +4,7 @@ import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.job.export.ExportDataExecutor;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -91,5 +92,9 @@ public class JobServiceApplication {
         ServiceStartInit.initSystemConfig(context);
         //加载业务侦听
         // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+
+        //启动导出数据线程处理器
+
+        ExportDataExecutor.startExportDataExecutor();
     }
 }
