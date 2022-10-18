@@ -16,6 +16,7 @@ import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,10 +91,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "pagePath", "请求中未包含页面");
 
-        Workbook workbook = null;  //工作簿
+        SXSSFWorkbook workbook = null;  //工作簿
         String userId = "";
         //工作表
-        workbook = new XSSFWorkbook();
+        workbook = new SXSSFWorkbook();
+        workbook.setCompressTempFiles(false);
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         String pagePath = reqJson.getString("pagePath");
 
