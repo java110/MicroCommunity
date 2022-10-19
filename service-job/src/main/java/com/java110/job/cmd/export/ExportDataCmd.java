@@ -70,7 +70,7 @@ public class ExportDataCmd extends Cmd {
         UserDownloadFilePo userDownloadFilePo = new UserDownloadFilePo();
         userDownloadFilePo.setDownloadId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         userDownloadFilePo.setDownloadUserId(userId);
-        userDownloadFilePo.setDownloadUserName(userDtos.get(0).getUserName());
+        userDownloadFilePo.setDownloadUserName(userDtos.get(0).getName());
         userDownloadFilePo.setFileType(reqJson.getString("pagePath"));
         userDownloadFilePo.setCommunityId(reqJson.getString("communityId"));
         userDownloadFilePo.setName(fileName);

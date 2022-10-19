@@ -27,6 +27,7 @@ import com.java110.doc.annotation.Java110CmdDocDiscovery;
 import com.java110.doc.registrar.ApiDocCmdPublishing;
 import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.intf.dev.ICacheV1InnerServiceSMO;
+import com.java110.job.export.ExportDataExecutor;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
@@ -186,6 +187,9 @@ public class BootApplicationStart {
             ServiceStartInit.initSystemConfig(context);
 
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
+
+            //启动导出数据线程处理器
+            ExportDataExecutor.startExportDataExecutor();
 
             //刷新缓存
             flushMainCache(args);
