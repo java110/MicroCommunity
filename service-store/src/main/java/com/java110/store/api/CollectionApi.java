@@ -178,6 +178,7 @@ public class CollectionApi {
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
+            purchaseApplyDetailPo.setPrice(resourceStore.getString("contrastPrice"));
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPo.setQuantity(purchaseApplyDetailPo.getPurchaseQuantity());
             purchaseApplyDetailPo.setRemark("直接出库");
