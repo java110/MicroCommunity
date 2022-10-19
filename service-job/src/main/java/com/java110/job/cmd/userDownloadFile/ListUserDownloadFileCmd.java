@@ -65,7 +65,10 @@ public class ListUserDownloadFileCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
         UserDownloadFileDto userDownloadFileDto = BeanConvertUtil.covertBean(reqJson, UserDownloadFileDto.class);
+        userDownloadFileDto.setDownloadUserId(userId);
 
         int count = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFilesCount(userDownloadFileDto);
 
