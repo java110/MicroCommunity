@@ -20,7 +20,7 @@
         select t.name,t.download_id,t.download_id downloadId,t.download_user_id,t.download_user_id
         downloadUserId,t.status_cd,t.status_cd statusCd,t.state,t.temp_url,t.temp_url
         tempUrl,t.community_id,t.community_id communityId,t.download_user_name,t.download_user_name
-        downloadUserName,t.file_type,t.file_type fileType,td.name stateName,td1.name fileTypeName,t.create_time
+        downloadUserName,t.file_type,t.file_type fileType,td.name stateName,td1.name fileTypeName,t.create_time createTime
         from user_download_file t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'user_download_file' and td.table_columns = 'state'
         left join t_dict td1 on t.file_type = td1.status_cd and td1.table_name = 'user_download_file' and td1.table_columns = 'file_type'
