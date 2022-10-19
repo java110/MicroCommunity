@@ -29,23 +29,23 @@ public class FileUploadTemplate {
 
     public String saveFile(InputStream inputStream,String fileName){
 
-        fileName = ROOT_PATH+ fileName;
+        String newfileName = ROOT_PATH+ fileName;
 
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
 
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
-            fileName = ossUploadTemplate.upload(inputStream, fileName);
+            newfileName = ossUploadTemplate.upload(inputStream, newfileName);
         } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
-            fileName = cosUploadTemplate.upload(inputStream, fileName);
+            newfileName = cosUploadTemplate.upload(inputStream, newfileName);
         } else {
             String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
             int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
             String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
             String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
 
-            fileName = ftpUploadTemplate.upload(inputStream, ftpServer,
+            newfileName = ftpUploadTemplate.upload(inputStream, ftpServer,
                     ftpPort, ftpUserName,
-                    ftpUserPassword, fileName);
+                    ftpUserPassword, newfileName);
         }
 
         String imgUrl = MappingCache.getValue("IMG_PATH");
