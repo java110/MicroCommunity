@@ -12,6 +12,9 @@ public class ExportDataDto implements Serializable{
 
     private String fileName;
 
+    private String downloadId;
+
+
     public String getBusinessAdapt() {
         return businessAdapt;
     }
@@ -34,5 +37,13 @@ public class ExportDataDto implements Serializable{
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getDownloadId() {
+        return downloadId;
+    }
+
+    public void setDownloadId(String downloadId) {
+        this.downloadId = downloadId;
     }
 }

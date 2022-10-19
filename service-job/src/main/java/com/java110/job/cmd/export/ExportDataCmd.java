@@ -5,16 +5,39 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.data.ExportDataDto;
+import com.java110.dto.user.UserDto;
+import com.java110.dto.userDownloadFile.UserDownloadFileDto;
+import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.job.export.ExportDataQueue;
+import com.java110.po.userDownloadFile.UserDownloadFilePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.ParseException;
+import java.util.List;
 
 /**
  * 数据导出处理类
  */
 @Java110Cmd(serviceCode = "export.exportData")
 public class ExportDataCmd extends Cmd {
+
+    private static final String EXPORT_DATA_PRE = "hc/temp/export/data/";
+
+    public static final String CODE_PREFIX_ID = "10";
+
+    @Autowired
+    private IUserDownloadFileV1InnerServiceSMO userDownloadFileV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含小区");
@@ -22,9 +45,47 @@ public class ExportDataCmd extends Cmd {
     }
 
     @Override
-    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+
+        String userId = context.getReqHeaders().get("user-id");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        ExportDataDto exportDataDto = new ExportDataDto();
+        exportDataDto.setBusinessAdapt(reqJson.getString("pagePath"));
+        exportDataDto.setReqJson(reqJson);
+        String fileName = DateUtil.getyyyyMMddhhmmssDateString()
+                + ".xlsx";
+        exportDataDto.setFileName(exportDataDto
+                + reqJson.getString("pagePath")
+                + "/"
+                + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)
+                + "/"
+                + fileName);
+
+        UserDownloadFilePo userDownloadFilePo = new UserDownloadFilePo();
+        userDownloadFilePo.setDownloadId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        userDownloadFilePo.setDownloadUserId(userId);
+        userDownloadFilePo.setDownloadUserName(userDtos.get(0).getUserName());
+        userDownloadFilePo.setFileType(reqJson.getString("pagePath"));
+        userDownloadFilePo.setCommunityId(reqJson.getString("communityId"));
+        userDownloadFilePo.setName(fileName);
+        userDownloadFilePo.setState(UserDownloadFileDto.STATE_WAIT);
+        int flag = userDownloadFileV1InnerServiceSMOImpl.saveUserDownloadFile(userDownloadFilePo);
+
+        if (flag < 1) {
+            throw new CmdException("下载文件失败");
+        }
+
+        exportDataDto.setDownloadId(userDownloadFilePo.getDownloadId());
+
+        ExportDataQueue.addMsg(exportDataDto);
 
 
-
+        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK,"文件正在生成，请到文件下载页面下载"));
     }
 }

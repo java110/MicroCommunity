@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userDownloadFileV1ServiceDaoImpl">
+
+
+    <!-- 保存文件下载信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserDownloadFileInfo" parameterType="Map">
+        insert into user_download_file(
+        name,download_id,download_user_id,state,temp_url,community_id,download_user_name,file_type
+        ) values (
+        #{name},#{downloadId},#{downloadUserId},#{state},#{tempUrl},#{communityId},#{downloadUserName},#{fileType}
+        )
+    </insert>
+
+
+    <!-- 查询文件下载信息 add by wuxw 2018-07-03 -->
+    <select id="getUserDownloadFileInfo" parameterType="Map" resultType="Map">
+        select t.name,t.download_id,t.download_id downloadId,t.download_user_id,t.download_user_id
+        downloadUserId,t.status_cd,t.status_cd statusCd,t.state,t.temp_url,t.temp_url
+        tempUrl,t.community_id,t.community_id communityId,t.download_user_name,t.download_user_name
+        downloadUserName,t.file_type,t.file_type fileType
+        from user_download_file t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="downloadId !=null and downloadId != ''">
+            and t.download_id= #{downloadId}
+        </if>
+        <if test="downloadUserId !=null and downloadUserId != ''">
+            and t.download_user_id= #{downloadUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="tempUrl !=null and tempUrl != ''">
+            and t.temp_url= #{tempUrl}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="downloadUserName !=null and downloadUserName != ''">
+            and t.download_user_name= #{downloadUserName}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            and t.file_type= #{fileType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改文件下载信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserDownloadFileInfo" parameterType="Map">
+        update user_download_file t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="downloadUserId !=null and downloadUserId != ''">
+            , t.download_user_id= #{downloadUserId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="tempUrl !=null and tempUrl != ''">
+            , t.temp_url= #{tempUrl}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="downloadUserName !=null and downloadUserName != ''">
+            , t.download_user_name= #{downloadUserName}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            , t.file_type= #{fileType}
+        </if>
+        where 1=1
+        <if test="downloadId !=null and downloadId != ''">
+            and t.download_id= #{downloadId}
+        </if>
+
+    </update>
+
+    <!-- 查询文件下载数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserDownloadFilesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from user_download_file t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="downloadId !=null and downloadId != ''">
+            and t.download_id= #{downloadId}
+        </if>
+        <if test="downloadUserId !=null and downloadUserId != ''">
+            and t.download_user_id= #{downloadUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="tempUrl !=null and tempUrl != ''">
+            and t.temp_url= #{tempUrl}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="downloadUserName !=null and downloadUserName != ''">
+            and t.download_user_name= #{downloadUserName}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            and t.file_type= #{fileType}
+        </if>
+
+
+    </select>
+
+</mapper>
