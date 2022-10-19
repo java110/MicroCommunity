@@ -164,7 +164,8 @@
         <if test="userName !=null and userName != ''">
             and u.name= #{userName}
         </if>
-        GROUP BY t.us_id
+<!--        这里先注释 因为 mysql 8.0  有问题 后面遇到问题 分析 为啥重复 优化 sql-->
+<!--        GROUP BY t.us_id-->
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
