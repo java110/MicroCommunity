@@ -11,6 +11,8 @@ import java.io.InputStream;
 @Component
 public class FileUploadTemplate {
 
+    private static final String ROOT_PATH = "hc/";
+
 
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
@@ -26,6 +28,8 @@ public class FileUploadTemplate {
 
 
     public String saveFile(InputStream inputStream,String fileName){
+
+        fileName = ROOT_PATH+ fileName;
 
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
 
@@ -43,6 +47,8 @@ public class FileUploadTemplate {
                     ftpPort, ftpUserName,
                     ftpUserPassword, fileName);
         }
-        return fileName;
+
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        return imgUrl+fileName;
     }
 }

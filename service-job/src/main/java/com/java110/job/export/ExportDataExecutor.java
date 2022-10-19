@@ -52,7 +52,7 @@ public class ExportDataExecutor implements Runnable {
                 log.error("处理消息异常", e);
                 e.printStackTrace();
             }
-            log.debug("导出数据线程开始完成");
+            log.debug("导出数据线程处理完成");
 
         }
 
@@ -87,6 +87,8 @@ public class ExportDataExecutor implements Runnable {
             inputStream = new ByteArrayInputStream(os.toByteArray());
 
             fileName = fileUploadTemplate.saveFile(inputStream, exportDataDto.getFileName());
+
+
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FINISH,fileName, "下载完成");
 
         } catch (Exception e) {
