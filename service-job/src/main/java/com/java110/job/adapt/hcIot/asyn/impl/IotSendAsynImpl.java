@@ -1454,8 +1454,8 @@ public class IotSendAsynImpl implements IIotSendAsyn {
                 MachineTranslateDto.CMD_ADD_PARKING_COUPON_CAR,
                 DEFAULT_MACHINE_CODE,
                 DEFAULT_MACHINE_ID,
-                "extConfigId",
-                "feeName",
+                "extPccId",
+                "couponName",
                 MachineTranslateDto.TYPE_PARK_COUPON_CAR);
         ResponseEntity<String> responseEntity = null;
         String url = IotConstant.getUrl(IotConstant.ADD_UPDATE_PARKING_COUPON_CAR);

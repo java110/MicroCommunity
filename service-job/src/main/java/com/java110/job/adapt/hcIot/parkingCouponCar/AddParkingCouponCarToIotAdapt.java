@@ -90,7 +90,7 @@ public class AddParkingCouponCarToIotAdapt extends DatabusAdaptImpl {
         ParkingCouponCarPo parkingCouponCarPo = BeanConvertUtil.covertBean(businessTempCarFeeConfig, ParkingCouponCarPo.class);
 
         ParkingCouponCarDto parkingCouponCarDto = new ParkingCouponCarDto();
-        parkingCouponCarDto.setCouponShopId(parkingCouponCarPo.getCouponShopId());
+        parkingCouponCarDto.setPccId(parkingCouponCarPo.getPccId());
         parkingCouponCarDto.setCommunityId(parkingCouponCarPo.getCommunityId());
         List<ParkingCouponCarDto> parkingCouponCarDtos = parkingCouponCarV1InnerServiceSMOImpl.queryParkingCouponCars(parkingCouponCarDto);
 
