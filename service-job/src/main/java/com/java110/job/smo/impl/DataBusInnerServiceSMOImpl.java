@@ -119,7 +119,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     }
 
     @Override
-    public ResultVo getManualOpenDoorLogs(JSONObject reqJson) {
+    public ResultVo getManualOpenDoorLogs(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_GET_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.getManualOpenDoorLogs(reqJson);
     }
