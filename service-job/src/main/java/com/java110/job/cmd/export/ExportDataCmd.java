@@ -58,7 +58,7 @@ public class ExportDataCmd extends Cmd {
         ExportDataDto exportDataDto = new ExportDataDto();
         exportDataDto.setBusinessAdapt(reqJson.getString("pagePath"));
         exportDataDto.setReqJson(reqJson);
-        String fileName = DateUtil.getyyyyMMddhhmmssDateString()
+        String fileName = GenerateCodeFactory.getUUID()
                 + ".xlsx";
         exportDataDto.setFileName(EXPORT_DATA_PRE
                 + reqJson.getString("pagePath")

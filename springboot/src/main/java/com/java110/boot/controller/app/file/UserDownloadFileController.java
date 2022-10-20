@@ -46,8 +46,11 @@ public class UserDownloadFileController {
         userDownloadFileDto.setDownloadUserId(userId);
         List<UserDownloadFileDto> userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
         Assert.listOnlyOne(userDownloadFileDtos, "文件不存在");
+        String tempUrl = userDownloadFileDtos.get(0).getTempUrl();
+        String fileName = tempUrl.substring(tempUrl.lastIndexOf("/"));
 
         response.setHeader("content-type", "application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
         response.setContentType("application/octet-stream");
 
         InputStream is = null;
