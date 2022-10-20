@@ -94,6 +94,7 @@ public class ExportDataExecutor implements Runnable {
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FINISH,fileName, "下载完成");
 
         } catch (Exception e) {
+            e.printStackTrace();
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FAIL, "","下载失败" + ExceptionUtil.getStackTrace(e));
         } finally {
             try {

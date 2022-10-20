@@ -27,7 +27,7 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt{
     @Autowired
     private IQueryPayFeeDetailInnerServiceSMO queryPayFeeDetailInnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 100;
+    private static final int MAX_ROW = 500;
 
 
     @Override
