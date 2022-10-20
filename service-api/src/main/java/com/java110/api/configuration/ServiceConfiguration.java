@@ -78,6 +78,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/car.queryWaitPayFeeTempCar,");
         exclusions.append("/app/alipay.payTempCarFee,");
         exclusions.append("/app/alipay/notify/receive,");
+        exclusions.append("/app/parkingCoupon.listParkingCouponCar,");
+
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
