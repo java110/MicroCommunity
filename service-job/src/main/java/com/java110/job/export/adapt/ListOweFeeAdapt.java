@@ -18,7 +18,7 @@ import java.util.List;
  * 欠费信息 数据导出功能
  *
  */
-@Service("reportPayFeeDetail")
+@Service("listOweFee")
 public class ListOweFeeAdapt implements IExportDataAdapt {
 
     private static final int MAX_ROW = 100;
