@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.couponUser.CouponUserDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
@@ -12,6 +13,7 @@ import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.acct.IParkingCouponCarOrderV1InnerServiceSMO;
 import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
+import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
@@ -49,6 +51,9 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
 
     @Autowired
     private IParkingCouponCarOrderV1InnerServiceSMO parkingCouponCarOrderV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
 
 
     @Override
@@ -102,6 +107,15 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
             throw new CmdException("已经处理过了 再不处理");
         }
         JSONObject paramObj = JSONObject.parseObject(paramIn);
+
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setPaId(paramObj.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaV1InnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        if(parkingAreaDtos == null  || parkingAreaDtos.size()<1){
+            paramObj.put("communityId","-1");
+        }else{
+            paramObj.put("communityId",parkingAreaDtos.get(0).getCommunityId());
+        }
         paramObj.putAll(reqJson);
         TempCarPayOrderDto tempCarPayOrderDto = BeanConvertUtil.covertBean(paramObj, TempCarPayOrderDto.class);
         dealParkingCouponCar(paramObj,tempCarPayOrderDto);
