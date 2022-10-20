@@ -102,7 +102,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         List<String> couponIds = new ArrayList<String>();
         if (couponList != null && couponList.size() > 0) {
             for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
-                couponIds.add(couponList.getJSONObject(couponIndex).getString("couponId"));
+                couponIds.add(couponList.getString(couponIndex));
             }
         }
         //查询用户ID
