@@ -20,6 +20,8 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
     public static final String STATE_FINISH = "2002";
 
     private String giveWay;
+    private String giveWayName;
+
     private String carNum;
     private String carNumLike;
     private String couponShopId;
@@ -230,5 +232,13 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
 
     public void setCouponName(String couponName) {
         this.couponName = couponName;
+    }
+
+    public String getGiveWayName() {
+        return giveWayName;
+    }
+
+    public void setGiveWayName(String giveWayName) {
+        this.giveWayName = giveWayName;
     }
 }
