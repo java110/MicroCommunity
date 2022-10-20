@@ -58,6 +58,7 @@ public class COSUtil {
         clientConfig.setHttpProtocol(HttpProtocol.https);
         // 3 生成 cos 客户端。
         COSClient cosClient = new COSClient(cred, clientConfig);
+
         return cosClient;
     }
 

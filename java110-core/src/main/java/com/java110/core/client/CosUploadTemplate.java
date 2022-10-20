@@ -65,7 +65,7 @@ public class CosUploadTemplate {
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
 
-            COSUtil.uploadByInputStream(cosClient, is,  ftpPath +urlPath);
+            COSUtil.uploadByInputStream(cosClient, is, ftpPath + urlPath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
@@ -110,14 +110,15 @@ public class CosUploadTemplate {
         }
         return fileName;
     }
+
     /*
      *文件上传工具方法
      */
-    public String upload(InputStream inputStream,  String ftpPath) {
+    public String upload(InputStream inputStream, String ftpPath) {
         COSClient cosClient = null;
         try {
             cosClient = COSUtil.getCOSClient();
-            COSUtil.uploadByInputStream(cosClient, inputStream, ftpPath );
+            COSUtil.uploadByInputStream(cosClient, inputStream, ftpPath);
         } catch (Exception e) {
             // logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
@@ -255,6 +256,22 @@ public class CosUploadTemplate {
             }
         }
         return null;
+    }
+
+    public InputStream download(String fileName) {
+        COSClient ossClient = null;
+        InputStream is = null;
+        try {
+            ossClient = COSUtil.getCOSClient();
+            is = COSUtil.getInputStreamByCOS(ossClient, fileName);
+            if (null == is) {
+                throw new FileNotFoundException(fileName);
+            }
+
+        } catch (Exception e) {
+            logger.error("ftp通过文件名称获取远程文件流", e);
+        }
+        return is;
     }
 
 }

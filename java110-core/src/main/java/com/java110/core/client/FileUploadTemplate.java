@@ -47,8 +47,32 @@ public class FileUploadTemplate {
                     ftpPort, ftpUserName,
                     ftpUserPassword, newfileName);
         }
+        return newfileName;
+    }
 
-        String imgUrl = MappingCache.getValue("IMG_PATH");
-        return imgUrl+fileName;
+    public InputStream downloadFile(String fileName){
+
+        String newfileName = ROOT_PATH+ fileName;
+
+        InputStream inputStream = null;
+
+        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+
+        if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
+            inputStream = ossUploadTemplate.download(newfileName);
+        } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
+            inputStream = cosUploadTemplate.download(newfileName);
+        } else {
+            String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+
+            inputStream = ftpUploadTemplate.download(newfileName, ftpServer,
+                    ftpPort, ftpUserName,
+                    ftpUserPassword);
+        }
+
+        return inputStream;
     }
 }

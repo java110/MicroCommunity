@@ -1,12 +1,11 @@
 package com.java110.core.client;
 
 import com.aliyun.oss.OSSClient;
-import com.java110.utils.cache.MappingCache;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.OSSUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,7 +64,7 @@ public class OssUploadTemplate {
             byte[] context = Base64Convert.base64ToByte(imageBase64);
             is = new ByteArrayInputStream(context);
 
-            OSSUtil.uploadByInputStream(ossClient, is,  ftpPath + urlPath);
+            OSSUtil.uploadByInputStream(ossClient, is, ftpPath + urlPath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
@@ -111,7 +110,7 @@ public class OssUploadTemplate {
         return fileName;
     }
 
-    public String upload(InputStream inputStream,  String ftpPath) {
+    public String upload(InputStream inputStream, String ftpPath) {
         OSSClient ossClient = null;
         try {
             ossClient = OSSUtil.getOSSClient();
@@ -252,6 +251,22 @@ public class OssUploadTemplate {
             }
         }
         return null;
+    }
+
+
+    public InputStream download(String fileName) {
+        OSSClient ossClient = null;
+        InputStream is = null;
+        try {
+            ossClient = OSSUtil.getOSSClient();
+            is = OSSUtil.getInputStreamByOSS(ossClient, fileName);
+            if (null == is) {
+                throw new FileNotFoundException(fileName);
+            }
+        } catch (Exception e) {
+            logger.error("ftp通过文件名称获取远程文件流", e);
+        }
+        return is;
     }
 
 }

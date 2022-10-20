@@ -402,4 +402,41 @@ public class FtpUploadTemplate {
             return false;
         }
     }
+
+
+    public InputStream download(String fileName, String server, int port, String userName, String userPassword) {
+        InputStream is = null;
+        ByteArrayOutputStream bos = null;
+        ByteArrayInputStream fis = null;
+        FTPClient ftpClient = new FTPClient();
+        try {
+            if (!ftpClient.isConnected()) {
+                ftpClient.connect(server, port);
+            }
+            ftpClient.login(userName, userPassword);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.enterLocalPassiveMode();
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+            }
+            String f = new String(
+                    (fileName).getBytes("GBK"),
+                    FTP.DEFAULT_CONTROL_ENCODING);
+            is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
+            if (null == is) {
+                throw new FileNotFoundException(fileName);
+            }
+
+        } catch (Exception e) {
+            logger.error("ftp通过文件名称获取远程文件流", e);
+        } finally {
+            try {
+                //closeConnect(ftpClient);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }
