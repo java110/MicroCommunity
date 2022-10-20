@@ -72,7 +72,7 @@ public class TempCarFeeCreateOrderV1InnerServiceSMOImpl  extends BaseServiceSMO 
 
         JSONObject fee = orderInfo.getJSONObject("data");
         //double money = fee.getDouble("payCharge");
-        BigDecimal money = new BigDecimal(fee.getDouble("payCharge"));
+        BigDecimal money = new BigDecimal(fee.getDouble("amount"));
         //3.0 考虑优惠卷 这里不考虑了 因为 物联网平台已经 考虑过了
 
         // double couponPrice = checkCouponUser(reqJson);
