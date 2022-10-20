@@ -33,8 +33,7 @@ public class ExportDataExecutor implements Runnable {
     private boolean isRun = false;
 
     public ExportDataExecutor(boolean isRun) {
-        this.userDownloadFileV1InnerServiceSMOImpl = ApplicationContextFactory.getBean("userDownloadFileV1InnerServiceSMOImpl", IUserDownloadFileV1InnerServiceSMO.class);
-        this.fileUploadTemplate = ApplicationContextFactory.getBean("fileUploadTemplate", FileUploadTemplate.class);
+
         this.isRun = isRun;
     }
 
@@ -61,6 +60,9 @@ public class ExportDataExecutor implements Runnable {
     private void doExportData() throws Exception {
 
         ExportDataDto exportDataDto = ExportDataQueue.getData();
+
+        this.userDownloadFileV1InnerServiceSMOImpl = ApplicationContextFactory.getBean("userDownloadFileV1InnerServiceSMOImpl", IUserDownloadFileV1InnerServiceSMO.class);
+        this.fileUploadTemplate = ApplicationContextFactory.getBean("fileUploadTemplate", FileUploadTemplate.class);
 
         ByteArrayInputStream inputStream = null;
         ByteArrayOutputStream os = null;

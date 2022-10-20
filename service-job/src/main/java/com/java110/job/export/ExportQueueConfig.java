@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Configuration;
 public class ExportQueueConfig {
 
 
-
-
-
     @Bean
     public ExportQueue exportQueue(){
         ExportQueue exportQueue = new ExportQueue();
