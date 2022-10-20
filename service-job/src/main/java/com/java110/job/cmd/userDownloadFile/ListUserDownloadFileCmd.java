@@ -76,6 +76,9 @@ public class ListUserDownloadFileCmd extends Cmd {
 
         if (count > 0) {
             userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
+            for(UserDownloadFileDto tmpUserDownloadFileDto: userDownloadFileDtos){
+                tmpUserDownloadFileDto.setDownloadUrl("/app/file/userfile/download/"+tmpUserDownloadFileDto.getDownloadId());
+            }
         } else {
             userDownloadFileDtos = new ArrayList<>();
         }

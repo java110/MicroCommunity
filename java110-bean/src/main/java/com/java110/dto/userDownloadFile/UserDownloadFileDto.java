@@ -45,6 +45,8 @@ public class UserDownloadFileDto extends PageDto implements Serializable {
 
     private String remark;
 
+    private String downloadUrl;
+
 
     public String getName() {
         return name;
@@ -149,5 +151,13 @@ public class UserDownloadFileDto extends PageDto implements Serializable {
 
     public void setFileTypeName(String fileTypeName) {
         this.fileTypeName = fileTypeName;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 }
