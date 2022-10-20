@@ -137,5 +137,12 @@ public class AccountDetailServiceDaoImpl extends BaseServiceDao implements IAcco
         return saveFlag;
     }
 
+    @Override
+    public int updateAccountDetails(Map info) {
+        int saveFlag = sqlSessionTemplate.update("accountDetailServiceDaoImpl.updateAccountDetails", info);
+
+        return saveFlag;
+    }
+
 
 }

@@ -51,4 +51,14 @@ public interface IAccountDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/saveAccountDetails", method = RequestMethod.POST)
     int saveAccountDetails(@RequestBody AccountDetailPo accountDetailPo);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param accountDetailPo 数据对象分享
+     * @return AccountDetailDto 对象数据
+     */
+    @RequestMapping(value = "/updateAccountDetails", method = RequestMethod.POST)
+    int updateAccountDetails(@RequestBody AccountDetailPo accountDetailPo);
 }

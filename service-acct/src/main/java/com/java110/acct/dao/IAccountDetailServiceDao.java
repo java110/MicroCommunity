@@ -79,4 +79,6 @@ public interface IAccountDetailServiceDao {
      * @return
      */
     int saveAccountDetails(Map beanCovertMap);
+
+    int updateAccountDetails(Map beanCovertMap);
 }

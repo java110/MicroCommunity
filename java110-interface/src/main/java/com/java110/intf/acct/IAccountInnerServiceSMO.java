@@ -69,7 +69,13 @@ public interface IAccountInnerServiceSMO {
 
     /**
      * 扣款金额
-     * @param accountDetailPo
+     * @param accountDetailPo 必填信息
+     * {
+     *                       acctId:'123123',
+     *                       objId:'111',
+     *                       amount:111,
+     *                       remark:'备注'
+     * }
      * @return
      */
     @RequestMapping(value = "/withholdAccount", method = RequestMethod.POST)

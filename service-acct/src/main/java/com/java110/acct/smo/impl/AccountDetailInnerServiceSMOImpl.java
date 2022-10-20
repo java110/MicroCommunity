@@ -57,6 +57,11 @@ public class AccountDetailInnerServiceSMOImpl extends BaseServiceSMO implements 
     public int saveAccountDetails(@RequestBody AccountDetailPo accountDetailPo) {
         return accountDetailServiceDaoImpl.saveAccountDetails(BeanConvertUtil.beanCovertMap(accountDetailPo));
     }
+    @Override
+    @Java110Transactional
+    public int updateAccountDetails(@RequestBody AccountDetailPo accountDetailPo) {
+        return accountDetailServiceDaoImpl.updateAccountDetails(BeanConvertUtil.beanCovertMap(accountDetailPo));
+    }
 
     public IAccountDetailServiceDao getAccountDetailServiceDaoImpl() {
         return accountDetailServiceDaoImpl;

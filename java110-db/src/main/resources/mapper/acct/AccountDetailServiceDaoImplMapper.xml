@@ -247,4 +247,18 @@
         #{detailType},#{amount},#{orderId},#{objId},#{detailId},#{acctId},#{relAcctId},#{remark},'-1',#{objType}
         )
     </insert>
+
+    <update id="updateAccountDetails" parameterType="Map">
+        update account_detail t
+        <set>
+            <if test="detailType !=null and detailType != ''">
+                 t.detail_type= #{detailType},
+            </if>
+            <if test="remark !=null and remark != ''">
+                 t.remark= #{remark},
+            </if>
+         </set>
+        where 1=1
+            and t.detail_id= #{detailId}
+    </update>
 </mapper>
