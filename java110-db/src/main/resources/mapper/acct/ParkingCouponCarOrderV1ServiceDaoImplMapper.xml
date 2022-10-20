@@ -20,7 +20,7 @@
         select t.pcc_id,t.pcc_id pccId,t.machine_id,t.machine_id machineId,t.order_id,t.order_id orderId,t.pa_id,t.pa_id
         paId,t.car_num,t.car_num carNum,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
         communityId,t.car_out_id,t.car_out_id carOutId,t.machine_name,t.machine_name machineName,pcs.pa_name paName,
-        pcs.shop_name shopName,pc.`name` couponName
+        pcs.shop_name shopName,pc.`name` couponName,t.create_time createTime
         from parking_coupon_car_order t
         left join parking_coupon_car pcc on t.pcc_id = pcc.pcc_id and pcc.status_cd = '0'
         left join parking_coupon_shop pcs on pcc.coupon_shop_id = pcs.coupon_shop_id and pcs.status_cd = '0'
