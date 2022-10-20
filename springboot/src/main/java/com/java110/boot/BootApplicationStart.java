@@ -16,6 +16,7 @@
 package com.java110.boot;
 
 import com.java110.core.annotation.Java110CmdDiscovery;
+import com.java110.core.client.OutRestTemplate;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.Environment;
 import com.java110.core.event.cmd.ServiceCmdEventPublishing;
@@ -27,7 +28,6 @@ import com.java110.doc.annotation.Java110CmdDocDiscovery;
 import com.java110.doc.registrar.ApiDocCmdPublishing;
 import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.intf.dev.ICacheV1InnerServiceSMO;
-import com.java110.job.export.ExportDataExecutor;
 import com.java110.service.init.ServiceStartInit;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
@@ -117,7 +117,7 @@ import java.util.concurrent.TimeUnit;
         })
 @EnableAsync
 //文档
-@Java110ApiDocDiscovery(basePackages = {"com.java110.boot.rest"},apiDocClass = ApiDocPublishing.class)
+@Java110ApiDocDiscovery(basePackages = {"com.java110.boot.rest"}, apiDocClass = ApiDocPublishing.class)
 @Java110CmdDocDiscovery(basePackages = {
         "com.java110.acct.cmd",
         "com.java110.acct.payment.business",
@@ -146,9 +146,9 @@ public class BootApplicationStart {
      * @return restTemplate
      */
     @Bean
-    public RestTemplate outRestTemplate() {
+    public OutRestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
+        OutRestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(OutRestTemplate.class);
         return restTemplate;
     }
 
@@ -169,7 +169,7 @@ public class BootApplicationStart {
     @Bean
     @ConditionalOnBean(Java110FeignClientInterceptor.class)
     public okhttp3.OkHttpClient okHttpClient(@Autowired
-                                                     Java110FeignClientInterceptor okHttpLoggingInterceptor) {
+                                             Java110FeignClientInterceptor okHttpLoggingInterceptor) {
         okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS) //读取超时
                 .connectTimeout(10, TimeUnit.SECONDS) //连接超时
@@ -188,8 +188,6 @@ public class BootApplicationStart {
 
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
 
-            //启动导出数据线程处理器
-            ExportDataExecutor.startExportDataExecutor();
 
             //刷新缓存
             flushMainCache(args);
