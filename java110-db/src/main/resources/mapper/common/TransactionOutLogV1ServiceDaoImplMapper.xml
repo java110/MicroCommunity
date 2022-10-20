@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="transactionOutLogV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存调用外系统日志信息 add by wuxw 2018-07-03 -->
+    <insert id="saveTransactionOutLogInfo" parameterType="Map">
+        insert into transaction_out_log(
+request_message,cost_time,request_url,request_method,response_header,log_id,request_header,state,response_message
+) values (
+#{requestMessage},#{costTime},#{requestUrl},#{requestMethod},#{responseHeader},#{logId},#{requestHeader},#{state},#{responseMessage}
+)
+    </insert>
+
+
+
+    <!-- 查询调用外系统日志信息 add by wuxw 2018-07-03 -->
+    <select id="getTransactionOutLogInfo" parameterType="Map" resultType="Map">
+        select  t.request_message,t.request_message requestMessage,t.cost_time,t.cost_time costTime,t.request_url,t.request_url requestUrl,t.request_method,t.request_method requestMethod,t.response_header,t.response_header responseHeader,t.log_id,t.log_id logId,t.request_header,t.request_header requestHeader,t.state,t.response_message,t.response_message responseMessage 
+from transaction_out_log t 
+where 1 =1 
+<if test="requestMessage !=null and requestMessage != ''">
+   and t.request_message= #{requestMessage}
+</if> 
+<if test="costTime !=null and costTime != ''">
+   and t.cost_time= #{costTime}
+</if> 
+<if test="requestUrl !=null and requestUrl != ''">
+   and t.request_url= #{requestUrl}
+</if> 
+<if test="requestMethod !=null and requestMethod != ''">
+   and t.request_method= #{requestMethod}
+</if> 
+<if test="responseHeader !=null and responseHeader != ''">
+   and t.response_header= #{responseHeader}
+</if> 
+<if test="logId !=null and logId != ''">
+   and t.log_id= #{logId}
+</if> 
+<if test="requestHeader !=null and requestHeader != ''">
+   and t.request_header= #{requestHeader}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="responseMessage !=null and responseMessage != ''">
+   and t.response_message= #{responseMessage}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改调用外系统日志信息 add by wuxw 2018-07-03 -->
+    <update id="updateTransactionOutLogInfo" parameterType="Map">
+        update  transaction_out_log t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="requestMessage !=null and requestMessage != ''">
+, t.request_message= #{requestMessage}
+</if> 
+<if test="costTime !=null and costTime != ''">
+, t.cost_time= #{costTime}
+</if> 
+<if test="requestUrl !=null and requestUrl != ''">
+, t.request_url= #{requestUrl}
+</if> 
+<if test="requestMethod !=null and requestMethod != ''">
+, t.request_method= #{requestMethod}
+</if> 
+<if test="responseHeader !=null and responseHeader != ''">
+, t.response_header= #{responseHeader}
+</if> 
+<if test="requestHeader !=null and requestHeader != ''">
+, t.request_header= #{requestHeader}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="responseMessage !=null and responseMessage != ''">
+, t.response_message= #{responseMessage}
+</if> 
+ where 1=1 <if test="logId !=null and logId != ''">
+and t.log_id= #{logId}
+</if> 
+
+    </update>
+
+    <!-- 查询调用外系统日志数量 add by wuxw 2018-07-03 -->
+     <select id="queryTransactionOutLogsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from transaction_out_log t 
+where 1 =1 
+<if test="requestMessage !=null and requestMessage != ''">
+   and t.request_message= #{requestMessage}
+</if> 
+<if test="costTime !=null and costTime != ''">
+   and t.cost_time= #{costTime}
+</if> 
+<if test="requestUrl !=null and requestUrl != ''">
+   and t.request_url= #{requestUrl}
+</if> 
+<if test="requestMethod !=null and requestMethod != ''">
+   and t.request_method= #{requestMethod}
+</if> 
+<if test="responseHeader !=null and responseHeader != ''">
+   and t.response_header= #{responseHeader}
+</if> 
+<if test="logId !=null and logId != ''">
+   and t.log_id= #{logId}
+</if> 
+<if test="requestHeader !=null and requestHeader != ''">
+   and t.request_header= #{requestHeader}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="responseMessage !=null and responseMessage != ''">
+   and t.response_message= #{responseMessage}
+</if> 
+
+
+     </select>
+
+</mapper>
