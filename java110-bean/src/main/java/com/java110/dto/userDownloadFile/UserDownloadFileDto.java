@@ -31,10 +31,12 @@ public class UserDownloadFileDto extends PageDto implements Serializable {
     private String downloadId;
     private String downloadUserId;
     private String state;
+    private String stateName;
     private String tempUrl;
     private String communityId;
     private String downloadUserName;
     private String fileType;
+    private String fileTypeName;
 
 
     private Date createTime;
@@ -131,5 +133,21 @@ public class UserDownloadFileDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getFileTypeName() {
+        return fileTypeName;
+    }
+
+    public void setFileTypeName(String fileTypeName) {
+        this.fileTypeName = fileTypeName;
     }
 }

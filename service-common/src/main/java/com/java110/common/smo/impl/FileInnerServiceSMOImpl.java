@@ -23,6 +23,8 @@ import java.util.List;
 @RestController
 public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInnerServiceSMO {
 
+    private static final String ROOT_PATH = "hc/";
+
     @Autowired
     private IFileServiceDao fileServiceDaoImpl;
 
@@ -51,21 +53,21 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ossUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                    java110Properties.getFtpUserPassword(), ROOT_PATH);
         } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
             fileName = cosUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                    java110Properties.getFtpUserPassword(), ROOT_PATH);
         } else {
             String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
             int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
             String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
             String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-            String ftpPath = java110Properties.getFtpPath();
+            //String ftpPath = java110Properties.getFtpPath();
 
             fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
                         ftpPort, ftpUserName,
-                        ftpUserPassword, ftpPath);
+                        ftpUserPassword, ROOT_PATH);
         }
         return fileName;
     }

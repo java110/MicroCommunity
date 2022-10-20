@@ -30,8 +30,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.userDownloadFile.UserDownloadFileDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "userDownloadFile.listUserDownloadFile")
 public class ListUserDownloadFileCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListUserDownloadFileCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListUserDownloadFileCmd.class);
     @Autowired
     private IUserDownloadFileV1InnerServiceSMO userDownloadFileV1InnerServiceSMOImpl;
 
@@ -63,22 +65,25 @@ public class ListUserDownloadFileCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           UserDownloadFileDto userDownloadFileDto = BeanConvertUtil.covertBean(reqJson, UserDownloadFileDto.class);
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
 
-           int count = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFilesCount(userDownloadFileDto);
+        UserDownloadFileDto userDownloadFileDto = BeanConvertUtil.covertBean(reqJson, UserDownloadFileDto.class);
+        userDownloadFileDto.setDownloadUserId(userId);
 
-           List<UserDownloadFileDto> userDownloadFileDtos = null;
+        int count = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFilesCount(userDownloadFileDto);
 
-           if (count > 0) {
-               userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
-           } else {
-               userDownloadFileDtos = new ArrayList<>();
-           }
+        List<UserDownloadFileDto> userDownloadFileDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, userDownloadFileDtos);
+        if (count > 0) {
+            userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
+        } else {
+            userDownloadFileDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, userDownloadFileDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

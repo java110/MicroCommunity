@@ -27,7 +27,7 @@ import java.util.List;
 @Java110Cmd(serviceCode = "export.exportData")
 public class ExportDataCmd extends Cmd {
 
-    private static final String EXPORT_DATA_PRE = "hc/temp/export/data/";
+    private static final String EXPORT_DATA_PRE = "temp/export/data/";
 
     public static final String CODE_PREFIX_ID = "10";
 
@@ -60,7 +60,7 @@ public class ExportDataCmd extends Cmd {
         exportDataDto.setReqJson(reqJson);
         String fileName = DateUtil.getyyyyMMddhhmmssDateString()
                 + ".xlsx";
-        exportDataDto.setFileName(exportDataDto
+        exportDataDto.setFileName(EXPORT_DATA_PRE
                 + reqJson.getString("pagePath")
                 + "/"
                 + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)
@@ -70,7 +70,7 @@ public class ExportDataCmd extends Cmd {
         UserDownloadFilePo userDownloadFilePo = new UserDownloadFilePo();
         userDownloadFilePo.setDownloadId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         userDownloadFilePo.setDownloadUserId(userId);
-        userDownloadFilePo.setDownloadUserName(userDtos.get(0).getUserName());
+        userDownloadFilePo.setDownloadUserName(userDtos.get(0).getName());
         userDownloadFilePo.setFileType(reqJson.getString("pagePath"));
         userDownloadFilePo.setCommunityId(reqJson.getString("communityId"));
         userDownloadFilePo.setName(fileName);

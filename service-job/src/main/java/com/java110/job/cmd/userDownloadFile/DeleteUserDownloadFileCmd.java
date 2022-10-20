@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：userDownloadFile.deleteUserDownloadFile
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "userDownloadFile.deleteUserDownloadFile")
 public class DeleteUserDownloadFileCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteUserDownloadFileCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteUserDownloadFileCmd.class);
 
     @Autowired
     private IUserDownloadFileV1InnerServiceSMO userDownloadFileV1InnerServiceSMOImpl;
@@ -51,7 +52,7 @@ public class DeleteUserDownloadFileCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "downloadId", "downloadId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       UserDownloadFilePo userDownloadFilePo = BeanConvertUtil.covertBean(reqJson, UserDownloadFilePo.class);
+        UserDownloadFilePo userDownloadFilePo = BeanConvertUtil.covertBean(reqJson, UserDownloadFilePo.class);
         int flag = userDownloadFileV1InnerServiceSMOImpl.deleteUserDownloadFile(userDownloadFilePo);
 
         if (flag < 1) {

@@ -30,19 +30,30 @@ public class ExportDataExecutor implements Runnable {
     //默认线程大小
     private static final int DEFAULT_EXPORT_POOL = 4;
 
-    public ExportDataExecutor() {
+    private boolean isRun = false;
+
+    public ExportDataExecutor(boolean isRun) {
         this.userDownloadFileV1InnerServiceSMOImpl = ApplicationContextFactory.getBean("userDownloadFileV1InnerServiceSMOImpl", IUserDownloadFileV1InnerServiceSMO.class);
         this.fileUploadTemplate = ApplicationContextFactory.getBean("fileUploadTemplate", FileUploadTemplate.class);
+        this.isRun = isRun;
+    }
+
+    public ExportDataExecutor() {
     }
 
     @Override
     public void run() {
 
-        try {
-            doExportData();
-        } catch (Exception e) {
-            log.error("处理消息异常", e);
-            e.printStackTrace();
+        while (isRun) {
+            log.debug("导出数据线程开始处理");
+            try {
+                doExportData();
+            } catch (Exception e) {
+                log.error("处理消息异常", e);
+                e.printStackTrace();
+            }
+            log.debug("导出数据线程处理完成");
+
         }
 
     }
@@ -76,6 +87,8 @@ public class ExportDataExecutor implements Runnable {
             inputStream = new ByteArrayInputStream(os.toByteArray());
 
             fileName = fileUploadTemplate.saveFile(inputStream, exportDataDto.getFileName());
+
+
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FINISH,fileName, "下载完成");
 
         } catch (Exception e) {
@@ -116,6 +129,6 @@ public class ExportDataExecutor implements Runnable {
      */
     public static void startExportDataExecutor() {
         ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_EXPORT_POOL);
-        executorService.execute(new ExportDataExecutor());
+        executorService.execute(new ExportDataExecutor(true));
     }
 }

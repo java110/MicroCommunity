@@ -112,7 +112,6 @@ public class OssUploadTemplate {
     }
 
     public String upload(InputStream inputStream,  String ftpPath) {
-        String fileName = "";
         OSSClient ossClient = null;
         try {
             ossClient = OSSUtil.getOSSClient();
@@ -122,7 +121,7 @@ public class OssUploadTemplate {
             throw new IllegalArgumentException("上传文件失败");
         } finally {
         }
-        return fileName;
+        return ftpPath;
     }
 
     /*
