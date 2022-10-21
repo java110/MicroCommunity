@@ -17,17 +17,17 @@
 
     <!-- 查询小区场地预约信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpacePersonInfo" parameterType="Map" resultType="Map">
-        select t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way
+        sselect t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way
         payWay,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
         receivedAmount,t.person_name,t.person_name personName,t.space_id,t.space_id spaceId,t.csp_id,t.csp_id
         cspId,t.appointment_time,t.appointment_time appointmentTime,t.person_id,t.person_id
         personId,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,td.name stateName,td1.name payWayName,
-        cs.name spaceName,t.create_time createTime
+        cs.name spaceName,t.create_time createTime,cv.`name` venueName
         from community_space_person t
         left join community_space cs on t.space_id = cs.space_id and cs.status_cd = '0'
+        left join community_venue cv on cs.venue_id = cv.venue_id and cv.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'community_space_person' and td.table_columns = 'state'
         left join t_dict td1 on t.pay_way = td1.status_cd and td1.table_name = 'community_space_person' and td1.table_columns = 'pay_way'
-
         where 1 =1
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}
