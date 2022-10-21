@@ -31,6 +31,8 @@ public class CommunitySpaceConfirmOrderDto extends PageDto implements Serializab
 
     private String hours;
 
+    private String venueName;
+
 
     private Date createTime;
 
@@ -141,5 +143,13 @@ public class CommunitySpaceConfirmOrderDto extends PageDto implements Serializab
 
     public void setHours(String hours) {
         this.hours = hours;
+    }
+
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
     }
 }

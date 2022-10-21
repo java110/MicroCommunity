@@ -20,11 +20,12 @@
         select t.space_id,t.space_id spaceId,t.csp_id,t.csp_id cspId,t.time_id,t.time_id timeId,t.order_id,t.order_id
         orderId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
         cs.name spaceName,csp.person_name personName,csp.person_tel personTel,csp.appointment_time appointmentTime,
-        cspt.hours,t.create_time createTime
+        cspt.hours,t.create_time createTime,cv.`name` venueName
         from community_space_confirm_order t
         left join community_space_person_time cspt on t.time_id = cspt.time_id and cspt.status_cd = '0'
         left join community_space_person csp on t.csp_id = csp.csp_id and csp.status_cd = '0'
         left join community_space cs on csp.space_id = cs.space_id and cs.status_cd = '0'
+        left join community_venue cv on cs.venue_id = cv.venue_id and cv.status_cd = '0'
         where 1 =1
         <if test="personName !=null and personName != ''">
             and csp.person_name like concat('%',#{personName},'%')
