@@ -1,6 +1,7 @@
 package com.java110.dto.transactionOutLog;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,15 +15,18 @@ import java.util.Date;
  **/
 public class TransactionOutLogDto extends PageDto implements Serializable {
 
+    public static final String STATE_S = "S";//成功
+    public static final String STATE_F = "F";//失败
+
     private String requestMessage;
-private String costTime;
-private String requestUrl;
-private String requestMethod;
-private String responseHeader;
-private String logId;
-private String requestHeader;
-private String state;
-private String responseMessage;
+    private String costTime;
+    private String requestUrl;
+    private String requestMethod;
+    private String responseHeader;
+    private String logId;
+    private String requestHeader;
+    private String state;
+    private String responseMessage;
 
 
     private Date createTime;
@@ -33,55 +37,72 @@ private String responseMessage;
     public String getRequestMessage() {
         return requestMessage;
     }
-public void setRequestMessage(String requestMessage) {
+
+    public void setRequestMessage(String requestMessage) {
         this.requestMessage = requestMessage;
     }
-public String getCostTime() {
+
+    public String getCostTime() {
         return costTime;
     }
-public void setCostTime(String costTime) {
+
+    public void setCostTime(String costTime) {
         this.costTime = costTime;
     }
-public String getRequestUrl() {
+
+    public String getRequestUrl() {
         return requestUrl;
     }
-public void setRequestUrl(String requestUrl) {
+
+    public void setRequestUrl(String requestUrl) {
         this.requestUrl = requestUrl;
     }
-public String getRequestMethod() {
+
+    public String getRequestMethod() {
         return requestMethod;
     }
-public void setRequestMethod(String requestMethod) {
+
+    public void setRequestMethod(String requestMethod) {
         this.requestMethod = requestMethod;
     }
-public String getResponseHeader() {
+
+    public String getResponseHeader() {
         return responseHeader;
     }
-public void setResponseHeader(String responseHeader) {
+
+    public void setResponseHeader(String responseHeader) {
         this.responseHeader = responseHeader;
     }
-public String getLogId() {
+
+    public String getLogId() {
         return logId;
     }
-public void setLogId(String logId) {
+
+    public void setLogId(String logId) {
         this.logId = logId;
     }
-public String getRequestHeader() {
+
+    public String getRequestHeader() {
         return requestHeader;
     }
-public void setRequestHeader(String requestHeader) {
+
+    public void setRequestHeader(String requestHeader) {
         this.requestHeader = requestHeader;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getResponseMessage() {
+
+    public String getResponseMessage() {
         return responseMessage;
     }
-public void setResponseMessage(String responseMessage) {
+
+    public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }
 
