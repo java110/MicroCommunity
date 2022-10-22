@@ -7,6 +7,7 @@ import com.java110.dto.transactionOutLog.TransactionOutLogDto;
 import com.java110.intf.common.ITransactionOutLogV1InnerServiceSMO;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.po.transactionOutLog.TransactionOutLogPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
@@ -77,6 +78,14 @@ public class OutRestTemplate extends RestTemplate {
 
 
     private void saveLog(String url, String method, HttpEntity<?> requestEntity, ResponseEntity<String> responseEntity, long costTime) {
+
+        String logServiceCode = MappingCache.getValue(MappingCache.CALL_OUT_LOG);
+
+        if("off".equals(logServiceCode.toLowerCase())){
+            return;
+        }
+
+
 
         ITransactionOutLogV1InnerServiceSMO transactionOutLogV1InnerServiceSMO
                 = ApplicationContextFactory.getBean(ITransactionOutLogV1InnerServiceSMO.class.getName(),ITransactionOutLogV1InnerServiceSMO.class);
