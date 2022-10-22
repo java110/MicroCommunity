@@ -99,7 +99,7 @@ public final class BeanConvertUtil {
             Object value = orgMap.get(field.getName());
             //String 转date
             Object tmpValue = Java110Converter.getValue(value, dstClass);
-            //System.out.println("tmpValue"+value.toString());
+            System.out.println("tmpValue"+value.toString());
             beanMap.put(field.getName(), tmpValue);
         }
     }
