@@ -87,9 +87,15 @@ public class OutRestTemplate extends RestTemplate {
 
 
 
-        ITransactionOutLogV1InnerServiceSMO transactionOutLogV1InnerServiceSMO
-                = ApplicationContextFactory.getBean(ITransactionOutLogV1InnerServiceSMO.class.getName(),ITransactionOutLogV1InnerServiceSMO.class);
+        ITransactionOutLogV1InnerServiceSMO transactionOutLogV1InnerServiceSMO = null;
 
+        try {
+            transactionOutLogV1InnerServiceSMO
+                    = ApplicationContextFactory.getBean(ITransactionOutLogV1InnerServiceSMO.class.getName(), ITransactionOutLogV1InnerServiceSMO.class);
+        }catch (Exception e){
+            transactionOutLogV1InnerServiceSMO
+                    = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1InnerServiceSMO.class);
+        }
         if(transactionOutLogV1InnerServiceSMO == null){
             transactionOutLogV1InnerServiceSMO
                     = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1InnerServiceSMO.class);
