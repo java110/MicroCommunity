@@ -97,9 +97,12 @@ public final class BeanConvertUtil {
             //System.out.println("字段类型" + dstClass);
 
             Object value = orgMap.get(field.getName());
+            if(value == null){
+                continue;
+            }
             //String 转date
             Object tmpValue = Java110Converter.getValue(value, dstClass);
-            System.out.println("tmpValue"+value.toString());
+            //System.out.println("tmpValue"+value.toString());
             beanMap.put(field.getName(), tmpValue);
         }
     }
