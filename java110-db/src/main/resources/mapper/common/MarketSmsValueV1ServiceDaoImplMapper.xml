@@ -18,14 +18,23 @@
     <!-- 查询营销信息值信息 add by wuxw 2018-07-03 -->
     <select id="getMarketSmsValueInfo" parameterType="Map" resultType="Map">
         select t.value_id,t.value_id valueId,t.sms_id,t.sms_id smsId,t.sms_key,t.sms_key smsKey,t.status_cd,t.status_cd
-        statusCd,t.sms_value,t.sms_value smsValue
+        statusCd,t.sms_value,t.sms_value smsValue,msk.`name`
         from market_sms_value t
+        LEFT JOIN market_sms ms on t.sms_id = ms.sms_id and ms.status_cd = '0'
+        LEFT JOIN market_sms_key msk on t.sms_key = msk.sms_key and ms.sms_type = msk.sms_type
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
         </if>
         <if test="smsId !=null and smsId != ''">
             and t.sms_id= #{smsId}
+        </if>
+        <if test="smsIds !=null">
+            and t.sms_id in
+            <foreach collection="smsIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
         </if>
         <if test="smsKey !=null and smsKey != ''">
             and t.sms_key= #{smsKey}

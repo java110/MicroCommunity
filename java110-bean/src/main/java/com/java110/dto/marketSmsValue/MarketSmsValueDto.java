@@ -21,6 +21,8 @@ public class MarketSmsValueDto extends PageDto implements Serializable {
     private String smsKey;
     private String smsValue;
 
+    private String name;
+
 
     private Date createTime;
 
@@ -82,5 +84,13 @@ public class MarketSmsValueDto extends PageDto implements Serializable {
 
     public void setSmsIds(String[] smsIds) {
         this.smsIds = smsIds;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

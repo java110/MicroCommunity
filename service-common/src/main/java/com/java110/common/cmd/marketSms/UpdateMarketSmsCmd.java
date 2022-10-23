@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.marketSms;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -23,10 +24,13 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IMarketSmsV1InnerServiceSMO;
+import com.java110.intf.common.IMarketSmsValueV1InnerServiceSMO;
 import com.java110.po.marketSms.MarketSmsPo;
+import com.java110.po.marketSmsValue.MarketSmsValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -46,16 +50,35 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "marketSms.updateMarketSms")
 public class UpdateMarketSmsCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateMarketSmsCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateMarketSmsCmd.class);
 
 
     @Autowired
     private IMarketSmsV1InnerServiceSMO marketSmsV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMarketSmsValueV1InnerServiceSMO marketSmsValueV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "smsId", "smsId不能为空");
-Assert.hasKeyAndValue(reqJson, "smsId", "smsId不能为空");
+
+        if (!reqJson.containsKey("smsTypeValues")) {
+            throw new CmdException("未包含配置信息");
+        }
+
+        JSONArray smsTypeValues = reqJson.getJSONArray("smsTypeValues");
+
+        if (smsTypeValues == null || smsTypeValues.size() < 1) {
+            throw new CmdException("未包含配置信息");
+        }
+
+        for (int typeIndex = 0; typeIndex < smsTypeValues.size(); typeIndex++) {
+            if (StringUtil.isEmpty(smsTypeValues.getJSONObject(typeIndex).getString("smsValue"))) {
+                throw new CmdException("未填写" + smsTypeValues.getJSONObject(typeIndex).getString("name"));
+            }
+        }
 
     }
 
@@ -63,12 +86,28 @@ Assert.hasKeyAndValue(reqJson, "smsId", "smsId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MarketSmsPo marketSmsPo = BeanConvertUtil.covertBean(reqJson, MarketSmsPo.class);
+        MarketSmsPo marketSmsPo = BeanConvertUtil.covertBean(reqJson, MarketSmsPo.class);
         int flag = marketSmsV1InnerServiceSMOImpl.updateMarketSms(marketSmsPo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
+        JSONArray smsTypeValues = reqJson.getJSONArray("smsTypeValues");
+
+        JSONObject value = null;
+
+        MarketSmsValuePo marketSmsValuePo = null;
+        for (int typeIndex = 0; typeIndex < smsTypeValues.size(); typeIndex++) {
+            value = smsTypeValues.getJSONObject(typeIndex);
+            marketSmsValuePo = BeanConvertUtil.covertBean(value, MarketSmsValuePo.class);
+            marketSmsValuePo.setSmsId(marketSmsPo.getSmsId());
+            flag = marketSmsValueV1InnerServiceSMOImpl.updateMarketSmsValue(marketSmsValuePo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
