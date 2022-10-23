@@ -1,6 +1,7 @@
 package com.java110.dto.marketSmsValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class MarketSmsValueDto extends PageDto implements Serializable {
 
     private String valueId;
-private String smsId;
-private String smsKey;
-private String smsValue;
+    private String smsId;
+    private String[] smsIds;
+    private String smsKey;
+    private String smsValue;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String smsValue;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getSmsId() {
+
+    public String getSmsId() {
         return smsId;
     }
-public void setSmsId(String smsId) {
+
+    public void setSmsId(String smsId) {
         this.smsId = smsId;
     }
-public String getSmsKey() {
+
+    public String getSmsKey() {
         return smsKey;
     }
-public void setSmsKey(String smsKey) {
+
+    public void setSmsKey(String smsKey) {
         this.smsKey = smsKey;
     }
-public String getSmsValue() {
+
+    public String getSmsValue() {
         return smsValue;
     }
-public void setSmsValue(String smsValue) {
+
+    public void setSmsValue(String smsValue) {
         this.smsValue = smsValue;
     }
 
@@ -65,5 +74,13 @@ public void setSmsValue(String smsValue) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getSmsIds() {
+        return smsIds;
+    }
+
+    public void setSmsIds(String[] smsIds) {
+        this.smsIds = smsIds;
     }
 }

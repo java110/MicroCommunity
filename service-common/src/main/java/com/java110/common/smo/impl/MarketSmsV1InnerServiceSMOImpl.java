@@ -17,8 +17,10 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.IMarketSmsV1ServiceDao;
+import com.java110.dto.marketSmsValue.MarketSmsValueDto;
 import com.java110.intf.common.IMarketSmsV1InnerServiceSMO;
 import com.java110.dto.marketSms.MarketSmsDto;
+import com.java110.intf.common.IMarketSmsValueV1InnerServiceSMO;
 import com.java110.po.marketSms.MarketSmsPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -44,6 +46,9 @@ public class MarketSmsV1InnerServiceSMOImpl extends BaseServiceSMO implements IM
 
     @Autowired
     private IMarketSmsV1ServiceDao marketSmsV1ServiceDaoImpl;
+
+    @Autowired
+    private IMarketSmsValueV1InnerServiceSMO marketSmsValueV1InnerServiceSMOImpl;
 
 
     @Override
@@ -78,7 +83,43 @@ public class MarketSmsV1InnerServiceSMOImpl extends BaseServiceSMO implements IM
 
         List<MarketSmsDto> marketSmss = BeanConvertUtil.covertBeanList(marketSmsV1ServiceDaoImpl.getMarketSmsInfo(BeanConvertUtil.beanCovertMap(marketSmsDto)), MarketSmsDto.class);
 
+        refreshMarketValues(marketSmss);
         return marketSmss;
+    }
+
+    /**
+     * 输入 值
+     * @param marketSmss
+     */
+    private void refreshMarketValues(List<MarketSmsDto> marketSmss) {
+
+        if(marketSmss == null || marketSmss.size() <1){
+            return ;
+        }
+
+        List<String> smsIds = new ArrayList<>();
+
+        for(MarketSmsDto marketSmsDto : marketSmss){
+            smsIds.add(marketSmsDto.getSmsId());
+        }
+
+
+        MarketSmsValueDto marketSmsValueDto = new MarketSmsValueDto();
+        marketSmsValueDto.setSmsIds(smsIds.toArray(new String[smsIds.size()]));
+        List<MarketSmsValueDto> smsValueDtos = marketSmsValueV1InnerServiceSMOImpl.queryMarketSmsValues(marketSmsValueDto);
+
+        List<MarketSmsValueDto> marketSmsValueDtos = null;
+        for(MarketSmsDto marketSmsDto : marketSmss){
+            marketSmsValueDtos = new ArrayList<>();
+            for(MarketSmsValueDto smsValueDto : smsValueDtos){
+                if(!marketSmsDto.getSmsId().equals(smsValueDto.getSmsId())){
+                    continue;
+                }
+                marketSmsValueDtos.add(smsValueDto);
+            }
+
+            marketSmsDto.setValues(marketSmsValueDtos);
+        }
     }
 
 

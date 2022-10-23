@@ -1,8 +1,11 @@
 package com.java110.dto.marketSms;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.marketSmsValue.MarketSmsValueDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,38 +18,47 @@ import java.util.Date;
 public class MarketSmsDto extends PageDto implements Serializable {
 
     private String smsName;
-private String smsId;
-private String smsType;
-private String remark;
+    private String smsId;
+    private String smsType;
+    private String remark;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private List<MarketSmsValueDto> values;
+
 
     public String getSmsName() {
         return smsName;
     }
-public void setSmsName(String smsName) {
+
+    public void setSmsName(String smsName) {
         this.smsName = smsName;
     }
-public String getSmsId() {
+
+    public String getSmsId() {
         return smsId;
     }
-public void setSmsId(String smsId) {
+
+    public void setSmsId(String smsId) {
         this.smsId = smsId;
     }
-public String getSmsType() {
+
+    public String getSmsType() {
         return smsType;
     }
-public void setSmsType(String smsType) {
+
+    public void setSmsType(String smsType) {
         this.smsType = smsType;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -65,5 +77,13 @@ public void setRemark(String remark) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<MarketSmsValueDto> getValues() {
+        return values;
+    }
+
+    public void setValues(List<MarketSmsValueDto> values) {
+        this.values = values;
     }
 }
