@@ -18,7 +18,7 @@
     <!-- 查询营销信息信息 add by wuxw 2018-07-03 -->
     <select id="getMarketSmsInfo" parameterType="Map" resultType="Map">
         select t.sms_name,t.sms_name smsName,t.sms_id,t.sms_id smsId,t.sms_type,t.sms_type
-        smsType,t.remark,t.status_cd,t.status_cd statusCd
+        smsType,t.remark,t.status_cd,t.status_cd statusCd,t.create_time createTime
         from market_sms t
         where 1 =1
         <if test="smsName !=null and smsName != ''">

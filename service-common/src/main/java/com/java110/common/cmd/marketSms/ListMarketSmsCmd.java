@@ -71,7 +71,6 @@ public class ListMarketSmsCmd extends Cmd {
 
            if (count > 0) {
                marketSmsDtos = marketSmsV1InnerServiceSMOImpl.queryMarketSmss(marketSmsDto);
-
            } else {
                marketSmsDtos = new ArrayList<>();
            }
