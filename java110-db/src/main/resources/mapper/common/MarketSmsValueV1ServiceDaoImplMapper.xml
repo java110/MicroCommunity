@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketSmsValueV1ServiceDaoImpl">
+
+
+    <!-- 保存营销信息值信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketSmsValueInfo" parameterType="Map">
+        insert into market_sms_value(
+        value_id,sms_id,sms_key,sms_value
+        ) values (
+        #{valueId},#{smsId},#{smsKey},#{smsValue}
+        )
+    </insert>
+
+
+    <!-- 查询营销信息值信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketSmsValueInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.sms_id,t.sms_id smsId,t.sms_key,t.sms_key smsKey,t.status_cd,t.status_cd
+        statusCd,t.sms_value,t.sms_value smsValue
+        from market_sms_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="smsId !=null and smsId != ''">
+            and t.sms_id= #{smsId}
+        </if>
+        <if test="smsKey !=null and smsKey != ''">
+            and t.sms_key= #{smsKey}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="smsValue !=null and smsValue != ''">
+            and t.sms_value= #{smsValue}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销信息值信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketSmsValueInfo" parameterType="Map">
+        update market_sms_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="smsId !=null and smsId != ''">
+            , t.sms_id= #{smsId}
+        </if>
+        <if test="smsKey !=null and smsKey != ''">
+            , t.sms_key= #{smsKey}
+        </if>
+        <if test="smsValue !=null and smsValue != ''">
+            , t.sms_value= #{smsValue}
+        </if>
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销信息值数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketSmsValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_sms_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="smsId !=null and smsId != ''">
+            and t.sms_id= #{smsId}
+        </if>
+        <if test="smsKey !=null and smsKey != ''">
+            and t.sms_key= #{smsKey}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="smsValue !=null and smsValue != ''">
+            and t.sms_value= #{smsValue}
+        </if>
+
+
+    </select>
+
+</mapper>

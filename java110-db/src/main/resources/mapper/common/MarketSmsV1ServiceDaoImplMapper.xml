@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketSmsV1ServiceDaoImpl">
+
+
+    <!-- 保存营销信息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketSmsInfo" parameterType="Map">
+        insert into market_sms(
+        sms_name,sms_id,sms_type,remark
+        ) values (
+        #{smsName},#{smsId},#{smsType},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询营销信息信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketSmsInfo" parameterType="Map" resultType="Map">
+        select t.sms_name,t.sms_name smsName,t.sms_id,t.sms_id smsId,t.sms_type,t.sms_type
+        smsType,t.remark,t.status_cd,t.status_cd statusCd
+        from market_sms t
+        where 1 =1
+        <if test="smsName !=null and smsName != ''">
+            and t.sms_name= #{smsName}
+        </if>
+        <if test="smsId !=null and smsId != ''">
+            and t.sms_id= #{smsId}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            and t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销信息信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketSmsInfo" parameterType="Map">
+        update market_sms t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="smsName !=null and smsName != ''">
+            , t.sms_name= #{smsName}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            , t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="smsId !=null and smsId != ''">
+            and t.sms_id= #{smsId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketSmssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_sms t
+        where 1 =1
+        <if test="smsName !=null and smsName != ''">
+            and t.sms_name= #{smsName}
+        </if>
+        <if test="smsId !=null and smsId != ''">
+            and t.sms_id= #{smsId}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            and t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>
