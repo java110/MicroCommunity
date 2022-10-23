@@ -1,6 +1,7 @@
 package com.java110.dto.marketSmsKey;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,10 @@ import java.util.Date;
 public class MarketSmsKeyDto extends PageDto implements Serializable {
 
     private String smsKey;
-private String name;
-private String keyId;
-private String smsType;
-private String remark;
+    private String name;
+    private String keyId;
+    private String smsType;
+    private String remark;
 
 
     private Date createTime;
@@ -29,31 +30,40 @@ private String remark;
     public String getSmsKey() {
         return smsKey;
     }
-public void setSmsKey(String smsKey) {
+
+    public void setSmsKey(String smsKey) {
         this.smsKey = smsKey;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getKeyId() {
+
+    public String getKeyId() {
         return keyId;
     }
-public void setKeyId(String keyId) {
+
+    public void setKeyId(String keyId) {
         this.keyId = keyId;
     }
-public String getSmsType() {
+
+    public String getSmsType() {
         return smsType;
     }
-public void setSmsType(String smsType) {
+
+    public void setSmsType(String smsType) {
         this.smsType = smsType;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 

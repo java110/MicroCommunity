@@ -17,6 +17,7 @@ package com.java110.po.marketSmsValue;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-23 17:57:54 mail: 928255095@qq.com
@@ -28,41 +29,50 @@ import java.util.Date;
 public class MarketSmsValuePo implements Serializable {
 
     private String valueId;
-private String smsId;
-private String smsKey;
-private String statusCd = "0";
-private String smsValue;
-public String getValueId() {
+    private String smsId;
+    private String smsKey;
+    private String statusCd = "0";
+    private String smsValue;
+
+    public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getSmsId() {
+
+    public String getSmsId() {
         return smsId;
     }
-public void setSmsId(String smsId) {
+
+    public void setSmsId(String smsId) {
         this.smsId = smsId;
     }
-public String getSmsKey() {
+
+    public String getSmsKey() {
         return smsKey;
     }
-public void setSmsKey(String smsKey) {
+
+    public void setSmsKey(String smsKey) {
         this.smsKey = smsKey;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getSmsValue() {
+
+    public String getSmsValue() {
         return smsValue;
     }
-public void setSmsValue(String smsValue) {
+
+    public void setSmsValue(String smsValue) {
         this.smsValue = smsValue;
     }
-
 
 
 }
