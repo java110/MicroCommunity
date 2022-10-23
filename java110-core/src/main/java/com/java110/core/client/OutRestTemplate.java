@@ -6,6 +6,7 @@ import com.java110.dto.transactionOutLog.TransactionOutLogDto;
 import com.java110.intf.common.ITransactionOutLogV1ServiceSMO;
 import com.java110.po.transactionOutLog.TransactionOutLogPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
@@ -78,7 +79,7 @@ public class OutRestTemplate extends RestTemplate {
 
         String logServiceCode = MappingCache.getValue(MappingCache.CALL_OUT_LOG);
 
-        if("off".equals(logServiceCode.toLowerCase())){
+        if("off".equals(logServiceCode.toLowerCase()) || url.startsWith(ServiceConstant.BOOT_SERVICE_ORDER_URL)){
             return;
         }
 
