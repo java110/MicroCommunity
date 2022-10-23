@@ -35,7 +35,7 @@ import java.util.List;
  */
 @FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/transactionOutLogV1Api")
-public interface ITransactionOutLogV1InnerServiceSMO {
+public interface ITransactionOutLogV1ServiceSMO {
 
 
     @RequestMapping(value = "/saveTransactionOutLog", method = RequestMethod.POST)

@@ -1,14 +1,11 @@
 package com.java110.core.client;
 
-import com.java110.core.context.ApiDataFlow;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.transactionOutLog.TransactionOutLogDto;
-import com.java110.intf.common.ITransactionOutLogV1InnerServiceSMO;
-import com.java110.po.transactionLog.TransactionLogPo;
+import com.java110.intf.common.ITransactionOutLogV1ServiceSMO;
 import com.java110.po.transactionOutLog.TransactionOutLogPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
@@ -87,18 +84,18 @@ public class OutRestTemplate extends RestTemplate {
 
 
 
-        ITransactionOutLogV1InnerServiceSMO transactionOutLogV1InnerServiceSMO = null;
+        ITransactionOutLogV1ServiceSMO transactionOutLogV1InnerServiceSMO = null;
 
         try {
             transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean(ITransactionOutLogV1InnerServiceSMO.class.getName(), ITransactionOutLogV1InnerServiceSMO.class);
+                    = ApplicationContextFactory.getBean(ITransactionOutLogV1ServiceSMO.class.getName(), ITransactionOutLogV1ServiceSMO.class);
         }catch (Exception e){
             transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1InnerServiceSMO.class);
+                    = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1ServiceSMO.class);
         }
         if(transactionOutLogV1InnerServiceSMO == null){
             transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1InnerServiceSMO.class);
+                    = ApplicationContextFactory.getBean("transactionOutLogV1InnerServiceSMOImpl",ITransactionOutLogV1ServiceSMO.class);
         }
 
         TransactionOutLogPo transactionOutLogPo = new TransactionOutLogPo();
