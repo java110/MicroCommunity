@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketSmsKeyV1ServiceDaoImpl">
+
+
+    <!-- 保存营销配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketSmsKeyInfo" parameterType="Map">
+        insert into market_sms_key(
+        sms_key,name,key_id,sms_type,remark
+        ) values (
+        #{smsKey},#{name},#{keyId},#{smsType},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询营销配置信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketSmsKeyInfo" parameterType="Map" resultType="Map">
+        select t.sms_key,t.sms_key smsKey,t.name,t.key_id,t.key_id keyId,t.sms_type,t.sms_type
+        smsType,t.remark,t.status_cd,t.status_cd statusCd
+        from market_sms_key t
+        where 1 =1
+        <if test="smsKey !=null and smsKey != ''">
+            and t.sms_key= #{smsKey}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            and t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketSmsKeyInfo" parameterType="Map">
+        update market_sms_key t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="smsKey !=null and smsKey != ''">
+            , t.sms_key= #{smsKey}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            , t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketSmsKeysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_sms_key t
+        where 1 =1
+        <if test="smsKey !=null and smsKey != ''">
+            and t.sms_key= #{smsKey}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+        <if test="smsType !=null and smsType != ''">
+            and t.sms_type= #{smsType}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>
