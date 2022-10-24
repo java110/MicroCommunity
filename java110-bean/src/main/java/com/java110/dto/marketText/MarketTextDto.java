@@ -17,6 +17,7 @@ public class MarketTextDto extends PageDto implements Serializable {
 
     private String textId;
     private String sendRate;
+    private String sendRateName;
     private String name;
     private String textContent;
     private String smsId;
@@ -91,5 +92,13 @@ public class MarketTextDto extends PageDto implements Serializable {
 
     public void setSmsName(String smsName) {
         this.smsName = smsName;
+    }
+
+    public String getSendRateName() {
+        return sendRateName;
+    }
+
+    public void setSendRateName(String sendRateName) {
+        this.sendRateName = sendRateName;
     }
 }
