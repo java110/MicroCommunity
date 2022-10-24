@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketTextV1ServiceDaoImpl">
+
+
+    <!-- 保存营销文本信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketTextInfo" parameterType="Map">
+        insert into market_text(
+        text_id,send_rate,name,text_content
+        ) values (
+        #{textId},#{sendRate},#{name},#{textContent}
+        )
+    </insert>
+
+
+    <!-- 查询营销文本信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketTextInfo" parameterType="Map" resultType="Map">
+        select t.text_id,t.text_id textId,t.send_rate,t.send_rate sendRate,t.name,t.text_content,t.text_content
+        textContent,t.status_cd,t.status_cd statusCd
+        from market_text t
+        where 1 =1
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+        <if test="sendRate !=null and sendRate != ''">
+            and t.send_rate= #{sendRate}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="textContent !=null and textContent != ''">
+            and t.text_content= #{textContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销文本信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketTextInfo" parameterType="Map">
+        update market_text t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="sendRate !=null and sendRate != ''">
+            , t.send_rate= #{sendRate}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="textContent !=null and textContent != ''">
+            , t.text_content= #{textContent}
+        </if>
+        where 1=1
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销文本数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketTextsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_text t
+        where 1 =1
+        <if test="textId !=null and textId != ''">
+            and t.text_id= #{textId}
+        </if>
+        <if test="sendRate !=null and sendRate != ''">
+            and t.send_rate= #{sendRate}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="textContent !=null and textContent != ''">
+            and t.text_content= #{textContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>
