@@ -17,7 +17,7 @@
 
     <!-- 查询小区场地预约信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpacePersonInfo" parameterType="Map" resultType="Map">
-        sselect t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way
+        select t.receivable_amount,t.receivable_amount receivableAmount,t.pay_way,t.pay_way
         payWay,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
         receivedAmount,t.person_name,t.person_name personName,t.space_id,t.space_id spaceId,t.csp_id,t.csp_id
         cspId,t.appointment_time,t.appointment_time appointmentTime,t.person_id,t.person_id
