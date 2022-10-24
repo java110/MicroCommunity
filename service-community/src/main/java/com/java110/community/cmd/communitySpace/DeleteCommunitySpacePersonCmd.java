@@ -109,6 +109,7 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
         onlinePayPo.setOrderId(onlinePayDtos.get(0).getOrderId());
         onlinePayPo.setPayId(onlinePayDtos.get(0).getPayId());
         onlinePayPo.setState(OnlinePayDto.STATE_WT);
+        onlinePayPo.setRefundFee(onlinePayDtos.get(0).getTotalFee());
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 }
