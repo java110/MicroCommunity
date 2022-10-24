@@ -1,6 +1,7 @@
 package com.java110.dto.marketText;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,11 @@ import java.util.Date;
 public class MarketTextDto extends PageDto implements Serializable {
 
     private String textId;
-private String sendRate;
-private String name;
-private String textContent;
+    private String sendRate;
+    private String name;
+    private String textContent;
+    private String smsId;
+    private String smsName;
 
 
     private Date createTime;
@@ -28,25 +31,32 @@ private String textContent;
     public String getTextId() {
         return textId;
     }
-public void setTextId(String textId) {
+
+    public void setTextId(String textId) {
         this.textId = textId;
     }
-public String getSendRate() {
+
+    public String getSendRate() {
         return sendRate;
     }
-public void setSendRate(String sendRate) {
+
+    public void setSendRate(String sendRate) {
         this.sendRate = sendRate;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getTextContent() {
+
+    public String getTextContent() {
         return textContent;
     }
-public void setTextContent(String textContent) {
+
+    public void setTextContent(String textContent) {
         this.textContent = textContent;
     }
 
@@ -65,5 +75,21 @@ public void setTextContent(String textContent) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSmsId() {
+        return smsId;
+    }
+
+    public void setSmsId(String smsId) {
+        this.smsId = smsId;
+    }
+
+    public String getSmsName() {
+        return smsName;
+    }
+
+    public void setSmsName(String smsName) {
+        this.smsName = smsName;
     }
 }

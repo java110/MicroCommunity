@@ -17,6 +17,7 @@ package com.java110.po.marketText;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-24 17:09:18 mail: 928255095@qq.com
@@ -28,41 +29,58 @@ import java.util.Date;
 public class MarketTextPo implements Serializable {
 
     private String textId;
-private String sendRate;
-private String name;
-private String textContent;
-private String statusCd = "0";
-public String getTextId() {
+    private String sendRate;
+    private String name;
+    private String textContent;
+    private String statusCd = "0";
+
+    private String smsId;
+
+    public String getTextId() {
         return textId;
     }
-public void setTextId(String textId) {
+
+    public void setTextId(String textId) {
         this.textId = textId;
     }
-public String getSendRate() {
+
+    public String getSendRate() {
         return sendRate;
     }
-public void setSendRate(String sendRate) {
+
+    public void setSendRate(String sendRate) {
         this.sendRate = sendRate;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getTextContent() {
+
+    public String getTextContent() {
         return textContent;
     }
-public void setTextContent(String textContent) {
+
+    public void setTextContent(String textContent) {
         this.textContent = textContent;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
 
+    public String getSmsId() {
+        return smsId;
+    }
 
-
+    public void setSmsId(String smsId) {
+        this.smsId = smsId;
+    }
 }
