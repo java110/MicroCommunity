@@ -2,7 +2,6 @@ package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -10,11 +9,12 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairTypeUserDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.*;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -49,6 +49,9 @@ public class GrabbingRepairCmd extends Cmd {
     @Autowired
     private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
@@ -60,12 +63,24 @@ public class GrabbingRepairCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
-        Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
+//        Assert.hasKeyAndValue(reqJson, "userId", "未包含用户ID");
+//        Assert.hasKeyAndValue(reqJson, "userName", "未包含用户名称");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String userId = context.getReqHeaders().get("user-id");
+        Assert.hasLength(userId, "员工不存在");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "未查询到用户信息");
+
+        reqJson.put("userId", userId);
+        reqJson.put("userName", userDtos.get(0).getName());
+
         int flag = 0;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + reqJson.getString("repairId");
@@ -144,7 +159,7 @@ public class GrabbingRepairCmd extends Cmd {
                     repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
                     List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
                     Assert.listOnlyOne(repairUserDtos, "未找到开始节点或找到多条");
-                    String userId = reqJson.getString("userId");
+                    userId = reqJson.getString("userId");
                     String userName = reqJson.getString("userName");
                     RepairUserPo repairUserPo = new RepairUserPo();
                     repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
@@ -193,5 +208,6 @@ public class GrabbingRepairCmd extends Cmd {
         int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
         if (flag < 1) {
             throw new CmdException("修改工单失败");
-        }    }
+        }
+    }
 }
