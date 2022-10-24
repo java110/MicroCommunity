@@ -18,6 +18,8 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
     public static final String STATE_WAIT_CONFIRM = "W"; //待核销
     public static final String STATE_FINISH = "C"; // 核销完成
 
+    public static final String STATE_CL = "CL";//取消预约
+
     private String spaceId;
     private String cspId;
     private String[] cspIds;

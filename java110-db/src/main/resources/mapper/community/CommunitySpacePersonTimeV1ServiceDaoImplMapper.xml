@@ -69,9 +69,7 @@
         <if test="spaceId !=null and spaceId != ''">
             , t.space_id= #{spaceId}
         </if>
-        <if test="cspId !=null and cspId != ''">
-            , t.csp_id= #{cspId}
-        </if>
+
         <if test="state !=null and state != ''">
             , t.state = #{state}
         </if>
@@ -84,6 +82,9 @@
         where 1=1
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}
+        </if>
+        <if test="cspId !=null and cspId != ''">
+            and t.csp_id= #{cspId}
         </if>
 
     </update>

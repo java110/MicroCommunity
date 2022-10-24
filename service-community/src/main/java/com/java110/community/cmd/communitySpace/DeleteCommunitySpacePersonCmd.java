@@ -22,13 +22,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
+import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
+import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +60,9 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
     @Autowired
     private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cspId", "cspId不能为空");
@@ -77,6 +84,15 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
 
         returnOnlinePayMoney(communitySpacePersonDtos);
 
+        if(!StringUtil.isEmpty(communitySpacePersonDtos.get(0).getOrderId()) &&
+                !"-1".equals(communitySpacePersonDtos.get(0).getOrderId())){
+            communitySpacePersonDto = new CommunitySpacePersonDto();
+            communitySpacePersonDto.setOrderId(communitySpacePersonDtos.get(0).getOrderId());
+            communitySpacePersonDto.setState(CommunitySpacePersonDto.STATE_S);
+            communitySpacePersonDtos = communitySpacePersonV1InnerServiceSMOImpl.queryCommunitySpacePersons(communitySpacePersonDto);
+
+        }
+
         for (CommunitySpacePersonDto communitySpacePersonDto1 : communitySpacePersonDtos) {
             CommunitySpacePersonPo communitySpacePersonPo = new CommunitySpacePersonPo();
             communitySpacePersonPo.setCspId(communitySpacePersonDto1.getCspId());
@@ -86,6 +102,12 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("删除数据失败");
             }
+
+
+            CommunitySpacePersonTimePo communitySpacePersonTimePo = new CommunitySpacePersonTimePo();
+            communitySpacePersonTimePo.setCspId(communitySpacePersonDto1.getCspId());
+            communitySpacePersonTimePo.setState(CommunitySpacePersonTimeDto.STATE_CL);
+            communitySpacePersonTimeV1InnerServiceSMOImpl.updateCommunitySpacePersonTime(communitySpacePersonTimePo);
         }
 
 
