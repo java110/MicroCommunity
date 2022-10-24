@@ -102,6 +102,10 @@ public class ListCommunitySpacePersonCmd extends Cmd {
 
         CommunitySpacePersonTimeDto communitySpaceOpenTimeDto = new CommunitySpacePersonTimeDto();
         communitySpaceOpenTimeDto.setCspIds(cspIds.toArray(new String[cspIds.size()]));
+        communitySpaceOpenTimeDto.setStates(new String[]{
+                CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM,
+                CommunitySpacePersonTimeDto.STATE_FINISH
+        });
         List<CommunitySpacePersonTimeDto> communitySpacePersonTimeDtos
                 = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimes(communitySpaceOpenTimeDto);
 

@@ -30,6 +30,7 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
     private String appointmentTime;
 
     private String state;
+    private String[] states;
 
 
     private Date createTime;
@@ -116,5 +117,13 @@ public class CommunitySpacePersonTimeDto extends PageDto implements Serializable
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

@@ -37,6 +37,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
         </if>
