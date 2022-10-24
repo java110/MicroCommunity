@@ -18,7 +18,7 @@
     <!-- 查询营销文本信息 add by wuxw 2018-07-03 -->
     <select id="getMarketTextInfo" parameterType="Map" resultType="Map">
         select t.text_id,t.text_id textId,t.send_rate,t.send_rate sendRate,t.name,t.text_content,t.text_content
-        textContent,t.status_cd,t.status_cd statusCd,t.sms_id smsId,ms.sms_name smsName,td.name sendRateName
+        textContent,t.status_cd,t.status_cd statusCd,t.sms_id smsId,ms.sms_name smsName,td.name sendRateName,t.create_time createTime
         from market_text t
         left join market_sms ms on t.sms_id = ms.sms_id and ms.status_cd = '0'
         left join t_dict td on t.send_rate = td.status_cd and td.table_name = 'market_text' and td.table_columns = 'send_rate'

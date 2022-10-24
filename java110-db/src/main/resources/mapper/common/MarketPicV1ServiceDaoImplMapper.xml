@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketPicV1ServiceDaoImpl">
+
+
+    <!-- 保存营销图片信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketPicInfo" parameterType="Map">
+        insert into market_pic(
+        pic_url,name,pic_link,remark,pic_id
+        ) values (
+        #{picUrl},#{name},#{picLink},#{remark},#{picId}
+        )
+    </insert>
+
+
+    <!-- 查询营销图片信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketPicInfo" parameterType="Map" resultType="Map">
+        select t.pic_url,t.pic_url picUrl,t.name,t.pic_link,t.pic_link picLink,t.status_cd,t.status_cd
+        statusCd,t.remark,t.pic_id,t.pic_id picId
+        from market_pic t
+        where 1 =1
+        <if test="picUrl !=null and picUrl != ''">
+            and t.pic_url= #{picUrl}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="picLink !=null and picLink != ''">
+            and t.pic_link= #{picLink}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="picId !=null and picId != ''">
+            and t.pic_id= #{picId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销图片信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketPicInfo" parameterType="Map">
+        update market_pic t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="picUrl !=null and picUrl != ''">
+            , t.pic_url= #{picUrl}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="picLink !=null and picLink != ''">
+            , t.pic_link= #{picLink}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="picId !=null and picId != ''">
+            and t.pic_id= #{picId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销图片数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketPicsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_pic t
+        where 1 =1
+        <if test="picUrl !=null and picUrl != ''">
+            and t.pic_url= #{picUrl}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="picLink !=null and picLink != ''">
+            and t.pic_link= #{picLink}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="picId !=null and picId != ''">
+            and t.pic_id= #{picId}
+        </if>
+
+
+    </select>
+
+</mapper>
