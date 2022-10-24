@@ -55,7 +55,6 @@ public class UpdateMarketPicCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "picId", "picId不能为空");
-Assert.hasKeyAndValue(reqJson, "picId", "picId不能为空");
 
     }
 

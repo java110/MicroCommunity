@@ -55,8 +55,8 @@ public class SaveMarketPicCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-Assert.hasKeyAndValue(reqJson, "picUrl", "请求报文中未包含picUrl");
-Assert.hasKeyAndValue(reqJson, "picLink", "请求报文中未包含picLink");
+        Assert.hasKeyAndValue(reqJson, "picUrl", "请求报文中未包含picUrl");
+        Assert.hasKeyAndValue(reqJson, "picLink", "请求报文中未包含picLink");
 
     }
 
@@ -64,7 +64,7 @@ Assert.hasKeyAndValue(reqJson, "picLink", "请求报文中未包含picLink");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MarketPicPo marketPicPo = BeanConvertUtil.covertBean(reqJson, MarketPicPo.class);
+        MarketPicPo marketPicPo = BeanConvertUtil.covertBean(reqJson, MarketPicPo.class);
         marketPicPo.setPicId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = marketPicV1InnerServiceSMOImpl.saveMarketPic(marketPicPo);
 
