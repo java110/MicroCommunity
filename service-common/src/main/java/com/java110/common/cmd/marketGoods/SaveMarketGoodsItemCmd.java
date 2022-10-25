@@ -69,7 +69,7 @@ public class SaveMarketGoodsItemCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         MarketGoodsItemPo marketGoodsItemPo = BeanConvertUtil.covertBean(reqJson, MarketGoodsItemPo.class);
-        marketGoodsItemPo.setGoodsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        marketGoodsItemPo.setItemId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = marketGoodsItemV1InnerServiceSMOImpl.saveMarketGoodsItem(marketGoodsItemPo);
 
         if (flag < 1) {

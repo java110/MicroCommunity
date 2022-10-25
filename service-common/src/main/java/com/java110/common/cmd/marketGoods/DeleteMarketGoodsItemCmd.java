@@ -49,7 +49,7 @@ public class DeleteMarketGoodsItemCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "goodsId", "goodsId不能为空");
+        Assert.hasKeyAndValue(reqJson, "itemId", "itemId不能为空");
 
     }
 

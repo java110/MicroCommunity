@@ -66,9 +66,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="itemId !=null and itemId != ''">
-            , t.item_id= #{itemId}
-        </if>
+
         <if test="picUrl !=null and picUrl != ''">
             , t.pic_url= #{picUrl}
         </if>
@@ -93,6 +91,9 @@
         where 1=1
         <if test="goodsId !=null and goodsId != ''">
             and t.goods_id= #{goodsId}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
         </if>
 
     </update>
