@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketRuleV1ServiceDaoImpl">
+
+
+    <!-- 保存营销规则信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketRuleInfo" parameterType="Map">
+        insert into market_rule(
+        name,remark,rule_id
+        ) values (
+        #{name},#{remark},#{ruleId}
+        )
+    </insert>
+
+
+    <!-- 查询营销规则信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketRuleInfo" parameterType="Map" resultType="Map">
+        select t.name,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId
+        from market_rule t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销规则信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketRuleInfo" parameterType="Map">
+        update market_rule t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销规则数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketRulesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_rule t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+
+
+    </select>
+
+</mapper>
