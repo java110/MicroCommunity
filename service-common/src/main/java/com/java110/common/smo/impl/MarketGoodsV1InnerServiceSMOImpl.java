@@ -98,6 +98,9 @@ public class MarketGoodsV1InnerServiceSMOImpl extends BaseServiceSMO implements 
 
         for(MarketGoodsDto marketGoodsDto1 : marketGoodss){
             for(MarketGoodsItemDto marketGoodsItemDto1:marketGoodsItemDtos){
+                if(!marketGoodsDto1.getGoodsId().equals(marketGoodsItemDto1.getGoodsId())){
+                    continue;
+                }
                 marketGoodsDto1.setGoodsCount(marketGoodsItemDto1.getGoodsCount());
             }
         }
