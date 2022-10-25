@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketGoodsItemV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存营销商品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketGoodsItemInfo" parameterType="Map">
+        insert into market_goods_item(
+item_id,pic_url,goods_id,price,prod_name,shop_name,pic_link,sort,prod_desc
+) values (
+#{itemId},#{picUrl},#{goodsId},#{price},#{prodName},#{shopName},#{picLink},#{sort},#{prodDesc}
+)
+    </insert>
+
+
+
+    <!-- 查询营销商品信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketGoodsItemInfo" parameterType="Map" resultType="Map">
+        select  t.item_id,t.item_id itemId,t.pic_url,t.pic_url picUrl,t.goods_id,t.goods_id goodsId,t.price,t.prod_name,t.prod_name prodName,t.shop_name,t.shop_name shopName,t.pic_link,t.pic_link picLink,t.status_cd,t.status_cd statusCd,t.sort,t.prod_desc,t.prod_desc prodDesc 
+from market_goods_item t 
+where 1 =1 
+<if test="itemId !=null and itemId != ''">
+   and t.item_id= #{itemId}
+</if> 
+<if test="picUrl !=null and picUrl != ''">
+   and t.pic_url= #{picUrl}
+</if> 
+<if test="goodsId !=null and goodsId != ''">
+   and t.goods_id= #{goodsId}
+</if> 
+<if test="price !=null and price != ''">
+   and t.price= #{price}
+</if> 
+<if test="prodName !=null and prodName != ''">
+   and t.prod_name= #{prodName}
+</if> 
+<if test="shopName !=null and shopName != ''">
+   and t.shop_name= #{shopName}
+</if> 
+<if test="picLink !=null and picLink != ''">
+   and t.pic_link= #{picLink}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="sort !=null and sort != ''">
+   and t.sort= #{sort}
+</if> 
+<if test="prodDesc !=null and prodDesc != ''">
+   and t.prod_desc= #{prodDesc}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改营销商品信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketGoodsItemInfo" parameterType="Map">
+        update  market_goods_item t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="itemId !=null and itemId != ''">
+, t.item_id= #{itemId}
+</if> 
+<if test="picUrl !=null and picUrl != ''">
+, t.pic_url= #{picUrl}
+</if> 
+<if test="price !=null and price != ''">
+, t.price= #{price}
+</if> 
+<if test="prodName !=null and prodName != ''">
+, t.prod_name= #{prodName}
+</if> 
+<if test="shopName !=null and shopName != ''">
+, t.shop_name= #{shopName}
+</if> 
+<if test="picLink !=null and picLink != ''">
+, t.pic_link= #{picLink}
+</if> 
+<if test="sort !=null and sort != ''">
+, t.sort= #{sort}
+</if> 
+<if test="prodDesc !=null and prodDesc != ''">
+, t.prod_desc= #{prodDesc}
+</if> 
+ where 1=1 <if test="goodsId !=null and goodsId != ''">
+and t.goods_id= #{goodsId}
+</if> 
+
+    </update>
+
+    <!-- 查询营销商品数量 add by wuxw 2018-07-03 -->
+     <select id="queryMarketGoodsItemsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from market_goods_item t 
+where 1 =1 
+<if test="itemId !=null and itemId != ''">
+   and t.item_id= #{itemId}
+</if> 
+<if test="picUrl !=null and picUrl != ''">
+   and t.pic_url= #{picUrl}
+</if> 
+<if test="goodsId !=null and goodsId != ''">
+   and t.goods_id= #{goodsId}
+</if> 
+<if test="price !=null and price != ''">
+   and t.price= #{price}
+</if> 
+<if test="prodName !=null and prodName != ''">
+   and t.prod_name= #{prodName}
+</if> 
+<if test="shopName !=null and shopName != ''">
+   and t.shop_name= #{shopName}
+</if> 
+<if test="picLink !=null and picLink != ''">
+   and t.pic_link= #{picLink}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="sort !=null and sort != ''">
+   and t.sort= #{sort}
+</if> 
+<if test="prodDesc !=null and prodDesc != ''">
+   and t.prod_desc= #{prodDesc}
+</if> 
+
+
+     </select>
+
+</mapper>
