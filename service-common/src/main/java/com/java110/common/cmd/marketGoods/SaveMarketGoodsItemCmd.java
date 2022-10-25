@@ -55,12 +55,12 @@ public class SaveMarketGoodsItemCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "goodsId", "请求报文中未包含goodsId");
-Assert.hasKeyAndValue(reqJson, "prodName", "请求报文中未包含prodName");
-Assert.hasKeyAndValue(reqJson, "prodDesc", "请求报文中未包含prodDesc");
-Assert.hasKeyAndValue(reqJson, "picUrl", "请求报文中未包含picUrl");
-Assert.hasKeyAndValue(reqJson, "picLink", "请求报文中未包含picLink");
-Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
-Assert.hasKeyAndValue(reqJson, "shopName", "请求报文中未包含shopName");
+        Assert.hasKeyAndValue(reqJson, "prodName", "请求报文中未包含prodName");
+        Assert.hasKeyAndValue(reqJson, "prodDesc", "请求报文中未包含prodDesc");
+        Assert.hasKeyAndValue(reqJson, "picUrl", "请求报文中未包含picUrl");
+        Assert.hasKeyAndValue(reqJson, "picLink", "请求报文中未包含picLink");
+        Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
+        Assert.hasKeyAndValue(reqJson, "shopName", "请求报文中未包含shopName");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "shopName", "请求报文中未包含shopName");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MarketGoodsItemPo marketGoodsItemPo = BeanConvertUtil.covertBean(reqJson, MarketGoodsItemPo.class);
+        MarketGoodsItemPo marketGoodsItemPo = BeanConvertUtil.covertBean(reqJson, MarketGoodsItemPo.class);
         marketGoodsItemPo.setGoodsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = marketGoodsItemV1InnerServiceSMOImpl.saveMarketGoodsItem(marketGoodsItemPo);
 
