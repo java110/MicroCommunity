@@ -108,5 +108,12 @@ public class MarketGoodsItemV1ServiceDaoImpl extends BaseServiceDao implements I
         return Integer.parseInt(businessMarketGoodsItemInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryMarketGoodssGroupCount(Map info) {
+        List<Map> businessMarketGoodsItemInfos = sqlSessionTemplate.selectList("marketGoodsItemV1ServiceDaoImpl.queryMarketGoodssGroupCount",info);
+
+        return businessMarketGoodsItemInfos;
+    }
+
 
 }

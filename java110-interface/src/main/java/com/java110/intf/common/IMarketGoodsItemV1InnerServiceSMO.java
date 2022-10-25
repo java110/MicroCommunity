@@ -65,4 +65,7 @@ public interface IMarketGoodsItemV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMarketGoodsItemsCount", method = RequestMethod.POST)
     int queryMarketGoodsItemsCount(@RequestBody MarketGoodsItemDto marketGoodsItemDto);
+
+    @RequestMapping(value = "/queryMarketGoodssGroupCount", method = RequestMethod.POST)
+    List<MarketGoodsItemDto> queryMarketGoodssGroupCount(@RequestBody MarketGoodsItemDto marketGoodsItemDto);
 }

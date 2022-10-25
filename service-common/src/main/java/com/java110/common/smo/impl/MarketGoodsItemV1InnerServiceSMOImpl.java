@@ -86,4 +86,11 @@ public class MarketGoodsItemV1InnerServiceSMOImpl extends BaseServiceSMO impleme
     public int queryMarketGoodsItemsCount(@RequestBody MarketGoodsItemDto marketGoodsItemDto) {
         return marketGoodsItemV1ServiceDaoImpl.queryMarketGoodsItemsCount(BeanConvertUtil.beanCovertMap(marketGoodsItemDto));    }
 
+    @Override
+    public List<MarketGoodsItemDto> queryMarketGoodssGroupCount(@RequestBody MarketGoodsItemDto marketGoodsItemDto) {
+        List<MarketGoodsItemDto> marketGoodsItems = BeanConvertUtil.covertBeanList(marketGoodsItemV1ServiceDaoImpl.queryMarketGoodssGroupCount(BeanConvertUtil.beanCovertMap(marketGoodsItemDto)), MarketGoodsItemDto.class);
+
+        return marketGoodsItems;
+    }
+
 }

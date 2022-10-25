@@ -1,6 +1,7 @@
 package com.java110.dto.marketGoods;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,8 +16,10 @@ import java.util.Date;
 public class MarketGoodsDto extends PageDto implements Serializable {
 
     private String goodsId;
-private String name;
-private String remark;
+    private String name;
+    private String remark;
+
+    private long goodsCount;
 
 
     private Date createTime;
@@ -27,19 +30,24 @@ private String remark;
     public String getGoodsId() {
         return goodsId;
     }
-public void setGoodsId(String goodsId) {
+
+    public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -58,5 +66,13 @@ public void setRemark(String remark) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public long getGoodsCount() {
+        return goodsCount;
+    }
+
+    public void setGoodsCount(long goodsCount) {
+        this.goodsCount = goodsCount;
     }
 }

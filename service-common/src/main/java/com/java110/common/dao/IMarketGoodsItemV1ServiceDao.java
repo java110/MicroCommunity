@@ -74,4 +74,5 @@ public interface IMarketGoodsItemV1ServiceDao {
      */
     int queryMarketGoodsItemsCount(Map info);
 
+    List<Map> queryMarketGoodssGroupCount(Map map);
 }

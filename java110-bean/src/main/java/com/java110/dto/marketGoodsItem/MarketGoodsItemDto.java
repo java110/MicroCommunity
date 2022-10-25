@@ -1,6 +1,7 @@
 package com.java110.dto.marketGoodsItem;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,17 @@ import java.util.Date;
 public class MarketGoodsItemDto extends PageDto implements Serializable {
 
     private String itemId;
-private String picUrl;
-private String goodsId;
-private String price;
-private String prodName;
-private String shopName;
-private String picLink;
-private String sort;
-private String prodDesc;
+    private String picUrl;
+    private String goodsId;
+    private String[] goodsIds;
+    private String price;
+    private String prodName;
+    private String shopName;
+    private String picLink;
+    private String sort;
+    private String prodDesc;
+
+    private long goodsCount;
 
 
     private Date createTime;
@@ -33,55 +37,72 @@ private String prodDesc;
     public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getPicUrl() {
+
+    public String getPicUrl() {
         return picUrl;
     }
-public void setPicUrl(String picUrl) {
+
+    public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
-public String getGoodsId() {
+
+    public String getGoodsId() {
         return goodsId;
     }
-public void setGoodsId(String goodsId) {
+
+    public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
-public String getPrice() {
+
+    public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getProdName() {
+
+    public String getProdName() {
         return prodName;
     }
-public void setProdName(String prodName) {
+
+    public void setProdName(String prodName) {
         this.prodName = prodName;
     }
-public String getShopName() {
+
+    public String getShopName() {
         return shopName;
     }
-public void setShopName(String shopName) {
+
+    public void setShopName(String shopName) {
         this.shopName = shopName;
     }
-public String getPicLink() {
+
+    public String getPicLink() {
         return picLink;
     }
-public void setPicLink(String picLink) {
+
+    public void setPicLink(String picLink) {
         this.picLink = picLink;
     }
-public String getSort() {
+
+    public String getSort() {
         return sort;
     }
-public void setSort(String sort) {
+
+    public void setSort(String sort) {
         this.sort = sort;
     }
-public String getProdDesc() {
+
+    public String getProdDesc() {
         return prodDesc;
     }
-public void setProdDesc(String prodDesc) {
+
+    public void setProdDesc(String prodDesc) {
         this.prodDesc = prodDesc;
     }
 
@@ -100,5 +121,21 @@ public void setProdDesc(String prodDesc) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getGoodsIds() {
+        return goodsIds;
+    }
+
+    public void setGoodsIds(String[] goodsIds) {
+        this.goodsIds = goodsIds;
+    }
+
+    public long getGoodsCount() {
+        return goodsCount;
+    }
+
+    public void setGoodsCount(long goodsCount) {
+        this.goodsCount = goodsCount;
     }
 }

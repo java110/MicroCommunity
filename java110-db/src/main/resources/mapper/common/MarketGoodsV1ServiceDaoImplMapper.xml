@@ -17,7 +17,7 @@
 
     <!-- 查询营销商品信息 add by wuxw 2018-07-03 -->
     <select id="getMarketGoodsInfo" parameterType="Map" resultType="Map">
-        select t.goods_id,t.goods_id goodsId,t.name,t.status_cd,t.status_cd statusCd,t.remark
+        select t.goods_id,t.goods_id goodsId,t.name,t.status_cd,t.status_cd statusCd,t.remark,t.create_time createTime
         from market_goods t
         where 1 =1
         <if test="goodsId !=null and goodsId != ''">
@@ -79,5 +79,7 @@
 
 
     </select>
+
+
 
 </mapper>

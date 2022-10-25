@@ -17,6 +17,8 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.IMarketGoodsV1ServiceDao;
+import com.java110.dto.marketGoodsItem.MarketGoodsItemDto;
+import com.java110.intf.common.IMarketGoodsItemV1InnerServiceSMO;
 import com.java110.intf.common.IMarketGoodsV1InnerServiceSMO;
 import com.java110.dto.marketGoods.MarketGoodsDto;
 import com.java110.po.marketGoods.MarketGoodsPo;
@@ -44,6 +46,9 @@ public class MarketGoodsV1InnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Autowired
     private IMarketGoodsV1ServiceDao marketGoodsV1ServiceDaoImpl;
+
+    @Autowired
+    private IMarketGoodsItemV1InnerServiceSMO marketGoodsItemV1InnerServiceSMOImpl;
 
 
     @Override
@@ -77,6 +82,25 @@ public class MarketGoodsV1InnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<MarketGoodsDto> marketGoodss = BeanConvertUtil.covertBeanList(marketGoodsV1ServiceDaoImpl.getMarketGoodsInfo(BeanConvertUtil.beanCovertMap(marketGoodsDto)), MarketGoodsDto.class);
+
+        if(marketGoodss == null || marketGoodss.size()<1 || marketGoodss.size()>20){
+            return marketGoodss;
+        }
+        List<String> goodsIds = new ArrayList<>();
+
+        for(MarketGoodsDto marketGoodsDto1 : marketGoodss){
+            goodsIds.add(marketGoodsDto1.getGoodsId());
+        }
+
+        MarketGoodsItemDto marketGoodsItemDto = new MarketGoodsItemDto();
+        marketGoodsItemDto.setGoodsIds(goodsIds.toArray(new String[goodsIds.size()]));
+        List<MarketGoodsItemDto> marketGoodsItemDtos = marketGoodsItemV1InnerServiceSMOImpl.queryMarketGoodssGroupCount(marketGoodsItemDto);
+
+        for(MarketGoodsDto marketGoodsDto1 : marketGoodss){
+            for(MarketGoodsItemDto marketGoodsItemDto1:marketGoodsItemDtos){
+                marketGoodsDto1.setGoodsCount(marketGoodsItemDto1.getGoodsCount());
+            }
+        }
 
         return marketGoodss;
     }
