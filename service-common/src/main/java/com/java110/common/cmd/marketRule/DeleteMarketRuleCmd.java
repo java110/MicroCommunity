@@ -51,7 +51,6 @@ public class DeleteMarketRuleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "ruleId不能为空");
-Assert.hasKeyAndValue(reqJson, "ruleId", "ruleId不能为空");
 
     }
 
