@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "marketRule    .listMarketRuleObj")
+@Java110Cmd(serviceCode = "marketRule.listMarketRuleObj")
 public class ListMarketRuleObjCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListMarketRuleObjCmd.class);
