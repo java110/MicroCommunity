@@ -20,11 +20,24 @@
         select t.person_name,t.person_name personName,t.send_content,t.send_content sendContent,t.send_way,t.send_way
         sendWay,t.open_id,t.open_id openId,t.log_id,t.log_id logId,t.community_name,t.community_name
         communityName,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id
-        communityId,t.person_tel,t.person_tel personTel,t.business_type,t.business_type businessType
+        communityId,t.person_tel,t.person_tel personTel,t.business_type,t.business_type businessType,mr.`name` ruleName,
+        td.`name` sendWayName,td1.name businessTypeName
         from market_log t
+        left join market_rule mr on t.rule_id = mr.rule_id and mr.status_cd = '0'
+        LEFT JOIN t_dict td on td.status_cd = t.send_way and td.table_name = 'market_log' and td.table_columns = 'send_way'
+        LEFT JOIN t_dict td1 on td1.status_cd = t.business_type and td1.table_name = 'market_log' and td1.table_columns = 'business_type'
         where 1 =1
         <if test="personName !=null and personName != ''">
             and t.person_name= #{personName}
+        </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name concat('%', #{personName},'%')
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
         </if>
         <if test="sendContent !=null and sendContent != ''">
             and t.send_content= #{sendContent}
@@ -117,6 +130,15 @@
         where 1 =1
         <if test="personName !=null and personName != ''">
             and t.person_name= #{personName}
+        </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name concat('%', #{personName},'%')
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt; #{endTime}
         </if>
         <if test="sendContent !=null and sendContent != ''">
             and t.send_content= #{sendContent}
