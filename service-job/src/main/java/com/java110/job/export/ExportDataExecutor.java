@@ -47,7 +47,7 @@ public class ExportDataExecutor implements Runnable {
             log.debug("导出数据线程开始处理");
             try {
                 doExportData();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 log.error("处理消息异常", e);
                 e.printStackTrace();
             }
@@ -93,7 +93,7 @@ public class ExportDataExecutor implements Runnable {
 
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FINISH,fileName, "下载完成");
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             updateUserDownloadFile(exportDataDto, UserDownloadFileDto.STATE_FAIL, "","下载失败" + ExceptionUtil.getStackTrace(e));
         } finally {
