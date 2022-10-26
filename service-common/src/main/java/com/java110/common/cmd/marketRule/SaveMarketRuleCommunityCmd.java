@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.marketRuleCommunity.MarketRuleCommunityDto;
 import com.java110.intf.common.IMarketRuleCommunityV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.po.marketRuleCommunity.MarketRuleCommunityPo;
@@ -63,6 +64,16 @@ public class SaveMarketRuleCommunityCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+
+        MarketRuleCommunityDto marketRuleCommunityDto = new MarketRuleCommunityDto();
+        marketRuleCommunityDto.setCommunityId(reqJson.getString("communityId"));
+        marketRuleCommunityDto.setRuleId(reqJson.getString("ruleId"));
+        List<MarketRuleCommunityDto> marketRuleCommunityDtos = marketRuleCommunityV1InnerServiceSMOImpl.queryMarketRuleCommunitys(marketRuleCommunityDto);
+
+        if(marketRuleCommunityDtos != null && marketRuleCommunityDtos.size() > 0){
+            throw new CmdException("小区已经授权");
+        }
 
     }
 
