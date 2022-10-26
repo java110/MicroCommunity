@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketRuleCommunityV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存营销规则小区信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketRuleCommunityInfo" parameterType="Map">
+        insert into market_rule_community(
+rc_id,community_name,remark,rule_id,community_id
+) values (
+#{rcId},#{communityName},#{remark},#{ruleId},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询营销规则小区信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketRuleCommunityInfo" parameterType="Map" resultType="Map">
+        select  t.rc_id,t.rc_id rcId,t.community_name,t.community_name communityName,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId 
+from market_rule_community t 
+where 1 =1 
+<if test="rcId !=null and rcId != ''">
+   and t.rc_id= #{rcId}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改营销规则小区信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketRuleCommunityInfo" parameterType="Map">
+        update  market_rule_community t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="communityName !=null and communityName != ''">
+, t.community_name= #{communityName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+, t.rule_id= #{ruleId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="rcId !=null and rcId != ''">
+and t.rc_id= #{rcId}
+</if> 
+
+    </update>
+
+    <!-- 查询营销规则小区数量 add by wuxw 2018-07-03 -->
+     <select id="queryMarketRuleCommunitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from market_rule_community t 
+where 1 =1 
+<if test="rcId !=null and rcId != ''">
+   and t.rc_id= #{rcId}
+</if> 
+<if test="communityName !=null and communityName != ''">
+   and t.community_name= #{communityName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>
