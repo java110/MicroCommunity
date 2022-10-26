@@ -20,7 +20,8 @@
         t.act_user_name,t.act_user_name actUserName,t.operate,t.sign_type,t.sign_type signType,
         t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name planUserName,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id actUserId,t.task_id,
-        t.task_id taskId,t.state,t.original_plan_user_id,t.original_plan_user_id originalPlanUserId,t.original_plan_user_name,t.original_plan_user_name originalPlanUserName,
+        t.task_id taskId,t.state,t.original_plan_user_id,t.original_plan_user_id
+        originalPlanUserId,t.original_plan_user_name,t.original_plan_user_name originalPlanUserName,
         t.transfer_desc,t.transfer_desc transferDesc,t.task_type,t.task_type taskType from business_inspection_task t
         where 1 =1
         <if test="planUserId !=null and planUserId != ''">
@@ -124,7 +125,8 @@
         signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name
         planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id
         actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,ip.inspection_plan_name
-        inspectionPlanName,t.original_plan_user_id,t.original_plan_user_id originalPlanUserId,t.original_plan_user_name,t.original_plan_user_name originalPlanUserName,
+        inspectionPlanName,t.original_plan_user_id,t.original_plan_user_id
+        originalPlanUserId,t.original_plan_user_name,t.original_plan_user_name originalPlanUserName,
         t.transfer_desc,t.transfer_desc transferDesc,t.task_type,t.task_type taskType
         from inspection_task t,inspection_plan ip,t_dict td1,t_dict td2
         where 1 =1
