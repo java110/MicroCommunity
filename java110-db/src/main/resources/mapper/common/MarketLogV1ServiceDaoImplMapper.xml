@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketLogV1ServiceDaoImpl">
+
+
+    <!-- 保存营销记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketLogInfo" parameterType="Map">
+        insert into market_log(
+        person_name,send_content,send_way,open_id,log_id,community_name,remark,rule_id,community_id,person_tel,business_type
+        ) values (
+        #{personName},#{sendContent},#{sendWay},#{openId},#{logId},#{communityName},#{remark},#{ruleId},#{communityId},#{personTel},#{businessType}
+        )
+    </insert>
+
+
+    <!-- 查询营销记录信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketLogInfo" parameterType="Map" resultType="Map">
+        select t.person_name,t.person_name personName,t.send_content,t.send_content sendContent,t.send_way,t.send_way
+        sendWay,t.open_id,t.open_id openId,t.log_id,t.log_id logId,t.community_name,t.community_name
+        communityName,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id
+        communityId,t.person_tel,t.person_tel personTel,t.business_type,t.business_type businessType
+        from market_log t
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="sendContent !=null and sendContent != ''">
+            and t.send_content= #{sendContent}
+        </if>
+        <if test="sendWay !=null and sendWay != ''">
+            and t.send_way= #{sendWay}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            and t.business_type= #{businessType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改营销记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketLogInfo" parameterType="Map">
+        update market_log t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="sendContent !=null and sendContent != ''">
+            , t.send_content= #{sendContent}
+        </if>
+        <if test="sendWay !=null and sendWay != ''">
+            , t.send_way= #{sendWay}
+        </if>
+        <if test="openId !=null and openId != ''">
+            , t.open_id= #{openId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            , t.business_type= #{businessType}
+        </if>
+        where 1=1
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+
+    </update>
+
+    <!-- 查询营销记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryMarketLogsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from market_log t
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="sendContent !=null and sendContent != ''">
+            and t.send_content= #{sendContent}
+        </if>
+        <if test="sendWay !=null and sendWay != ''">
+            and t.send_way= #{sendWay}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="logId !=null and logId != ''">
+            and t.log_id= #{logId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="businessType !=null and businessType != ''">
+            and t.business_type= #{businessType}
+        </if>
+
+
+    </select>
+
+</mapper>
