@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="marketBlacklistV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存营销黑名单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMarketBlacklistInfo" parameterType="Map">
+        insert into market_blacklist(
+person_name,filter,remark,bl_id
+) values (
+#{personName},#{filter},#{remark},#{blId}
+)
+    </insert>
+
+
+
+    <!-- 查询营销黑名单信息 add by wuxw 2018-07-03 -->
+    <select id="getMarketBlacklistInfo" parameterType="Map" resultType="Map">
+        select  t.person_name,t.person_name personName,t.filter,t.status_cd,t.status_cd statusCd,t.remark,t.bl_id,t.bl_id blId 
+from market_blacklist t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="filter !=null and filter != ''">
+   and t.filter= #{filter}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="blId !=null and blId != ''">
+   and t.bl_id= #{blId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改营销黑名单信息 add by wuxw 2018-07-03 -->
+    <update id="updateMarketBlacklistInfo" parameterType="Map">
+        update  market_blacklist t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="personName !=null and personName != ''">
+, t.person_name= #{personName}
+</if> 
+<if test="filter !=null and filter != ''">
+, t.filter= #{filter}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+ where 1=1 <if test="blId !=null and blId != ''">
+and t.bl_id= #{blId}
+</if> 
+
+    </update>
+
+    <!-- 查询营销黑名单数量 add by wuxw 2018-07-03 -->
+     <select id="queryMarketBlacklistsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from market_blacklist t 
+where 1 =1 
+<if test="personName !=null and personName != ''">
+   and t.person_name= #{personName}
+</if> 
+<if test="filter !=null and filter != ''">
+   and t.filter= #{filter}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="blId !=null and blId != ''">
+   and t.bl_id= #{blId}
+</if> 
+
+
+     </select>
+
+</mapper>
