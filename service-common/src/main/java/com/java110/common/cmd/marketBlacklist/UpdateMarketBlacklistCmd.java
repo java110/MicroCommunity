@@ -55,7 +55,6 @@ public class UpdateMarketBlacklistCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "blId", "blId不能为空");
-Assert.hasKeyAndValue(reqJson, "blId", "blId不能为空");
 
     }
 
