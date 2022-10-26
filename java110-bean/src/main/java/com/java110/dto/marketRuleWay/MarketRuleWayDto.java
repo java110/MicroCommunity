@@ -17,9 +17,14 @@ public class MarketRuleWayDto extends PageDto implements Serializable {
 
     private String wayId;
     private String wayType;
+    private String wayTypeName;
     private String wayObjId;
     private String remark;
     private String ruleId;
+
+    private String textName;
+    private String picName;
+    private String goodsName;
 
 
     private Date createTime;
@@ -82,5 +87,37 @@ public class MarketRuleWayDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTextName() {
+        return textName;
+    }
+
+    public void setTextName(String textName) {
+        this.textName = textName;
+    }
+
+    public String getPicName() {
+        return picName;
+    }
+
+    public void setPicName(String picName) {
+        this.picName = picName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getWayTypeName() {
+        return wayTypeName;
+    }
+
+    public void setWayTypeName(String wayTypeName) {
+        this.wayTypeName = wayTypeName;
     }
 }

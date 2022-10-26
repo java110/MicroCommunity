@@ -18,8 +18,13 @@
     <!-- 查询营销规则方式信息 add by wuxw 2018-07-03 -->
     <select id="getMarketRuleWayInfo" parameterType="Map" resultType="Map">
         select t.way_id,t.way_id wayId,t.way_type,t.way_type wayType,t.way_obj_id,t.way_obj_id
-        wayObjId,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId
+        wayObjId,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId,
+        mt.name textName,mp.`name` picName,mg.name goodsName,td.`name` wayTypeName
         from market_rule_way t
+        left join market_text mt on t.way_obj_id = mt.text_id and t.way_type = '1001' and mt.status_cd =  '0'
+        left join market_pic mp on t.way_obj_id = mp.pic_id and t.way_type = '2002' and mp.status_cd =  '0'
+        left join market_goods mg on t.way_obj_id = mg.goods_id and t.way_type = '3003' and mg.status_cd =  '0'
+        left join t_dict td on t.way_type = td.status_cd and td.table_name = 'market_rule_way' and td.table_columns = 'way_type'
         where 1 =1
         <if test="wayId !=null and wayId != ''">
             and t.way_id= #{wayId}
