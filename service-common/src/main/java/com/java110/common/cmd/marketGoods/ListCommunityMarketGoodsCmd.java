@@ -105,7 +105,7 @@ public class ListCommunityMarketGoodsCmd extends Cmd {
 
         MarketRuleWayDto marketRuleWayDto = new MarketRuleWayDto();
         marketRuleWayDto.setRuleIds(ruleIds.toArray(new String[ruleIds.size()]));
-        marketRuleWayDto.setWayType(MarketRuleWayDto.WAY_TYPE_PIC);
+        marketRuleWayDto.setWayType(MarketRuleWayDto.WAY_TYPE_GOODS);
         List<MarketRuleWayDto> marketRuleWayDtos = marketRuleWayV1InnerServiceSMOImpl.queryMarketRuleWays(marketRuleWayDto);
 
         if(marketRuleWayDtos == null || marketRuleWayDtos.size()<1){
