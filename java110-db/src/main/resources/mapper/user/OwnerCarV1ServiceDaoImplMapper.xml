@@ -44,6 +44,12 @@
         <if test="leaseType !=null and leaseType != ''">
             and t.lease_type= #{leaseType}
         </if>
+        <if test="leaseTypes !=null ">
+            and t.lease_type in
+            <foreach collection="leaseTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}
         </if>
@@ -167,6 +173,12 @@
         </if>
         <if test="leaseType !=null and leaseType != ''">
             and t.lease_type= #{leaseType}
+        </if>
+        <if test="leaseTypes !=null ">
+            and t.lease_type in
+            <foreach collection="leaseTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}

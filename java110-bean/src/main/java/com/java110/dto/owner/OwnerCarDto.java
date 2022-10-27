@@ -90,6 +90,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String oweAmount;
 
     private String leaseType;
+    private String[] leaseTypes;
 
     private String leaseTypeName;
 
@@ -461,5 +462,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCarTypeCdName(String carTypeCdName) {
         this.carTypeCdName = carTypeCdName;
+    }
+
+    public String[] getLeaseTypes() {
+        return leaseTypes;
+    }
+
+    public void setLeaseTypes(String[] leaseTypes) {
+        this.leaseTypes = leaseTypes;
     }
 }
