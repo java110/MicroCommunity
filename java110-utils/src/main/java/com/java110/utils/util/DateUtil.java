@@ -465,6 +465,23 @@ public class DateUtil {
         return sf.format(c.getTime());
     }
 
+    public static String getAddDayStringA(Date date,int days) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, days);
+        return sf.format(c.getTime());
+    }
+
+
+    public static String getAddMonthStringA(Date date,int month) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, month);
+        return sf.format(c.getTime());
+    }
+
     /**
      * 在给定的日期加上或减去指定月份后的日期
      *

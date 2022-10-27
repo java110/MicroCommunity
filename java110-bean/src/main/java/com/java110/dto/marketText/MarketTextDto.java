@@ -15,6 +15,11 @@ import java.util.Date;
  **/
 public class MarketTextDto extends PageDto implements Serializable {
 
+    public static final String SEND_RATE_DAY="1001";
+    public static final String SEND_RATE_MONTH="2002";
+    public static final String SEND_RATE_NO="3003";
+
+    private String ruleId;
     private String textId;
     private String sendRate;
     private String sendRateName;
@@ -22,6 +27,8 @@ public class MarketTextDto extends PageDto implements Serializable {
     private String textContent;
     private String smsId;
     private String smsName;
+
+    private String smsType;
 
 
     private Date createTime;
@@ -100,5 +107,21 @@ public class MarketTextDto extends PageDto implements Serializable {
 
     public void setSendRateName(String sendRateName) {
         this.sendRateName = sendRateName;
+    }
+
+    public String getSmsType() {
+        return smsType;
+    }
+
+    public void setSmsType(String smsType) {
+        this.smsType = smsType;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }

@@ -15,10 +15,18 @@ import java.util.Date;
  **/
 public class MarketRuleObjDto extends PageDto implements Serializable {
 
+    public static final String OBJ_TYPE_ACCESS_CONTROL = "1001";
+    public static final String OBJ_TYPE_BARRIER = "2002";
+    public static final String OBJ_TYPE_PAY_FINISH = "3003";
+    public static final String OBJ_TYPE_REPAIR_SUMMIT = "4004";
+    //对象类型 1001 门禁 2002 车辆道闸 3003 手机支付完成 4004 报修单提交
+
     private String objId;
     private String remark;
     private String ruleId;
+    private String[] ruleIds;
     private String objType;
+    private String[] objTypes;
     private String objTypeName;
 
 
@@ -82,5 +90,21 @@ public class MarketRuleObjDto extends PageDto implements Serializable {
 
     public void setObjTypeName(String objTypeName) {
         this.objTypeName = objTypeName;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
+    }
+
+    public String[] getObjTypes() {
+        return objTypes;
+    }
+
+    public void setObjTypes(String[] objTypes) {
+        this.objTypes = objTypes;
     }
 }

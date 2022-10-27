@@ -32,6 +32,12 @@
         <if test="wayType !=null and wayType != ''">
             and t.way_type= #{wayType}
         </if>
+        <if test="wayTypes !=null ">
+            and t.way_type in
+            <foreach collection="wayTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="wayObjId !=null and wayObjId != ''">
             and t.way_obj_id= #{wayObjId}
         </if>
@@ -44,6 +50,13 @@
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
         </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -88,6 +101,12 @@
         <if test="wayType !=null and wayType != ''">
             and t.way_type= #{wayType}
         </if>
+        <if test="wayTypes !=null ">
+            and t.way_type in
+            <foreach collection="wayTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="wayObjId !=null and wayObjId != ''">
             and t.way_obj_id= #{wayObjId}
         </if>
@@ -99,6 +118,12 @@
         </if>
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
+        </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 

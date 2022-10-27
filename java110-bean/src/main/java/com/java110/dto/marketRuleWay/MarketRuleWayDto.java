@@ -15,12 +15,19 @@ import java.util.Date;
  **/
 public class MarketRuleWayDto extends PageDto implements Serializable {
 
+    public static final String WAY_TYPE_TEXT = "1001";
+    public static final String WAY_TYPE_PIC = "2002";
+    public static final String WAY_TYPE_GOODS = "3003";
+            //营销方式类型 1001 文本 2002 图片 3003 商品
+
     private String wayId;
     private String wayType;
+    private String[] wayTypes;
     private String wayTypeName;
     private String wayObjId;
     private String remark;
     private String ruleId;
+    private String[] ruleIds;
 
     private String textName;
     private String picName;
@@ -119,5 +126,21 @@ public class MarketRuleWayDto extends PageDto implements Serializable {
 
     public void setWayTypeName(String wayTypeName) {
         this.wayTypeName = wayTypeName;
+    }
+
+    public String[] getWayTypes() {
+        return wayTypes;
+    }
+
+    public void setWayTypes(String[] wayTypes) {
+        this.wayTypes = wayTypes;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
     }
 }

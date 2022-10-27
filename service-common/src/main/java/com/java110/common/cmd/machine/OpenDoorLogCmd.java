@@ -2,6 +2,7 @@ package com.java110.common.cmd.machine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -103,6 +104,7 @@ public class OpenDoorLogCmd extends Cmd{
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         MachineRecordDto machineRecordDto = BeanConvertUtil.covertBean(reqJson, MachineRecordDto.class);
@@ -159,9 +161,9 @@ public class OpenDoorLogCmd extends Cmd{
         if (count < 1) {
             context.setResponseEntity(ResultVo.error("上传记录失败"));
         }
-        //传送databus
-        dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
-                BusinessTypeConstant.BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG, BeanConvertUtil.beanCovertJson(machineRecordPo)));
+//        //传送databus
+//        dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+//                BusinessTypeConstant.BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG, BeanConvertUtil.beanCovertJson(machineRecordPo)));
         context.setResponseEntity(ResultVo.success());
     }
 }

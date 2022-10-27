@@ -34,9 +34,22 @@
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
         </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
+        <if test="objTypes !=null ">
+            and t.obj_type in
+            <foreach collection="objTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -84,8 +97,20 @@
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
         </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
+        </if>
+        <if test="objTypes !=null ">
+            and t.obj_type in
+            <foreach collection="objTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 
