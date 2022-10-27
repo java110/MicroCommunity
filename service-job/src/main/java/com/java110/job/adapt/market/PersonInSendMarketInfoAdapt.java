@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 发送营销信息
+ * 人员进场发送营销信息
  *
  * 根据 admin账户下 营销配置 发送
  *
