@@ -50,7 +50,7 @@ public class SendExecutorSMS extends DefaultSendExecutor {
     private OutRestTemplate outRestTemplate;
 
     @Override
-    public ResultVo doSend(MarketTextDto marketTextDto, String tel, String communityId) {
+    public ResultVo doSend(MarketTextDto marketTextDto, String tel, String communityId,String openId) {
 
         MarketSmsValueDto marketSmsValueDto = new MarketSmsValueDto();
         marketSmsValueDto.setSmsId(marketTextDto.getSmsId());

@@ -27,6 +27,12 @@
         <if test="filter !=null and filter != ''">
             and t.filter= #{filter}
         </if>
+        <if test="filters !=null ">
+            and t.filter in
+            <foreach collection="filters" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -76,6 +82,12 @@
         </if>
         <if test="filter !=null and filter != ''">
             and t.filter= #{filter}
+        </if>
+        <if test="filters !=null ">
+            and t.filter in
+            <foreach collection="filters" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

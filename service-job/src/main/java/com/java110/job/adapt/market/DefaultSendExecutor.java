@@ -1,11 +1,13 @@
 package com.java110.job.adapt.market;
 
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.marketBlacklist.MarketBlacklistDto;
 import com.java110.dto.marketLog.MarketLogDto;
 import com.java110.dto.marketSmsValue.MarketSmsValueDto;
 import com.java110.dto.marketText.MarketTextDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IMarketBlacklistV1InnerServiceSMO;
 import com.java110.intf.common.IMarketLogV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -29,6 +31,9 @@ public  abstract class DefaultSendExecutor implements ISendExecutor {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IMarketBlacklistV1InnerServiceSMO marketBlacklistV1InnerServiceSMOImpl;
 
 
     @Override
@@ -58,8 +63,15 @@ public  abstract class DefaultSendExecutor implements ISendExecutor {
             return;
         }
 
+        //判断是否为黑名单
 
-        ResultVo resultVo = doSend(marketTextDto,tel,communityId);
+        if(validateBlacklist(tel,openId)){
+            return ;
+        }
+
+
+
+        ResultVo resultVo = doSend(marketTextDto,tel,communityId,openId);
 
         String userName = "未知";
 
@@ -91,13 +103,26 @@ public  abstract class DefaultSendExecutor implements ISendExecutor {
         marketLogV1InnerServiceSMOImpl.saveMarketLog(marketLogPo);
     }
 
+    private boolean validateBlacklist(String tel, String openId) {
+
+        MarketBlacklistDto marketBlacklistDto = new MarketBlacklistDto();
+        marketBlacklistDto.setFilters(new String[]{tel,openId});
+        int count = marketBlacklistV1InnerServiceSMOImpl.queryMarketBlacklistsCount(marketBlacklistDto);
+
+        if(count> 0){
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * 发送消息
      * @param marketTextDto
      * @param tel
      * @param communityId
      */
-    public abstract ResultVo doSend(MarketTextDto marketTextDto, String tel, String communityId);
+    public abstract ResultVo doSend(MarketTextDto marketTextDto, String tel, String communityId,String openId);
 
 
     private String getOpenId(MarketTextDto marketTextDto,String tel, String communityId) {
