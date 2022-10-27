@@ -79,7 +79,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/alipay.payTempCarFee,");
         exclusions.append("/app/alipay/notify/receive,");
         exclusions.append("/app/parkingCoupon.listParkingCouponCar,");
-
+        exclusions.append("/app/marketPic.listCommunityMarketPic,");
+        exclusions.append("/app/marketGoods.listCommunityMarketGoods,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

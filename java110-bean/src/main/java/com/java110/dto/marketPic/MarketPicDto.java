@@ -1,6 +1,7 @@
 package com.java110.dto.marketPic;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,10 @@ import java.util.Date;
 public class MarketPicDto extends PageDto implements Serializable {
 
     private String picUrl;
-private String name;
-private String picLink;
-private String remark;
-private String picId;
+    private String name;
+    private String picLink;
+    private String remark;
+    private String picId;
 
 
     private Date createTime;
@@ -29,31 +30,40 @@ private String picId;
     public String getPicUrl() {
         return picUrl;
     }
-public void setPicUrl(String picUrl) {
+
+    public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getPicLink() {
+
+    public String getPicLink() {
         return picLink;
     }
-public void setPicLink(String picLink) {
+
+    public void setPicLink(String picLink) {
         this.picLink = picLink;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getPicId() {
+
+    public String getPicId() {
         return picId;
     }
-public void setPicId(String picId) {
+
+    public void setPicId(String picId) {
         this.picId = picId;
     }
 
