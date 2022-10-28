@@ -9,6 +9,7 @@ import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionPlan.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
+import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -28,7 +29,7 @@ import java.util.List;
 public class ListInspectionPlansCmd extends Cmd {
 
     @Autowired
-    private IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl;
+    private IInspectionPlanV1InnerServiceSMO inspectionPlanV1InnerServiceSMOImpl;
     @Autowired
     private IOrgStaffRelInnerServiceSMO iOrgStaffRelInnerServiceSMO;
     @Autowired
@@ -44,12 +45,12 @@ public class ListInspectionPlansCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         InspectionPlanDto inspectionPlanDto = BeanConvertUtil.covertBean(reqJson, InspectionPlanDto.class);
 
-        int count = inspectionPlanInnerServiceSMOImpl.queryInspectionPlansCount(inspectionPlanDto);
+        int count = inspectionPlanV1InnerServiceSMOImpl.queryInspectionPlansCount(inspectionPlanDto);
 
         List<ApiInspectionPlanDataVo> inspectionPlans = null;
 
         if (count > 0) {
-            inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
+            inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanV1InnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
             List<Object> staffIds = new ArrayList<Object>();
             List<Object> inspectionRouteIds = new ArrayList<Object>();
             for (ApiInspectionPlanDataVo Plans : inspectionPlans) {
