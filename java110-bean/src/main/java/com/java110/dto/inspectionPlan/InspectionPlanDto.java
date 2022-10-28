@@ -46,6 +46,12 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String inspectionPlanPeriodName;
     private String signTypeName;
     private String keyWord;
+    private String inspectionMonth;
+    private String inspectionDay;
+    private String inspectionWorkday;
+    private String startDate;
+    private String endDate;
+    private String beforeTime;
 
 
     public String getInspectionPlanName() {
@@ -224,5 +230,53 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setCurTime(String curTime) {
         this.curTime = curTime;
+    }
+
+    public String getInspectionMonth() {
+        return inspectionMonth;
+    }
+
+    public void setInspectionMonth(String inspectionMonth) {
+        this.inspectionMonth = inspectionMonth;
+    }
+
+    public String getInspectionDay() {
+        return inspectionDay;
+    }
+
+    public void setInspectionDay(String inspectionDay) {
+        this.inspectionDay = inspectionDay;
+    }
+
+    public String getInspectionWorkday() {
+        return inspectionWorkday;
+    }
+
+    public void setInspectionWorkday(String inspectionWorkday) {
+        this.inspectionWorkday = inspectionWorkday;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getBeforeTime() {
+        return beforeTime;
+    }
+
+    public void setBeforeTime(String beforeTime) {
+        this.beforeTime = beforeTime;
     }
 }

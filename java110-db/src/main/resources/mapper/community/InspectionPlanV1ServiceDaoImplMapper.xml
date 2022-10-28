@@ -8,9 +8,13 @@
     <!-- 保存巡检计划信息 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionPlanInfo" parameterType="Map">
         insert into inspection_plan(
-        inspection_plan_name,create_user_id,inspection_route_id,inspection_plan_period,remark,create_user_name,sign_type,start_time,inspection_plan_id,end_time,state,community_id
+        inspection_plan_name,create_user_id,inspection_route_id,inspection_plan_period,remark,
+        create_user_name,sign_type,start_time,inspection_plan_id,end_time,state,community_id,
+        start_date,end_date,inspection_month,inspection_day,inspection_workday,before_time
         ) values (
-        #{inspectionPlanName},#{createUserId},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},#{createUserName},#{signType},#{startTime},#{inspectionPlanId},#{endTime},#{state},#{communityId}
+        #{inspectionPlanName},#{createUserId},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
+        #{createUserName},#{signType},#{startTime},#{inspectionPlanId},#{endTime},#{state},#{communityId},
+        #{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{beforeTime}
         )
     </insert>
 
@@ -23,7 +27,9 @@
         inspectionPlanPeriod,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.sign_type,t.sign_type signType,t.start_time,t.start_time
         startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
-        endTime,t.state,t.community_id,t.community_id communityId
+        endTime,t.state,t.community_id,t.community_id communityId,
+        t.start_date startDate,t.end_date endDate,t.inspection_month inspectionMonth,t.inspection_day inspectionDay,
+        t.inspection_workday inspectionWorkday,t.before_time beforeTime
         from inspection_plan t
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
@@ -58,6 +64,15 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
+        </if>
+        <if test="startDate !=null and startDate != ''">
+            and t.start_date= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate != ''">
+            and t.end_date= #{endDate}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            and t.before_time = #{beforeTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -109,12 +124,33 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
+
+        <if test="startDate !=null and startDate != ''">
+            , t.start_date= #{startDate}
         </if>
+        <if test="endDate !=null and endDate != ''">
+            , t.end_date= #{endDate}
+        </if>
+
+        <if test="inspectionMonth !=null and inspectionMonth != ''">
+            , t.inspection_month = #{inspectionMonth}
+        </if>
+        <if test="inspectionDay !=null and inspectionDay != ''">
+            , t.inspection_day= #{inspectionDay}
+        </if>
+        <if test="inspectionWorkday !=null and inspectionWorkday != ''">
+            ,t.inspection_workday= #{inspectionWorkday}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            , t.before_time = #{beforeTime}
+        </if>
+
         where 1=1
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -157,11 +193,20 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
+        <if test="startDate !=null and startDate != ''">
+            and t.start_date= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate != ''">
+            and t.end_date= #{endDate}
+        </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            and t.before_time = #{beforeTime}
         </if>
 
 

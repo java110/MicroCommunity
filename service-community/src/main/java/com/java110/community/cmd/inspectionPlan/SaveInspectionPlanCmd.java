@@ -1,5 +1,6 @@
 package com.java110.community.cmd.inspectionPlan;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -7,9 +8,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.community.IInspectionPlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.inspection.InspectionPlanPo;
+import com.java110.po.inspection.InspectionPlanStaffPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -25,6 +28,9 @@ public class SaveInspectionPlanCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IInspectionPlanStaffV1InnerServiceSMO inspectionPlanStaffV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -60,6 +66,20 @@ public class SaveInspectionPlanCmd extends Cmd {
         int flag = inspectionPlanV1InnerServiceSMOImpl.saveInspectionPlan(inspectionPlanPo);
         if (flag < 1) {
             throw new CmdException("保存巡检计划失败");
+        }
+
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+        InspectionPlanStaffPo inspectionPlanStaffPo = null;
+        for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
+            inspectionPlanStaffPo = new InspectionPlanStaffPo();
+            inspectionPlanStaffPo.setCommunityId(reqJson.getString("communityId"));
+            inspectionPlanStaffPo.setEndTime(reqJson.getString("endTime"));
+            inspectionPlanStaffPo.setInspectionPlanId(inspectionPlanPo.getInspectionPlanId());
+            inspectionPlanStaffPo.setIpStaffId(GenerateCodeFactory.getGeneratorId("11"));
+            inspectionPlanStaffPo.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
+            inspectionPlanStaffPo.setStaffName(staffs.getJSONObject(staffIndex).getString("name"));
+            inspectionPlanStaffPo.setStartTime(reqJson.getString("startTime"));
+            inspectionPlanStaffV1InnerServiceSMOImpl.saveInspectionPlanStaff(inspectionPlanStaffPo);
         }
     }
 }
