@@ -1,6 +1,7 @@
 package com.java110.dto.scheduleClasses;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,13 +16,17 @@ import java.util.Date;
 public class ScheduleClassesDto extends PageDto implements Serializable {
 
     private String scheduleType;
-private String scheduleCycle;
-private String computeTime;
-private String name;
-private String remark;
-private String state;
-private String storeId;
-private String scheduleId;
+    private String scheduleTypeName;
+    private String scheduleCycle;
+    private String computeTime;
+    private String name;
+    private String nameLike;
+    private String remark;
+    private String state;
+    private String stateName;
+    private String storeId;
+    private String scheduleId;
+    private long staffCount;
 
 
     private Date createTime;
@@ -32,49 +37,64 @@ private String scheduleId;
     public String getScheduleType() {
         return scheduleType;
     }
-public void setScheduleType(String scheduleType) {
+
+    public void setScheduleType(String scheduleType) {
         this.scheduleType = scheduleType;
     }
-public String getScheduleCycle() {
+
+    public String getScheduleCycle() {
         return scheduleCycle;
     }
-public void setScheduleCycle(String scheduleCycle) {
+
+    public void setScheduleCycle(String scheduleCycle) {
         this.scheduleCycle = scheduleCycle;
     }
-public String getComputeTime() {
+
+    public String getComputeTime() {
         return computeTime;
     }
-public void setComputeTime(String computeTime) {
+
+    public void setComputeTime(String computeTime) {
         this.computeTime = computeTime;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getScheduleId() {
+
+    public String getScheduleId() {
         return scheduleId;
     }
-public void setScheduleId(String scheduleId) {
+
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
 
@@ -93,5 +113,37 @@ public void setScheduleId(String scheduleId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getScheduleTypeName() {
+        return scheduleTypeName;
+    }
+
+    public void setScheduleTypeName(String scheduleTypeName) {
+        this.scheduleTypeName = scheduleTypeName;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public long getStaffCount() {
+        return staffCount;
+    }
+
+    public void setStaffCount(long staffCount) {
+        this.staffCount = staffCount;
     }
 }

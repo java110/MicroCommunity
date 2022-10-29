@@ -86,4 +86,19 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
     public int queryScheduleClassesStaffsCount(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto) {
         return scheduleClassesStaffV1ServiceDaoImpl.queryScheduleClassesStaffsCount(BeanConvertUtil.beanCovertMap(scheduleClassesStaffDto));    }
 
+    @Override
+    public List<ScheduleClassesStaffDto> queryGroupScheduleClassesStaffs(@RequestBody  ScheduleClassesStaffDto scheduleClassesStaffDto) {
+
+        //校验是否传了 分页信息
+
+        int page = scheduleClassesStaffDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            scheduleClassesStaffDto.setPage((page - 1) * scheduleClassesStaffDto.getRow());
+        }
+
+        List<ScheduleClassesStaffDto> scheduleClassesStaffs = BeanConvertUtil.covertBeanList(scheduleClassesStaffV1ServiceDaoImpl.getGroupScheduleClassesStaffInfo(BeanConvertUtil.beanCovertMap(scheduleClassesStaffDto)), ScheduleClassesStaffDto.class);
+
+        return scheduleClassesStaffs;
+    }
 }

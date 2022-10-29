@@ -74,4 +74,16 @@ public interface IScheduleClassesStaffV1ServiceDao {
      */
     int queryScheduleClassesStaffsCount(Map info);
 
+
+
+    /**
+     * 查询排班员工信息（instance过程）
+     * 根据bId 查询排班员工信息
+     * @param info bId 信息
+     * @return 排班员工信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getGroupScheduleClassesStaffInfo(Map info) throws DAOException;
+
+
 }

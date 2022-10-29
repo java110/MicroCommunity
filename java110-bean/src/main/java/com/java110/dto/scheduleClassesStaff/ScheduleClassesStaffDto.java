@@ -1,6 +1,7 @@
 package com.java110.dto.scheduleClassesStaff;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,13 @@ import java.util.Date;
 public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     private String staffName;
-private String storeId;
-private String scsId;
-private String scheduleId;
-private String staffId;
+    private String storeId;
+    private String scsId;
+    private String scheduleId;
+    private String[] scheduleIds;
+    private String staffId;
+
+    private long staffCount;
 
 
     private Date createTime;
@@ -29,31 +33,40 @@ private String staffId;
     public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getScsId() {
+
+    public String getScsId() {
         return scsId;
     }
-public void setScsId(String scsId) {
+
+    public void setScsId(String scsId) {
         this.scsId = scsId;
     }
-public String getScheduleId() {
+
+    public String getScheduleId() {
         return scheduleId;
     }
-public void setScheduleId(String scheduleId) {
+
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -72,5 +85,21 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getScheduleIds() {
+        return scheduleIds;
+    }
+
+    public void setScheduleIds(String[] scheduleIds) {
+        this.scheduleIds = scheduleIds;
+    }
+
+    public long getStaffCount() {
+        return staffCount;
+    }
+
+    public void setStaffCount(long staffCount) {
+        this.staffCount = staffCount;
     }
 }

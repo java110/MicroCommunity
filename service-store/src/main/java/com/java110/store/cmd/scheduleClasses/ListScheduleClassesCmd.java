@@ -22,6 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
+import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.po.scheduleClasses.ScheduleClassesPo;
 import com.java110.utils.exception.CmdException;
@@ -30,8 +32,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.scheduleClasses.ScheduleClassesDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,9 +55,12 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "scheduleClasses.listScheduleClasses")
 public class ListScheduleClassesCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListScheduleClassesCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListScheduleClassesCmd.class);
     @Autowired
     private IScheduleClassesV1InnerServiceSMO scheduleClassesV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -63,22 +70,56 @@ public class ListScheduleClassesCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ScheduleClassesDto scheduleClassesDto = BeanConvertUtil.covertBean(reqJson, ScheduleClassesDto.class);
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
-           int count = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassessCount(scheduleClassesDto);
+        ScheduleClassesDto scheduleClassesDto = BeanConvertUtil.covertBean(reqJson, ScheduleClassesDto.class);
+        scheduleClassesDto.setStoreId(storeId);
 
-           List<ScheduleClassesDto> scheduleClassesDtos = null;
+        int count = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassessCount(scheduleClassesDto);
 
-           if (count > 0) {
-               scheduleClassesDtos = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassess(scheduleClassesDto);
-           } else {
-               scheduleClassesDtos = new ArrayList<>();
-           }
+        List<ScheduleClassesDto> scheduleClassesDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, scheduleClassesDtos);
+        if (count > 0) {
+            scheduleClassesDtos = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassess(scheduleClassesDto);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+            freshScheduleClassesStaff(scheduleClassesDtos);
+        } else {
+            scheduleClassesDtos = new ArrayList<>();
+        }
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, scheduleClassesDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入员工数量
+     * @param scheduleClassesDtos
+     */
+    private void freshScheduleClassesStaff(List<ScheduleClassesDto> scheduleClassesDtos) {
+        if(scheduleClassesDtos == null || scheduleClassesDtos.size()< 1){
+            return ;
+        }
+
+        List<String> scheduleIds = new ArrayList<>();
+
+        for(ScheduleClassesDto scheduleClassesDto : scheduleClassesDtos){
+            scheduleIds.add(scheduleClassesDto.getScheduleId());
+        }
+
+
+        ScheduleClassesStaffDto  scheduleClassesStaffDto = new ScheduleClassesStaffDto();
+        scheduleClassesStaffDto.setScheduleIds(scheduleIds.toArray(new String[scheduleIds.size()]));
+        List<ScheduleClassesStaffDto> scheduleClassesStaffDtos = scheduleClassesStaffV1InnerServiceSMOImpl.queryGroupScheduleClassesStaffs(scheduleClassesStaffDto);
+
+        for(ScheduleClassesDto scheduleClassesDto : scheduleClassesDtos){
+            for(ScheduleClassesStaffDto scheduleClassesStaffDto1 : scheduleClassesStaffDtos){
+                if(scheduleClassesDto.getScheduleId().equals(scheduleClassesStaffDto1.getScheduleId())){
+                    scheduleClassesDto.setStaffCount(scheduleClassesStaffDto1.getStaffCount());
+                }
+            }
+        }
     }
 }

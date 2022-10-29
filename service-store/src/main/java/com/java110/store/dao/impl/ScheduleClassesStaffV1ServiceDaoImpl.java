@@ -108,5 +108,19 @@ public class ScheduleClassesStaffV1ServiceDaoImpl extends BaseServiceDao impleme
         return Integer.parseInt(businessScheduleClassesStaffInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询排班员工信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getGroupScheduleClassesStaffInfo(Map info) throws DAOException {
+        logger.debug("查询 getGroupScheduleClassesStaffInfo 入参 info : {}",info);
+
+        List<Map> businessScheduleClassesStaffInfos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.getGroupScheduleClassesStaffInfo",info);
+
+        return businessScheduleClassesStaffInfos;
+    }
 
 }

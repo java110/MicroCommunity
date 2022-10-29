@@ -65,4 +65,8 @@ public interface IScheduleClassesStaffV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryScheduleClassesStaffsCount", method = RequestMethod.POST)
     int queryScheduleClassesStaffsCount(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
+
+
+    @RequestMapping(value = "/queryGroupScheduleClassesStaffs", method = RequestMethod.POST)
+    List<ScheduleClassesStaffDto> queryGroupScheduleClassesStaffs(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
 }
