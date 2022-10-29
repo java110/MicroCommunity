@@ -13,6 +13,12 @@
             inspection_plan_period,
             remark,
             end_time,
+            start_date,
+            end_date,
+            inspection_month,
+            inspection_day,
+            inspection_workday,
+            can_reexamine,
             operate,
             sign_type,
             start_time,
@@ -23,7 +29,8 @@
             create_user_id,
             create_user_name)
         values (#{inspectionPlanName},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
-                #{endTime},#{operate},#{signType},#{startTime},
+                #{endTime},#{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{canReexamine},
+                #{operate},#{signType},#{startTime},
                 #{inspectionPlanId},#{state},#{communityId},#{bId},#{createUserId},
                 #{createUserName})
        </insert>
