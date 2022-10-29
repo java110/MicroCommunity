@@ -17,6 +17,7 @@ package com.java110.po.scheduleClasses;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-29 15:29:19 mail: 928255095@qq.com
@@ -28,69 +29,86 @@ import java.util.Date;
 public class ScheduleClassesPo implements Serializable {
 
     private String scheduleType;
-private String scheduleCycle;
-private String computeTime;
-private String name;
-private String remark;
-private String statusCd = "0";
-private String state;
-private String storeId;
-private String scheduleId;
-public String getScheduleType() {
+    private String scheduleCycle;
+    private String computeTime;
+    private String name;
+    private String remark;
+    private String statusCd = "0";
+    private String state;
+    private String storeId;
+    private String scheduleId;
+
+    public String getScheduleType() {
         return scheduleType;
     }
-public void setScheduleType(String scheduleType) {
+
+    public void setScheduleType(String scheduleType) {
         this.scheduleType = scheduleType;
     }
-public String getScheduleCycle() {
+
+    public String getScheduleCycle() {
         return scheduleCycle;
     }
-public void setScheduleCycle(String scheduleCycle) {
+
+    public void setScheduleCycle(String scheduleCycle) {
         this.scheduleCycle = scheduleCycle;
     }
-public String getComputeTime() {
+
+    public String getComputeTime() {
         return computeTime;
     }
-public void setComputeTime(String computeTime) {
+
+    public void setComputeTime(String computeTime) {
         this.computeTime = computeTime;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getScheduleId() {
+
+    public String getScheduleId() {
         return scheduleId;
     }
-public void setScheduleId(String scheduleId) {
+
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
-
 
 
 }

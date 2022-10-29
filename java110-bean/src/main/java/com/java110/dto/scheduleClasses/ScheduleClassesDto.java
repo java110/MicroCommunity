@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class ScheduleClassesDto extends PageDto implements Serializable {
 
+    public static final String STATE_START = "1001";
+    public static final String STATE_STOP = "2002";
+
     private String scheduleType;
     private String scheduleTypeName;
     private String scheduleCycle;
