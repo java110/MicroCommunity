@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scheduleClassesStaffV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存排班员工信息 add by wuxw 2018-07-03 -->
+    <insert id="saveScheduleClassesStaffInfo" parameterType="Map">
+        insert into schedule_classes_staff(
+staff_name,store_id,scs_id,schedule_id,staff_id
+) values (
+#{staffName},#{storeId},#{scsId},#{scheduleId},#{staffId}
+)
+    </insert>
+
+
+
+    <!-- 查询排班员工信息 add by wuxw 2018-07-03 -->
+    <select id="getScheduleClassesStaffInfo" parameterType="Map" resultType="Map">
+        select  t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.scs_id,t.scs_id scsId,t.schedule_id,t.schedule_id scheduleId,t.staff_id,t.staff_id staffId 
+from schedule_classes_staff t 
+where 1 =1 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="scsId !=null and scsId != ''">
+   and t.scs_id= #{scsId}
+</if> 
+<if test="scheduleId !=null and scheduleId != ''">
+   and t.schedule_id= #{scheduleId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改排班员工信息 add by wuxw 2018-07-03 -->
+    <update id="updateScheduleClassesStaffInfo" parameterType="Map">
+        update  schedule_classes_staff t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+, t.staff_name= #{staffName}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="scheduleId !=null and scheduleId != ''">
+, t.schedule_id= #{scheduleId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+ where 1=1 <if test="scsId !=null and scsId != ''">
+and t.scs_id= #{scsId}
+</if> 
+
+    </update>
+
+    <!-- 查询排班员工数量 add by wuxw 2018-07-03 -->
+     <select id="queryScheduleClassesStaffsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from schedule_classes_staff t 
+where 1 =1 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="scsId !=null and scsId != ''">
+   and t.scs_id= #{scsId}
+</if> 
+<if test="scheduleId !=null and scheduleId != ''">
+   and t.schedule_id= #{scheduleId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+
+
+     </select>
+
+</mapper>
