@@ -55,9 +55,8 @@ public class SaveScheduleClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-Assert.hasKeyAndValue(reqJson, "scheduleType", "请求报文中未包含scheduleType");
-Assert.hasKeyAndValue(reqJson, "scheduleCycle", "请求报文中未包含scheduleCycle");
-Assert.hasKeyAndValue(reqJson, "computeTime", "请求报文中未包含computeTime");
+        Assert.hasKeyAndValue(reqJson, "scheduleType", "请求报文中未包含scheduleType");
+        Assert.hasKeyAndValue(reqJson, "scheduleCycle", "请求报文中未包含scheduleCycle");
 
     }
 
@@ -65,7 +64,7 @@ Assert.hasKeyAndValue(reqJson, "computeTime", "请求报文中未包含computeTi
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
+        ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
         scheduleClassesPo.setScheduleId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = scheduleClassesV1InnerServiceSMOImpl.saveScheduleClasses(scheduleClassesPo);
 

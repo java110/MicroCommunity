@@ -55,9 +55,8 @@ public class SaveScheduleClassesStaffCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "请求报文中未包含scheduleId");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
+        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
 
     }
 
@@ -65,8 +64,11 @@ Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName")
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ScheduleClassesStaffPo scheduleClassesStaffPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesStaffPo.class);
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+
+        ScheduleClassesStaffPo scheduleClassesStaffPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesStaffPo.class);
         scheduleClassesStaffPo.setScsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        scheduleClassesStaffPo.setStoreId(storeId);
         int flag = scheduleClassesStaffV1InnerServiceSMOImpl.saveScheduleClassesStaff(scheduleClassesStaffPo);
 
         if (flag < 1) {

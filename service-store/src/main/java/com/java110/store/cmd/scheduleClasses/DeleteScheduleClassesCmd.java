@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：scheduleClasses.deleteScheduleClasses
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "scheduleClasses.deleteScheduleClasses")
 public class DeleteScheduleClassesCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteScheduleClassesCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteScheduleClassesCmd.class);
 
     @Autowired
     private IScheduleClassesV1InnerServiceSMO scheduleClassesV1InnerServiceSMOImpl;
@@ -51,7 +52,6 @@ public class DeleteScheduleClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
-Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
 
     }
 
@@ -59,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
+        ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
         int flag = scheduleClassesV1InnerServiceSMOImpl.deleteScheduleClasses(scheduleClassesPo);
 
         if (flag < 1) {
