@@ -22,8 +22,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
+import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.po.scheduleClasses.ScheduleClassesPo;
+import com.java110.po.scheduleClassesDay.ScheduleClassesDayPo;
+import com.java110.po.scheduleClassesTime.ScheduleClassesTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -49,6 +53,13 @@ public class DeleteScheduleClassesCmd extends Cmd {
     @Autowired
     private IScheduleClassesV1InnerServiceSMO scheduleClassesV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IScheduleClassesDayV1InnerServiceSMO scheduleClassesDayV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IScheduleClassesTimeV1InnerServiceSMO scheduleClassesTimeV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
@@ -65,6 +76,23 @@ public class DeleteScheduleClassesCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        ScheduleClassesDayPo scheduleClassesDayPo = new ScheduleClassesDayPo();
+        scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
+        flag = scheduleClassesDayV1InnerServiceSMOImpl.deleteScheduleClassesDay(scheduleClassesDayPo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
+
+        ScheduleClassesTimePo scheduleClassesTimePo = new ScheduleClassesTimePo();
+        scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
+        flag = scheduleClassesTimeV1InnerServiceSMOImpl.deleteScheduleClassesTime(scheduleClassesTimePo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

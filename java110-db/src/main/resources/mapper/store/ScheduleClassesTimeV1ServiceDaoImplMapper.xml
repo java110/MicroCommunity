@@ -68,12 +68,13 @@
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
         </if>
-        <if test="scheduleId !=null and scheduleId != ''">
-            , t.schedule_id= #{scheduleId}
-        </if>
+
         where 1=1
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
         </if>
 
     </update>

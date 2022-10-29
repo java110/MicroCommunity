@@ -15,6 +15,7 @@
  */
 package com.java110.store.cmd.scheduleClasses;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,11 +23,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
+import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
+import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.po.scheduleClasses.ScheduleClassesPo;
+import com.java110.po.scheduleClassesDay.ScheduleClassesDayPo;
+import com.java110.po.scheduleClassesTime.ScheduleClassesTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -52,10 +59,47 @@ public class UpdateScheduleClassesCmd extends Cmd {
     @Autowired
     private IScheduleClassesV1InnerServiceSMO scheduleClassesV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IScheduleClassesDayV1InnerServiceSMO scheduleClassesDayV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IScheduleClassesTimeV1InnerServiceSMO scheduleClassesTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
 
+        Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
+        Assert.hasKeyAndValue(reqJson, "scheduleType", "请求报文中未包含scheduleType");
+        Assert.hasKeyAndValue(reqJson, "scheduleCycle", "请求报文中未包含scheduleCycle");
+
+        if(!reqJson.containsKey("days")){
+            throw new CmdException("未包含天");
+        }
+
+        JSONArray days = reqJson.getJSONArray("days");
+        if(days.size() <1){
+            throw new CmdException("未包含天");
+        }
+
+        JSONObject day = null;
+        JSONArray times = null;
+        for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
+            day = days.getJSONObject(dayIndex);
+
+            if(!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getString("workday"))){
+                continue;
+            }
+            if(!day.containsKey("times")){
+                throw new CmdException("未包时间");
+            }
+            times = day.getJSONArray("times");
+            if(times.size() <1){
+                throw new CmdException("未包时间");
+            }
+
+        }
     }
 
     @Override
@@ -67,6 +111,55 @@ public class UpdateScheduleClassesCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+
+        ScheduleClassesDayPo scheduleClassesDayPo = new ScheduleClassesDayPo();
+        scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
+        flag = scheduleClassesDayV1InnerServiceSMOImpl.deleteScheduleClassesDay(scheduleClassesDayPo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
+
+        ScheduleClassesTimePo scheduleClassesTimePo = new ScheduleClassesTimePo();
+        scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
+        flag = scheduleClassesTimeV1InnerServiceSMOImpl.deleteScheduleClassesTime(scheduleClassesTimePo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
+
+        JSONArray days = reqJson.getJSONArray("days");
+
+        JSONObject day = null;
+        JSONObject time = null;
+        JSONArray times = null;
+        for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
+            day = days.getJSONObject(dayIndex);
+            scheduleClassesDayPo = new ScheduleClassesDayPo();
+            scheduleClassesDayPo.setDayId(GenerateCodeFactory.getGeneratorId("11"));
+            scheduleClassesDayPo.setDay(day.getString("day"));
+            scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
+            scheduleClassesDayPo.setWeekFlag(StringUtil.isEmpty(day.getString("weekFlag"))?"1":day.getString("weekFlag"));
+            scheduleClassesDayPo.setWorkday(day.getString("workday"));
+            flag = scheduleClassesDayV1InnerServiceSMOImpl.saveScheduleClassesDay(scheduleClassesDayPo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+            times = day.getJSONArray("times");
+            for(int timeIndex = 0 ;timeIndex < times.size();timeIndex++){
+                time = times.getJSONObject(timeIndex);
+                scheduleClassesTimePo = new ScheduleClassesTimePo();
+                scheduleClassesTimePo.setDayId(scheduleClassesDayPo.getDayId());
+                scheduleClassesTimePo.setEndTime(time.getString("endTime"));
+                scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
+                scheduleClassesTimePo.setStartTime(time.getString("startTime"));
+                scheduleClassesTimePo.setTimeId(GenerateCodeFactory.getGeneratorId("11"));
+                flag = scheduleClassesTimeV1InnerServiceSMOImpl.saveScheduleClassesTime(scheduleClassesTimePo);
+                if (flag < 1) {
+                    throw new CmdException("保存数据失败");
+                }
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

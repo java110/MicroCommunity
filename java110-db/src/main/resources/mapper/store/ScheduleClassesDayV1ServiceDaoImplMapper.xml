@@ -56,19 +56,21 @@
         <if test="workday !=null and workday != ''">
             , t.workday= #{workday}
         </if>
-        <if test="dayId !=null and dayId != ''">
-            , t.day_id= #{dayId}
-        </if>
+
         <if test="day !=null and day != ''">
             , t.day= #{day}
         </if>
-        <if test="scheduleId !=null and scheduleId != ''">
-            , t.schedule_id= #{scheduleId}
-        </if>
+
         <if test="weekFlag !=null and weekFlag != ''">
             , t.week_flag= #{weekFlag}
         </if>
         where 1=1
+        <if test="dayId !=null and dayId != ''">
+            and t.day_id= #{dayId}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
     </update>
 
     <!-- 查询排班天数量 add by wuxw 2018-07-03 -->
