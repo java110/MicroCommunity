@@ -27,6 +27,12 @@
         <if test="dayId !=null and dayId != ''">
             and t.day_id= #{dayId}
         </if>
+        <if test="dayIds !=null">
+            and t.day_id in
+            <foreach collection="dayIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
@@ -39,7 +45,7 @@
         <if test="scheduleId !=null and scheduleId != ''">
             and t.schedule_id= #{scheduleId}
         </if>
-        order by t.create_time desc
+        order by t.start_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -82,6 +88,12 @@
         </if>
         <if test="dayId !=null and dayId != ''">
             and t.day_id= #{dayId}
+        </if>
+        <if test="dayIds !=null">
+            and t.day_id in
+            <foreach collection="dayIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}

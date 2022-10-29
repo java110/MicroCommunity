@@ -1,6 +1,7 @@
 package com.java110.dto.scheduleClassesTime;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class ScheduleClassesTimeDto extends PageDto implements Serializable {
 
     private String timeId;
-private String dayId;
-private String startTime;
-private String endTime;
-private String scheduleId;
+    private String dayId;
+    private String[] dayIds;
+    private String startTime;
+    private String endTime;
+    private String scheduleId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String scheduleId;
     public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getDayId() {
+
+    public String getDayId() {
         return dayId;
     }
-public void setDayId(String dayId) {
+
+    public void setDayId(String dayId) {
         this.dayId = dayId;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getScheduleId() {
+
+    public String getScheduleId() {
         return scheduleId;
     }
-public void setScheduleId(String scheduleId) {
+
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
 
@@ -72,5 +83,13 @@ public void setScheduleId(String scheduleId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getDayIds() {
+        return dayIds;
+    }
+
+    public void setDayIds(String[] dayIds) {
+        this.dayIds = dayIds;
     }
 }

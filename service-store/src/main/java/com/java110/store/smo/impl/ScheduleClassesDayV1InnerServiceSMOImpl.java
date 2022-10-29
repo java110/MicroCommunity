@@ -16,6 +16,9 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
+import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
+import com.java110.po.scheduleClassesTime.ScheduleClassesTimePo;
 import com.java110.store.dao.IScheduleClassesDayV1ServiceDao;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
@@ -44,6 +47,9 @@ public class ScheduleClassesDayV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
     @Autowired
     private IScheduleClassesDayV1ServiceDao scheduleClassesDayV1ServiceDaoImpl;
+
+    @Autowired
+    private IScheduleClassesTimeV1InnerServiceSMO scheduleClassesTimeV1InnerServiceSMOImpl;
 
 
     @Override
@@ -77,6 +83,30 @@ public class ScheduleClassesDayV1InnerServiceSMOImpl extends BaseServiceSMO impl
         }
 
         List<ScheduleClassesDayDto> scheduleClassesDays = BeanConvertUtil.covertBeanList(scheduleClassesDayV1ServiceDaoImpl.getScheduleClassesDayInfo(BeanConvertUtil.beanCovertMap(scheduleClassesDayDto)), ScheduleClassesDayDto.class);
+
+        if(scheduleClassesDays == null || scheduleClassesDays.size() <1){
+            return scheduleClassesDays;
+        }
+
+        List<String> dayIds = new ArrayList<>();
+        for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDays){
+            dayIds.add(scheduleClassesDayDto1.getDayId());
+        }
+
+        ScheduleClassesTimeDto scheduleClassesTimeDto =  new ScheduleClassesTimeDto();
+        scheduleClassesTimeDto.setDayIds(dayIds.toArray(new String[dayIds.size()]));
+        List<ScheduleClassesTimeDto> scheduleClassesTimeDtos = scheduleClassesTimeV1InnerServiceSMOImpl.queryScheduleClassesTimes(scheduleClassesTimeDto);
+        List<ScheduleClassesTimeDto> scheduleClassesTimeDtos1 =  null;
+        for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDays){
+            scheduleClassesTimeDtos1 = new ArrayList<>();
+            for(ScheduleClassesTimeDto scheduleClassesTimeDto1 : scheduleClassesTimeDtos){
+                if(scheduleClassesDayDto1.getDayId().equals(scheduleClassesTimeDto1.getDayId())) {
+                    scheduleClassesTimeDtos1.add(scheduleClassesTimeDto1);
+                }
+            }
+            scheduleClassesDayDto1.setTimes(scheduleClassesTimeDtos1);
+        }
+
 
         return scheduleClassesDays;
     }

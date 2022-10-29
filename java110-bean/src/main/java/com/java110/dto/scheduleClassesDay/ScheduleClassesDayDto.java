@@ -1,9 +1,11 @@
 package com.java110.dto.scheduleClassesDay;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -22,6 +24,8 @@ public class ScheduleClassesDayDto extends PageDto implements Serializable {
     private String day;
     private String scheduleId;
     private String weekFlag;
+
+    private List<ScheduleClassesTimeDto> times;
 
 
     private Date createTime;
@@ -84,5 +88,13 @@ public class ScheduleClassesDayDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ScheduleClassesTimeDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ScheduleClassesTimeDto> times) {
+        this.times = times;
     }
 }

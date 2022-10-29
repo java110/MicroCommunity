@@ -5,102 +5,97 @@
 <mapper namespace="scheduleClassesDayV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存排班天信息 add by wuxw 2018-07-03 -->
     <insert id="saveScheduleClassesDayInfo" parameterType="Map">
         insert into schedule_classes_day(
-workday,day_id,day,schedule_id,week_flag
-) values (
-#{workday},#{dayId},#{day},#{scheduleId},#{weekFlag}
-)
+        workday,day_id,day,schedule_id,week_flag
+        ) values (
+        #{workday},#{dayId},#{day},#{scheduleId},#{weekFlag}
+        )
     </insert>
-
 
 
     <!-- 查询排班天信息 add by wuxw 2018-07-03 -->
     <select id="getScheduleClassesDayInfo" parameterType="Map" resultType="Map">
-        select  t.workday,t.day_id,t.day_id dayId,t.status_cd,t.status_cd statusCd,t.day,t.schedule_id,t.schedule_id scheduleId,t.week_flag,t.week_flag weekFlag 
-from schedule_classes_day t 
-where 1 =1 
-<if test="workday !=null and workday != ''">
-   and t.workday= #{workday}
-</if> 
-<if test="dayId !=null and dayId != ''">
-   and t.day_id= #{dayId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="day !=null and day != ''">
-   and t.day= #{day}
-</if> 
-<if test="scheduleId !=null and scheduleId != ''">
-   and t.schedule_id= #{scheduleId}
-</if> 
-<if test="weekFlag !=null and weekFlag != ''">
-   and t.week_flag= #{weekFlag}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.workday,t.day_id,t.day_id dayId,t.status_cd,t.status_cd statusCd,t.day,t.schedule_id,t.schedule_id
+        scheduleId,t.week_flag,t.week_flag weekFlag
+        from schedule_classes_day t
+        where 1 =1
+        <if test="workday !=null and workday != ''">
+            and t.workday= #{workday}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            and t.day_id= #{dayId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="day !=null and day != ''">
+            and t.day= #{day}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+        <if test="weekFlag !=null and weekFlag != ''">
+            and t.week_flag= #{weekFlag}
+        </if>
+        order by t.day
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改排班天信息 add by wuxw 2018-07-03 -->
     <update id="updateScheduleClassesDayInfo" parameterType="Map">
-        update  schedule_classes_day t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="workday !=null and workday != ''">
-, t.workday= #{workday}
-</if> 
-<if test="dayId !=null and dayId != ''">
-, t.day_id= #{dayId}
-</if> 
-<if test="day !=null and day != ''">
-, t.day= #{day}
-</if> 
-<if test="scheduleId !=null and scheduleId != ''">
-, t.schedule_id= #{scheduleId}
-</if> 
-<if test="weekFlag !=null and weekFlag != ''">
-, t.week_flag= #{weekFlag}
-</if> 
- where 1=1 
+        update schedule_classes_day t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="workday !=null and workday != ''">
+            , t.workday= #{workday}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            , t.day_id= #{dayId}
+        </if>
+        <if test="day !=null and day != ''">
+            , t.day= #{day}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            , t.schedule_id= #{scheduleId}
+        </if>
+        <if test="weekFlag !=null and weekFlag != ''">
+            , t.week_flag= #{weekFlag}
+        </if>
+        where 1=1
     </update>
 
     <!-- 查询排班天数量 add by wuxw 2018-07-03 -->
-     <select id="queryScheduleClassesDaysCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from schedule_classes_day t 
-where 1 =1 
-<if test="workday !=null and workday != ''">
-   and t.workday= #{workday}
-</if> 
-<if test="dayId !=null and dayId != ''">
-   and t.day_id= #{dayId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="day !=null and day != ''">
-   and t.day= #{day}
-</if> 
-<if test="scheduleId !=null and scheduleId != ''">
-   and t.schedule_id= #{scheduleId}
-</if> 
-<if test="weekFlag !=null and weekFlag != ''">
-   and t.week_flag= #{weekFlag}
-</if> 
+    <select id="queryScheduleClassesDaysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from schedule_classes_day t
+        where 1 =1
+        <if test="workday !=null and workday != ''">
+            and t.workday= #{workday}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            and t.day_id= #{dayId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="day !=null and day != ''">
+            and t.day= #{day}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+        <if test="weekFlag !=null and weekFlag != ''">
+            and t.week_flag= #{weekFlag}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
