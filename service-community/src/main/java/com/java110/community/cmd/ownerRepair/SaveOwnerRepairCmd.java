@@ -10,10 +10,12 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
@@ -60,6 +62,9 @@ public class SaveOwnerRepairCmd extends Cmd {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private INotepadV1InnerServiceSMO notepadV1InnerServiceSMOImpl;
@@ -154,9 +159,18 @@ public class SaveOwnerRepairCmd extends Cmd {
         if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                Object _photo = photos.get(_photoIndex);
+                String _photo = photos.getString(_photoIndex);
+                if(_photo.length()> 512){
+                    FileDto fileDto = new FileDto();
+                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                    fileDto.setFileName(fileDto.getFileId());
+                    fileDto.setContext(_photo);
+                    fileDto.setSuffix("jpeg");
+                    fileDto.setCommunityId(reqJson.getString("communityId"));
+                    _photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+                }
                 JSONObject businessUnit = new JSONObject();
-                businessUnit.put("fileRelId", "-" + (_photoIndex + 1));
+                businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId("12"));
                 businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
                 businessUnit.put("saveWay", "ftp");
                 businessUnit.put("objId", businessOwnerRepair.getString("repairId"));
