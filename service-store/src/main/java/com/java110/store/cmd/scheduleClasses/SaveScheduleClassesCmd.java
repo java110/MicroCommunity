@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.scheduleClasses.ScheduleClassesDto;
+import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
@@ -82,10 +83,15 @@ public class SaveScheduleClassesCmd extends Cmd {
             throw new CmdException("未包含天");
         }
 
+
         JSONObject day = null;
         JSONArray times = null;
         for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
             day = days.getJSONObject(dayIndex);
+
+            if(!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getString("workday"))){
+                continue;
+            }
             if(!day.containsKey("times")){
                 throw new CmdException("未包时间");
             }

@@ -20,7 +20,7 @@
         select t.schedule_type,t.schedule_type scheduleType,t.schedule_cycle,t.schedule_cycle
         scheduleCycle,t.compute_time,t.compute_time computeTime,t.name,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.store_id,t.store_id storeId,t.schedule_id,t.schedule_id scheduleId,
-        td.name scheduleTypeName,td1.name stateName
+        td.name scheduleTypeName,td1.name stateName,t.create_time createTime
         from schedule_classes t
         left join t_dict td on t.schedule_type =  td.status_cd and td.table_name = 'schedule_classes' and td.table_columns = 'schedule_type'
         left join t_dict td1 on t.state =  td1.status_cd and td1.table_name = 'schedule_classes' and td1.table_columns = 'state'

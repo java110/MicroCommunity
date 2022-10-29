@@ -1,6 +1,7 @@
 package com.java110.dto.scheduleClassesDay;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,11 +15,13 @@ import java.util.Date;
  **/
 public class ScheduleClassesDayDto extends PageDto implements Serializable {
 
+    public static final String WORKDAY_NORMAL = "1001";
+
     private String workday;
-private String dayId;
-private String day;
-private String scheduleId;
-private String weekFlag;
+    private String dayId;
+    private String day;
+    private String scheduleId;
+    private String weekFlag;
 
 
     private Date createTime;
@@ -29,31 +32,40 @@ private String weekFlag;
     public String getWorkday() {
         return workday;
     }
-public void setWorkday(String workday) {
+
+    public void setWorkday(String workday) {
         this.workday = workday;
     }
-public String getDayId() {
+
+    public String getDayId() {
         return dayId;
     }
-public void setDayId(String dayId) {
+
+    public void setDayId(String dayId) {
         this.dayId = dayId;
     }
-public String getDay() {
+
+    public String getDay() {
         return day;
     }
-public void setDay(String day) {
+
+    public void setDay(String day) {
         this.day = day;
     }
-public String getScheduleId() {
+
+    public String getScheduleId() {
         return scheduleId;
     }
-public void setScheduleId(String scheduleId) {
+
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
-public String getWeekFlag() {
+
+    public String getWeekFlag() {
         return weekFlag;
     }
-public void setWeekFlag(String weekFlag) {
+
+    public void setWeekFlag(String weekFlag) {
         this.weekFlag = weekFlag;
     }
 
