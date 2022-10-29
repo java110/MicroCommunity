@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scheduleClassesV1ServiceDaoImpl">
+
+
+    <!-- 保存排班信息 add by wuxw 2018-07-03 -->
+    <insert id="saveScheduleClassesInfo" parameterType="Map">
+        insert into schedule_classes(
+        schedule_type,schedule_cycle,compute_time,name,remark,state,store_id,schedule_id
+        ) values (
+        #{scheduleType},#{scheduleCycle},#{computeTime},#{name},#{remark},#{state},#{storeId},#{scheduleId}
+        )
+    </insert>
+
+
+    <!-- 查询排班信息 add by wuxw 2018-07-03 -->
+    <select id="getScheduleClassesInfo" parameterType="Map" resultType="Map">
+        select t.schedule_type,t.schedule_type scheduleType,t.schedule_cycle,t.schedule_cycle
+        scheduleCycle,t.compute_time,t.compute_time computeTime,t.name,t.remark,t.status_cd,t.status_cd
+        statusCd,t.state,t.store_id,t.store_id storeId,t.schedule_id,t.schedule_id scheduleId,
+        td.name scheduleTypeName,td1.name stateName,t.create_time createTime
+        from schedule_classes t
+        left join t_dict td on t.schedule_type =  td.status_cd and td.table_name = 'schedule_classes' and td.table_columns = 'schedule_type'
+        left join t_dict td1 on t.state =  td1.status_cd and td1.table_name = 'schedule_classes' and td1.table_columns = 'state'
+        where 1 =1
+        <if test="scheduleType !=null and scheduleType != ''">
+            and t.schedule_type= #{scheduleType}
+        </if>
+        <if test="scheduleCycle !=null and scheduleCycle != ''">
+            and t.schedule_cycle= #{scheduleCycle}
+        </if>
+        <if test="computeTime !=null and computeTime != ''">
+            and t.compute_time= #{computeTime}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改排班信息 add by wuxw 2018-07-03 -->
+    <update id="updateScheduleClassesInfo" parameterType="Map">
+        update schedule_classes t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="scheduleType !=null and scheduleType != ''">
+            , t.schedule_type= #{scheduleType}
+        </if>
+        <if test="scheduleCycle !=null and scheduleCycle != ''">
+            , t.schedule_cycle= #{scheduleCycle}
+        </if>
+        <if test="computeTime !=null and computeTime != ''">
+            , t.compute_time= #{computeTime}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        where 1=1
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+
+    </update>
+
+    <!-- 查询排班数量 add by wuxw 2018-07-03 -->
+    <select id="queryScheduleClassessCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from schedule_classes t
+        where 1 =1
+        <if test="scheduleType !=null and scheduleType != ''">
+            and t.schedule_type= #{scheduleType}
+        </if>
+        <if test="scheduleCycle !=null and scheduleCycle != ''">
+            and t.schedule_cycle= #{scheduleCycle}
+        </if>
+        <if test="computeTime !=null and computeTime != ''">
+            and t.compute_time= #{computeTime}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+
+
+    </select>
+
+</mapper>

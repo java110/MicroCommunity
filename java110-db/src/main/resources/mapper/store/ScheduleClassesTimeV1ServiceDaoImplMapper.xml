@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scheduleClassesTimeV1ServiceDaoImpl">
+
+
+    <!-- 保存排班时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveScheduleClassesTimeInfo" parameterType="Map">
+        insert into schedule_classes_time(
+        time_id,day_id,start_time,end_time,schedule_id
+        ) values (
+        #{timeId},#{dayId},#{startTime},#{endTime},#{scheduleId}
+        )
+    </insert>
+
+
+    <!-- 查询排班时间信息 add by wuxw 2018-07-03 -->
+    <select id="getScheduleClassesTimeInfo" parameterType="Map" resultType="Map">
+        select t.time_id,t.time_id timeId,t.day_id,t.day_id dayId,t.start_time,t.start_time
+        startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.schedule_id,t.schedule_id scheduleId
+        from schedule_classes_time t
+        where 1 =1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            and t.day_id= #{dayId}
+        </if>
+        <if test="dayIds !=null">
+            and t.day_id in
+            <foreach collection="dayIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+        order by t.start_time
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改排班时间信息 add by wuxw 2018-07-03 -->
+    <update id="updateScheduleClassesTimeInfo" parameterType="Map">
+        update schedule_classes_time t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            , t.day_id= #{dayId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+
+        where 1=1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+
+    </update>
+
+    <!-- 查询排班时间数量 add by wuxw 2018-07-03 -->
+    <select id="queryScheduleClassesTimesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from schedule_classes_time t
+        where 1 =1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="dayId !=null and dayId != ''">
+            and t.day_id= #{dayId}
+        </if>
+        <if test="dayIds !=null">
+            and t.day_id in
+            <foreach collection="dayIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="scheduleId !=null and scheduleId != ''">
+            and t.schedule_id= #{scheduleId}
+        </if>
+
+
+    </select>
+
+</mapper>
