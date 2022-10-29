@@ -82,6 +82,9 @@ public class PropertyAppLoginSMOImpl extends DefaultAbstractComponentSMO impleme
         userInfo.put("storeTypeCd", storeInfo.getString("storeTypeCd"));
         JSONObject paramOut = new JSONObject();
         paramOut.put("result", 0);
+
+        paramOut.put("code", 0);
+        paramOut.put("msg", "成功");
         paramOut.put("userInfo", userInfo);
         paramOut.put("token", userInfo.getString("token"));
         //pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
