@@ -52,6 +52,7 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String startDate;
     private String endDate;
     private String beforeTime;
+    private String canReexamine;
 
 
     public String getInspectionPlanName() {
@@ -278,5 +279,13 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setBeforeTime(String beforeTime) {
         this.beforeTime = beforeTime;
+    }
+
+    public String getCanReexamine() {
+        return canReexamine;
+    }
+
+    public void setCanReexamine(String canReexamine) {
+        this.canReexamine = canReexamine;
     }
 }

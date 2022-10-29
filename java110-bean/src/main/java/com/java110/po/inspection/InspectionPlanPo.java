@@ -31,7 +31,7 @@ public class InspectionPlanPo implements Serializable {
     private String inspectionDay;
     private String inspectionWorkday;
     private String beforeTime;
-
+    private String canReexamine;
 
 
     public String getInspectionPlanId() {
@@ -184,5 +184,13 @@ public class InspectionPlanPo implements Serializable {
 
     public void setBeforeTime(String beforeTime) {
         this.beforeTime = beforeTime;
+    }
+
+    public String getCanReexamine() {
+        return canReexamine;
+    }
+
+    public void setCanReexamine(String canReexamine) {
+        this.canReexamine = canReexamine;
     }
 }

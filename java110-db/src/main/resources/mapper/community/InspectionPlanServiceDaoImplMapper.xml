@@ -159,6 +159,7 @@
         t.inspection_plan_id inspectionPlanId,
         t.state,
         t.community_id communityId,
+        t.can_reexamine canReexamine,
         t.b_id bId,
         t.create_time createTime,
         d.name stateName,
@@ -190,6 +191,9 @@
 
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
+        </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            and t.can_reexamine= #{canReexamine}
         </if>
         <if test="startTime !=null ">
             and t.start_time= #{startTime}
@@ -245,6 +249,9 @@
         <if test="signType !=null and signType != ''">
             , t.sign_type= #{signType}
         </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            , t.can_reexamine= #{canReexamine}
+        </if>
         <if test="startTime !=null">
             , t.start_time= #{startTime}
         </if>
@@ -289,6 +296,9 @@
         </if>
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
+        </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            and t.can_reexamine= #{canReexamine}
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
