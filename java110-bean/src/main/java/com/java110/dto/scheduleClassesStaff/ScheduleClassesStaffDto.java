@@ -22,6 +22,10 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
     private String[] scheduleIds;
     private String staffId;
 
+    private Date today;
+
+    private boolean isWork;
+
     private long staffCount;
 
 
@@ -101,5 +105,21 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setStaffCount(long staffCount) {
         this.staffCount = staffCount;
+    }
+
+    public Date getToday() {
+        return today;
+    }
+
+    public void setToday(Date today) {
+        this.today = today;
+    }
+
+    public boolean isWork() {
+        return isWork;
+    }
+
+    public void setWork(boolean work) {
+        isWork = work;
     }
 }

@@ -139,24 +139,24 @@ public class DateUtil {
         }
     }
 
-    public static Date getDateFromStringB(String date){
+    public static Date getDateFromStringB(String date) {
         SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_B);
-        try{
+        try {
             synchronized (sDateFormat) {
                 return sDateFormat.parse(date);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    public static Date getDateFromStringA(String date){
+    public static Date getDateFromStringA(String date) {
         SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_A);
-        try{
+        try {
             synchronized (sDateFormat) {
                 return sDateFormat.parse(date);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -173,7 +173,6 @@ public class DateUtil {
     public static String getNow(String pattern) {
         return getFormatTimeString(new Date(), pattern);
     }
-
 
 
     public static String getLastTime() {
@@ -446,10 +445,10 @@ public class DateUtil {
 //        c.setTime(DateUtil.getDateFromString("2021-12-03",DateUtil.DATE_FORMATE_STRING_A));
 //        c.add(Calendar.DAY_OF_MONTH, 125);
 //        System.out.println("增加一天后日期:"+sf.format(c.getTime()));
-        System.out.println( "2021-12-07".compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
+        System.out.println("2021-12-07".compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
     }
 
-    public static String getAddDayString(Date date,String pattern,int days)  {
+    public static String getAddDayString(Date date, String pattern, int days) {
         SimpleDateFormat sf = new SimpleDateFormat(pattern);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -457,7 +456,7 @@ public class DateUtil {
         return sf.format(c.getTime());
     }
 
-    public static String getAddDayStringB(Date date,int days) {
+    public static String getAddDayStringB(Date date, int days) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_B);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -465,7 +464,7 @@ public class DateUtil {
         return sf.format(c.getTime());
     }
 
-    public static String getAddDayStringA(Date date,int days) {
+    public static String getAddDayStringA(Date date, int days) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -474,7 +473,7 @@ public class DateUtil {
     }
 
 
-    public static String getAddMonthStringA(Date date,int month) {
+    public static String getAddMonthStringA(Date date, int month) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -586,5 +585,26 @@ public class DateUtil {
     //获取两个日期之间的分钟数
     private static int millisecondsToDays(long intervalMs) {
         return (int) (intervalMs / (1000 * 86400));
+    }
+
+    /**
+     * 　　 *字符串的日期格式的计算
+     *
+     */
+    public static int daysBetween(String smdate, String bdate) {
+        long between_days = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(smdate));
+            long time1 = cal.getTimeInMillis();
+            cal.setTime(sdf.parse(bdate));
+            long time2 = cal.getTimeInMillis();
+            between_days = (time2 - time1) / (1000 * 3600 * 24);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Integer.parseInt(String.valueOf(between_days));
     }
 }

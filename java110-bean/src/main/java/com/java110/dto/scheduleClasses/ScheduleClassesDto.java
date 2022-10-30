@@ -18,6 +18,11 @@ public class ScheduleClassesDto extends PageDto implements Serializable {
     public static final String STATE_START = "1001";
     public static final String STATE_STOP = "2002";
 
+    //排班类型 1001 按日排班 2002 按周排班 3003 按月排班
+    public static final String SCHEDULE_TYPE_DAY = "1001";
+    public static final String SCHEDULE_TYPE_WEEK = "2002";
+    public static final String SCHEDULE_TYPE_MONTH = "3003";
+
     private String scheduleType;
     private String scheduleTypeName;
     private String scheduleCycle;

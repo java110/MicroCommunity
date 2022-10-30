@@ -69,4 +69,17 @@ public interface IScheduleClassesStaffV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryGroupScheduleClassesStaffs", method = RequestMethod.POST)
     List<ScheduleClassesStaffDto> queryGroupScheduleClassesStaffs(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
+
+    /**
+     * 判断员工是否在上班
+     * @param scheduleClassesStaffDto
+     * {
+     *     staffId:xxx,
+     *     today:new Date()
+     * }
+     * @return
+     */
+    @RequestMapping(value = "/staffIsWork", method = RequestMethod.POST)
+    ScheduleClassesStaffDto staffIsWork(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
+
 }
