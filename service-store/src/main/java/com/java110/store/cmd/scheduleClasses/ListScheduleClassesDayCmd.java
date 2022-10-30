@@ -60,7 +60,6 @@ public class ListScheduleClassesDayCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
            ScheduleClassesDayDto scheduleClassesDayDto = BeanConvertUtil.covertBean(reqJson, ScheduleClassesDayDto.class);
-
            int count = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDaysCount(scheduleClassesDayDto);
 
            List<ScheduleClassesDayDto> scheduleClassesDayDtos = null;
