@@ -165,8 +165,9 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
             curDay = allDay % scheduleCycle;
 
             if (curDay == 0) {
-                curDay = scheduleCycle;
+                curDay = 1;
             }
+
 
             scDay.setDay(day+"");
             //计算 排班
