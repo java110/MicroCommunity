@@ -10,11 +10,11 @@
         insert into inspection_plan(
         inspection_plan_name,create_user_id,inspection_route_id,inspection_plan_period,remark,
         create_user_name,sign_type,start_time,inspection_plan_id,end_time,state,community_id,
-        start_date,end_date,inspection_month,inspection_day,inspection_workday,before_time
+        start_date,end_date,inspection_month,inspection_day,inspection_workday,before_time,can_reexamine
         ) values (
         #{inspectionPlanName},#{createUserId},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
         #{createUserName},#{signType},#{startTime},#{inspectionPlanId},#{endTime},#{state},#{communityId},
-        #{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{beforeTime}
+        #{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{beforeTime},#{canReexamine}
         )
     </insert>
 
@@ -23,8 +23,8 @@
     <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
 
         select t.inspection_plan_name,t.inspection_plan_name inspectionPlanName,t.create_user_id,t.create_user_id
-        createUserId,t.inspection_route_id,t.inspection_route_id
-        inspectionRouteId,t.inspection_plan_period,t.inspection_plan_period
+        createUserId,t.inspection_route_id,t.inspection_route_id inspectionRouteId
+        ,t.can_reexamine,t.can_reexamine canReexamine,t.inspection_plan_period,t.inspection_plan_period
         inspectionPlanPeriod,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.sign_type,t.sign_type signType,t.start_time,t.start_time
         startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
@@ -46,6 +46,9 @@
         </if>
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
+        </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            and t.can_reexamine= #{canReexamine}
         </if>
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_id= #{inspectionRouteId}
@@ -105,6 +108,9 @@
         </if>
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             , t.inspection_plan_name= #{inspectionPlanName}
+        </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            , t.can_reexamine= #{canReexamine}
         </if>
         <if test="createUserId !=null and createUserId != ''">
             , t.create_user_id= #{createUserId}
@@ -174,6 +180,9 @@
         </if>
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
+        </if>
+        <if test="canReexamine !=null and canReexamine != ''">
+            and t.can_reexamine= #{canReexamine}
         </if>
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_id= #{inspectionRouteId}

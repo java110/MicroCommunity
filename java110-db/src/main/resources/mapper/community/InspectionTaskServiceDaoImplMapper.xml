@@ -148,7 +148,7 @@
             and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">
-            and t.plan_ins_time= #{planInsTime}
+            and DATE_FORMAT(t.plan_ins_time,'%Y-%m-%d')= #{planInsTime}
         </if>
         <if test="planEndTime !=null ">
             and t.plan_end_time= #{planEndTime}
@@ -292,7 +292,7 @@
             and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">
-            and t.plan_ins_time= #{planInsTime}
+            and DATE_FORMAT(t.plan_ins_time,'%Y-%m-%d')= #{planInsTime}
         </if>
         <if test="planEndTime !=null ">
             and t.plan_end_time= #{planEndTime}
