@@ -164,9 +164,13 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
             int allDay = DateUtil.daysBetween(scheduleClassesDto.getComputeTime(), today)+1;
             curDay = allDay % scheduleCycle;
 
-            if (curDay == 0) {
+            if (curDay == 0 && day == 1) {
                 curDay = 1;
             }
+            if (curDay == 0 && day > 1) {
+                curDay = scheduleCycle;
+            }
+
 
 
             scDay.setDay(day+"");
