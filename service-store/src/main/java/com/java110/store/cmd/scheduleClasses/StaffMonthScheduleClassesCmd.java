@@ -68,7 +68,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "curMonth", "未包含月 YYYY-MM");
+        Assert.hasKeyAndValue(reqJson, "curDate", "未包含月 YYYY-MM");
     }
 
     @Override
@@ -128,7 +128,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
             return;
         }
 
-        String curMonth = reqJson.getString("curMonth");
+        String curMonth = reqJson.getString("curDate");
         String curMonthDay = curMonth + "-01";
 
         Calendar calendar = Calendar.getInstance();
