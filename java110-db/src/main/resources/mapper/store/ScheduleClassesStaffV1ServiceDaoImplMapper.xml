@@ -18,7 +18,8 @@
     <!-- 查询排班员工信息 add by wuxw 2018-07-03 -->
     <select id="getScheduleClassesStaffInfo" parameterType="Map" resultType="Map">
         select t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
-        storeId,t.scs_id,t.scs_id scsId,t.schedule_id,t.schedule_id scheduleId,t.staff_id,t.staff_id staffId
+        storeId,t.scs_id,t.scs_id scsId,t.schedule_id,t.schedule_id scheduleId,t.staff_id,t.staff_id staffId,
+        t.create_time createTime
         from schedule_classes_staff t
         where 1 =1
         <if test="staffName !=null and staffName != ''">
