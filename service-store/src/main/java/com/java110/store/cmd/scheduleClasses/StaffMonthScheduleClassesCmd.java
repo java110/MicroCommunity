@@ -156,7 +156,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
         ScheduleClassesDayDto tmpScheduleClassesDayDto = null;
         int curDay = 1;
         for (int day = 1; day <= maxDay; day++) {
-
+            scDay = new ScheduleClassesDayDto();
             String today = curMonth + "-"+day;
 
             int scheduleCycle = Integer.parseInt(scheduleClassesDto.getScheduleCycle());
@@ -195,7 +195,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
         ScheduleClassesDayDto tmpScheduleClassesDayDto = null;
         int curDay = 1;
         for (int day = 1; day <= maxDay; day++) {
-
+            scDay = new ScheduleClassesDayDto();
             Calendar today = Calendar.getInstance();
             today.setTime(DateUtil.getDateFromStringB(curMonth + "-"+day));
             int week = today.get(Calendar.WEEK_OF_MONTH);
@@ -247,6 +247,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
         ScheduleClassesDayDto tmpScheduleClassesDayDto = null;
         int curDay = 1;
         for (int day = 1; day <= maxDay; day++) {
+            scDay = new ScheduleClassesDayDto();
             curDay = day;
             scDay.setDay(day+"");
             //计算 排班
