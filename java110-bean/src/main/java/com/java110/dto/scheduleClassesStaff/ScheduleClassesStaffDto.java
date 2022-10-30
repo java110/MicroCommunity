@@ -1,9 +1,11 @@
 package com.java110.dto.scheduleClassesStaff;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -27,6 +29,8 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
     private boolean isWork;
 
     private long staffCount;
+
+    List<ScheduleClassesDayDto> days;
 
 
     private Date createTime;
@@ -121,5 +125,13 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setWork(boolean work) {
         isWork = work;
+    }
+
+    public List<ScheduleClassesDayDto> getDays() {
+        return days;
+    }
+
+    public void setDays(List<ScheduleClassesDayDto> days) {
+        this.days = days;
     }
 }

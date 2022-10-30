@@ -131,7 +131,9 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
         //查询 排班
         ScheduleClassesStaffDto tmpScheduleClassesStaffDto = new ScheduleClassesStaffDto();
         tmpScheduleClassesStaffDto.setStaffId(scheduleClassesStaffDto.getStaffId());
-        List<ScheduleClassesStaffDto> scheduleClassesStaffs = BeanConvertUtil.covertBeanList(scheduleClassesStaffV1ServiceDaoImpl.getScheduleClassesStaffInfo(BeanConvertUtil.beanCovertMap(scheduleClassesStaffDto)), ScheduleClassesStaffDto.class);
+        List<ScheduleClassesStaffDto> scheduleClassesStaffs = BeanConvertUtil.covertBeanList(
+                scheduleClassesStaffV1ServiceDaoImpl.getScheduleClassesStaffInfo(BeanConvertUtil.beanCovertMap(scheduleClassesStaffDto)
+                ), ScheduleClassesStaffDto.class);
 
         //这里 如果没有员工排班 那么就认为 员工一直在上班
         if (scheduleClassesStaffs == null || scheduleClassesStaffs.size() < 1) {
@@ -227,6 +229,13 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
         scheduleClassesDayDto.setWeekFlag(week + "");
         List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
 
+        //如果没有设置周
+        if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
+            scheduleClassesDayDto = new ScheduleClassesDayDto();
+            scheduleClassesDayDto.setScheduleId(scheduleClassesDto.getScheduleId());
+            scheduleClassesDayDto.setDay(day + "");
+            scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
+        }
         //设置问题 ，这里默认反馈在线
         if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
             scheduleClassesStaffDto.setWork(true);
