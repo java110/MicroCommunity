@@ -15,6 +15,7 @@
  */
 package com.java110.store.cmd.scheduleClasses;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,7 +23,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
+import com.java110.po.inspection.InspectionPlanStaffPo;
 import com.java110.po.scheduleClassesStaff.ScheduleClassesStaffPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -55,8 +58,29 @@ public class SaveScheduleClassesStaffCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "请求报文中未包含scheduleId");
-        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+
+        if(!reqJson.containsKey("staffs")){
+            throw new CmdException("未包含员工");
+        }
+
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+        if(staffs.size() < 1){
+            throw new CmdException("未包含员工");
+        }
+        long count = 0;
+        ScheduleClassesStaffDto scheduleClassesStaffDto = null;
+        for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
+            scheduleClassesStaffDto = new ScheduleClassesStaffDto();
+            scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
+            scheduleClassesStaffDto.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
+            count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
+
+            if(count > 0){
+                throw new CmdException("员工已经存在");
+            }
+
+
+        }
 
     }
 
@@ -65,14 +89,23 @@ public class SaveScheduleClassesStaffCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+        ScheduleClassesStaffPo scheduleClassesStaffPo = null;
 
-        ScheduleClassesStaffPo scheduleClassesStaffPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesStaffPo.class);
-        scheduleClassesStaffPo.setScsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        scheduleClassesStaffPo.setStoreId(storeId);
-        int flag = scheduleClassesStaffV1InnerServiceSMOImpl.saveScheduleClassesStaff(scheduleClassesStaffPo);
+        int flag = 0;
+        for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
+            scheduleClassesStaffPo = new ScheduleClassesStaffPo();
+            scheduleClassesStaffPo.setStoreId(storeId);
+            scheduleClassesStaffPo.setScheduleId(reqJson.getString("scheduleId"));
+            scheduleClassesStaffPo.setScsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            scheduleClassesStaffPo.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
+            scheduleClassesStaffPo.setStaffName(staffs.getJSONObject(staffIndex).getString("name"));
+            scheduleClassesStaffPo.setStoreId(storeId);
+            flag = scheduleClassesStaffV1InnerServiceSMOImpl.saveScheduleClassesStaff(scheduleClassesStaffPo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
