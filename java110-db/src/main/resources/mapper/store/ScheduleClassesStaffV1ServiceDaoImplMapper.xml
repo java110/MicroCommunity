@@ -25,6 +25,9 @@
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -81,6 +84,9 @@
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -105,7 +111,7 @@
         select t.schedule_id scheduleId,count(1) staffCount
         from schedule_classes_staff t
         where 1 =1
-            and t.status_cd= '0'
+        and t.status_cd= '0'
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>

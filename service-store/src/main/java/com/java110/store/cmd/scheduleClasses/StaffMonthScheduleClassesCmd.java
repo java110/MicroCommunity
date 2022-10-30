@@ -78,6 +78,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
         scheduleClassesStaffDto.setStaffId(reqJson.getString("staffId"));
+        scheduleClassesStaffDto.setStaffNameLike(reqJson.getString("staffNameLike"));
         scheduleClassesStaffDto.setPage(reqJson.getIntValue("page"));
         scheduleClassesStaffDto.setRow(reqJson.getIntValue("row"));
         scheduleClassesStaffDto.setStoreId(storeId);

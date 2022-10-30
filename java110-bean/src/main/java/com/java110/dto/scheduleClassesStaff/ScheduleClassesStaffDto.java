@@ -18,6 +18,7 @@ import java.util.List;
 public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     private String staffName;
+    private String staffNameLike;
     private String storeId;
     private String scsId;
     private String scheduleId;
@@ -133,5 +134,13 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setDays(List<ScheduleClassesDayDto> days) {
         this.days = days;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }
