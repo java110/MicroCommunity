@@ -6,8 +6,10 @@ import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
 import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
 import com.java110.dto.inspectionPlan.InspectionTaskDto;
+import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;
+import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.inspection.InspectionTaskDetailPo;
 import com.java110.po.inspection.InspectionTaskPo;
@@ -15,10 +17,7 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
@@ -39,9 +38,12 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
     @Autowired
     private IInspectionTaskDetailInnerServiceSMO inspectionTaskDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
+
     @Override
     protected void process(TaskDto taskDto) throws Exception {
-        logger.debug("开始执行微信模板信息推送" + taskDto.toString());
+        logger.debug("开始执行巡检任务生成" + taskDto.toString());
 
         // 获取小区
         List<CommunityDto> communityDtos = getAllCommunity();
@@ -107,35 +109,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
 
     }
 
-    /**
-     * 每日
-     *
-     * @param tmpInspectionPlanDto
-     * @param taskDto
-     * @param communityDto
-     */
-    private boolean dealDayInspectionPlan(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
-                                          InspectionPlanStaffDto tmpInspectionPlanStaffDto, List<InspectionTaskPo> inspectionTaskPos,
-                                          List<InspectionTaskDetailPo> inspectionTaskDetailPos) {
 
-        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
-        inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
-        inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
-        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 1);
-        inspectionTaskDto.setScopeTime(calendar.getTime());
-        inspectionTaskDto.setCreateTime(new Date());
-        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
-
-        if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) { // 已经生成过
-            return true;
-        }
-
-        return false;
-
-    }
 
     private void generatorStaffTask(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
                                     InspectionPlanStaffDto tmpInspectionPlanStaffDto, List<InspectionTaskPo> inspectionTaskPos,
@@ -144,19 +118,16 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         //巡检方式
         String inspectionPlanPeriod = tmpInspectionPlanDto.getInspectionPlanPeriod();
 
-        boolean hasInspection = false;
+        boolean hasCondition = false;
         switch (inspectionPlanPeriod) {
             case InspectionPlanDto.INSPECTION_PLAN_PERIOD_DAY:
-                hasInspection = dealDayInspectionPlan(tmpInspectionPlanDto, taskDto, communityDto, tmpInspectionPlanStaffDto, inspectionTaskPos, inspectionTaskDetailPos);
-                break;
+                hasCondition = hasGeneratorTaskConditionByDay(tmpInspectionPlanDto, taskDto, communityDto, tmpInspectionPlanStaffDto, inspectionTaskPos, inspectionTaskDetailPos);
+            break;
             case InspectionPlanDto.INSPECTION_PLAN_PERIOD_WEEK:
-                hasInspection = dealWeekInspectionPlan(tmpInspectionPlanDto, taskDto, communityDto, tmpInspectionPlanStaffDto, inspectionTaskPos, inspectionTaskDetailPos);
-                break;
-            case InspectionPlanDto.INSPECTION_PLAN_PERIOD_NEXT_DAY:
-                hasInspection = dealNextDayInspectionPlan(tmpInspectionPlanDto, taskDto, communityDto, tmpInspectionPlanStaffDto, inspectionTaskPos, inspectionTaskDetailPos);
+                hasCondition = hasGeneratorTaskConditionByWeek(tmpInspectionPlanDto, taskDto, communityDto, tmpInspectionPlanStaffDto, inspectionTaskPos, inspectionTaskDetailPos);
                 break;
         }
-        if (hasInspection) {
+        if (!hasCondition) {
             return;
         }
 
@@ -197,41 +168,77 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
             inspectionTaskDetailPo.setTaskDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskDetailId));
             inspectionTaskDetailPos.add(inspectionTaskDetailPo);
         }
-
-
         inspectionTaskPos.add(inspectionTaskPo);
-
-
     }
 
+
     /**
-     * 隔天
+     * 每日
      *
      * @param tmpInspectionPlanDto
      * @param taskDto
      * @param communityDto
      */
-    private boolean dealNextDayInspectionPlan(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
-                                              InspectionPlanStaffDto tmpInspectionPlanStaffDto, List<InspectionTaskPo> inspectionTaskPos,
-                                              List<InspectionTaskDetailPo> inspectionTaskDetailPos) {
-        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
-        inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
-        inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
-        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+    private boolean hasGeneratorTaskConditionByDay(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
+                                                   InspectionPlanStaffDto tmpInspectionPlanStaffDto, List<InspectionTaskPo> inspectionTaskPos,
+                                                   List<InspectionTaskDetailPo> inspectionTaskDetailPos) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 2);
-        inspectionTaskDto.setScopeTime(calendar.getTime());
-        inspectionTaskDto.setCreateTime(new Date());
-        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
+        // 检查 今日是否 需要 生成巡检任务
+        String[] months = tmpInspectionPlanDto.getInspectionMonth().split(",");
 
-        if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) { // 已经生成过
-            return true;
+        Calendar today = Calendar.getInstance();
+        int month = today.get(Calendar.MONTH)+1;
+        if(!Arrays.asList(months).contains(month+"")){
+            return false;
+        }
+        String[] days = tmpInspectionPlanDto.getInspectionDay().split(",");
+        int day = today.get(Calendar.DAY_OF_MONTH);
+        if(!Arrays.asList(days).contains(day+"")){
+            return false;
         }
 
-        return false;
-    }
+        //当前时间是否 到了 巡检任务前30分钟
 
+        int beforeTime = Integer.parseInt(tmpInspectionPlanDto.getBeforeTime());
+
+        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)+" "+tmpInspectionPlanDto.getStartTime()+":00";
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDateFromStringA(planTime));
+        calendar.add(Calendar.MINUTE,beforeTime*(-1));
+        if(DateUtil.getCurrentDate().before(calendar.getTime())){ // 还没到生成任务时间
+            return false;
+        }
+
+        // 判断 员工是否上班
+
+        ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
+        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        scheduleClassesStaffDto.setToday(DateUtil.getDateFromStringA(planTime));
+        scheduleClassesStaffDto = scheduleClassesStaffV1InnerServiceSMOImpl.staffIsWork(scheduleClassesStaffDto);
+
+        if(!scheduleClassesStaffDto.isWork()){//根据排班员工 休息
+            return false;
+
+        }
+
+        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
+        inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
+        //inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
+        //这里修改为用原始 巡检人查 以防 做了 转单
+        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanDto.getInspectionPlanId());
+        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        inspectionTaskDto.setPlanInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+
+        //目前逻辑修改 一个巡检 计划 对于一个员工只能生成一次巡检任务，所以 传 员工 巡检计划ID 时间即可
+        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
+        if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) { // 已经生成过
+            return false;
+        }
+
+        return true;
+
+    }
     /**
      * 每周
      *
@@ -239,25 +246,68 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
      * @param taskDto
      * @param communityDto
      */
-    private boolean dealWeekInspectionPlan(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
+    private boolean hasGeneratorTaskConditionByWeek(InspectionPlanDto tmpInspectionPlanDto, TaskDto taskDto, CommunityDto communityDto,
                                            InspectionPlanStaffDto tmpInspectionPlanStaffDto, List<InspectionTaskPo> inspectionTaskPos,
                                            List<InspectionTaskDetailPo> inspectionTaskDetailPos) {
-        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
-        inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
-        inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
-        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 7);
-        inspectionTaskDto.setScopeTime(calendar.getTime());
-        inspectionTaskDto.setCreateTime(new Date());
-        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
+        // 检查 今日是否 需要 生成巡检任务
+        String[] workday = tmpInspectionPlanDto.getInspectionWorkday().split(",");
 
-        if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) { // 已经生成过
-            return true;
+        Calendar today = Calendar.getInstance();
+        int day = today.get(Calendar.DAY_OF_WEEK);
+
+        //一周第一天是否为星期天
+        boolean isFirstSunday = (today.getFirstDayOfWeek() == Calendar.SUNDAY);
+        //获取周几
+        //若一周第一天为星期天，则-1
+        if (isFirstSunday) {
+            day = day - 1;
+            if (day == 0) {
+                day = 7;
+            }
+        }
+        if(!Arrays.asList(workday).contains(day+"")){
+            return false;
         }
 
-        return false;
+        //当前时间是否 到了 巡检任务前30分钟
+        int beforeTime = Integer.parseInt(tmpInspectionPlanDto.getBeforeTime());
+
+        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)+" "+tmpInspectionPlanDto.getStartTime()+":00";
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDateFromStringA(planTime));
+        calendar.add(Calendar.MINUTE,beforeTime*(-1));
+        if(DateUtil.getCurrentDate().before(calendar.getTime())){ // 还没到生成任务时间
+            return false;
+        }
+
+
+        ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
+        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        scheduleClassesStaffDto.setToday(DateUtil.getDateFromStringA(planTime));
+        scheduleClassesStaffDto = scheduleClassesStaffV1InnerServiceSMOImpl.staffIsWork(scheduleClassesStaffDto);
+
+        if(!scheduleClassesStaffDto.isWork()){//根据排班员工 休息
+            return false;
+
+        }
+
+        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
+        inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
+       //inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
+        //这里修改为用原始 巡检人查 以防 做了 转单
+        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanDto.getInspectionPlanId());
+        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        inspectionTaskDto.setPlanInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+
+        //目前逻辑修改 一个巡检 计划 对于一个员工只能生成一次巡检任务，所以 传 员工 巡检计划ID 时间即可
+        List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
+        if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) { // 已经生成过
+            return false;
+        }
+
+        return true;
 
     }
 

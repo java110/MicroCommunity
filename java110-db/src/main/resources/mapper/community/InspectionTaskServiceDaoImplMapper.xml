@@ -141,6 +141,9 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
+        <if test="originalPlanUserId !=null and originalPlanUserId != ''">
+            and t.original_plan_user_id= #{originalPlanUserId}
+        </if>
         <if test="startTime != null">
             and t.act_ins_time &gt;= #{startTime}
         </if>
@@ -284,6 +287,9 @@
         and ip.status_cd = '0'
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
+        </if>
+        <if test="originalPlanUserId !=null and originalPlanUserId != ''">
+            and t.original_plan_user_id= #{originalPlanUserId}
         </if>
         <if test="startTime != null">
             and t.act_ins_time &gt;= #{startTime}
