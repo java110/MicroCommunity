@@ -39,7 +39,7 @@
         <if test="weekFlag !=null and weekFlag != ''">
             and t.week_flag= #{weekFlag}
         </if>
-        order by t.day
+        order by t.week_flag,t.day
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
