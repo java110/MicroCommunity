@@ -71,12 +71,12 @@ public class SaveScheduleClassesStaffCmd extends Cmd {
         ScheduleClassesStaffDto scheduleClassesStaffDto = null;
         for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
             scheduleClassesStaffDto = new ScheduleClassesStaffDto();
-            scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
+            //scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
             scheduleClassesStaffDto.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
             count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
 
             if(count > 0){
-                throw new CmdException("员工已经存在");
+                throw new CmdException(staffs.getJSONObject(staffIndex).getString("name")+"员工已经存在排班");
             }
 
 
