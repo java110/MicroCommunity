@@ -76,7 +76,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
 
         getStaffMonthScheduleClasses(sheet,scheduleClassesStaffDto,reqJson);
 
-        return null;
+        return workbook;
     }
 
     private void getStaffMonthScheduleClasses(Sheet sheet, ScheduleClassesStaffDto scheduleClassesStaffDto,JSONObject reqJson) {
@@ -102,14 +102,13 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
     private void appendData(List<ScheduleClassesStaffDto> scheduleClassesStaffDtos,Sheet sheet,int step) {
 
         Row row = null;
-        JSONObject dataObj = null;
         ScheduleClassesStaffDto scheduleClassesStaffDto = null;
         String cellValue = "";
         ScheduleClassesDayDto day = null;
         for (int roomIndex = 0; roomIndex < scheduleClassesStaffDtos.size(); roomIndex++) {
             row = sheet.createRow(roomIndex +step + 1);
             scheduleClassesStaffDto = scheduleClassesStaffDtos.get(0);
-            row.createCell(0).setCellValue(dataObj.getString(scheduleClassesStaffDto.getStaffName()));
+            row.createCell(0).setCellValue(scheduleClassesStaffDto.getStaffName());
             for(int dayIndex = 1 ; dayIndex <= scheduleClassesStaffDto.getDays().size(); dayIndex++) {
 
                 day = scheduleClassesStaffDto.getDays().get(dayIndex);
