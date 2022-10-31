@@ -64,8 +64,8 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         calendar.setTime(DateUtil.getDateFromStringB(curMonthDay));
         int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        for(int day = 1; day <= maxDay ; day++){
-            row.createCell(day).setCellValue(day+"");
+        for (int day = 1; day <= maxDay; day++) {
+            row.createCell(day).setCellValue(day + "");
         }
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
@@ -74,20 +74,20 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
         scheduleClassesStaffDto.setStoreId(reqJson.getString("storeId"));
 
-        getStaffMonthScheduleClasses(sheet,scheduleClassesStaffDto,reqJson);
+        getStaffMonthScheduleClasses(sheet, scheduleClassesStaffDto, reqJson);
 
         return workbook;
     }
 
-    private void getStaffMonthScheduleClasses(Sheet sheet, ScheduleClassesStaffDto scheduleClassesStaffDto,JSONObject reqJson) {
+    private void getStaffMonthScheduleClasses(Sheet sheet, ScheduleClassesStaffDto scheduleClassesStaffDto, JSONObject reqJson) {
         scheduleClassesStaffDto.setPage(1);
         scheduleClassesStaffDto.setRow(MAX_ROW);
         long count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
-        int record = (int)Math.ceil((double) count / (double) MAX_ROW);
+        int record = (int) Math.ceil((double) count / (double) MAX_ROW);
 
         List<ScheduleClassesStaffDto> scheduleClassesStaffDtos = null;
 
-        for(int page = 1;page <= record; page++){
+        for (int page = 1; page <= record; page++) {
             scheduleClassesStaffDto.setPage(page);
             scheduleClassesStaffDto.setRow(MAX_ROW);
             scheduleClassesStaffDtos = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffs(scheduleClassesStaffDto);
@@ -95,29 +95,28 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
                 computeStaffCurMonthWorkday(tmpScheduleClassesStaffDto, reqJson);
 
             }
-            appendData(scheduleClassesStaffDtos,sheet,(page-1)*MAX_ROW);
+            appendData(scheduleClassesStaffDtos, sheet, (page - 1) * MAX_ROW);
         }
     }
 
-    private void appendData(List<ScheduleClassesStaffDto> scheduleClassesStaffDtos,Sheet sheet,int step) {
+    private void appendData(List<ScheduleClassesStaffDto> scheduleClassesStaffDtos, Sheet sheet, int step) {
 
         Row row = null;
         ScheduleClassesStaffDto scheduleClassesStaffDto = null;
         String cellValue = "";
         ScheduleClassesDayDto day = null;
         for (int roomIndex = 0; roomIndex < scheduleClassesStaffDtos.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex +step + 1);
+            row = sheet.createRow(roomIndex + step + 1);
             scheduleClassesStaffDto = scheduleClassesStaffDtos.get(0);
             row.createCell(0).setCellValue(scheduleClassesStaffDto.getStaffName());
-            for(int dayIndex = 1 ; dayIndex <= scheduleClassesStaffDto.getDays().size(); dayIndex++) {
-
-                day = scheduleClassesStaffDto.getDays().get(dayIndex);
-                if(!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getWorkday())){
-                    cellValue= "休息";
-                }else{
-                    cellValue= "正常上下班";
-                    for(ScheduleClassesTimeDto time : day.getTimes()){
-                        cellValue +=(time.getStartTime()+"-"+time.getEndTime());
+            for (int dayIndex = 1; dayIndex <= scheduleClassesStaffDto.getDays().size(); dayIndex++) {
+                day = scheduleClassesStaffDto.getDays().get(dayIndex-1);
+                if (!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getWorkday())) {
+                    cellValue = "休息";
+                } else {
+                    cellValue = "正常上下班";
+                    for (ScheduleClassesTimeDto time : day.getTimes()) {
+                        cellValue += (time.getStartTime() + "-" + time.getEndTime());
                     }
                 }
                 row.createCell(dayIndex).setCellValue(cellValue);
@@ -166,7 +165,6 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         }
 
 
-
     }
 
     private void doDay(ScheduleClassesStaffDto scheduleClassesStaffDto,
@@ -179,11 +177,11 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         int curDay = 1;
         for (int day = 1; day <= maxDay; day++) {
             scDay = new ScheduleClassesDayDto();
-            String today = curMonth + "-"+day;
+            String today = curMonth + "-" + day;
 
             int scheduleCycle = Integer.parseInt(scheduleClassesDto.getScheduleCycle());
 
-            int allDay = DateUtil.daysBetween(scheduleClassesDto.getComputeTime(), today)+1;
+            int allDay = DateUtil.daysBetween(scheduleClassesDto.getComputeTime(), today) + 1;
             curDay = allDay % scheduleCycle;
 //
 //            if (curDay == 0 && day == 1) {
@@ -197,15 +195,14 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
             }
 
 
-
-            scDay.setDay(day+"");
+            scDay.setDay(day + "");
             //计算 排班
-            for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos){
-                if((curDay+"").equals(scheduleClassesDayDto1.getDay())){
+            for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
+                if ((curDay + "").equals(scheduleClassesDayDto1.getDay())) {
                     tmpScheduleClassesDayDto = scheduleClassesDayDto1;
                 }
             }
-            if(tmpScheduleClassesDayDto != null ){
+            if (tmpScheduleClassesDayDto != null) {
                 scDay.setWorkday(tmpScheduleClassesDayDto.getWorkday());
                 scDay.setTimes(tmpScheduleClassesDayDto.getTimes());
             }
@@ -227,7 +224,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         for (int day = 1; day <= maxDay; day++) {
             scDay = new ScheduleClassesDayDto();
             Calendar today = Calendar.getInstance();
-            today.setTime(DateUtil.getDateFromStringB(curMonth + "-"+day));
+            today.setTime(DateUtil.getDateFromStringB(curMonth + "-" + day));
             int week = today.get(Calendar.WEEK_OF_MONTH);
             curDay = today.get(Calendar.DAY_OF_WEEK);
 
@@ -242,21 +239,21 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
                 }
             }
 
-            scDay.setDay(day+"");
+            scDay.setDay(day + "");
             //计算 排班
-            for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos){
-                if((curDay+"").equals(scheduleClassesDayDto1.getDay()) && (week+"").equals(scheduleClassesDayDto1.getWeekFlag())){
+            for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
+                if ((curDay + "").equals(scheduleClassesDayDto1.getDay()) && (week + "").equals(scheduleClassesDayDto1.getWeekFlag())) {
                     tmpScheduleClassesDayDto = scheduleClassesDayDto1;
                 }
             }
-            if(tmpScheduleClassesDayDto == null){ // 没有设置周
-                for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos){
-                    if((curDay+"").equals(scheduleClassesDayDto1.getDay())){
+            if (tmpScheduleClassesDayDto == null) { // 没有设置周
+                for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
+                    if ((curDay + "").equals(scheduleClassesDayDto1.getDay())) {
                         tmpScheduleClassesDayDto = scheduleClassesDayDto1;
                     }
                 }
             }
-            if(tmpScheduleClassesDayDto != null ){
+            if (tmpScheduleClassesDayDto != null) {
                 scDay.setWorkday(tmpScheduleClassesDayDto.getWorkday());
                 scDay.setTimes(tmpScheduleClassesDayDto.getTimes());
             }
@@ -279,14 +276,14 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         for (int day = 1; day <= maxDay; day++) {
             scDay = new ScheduleClassesDayDto();
             curDay = day;
-            scDay.setDay(day+"");
+            scDay.setDay(day + "");
             //计算 排班
-            for(ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos){
-                if((curDay+"").equals(scheduleClassesDayDto1.getDay())){
+            for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
+                if ((curDay + "").equals(scheduleClassesDayDto1.getDay())) {
                     tmpScheduleClassesDayDto = scheduleClassesDayDto1;
                 }
             }
-            if(tmpScheduleClassesDayDto != null ){
+            if (tmpScheduleClassesDayDto != null) {
                 scDay.setWorkday(tmpScheduleClassesDayDto.getWorkday());
                 scDay.setTimes(tmpScheduleClassesDayDto.getTimes());
             }
@@ -295,7 +292,6 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
 
         scheduleClassesStaffDto.setDays(days);
     }
-
 
 
 }
