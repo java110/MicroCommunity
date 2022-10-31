@@ -12,11 +12,15 @@ import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -48,14 +52,14 @@ import java.util.List;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "userId",  length = 30, defaultValue = "-1", remark = "用户ID，如果没有填写-1"),
-        @Java110ParamDoc(name = "userName", type = "String", length = 64,  remark = "用户 名称"),
-        @Java110ParamDoc(name = "machineCode", type = "String", length = 64,  remark = "设备编号"),
-        @Java110ParamDoc(name = "openTypeCd", type = "String", length = 64,  remark = "开门类型 1000 人脸"),
-        @Java110ParamDoc(name = "similar", type = "String", length = 64,  remark = "相似度 0-1 之间"),
-        @Java110ParamDoc(name = "dateTime", type = "String", length = 64,  remark = "开门时间 YYYY-MM-DD hh24:mi:ss"),
-        @Java110ParamDoc(name = "extCommunityId", type = "String", length = 64,  remark = "小区ID"),
-        @Java110ParamDoc(name = "recordTypeCd", type = "String", length = 64,  remark = "8888 开门记录"),
+        @Java110ParamDoc(name = "userId", length = 30, defaultValue = "-1", remark = "用户ID，如果没有填写-1"),
+        @Java110ParamDoc(name = "userName", type = "String", length = 64, remark = "用户 名称"),
+        @Java110ParamDoc(name = "machineCode", type = "String", length = 64, remark = "设备编号"),
+        @Java110ParamDoc(name = "openTypeCd", type = "String", length = 64, remark = "开门类型 1000 人脸"),
+        @Java110ParamDoc(name = "similar", type = "String", length = 64, remark = "相似度 0-1 之间"),
+        @Java110ParamDoc(name = "dateTime", type = "String", length = 64, remark = "开门时间 YYYY-MM-DD hh24:mi:ss"),
+        @Java110ParamDoc(name = "extCommunityId", type = "String", length = 64, remark = "小区ID"),
+        @Java110ParamDoc(name = "recordTypeCd", type = "String", length = 64, remark = "8888 开门记录"),
 })
 
 @Java110ResponseDoc(
@@ -66,14 +70,14 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{'userId':'123123','userName':'admin','machineCode':'sss','openTypeCd':'1000','similar':'0.9','dateTime':'2022-10-22 10:10:10','extCommunityId':'123123','recordTypeCd':'8888'}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{'userId':'123123','userName':'admin','machineCode':'sss','openTypeCd':'1000','similar':'0.9','dateTime':'2022-10-22 10:10:10','extCommunityId':'123123','recordTypeCd':'8888'}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 /**
  * 门禁开门 物联网 触发调用 cmd
  */
 @Java110Cmd(serviceCode = "/machine/openDoorLog")
-public class OpenDoorLogCmd extends Cmd{
+public class OpenDoorLogCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -89,6 +93,12 @@ public class OpenDoorLogCmd extends Cmd{
 
     @Autowired
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -120,6 +130,9 @@ public class OpenDoorLogCmd extends Cmd{
         } else {
             machineRecordDto.setTel("-1");
         }
+
+        //根据用户ID查询手机号嘛
+        addTelByUserId(reqJson, machineRecordDto);
 
         machineRecordDto.setMachineRecordId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
         if (!StringUtil.isEmpty(machineRecordDto.getPhoto())) {
@@ -165,5 +178,34 @@ public class OpenDoorLogCmd extends Cmd{
 //        dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
 //                BusinessTypeConstant.BUSINESS_TYPE_DATABUS_SEND_OPEN_LOG, BeanConvertUtil.beanCovertJson(machineRecordPo)));
         context.setResponseEntity(ResultVo.success());
+    }
+
+    private void addTelByUserId(JSONObject reqJson, MachineRecordDto machineRecordDto) {
+
+        if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("user"))) {
+            return;
+        }
+
+        if(!"-1".equals(StringUtil.isEmpty(machineRecordDto.getTel()))){
+            return ;
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("userId"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        if(userDtos != null && userDtos.size()> 0){
+            machineRecordDto.setTel(userDtos.get(0).getTel());
+            return ;
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(reqJson.getString("userId"));
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        if(ownerDtos == null || ownerDtos.size()<1){
+            return ;
+        }
+        machineRecordDto.setTel(ownerDtos.get(0).getLink());
     }
 }
