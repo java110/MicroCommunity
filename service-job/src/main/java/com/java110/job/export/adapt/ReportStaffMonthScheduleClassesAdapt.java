@@ -107,7 +107,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         ScheduleClassesDayDto day = null;
         for (int roomIndex = 0; roomIndex < scheduleClassesStaffDtos.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + step + 1);
-            scheduleClassesStaffDto = scheduleClassesStaffDtos.get(0);
+            scheduleClassesStaffDto = scheduleClassesStaffDtos.get(roomIndex);
             row.createCell(0).setCellValue(scheduleClassesStaffDto.getStaffName());
             for (int dayIndex = 1; dayIndex <= scheduleClassesStaffDto.getDays().size(); dayIndex++) {
                 day = scheduleClassesStaffDto.getDays().get(dayIndex-1);
