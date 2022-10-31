@@ -114,7 +114,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
                 if (!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getWorkday())) {
                     cellValue = "休息";
                 } else {
-                    cellValue = "正常上下班";
+                    cellValue = "正常上下班\r\n";
                     for (ScheduleClassesTimeDto time : day.getTimes()) {
                         cellValue += (time.getStartTime() + "-" + time.getEndTime());
                     }
