@@ -48,12 +48,18 @@ public class ExportDataCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         String userId = context.getReqHeaders().get("user-id");
+        String storeId = context.getReqHeaders().get("store-id");
 
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户不存在");
+
+        //这里放入 员工ID 和  商户ID
+
+        reqJson.put("userId",userId);
+        reqJson.put("storeId",storeId);
 
         ExportDataDto exportDataDto = new ExportDataDto();
         exportDataDto.setBusinessAdapt(reqJson.getString("pagePath"));
