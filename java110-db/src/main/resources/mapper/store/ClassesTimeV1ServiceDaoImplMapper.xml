@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="classesTimeV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存班次时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveClassesTimeInfo" parameterType="Map">
+        insert into classes_time(
+classes_id,time_id,start_time,end_time
+) values (
+#{classesId},#{timeId},#{startTime},#{endTime}
+)
+    </insert>
+
+
+
+    <!-- 查询班次时间信息 add by wuxw 2018-07-03 -->
+    <select id="getClassesTimeInfo" parameterType="Map" resultType="Map">
+        select  t.classes_id,t.classes_id classesId,t.time_id,t.time_id timeId,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime 
+from classes_time t 
+where 1 =1 
+<if test="classesId !=null and classesId != ''">
+   and t.classes_id= #{classesId}
+</if> 
+<if test="timeId !=null and timeId != ''">
+   and t.time_id= #{timeId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改班次时间信息 add by wuxw 2018-07-03 -->
+    <update id="updateClassesTimeInfo" parameterType="Map">
+        update  classes_time t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="classesId !=null and classesId != ''">
+, t.classes_id= #{classesId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+ where 1=1 <if test="timeId !=null and timeId != ''">
+and t.time_id= #{timeId}
+</if> 
+
+    </update>
+
+    <!-- 查询班次时间数量 add by wuxw 2018-07-03 -->
+     <select id="queryClassesTimesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from classes_time t 
+where 1 =1 
+<if test="classesId !=null and classesId != ''">
+   and t.classes_id= #{classesId}
+</if> 
+<if test="timeId !=null and timeId != ''">
+   and t.time_id= #{timeId}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+
+
+     </select>
+
+</mapper>
