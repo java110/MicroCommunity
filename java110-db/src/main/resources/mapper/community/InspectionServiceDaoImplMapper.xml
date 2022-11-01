@@ -112,7 +112,8 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        group by t.inspection_id
+        <!--这里注释 因为 MySQL 8.0  这个写法不合适，如果引起其他bug 请考虑MySQL 8.0 的写法-->
+        <!--group by t.inspection_id-->
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
