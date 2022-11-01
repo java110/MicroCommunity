@@ -22,8 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.store.IClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IClassesV1InnerServiceSMO;
 import com.java110.po.classes.ClassesPo;
+import com.java110.po.classesTime.ClassesTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,10 @@ public class DeleteClassesCmd extends Cmd {
     @Autowired
     private IClassesV1InnerServiceSMO classesV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IClassesTimeV1InnerServiceSMO classesTimeV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesId", "classesId不能为空");
@@ -63,6 +69,14 @@ public class DeleteClassesCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        ClassesTimePo classesTimePo = null;
+        classesTimePo = new ClassesTimePo();
+        classesTimePo.setClassesId(classesPo.getClassesId());
+        flag = classesTimeV1InnerServiceSMOImpl.deleteClassesTime(classesTimePo);
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
