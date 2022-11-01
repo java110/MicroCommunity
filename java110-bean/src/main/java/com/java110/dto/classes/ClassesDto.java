@@ -1,9 +1,11 @@
 package com.java110.dto.classes;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.classesTime.ClassesTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -28,6 +30,8 @@ public class ClassesDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<ClassesTimeDto> times;
 
 
     public String getClassesId() {
@@ -85,5 +89,13 @@ public class ClassesDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ClassesTimeDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ClassesTimeDto> times) {
+        this.times = times;
     }
 }

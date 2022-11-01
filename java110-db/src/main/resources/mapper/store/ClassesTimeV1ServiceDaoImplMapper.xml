@@ -24,6 +24,13 @@
         <if test="classesId !=null and classesId != ''">
             and t.classes_id= #{classesId}
         </if>
+        <if test="classesIds !=null">
+            and t.classes_id in
+            <foreach collection="classesIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}
         </if>
@@ -72,8 +79,11 @@
         select count(1) count
         from classes_time t
         where 1 =1
-        <if test="classesId !=null and classesId != ''">
-            and t.classes_id= #{classesId}
+        <if test="classesIds !=null">
+            and t.classes_id in
+            <foreach collection="classesIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}

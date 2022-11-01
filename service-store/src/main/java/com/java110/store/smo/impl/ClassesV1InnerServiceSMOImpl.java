@@ -16,6 +16,8 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.classesTime.ClassesTimeDto;
+import com.java110.intf.store.IClassesTimeV1InnerServiceSMO;
 import com.java110.store.dao.IClassesV1ServiceDao;
 import com.java110.intf.store.IClassesV1InnerServiceSMO;
 import com.java110.dto.classes.ClassesDto;
@@ -45,28 +47,31 @@ public class ClassesV1InnerServiceSMOImpl extends BaseServiceSMO implements ICla
     @Autowired
     private IClassesV1ServiceDao classesV1ServiceDaoImpl;
 
+    @Autowired
+    private IClassesTimeV1InnerServiceSMO classesTimeV1InnerServiceSMOImpl;
+
 
     @Override
-    public int saveClasses(@RequestBody  ClassesPo classesPo) {
+    public int saveClasses(@RequestBody ClassesPo classesPo) {
         int saveFlag = classesV1ServiceDaoImpl.saveClassesInfo(BeanConvertUtil.beanCovertMap(classesPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateClasses(@RequestBody  ClassesPo classesPo) {
+    @Override
+    public int updateClasses(@RequestBody ClassesPo classesPo) {
         int saveFlag = classesV1ServiceDaoImpl.updateClassesInfo(BeanConvertUtil.beanCovertMap(classesPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteClasses(@RequestBody  ClassesPo classesPo) {
-       classesPo.setStatusCd("1");
-       int saveFlag = classesV1ServiceDaoImpl.updateClassesInfo(BeanConvertUtil.beanCovertMap(classesPo));
-       return saveFlag;
+    @Override
+    public int deleteClasses(@RequestBody ClassesPo classesPo) {
+        classesPo.setStatusCd("1");
+        int saveFlag = classesV1ServiceDaoImpl.updateClassesInfo(BeanConvertUtil.beanCovertMap(classesPo));
+        return saveFlag;
     }
 
     @Override
-    public List<ClassesDto> queryClassess(@RequestBody  ClassesDto classesDto) {
+    public List<ClassesDto> queryClassess(@RequestBody ClassesDto classesDto) {
 
         //校验是否传了 分页信息
 
@@ -78,12 +83,35 @@ public class ClassesV1InnerServiceSMOImpl extends BaseServiceSMO implements ICla
 
         List<ClassesDto> classess = BeanConvertUtil.covertBeanList(classesV1ServiceDaoImpl.getClassesInfo(BeanConvertUtil.beanCovertMap(classesDto)), ClassesDto.class);
 
+        if (classess == null || classess.size() < 1) {
+            return classess;
+        }
+        List<String> classesIds = new ArrayList<>();
+        for (ClassesDto tmpClassesDto : classess) {
+            classesIds.add(tmpClassesDto.getClassesId());
+        }
+
+        ClassesTimeDto classesTimeDto = new ClassesTimeDto();
+        classesTimeDto.setClassesIds(classesIds.toArray(new String[classesIds.size()]));
+        List<ClassesTimeDto> classesTimeDtos = classesTimeV1InnerServiceSMOImpl.queryClassesTimes(classesTimeDto);
+        List<ClassesTimeDto> times = null;
+        for(ClassesDto tmpClassesDto : classess){
+            times = new ArrayList<>();
+            for(ClassesTimeDto tmpClassesTimeDto: classesTimeDtos){
+                if(tmpClassesDto.getClassesId().equals(tmpClassesTimeDto.getClassesId())){
+                    times.add(tmpClassesTimeDto);
+                }
+            }
+            tmpClassesDto.setTimes(times);
+        }
+
         return classess;
     }
 
 
     @Override
     public int queryClassessCount(@RequestBody ClassesDto classesDto) {
-        return classesV1ServiceDaoImpl.queryClassessCount(BeanConvertUtil.beanCovertMap(classesDto));    }
+        return classesV1ServiceDaoImpl.queryClassessCount(BeanConvertUtil.beanCovertMap(classesDto));
+    }
 
 }
