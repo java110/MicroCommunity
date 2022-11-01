@@ -182,11 +182,11 @@ public class OpenDoorLogCmd extends Cmd {
 
     private void addTelByUserId(JSONObject reqJson, MachineRecordDto machineRecordDto) {
 
-        if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("user"))) {
+        if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("userId"))) {
             return;
         }
 
-        if(!"-1".equals(StringUtil.isEmpty(machineRecordDto.getTel()))){
+        if(!"-1".equals(machineRecordDto.getTel())){
             return ;
         }
 
