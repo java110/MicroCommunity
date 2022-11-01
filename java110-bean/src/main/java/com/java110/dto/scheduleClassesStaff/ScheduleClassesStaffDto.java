@@ -2,6 +2,7 @@ package com.java110.dto.scheduleClassesStaff;
 
 import com.java110.dto.PageDto;
 import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
+import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +35,8 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
     private String curDate;
 
     List<ScheduleClassesDayDto> days;
+
+    List<ScheduleClassesTimeDto> times;
 
 
     private Date createTime;
@@ -152,5 +155,13 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setCurDate(String curDate) {
         this.curDate = curDate;
+    }
+
+    public List<ScheduleClassesTimeDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ScheduleClassesTimeDto> times) {
+        this.times = times;
     }
 }

@@ -169,6 +169,10 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
      * 员工是否上班 按月 排班
      * @param scheduleClassesDto
      * @param scheduleClassesStaffDto
+     * {
+     *     work:true // 表名 员工 此刻 在线
+     *     times:[] // 当日 上班下班时间点 ，这个节点 不一定存在
+     * }
      */
     private void staffIsWorkMonth( ScheduleClassesDto scheduleClassesDto, ScheduleClassesStaffDto scheduleClassesStaffDto) {
         Calendar today = Calendar.getInstance();
@@ -192,7 +196,7 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
 
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
-
+        scheduleClassesStaffDto.setTimes(times);
         String startTime = null;
         String endTime = null;
         for (ScheduleClassesTimeDto time : times) {
@@ -256,7 +260,7 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
 
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
-
+        scheduleClassesStaffDto.setTimes(times);
         String startTime = null;
         String endTime = null;
         for (ScheduleClassesTimeDto time : times) {
@@ -307,8 +311,10 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             return ;
         }
 
+
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
+        scheduleClassesStaffDto.setTimes(times);
 
         String startTime = null;
         String endTime = null;
