@@ -161,6 +161,8 @@
         t.end_time endTime,
         t.sign_type signType,
         t.start_time startTime,
+        t.end_date endDate,
+        t.start_date startDate,
         t.create_user_id createUserId,
         t.create_user_name createUserName,
         t.inspection_plan_id inspectionPlanId,
@@ -169,6 +171,9 @@
         t.can_reexamine canReexamine,
         t.b_id bId,
         t.create_time createTime,
+        t.inspection_workday inspectionWorkday,
+        t.inspection_month inspectionMonth,
+        t.inspection_day inspectionDay,
         d.name stateName,
         c.name inspectionPlanPeriodName,
         i.name signTypeName
