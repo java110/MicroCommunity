@@ -164,7 +164,7 @@ public class AddOwnerToHcGovAdapt extends DatabusAdaptImpl {
             body.put("maritalStatus", "N");
             body.put("religiousBelief", "无");
             body.put("ramark", ownerPo.getRemark());
-            body.put("extRoomId", extRoomId.toJSONString());
+            body.put("extRoomId", extRoomId != null ? extRoomId.toJSONString():"");
             body.put("ownerType", "2002");
             body.put("ownerAddress", "无");
             body.put("ownerTypeCd", ownerPo.getOwnerTypeCd());
