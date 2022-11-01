@@ -82,4 +82,7 @@ public interface IScheduleClassesStaffV1InnerServiceSMO {
     @RequestMapping(value = "/staffIsWork", method = RequestMethod.POST)
     ScheduleClassesStaffDto staffIsWork(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
 
+    @RequestMapping(value = "/computeStaffCurMonthWorkday", method = RequestMethod.POST)
+    ScheduleClassesStaffDto computeStaffCurMonthWorkday(@RequestBody ScheduleClassesStaffDto scheduleClassesStaffDto);
+
 }

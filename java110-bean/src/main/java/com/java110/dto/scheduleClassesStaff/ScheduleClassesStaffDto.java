@@ -31,6 +31,8 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     private long staffCount;
 
+    private String curDate;
+
     List<ScheduleClassesDayDto> days;
 
 
@@ -142,5 +144,13 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setStaffNameLike(String staffNameLike) {
         this.staffNameLike = staffNameLike;
+    }
+
+    public String getCurDate() {
+        return curDate;
+    }
+
+    public void setCurDate(String curDate) {
+        this.curDate = curDate;
     }
 }
