@@ -21,7 +21,7 @@
         sendWay,t.open_id,t.open_id openId,t.log_id,t.log_id logId,t.community_name,t.community_name
         communityName,t.status_cd,t.status_cd statusCd,t.remark,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id
         communityId,t.person_tel,t.person_tel personTel,t.business_type,t.business_type businessType,mr.`name` ruleName,
-        td.`name` sendWayName,td1.name businessTypeName
+        td.`name` sendWayName,td1.name businessTypeName,t.create_time createTime
         from market_log t
         left join market_rule mr on t.rule_id = mr.rule_id and mr.status_cd = '0'
         LEFT JOIN t_dict td on td.status_cd = t.send_way and td.table_name = 'market_log' and td.table_columns = 'send_way'

@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.classes.ClassesDto;
 import com.java110.intf.store.IClassesV1InnerServiceSMO;
 import com.java110.po.classes.ClassesPo;
 import com.java110.utils.exception.CmdException;
@@ -55,7 +56,6 @@ public class SaveClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
 
     }
 
@@ -63,8 +63,9 @@ Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ClassesPo classesPo = BeanConvertUtil.covertBean(reqJson, ClassesPo.class);
+        ClassesPo classesPo = BeanConvertUtil.covertBean(reqJson, ClassesPo.class);
         classesPo.setClassesId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        classesPo.setState(ClassesDto.STATE_START);
         int flag = classesV1InnerServiceSMOImpl.saveClasses(classesPo);
 
         if (flag < 1) {
