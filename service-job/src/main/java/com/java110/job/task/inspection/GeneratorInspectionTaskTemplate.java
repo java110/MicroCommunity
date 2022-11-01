@@ -226,8 +226,8 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         inspectionTaskDto.setCommunityId(tmpInspectionPlanDto.getCommunityId());
         //inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
         //这里修改为用原始 巡检人查 以防 做了 转单
-        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanDto.getInspectionPlanId());
-        inspectionTaskDto.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
+        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
         inspectionTaskDto.setPlanInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
 
         //目前逻辑修改 一个巡检 计划 对于一个员工只能生成一次巡检任务，所以 传 员工 巡检计划ID 时间即可
@@ -298,7 +298,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
        //inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
         //这里修改为用原始 巡检人查 以防 做了 转单
         inspectionTaskDto.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
-        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanStaffDto.getIpStaffId());
+        inspectionTaskDto.setOriginalPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
         inspectionTaskDto.setPlanInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
 
         //目前逻辑修改 一个巡检 计划 对于一个员工只能生成一次巡检任务，所以 传 员工 巡检计划ID 时间即可
