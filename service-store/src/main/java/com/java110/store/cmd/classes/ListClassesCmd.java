@@ -30,8 +30,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.classes.ClassesDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "classes.listClasses")
 public class ListClassesCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListClassesCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListClassesCmd.class);
     @Autowired
     private IClassesV1InnerServiceSMO classesV1InnerServiceSMOImpl;
 
@@ -63,22 +65,25 @@ public class ListClassesCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ClassesDto classesDto = BeanConvertUtil.covertBean(reqJson, ClassesDto.class);
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
-           int count = classesV1InnerServiceSMOImpl.queryClassessCount(classesDto);
+        ClassesDto classesDto = BeanConvertUtil.covertBean(reqJson, ClassesDto.class);
+        classesDto.setStoreId(storeId);
 
-           List<ClassesDto> classesDtos = null;
+        int count = classesV1InnerServiceSMOImpl.queryClassessCount(classesDto);
 
-           if (count > 0) {
-               classesDtos = classesV1InnerServiceSMOImpl.queryClassess(classesDto);
-           } else {
-               classesDtos = new ArrayList<>();
-           }
+        List<ClassesDto> classesDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, classesDtos);
+        if (count > 0) {
+            classesDtos = classesV1InnerServiceSMOImpl.queryClassess(classesDto);
+        } else {
+            classesDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, classesDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

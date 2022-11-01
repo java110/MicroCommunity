@@ -62,10 +62,12 @@ public class SaveClassesCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
         ClassesPo classesPo = BeanConvertUtil.covertBean(reqJson, ClassesPo.class);
         classesPo.setClassesId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         classesPo.setState(ClassesDto.STATE_START);
+        classesPo.setStoreId(storeId);
         int flag = classesV1InnerServiceSMOImpl.saveClasses(classesPo);
 
         if (flag < 1) {
