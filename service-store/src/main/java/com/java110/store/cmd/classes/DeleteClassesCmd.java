@@ -51,7 +51,6 @@ public class DeleteClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesId", "classesId不能为空");
-Assert.hasKeyAndValue(reqJson, "classesId", "classesId不能为空");
 
     }
 

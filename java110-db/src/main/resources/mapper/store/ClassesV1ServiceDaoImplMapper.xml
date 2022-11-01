@@ -18,7 +18,7 @@
     <!-- 查询班次信息 add by wuxw 2018-07-03 -->
     <select id="getClassesInfo" parameterType="Map" resultType="Map">
         select t.classes_id,t.classes_id classesId,t.name,t.remark,t.status_cd,t.status_cd
-        statusCd,t.state,t.store_id,t.store_id storeId
+        statusCd,t.state,t.store_id,t.store_id storeId,t.create_time createTime
         from classes t
         where 1 =1
         <if test="classesId !=null and classesId != ''">
@@ -62,12 +62,13 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         where 1=1
         <if test="classesId !=null and classesId != ''">
             and t.classes_id= #{classesId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

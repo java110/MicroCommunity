@@ -15,6 +15,7 @@
  */
 package com.java110.store.cmd.classes;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -23,8 +24,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.classes.ClassesDto;
+import com.java110.intf.store.IClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IClassesV1InnerServiceSMO;
 import com.java110.po.classes.ClassesPo;
+import com.java110.po.classesTime.ClassesTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -53,9 +56,22 @@ public class SaveClassesCmd extends Cmd {
     @Autowired
     private IClassesV1InnerServiceSMO classesV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IClassesTimeV1InnerServiceSMO classesTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
+
+        if(!reqJson.containsKey("times")){
+            throw new CmdException("未包含时间");
+        }
+
+        JSONArray times = reqJson.getJSONArray("times");
+
+        if(times.size() < 1){
+            throw new CmdException("未包含时间");
+        }
 
     }
 
@@ -72,6 +88,22 @@ public class SaveClassesCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        JSONArray times = reqJson.getJSONArray("times");
+        JSONObject time = null;
+        ClassesTimePo classesTimePo = null;
+        for(int timeIndex = 0; timeIndex < times.size() ; timeIndex ++){
+            time = times.getJSONObject(timeIndex);
+            classesTimePo = new ClassesTimePo();
+            classesTimePo.setClassesId(classesPo.getClassesId());
+            classesTimePo.setStartTime(time.getString("startTime"));
+            classesTimePo.setEndTime(time.getString("endTime"));
+            classesTimePo.setTimeId(GenerateCodeFactory.getGeneratorId("11"));
+            flag = classesTimeV1InnerServiceSMOImpl.saveClassesTime(classesTimePo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

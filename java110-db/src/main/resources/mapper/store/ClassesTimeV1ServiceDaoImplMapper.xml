@@ -50,9 +50,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="classesId !=null and classesId != ''">
-            , t.classes_id= #{classesId}
-        </if>
+
         <if test="startTime !=null and startTime != ''">
             , t.start_time= #{startTime}
         </if>
@@ -62,6 +60,9 @@
         where 1=1
         <if test="timeId !=null and timeId != ''">
             and t.time_id= #{timeId}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
         </if>
 
     </update>
