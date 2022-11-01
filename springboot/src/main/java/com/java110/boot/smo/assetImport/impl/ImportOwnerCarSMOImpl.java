@@ -267,7 +267,9 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             ownerCarPo.setCarId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));
             ownerCarPo.setMemberId(ownerCarPo.getCarId());
             ownerCarPo.setState("1001"); //1001 正常状态，2002 车位释放欠费状态，3003 车位释放
-            ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
+            //ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
+            ownerCarPo.setLeaseType(ownerCarDto.getSpaceSate());
+
             ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
             parkingSpacePo.setPsId(psId); //车位id
