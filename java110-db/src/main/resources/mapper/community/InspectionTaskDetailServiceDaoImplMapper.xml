@@ -211,8 +211,12 @@
         <if test="nowTime != null">
             and t.create_time &lt; #{nowTime}
         </if>
+        <!--<if test="qrCodeTime != null">-->
+            <!--and t.create_time &gt; #{qrCodeTime}-->
+        <!--</if>-->
         <if test="qrCodeTime != null">
-            and t.create_time &gt; #{qrCodeTime}
+            and it.plan_ins_time &lt; #{qrCodeTime}
+            and it.plan_end_time &gt; #{qrCodeTime}
         </if>
         <if test="inspectionStartTime !=null and inspectionStartTime != ''">
             and t.inspection_time &gt;= #{inspectionStartTime}
@@ -366,6 +370,10 @@
         </if>
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="qrCodeTime != null">
+            and it.plan_ins_time &lt; #{qrCodeTime}
+            and it.plan_end_time &gt; #{qrCodeTime}
         </if>
         <if test="inspectionStartTime !=null and inspectionStartTime != ''">
             and t.inspection_time &gt;= #{inspectionStartTime}
