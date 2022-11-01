@@ -183,6 +183,11 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             return;
         }
 
+        if(ScheduleClassesDayDto.WORKDAY_NO.equals(scheduleClassesDayDtos.get(0).getWorkday())){
+            scheduleClassesStaffDto.setWork(false);
+            return ;
+        }
+
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
 
@@ -242,6 +247,11 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             return;
         }
 
+        if(ScheduleClassesDayDto.WORKDAY_NO.equals(scheduleClassesDayDtos.get(0).getWorkday())){
+            scheduleClassesStaffDto.setWork(false);
+            return ;
+        }
+
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
 
@@ -288,6 +298,11 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
         if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
             scheduleClassesStaffDto.setWork(true);
             return;
+        }
+
+        if(ScheduleClassesDayDto.WORKDAY_NO.equals(scheduleClassesDayDtos.get(0).getWorkday())){
+            scheduleClassesStaffDto.setWork(false);
+            return ;
         }
 
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();

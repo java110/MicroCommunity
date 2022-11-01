@@ -17,7 +17,7 @@ import java.util.List;
  **/
 public class ScheduleClassesDayDto extends PageDto implements Serializable {
 
-    public static final String WORKDAY_NORMAL = "1001";
+    public static final String WORKDAY_NO = "2002";
 
     private String workday;
     private String workdayName;

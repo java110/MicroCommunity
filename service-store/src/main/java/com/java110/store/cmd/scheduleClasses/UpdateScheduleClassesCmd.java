@@ -88,7 +88,7 @@ public class UpdateScheduleClassesCmd extends Cmd {
         for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
             day = days.getJSONObject(dayIndex);
 
-            if(!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getString("workday"))){
+            if(ScheduleClassesDayDto.WORKDAY_NO.equals(day.getString("workday"))){
                 continue;
             }
             if(!day.containsKey("times")){

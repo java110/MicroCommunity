@@ -111,10 +111,10 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
             row.createCell(0).setCellValue(scheduleClassesStaffDto.getStaffName());
             for (int dayIndex = 1; dayIndex <= scheduleClassesStaffDto.getDays().size(); dayIndex++) {
                 day = scheduleClassesStaffDto.getDays().get(dayIndex-1);
-                if (!ScheduleClassesDayDto.WORKDAY_NORMAL.equals(day.getWorkday())) {
+                if (ScheduleClassesDayDto.WORKDAY_NO.equals(day.getWorkday())) {
                     cellValue = "休息";
                 } else {
-                    cellValue = "正常上下班\r\n";
+                    cellValue = day.getWorkdayName()+"\r\n";
                     for (ScheduleClassesTimeDto time : day.getTimes()) {
                         cellValue += (time.getStartTime() + "-" + time.getEndTime());
                     }
