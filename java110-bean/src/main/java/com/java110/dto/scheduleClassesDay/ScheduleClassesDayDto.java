@@ -20,6 +20,7 @@ public class ScheduleClassesDayDto extends PageDto implements Serializable {
     public static final String WORKDAY_NORMAL = "1001";
 
     private String workday;
+    private String workdayName;
     private String dayId;
     private String day;
     private String scheduleId;
@@ -96,5 +97,13 @@ public class ScheduleClassesDayDto extends PageDto implements Serializable {
 
     public void setTimes(List<ScheduleClassesTimeDto> times) {
         this.times = times;
+    }
+
+    public String getWorkdayName() {
+        return workdayName;
+    }
+
+    public void setWorkdayName(String workdayName) {
+        this.workdayName = workdayName;
     }
 }

@@ -18,8 +18,9 @@
     <!-- 查询排班天信息 add by wuxw 2018-07-03 -->
     <select id="getScheduleClassesDayInfo" parameterType="Map" resultType="Map">
         select t.workday,t.day_id,t.day_id dayId,t.status_cd,t.status_cd statusCd,t.day,t.schedule_id,t.schedule_id
-        scheduleId,t.week_flag,t.week_flag weekFlag
+        scheduleId,t.week_flag,t.week_flag weekFlag,c.`name` workdayName
         from schedule_classes_day t
+        left join classes c on  t.workday =c.classes_id and c.status_cd =  '0'
         where 1 =1
         <if test="workday !=null and workday != ''">
             and t.workday= #{workday}
