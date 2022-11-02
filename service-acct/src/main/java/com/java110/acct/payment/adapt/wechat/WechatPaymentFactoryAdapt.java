@@ -282,6 +282,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String outTradeNo = map.get("out_trade_no").toString();
         paymentOrderDto.setOrderId(outTradeNo);
+        paymentOrderDto.setTransactionId(map.get("transaction_id").toString());
 
         doUpdateOnlinePay(outTradeNo, OnlinePayDto.STATE_COMPILE, "支付成功");
         return 1;

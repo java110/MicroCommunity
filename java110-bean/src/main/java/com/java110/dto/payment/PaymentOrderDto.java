@@ -12,6 +12,8 @@ public class PaymentOrderDto implements Serializable{
 
     private String orderId;
 
+    private String transactionId;
+
     //金额
     private double money;
 
@@ -72,5 +74,13 @@ public class PaymentOrderDto implements Serializable{
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 }
