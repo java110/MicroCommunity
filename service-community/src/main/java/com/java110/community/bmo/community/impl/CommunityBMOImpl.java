@@ -503,20 +503,8 @@ public class CommunityBMOImpl implements ICommunityBMO {
      */
     public void addCommunityMembers(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext) {
 
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_communityMemberId));
-        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", paramInJson.getString("storeId"));
-        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.AGENT);
-        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
-        communityMemberPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        communityMemberPo.setEndTime(DateUtil.getLastTime());
-        int flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
-
-        if (flag < 1) {
-            throw new IllegalArgumentException("添加小区成员失败");
-        }
+        JSONObject businessCommunityMember = null;
+        CommunityMemberPo communityMemberPo = null;
 
         //添加运维商户
         //添加开发商户
@@ -529,7 +517,7 @@ public class CommunityBMOImpl implements ICommunityBMO {
         communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
         communityMemberPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         communityMemberPo.setEndTime(DateUtil.getLastTime());
-        flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
+        int flag = communityMemberV1InnerServiceSMOImpl.saveCommunityMember(communityMemberPo);
         if (flag < 1) {
             throw new IllegalArgumentException("添加小区成员失败");
         }
