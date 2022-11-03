@@ -3,15 +3,18 @@ package com.java110.user.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.owner.OwnerPo;
 import com.java110.user.dao.IOwnerServiceDao;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -47,6 +50,9 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
 
@@ -81,7 +87,29 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         for (OwnerDto owner : owners) {
             refreshOwner(owner, users, ownerAttrDtos);
         }
+
+       updateOwnerPhone(owners) ;
         return owners;
+    }
+
+    private boolean updateOwnerPhone(List<OwnerDto> owners) {
+        if(owners.size() != 1){
+            return true;
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(owners.get(0).getMemberId());
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size()< 1){
+            return true;
+        }
+
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String ownerUrl = imgUrl + fileRelDtos.get(0).getFileSaveName();
+
+        owners.get(0).setUrl(ownerUrl);
+        return false;
     }
 
     @Override
@@ -103,6 +131,8 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         for (OwnerDto owner : owners) {
             refreshOwner(owner, users, ownerAttrDtos);
         }
+
+        updateOwnerPhone(owners);
         return owners;
     }
 
@@ -245,6 +275,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         for (OwnerDto owner : owners) {
             refreshOwner(owner, users, ownerAttrDtos);
         }
+        updateOwnerPhone(owners) ;
         return owners;
     }
 

@@ -65,6 +65,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String endTime;
     private String appUserName;
 
+
     private String bId;
 
     private String userName;
