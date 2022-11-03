@@ -23,6 +23,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAttendanceClassesAttrV1InnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
@@ -36,6 +37,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+@Java110CmdDoc(title = "修改考勤规则",
+        description = "外系统修改考勤规则",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/attendanceClasses.updateAttendanceClasses",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "attendanceClasses.updateAttendanceClasses"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "classesName", length = 64, remark = "规则名称"),
+        @Java110ParamDoc(name = "timeOffset", type = "int",length = 11, remark = "打卡范围"),
+        @Java110ParamDoc(name = "lateOffset", type = "int",length = 11, remark = "迟到范围"),
+        @Java110ParamDoc(name = "leaveOffset", type = "int",length = 11, remark = "早退范围"),
+        @Java110ParamDoc(name = "classesObjId", length = 30, remark = "部门ID orgId"),
+        @Java110ParamDoc(name = "classesObjName", length = 64, remark = "部门名称"),
+        @Java110ParamDoc(name = "classesId", length = 30, remark = "班级ID"),
+
+
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"classesId\":\"123123\",\"classesName\":\"测试考勤\",\"timeOffset\":\"10\",\"leaveOffset\":\"10\",\"lateOffset\":\"10\",\"classesObjType\":\"\",\"classesObjId\":\"842022081548770433\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：更新

@@ -53,8 +53,8 @@ import org.springframework.beans.factory.annotation.Autowired;
         @Java110ParamDoc(name = "timeOffset", type = "int",length = 30, remark = "打卡范围"),
         @Java110ParamDoc(name = "lateOffset", type = "int",length = 30, remark = "迟到范围"),
         @Java110ParamDoc(name = "leaveOffset", type = "int",length = 30, remark = "早退范围"),
-        @Java110ParamDoc(name = "classesObjId", type = "int",length = 30, remark = "部门ID orgId"),
-        @Java110ParamDoc(name = "classesObjName", type = "int",length = 30, remark = "部门名称"),
+        @Java110ParamDoc(name = "classesObjId",length = 30, remark = "部门ID orgId"),
+        @Java110ParamDoc(name = "classesObjName",length = 64, remark = "部门名称"),
 
 })
 
