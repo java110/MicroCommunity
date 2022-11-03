@@ -79,9 +79,6 @@ public class FtpUploadTemplate {
             } else if (imageBase64.contains("data:application/octet-stream;base64,")) {
                 imageBase64 = imageBase64.replace("data:application/octet-stream;base64,", "");
                 fileName += ".jpg";
-            } else if (imageBase64.contains(".mp4") || imageBase64.contains(".MP4") || imageBase64.contains(".AVI") || imageBase64.contains(".avi")
-                    || imageBase64.contains(".WMV") || imageBase64.contains(".wmv")) {
-                fileName += ".mp4";
             } else {
                 fileName += ".jpg";
             }
