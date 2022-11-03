@@ -24,6 +24,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
+import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.intf.common.IAttendanceClassesAttrV1InnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
@@ -35,6 +37,38 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
+@Java110CmdDoc(title = "添加考勤规则",
+        description = "外系统添加考勤规则",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/attendanceClasses.saveAttendanceClasses",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "attendanceClasses.saveAttendanceClasses"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "classesName", length = 64, remark = "规则名称"),
+        @Java110ParamDoc(name = "timeOffset", type = "int",length = 30, remark = "打卡范围"),
+        @Java110ParamDoc(name = "lateOffset", type = "int",length = 30, remark = "迟到范围"),
+        @Java110ParamDoc(name = "leaveOffset", type = "int",length = 30, remark = "早退范围"),
+        @Java110ParamDoc(name = "classesObjId", type = "int",length = 30, remark = "部门ID orgId"),
+        @Java110ParamDoc(name = "classesObjName", type = "int",length = 30, remark = "部门名称"),
+
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"classesId\":\"\",\"classesName\":\"测试考勤\",\"timeOffset\":\"10\",\"leaveOffset\":\"10\",\"lateOffset\":\"10\",\"classesObjType\":\"\",\"classesObjId\":\"842022081548770433\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：保存
@@ -63,13 +97,11 @@ public class SaveAttendanceClassesCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesName", "请求报文中未包含classesName");
         Assert.hasKeyAndValue(reqJson, "timeOffset", "请求报文中未包含timeOffset");
-        Assert.hasKeyAndValue(reqJson, "clockCount", "请求报文中未包含clockCount");
-        Assert.hasKeyAndValue(reqJson, "clockType", "请求报文中未包含clockType");
-        Assert.hasKeyAndValue(reqJson, "clockTypeValue", "请求报文中未包含clockTypeValue");
         Assert.hasKeyAndValue(reqJson, "lateOffset", "请求报文中未包含lateOffset");
         Assert.hasKeyAndValue(reqJson, "leaveOffset", "请求报文中未包含leaveOffset");
-        Assert.hasKeyAndValue(reqJson, "classesObjType", "请求报文中未包含classesObjType");
         Assert.hasKeyAndValue(reqJson, "classesObjId", "请求报文中未包含classesObjId");
+        Assert.hasKeyAndValue(reqJson, "classesObjName", "请求报文中未包含classesObjName");
+
 
     }
 
@@ -80,6 +112,10 @@ public class SaveAttendanceClassesCmd extends Cmd {
         AttendanceClassesPo attendanceClassesPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesPo.class);
         attendanceClassesPo.setClassesId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         attendanceClassesPo.setStoreId(cmdDataFlowContext.getReqHeaders().get("store-id"));
+        attendanceClassesPo.setClockCount("2");
+        attendanceClassesPo.setClassesObjType(AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT);
+        attendanceClassesPo.setClockType("1001");
+        attendanceClassesPo.setClockTypeValue("*");
         //处理房屋属性
         dealAttr(reqJson,attendanceClassesPo, cmdDataFlowContext);
 

@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
@@ -24,6 +25,43 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
+/**
+ * 查询公告 功能
+ * 请求地址为/app/login.pcUserLogin
+ */
+
+@Java110CmdDoc(title = "查询公告",
+        description = "提供外系统查询物业系统公告",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/notice.listNotices",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "notice.listNotices"
+)
+//入参要求
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 30, remark = "行数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+                @Java110ParamDoc(parentNodeName = "token",name = "abc", type = "String", remark = "临时票据"),
+
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://localhost:3000/app/notice.listNotices?title=&noticeTypeCd=&state=&noticeId=&startTime=&endTime=&page=1&row=10&communityId=2022110264250009",
+        resBody="{\"notices\":[],\"page\":0,\"records\":0,\"rows\":0,\"total\":0}"
+)
 
 @Java110Cmd(serviceCode = "notice.listNotices")
 public class ListNoticesCmd extends Cmd {
