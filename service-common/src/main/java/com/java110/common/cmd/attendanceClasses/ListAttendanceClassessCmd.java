@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -35,6 +36,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Java110CmdDoc(title = "查询考勤规则",
+        description = "外系统查询考勤规则",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/attendanceClasses.listAttendanceClassess",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "attendanceClasses.listAttendanceClassess"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "classesId", length = 30, remark = "班级ID"),
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "分页页数"),
+        @Java110ParamDoc(name = "row",type = "int", length = 11, remark = "分页行数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "classesName", length = 64, remark = "规则名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "timeOffset", type = "int",length = 11, remark = "打卡范围"),
+                @Java110ParamDoc(parentNodeName = "data",name = "lateOffset", type = "int",length = 11, remark = "迟到范围"),
+                @Java110ParamDoc(parentNodeName = "data",name = "leaveOffset", type = "int",length = 11, remark = "早退范围"),
+                @Java110ParamDoc(parentNodeName = "data",name = "classesObjId", length = 30, remark = "部门ID orgId"),
+                @Java110ParamDoc(parentNodeName = "data",name = "classesObjName", length = 64, remark = "部门名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "classesId", length = 30, remark = "班级ID"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/attendanceClasses.listAttendanceClassess?page=1&row=1&classesId=842022081548770433",
+        resBody="{\"code\":0,\"data\":[{\"attrs\":[{\"attrId\":\"112022110409750012\",\"classesId\":\"102022110491120003\",\"name\":\"上午上班\",\"page\":-1,\"records\":0,\"row\":0,\"specCd\":\"10000\",\"statusCd\":\"0\",\"storeId\":\"102022081507340423\",\"total\":0,\"value\":\"\"},{\"attrId\":\"112022110496120014\",\"classesId\":\"102022110491120003\",\"name\":\"下午下班\",\"page\":-1,\"records\":0,\"row\":0,\"specCd\":\"20000\",\"statusCd\":\"0\",\"storeId\":\"102022081507340423\",\"total\":0,\"value\":\"\"}],\"classesId\":\"102022110491120003\",\"classesName\":\"测试考勤设置\",\"classesObjId\":\"842022081548770433\",\"classesObjName\":\"演示物业\",\"classesObjType\":\"1003\",\"clockCount\":\"2\",\"clockType\":\"1001\",\"clockTypeName\":\"每天打卡\",\"clockTypeValue\":\"*\",\"lateOffset\":\"30\",\"leaveOffset\":\"31\",\"page\":-1,\"records\":0,\"row\":0,\"statusCd\":\"0\",\"storeId\":\"102022081507340423\",\"timeOffset\":\"30\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+)
 /**
  * 类表述：查询
  * 服务编码：attendanceClasses.listAttendanceClasses

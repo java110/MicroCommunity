@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+@Java110CmdDoc(title = "删除考勤规则",
+        description = "外系统删除考勤规则",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/attendanceClasses.deleteAttendanceClasses",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "attendanceClasses.deleteAttendanceClasses"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "classesId", length = 30, remark = "班级ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"classesId\":\"123123\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：删除
  * 服务编码：attendanceClasses.deleteAttendanceClasses
@@ -51,7 +77,6 @@ public class DeleteAttendanceClassesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesId", "classesId不能为空");
-        Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
 
     }
 
@@ -59,7 +84,10 @@ public class DeleteAttendanceClassesCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+
         AttendanceClassesPo attendanceClassesPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesPo.class);
+        attendanceClassesPo.setStoreId(storeId);
         int flag = attendanceClassesV1InnerServiceSMOImpl.deleteAttendanceClasses(attendanceClassesPo);
 
         if (flag < 1) {
