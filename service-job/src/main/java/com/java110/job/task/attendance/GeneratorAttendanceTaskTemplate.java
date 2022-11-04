@@ -16,11 +16,9 @@ import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.DateUtil;
-import com.sun.tools.javah.Gen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -221,14 +219,14 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesTaskDetailPo.setValue(curDate + " " + startTimeStr + ":00");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(valueDate);
-        calendar.add(Calendar.MINUTE,timeOffset * -1);
-        attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        calendar.add(Calendar.MINUTE, timeOffset * -1);
+        attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         int lateOffset = Integer.parseInt(tmpAttendanceClassesDto.getLateOffset());
         calendar = Calendar.getInstance();
         calendar.setTime(valueDate);
-        calendar.add(Calendar.MINUTE,lateOffset);
-        attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        calendar.add(Calendar.MINUTE, lateOffset);
+        attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         attendanceClassesTaskDetailPo.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
         attendanceClassesTaskDetailPo.setStoreId(tmpStoreDto.getStoreId());
 
@@ -251,12 +249,12 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
 
         calendar = Calendar.getInstance();
         calendar.setTime(valueDate);
-        calendar.add(Calendar.MINUTE,leaveOffset * -1);
-        attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        calendar.add(Calendar.MINUTE, leaveOffset * -1);
+        attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         calendar = Calendar.getInstance();
         calendar.setTime(valueDate);
-        calendar.add(Calendar.MINUTE,timeOffset);
-        attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        calendar.add(Calendar.MINUTE, timeOffset);
+        attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         attendanceClassesTaskDetailPo.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
         attendanceClassesTaskDetailPo.setStoreId(tmpStoreDto.getStoreId());
 
