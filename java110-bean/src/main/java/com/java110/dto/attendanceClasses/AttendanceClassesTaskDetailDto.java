@@ -18,11 +18,15 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     //打卡状态 10000未考勤  30000正常考勤 40000 迟到 50000早退 60000 免考勤 70000 补考勤
     public static final String STATE_REPLENISH = "70000";//补考勤
     public static final String STATE_WAIT = "10000";//补考勤
+    public static final String STATE_NORMAL = "30000";//正常考勤
+    public static final String STATE_LATE = "40000";//迟到
+    public static final String STATE_LEAVE = "50000";//早退
 
     public static final String SPEC_CD_START = "1001" ;//上班时间
     public static final String SPEC_CD_END = "2002" ;//上班时间
 
     private String checkTime;
+    private String nowCheckTime;
     private String detailId;
     private String specCd;
     private String specName;
@@ -36,6 +40,12 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     private String storeId;
     private String value;
     private String taskId;
+
+
+
+    private String classId;
+
+    private String staffId;
 
     private String[] taskIds;
 
@@ -184,5 +194,30 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setLateValue(String lateValue) {
         this.lateValue = lateValue;
+    }
+
+    public String getNowCheckTime() {
+        return nowCheckTime;
+    }
+
+    public void setNowCheckTime(String nowCheckTime) {
+        this.nowCheckTime = nowCheckTime;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }

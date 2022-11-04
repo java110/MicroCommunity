@@ -21,11 +21,22 @@
         specCd,t.status_cd,t.status_cd statusCd,t.remark,t.face_path,t.face_path facePath,t.state,t.store_id,t.store_id
         storeId,t.value,t.task_id,t.task_id taskId,td.`name` specName,td1.name stateName,t.leave_value leaveValue,t.late_value lateValue
         from attendance_classes_task_detail t
+        left join attendance_classes_task act on t.task_id = act.task_id and act.status_cd = '0'
         left join t_dict td on t.spec_cd = td.status_cd and td.table_name = 'attendance_classes_attr' and td.table_columns = 'spec_cd'
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'attendance_classes_task_detail' and td1.table_columns = 'state'
         where 1 =1
+        <if test="classId !=null and classId != ''">
+            and act.class_id = #{classId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and act.staff_id = #{staffId}
+        </if>
         <if test="checkTime !=null and checkTime != ''">
             and t.check_time= #{checkTime}
+        </if>
+        <if test="nowCheckTime !=null and nowCheckTime != ''">
+            and t.leave_value &lt; #{nowCheckTime}
+            and t.late_value &gt; #{nowCheckTime}
         </if>
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
