@@ -16,6 +16,7 @@ import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String REPORT_FLOOR_UNIT_FEE_SUMMARY = "reportFloorUnitFeeSummary";
     public static final String REPORT_FEE_BREAKDOWN = "reportFeeBreakdown";
     public static final String REPORT_FEE_DETAIL = "reportFeeDetail";
+    public static final String REPORT_RETURN_PAY_FEE_MANAGE = "returnPayFeeManage";
     public static final String REPORT_OWE_FEE_DETAIL = "reportOweFeeDetail";
     public static final String REPORT_PAY_FEE_DETAIL = "reportPayFeeDetail";
     public static final String REPORT_YEAR_COLLECTION = "reportYearCollection";
@@ -89,10 +91,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "pagePath", "请求中未包含页面");
 
-        Workbook workbook = null;  //工作簿
+        SXSSFWorkbook workbook = null;  //工作簿
         String userId = "";
         //工作表
-        workbook = new XSSFWorkbook();
+        workbook = new SXSSFWorkbook();
+        workbook.setCompressTempFiles(false);
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         String pagePath = reqJson.getString("pagePath");
 
@@ -105,6 +108,9 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 break;
             case REPORT_FEE_BREAKDOWN:
                 reportFeeBreakdown(pd, result, workbook);
+                break;
+            case REPORT_RETURN_PAY_FEE_MANAGE:
+                returnPayFeeManage(pd, result, workbook);
                 break;
             case REPORT_FEE_DETAIL:
                 reportFeeDetail(pd, result, workbook);
@@ -354,11 +360,12 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(11).setCellValue("实收金额");
         row.createCell(12).setCellValue("优惠金额");
         row.createCell(13).setCellValue("减免金额");
-        row.createCell(14).setCellValue("滞纳金");
-        row.createCell(15).setCellValue("空置房打折金额");
-        row.createCell(16).setCellValue("空置房减免金额");
-        row.createCell(17).setCellValue("面积");
-        row.createCell(18).setCellValue("车位");
+        row.createCell(14).setCellValue("赠送金额");
+        row.createCell(15).setCellValue("滞纳金");
+        row.createCell(16).setCellValue("空置房打折金额");
+        row.createCell(17).setCellValue("空置房减免金额");
+        row.createCell(18).setCellValue("面积");
+        row.createCell(19).setCellValue("车位");
         //查询楼栋信息
         JSONArray rooms = this.getReportPayFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
@@ -369,7 +376,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("oId"));
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(1).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("feeName"));
             row.createCell(4).setCellValue(dataObj.getString("feeTypeCdName"));
@@ -382,11 +393,12 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(11).setCellValue(dataObj.getDouble("receivedAmount"));
             row.createCell(12).setCellValue(dataObj.getDouble("preferentialAmount"));
             row.createCell(13).setCellValue(dataObj.getDouble("deductionAmount"));
-            row.createCell(14).setCellValue(dataObj.getDouble("lateFee"));
-            row.createCell(15).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
-            row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingReduction"));
-            row.createCell(17).setCellValue(dataObj.getString("builtUpArea"));
-            row.createCell(18).setCellValue(dataObj.getString("psName"));
+            row.createCell(14).setCellValue(dataObj.getDouble("giftAmount"));
+            row.createCell(15).setCellValue(dataObj.getDouble("lateFee"));
+            row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
+            row.createCell(17).setCellValue(dataObj.getDouble("vacantHousingReduction"));
+            row.createCell(18).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(19).setCellValue(dataObj.getString("psName"));
         }
     }
 
@@ -503,7 +515,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         for (int roomIndex = 0; roomIndex < prePayFees.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = prePayFees.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(0).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(0).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(1).setCellValue(dataObj.getString("feeName"));
             row.createCell(2).setCellValue(dataObj.getString("endTime"));
             row.createCell(3).setCellValue(dataObj.getString("oweDay"));
@@ -526,7 +542,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         for (int roomIndex = 0; roomIndex < deadlineFees.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = deadlineFees.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("objName"));
+            row.createCell(0).setCellValue(dataObj.getString("objNameNum"));
             row.createCell(1).setCellValue(dataObj.getString("feeName"));
             row.createCell(2).setCellValue(dataObj.getString("deadlineTime"));
             row.createCell(3).setCellValue(dataObj.getString("oweDay"));
@@ -575,7 +591,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(11).setCellValue("申请数量");
         row.createCell(12).setCellValue("采购/出库数量");
         row.createCell(13).setCellValue("采购价格");
-        row.createCell(14).setCellValue("采购总价");
+        row.createCell(14).setCellValue("总价");
         row.createCell(15).setCellValue("申请备注");
         row.createCell(16).setCellValue("状态");
         row.createCell(17).setCellValue("创建时间");
@@ -602,8 +618,8 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(11).setCellValue(dataObj.getString("quantity") + dataObj.getString("unitCodeName"));
             row.createCell(12).setCellValue(dataObj.getString("purchaseQuantity") + dataObj.getString("unitCodeName"));
             row.createCell(13).setCellValue(dataObj.getString("price"));
-            if (!StringUtil.isEmpty(dataObj.getString("resOrderType")) && dataObj.getString("resOrderType").equals("10000") &&
-                    !StringUtil.isEmpty(dataObj.getString("purchaseQuantity")) && !StringUtil.isEmpty(dataObj.getString("price"))) { //状态是入库
+            //!StringUtil.isEmpty(dataObj.getString("resOrderType")) && dataObj.getString("resOrderType").equals("10000") &&
+            if (!StringUtil.isEmpty(dataObj.getString("purchaseQuantity")) && !StringUtil.isEmpty(dataObj.getString("price"))) { //状态是入库
                 //获取采购数量
                 double purchaseQuantity = Double.parseDouble(dataObj.getString("purchaseQuantity"));
                 //获取采购单价
@@ -1038,7 +1054,11 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = reportPayFeeDeposits.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("feeId"));
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
+                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            } else {
+                row.createCell(1).setCellValue(dataObj.getString("objName"));
+            }
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));
             row.createCell(4).setCellValue(dataObj.getString("feeName"));
@@ -1292,7 +1312,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        reqJson.put("storeId",result.getStoreId());
+        reqJson.put("storeId", result.getStoreId());
         apiUrl = "purchaseApplyDetail.listPurchaseApplyDetails" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -1607,6 +1627,89 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         }
     }
 
+    private void returnPayFeeManage(IPageData pd, ComponentValidateResult result, Workbook workbook) {
+        Sheet sheet = workbook.createSheet("退费审核表");
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue("退费审核编号");
+        row.createCell(1).setCellValue("退款单号");
+        row.createCell(2).setCellValue("缴费单号");
+        row.createCell(3).setCellValue("费用类型");
+        row.createCell(4).setCellValue("付费对象");
+        row.createCell(5).setCellValue("付费周期(单位:月)");
+        row.createCell(6).setCellValue("应付金额(单位:元)");
+        row.createCell(7).setCellValue("实付金额(单位:元)");
+        row.createCell(8).setCellValue("申请时间");
+        row.createCell(9).setCellValue("退费原因");
+        row.createCell(10).setCellValue("审核状态");
+        //查询楼栋信息
+        JSONArray returnPayFees = this.getReturnPayFeeManage(pd, result);
+        if (returnPayFees == null || returnPayFees.size() == 0) {
+            return;
+        }
+        JSONObject dataObj = null;
+        for (int roomIndex = 0; roomIndex < returnPayFees.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = returnPayFees.getJSONObject(roomIndex);
+            row.createCell(0).setCellValue(roomIndex + 1);
+            row.createCell(1).setCellValue(dataObj.getString("returnFeeId"));
+            row.createCell(2).setCellValue(dataObj.getString("detailId"));
+            row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));
+            row.createCell(4).setCellValue(dataObj.getString("payerObjName"));
+            String cycle = dataObj.getString("cycles");
+            if (!StringUtil.isEmpty(cycle) && cycle.contains("-")) {
+                String[] split = cycle.split("-");
+                cycle = split[1];
+            }
+            row.createCell(5).setCellValue(cycle);
+            String receivableAmount = dataObj.getString("receivableAmount");
+            if (!StringUtil.isEmpty(receivableAmount) && receivableAmount.contains("-")) {
+                String[] split = receivableAmount.split("-");
+                receivableAmount = split[1];
+            }
+            row.createCell(6).setCellValue(receivableAmount);
+            String feeAccountDetailDtoList = dataObj.getString("feeAccountDetailDtoList");
+            JSONArray feeAccountDetails = JSONArray.parseArray(feeAccountDetailDtoList);
+            String str = "";
+            if (feeAccountDetails != null && feeAccountDetails.size() > 0) {
+                for (int paramIndex = 0; paramIndex < feeAccountDetails.size(); paramIndex++) {
+                    JSONObject param = feeAccountDetails.getJSONObject(paramIndex);
+                    //获取抵扣类型
+                    String state = param.getString("state");
+                    if (!StringUtil.isEmpty(state) && !state.equals("1001")) {
+                        str = param.getString("stateName") + ":" + param.getString("amount") + ";  " + str;
+                    }
+                }
+            }
+            String payFeeDetailDiscountDtoList = dataObj.getString("payFeeDetailDiscountDtoList");
+            JSONArray payFeeDetailDiscounts = JSONArray.parseArray(payFeeDetailDiscountDtoList);
+            String discount = "";
+            if (payFeeDetailDiscounts != null && payFeeDetailDiscounts.size() > 0) {
+                for (int index = 0; index < payFeeDetailDiscounts.size(); index++) {
+                    JSONObject param = payFeeDetailDiscounts.getJSONObject(index);
+                    String discountPrice = param.getString("discountPrice");
+                    if (!StringUtil.isEmpty(discountPrice) && discountPrice.contains("-")) {
+                        String[] split = discountPrice.split("-");
+                        discountPrice = split[1];
+                    }
+                    discount = param.getString("discountName") + ":" + discountPrice + ";  " + discount;
+                }
+            }
+            String receivedAmount = dataObj.getString("receivedAmount");
+            if (!StringUtil.isEmpty(receivedAmount) && receivedAmount.contains("-")) {
+                String[] split = receivedAmount.split("-");
+                receivedAmount = split[1];
+            }
+            if(!StringUtil.isEmpty(str) || !StringUtil.isEmpty(discount)) {
+                row.createCell(7).setCellValue(receivedAmount + "(" + str + discount + ")");
+            } else {
+                row.createCell(7).setCellValue(receivedAmount);
+            }
+            row.createCell(8).setCellValue(dataObj.getString("createTime"));
+            row.createCell(9).setCellValue(dataObj.getString("reason"));
+            row.createCell(10).setCellValue(dataObj.getString("stateName"));
+        }
+    }
+
     private void reportFeeDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("费用明细表");
         Row row = sheet.createRow(0);
@@ -1636,7 +1739,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(roomIndex + 1);
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
+            row.createCell(1).setCellValue(dataObj.getString("objNameNum"));
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
             row.createCell(4).setCellValue(dataObj.getString("feeName"));
@@ -1680,6 +1783,29 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             return null;
         }
         return savedRoomInfoResults.getJSONArray("data");
+    }
+
+    private JSONArray getReturnPayFeeManage(IPageData pd, ComponentValidateResult result) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("page", 1);
+        reqJson.put("row", 10000);
+        apiUrl = "returnPayFee.listReturnPayFees" + mapToUrlParam(reqJson);
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+        JSONObject savedReturnPayFeeManages = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
+        //获取限制条数的值
+        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
+        if (savedReturnPayFeeManages.getJSONArray("returnPayFees").size() > number) {
+            throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
+        }
+        if (!savedReturnPayFeeManages.containsKey("returnPayFees")) {
+            return null;
+        }
+        return savedReturnPayFeeManages.getJSONArray("returnPayFees");
     }
 
     private JSONArray getReportFeeDetail(IPageData pd, ComponentValidateResult result) {
