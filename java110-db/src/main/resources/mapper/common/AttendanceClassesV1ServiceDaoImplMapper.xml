@@ -49,6 +49,12 @@
         <if test="classesObjId !=null and classesObjId != ''">
             and t.classes_obj_id= #{classesObjId}
         </if>
+        <if test="classesObjIds !=null">
+            and t.classes_obj_id in
+            <foreach collection="classesObjIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="classesName !=null and classesName != ''">
             and t.classes_name= #{classesName}
         </if>

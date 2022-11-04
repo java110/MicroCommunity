@@ -13,9 +13,11 @@ import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.*;
+import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
@@ -30,6 +32,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +47,6 @@ import java.util.List;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "classId", length = 30, remark = "班次ID"),
         @Java110ParamDoc(name = "staffId", length = 30, remark = "打卡员工"),
         @Java110ParamDoc(name = "checkTime", type = "String", length = 30, remark = "考勤时间 YYYY-MM-DD hh24:mi:ss"),
         @Java110ParamDoc(name = "photo", type = "String", length = 2048, remark = "考勤图片"),
@@ -89,10 +91,12 @@ public class CheckInCmd extends Cmd {
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
+    @Autowired
+    private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-        Assert.hasKeyAndValue(reqJson, "classId", "未包含班次");
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含员工");
         Assert.hasKeyAndValue(reqJson, "clockTime", "未包含考勤时间");
     }
@@ -112,10 +116,24 @@ public class CheckInCmd extends Cmd {
 
         Assert.listOnlyOne(storeUserDtos, "员工不存在");
 
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setStoreId(storeUserDtos.get(0).getStoreId());
+        orgStaffRelDto.setStaffId(reqJson.getString("staffId"));
+        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+
+        if(orgStaffRelDtos == null || orgStaffRelDtos.size() < 1){
+            throw new CmdException("员工没有考勤任务");
+        }
+
+        List<String> orgIds = new ArrayList<>();
+        for(OrgStaffRelDto orgStaffRelDto1: orgStaffRelDtos){
+            orgIds.add(orgStaffRelDto1.getOrgId());
+        }
+
         // 考勤班次是否存在
         AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
         attendanceClassesDto.setStoreId(storeUserDtos.get(0).getStoreId());
-        attendanceClassesDto.setClassesId(reqJson.getString("classId"));
+        attendanceClassesDto.setClassesObjIds(orgIds.toArray(new String[orgIds.size()]));
         List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
 
         Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
@@ -140,7 +158,7 @@ public class CheckInCmd extends Cmd {
 
         AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
         attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("clockTime"));
-        attendanceClassesTaskDetailDto.setClassId(reqJson.getString("classId"));
+        attendanceClassesTaskDetailDto.setClassId(attendanceClassesDtos.get(0).getClassesId());
         attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
