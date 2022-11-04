@@ -14,6 +14,8 @@ public class AttendanceClassesTaskDetailPo implements Serializable {
     private String state;
     private String storeId;
     private String value;
+    private String leaveValue;
+    private String lateValue;
     private String taskId;
 
 
@@ -98,4 +100,19 @@ public class AttendanceClassesTaskDetailPo implements Serializable {
         this.taskId = taskId;
     }
 
+    public String getLeaveValue() {
+        return leaveValue;
+    }
+
+    public void setLeaveValue(String leaveValue) {
+        this.leaveValue = leaveValue;
+    }
+
+    public String getLateValue() {
+        return lateValue;
+    }
+
+    public void setLateValue(String lateValue) {
+        this.lateValue = lateValue;
+    }
 }

@@ -19,6 +19,9 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     public static final String STATE_REPLENISH = "70000";//补考勤
     public static final String STATE_WAIT = "10000";//补考勤
 
+    public static final String SPEC_CD_START = "1001" ;//上班时间
+    public static final String SPEC_CD_END = "2002" ;//上班时间
+
     private String checkTime;
     private String detailId;
     private String specCd;
@@ -40,6 +43,10 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
     private Date createTime;
 
     private String statusCd = "0";
+
+
+    private String leaveValue;
+    private String lateValue;
 
 
     public String getCheckTime() {
@@ -161,5 +168,21 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getLeaveValue() {
+        return leaveValue;
+    }
+
+    public void setLeaveValue(String leaveValue) {
+        this.leaveValue = leaveValue;
+    }
+
+    public String getLateValue() {
+        return lateValue;
+    }
+
+    public void setLateValue(String lateValue) {
+        this.lateValue = lateValue;
     }
 }
