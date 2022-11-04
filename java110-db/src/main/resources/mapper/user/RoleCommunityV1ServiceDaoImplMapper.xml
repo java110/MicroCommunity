@@ -133,8 +133,6 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
-
     </select>
 
     <select id="queryRoleCommunitysName" parameterType="Map" resultType="Map">

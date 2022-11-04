@@ -434,7 +434,6 @@ public class RoomRenovationApi {
         roomRenovationRecordPo.setIsTrue(isTrue);
         saveRoomRenovationRecordBMO.saveRecord(roomRenovationRecordPo);
         FileRelPo fileRelPo = new FileRelPo();
-        fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
         fileRelPo.setObjId(roomRenovationRecordPo.getRecordId());
         //table表示表存储 ftp表示ftp文件存储
         fileRelPo.setSaveWay("ftp");
@@ -444,6 +443,7 @@ public class RoomRenovationApi {
             //19000表示装修图片
             fileRelPo.setRelTypeCd("19000");
             for (String photo : photos) {
+                fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
                 fileRelPo.setFileRealName(photo);
                 fileRelPo.setFileSaveName(photo);
                 fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
