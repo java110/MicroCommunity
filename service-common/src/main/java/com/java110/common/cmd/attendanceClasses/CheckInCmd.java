@@ -44,7 +44,7 @@ import java.util.List;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "classesId", length = 30, remark = "班次ID"),
+        @Java110ParamDoc(name = "classId", length = 30, remark = "班次ID"),
         @Java110ParamDoc(name = "staffId", length = 30, remark = "打卡员工"),
         @Java110ParamDoc(name = "checkTime", type = "String", length = 30, remark = "考勤时间 YYYY-MM-DD hh24:mi:ss"),
         @Java110ParamDoc(name = "photo", type = "String", length = 2048, remark = "考勤图片"),
@@ -181,9 +181,9 @@ public class CheckInCmd extends Cmd {
         int count = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetailsCount(attendanceClassesTaskDetailDto);
         AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
         attendanceClassesTaskPo.setTaskId(nowAttendanceClassesTaskDetailDto.getTaskId());
-        if(count > 0){
+        if (count > 0) {
             attendanceClassesTaskPo.setState(AttendanceClassesTaskDto.STATE_DOING);
-        }else{
+        } else {
             attendanceClassesTaskPo.setState(AttendanceClassesTaskDto.STATE_FINISH);
         }
 
@@ -205,16 +205,16 @@ public class CheckInCmd extends Cmd {
 
         Date value = DateUtil.getDateFromStringA(nowAttendanceClassesTaskDetailDto.getValue());
 
-        if(AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(nowAttendanceClassesTaskDetailDto.getSpecCd())){
+        if (AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(nowAttendanceClassesTaskDetailDto.getSpecCd())) {
 
-            if(clockTime.after(value)){
+            if (clockTime.after(value)) {
                 return AttendanceClassesTaskDetailDto.STATE_LATE;
             }
             return AttendanceClassesTaskDetailDto.STATE_NORMAL;
         }
 
 
-        if(clockTime.before(value)){
+        if (clockTime.before(value)) {
             return AttendanceClassesTaskDetailDto.STATE_LEAVE;
         }
         return AttendanceClassesTaskDetailDto.STATE_NORMAL;
