@@ -591,7 +591,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(11).setCellValue("申请数量");
         row.createCell(12).setCellValue("采购/出库数量");
         row.createCell(13).setCellValue("采购价格");
-        row.createCell(14).setCellValue("采购总价");
+        row.createCell(14).setCellValue("总价");
         row.createCell(15).setCellValue("申请备注");
         row.createCell(16).setCellValue("状态");
         row.createCell(17).setCellValue("创建时间");
@@ -618,8 +618,8 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(11).setCellValue(dataObj.getString("quantity") + dataObj.getString("unitCodeName"));
             row.createCell(12).setCellValue(dataObj.getString("purchaseQuantity") + dataObj.getString("unitCodeName"));
             row.createCell(13).setCellValue(dataObj.getString("price"));
-            if (!StringUtil.isEmpty(dataObj.getString("resOrderType")) && dataObj.getString("resOrderType").equals("10000") &&
-                    !StringUtil.isEmpty(dataObj.getString("purchaseQuantity")) && !StringUtil.isEmpty(dataObj.getString("price"))) { //状态是入库
+            //!StringUtil.isEmpty(dataObj.getString("resOrderType")) && dataObj.getString("resOrderType").equals("10000") &&
+            if (!StringUtil.isEmpty(dataObj.getString("purchaseQuantity")) && !StringUtil.isEmpty(dataObj.getString("price"))) { //状态是入库
                 //获取采购数量
                 double purchaseQuantity = Double.parseDouble(dataObj.getString("purchaseQuantity"));
                 //获取采购单价
