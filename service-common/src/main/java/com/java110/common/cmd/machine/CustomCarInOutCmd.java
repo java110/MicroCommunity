@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.machine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.IMachineOpenDoorBMO;
 import com.java110.common.dao.ICarBlackWhiteServiceDao;
@@ -27,11 +28,16 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.intf.acct.IParkingCouponCarOrderV1InnerServiceSMO;
+import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
+import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
+import com.java110.po.parkingCouponCarOrder.ParkingCouponCarOrderPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -42,6 +48,7 @@ import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,6 +83,13 @@ public class CustomCarInOutCmd extends Cmd {
 
     @Autowired
     private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingCouponCarOrderV1InnerServiceSMO parkingCouponCarOrderV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -148,6 +162,8 @@ public class CustomCarInOutCmd extends Cmd {
             tempCarPayOrderDto.setAmount(Double.parseDouble(reqJson.getString("amount")));
             tempCarPayOrderDto.setPayCharge(Double.parseDouble(reqJson.getString("payCharge")));
             tempCarPayOrderDto.setPayType(reqJson.getString("payType"));
+            //处理优惠券
+            dealParkingCouponCar(reqJson,tempCarPayOrderDto);
             //tempCarPayOrderDto.setMachineId(reqJson.getString("machineId"));
              resultVo = dataBusInnerServiceSMOImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
             if(resultVo.getCode() != ResultVo.CODE_OK){
@@ -156,5 +172,42 @@ public class CustomCarInOutCmd extends Cmd {
         }
         ResponseEntity<String> responseEntity = machineOpenDoorBMOImpl.customCarInOut(reqJson);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void dealParkingCouponCar(JSONObject reqJson,TempCarPayOrderDto tempCarPayOrderDto) {
+        //处理停车劵
+
+        if(!reqJson.containsKey("pccIds")) {
+            return ;
+        }
+
+        JSONArray pccIds = reqJson.getJSONArray("pccIds");
+        ParkingCouponCarPo parkingCouponCarPo = null;
+        ParkingCouponCarOrderPo parkingCouponCarOrderPo = null;
+        String pccId = "";
+        List<String> tmpPccIds = new ArrayList<>();
+        for(int pccIndex = 0;pccIndex <  pccIds.size();pccIndex++){
+            pccId = pccIds.getString(pccIndex);
+            tmpPccIds.add(pccId);
+            parkingCouponCarPo = new ParkingCouponCarPo();
+            parkingCouponCarPo.setPccId(pccId);
+            parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_FINISH);
+            parkingCouponCarV1InnerServiceSMOImpl.updateParkingCouponCar(parkingCouponCarPo);
+
+            parkingCouponCarOrderPo = new ParkingCouponCarOrderPo();
+            parkingCouponCarOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId("11"));
+            parkingCouponCarOrderPo.setCarNum(reqJson.getString("carNum"));
+            parkingCouponCarOrderPo.setCarOutId("-1");
+            parkingCouponCarOrderPo.setCommunityId(reqJson.getString("communityId"));
+            parkingCouponCarOrderPo.setMachineId(StringUtil.isEmpty(reqJson.getString("machineId"))?"-1":reqJson.getString("machineId"));
+            parkingCouponCarOrderPo.setMachineName("未知");
+            parkingCouponCarOrderPo.setPaId(reqJson.getString("paId"));
+            parkingCouponCarOrderPo.setPccId(pccId);
+            parkingCouponCarOrderPo.setRemark("pc端支付停车劵抵扣");
+
+            parkingCouponCarOrderV1InnerServiceSMOImpl.saveParkingCouponCarOrder(parkingCouponCarOrderPo);
+        }
+
+        tempCarPayOrderDto.setPccIds(tmpPccIds.toArray(new String[tmpPccIds.size()]));
     }
 }
