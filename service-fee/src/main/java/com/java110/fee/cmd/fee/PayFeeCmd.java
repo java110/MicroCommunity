@@ -756,7 +756,7 @@ public class PayFeeCmd extends Cmd {
             } else {
                 redepositAmount = receivedAmount;//抵扣金额
             }
-            if (!StringUtil.isEmpty(param.getString("acctType")) && param.getString("acctType").equals("2004")) {
+            if ("2004".equals(param.getString("acctType"))) {
                 //获取最大抵扣积分
                 BigDecimal maximumNumber = new BigDecimal(param.getString("maximumNumber"));
                 //获取积分抵扣

@@ -137,7 +137,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             //在账户增加
             double amount = Double.parseDouble(accounts.get(0).getAmount());
             BigDecimal amountBig = new BigDecimal(amount);
-            amount = amountBig.add(new BigDecimal(accountDetailPo.getAmount())).doubleValue();
+            amount = amountBig.add(new BigDecimal(Double.parseDouble(accountDetailPo.getAmount()))).doubleValue();
             AccountPo accountPo = new AccountPo();
             accountPo.setObjId(accountDetailPo.getObjId());
             accountPo.setAcctId(accountDetailPo.getAcctId());
@@ -195,7 +195,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             //在账户增加
             double amount = Double.parseDouble(accounts.get(0).getAmount());
             BigDecimal amountBig = new BigDecimal(amount);
-            amount = amountBig.subtract(new BigDecimal(accountDetailPo.getAmount())).doubleValue();
+            amount = amountBig.subtract(new BigDecimal(Double.parseDouble(accountDetailPo.getAmount()))).doubleValue();
             if(amount < 0){
                 throw new IllegalArgumentException("余额不足");
             }

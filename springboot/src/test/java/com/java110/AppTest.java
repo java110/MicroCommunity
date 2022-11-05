@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.util.DateUtil;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,13 +24,9 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
 
-       List<String> abc = new ArrayList<>();
-        abc.add("123123");
-        abc.add("123123");
-        abc.add("123123");
-        abc.add("123123");
-        JSONObject data = new JSONObject();
-        data.put("pccIds",abc);
-        System.out.println(data.toJSONString());
+        double amount = Double.parseDouble("0.6");
+        BigDecimal amountBig = new BigDecimal(amount);
+        amount = amountBig.subtract(new BigDecimal(Double.parseDouble("0.6"))).doubleValue();
+        System.out.println(amount);
     }
 }
