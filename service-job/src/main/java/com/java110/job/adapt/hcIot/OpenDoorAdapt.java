@@ -239,6 +239,8 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
         postParameters.put("amount", paramIn.getString("amount"));
         postParameters.put("payCharge", paramIn.getString("payCharge"));
         postParameters.put("payType", paramIn.getString("payType"));
+        postParameters.put("unlicense", paramIn.getString("unlicense"));
+
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.CUSTOM_CAR_INOUT), HttpMethod.POST, httpEntity, String.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
