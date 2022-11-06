@@ -1,8 +1,10 @@
 package com.java110.dto.maintainanceItemValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,10 +17,11 @@ import java.util.Date;
 public class MaintainanceItemValueDto extends PageDto implements Serializable {
 
     private String itemId;
-private String valueId;
-private String itemValue;
-private String communityId;
-private String seq;
+    private String[] itemIds;
+    private String valueId;
+    private String itemValue;
+    private String communityId;
+    private String seq;
 
 
     private Date createTime;
@@ -26,34 +29,45 @@ private String seq;
     private String statusCd = "0";
 
 
+
+
     public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getValueId() {
+
+    public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getItemValue() {
+
+    public String getItemValue() {
         return itemValue;
     }
-public void setItemValue(String itemValue) {
+
+    public void setItemValue(String itemValue) {
         this.itemValue = itemValue;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -73,4 +87,14 @@ public void setSeq(String seq) {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String[] getItemIds() {
+        return itemIds;
+    }
+
+    public void setItemIds(String[] itemIds) {
+        this.itemIds = itemIds;
+    }
+
+
 }

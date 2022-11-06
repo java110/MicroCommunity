@@ -24,6 +24,12 @@
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
         </if>
+        <if test="itemIds !=null">
+            and t.item_id in
+            <foreach collection="itemIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
         </if>
@@ -79,6 +85,12 @@
         where 1 =1
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
+        </if>
+        <if test="itemIds !=null">
+            and t.item_id in
+            <foreach collection="itemIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}

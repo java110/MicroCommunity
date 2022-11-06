@@ -20,7 +20,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
+import com.java110.dto.maintainanceItemValue.MaintainanceItemValueDto;
 import com.java110.intf.community.IMaintainanceItemV1InnerServiceSMO;
+import com.java110.intf.community.IMaintainanceItemValueV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -54,10 +58,14 @@ public class ListMaintainanceItemCmd extends Cmd {
     @Autowired
     private IMaintainanceItemV1InnerServiceSMO maintainanceItemV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMaintainanceItemValueV1InnerServiceSMO maintainanceItemValueV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
@@ -71,6 +79,7 @@ public class ListMaintainanceItemCmd extends Cmd {
 
         if (count > 0) {
             maintainanceItemDtos = maintainanceItemV1InnerServiceSMOImpl.queryMaintainanceItems(maintainanceItemDto);
+            refreshTitileValues(maintainanceItemDtos);
         } else {
             maintainanceItemDtos = new ArrayList<>();
         }
@@ -80,5 +89,36 @@ public class ListMaintainanceItemCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshTitileValues(List<MaintainanceItemDto> maintainanceItemDtos) {
+
+        if (maintainanceItemDtos == null || maintainanceItemDtos.size() < 1) {
+            return;
+        }
+
+        List<String> itemIds = new ArrayList<>();
+        for (MaintainanceItemDto maintainanceItemDto : maintainanceItemDtos) {
+            itemIds.add(maintainanceItemDto.getItemId());
+        }
+
+        MaintainanceItemValueDto maintainanceItemValueDto = new MaintainanceItemValueDto();
+        maintainanceItemValueDto.setItemIds(itemIds.toArray(new String[itemIds.size()]));
+        maintainanceItemValueDto.setCommunityId(maintainanceItemDtos.get(0).getCommunityId());
+        List<MaintainanceItemValueDto> maintainanceItemValueDtos
+                = maintainanceItemValueV1InnerServiceSMOImpl.queryMaintainanceItemValues(maintainanceItemValueDto);
+
+        List<MaintainanceItemValueDto> tmpMaintainanceItemValueDtos = null;
+        for (MaintainanceItemDto maintainanceItemDto : maintainanceItemDtos) {
+            tmpMaintainanceItemValueDtos = new ArrayList<>();
+            for (MaintainanceItemValueDto tmpMaintainanceItemValueDto : maintainanceItemValueDtos) {
+                if (maintainanceItemDto.getItemId().equals(tmpMaintainanceItemValueDto.getItemId())) {
+                    tmpMaintainanceItemValueDtos.add(tmpMaintainanceItemValueDto);
+                }
+            }
+            maintainanceItemDto.setValues(tmpMaintainanceItemValueDtos);
+        }
+
+
     }
 }

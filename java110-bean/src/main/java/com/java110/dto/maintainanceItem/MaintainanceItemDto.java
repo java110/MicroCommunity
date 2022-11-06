@@ -1,9 +1,11 @@
 package com.java110.dto.maintainanceItem;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.maintainanceItemValue.MaintainanceItemValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -29,6 +31,8 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    List<MaintainanceItemValueDto> values;
 
 
     public String getItemId() {
@@ -86,5 +90,13 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<MaintainanceItemValueDto> getValues() {
+        return values;
+    }
+
+    public void setValues(List<MaintainanceItemValueDto> values) {
+        this.values = values;
     }
 }

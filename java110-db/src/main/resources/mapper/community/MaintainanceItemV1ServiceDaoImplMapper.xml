@@ -5,102 +5,98 @@
 <mapper namespace="maintainanceItemV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存保养检查项信息 add by wuxw 2018-07-03 -->
     <insert id="saveMaintainanceItemInfo" parameterType="Map">
         insert into maintainance_item(
-item_id,title_type,item_title,community_id,seq
-) values (
-#{itemId},#{titleType},#{itemTitle},#{communityId},#{seq}
-)
+        item_id,title_type,item_title,community_id,seq
+        ) values (
+        #{itemId},#{titleType},#{itemTitle},#{communityId},#{seq}
+        )
     </insert>
-
 
 
     <!-- 查询保养检查项信息 add by wuxw 2018-07-03 -->
     <select id="getMaintainanceItemInfo" parameterType="Map" resultType="Map">
-        select  t.item_id,t.item_id itemId,t.title_type,t.title_type titleType,t.item_title,t.item_title itemTitle,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq 
-from maintainance_item t 
-where 1 =1 
-<if test="itemId !=null and itemId != ''">
-   and t.item_id= #{itemId}
-</if> 
-<if test="titleType !=null and titleType != ''">
-   and t.title_type= #{titleType}
-</if> 
-<if test="itemTitle !=null and itemTitle != ''">
-   and t.item_title= #{itemTitle}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.item_id,t.item_id itemId,t.title_type,t.title_type titleType,t.item_title,t.item_title
+        itemTitle,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq,t.create_time createTime
+        from maintainance_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="titleType !=null and titleType != ''">
+            and t.title_type= #{titleType}
+        </if>
+        <if test="itemTitle !=null and itemTitle != ''">
+            and t.item_title= #{itemTitle}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改保养检查项信息 add by wuxw 2018-07-03 -->
     <update id="updateMaintainanceItemInfo" parameterType="Map">
-        update  maintainance_item t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="titleType !=null and titleType != ''">
-, t.title_type= #{titleType}
-</if> 
-<if test="itemTitle !=null and itemTitle != ''">
-, t.item_title= #{itemTitle}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-, t.seq= #{seq}
-</if> 
- where 1=1 <if test="itemId !=null and itemId != ''">
-and t.item_id= #{itemId}
-</if> 
+        update maintainance_item t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="titleType !=null and titleType != ''">
+            , t.title_type= #{titleType}
+        </if>
+        <if test="itemTitle !=null and itemTitle != ''">
+            , t.item_title= #{itemTitle}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
 
     </update>
 
     <!-- 查询保养检查项数量 add by wuxw 2018-07-03 -->
-     <select id="queryMaintainanceItemsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from maintainance_item t 
-where 1 =1 
-<if test="itemId !=null and itemId != ''">
-   and t.item_id= #{itemId}
-</if> 
-<if test="titleType !=null and titleType != ''">
-   and t.title_type= #{titleType}
-</if> 
-<if test="itemTitle !=null and itemTitle != ''">
-   and t.item_title= #{itemTitle}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
+    <select id="queryMaintainanceItemsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="titleType !=null and titleType != ''">
+            and t.title_type= #{titleType}
+        </if>
+        <if test="itemTitle !=null and itemTitle != ''">
+            and t.item_title= #{itemTitle}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
