@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainanceStandardV1ServiceDaoImpl">
+
+
+    <!-- 保存保养标准信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainanceStandardInfo" parameterType="Map">
+        insert into maintainance_standard(
+        standard_name,standard_id,remark,community_id
+        ) values (
+        #{standardName},#{standardId},#{remark},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询保养标准信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainanceStandardInfo" parameterType="Map" resultType="Map">
+        select t.standard_name,t.standard_name standardName,t.standard_id,t.standard_id
+        standardId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        from maintainance_standard t
+        where 1 =1
+        <if test="standardName !=null and standardName != ''">
+            and t.standard_name= #{standardName}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改保养标准信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainanceStandardInfo" parameterType="Map">
+        update maintainance_standard t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="standardName !=null and standardName != ''">
+            , t.standard_name= #{standardName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+
+    </update>
+
+    <!-- 查询保养标准数量 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainanceStandardsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_standard t
+        where 1 =1
+        <if test="standardName !=null and standardName != ''">
+            and t.standard_name= #{standardName}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
