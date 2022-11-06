@@ -18,8 +18,9 @@
     <!-- 查询保养标准信息 add by wuxw 2018-07-03 -->
     <select id="getMaintainanceStandardItemInfo" parameterType="Map" resultType="Map">
         select t.item_id,t.item_id itemId,t.standard_id,t.standard_id standardId,t.status_cd,t.status_cd
-        statusCd,t.msi_id,t.msi_id msiId,t.community_id,t.community_id communityId
+        statusCd,t.msi_id,t.msi_id msiId,t.community_id,t.community_id communityId,mi.item_title itemTitle
         from maintainance_standard_item t
+        left join maintainance_item mi on t.item_id = mi.item_id and mi.status_cd = '0'
         where 1 =1
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}

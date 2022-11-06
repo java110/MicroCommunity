@@ -1,6 +1,8 @@
 package com.java110.dto.maintainanceStandardItem;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.maintainanceItem.MaintainanceItemDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,12 +14,12 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class MaintainanceStandardItemDto extends PageDto implements Serializable {
+public class MaintainanceStandardItemDto extends MaintainanceItemDto implements Serializable {
 
     private String itemId;
-private String standardId;
-private String msiId;
-private String communityId;
+    private String standardId;
+    private String msiId;
+    private String communityId;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String communityId;
     public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getStandardId() {
+
+    public String getStandardId() {
         return standardId;
     }
-public void setStandardId(String standardId) {
+
+    public void setStandardId(String standardId) {
         this.standardId = standardId;
     }
-public String getMsiId() {
+
+    public String getMsiId() {
         return msiId;
     }
-public void setMsiId(String msiId) {
+
+    public void setMsiId(String msiId) {
         this.msiId = msiId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 

@@ -55,8 +55,8 @@ public class SaveMaintainanceStandardItemCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "standardId", "请求报文中未包含standardId");
-Assert.hasKeyAndValue(reqJson, "itemId", "请求报文中未包含itemId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "itemId", "请求报文中未包含itemId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -64,7 +64,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MaintainanceStandardItemPo maintainanceStandardItemPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardItemPo.class);
+        MaintainanceStandardItemPo maintainanceStandardItemPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardItemPo.class);
         maintainanceStandardItemPo.setMsiId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = maintainanceStandardItemV1InnerServiceSMOImpl.saveMaintainanceStandardItem(maintainanceStandardItemPo);
 
