@@ -30,6 +30,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：maintainanceStandard.deleteMaintainanceStandard
@@ -42,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "maintainance.deleteMaintainanceStandard")
 public class DeleteMaintainanceStandardCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteMaintainanceStandardCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteMaintainanceStandardCmd.class);
 
     @Autowired
     private IMaintainanceStandardV1InnerServiceSMO maintainanceStandardV1InnerServiceSMOImpl;
@@ -50,7 +51,7 @@ public class DeleteMaintainanceStandardCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "standardId", "standardId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -58,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MaintainanceStandardPo maintainanceStandardPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardPo.class);
+        MaintainanceStandardPo maintainanceStandardPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardPo.class);
         int flag = maintainanceStandardV1InnerServiceSMOImpl.deleteMaintainanceStandard(maintainanceStandardPo);
 
         if (flag < 1) {

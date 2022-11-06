@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "maintainance.updateMaintainanceStandard")
 public class UpdateMaintainanceStandardCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateMaintainanceStandardCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateMaintainanceStandardCmd.class);
 
 
     @Autowired
@@ -54,7 +54,7 @@ public class UpdateMaintainanceStandardCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "standardId", "standardId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -62,7 +62,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MaintainanceStandardPo maintainanceStandardPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardPo.class);
+        MaintainanceStandardPo maintainanceStandardPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardPo.class);
         int flag = maintainanceStandardV1InnerServiceSMOImpl.updateMaintainanceStandard(maintainanceStandardPo);
 
         if (flag < 1) {
