@@ -23,6 +23,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.maintainanceStandardItem.MaintainanceStandardItemDto;
 import com.java110.intf.community.IMaintainanceStandardItemV1InnerServiceSMO;
 import com.java110.po.maintainanceStandardItem.MaintainanceStandardItemPo;
 import com.java110.utils.exception.CmdException;
@@ -32,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -66,6 +69,19 @@ public class SaveMaintainanceStandardItemCmd extends Cmd {
 
         if(items.size() < 1){
             throw new CmdException("未包含检查项");
+        }
+        String itemId = "";
+        MaintainanceStandardItemDto maintainanceStandardItemDto = new MaintainanceStandardItemDto();
+        maintainanceStandardItemDto.setStandardId(reqJson.getString("standardId"));
+        List<MaintainanceStandardItemDto> maintainanceStandardItemDtos = null;
+        for(int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+            itemId = items.getString(itemIndex);
+            maintainanceStandardItemDto.setItemId(itemId);
+            maintainanceStandardItemDtos = maintainanceStandardItemV1InnerServiceSMOImpl.queryMaintainanceStandardItems(maintainanceStandardItemDto);
+
+            if (maintainanceStandardItemDtos != null && maintainanceStandardItemDtos.size() >0) {
+                throw new CmdException(maintainanceStandardItemDtos.get(0).getItemTitle()+"已经添加");
+            }
         }
 
     }
