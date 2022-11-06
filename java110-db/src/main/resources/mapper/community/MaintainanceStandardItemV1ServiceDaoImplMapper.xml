@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainanceStandardItemV1ServiceDaoImpl">
+
+
+    <!-- 保存保养标准信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainanceStandardItemInfo" parameterType="Map">
+        insert into maintainance_standard_item(
+        item_id,standard_id,msi_id,community_id
+        ) values (
+        #{itemId},#{standardId},#{msiId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询保养标准信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainanceStandardItemInfo" parameterType="Map" resultType="Map">
+        select t.item_id,t.item_id itemId,t.standard_id,t.standard_id standardId,t.status_cd,t.status_cd
+        statusCd,t.msi_id,t.msi_id msiId,t.community_id,t.community_id communityId
+        from maintainance_standard_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="msiId !=null and msiId != ''">
+            and t.msi_id= #{msiId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改保养标准信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainanceStandardItemInfo" parameterType="Map">
+        update maintainance_standard_item t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            , t.item_id= #{itemId}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            , t.standard_id= #{standardId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="msiId !=null and msiId != ''">
+            and t.msi_id= #{msiId}
+        </if>
+
+    </update>
+
+    <!-- 查询保养标准数量 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainanceStandardItemsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_standard_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="msiId !=null and msiId != ''">
+            and t.msi_id= #{msiId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
