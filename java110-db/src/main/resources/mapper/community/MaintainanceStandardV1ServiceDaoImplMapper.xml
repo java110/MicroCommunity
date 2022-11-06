@@ -18,7 +18,8 @@
     <!-- 查询保养标准信息 add by wuxw 2018-07-03 -->
     <select id="getMaintainanceStandardInfo" parameterType="Map" resultType="Map">
         select t.standard_name,t.standard_name standardName,t.standard_id,t.standard_id
-        standardId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        standardId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        t.create_time createTime
         from maintainance_standard t
         where 1 =1
         <if test="standardName !=null and standardName != ''">
