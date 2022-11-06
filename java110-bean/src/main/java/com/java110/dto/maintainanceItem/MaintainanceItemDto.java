@@ -1,6 +1,7 @@
 package com.java110.dto.maintainanceItem;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,11 +15,15 @@ import java.util.Date;
  **/
 public class MaintainanceItemDto extends PageDto implements Serializable {
 
+    public static final String TITLE_TYPE_SINGLE = "1001"; // 单选题
+    public static final String TITLE_TYPE_MULTIPLE = "2002"; // 多选题
+    public static final String TITLE_TYPE_QUESTIONS = "3003"; // 简答题
+
     private String itemId;
-private String titleType;
-private String itemTitle;
-private String communityId;
-private String seq;
+    private String titleType;
+    private String itemTitle;
+    private String communityId;
+    private String seq;
 
 
     private Date createTime;
@@ -29,31 +34,40 @@ private String seq;
     public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getTitleType() {
+
+    public String getTitleType() {
         return titleType;
     }
-public void setTitleType(String titleType) {
+
+    public void setTitleType(String titleType) {
         this.titleType = titleType;
     }
-public String getItemTitle() {
+
+    public String getItemTitle() {
         return itemTitle;
     }
-public void setItemTitle(String itemTitle) {
+
+    public void setItemTitle(String itemTitle) {
         this.itemTitle = itemTitle;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 

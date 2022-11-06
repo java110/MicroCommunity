@@ -15,15 +15,22 @@
  */
 package com.java110.community.cmd.maintainance;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IMaintainanceItemValueV1ServiceDao;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.inspectionItemTitle.InspectionItemTitleDto;
+import com.java110.dto.maintainanceItem.MaintainanceItemDto;
 import com.java110.intf.community.IMaintainanceItemV1InnerServiceSMO;
+import com.java110.intf.community.IMaintainanceItemValueV1InnerServiceSMO;
+import com.java110.po.inspectionItemTitleValue.InspectionItemTitleValuePo;
 import com.java110.po.maintainanceItem.MaintainanceItemPo;
+import com.java110.po.maintainanceItemValue.MaintainanceItemValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,6 +59,9 @@ public class SaveMaintainanceItemCmd extends Cmd {
     @Autowired
     private IMaintainanceItemV1InnerServiceSMO maintainanceItemV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMaintainanceItemValueV1InnerServiceSMO maintainanceItemValueV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "itemTitle", "请求报文中未包含itemTitle");
@@ -59,6 +69,13 @@ public class SaveMaintainanceItemCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
 
+        JSONArray titleValues = null;
+        if (!MaintainanceItemDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
     }
 
     @Override
@@ -71,6 +88,23 @@ public class SaveMaintainanceItemCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+
+        if (MaintainanceItemDto.TITLE_TYPE_QUESTIONS.equals(maintainanceItemPo.getTitleType())) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
+        JSONArray titleValues = reqJson.getJSONArray("titleValues");
+        MaintainanceItemValuePo maintainanceItemValuePo = null;
+        for (int titleValueIndex = 0; titleValueIndex < titleValues.size(); titleValueIndex++) {
+            maintainanceItemValuePo = new MaintainanceItemValuePo();
+            maintainanceItemValuePo.setItemValue(titleValues.getJSONObject(titleValueIndex).getString("itemValue"));
+            maintainanceItemValuePo.setSeq(titleValues.getJSONObject(titleValueIndex).getString("seq"));
+            maintainanceItemValuePo.setItemId(maintainanceItemPo.getItemId());
+            maintainanceItemValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
+            maintainanceItemValuePo.setCommunityId(maintainanceItemPo.getCommunityId());
+            maintainanceItemValueV1InnerServiceSMOImpl.saveMaintainanceItemValue(maintainanceItemValuePo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

@@ -21,8 +21,13 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.inspectionItemTitleValue.InspectionItemTitleValueDto;
+import com.java110.dto.maintainanceItemValue.MaintainanceItemValueDto;
 import com.java110.intf.community.IMaintainanceItemV1InnerServiceSMO;
+import com.java110.intf.community.IMaintainanceItemValueV1InnerServiceSMO;
+import com.java110.po.inspectionItemTitleValue.InspectionItemTitleValuePo;
 import com.java110.po.maintainanceItem.MaintainanceItemPo;
+import com.java110.po.maintainanceItemValue.MaintainanceItemValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +53,10 @@ public class DeleteMaintainanceItemCmd extends Cmd {
     @Autowired
     private IMaintainanceItemV1InnerServiceSMO maintainanceItemV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IMaintainanceItemValueV1InnerServiceSMO maintainanceItemValueV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "itemId", "itemId不能为空");
@@ -64,6 +73,19 @@ public class DeleteMaintainanceItemCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        MaintainanceItemValuePo maintainanceItemValuePo = new MaintainanceItemValuePo();
+        maintainanceItemValuePo.setItemId(maintainanceItemPo.getItemId());
+
+        MaintainanceItemValueDto tmpMaintainanceItemValueDto = BeanConvertUtil.covertBean(reqJson, MaintainanceItemValueDto.class);
+        int count = maintainanceItemValueV1InnerServiceSMOImpl.queryMaintainanceItemValuesCount(tmpMaintainanceItemValueDto);
+
+        if (count > 0) {
+            flag = maintainanceItemValueV1InnerServiceSMOImpl.deleteMaintainanceItemValue(maintainanceItemValuePo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
