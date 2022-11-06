@@ -1,6 +1,7 @@
 package com.java110.dto.maintainanceStandard;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,38 +16,47 @@ import java.util.Date;
 public class MaintainanceStandardDto extends PageDto implements Serializable {
 
     private String standardName;
-private String standardId;
-private String remark;
-private String communityId;
+    private String standardId;
+    private String remark;
+    private String communityId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private long itemCount;
+
 
     public String getStandardName() {
         return standardName;
     }
-public void setStandardName(String standardName) {
+
+    public void setStandardName(String standardName) {
         this.standardName = standardName;
     }
-public String getStandardId() {
+
+    public String getStandardId() {
         return standardId;
     }
-public void setStandardId(String standardId) {
+
+    public void setStandardId(String standardId) {
         this.standardId = standardId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -65,5 +75,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public long getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(long itemCount) {
+        this.itemCount = itemCount;
     }
 }

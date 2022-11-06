@@ -18,8 +18,11 @@ public class MaintainanceStandardItemDto extends MaintainanceItemDto implements 
 
     private String itemId;
     private String standardId;
+    private String[] standardIds;
     private String msiId;
     private String communityId;
+
+    private long itemCount;
 
 
     private Date createTime;
@@ -74,5 +77,21 @@ public class MaintainanceStandardItemDto extends MaintainanceItemDto implements 
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getStandardIds() {
+        return standardIds;
+    }
+
+    public void setStandardIds(String[] standardIds) {
+        this.standardIds = standardIds;
+    }
+
+    public long getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(long itemCount) {
+        this.itemCount = itemCount;
     }
 }

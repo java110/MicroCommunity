@@ -65,4 +65,7 @@ public interface IMaintainanceStandardItemV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMaintainanceStandardItemsCount", method = RequestMethod.POST)
     int queryMaintainanceStandardItemsCount(@RequestBody MaintainanceStandardItemDto maintainanceStandardItemDto);
+
+    @RequestMapping(value = "/queryMaintainanceStandardItemsGroupCount", method = RequestMethod.POST)
+    List<MaintainanceStandardItemDto> queryMaintainanceStandardItemsGroupCount(@RequestBody MaintainanceStandardItemDto maintainanceStandardItemDto);
 }

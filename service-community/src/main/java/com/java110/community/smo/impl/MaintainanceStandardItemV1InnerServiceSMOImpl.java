@@ -86,4 +86,11 @@ public class MaintainanceStandardItemV1InnerServiceSMOImpl extends BaseServiceSM
     public int queryMaintainanceStandardItemsCount(@RequestBody MaintainanceStandardItemDto maintainanceStandardItemDto) {
         return maintainanceStandardItemV1ServiceDaoImpl.queryMaintainanceStandardItemsCount(BeanConvertUtil.beanCovertMap(maintainanceStandardItemDto));    }
 
+    @Override
+    public List<MaintainanceStandardItemDto> queryMaintainanceStandardItemsGroupCount(@RequestBody MaintainanceStandardItemDto maintainanceStandardItemDto) {
+        List<MaintainanceStandardItemDto> maintainanceStandardItems = BeanConvertUtil.covertBeanList(maintainanceStandardItemV1ServiceDaoImpl.queryMaintainanceStandardItemsGroupCount(BeanConvertUtil.beanCovertMap(maintainanceStandardItemDto)), MaintainanceStandardItemDto.class);
+
+        return maintainanceStandardItems;
+    }
+
 }

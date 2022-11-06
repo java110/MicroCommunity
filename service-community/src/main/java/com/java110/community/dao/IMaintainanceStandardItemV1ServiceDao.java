@@ -74,4 +74,10 @@ public interface IMaintainanceStandardItemV1ServiceDao {
      */
     int queryMaintainanceStandardItemsCount(Map info);
 
+    /**
+     * 根据标准 分组查询数据
+     * @param info
+     * @return
+     */
+    List<Map> queryMaintainanceStandardItemsGroupCount(Map info);
 }

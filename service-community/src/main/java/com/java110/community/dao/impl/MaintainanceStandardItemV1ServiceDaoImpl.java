@@ -108,5 +108,14 @@ public class MaintainanceStandardItemV1ServiceDaoImpl extends BaseServiceDao imp
         return Integer.parseInt(businessMaintainanceStandardItemInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryMaintainanceStandardItemsGroupCount(Map info) {
+        logger.debug("查询 queryMaintainanceStandardItemsGroupCount 入参 info : {}",info);
+
+        List<Map> businessMaintainanceStandardItemInfos = sqlSessionTemplate.selectList("maintainanceStandardItemV1ServiceDaoImpl.queryMaintainanceStandardItemsGroupCount",info);
+
+        return businessMaintainanceStandardItemInfos;
+    }
+
 
 }

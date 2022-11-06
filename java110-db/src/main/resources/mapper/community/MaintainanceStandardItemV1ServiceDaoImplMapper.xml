@@ -91,4 +91,37 @@
 
     </select>
 
+
+    <!-- 查询保养标准信息 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainanceStandardItemsGroupCount" parameterType="Map" resultType="Map">
+        select t.standard_id standardId,count(1) itemCount
+        from maintainance_standard_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="standardId !=null and standardId != ''">
+            and t.standard_id= #{standardId}
+        </if>
+        <if test="standardIds !=null ">
+            and t.standard_id in
+            <foreach collection="standardIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="msiId !=null and msiId != ''">
+            and t.msi_id= #{msiId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+        group by t.standard_id
+
+
+    </select>
+
 </mapper>

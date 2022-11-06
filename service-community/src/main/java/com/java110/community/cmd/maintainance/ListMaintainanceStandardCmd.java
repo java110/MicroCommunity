@@ -20,6 +20,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.maintainanceStandardItem.MaintainanceStandardItemDto;
+import com.java110.intf.community.IMaintainanceStandardItemV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainanceStandardV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -52,6 +54,10 @@ public class ListMaintainanceStandardCmd extends Cmd {
     @Autowired
     private IMaintainanceStandardV1InnerServiceSMO maintainanceStandardV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IMaintainanceStandardItemV1InnerServiceSMO maintainanceStandardItemV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -69,6 +75,9 @@ public class ListMaintainanceStandardCmd extends Cmd {
 
            if (count > 0) {
                maintainanceStandardDtos = maintainanceStandardV1InnerServiceSMOImpl.queryMaintainanceStandards(maintainanceStandardDto);
+
+               refreshItemCount(maintainanceStandardDtos);
+
            } else {
                maintainanceStandardDtos = new ArrayList<>();
            }
@@ -78,5 +87,30 @@ public class ListMaintainanceStandardCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshItemCount(List<MaintainanceStandardDto> maintainanceStandardDtos) {
+
+        if(maintainanceStandardDtos == null || maintainanceStandardDtos.size()< 1){
+            return ;
+        }
+
+        List<String> standardIds = new ArrayList<>();
+        for(MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos){
+            standardIds.add(maintainanceStandardDto.getStandardId());
+        }
+
+        MaintainanceStandardItemDto maintainanceStandardItemDto = new MaintainanceStandardItemDto();
+        maintainanceStandardItemDto.setStandardIds(standardIds.toArray(new String[standardIds.size()]));
+        maintainanceStandardItemDto.setCommunityId(maintainanceStandardDtos.get(0).getCommunityId());
+
+        List<MaintainanceStandardItemDto> maintainanceStandardItemDtos = maintainanceStandardItemV1InnerServiceSMOImpl.queryMaintainanceStandardItemsGroupCount(maintainanceStandardItemDto);
+
+        for(MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos){
+            for(MaintainanceStandardItemDto tmpMaintainanceStandardItemDto : maintainanceStandardItemDtos){
+                if(maintainanceStandardDto.getStandardId().equals(tmpMaintainanceStandardItemDto.getStandardId()))
+                    maintainanceStandardDto.setItemCount(tmpMaintainanceStandardItemDto.getItemCount());
+            }
+        }
     }
 }
