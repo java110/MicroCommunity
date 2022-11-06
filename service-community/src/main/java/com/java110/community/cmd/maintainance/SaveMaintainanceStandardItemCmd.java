@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.maintainance;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -55,8 +56,17 @@ public class SaveMaintainanceStandardItemCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "standardId", "请求报文中未包含standardId");
-        Assert.hasKeyAndValue(reqJson, "itemId", "请求报文中未包含itemId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+        if(!reqJson.containsKey("items")){
+            throw new CmdException("未包含检查项");
+        }
+
+        JSONArray items = reqJson.getJSONArray("items");
+
+        if(items.size() < 1){
+            throw new CmdException("未包含检查项");
+        }
 
     }
 
@@ -65,11 +75,18 @@ public class SaveMaintainanceStandardItemCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         MaintainanceStandardItemPo maintainanceStandardItemPo = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardItemPo.class);
-        maintainanceStandardItemPo.setMsiId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = maintainanceStandardItemV1InnerServiceSMOImpl.saveMaintainanceStandardItem(maintainanceStandardItemPo);
+        JSONArray items = reqJson.getJSONArray("items");
+        String itemId = "";
+        int flag = 0;
+        for(int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+            itemId = items.getString(itemIndex);
+            maintainanceStandardItemPo.setItemId(itemId);
+            maintainanceStandardItemPo.setMsiId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            flag = maintainanceStandardItemV1InnerServiceSMOImpl.saveMaintainanceStandardItem(maintainanceStandardItemPo);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
