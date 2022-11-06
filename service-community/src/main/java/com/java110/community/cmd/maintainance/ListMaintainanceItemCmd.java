@@ -116,7 +116,7 @@ public class ListMaintainanceItemCmd extends Cmd {
                     tmpMaintainanceItemValueDtos.add(tmpMaintainanceItemValueDto);
                 }
             }
-            maintainanceItemDto.setValues(tmpMaintainanceItemValueDtos);
+            maintainanceItemDto.setTitleValues(tmpMaintainanceItemValueDtos);
         }
 
 

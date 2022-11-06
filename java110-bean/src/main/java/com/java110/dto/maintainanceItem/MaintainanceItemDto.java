@@ -32,7 +32,7 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
-    List<MaintainanceItemValueDto> values;
+    List<MaintainanceItemValueDto> titleValues;
 
 
     public String getItemId() {
@@ -92,11 +92,11 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public List<MaintainanceItemValueDto> getValues() {
-        return values;
+    public List<MaintainanceItemValueDto> getTitleValues() {
+        return titleValues;
     }
 
-    public void setValues(List<MaintainanceItemValueDto> values) {
-        this.values = values;
+    public void setTitleValues(List<MaintainanceItemValueDto> titleValues) {
+        this.titleValues = titleValues;
     }
 }
