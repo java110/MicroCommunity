@@ -17,6 +17,7 @@ package com.java110.po.maintainancePlan;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-07 02:07:55 mail: 928255095@qq.com
@@ -28,111 +29,140 @@ import java.util.Date;
 public class MaintainancePlanPo implements Serializable {
 
     private String maintainanceDay;
-private String planPeriod;
-private String createUserId;
-private String endDate;
-private String standardId;
-private String planName;
-private String remark;
-private String createUserName;
-private String statusCd = "0";
-private String maintainanceEveryday;
-private String maintainanceMonth;
-private String planId;
-private String state;
-private String communityId;
-private String startDate;
-public String getMaintainanceDay() {
+    private String planPeriod;
+    private String createUserId;
+    private String endDate;
+    private String standardId;
+    private String planName;
+    private String remark;
+    private String createUserName;
+    private String statusCd = "0";
+    private String maintainanceEveryday;
+    private String maintainanceMonth;
+    private String planId;
+    private String state;
+    private String communityId;
+    private String startDate;
+
+    public String getMaintainanceDay() {
         return maintainanceDay;
     }
-public void setMaintainanceDay(String maintainanceDay) {
+
+    public void setMaintainanceDay(String maintainanceDay) {
         this.maintainanceDay = maintainanceDay;
     }
-public String getPlanPeriod() {
+
+    public String getPlanPeriod() {
         return planPeriod;
     }
-public void setPlanPeriod(String planPeriod) {
+
+    public void setPlanPeriod(String planPeriod) {
         this.planPeriod = planPeriod;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getEndDate() {
+
+    public String getEndDate() {
         return endDate;
     }
-public void setEndDate(String endDate) {
+
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
-public String getStandardId() {
+
+    public String getStandardId() {
         return standardId;
     }
-public void setStandardId(String standardId) {
+
+    public void setStandardId(String standardId) {
         this.standardId = standardId;
     }
-public String getPlanName() {
+
+    public String getPlanName() {
         return planName;
     }
-public void setPlanName(String planName) {
+
+    public void setPlanName(String planName) {
         this.planName = planName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getMaintainanceEveryday() {
+
+    public String getMaintainanceEveryday() {
         return maintainanceEveryday;
     }
-public void setMaintainanceEveryday(String maintainanceEveryday) {
+
+    public void setMaintainanceEveryday(String maintainanceEveryday) {
         this.maintainanceEveryday = maintainanceEveryday;
     }
-public String getMaintainanceMonth() {
+
+    public String getMaintainanceMonth() {
         return maintainanceMonth;
     }
-public void setMaintainanceMonth(String maintainanceMonth) {
+
+    public void setMaintainanceMonth(String maintainanceMonth) {
         this.maintainanceMonth = maintainanceMonth;
     }
-public String getPlanId() {
+
+    public String getPlanId() {
         return planId;
     }
-public void setPlanId(String planId) {
+
+    public void setPlanId(String planId) {
         this.planId = planId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStartDate() {
+
+    public String getStartDate() {
         return startDate;
     }
-public void setStartDate(String startDate) {
+
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-
 
 
 }

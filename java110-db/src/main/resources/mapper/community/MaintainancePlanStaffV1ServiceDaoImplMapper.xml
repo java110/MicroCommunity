@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainancePlanStaffV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存保养计划员工信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainancePlanStaffInfo" parameterType="Map">
+        insert into maintainance_plan_staff(
+staff_name,plan_id,community_id,staff_id,mps_id
+) values (
+#{staffName},#{planId},#{communityId},#{staffId},#{mpsId}
+)
+    </insert>
+
+
+
+    <!-- 查询保养计划员工信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainancePlanStaffInfo" parameterType="Map" resultType="Map">
+        select  t.staff_name,t.staff_name staffName,t.plan_id,t.plan_id planId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,t.mps_id,t.mps_id mpsId 
+from maintainance_plan_staff t 
+where 1 =1 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="planId !=null and planId != ''">
+   and t.plan_id= #{planId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="mpsId !=null and mpsId != ''">
+   and t.mps_id= #{mpsId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改保养计划员工信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainancePlanStaffInfo" parameterType="Map">
+        update  maintainance_plan_staff t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="staffName !=null and staffName != ''">
+, t.staff_name= #{staffName}
+</if> 
+<if test="planId !=null and planId != ''">
+, t.plan_id= #{planId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+ where 1=1 <if test="mpsId !=null and mpsId != ''">
+and t.mps_id= #{mpsId}
+</if> 
+
+    </update>
+
+    <!-- 查询保养计划员工数量 add by wuxw 2018-07-03 -->
+     <select id="queryMaintainancePlanStaffsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from maintainance_plan_staff t 
+where 1 =1 
+<if test="staffName !=null and staffName != ''">
+   and t.staff_name= #{staffName}
+</if> 
+<if test="planId !=null and planId != ''">
+   and t.plan_id= #{planId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="mpsId !=null and mpsId != ''">
+   and t.mps_id= #{mpsId}
+</if> 
+
+
+     </select>
+
+</mapper>

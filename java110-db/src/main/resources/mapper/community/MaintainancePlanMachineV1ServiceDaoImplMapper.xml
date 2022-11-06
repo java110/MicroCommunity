@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainancePlanMachineV1ServiceDaoImpl">
+
+
+    <!-- 保存保养设备信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainancePlanMachineInfo" parameterType="Map">
+        insert into maintainance_plan_machine(
+        mpm_id,machine_id,plan_id,community_id,machine_name
+        ) values (
+        #{mpmId},#{machineId},#{planId},#{communityId},#{machineName}
+        )
+    </insert>
+
+
+    <!-- 查询保养设备信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainancePlanMachineInfo" parameterType="Map" resultType="Map">
+        select t.mpm_id,t.mpm_id mpmId,t.machine_id,t.machine_id machineId,t.create_time,t.create_time
+        createTime,t.plan_id,t.plan_id planId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.machine_name,t.machine_name machineName
+        from maintainance_plan_machine t
+        where 1 =1
+        <if test="mpmId !=null and mpmId != ''">
+            and t.mpm_id= #{mpmId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改保养设备信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainancePlanMachineInfo" parameterType="Map">
+        update maintainance_plan_machine t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="planId !=null and planId != ''">
+            , t.plan_id= #{planId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        where 1=1
+        <if test="mpmId !=null and mpmId != ''">
+            and t.mpm_id= #{mpmId}
+        </if>
+
+    </update>
+
+    <!-- 查询保养设备数量 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainancePlanMachinesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_plan_machine t
+        where 1 =1
+        <if test="mpmId !=null and mpmId != ''">
+            and t.mpm_id= #{mpmId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+
+
+    </select>
+
+</mapper>
