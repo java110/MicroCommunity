@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainancePlanV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存保养计划信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainancePlanInfo" parameterType="Map">
+        insert into maintainance_plan(
+maintainance_day,plan_period,create_user_id,end_date,standard_id,plan_name,remark,create_user_name,maintainance_everyday,maintainance_month,plan_id,state,community_id,start_date
+) values (
+#{maintainanceDay},#{planPeriod},#{createUserId},#{endDate},#{standardId},#{planName},#{remark},#{createUserName},#{maintainanceEveryday},#{maintainanceMonth},#{planId},#{state},#{communityId},#{startDate}
+)
+    </insert>
+
+
+
+    <!-- 查询保养计划信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainancePlanInfo" parameterType="Map" resultType="Map">
+        select  t.maintainance_day,t.maintainance_day maintainanceDay,t.plan_period,t.plan_period planPeriod,t.create_user_id,t.create_user_id createUserId,t.end_date,t.end_date endDate,t.standard_id,t.standard_id standardId,t.plan_name,t.plan_name planName,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd statusCd,t.maintainance_everyday,t.maintainance_everyday maintainanceEveryday,t.maintainance_month,t.maintainance_month maintainanceMonth,t.plan_id,t.plan_id planId,t.state,t.community_id,t.community_id communityId,t.start_date,t.start_date startDate 
+from maintainance_plan t 
+where 1 =1 
+<if test="maintainanceDay !=null and maintainanceDay != ''">
+   and t.maintainance_day= #{maintainanceDay}
+</if> 
+<if test="planPeriod !=null and planPeriod != ''">
+   and t.plan_period= #{planPeriod}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="endDate !=null and endDate != ''">
+   and t.end_date= #{endDate}
+</if> 
+<if test="standardId !=null and standardId != ''">
+   and t.standard_id= #{standardId}
+</if> 
+<if test="planName !=null and planName != ''">
+   and t.plan_name= #{planName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="maintainanceEveryday !=null and maintainanceEveryday != ''">
+   and t.maintainance_everyday= #{maintainanceEveryday}
+</if> 
+<if test="maintainanceMonth !=null and maintainanceMonth != ''">
+   and t.maintainance_month= #{maintainanceMonth}
+</if> 
+<if test="planId !=null and planId != ''">
+   and t.plan_id= #{planId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="startDate !=null and startDate != ''">
+   and t.start_date= #{startDate}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改保养计划信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainancePlanInfo" parameterType="Map">
+        update  maintainance_plan t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="maintainanceDay !=null and maintainanceDay != ''">
+, t.maintainance_day= #{maintainanceDay}
+</if> 
+<if test="planPeriod !=null and planPeriod != ''">
+, t.plan_period= #{planPeriod}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+, t.create_user_id= #{createUserId}
+</if> 
+<if test="endDate !=null and endDate != ''">
+, t.end_date= #{endDate}
+</if> 
+<if test="standardId !=null and standardId != ''">
+, t.standard_id= #{standardId}
+</if> 
+<if test="planName !=null and planName != ''">
+, t.plan_name= #{planName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+, t.create_user_name= #{createUserName}
+</if> 
+<if test="maintainanceEveryday !=null and maintainanceEveryday != ''">
+, t.maintainance_everyday= #{maintainanceEveryday}
+</if> 
+<if test="maintainanceMonth !=null and maintainanceMonth != ''">
+, t.maintainance_month= #{maintainanceMonth}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="startDate !=null and startDate != ''">
+, t.start_date= #{startDate}
+</if> 
+ where 1=1 <if test="planId !=null and planId != ''">
+and t.plan_id= #{planId}
+</if> 
+
+    </update>
+
+    <!-- 查询保养计划数量 add by wuxw 2018-07-03 -->
+     <select id="queryMaintainancePlansCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from maintainance_plan t 
+where 1 =1 
+<if test="maintainanceDay !=null and maintainanceDay != ''">
+   and t.maintainance_day= #{maintainanceDay}
+</if> 
+<if test="planPeriod !=null and planPeriod != ''">
+   and t.plan_period= #{planPeriod}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="endDate !=null and endDate != ''">
+   and t.end_date= #{endDate}
+</if> 
+<if test="standardId !=null and standardId != ''">
+   and t.standard_id= #{standardId}
+</if> 
+<if test="planName !=null and planName != ''">
+   and t.plan_name= #{planName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="maintainanceEveryday !=null and maintainanceEveryday != ''">
+   and t.maintainance_everyday= #{maintainanceEveryday}
+</if> 
+<if test="maintainanceMonth !=null and maintainanceMonth != ''">
+   and t.maintainance_month= #{maintainanceMonth}
+</if> 
+<if test="planId !=null and planId != ''">
+   and t.plan_id= #{planId}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="startDate !=null and startDate != ''">
+   and t.start_date= #{startDate}
+</if> 
+
+
+     </select>
+
+</mapper>
