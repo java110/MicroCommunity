@@ -54,7 +54,6 @@ public class UpdateMachineTypeCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
-        Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
 
     }
 

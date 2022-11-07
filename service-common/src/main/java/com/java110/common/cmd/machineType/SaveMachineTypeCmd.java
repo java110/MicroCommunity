@@ -54,7 +54,6 @@ public class SaveMachineTypeCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "machineTypeCd", "请求报文中未包含machineTypeCd");
         Assert.hasKeyAndValue(reqJson, "machineTypeName", "请求报文中未包含machineTypeName");
 
     }
