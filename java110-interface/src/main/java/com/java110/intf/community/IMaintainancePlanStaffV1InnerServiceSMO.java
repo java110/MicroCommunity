@@ -16,6 +16,7 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.maintainancePlanMachine.MaintainancePlanMachineDto;
 import com.java110.dto.maintainancePlanStaff.MaintainancePlanStaffDto;
 import com.java110.po.maintainancePlanStaff.MaintainancePlanStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -65,4 +66,7 @@ public interface IMaintainancePlanStaffV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMaintainancePlanStaffsCount", method = RequestMethod.POST)
     int queryMaintainancePlanStaffsCount(@RequestBody MaintainancePlanStaffDto maintainancePlanStaffDto);
+
+    @RequestMapping(value = "/queryMaintainancePlanStaffsGroupCount", method = RequestMethod.POST)
+    List<MaintainancePlanStaffDto> queryMaintainancePlanStaffsGroupCount(@RequestBody MaintainancePlanStaffDto maintainancePlanStaffDto);
 }

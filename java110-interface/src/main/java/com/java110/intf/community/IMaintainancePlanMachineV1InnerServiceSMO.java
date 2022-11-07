@@ -65,4 +65,7 @@ public interface IMaintainancePlanMachineV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMaintainancePlanMachinesCount", method = RequestMethod.POST)
     int queryMaintainancePlanMachinesCount(@RequestBody MaintainancePlanMachineDto maintainancePlanMachineDto);
+
+    @RequestMapping(value = "/queryMaintainancePlanMachinesGroupCount", method = RequestMethod.POST)
+    List<MaintainancePlanMachineDto> queryMaintainancePlanMachinesGroupCount(@RequestBody MaintainancePlanMachineDto maintainancePlanMachineDto);
 }

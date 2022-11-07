@@ -74,4 +74,5 @@ public interface IMaintainancePlanMachineV1ServiceDao {
      */
     int queryMaintainancePlanMachinesCount(Map info);
 
+    List<Map> queryMaintainancePlanMachinesGroupCount(Map map);
 }

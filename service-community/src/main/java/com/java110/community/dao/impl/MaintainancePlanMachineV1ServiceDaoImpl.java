@@ -108,5 +108,21 @@ public class MaintainancePlanMachineV1ServiceDaoImpl extends BaseServiceDao impl
         return Integer.parseInt(businessMaintainancePlanMachineInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询保养设备信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryMaintainancePlanMachinesGroupCount(Map info) throws DAOException {
+        logger.debug("查询 queryMaintainancePlanMachinesGroupCount 入参 info : {}",info);
+
+        List<Map> businessMaintainancePlanMachineInfos = sqlSessionTemplate.selectList("maintainancePlanMachineV1ServiceDaoImpl.queryMaintainancePlanMachinesGroupCount",info);
+
+        return businessMaintainancePlanMachineInfos;
+    }
+
+
 
 }

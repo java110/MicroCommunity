@@ -1,6 +1,7 @@
 package com.java110.dto.maintainancePlanMachine;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,13 @@ import java.util.Date;
 public class MaintainancePlanMachineDto extends PageDto implements Serializable {
 
     private String mpmId;
-private String machineId;
-private String planId;
-private String communityId;
-private String machineName;
+    private String machineId;
+    private String planId;
+    private String[] planIds;
+    private String communityId;
+    private String machineName;
+
+    private long machineCount;
 
 
     private Date createTime;
@@ -29,31 +33,40 @@ private String machineName;
     public String getMpmId() {
         return mpmId;
     }
-public void setMpmId(String mpmId) {
+
+    public void setMpmId(String mpmId) {
         this.mpmId = mpmId;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getPlanId() {
+
+    public String getPlanId() {
         return planId;
     }
-public void setPlanId(String planId) {
+
+    public void setPlanId(String planId) {
         this.planId = planId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
 
@@ -72,5 +85,21 @@ public void setMachineName(String machineName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getPlanIds() {
+        return planIds;
+    }
+
+    public void setPlanIds(String[] planIds) {
+        this.planIds = planIds;
+    }
+
+    public long getMachineCount() {
+        return machineCount;
+    }
+
+    public void setMachineCount(long machineCount) {
+        this.machineCount = machineCount;
     }
 }

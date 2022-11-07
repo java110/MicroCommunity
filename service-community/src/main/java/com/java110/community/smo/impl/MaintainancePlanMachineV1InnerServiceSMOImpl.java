@@ -86,4 +86,14 @@ public class MaintainancePlanMachineV1InnerServiceSMOImpl extends BaseServiceSMO
     public int queryMaintainancePlanMachinesCount(@RequestBody MaintainancePlanMachineDto maintainancePlanMachineDto) {
         return maintainancePlanMachineV1ServiceDaoImpl.queryMaintainancePlanMachinesCount(BeanConvertUtil.beanCovertMap(maintainancePlanMachineDto));    }
 
+
+    @Override
+    public List<MaintainancePlanMachineDto> queryMaintainancePlanMachinesGroupCount(@RequestBody  MaintainancePlanMachineDto maintainancePlanMachineDto) {
+
+        //校验是否传了 分页信息
+
+        List<MaintainancePlanMachineDto> maintainancePlanMachines = BeanConvertUtil.covertBeanList(maintainancePlanMachineV1ServiceDaoImpl.queryMaintainancePlanMachinesGroupCount(BeanConvertUtil.beanCovertMap(maintainancePlanMachineDto)), MaintainancePlanMachineDto.class);
+
+        return maintainancePlanMachines;
+    }
 }

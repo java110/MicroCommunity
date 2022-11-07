@@ -94,4 +94,22 @@
 
     </select>
 
+
+
+    <select id="queryMaintainancePlanStaffsGroupCount" parameterType="Map" resultType="Map">
+        select t.plan_id planId,count(1) staffCount
+        from maintainance_plan_staff t
+        where 1 =1
+        <if test="planIds !=null ">
+            and t.plan_id in
+            <foreach collection="planIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
 </mapper>

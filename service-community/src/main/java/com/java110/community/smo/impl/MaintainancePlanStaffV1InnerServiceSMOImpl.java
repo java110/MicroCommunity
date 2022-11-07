@@ -86,4 +86,14 @@ public class MaintainancePlanStaffV1InnerServiceSMOImpl extends BaseServiceSMO i
     public int queryMaintainancePlanStaffsCount(@RequestBody MaintainancePlanStaffDto maintainancePlanStaffDto) {
         return maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsCount(BeanConvertUtil.beanCovertMap(maintainancePlanStaffDto));    }
 
+    @Override
+    public List<MaintainancePlanStaffDto> queryMaintainancePlanStaffsGroupCount(@RequestBody  MaintainancePlanStaffDto maintainancePlanStaffDto) {
+
+        //校验是否传了 分页信息
+
+
+        List<MaintainancePlanStaffDto> maintainancePlanStaffs = BeanConvertUtil.covertBeanList(maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsGroupCount(BeanConvertUtil.beanCovertMap(maintainancePlanStaffDto)), MaintainancePlanStaffDto.class);
+
+        return maintainancePlanStaffs;
+    }
 }

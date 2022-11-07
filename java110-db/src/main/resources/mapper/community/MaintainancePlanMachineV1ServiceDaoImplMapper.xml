@@ -109,4 +109,26 @@
 
     </select>
 
+
+    <!-- 查询保养设备信息 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainancePlanMachinesGroupCount" parameterType="Map" resultType="Map">
+        select t.plan_id planId,count(1) machineCount
+        from maintainance_plan_machine t
+        where 1 =1
+        and t.status_cd = 0
+
+        <if test="planIds !=null ">
+            and t.plan_id in
+            <foreach collection="planIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        group  by t.plan_id
+
+    </select>
+
 </mapper>
