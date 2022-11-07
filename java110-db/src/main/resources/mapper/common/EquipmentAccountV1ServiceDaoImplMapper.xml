@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="equipmentAccountV1ServiceDaoImpl">
+
+
+    <!-- 保存设备台账信息 add by wuxw 2018-07-03 -->
+    <insert id="saveEquipmentAccountInfo" parameterType="Map">
+        insert into equipment_account(use_org_name, location_type_cd, remark, purchase_price, charge_org_name,
+                                      machine_name, charge_org_id, location_detail, first_enable_time,
+                                      warranty_deadline, model, state, community_id, brand, machine_type_cd,
+                                      machine_code, use_user_name, importance_level, use_org_id, use_use_tel,
+                                      machine_version, charge_use_name, useful_life, machine_id, charge_use_id,
+                                      net_worth, charge_org_tel, type_id, location_obj_id, location_obj_name, use_user_id)
+        values (#{useOrgName}, #{locationTypeCd}, #{remark}, #{purchasePrice}, #{chargeOrgName}, #{machineName},
+                #{chargeOrgId}, #{locationDetail}, #{firstEnableTime}, #{warrantyDeadline}, #{model}, #{state},
+                #{communityId}, #{brand}, #{machineTypeCd}, #{machineCode}, #{useUserName}, #{importanceLevel},
+                #{useOrgId}, #{useUseTel}, #{machineVersion}, #{chargeUseName}, #{usefulLife}, #{machineId},
+                #{chargeUseId}, #{netWorth}, #{chargeOrgTel}, #{typeId}, #{locationObjId}, #{locationObjName}, #{useUserId})
+    </insert>
+    <insert id="saveEquipmentAccountInfoSelective" parameterType="Map">
+        insert into equipment_account
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="useOrgName != null" >
+                use_org_name,
+            </if>
+            <if test="locationTypeCd != null" >
+                location_type_cd,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="purchasePrice != null" >
+                purchase_price,
+            </if>
+            <if test="chargeOrgName != null" >
+                charge_org_name,
+            </if>
+            <if test="machineName != null" >
+                machine_name,
+            </if>
+            <if test="chargeOrgId != null" >
+                charge_org_id,
+            </if>
+            <if test="locationDetail != null" >
+                location_detail,
+            </if>
+            <if test="firstEnableTime != null and firstEnableTime!=''" >
+                first_enable_time,
+            </if>
+            <if test="warrantyDeadline != null and warrantyDeadline!=''" >
+                warranty_deadline,
+            </if>
+            <if test="model != null" >
+                model,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="communityId != null" >
+                community_id,
+            </if>
+            <if test="brand != null" >
+                brand,
+            </if>
+            <if test="machineTypeCd != null" >
+                machine_type_cd,
+            </if>
+            <if test="machineCode != null" >
+                machine_code,
+            </if>
+            <if test="useUserName != null" >
+                use_user_name,
+            </if>
+            <if test="importanceLevel != null" >
+                importance_level,
+            </if>
+            <if test="useOrgId != null" >
+                use_org_id,
+            </if>
+            <if test="useUseTel != null and useUseTel!=''" >
+                use_use_tel,
+            </if>
+            <if test="machineVersion != null and machineVersion!=''" >
+                machine_version,
+            </if>
+            <if test="chargeUseName != null and chargeUseName!=''" >
+                charge_use_name,
+            </if>
+            <if test="usefulLife != null and usefulLife!=''" >
+                useful_life,
+            </if>
+            <if test="machineId != null" >
+                machine_id,
+            </if>
+            <if test="chargeUseId != null" >
+                charge_use_id,
+            </if>
+            <if test="netWorth != null" >
+                net_worth,
+            </if>
+            <if test="chargeOrgTel != null" >
+                charge_org_tel,
+            </if>
+            <if test="typeId != null" >
+                type_id,
+            </if>
+            <if test="locationObjId != null" >
+                location_obj_id,
+            </if>
+            <if test="locationObjName != null" >
+                location_obj_name,
+            </if>
+            <if test="useUserId != null" >
+                use_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="useOrgName != null" >
+                #{useOrgName},
+            </if>
+            <if test="locationTypeCd != null" >
+                #{locationTypeCd},
+            </if>
+            <if test="remark != null" >
+                #{remark},
+            </if>
+            <if test="purchasePrice != null" >
+                #{purchasePrice},
+            </if>
+            <if test="chargeOrgName != null" >
+                #{chargeOrgName},
+            </if>
+            <if test="machineName != null" >
+                #{machineName},
+            </if>
+            <if test="chargeOrgId != null" >
+                #{chargeOrgId},
+            </if>
+            <if test="locationDetail != null" >
+                #{locationDetail},
+            </if>
+            <if test="firstEnableTime != null and firstEnableTime!=''" >
+                #{firstEnableTime},
+            </if>
+            <if test="warrantyDeadline != null and warrantyDeadline!=''" >
+                #{warrantyDeadline},
+            </if>
+            <if test="model != null" >
+                #{model},
+            </if>
+            <if test="state != null" >
+                #{state},
+            </if>
+            <if test="communityId != null" >
+                #{communityId},
+            </if>
+            <if test="brand != null" >
+                #{brand},
+            </if>
+            <if test="machineTypeCd != null" >
+                #{machineTypeCd},
+            </if>
+            <if test="machineCode != null" >
+                #{machineCode},
+            </if>
+            <if test="useUserName != null" >
+                #{useUserName},
+            </if>
+            <if test="importanceLevel != null" >
+                #{importanceLevel},
+            </if>
+            <if test="useOrgId != null" >
+                #{useOrgId},
+            </if>
+            <if test="useUseTel != null and useUseTel!=''" >
+                #{useUseTel},
+            </if>
+            <if test="machineVersion != null" >
+                #{machineVersion},
+            </if>
+            <if test="chargeUseName != null and chargeUseName!=''" >
+                #{chargeUseName},
+            </if>
+            <if test="usefulLife != null and usefulLife!=''" >
+                #{usefulLife},
+            </if>
+            <if test="machineId != null" >
+                #{machineId},
+            </if>
+            <if test="chargeUseId != null" >
+                #{chargeUseId},
+            </if>
+            <if test="netWorth != null" >
+                #{netWorth},
+            </if>
+            <if test="chargeOrgTel != null" >
+                #{chargeOrgTel},
+            </if>
+            <if test="typeId != null" >
+                #{typeId},
+            </if>
+            <if test="locationObjId != null" >
+                #{locationObjId},
+            </if>
+            <if test="locationObjName != null" >
+                #{locationObjName},
+            </if>
+            <if test="useUserId != null" >
+                #{useUserId},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 查询设备台账信息 add by wuxw 2018-07-03 -->
+    <select id="getEquipmentAccountInfo" parameterType="Map" resultType="Map">
+        select t.use_org_name,t.use_org_name useOrgName,t.location_type_cd,t.location_type_cd
+        locationTypeCd,t.remark,t.purchase_price,t.purchase_price purchasePrice,t.charge_org_name,t.charge_org_name
+        chargeOrgName,t.machine_name,t.machine_name machineName,t.charge_org_id,t.charge_org_id
+        chargeOrgId,t.location_detail,t.location_detail locationDetail,t.first_enable_time,t.first_enable_time
+        firstEnableTime,t.warranty_deadline,t.warranty_deadline
+        warrantyDeadline,t.model,t.state,t.community_id,t.community_id
+        communityId,t.brand,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_code,t.machine_code
+        machineCode,t.use_user_name,t.use_user_name useUserName,t.importance_level,t.importance_level
+        importanceLevel,t.use_org_id,t.use_org_id useOrgId,t.use_use_tel,t.use_use_tel
+        useUseTel,t.machine_version,t.machine_version machineVersion,t.status_cd,t.status_cd
+        statusCd,t.charge_use_name,t.charge_use_name chargeUseName,t.useful_life,t.useful_life
+        usefulLife,t.machine_id,t.machine_id machineId,t.charge_use_id,t.charge_use_id
+        chargeUseId,t.create_time,t.create_time createTime,t.net_worth,t.net_worth
+        netWorth,t.charge_org_tel,t.charge_org_tel chargeOrgTel,t.type_id,t.type_id
+        typeId,t.location_obj_id,t.location_obj_id locationObjId,t.location_obj_name,t.location_obj_name locationObjName,t.use_user_id,t.use_user_id useUserId,td.name stateName,td1.name levelName
+        from equipment_account t
+        LEFT JOIN t_dict td on td.status_cd = t.state and td.table_name = 'equipment_account' and td.table_columns = 'state'
+        LEFT JOIN t_dict td1 on td1.status_cd = t.importance_level and td1.table_name = 'equipment_account' and td1.table_columns = 'importance_level'
+        where 1 =1
+        <if test="useOrgName !=null and useOrgName != ''">
+            and t.use_org_name= #{useOrgName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="purchasePrice !=null and purchasePrice != ''">
+            and t.purchase_price= #{purchasePrice}
+        </if>
+        <if test="chargeOrgName !=null and chargeOrgName != ''">
+            and t.charge_org_name= #{chargeOrgName}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="chargeOrgId !=null and chargeOrgId != ''">
+            and t.charge_org_id= #{chargeOrgId}
+        </if>
+        <if test="locationDetail !=null and locationDetail != ''">
+            and t.location_detail= #{locationDetail}
+        </if>
+        <if test="firstEnableTime !=null and firstEnableTime != ''">
+            and t.first_enable_time= #{firstEnableTime}
+        </if>
+        <if test="warrantyDeadline !=null and warrantyDeadline != ''">
+            and t.warranty_deadline= #{warrantyDeadline}
+        </if>
+        <if test="model !=null and model != ''">
+            and t.model= #{model}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="brand !=null and brand != ''">
+            and t.brand= #{brand}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="useUserName !=null and useUserName != ''">
+            and t.use_user_name= #{useUserName}
+        </if>
+        <if test="importanceLevel !=null and importanceLevel != ''">
+            and t.importance_level= #{importanceLevel}
+        </if>
+        <if test="useOrgId !=null and useOrgId != ''">
+            and t.use_org_id= #{useOrgId}
+        </if>
+        <if test="useUseTel !=null and useUseTel != ''">
+            and t.use_use_tel= #{useUseTel}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="chargeUseName !=null and chargeUseName != ''">
+            and t.charge_use_name= #{chargeUseName}
+        </if>
+        <if test="usefulLife !=null and usefulLife != ''">
+            and t.useful_life= #{usefulLife}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineIds !=null">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="chargeUseId !=null and chargeUseId != ''">
+            and t.charge_use_id= #{chargeUseId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="netWorth !=null and netWorth != ''">
+            and t.net_worth= #{netWorth}
+        </if>
+        <if test="chargeOrgTel !=null and chargeOrgTel != ''">
+            and t.charge_org_tel= #{chargeOrgTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="locationObjName !=null and locationObjName != ''">
+            and t.location_obj_name= #{locationObjName}
+        </if>
+        <if test="useUserId !=null and useUserId != ''">
+            and t.use_user_id= #{useUserId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改设备台账信息 add by wuxw 2018-07-03 -->
+    <update id="updateEquipmentAccountInfo" parameterType="Map">
+        update equipment_account t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="useOrgName !=null and useOrgName != ''">
+            , t.use_org_name= #{useOrgName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            , t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="purchasePrice !=null and purchasePrice != ''">
+            , t.purchase_price= #{purchasePrice}
+        </if>
+        <if test="chargeOrgName !=null and chargeOrgName != ''">
+            , t.charge_org_name= #{chargeOrgName}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        <if test="chargeOrgId !=null and chargeOrgId != ''">
+            , t.charge_org_id= #{chargeOrgId}
+        </if>
+        <if test="locationDetail !=null and locationDetail != ''">
+            , t.location_detail= #{locationDetail}
+        </if>
+        <if test="firstEnableTime !=null and firstEnableTime != ''">
+            , t.first_enable_time= #{firstEnableTime}
+        </if>
+        <if test="warrantyDeadline !=null and warrantyDeadline != ''">
+            , t.warranty_deadline= #{warrantyDeadline}
+        </if>
+        <if test="model !=null and model != ''">
+            , t.model= #{model}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="brand !=null and brand != ''">
+            , t.brand= #{brand}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            , t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="useUserName !=null and useUserName != ''">
+            , t.use_user_name= #{useUserName}
+        </if>
+        <if test="importanceLevel !=null and importanceLevel != ''">
+            , t.importance_level= #{importanceLevel}
+        </if>
+        <if test="useOrgId !=null and useOrgId != ''">
+            , t.use_org_id= #{useOrgId}
+        </if>
+        <if test="useUseTel !=null and useUseTel != ''">
+            , t.use_use_tel= #{useUseTel}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            , t.machine_version= #{machineVersion}
+        </if>
+        <if test="chargeUseName !=null and chargeUseName != ''">
+            , t.charge_use_name= #{chargeUseName}
+        </if>
+        <if test="usefulLife !=null and usefulLife != ''">
+            , t.useful_life= #{usefulLife}
+        </if>
+        <if test="chargeUseId !=null and chargeUseId != ''">
+            , t.charge_use_id= #{chargeUseId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="netWorth !=null and netWorth != ''">
+            , t.net_worth= #{netWorth}
+        </if>
+        <if test="chargeOrgTel !=null and chargeOrgTel != ''">
+            , t.charge_org_tel= #{chargeOrgTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            , t.type_id= #{typeId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            , t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="locationObjName != null" >
+            , t.location_obj_name= #{locationObjName}
+        </if>
+        <if test="useUserId !=null and useUserId != ''">
+            , t.use_user_id= #{useUserId}
+        </if>
+        where 1=1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+
+    </update>
+
+    <!-- 查询设备台账数量 add by wuxw 2018-07-03 -->
+    <select id="queryEquipmentAccountsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from equipment_account t
+        where 1 =1
+        <if test="useOrgName !=null and useOrgName != ''">
+            and t.use_org_name= #{useOrgName}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="purchasePrice !=null and purchasePrice != ''">
+            and t.purchase_price= #{purchasePrice}
+        </if>
+        <if test="chargeOrgName !=null and chargeOrgName != ''">
+            and t.charge_org_name= #{chargeOrgName}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="chargeOrgId !=null and chargeOrgId != ''">
+            and t.charge_org_id= #{chargeOrgId}
+        </if>
+        <if test="locationDetail !=null and locationDetail != ''">
+            and t.location_detail= #{locationDetail}
+        </if>
+        <if test="firstEnableTime !=null and firstEnableTime != ''">
+            and t.first_enable_time= #{firstEnableTime}
+        </if>
+        <if test="warrantyDeadline !=null and warrantyDeadline != ''">
+            and t.warranty_deadline= #{warrantyDeadline}
+        </if>
+        <if test="model !=null and model != ''">
+            and t.model= #{model}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="brand !=null and brand != ''">
+            and t.brand= #{brand}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="useUserName !=null and useUserName != ''">
+            and t.use_user_name= #{useUserName}
+        </if>
+        <if test="importanceLevel !=null and importanceLevel != ''">
+            and t.importance_level= #{importanceLevel}
+        </if>
+        <if test="useOrgId !=null and useOrgId != ''">
+            and t.use_org_id= #{useOrgId}
+        </if>
+        <if test="useUseTel !=null and useUseTel != ''">
+            and t.use_use_tel= #{useUseTel}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="chargeUseName !=null and chargeUseName != ''">
+            and t.charge_use_name= #{chargeUseName}
+        </if>
+        <if test="usefulLife !=null and usefulLife != ''">
+            and t.useful_life= #{usefulLife}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineIds !=null">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="chargeUseId !=null and chargeUseId != ''">
+            and t.charge_use_id= #{chargeUseId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="netWorth !=null and netWorth != ''">
+            and t.net_worth= #{netWorth}
+        </if>
+        <if test="chargeOrgTel !=null and chargeOrgTel != ''">
+            and t.charge_org_tel= #{chargeOrgTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="locationObjName != null  and locationObjName != ''" >
+            and t.location_obj_name= #{locationObjName}
+        </if>
+        <if test="useUserId !=null and useUserId != ''">
+            and t.use_user_id= #{useUserId}
+        </if>
+    </select>
+
+</mapper>

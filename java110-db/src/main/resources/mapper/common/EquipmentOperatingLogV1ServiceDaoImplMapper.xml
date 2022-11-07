@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="equipmentOperatingLogV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存设备操作记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveEquipmentOperatingLogInfo" parameterType="Map">
+        insert into equipment_operating_log(
+operating_code,machine_id,operating_id,remark,community_id,operating_descriptor,user_name,user_id,use_tel
+) values (
+#{operatingCode},#{machineId},#{operatingId},#{remark},#{communityId},#{operatingDescriptor},#{userName},#{userId},#{useTel}
+)
+    </insert>
+
+
+
+    <!-- 查询设备操作记录信息 add by wuxw 2018-07-03 -->
+    <select id="getEquipmentOperatingLogInfo" parameterType="Map" resultType="Map">
+        select  t.operating_code,t.operating_code operatingCode,t.machine_id,t.machine_id machineId,t.create_time,t.create_time createTime,t.operating_id,t.operating_id operatingId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.operating_descriptor,t.operating_descriptor operatingDescriptor,t.user_name,t.user_name userName,t.user_id,t.user_id userId,t.use_tel,t.use_tel useTel 
+from equipment_operating_log t 
+where 1 =1 
+<if test="operatingCode !=null and operatingCode != ''">
+   and t.operating_code= #{operatingCode}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="operatingId !=null and operatingId != ''">
+   and t.operating_id= #{operatingId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="operatingDescriptor !=null and operatingDescriptor != ''">
+   and t.operating_descriptor= #{operatingDescriptor}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="useTel !=null and useTel != ''">
+   and t.use_tel= #{useTel}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改设备操作记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateEquipmentOperatingLogInfo" parameterType="Map">
+        update  equipment_operating_log t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="operatingCode !=null and operatingCode != ''">
+, t.operating_code= #{operatingCode}
+</if> 
+<if test="machineId !=null and machineId != ''">
+, t.machine_id= #{machineId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+, t.create_time= #{createTime}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="operatingDescriptor !=null and operatingDescriptor != ''">
+, t.operating_descriptor= #{operatingDescriptor}
+</if> 
+<if test="userName !=null and userName != ''">
+, t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="useTel !=null and useTel != ''">
+, t.use_tel= #{useTel}
+</if> 
+ where 1=1 <if test="operatingId !=null and operatingId != ''">
+and t.operating_id= #{operatingId}
+</if> 
+
+    </update>
+
+    <!-- 查询设备操作记录数量 add by wuxw 2018-07-03 -->
+     <select id="queryEquipmentOperatingLogsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from equipment_operating_log t 
+where 1 =1 
+<if test="operatingCode !=null and operatingCode != ''">
+   and t.operating_code= #{operatingCode}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="createTime !=null and createTime != ''">
+   and t.create_time= #{createTime}
+</if> 
+<if test="operatingId !=null and operatingId != ''">
+   and t.operating_id= #{operatingId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="operatingDescriptor !=null and operatingDescriptor != ''">
+   and t.operating_descriptor= #{operatingDescriptor}
+</if> 
+<if test="userName !=null and userName != ''">
+   and t.user_name= #{userName}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="useTel !=null and useTel != ''">
+   and t.use_tel= #{useTel}
+</if> 
+
+
+     </select>
+
+</mapper>
