@@ -22,6 +22,7 @@
         communityId,t.machine_name,t.machine_name machineName
         from maintainance_plan_machine t
         where 1 =1
+        and t.status_cd = '0'
         <if test="mpmId !=null and mpmId != ''">
             and t.mpm_id= #{mpmId}
         </if>
@@ -33,9 +34,6 @@
         </if>
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
-        </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -84,6 +82,7 @@
         select count(1) count
         from maintainance_plan_machine t
         where 1 =1
+        and t.status_cd = '0'
         <if test="mpmId !=null and mpmId != ''">
             and t.mpm_id= #{mpmId}
         </if>
@@ -95,9 +94,6 @@
         </if>
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
-        </if>
-        <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
