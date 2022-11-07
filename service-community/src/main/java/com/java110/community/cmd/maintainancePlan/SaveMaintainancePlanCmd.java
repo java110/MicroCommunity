@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.maintainancePlan;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,14 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.equipmentAccount.EquipmentAccountDto;
+import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;
+import com.java110.intf.community.IMaintainancePlanMachineV1InnerServiceSMO;
+import com.java110.intf.community.IMaintainancePlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanV1InnerServiceSMO;
 import com.java110.po.maintainancePlan.MaintainancePlanPo;
+import com.java110.po.maintainancePlanMachine.MaintainancePlanMachinePo;
+import com.java110.po.maintainancePlanStaff.MaintainancePlanStaffPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +38,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +61,15 @@ public class SaveMaintainancePlanCmd extends Cmd {
     @Autowired
     private IMaintainancePlanV1InnerServiceSMO maintainancePlanV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMaintainancePlanMachineV1InnerServiceSMO maintainancePlanMachineV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IMaintainancePlanStaffV1InnerServiceSMO maintainancePlanStaffV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IEquipmentAccountV1InnerServiceSMO equipmentAccountV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "planName", "请求报文中未包含planName");
@@ -60,9 +78,27 @@ public class SaveMaintainancePlanCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "startDate", "请求报文中未包含startDate");
         Assert.hasKeyAndValue(reqJson, "endDate", "请求报文中未包含endDate");
         Assert.hasKeyAndValue(reqJson, "planPeriod", "请求报文中未包含planPeriod");
-        Assert.hasKeyAndValue(reqJson, "maintainanceMonth", "请求报文中未包含maintainanceMonth");
-        Assert.hasKeyAndValue(reqJson, "maintainanceDay", "请求报文中未包含maintainanceDay");
-        Assert.hasKeyAndValue(reqJson, "maintainanceEveryday", "请求报文中未包含maintainanceEveryday");
+
+        if (!reqJson.containsKey("staffs")) {
+            throw new CmdException("未包含员工");
+        }
+
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+
+        if (staffs.size() < 1) {
+            throw new CmdException("未包含员工");
+        }
+
+        if (!reqJson.containsKey("machineIds")) {
+            throw new CmdException("未包含设备");
+        }
+
+        JSONArray machineIds = reqJson.getJSONArray("machineIds");
+
+        if (machineIds.size() < 1) {
+            throw new CmdException("未包含设备");
+        }
+
 
     }
 
@@ -77,6 +113,39 @@ public class SaveMaintainancePlanCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+        MaintainancePlanStaffPo maintainancePlanStaffPo = null;
+        for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
+            maintainancePlanStaffPo = new MaintainancePlanStaffPo();
+            maintainancePlanStaffPo.setCommunityId(reqJson.getString("communityId"));
+            maintainancePlanStaffPo.setPlanId(maintainancePlanPo.getPlanId());
+            maintainancePlanStaffPo.setMpsId(GenerateCodeFactory.getGeneratorId("11"));
+            maintainancePlanStaffPo.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
+            maintainancePlanStaffPo.setStaffName(staffs.getJSONObject(staffIndex).getString("name"));
+            maintainancePlanStaffV1InnerServiceSMOImpl.saveMaintainancePlanStaff(maintainancePlanStaffPo);
+        }
+
+        JSONArray machineIds = reqJson.getJSONArray("machineIds");
+        MaintainancePlanMachinePo maintainancePlanMachinePo = null;
+        EquipmentAccountDto equipmentAccountDto = null;
+        List<EquipmentAccountDto> accountDtos = null;
+        for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
+            maintainancePlanMachinePo = new MaintainancePlanMachinePo();
+            maintainancePlanMachinePo.setCommunityId(reqJson.getString("communityId"));
+            maintainancePlanMachinePo.setPlanId(maintainancePlanPo.getPlanId());
+            maintainancePlanMachinePo.setMpmId(GenerateCodeFactory.getGeneratorId("11"));
+            maintainancePlanMachinePo.setMachineId(machineIds.getString(machineIndex));
+
+            equipmentAccountDto = new EquipmentAccountDto();
+            equipmentAccountDto.setMachineId(machineIds.getString(machineIndex));
+            accountDtos = equipmentAccountV1InnerServiceSMOImpl.queryEquipmentAccounts(equipmentAccountDto);
+            Assert.listOnlyOne(accountDtos, "设备不存在");
+
+            maintainancePlanMachinePo.setMachineName(accountDtos.get(0).getMachineName());
+            maintainancePlanMachineV1InnerServiceSMOImpl.saveMaintainancePlanMachine(maintainancePlanMachinePo);
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

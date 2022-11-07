@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.maintainancePlan;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.community.IMaintainancePlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanV1InnerServiceSMO;
 import com.java110.po.maintainancePlan.MaintainancePlanPo;
+import com.java110.po.maintainancePlanStaff.MaintainancePlanStaffPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,10 +55,25 @@ public class UpdateMaintainancePlanCmd extends Cmd {
     @Autowired
     private IMaintainancePlanV1InnerServiceSMO maintainancePlanV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IMaintainancePlanStaffV1InnerServiceSMO maintainancePlanStaffV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "planId", "planId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
+        if (!reqJson.containsKey("staffs")) {
+            throw new CmdException("未包含员工");
+        }
+
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+
+        if (staffs.size() < 1) {
+            throw new CmdException("未包含员工");
+        }
 
     }
 
@@ -68,6 +86,27 @@ public class UpdateMaintainancePlanCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+
+        }
+
+        MaintainancePlanStaffPo maintainancePlanStaffPo = null;
+        maintainancePlanStaffPo = new MaintainancePlanStaffPo();
+        maintainancePlanStaffPo.setPlanId(maintainancePlanPo.getPlanId());
+        flag = maintainancePlanStaffV1InnerServiceSMOImpl.deleteMaintainancePlanStaff(maintainancePlanStaffPo);
+
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+
+        }
+        JSONArray staffs = reqJson.getJSONArray("staffs");
+        for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
+            maintainancePlanStaffPo = new MaintainancePlanStaffPo();
+            maintainancePlanStaffPo.setCommunityId(reqJson.getString("communityId"));
+            maintainancePlanStaffPo.setPlanId(maintainancePlanPo.getPlanId());
+            maintainancePlanStaffPo.setMpsId(GenerateCodeFactory.getGeneratorId("11"));
+            maintainancePlanStaffPo.setStaffId(staffs.getJSONObject(staffIndex).getString("userId"));
+            maintainancePlanStaffPo.setStaffName(staffs.getJSONObject(staffIndex).getString("name"));
+            maintainancePlanStaffV1InnerServiceSMOImpl.saveMaintainancePlanStaff(maintainancePlanStaffPo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
