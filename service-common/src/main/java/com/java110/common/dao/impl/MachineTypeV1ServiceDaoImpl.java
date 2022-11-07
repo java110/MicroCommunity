@@ -42,10 +42,6 @@ public class MachineTypeV1ServiceDaoImpl extends BaseServiceDao implements IMach
 
     private static Logger logger = LoggerFactory.getLogger(MachineTypeV1ServiceDaoImpl.class);
 
-
-
-
-
     /**
      * 保存设备类型信息 到 instance
      * @param info   bId 信息
@@ -56,6 +52,15 @@ public class MachineTypeV1ServiceDaoImpl extends BaseServiceDao implements IMach
         logger.debug("保存 saveMachineTypeInfo 入参 info : {}",info);
 
         int saveFlag = sqlSessionTemplate.insert("machineTypeV1ServiceDaoImpl.saveMachineTypeInfo",info);
+
+        return saveFlag;
+    }
+
+    @Override
+    public int saveMachineTypeInfoSelective(Map info) throws DAOException {
+        logger.debug("保存 saveMachineTypeInfoSelective 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("machineTypeV1ServiceDaoImpl.saveMachineTypeInfoSelective",info);
 
         return saveFlag;
     }
@@ -91,7 +96,7 @@ public class MachineTypeV1ServiceDaoImpl extends BaseServiceDao implements IMach
         return saveFlag;
     }
 
-     /**
+    /**
      * 查询设备类型数量
      * @param info 设备类型信息
      * @return 设备类型数量

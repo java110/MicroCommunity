@@ -48,21 +48,21 @@ public class MachineTypeV1InnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Override
     public int saveMachineType(@RequestBody  MachineTypePo machineTypePo) {
-        int saveFlag = machineTypeV1ServiceDaoImpl.saveMachineTypeInfo(BeanConvertUtil.beanCovertMap(machineTypePo));
+        int saveFlag = machineTypeV1ServiceDaoImpl.saveMachineTypeInfoSelective(BeanConvertUtil.beanCovertMap(machineTypePo));
         return saveFlag;
     }
 
-     @Override
+    @Override
     public int updateMachineType(@RequestBody  MachineTypePo machineTypePo) {
         int saveFlag = machineTypeV1ServiceDaoImpl.updateMachineTypeInfo(BeanConvertUtil.beanCovertMap(machineTypePo));
         return saveFlag;
     }
 
-     @Override
+    @Override
     public int deleteMachineType(@RequestBody  MachineTypePo machineTypePo) {
-       machineTypePo.setStatusCd("1");
-       int saveFlag = machineTypeV1ServiceDaoImpl.updateMachineTypeInfo(BeanConvertUtil.beanCovertMap(machineTypePo));
-       return saveFlag;
+        machineTypePo.setStatusCd("1");
+        int saveFlag = machineTypeV1ServiceDaoImpl.updateMachineTypeInfo(BeanConvertUtil.beanCovertMap(machineTypePo));
+        return saveFlag;
     }
 
     @Override

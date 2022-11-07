@@ -44,7 +44,13 @@ public interface IMachineTypeV1ServiceDao {
      */
     int saveMachineTypeInfo(Map info) throws DAOException;
 
-
+    /**
+     * 选择保存插入
+     * @param info 参数
+     * @return
+     * @throws DAOException
+     */
+    int saveMachineTypeInfoSelective(Map info) throws DAOException;
 
 
     /**
