@@ -24,10 +24,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.equipmentAccount.EquipmentAccountDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanMachineV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.maintainancePlan.MaintainancePlanPo;
 import com.java110.po.maintainancePlanMachine.MaintainancePlanMachinePo;
 import com.java110.po.maintainancePlanStaff.MaintainancePlanStaffPo;
@@ -70,6 +72,9 @@ public class SaveMaintainancePlanCmd extends Cmd {
     @Autowired
     private IEquipmentAccountV1InnerServiceSMO equipmentAccountV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "planName", "请求报文中未包含planName");
@@ -106,7 +111,18 @@ public class SaveMaintainancePlanCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setRow(1);
+        userDto.setPage(1);
+        List<UserDto> userDtos =  userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"员工不存在");
+
         MaintainancePlanPo maintainancePlanPo = BeanConvertUtil.covertBean(reqJson, MaintainancePlanPo.class);
+        maintainancePlanPo.setCreateUserId(userId);
+        maintainancePlanPo.setCreateUserName(userDtos.get(0).getName());
         maintainancePlanPo.setPlanId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = maintainancePlanV1InnerServiceSMOImpl.saveMaintainancePlan(maintainancePlanPo);
 
