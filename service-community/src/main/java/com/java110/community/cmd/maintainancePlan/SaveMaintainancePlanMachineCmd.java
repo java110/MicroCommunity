@@ -15,6 +15,7 @@
  */
 package com.java110.community.cmd.maintainancePlan;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,6 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.equipmentAccount.EquipmentAccountDto;
+import com.java110.dto.maintainancePlanMachine.MaintainancePlanMachineDto;
+import com.java110.dto.maintainanceStandardItem.MaintainanceStandardItemDto;
+import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanMachineV1InnerServiceSMO;
 import com.java110.po.maintainancePlanMachine.MaintainancePlanMachinePo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +36,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,25 +59,65 @@ public class SaveMaintainancePlanMachineCmd extends Cmd {
     @Autowired
     private IMaintainancePlanMachineV1InnerServiceSMO maintainancePlanMachineV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IEquipmentAccountV1InnerServiceSMO equipmentAccountV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "planId", "请求报文中未包含planId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
-        Assert.hasKeyAndValue(reqJson, "machineName", "请求报文中未包含machineName");
 
+        if(!reqJson.containsKey("machines")){
+            throw new CmdException("未包含保养设备");
+        }
+
+        JSONArray items = reqJson.getJSONArray("machines");
+
+        if(items.size() < 1){
+            throw new CmdException("未包含保养设备");
+        }
+        String machineId = "";
+        MaintainancePlanMachineDto maintainancePlanMachineDto = new MaintainancePlanMachineDto();
+        maintainancePlanMachineDto.setPlanId(reqJson.getString("planId"));
+        List<MaintainancePlanMachineDto> maintainancePlanMachineDtos = null;
+        for(int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+            machineId = items.getString(itemIndex);
+            maintainancePlanMachineDto.setMachineId(machineId);
+            maintainancePlanMachineDtos = maintainancePlanMachineV1InnerServiceSMOImpl.queryMaintainancePlanMachines(maintainancePlanMachineDto);
+
+            if (maintainancePlanMachineDtos != null && maintainancePlanMachineDtos.size() >0) {
+                throw new CmdException(maintainancePlanMachineDtos.get(0).getMachineName()+"已经添加");
+            }
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        MaintainancePlanMachinePo maintainancePlanMachinePo = BeanConvertUtil.covertBean(reqJson, MaintainancePlanMachinePo.class);
-        maintainancePlanMachinePo.setMpmId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = maintainancePlanMachineV1InnerServiceSMOImpl.saveMaintainancePlanMachine(maintainancePlanMachinePo);
+        MaintainancePlanMachinePo maintainancePlanMachinePo = null;
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+        int flag = 0;
+        JSONArray machineIds = reqJson.getJSONArray("machines");
+        EquipmentAccountDto equipmentAccountDto = null;
+        List<EquipmentAccountDto> accountDtos = null;
+        for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
+            maintainancePlanMachinePo = new MaintainancePlanMachinePo();
+            maintainancePlanMachinePo.setCommunityId(reqJson.getString("communityId"));
+            maintainancePlanMachinePo.setPlanId(reqJson.getString("planId"));
+            maintainancePlanMachinePo.setMpmId(GenerateCodeFactory.getGeneratorId("11"));
+            maintainancePlanMachinePo.setMachineId(machineIds.getString(machineIndex));
+
+            equipmentAccountDto = new EquipmentAccountDto();
+            equipmentAccountDto.setMachineId(machineIds.getString(machineIndex));
+            accountDtos = equipmentAccountV1InnerServiceSMOImpl.queryEquipmentAccounts(equipmentAccountDto);
+            Assert.listOnlyOne(accountDtos, "设备不存在");
+
+            maintainancePlanMachinePo.setMachineName(accountDtos.get(0).getMachineName());
+            flag = maintainancePlanMachineV1InnerServiceSMOImpl.saveMaintainancePlanMachine(maintainancePlanMachinePo);
+            if(flag < 1){
+                throw new CmdException("未包含保养设备");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
