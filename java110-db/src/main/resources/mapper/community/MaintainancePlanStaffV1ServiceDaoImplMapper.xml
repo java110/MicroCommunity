@@ -113,6 +113,8 @@
             and t.community_id= #{communityId}
         </if>
 
+        group by t.plan_id
+
 
     </select>
 </mapper>
