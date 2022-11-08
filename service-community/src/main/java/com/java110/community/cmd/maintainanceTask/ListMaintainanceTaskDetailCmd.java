@@ -22,6 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.community.IMaintainanceTaskDetailV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "maintainanceTaskDetail.listMaintainanceTaskDetail")
+@Java110Cmd(serviceCode = "maintainanceTask.listMaintainanceTaskDetail")
 public class ListMaintainanceTaskDetailCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(ListMaintainanceTaskDetailCmd.class);
@@ -54,6 +55,7 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
     }
 
     @Override
