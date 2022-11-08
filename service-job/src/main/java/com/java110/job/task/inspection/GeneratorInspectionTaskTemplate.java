@@ -213,7 +213,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         // 判断 员工是否上班
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
-        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getStaffId());
         scheduleClassesStaffDto.setToday(DateUtil.getDateFromStringA(planTime));
         scheduleClassesStaffDto = scheduleClassesStaffV1InnerServiceSMOImpl.staffIsWork(scheduleClassesStaffDto);
 
@@ -284,7 +284,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
 
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
-        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
+        scheduleClassesStaffDto.setStaffId(tmpInspectionPlanStaffDto.getStaffId());
         scheduleClassesStaffDto.setToday(DateUtil.getDateFromStringA(planTime));
         scheduleClassesStaffDto = scheduleClassesStaffV1InnerServiceSMOImpl.staffIsWork(scheduleClassesStaffDto);
 

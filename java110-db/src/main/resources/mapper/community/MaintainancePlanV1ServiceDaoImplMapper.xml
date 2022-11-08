@@ -39,6 +39,10 @@
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
         </if>
+        <if test="curTime !=null ">
+            and t.start_date &lt; #{curTime}
+            and t.end_date &gt; #{curTime}
+        </if>
         <if test="endDate !=null and endDate != ''">
             and t.end_date= #{endDate}
         </if>
@@ -188,5 +192,7 @@
 
 
     </select>
+
+
 
 </mapper>

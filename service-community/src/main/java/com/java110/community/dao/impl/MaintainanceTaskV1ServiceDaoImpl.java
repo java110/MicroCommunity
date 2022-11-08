@@ -108,5 +108,15 @@ public class MaintainanceTaskV1ServiceDaoImpl extends BaseServiceDao implements 
         return Integer.parseInt(businessMaintainanceTaskInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int insertMaintainanceTask(Map info) {
+        return sqlSessionTemplate.update("maintainanceTaskV1ServiceDaoImpl.insertMaintainanceTask", info);
+    }
+
+    @Override
+    public int insertMaintainanceTaskDetail(Map info) {
+        return sqlSessionTemplate.update("maintainanceTaskV1ServiceDaoImpl.insertMaintainanceTaskDetail", info);
+    }
+
 
 }

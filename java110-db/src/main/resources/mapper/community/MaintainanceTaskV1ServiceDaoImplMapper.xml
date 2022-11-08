@@ -34,7 +34,7 @@
             and t.act_ins_time= #{actInsTime}
         </if>
         <if test="planInsTime !=null and planInsTime != ''">
-            and t.plan_ins_time= #{planInsTime}
+            and DATE_FORMAT(t.plan_ins_time,'%Y-%m-%d')= #{planInsTime}
         </if>
         <if test="originalPlanUserName !=null and originalPlanUserName != ''">
             and t.original_plan_user_name= #{originalPlanUserName}
@@ -156,7 +156,7 @@
             and t.act_ins_time= #{actInsTime}
         </if>
         <if test="planInsTime !=null and planInsTime != ''">
-            and t.plan_ins_time= #{planInsTime}
+            and DATE_FORMAT(t.plan_ins_time,'%Y-%m-%d')= #{planInsTime}
         </if>
         <if test="originalPlanUserName !=null and originalPlanUserName != ''">
             and t.original_plan_user_name= #{originalPlanUserName}
@@ -203,5 +203,30 @@
 
 
     </select>
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+    <insert id="insertMaintainanceTask" parameterType="Map">
+        insert into maintainance_task(
+        plan_user_id,act_ins_time,plan_ins_time,original_plan_user_name,transfer_desc,act_user_name,auth_desc,original_plan_user_id,task_type,plan_id,plan_end_time,plan_user_name,community_id,act_user_id,task_id,mps_id
+        ) values
+        <foreach collection="tasks" item="item" separator=",">
+            (
+            #{item.planUserId},#{item.actInsTime},#{item.planInsTime},#{item.originalPlanUserName},#{item.transferDesc},#{item.actUserName},#{item.authDesc},#{item.originalPlanUserId},#{item.taskType},#{item.planId},#{item.planEndTime},#{item.planUserName},#{item.communityId},#{item.actUserId},#{item.taskId},#{item.mpsId}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+    <insert id="insertMaintainanceTaskDetail" parameterType="Map">
+        insert into maintainance_task_detail(
+        send_flag,point_end_time,inspection_time,sort_number,machine_name,act_user_name,task_detail_id,machine_id,point_start_time,state,community_id,act_user_id,task_id
+        ) values
+        <foreach collection="tasks" item="task" separator=",">
+            (
+            #{task.sendFlag},#{task.pointEndTime},#{task.inspectionTime},#{task.sortNumber},#{task.machineName},#{task.actUserName},#{task.taskDetailId},#{task.machineId},#{task.pointStartTime},#{task.state},#{task.communityId},#{task.actUserId},#{task.taskId}
+            )
+        </foreach>
+    </insert>
+
 
 </mapper>

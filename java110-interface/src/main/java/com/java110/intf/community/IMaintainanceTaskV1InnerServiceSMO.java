@@ -18,6 +18,7 @@ package com.java110.intf.community;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
 import com.java110.po.maintainanceTask.MaintainanceTaskPo;
+import com.java110.po.maintainanceTaskDetail.MaintainanceTaskDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,4 +66,11 @@ public interface IMaintainanceTaskV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMaintainanceTasksCount", method = RequestMethod.POST)
     int queryMaintainanceTasksCount(@RequestBody MaintainanceTaskDto maintainanceTaskDto);
+
+    @RequestMapping(value = "/saveMaintainanceTask", method = RequestMethod.POST)
+    int saveMaintainanceTask(@RequestBody List<MaintainanceTaskPo> maintainanceTaskPos);
+
+    @RequestMapping(value = "/saveMaintainanceTaskDetail", method = RequestMethod.POST)
+    int saveMaintainanceTaskDetail(@RequestBody List<MaintainanceTaskDetailPo> maintainanceTaskDetailPos);
+
 }

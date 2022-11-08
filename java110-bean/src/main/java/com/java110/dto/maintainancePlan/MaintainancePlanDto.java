@@ -15,6 +15,13 @@ import java.util.Date;
  **/
 public class MaintainancePlanDto extends PageDto implements Serializable {
 
+    public static final String STATE_STOP = "2020026";
+    public static final String STATE_RUN = "2020025";
+
+    public static final String INSPECTION_PLAN_PERIOD_DAY = "2020022"; // 连续每天
+    public static final String INSPECTION_PLAN_PERIOD_WEEK = "2020023"; // 连续每周
+    public static final String INSPECTION_PLAN_PERIOD_NEXT_DAY = "2020024"; // 固定天
+
     private String maintainanceDay;
     private String planPeriod;
     private String planPeriodName;
@@ -34,6 +41,8 @@ public class MaintainancePlanDto extends PageDto implements Serializable {
     private String startDate;
     private long machineCount;
     private long staffCount;
+
+    private String curTime;
 
 
     private Date createTime;
@@ -208,5 +217,13 @@ public class MaintainancePlanDto extends PageDto implements Serializable {
 
     public void setStaffCount(long staffCount) {
         this.staffCount = staffCount;
+    }
+
+    public String getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(String curTime) {
+        this.curTime = curTime;
     }
 }

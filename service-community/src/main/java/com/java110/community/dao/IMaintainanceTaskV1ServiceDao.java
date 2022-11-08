@@ -74,4 +74,7 @@ public interface IMaintainanceTaskV1ServiceDao {
      */
     int queryMaintainanceTasksCount(Map info);
 
+    int insertMaintainanceTask(Map task);
+
+    int insertMaintainanceTaskDetail(Map task);
 }
