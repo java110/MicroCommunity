@@ -23,8 +23,11 @@
         machineName,t.act_user_name,t.act_user_name actUserName,t.task_detail_id,t.task_detail_id
         taskDetailId,t.machine_id,t.machine_id machineId,t.point_start_time,t.point_start_time
         pointStartTime,t.state,t.community_id,t.community_id communityId,t.act_user_id,t.act_user_id
-        actUserId,t.task_id,t.task_id taskId
+        actUserId,t.task_id,t.task_id taskId,mp.plan_name planName,td.name stateName,mt.plan_user_name planUserName
         from maintainance_task_detail t
+        left join maintainance_task mt on t.task_id = mt.task_id and mt.status_cd = '0'
+        left join maintainance_plan mp on mt.plan_id = mp.plan_id and mp.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'maintainance_task_detail' and td.table_columns = 'state'
         where 1 =1
         <if test="sendFlag !=null and sendFlag != ''">
             and t.send_flag= #{sendFlag}
