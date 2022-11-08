@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainanceTaskV1ServiceDaoImpl">
+
+
+    <!-- 保存保养任务信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainanceTaskInfo" parameterType="Map">
+        insert into maintainance_task(
+        plan_user_id,act_ins_time,plan_ins_time,original_plan_user_name,transfer_desc,act_user_name,auth_desc,original_plan_user_id,task_type,plan_id,plan_end_time,plan_user_name,community_id,act_user_id,task_id,mps_id
+        ) values (
+        #{planUserId},#{actInsTime},#{planInsTime},#{originalPlanUserName},#{transferDesc},#{actUserName},#{authDesc},#{originalPlanUserId},#{taskType},#{planId},#{planEndTime},#{planUserName},#{communityId},#{actUserId},#{taskId},#{mpsId}
+        )
+    </insert>
+
+
+    <!-- 查询保养任务信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainanceTaskInfo" parameterType="Map" resultType="Map">
+        select t.plan_user_id,t.plan_user_id planUserId,t.act_ins_time,t.act_ins_time
+        actInsTime,t.plan_ins_time,t.plan_ins_time planInsTime,t.original_plan_user_name,t.original_plan_user_name
+        originalPlanUserName,t.transfer_desc,t.transfer_desc transferDesc,t.status_cd,t.status_cd
+        statusCd,t.act_user_name,t.act_user_name actUserName,t.auth_desc,t.auth_desc
+        authDesc,t.original_plan_user_id,t.original_plan_user_id originalPlanUserId,t.task_type,t.task_type
+        taskType,t.plan_id,t.plan_id planId,t.plan_end_time,t.plan_end_time
+        planEndTime,t.plan_user_name,t.plan_user_name planUserName,t.community_id,t.community_id
+        communityId,t.act_user_id,t.act_user_id actUserId,t.task_id,t.task_id taskId,t.mps_id,t.mps_id mpsId
+        from maintainance_task t
+        where 1 =1
+        <if test="planUserId !=null and planUserId != ''">
+            and t.plan_user_id= #{planUserId}
+        </if>
+        <if test="actInsTime !=null and actInsTime != ''">
+            and t.act_ins_time= #{actInsTime}
+        </if>
+        <if test="planInsTime !=null and planInsTime != ''">
+            and t.plan_ins_time= #{planInsTime}
+        </if>
+        <if test="originalPlanUserName !=null and originalPlanUserName != ''">
+            and t.original_plan_user_name= #{originalPlanUserName}
+        </if>
+        <if test="transferDesc !=null and transferDesc != ''">
+            and t.transfer_desc= #{transferDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            and t.act_user_name= #{actUserName}
+        </if>
+        <if test="authDesc !=null and authDesc != ''">
+            and t.auth_desc= #{authDesc}
+        </if>
+        <if test="originalPlanUserId !=null and originalPlanUserId != ''">
+            and t.original_plan_user_id= #{originalPlanUserId}
+        </if>
+        <if test="taskType !=null and taskType != ''">
+            and t.task_type= #{taskType}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="planEndTime !=null and planEndTime != ''">
+            and t.plan_end_time= #{planEndTime}
+        </if>
+        <if test="planUserName !=null and planUserName != ''">
+            and t.plan_user_name= #{planUserName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            and t.act_user_id= #{actUserId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="mpsId !=null and mpsId != ''">
+            and t.mps_id= #{mpsId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改保养任务信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainanceTaskInfo" parameterType="Map">
+        update maintainance_task t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="planUserId !=null and planUserId != ''">
+            , t.plan_user_id= #{planUserId}
+        </if>
+        <if test="actInsTime !=null and actInsTime != ''">
+            , t.act_ins_time= #{actInsTime}
+        </if>
+        <if test="planInsTime !=null and planInsTime != ''">
+            , t.plan_ins_time= #{planInsTime}
+        </if>
+        <if test="originalPlanUserName !=null and originalPlanUserName != ''">
+            , t.original_plan_user_name= #{originalPlanUserName}
+        </if>
+        <if test="transferDesc !=null and transferDesc != ''">
+            , t.transfer_desc= #{transferDesc}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            , t.act_user_name= #{actUserName}
+        </if>
+        <if test="authDesc !=null and authDesc != ''">
+            , t.auth_desc= #{authDesc}
+        </if>
+        <if test="originalPlanUserId !=null and originalPlanUserId != ''">
+            , t.original_plan_user_id= #{originalPlanUserId}
+        </if>
+        <if test="taskType !=null and taskType != ''">
+            , t.task_type= #{taskType}
+        </if>
+        <if test="planId !=null and planId != ''">
+            , t.plan_id= #{planId}
+        </if>
+        <if test="planEndTime !=null and planEndTime != ''">
+            , t.plan_end_time= #{planEndTime}
+        </if>
+        <if test="planUserName !=null and planUserName != ''">
+            , t.plan_user_name= #{planUserName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            , t.act_user_id= #{actUserId}
+        </if>
+        <if test="mpsId !=null and mpsId != ''">
+            , t.mps_id= #{mpsId}
+        </if>
+        where 1=1
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+
+    </update>
+
+    <!-- 查询保养任务数量 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainanceTasksCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_task t
+        where 1 =1
+        <if test="planUserId !=null and planUserId != ''">
+            and t.plan_user_id= #{planUserId}
+        </if>
+        <if test="actInsTime !=null and actInsTime != ''">
+            and t.act_ins_time= #{actInsTime}
+        </if>
+        <if test="planInsTime !=null and planInsTime != ''">
+            and t.plan_ins_time= #{planInsTime}
+        </if>
+        <if test="originalPlanUserName !=null and originalPlanUserName != ''">
+            and t.original_plan_user_name= #{originalPlanUserName}
+        </if>
+        <if test="transferDesc !=null and transferDesc != ''">
+            and t.transfer_desc= #{transferDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            and t.act_user_name= #{actUserName}
+        </if>
+        <if test="authDesc !=null and authDesc != ''">
+            and t.auth_desc= #{authDesc}
+        </if>
+        <if test="originalPlanUserId !=null and originalPlanUserId != ''">
+            and t.original_plan_user_id= #{originalPlanUserId}
+        </if>
+        <if test="taskType !=null and taskType != ''">
+            and t.task_type= #{taskType}
+        </if>
+        <if test="planId !=null and planId != ''">
+            and t.plan_id= #{planId}
+        </if>
+        <if test="planEndTime !=null and planEndTime != ''">
+            and t.plan_end_time= #{planEndTime}
+        </if>
+        <if test="planUserName !=null and planUserName != ''">
+            and t.plan_user_name= #{planUserName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            and t.act_user_id= #{actUserId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="mpsId !=null and mpsId != ''">
+            and t.mps_id= #{mpsId}
+        </if>
+
+
+    </select>
+
+</mapper>
