@@ -152,6 +152,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
         maintainanceTaskPo.setOriginalPlanUserId(tmpMaintainancePlanStaffDto.getStaffId());
         maintainanceTaskPo.setOriginalPlanUserName(tmpMaintainancePlanStaffDto.getStaffName());
         maintainanceTaskPo.setTaskType("1000");
+        maintainanceTaskPo.setState(MaintainanceTaskDto.STATE_WAIT);
 
         MaintainancePlanMachineDto maintainancePlanMachineDto = new MaintainancePlanMachineDto();
         maintainancePlanMachineDto.setCommunityId(tmpMaintainancePlanDto.getCommunityId());
