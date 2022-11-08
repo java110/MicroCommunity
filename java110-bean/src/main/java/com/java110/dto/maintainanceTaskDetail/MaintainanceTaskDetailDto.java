@@ -47,6 +47,8 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
     private String stateName;
     private String planUserName;
     private String standardName;
+    private String planEndTime;
+    private String planInsTime;
 
 
     private Date createTime;
@@ -205,5 +207,21 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     public void setStandardName(String standardName) {
         this.standardName = standardName;
+    }
+
+    public String getPlanEndTime() {
+        return planEndTime;
+    }
+
+    public void setPlanEndTime(String planEndTime) {
+        this.planEndTime = planEndTime;
+    }
+
+    public String getPlanInsTime() {
+        return planInsTime;
+    }
+
+    public void setPlanInsTime(String planInsTime) {
+        this.planInsTime = planInsTime;
     }
 }
