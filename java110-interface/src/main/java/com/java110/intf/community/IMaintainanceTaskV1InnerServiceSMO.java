@@ -67,8 +67,8 @@ public interface IMaintainanceTaskV1InnerServiceSMO {
     @RequestMapping(value = "/queryMaintainanceTasksCount", method = RequestMethod.POST)
     int queryMaintainanceTasksCount(@RequestBody MaintainanceTaskDto maintainanceTaskDto);
 
-    @RequestMapping(value = "/saveMaintainanceTask", method = RequestMethod.POST)
-    int saveMaintainanceTask(@RequestBody List<MaintainanceTaskPo> maintainanceTaskPos);
+    @RequestMapping(value = "/saveMaintainanceTasks", method = RequestMethod.POST)
+    int saveMaintainanceTasks(@RequestBody List<MaintainanceTaskPo> maintainanceTaskPos);
 
     @RequestMapping(value = "/saveMaintainanceTaskDetail", method = RequestMethod.POST)
     int saveMaintainanceTaskDetail(@RequestBody List<MaintainanceTaskDetailPo> maintainanceTaskDetailPos);

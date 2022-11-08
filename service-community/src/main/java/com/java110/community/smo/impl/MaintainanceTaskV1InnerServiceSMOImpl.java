@@ -91,7 +91,7 @@ public class MaintainanceTaskV1InnerServiceSMOImpl extends BaseServiceSMO implem
 
 
     @Override
-    public int saveMaintainanceTask(@RequestBody List<MaintainanceTaskPo> maintainanceTaskPos) {
+    public int saveMaintainanceTasks(@RequestBody List<MaintainanceTaskPo> maintainanceTaskPos) {
         Map task = new HashMap();
         List<Map> list = new ArrayList<>();
         for (MaintainanceTaskPo maintainanceTaskpo : maintainanceTaskPos) {

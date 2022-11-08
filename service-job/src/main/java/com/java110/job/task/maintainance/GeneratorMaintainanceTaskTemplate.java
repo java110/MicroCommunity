@@ -109,7 +109,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
         if (maintainanceTaskDetailPos.size() < 1) {
             return;
         }
-        maintainanceTaskV1InnerServiceSMOImpl.saveMaintainanceTask(maintainanceTaskPos);
+        maintainanceTaskV1InnerServiceSMOImpl.saveMaintainanceTasks(maintainanceTaskPos);
 
         maintainanceTaskV1InnerServiceSMOImpl.saveMaintainanceTaskDetail(maintainanceTaskDetailPos);
 
