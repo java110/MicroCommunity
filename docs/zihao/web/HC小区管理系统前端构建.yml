@@ -1,0 +1,12 @@
+version: "1.0"
+job:
+    job_name: HC小区管理系统前端构建
+    git_url: https://gitee.com/java110/MicroCommunityWeb.git
+    git_passwd: 无
+    git_username: 无
+    work_dir: /home/hc/MicroCommunityWeb
+    job_shell: |-
+        rm -rf /home/data/web/propertyWeb
+        cp -r public /home/data/web/
+        mv /home/data/web/public /home/data/web/propertyWeb
+    plans: []
