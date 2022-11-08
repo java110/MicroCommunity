@@ -43,6 +43,9 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
     private String communityId;
     private String actUserId;
     private String taskId;
+    private String planName;
+    private String stateName;
+    private String planUserName;
 
 
     private Date createTime;
@@ -169,5 +172,29 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPlanName() {
+        return planName;
+    }
+
+    public void setPlanName(String planName) {
+        this.planName = planName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getPlanUserName() {
+        return planUserName;
+    }
+
+    public void setPlanUserName(String planUserName) {
+        this.planUserName = planUserName;
     }
 }
