@@ -17,6 +17,7 @@ package com.java110.po.maintainanceTask;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-08 15:51:01 mail: 928255095@qq.com
@@ -28,125 +29,165 @@ import java.util.Date;
 public class MaintainanceTaskPo implements Serializable {
 
     private String planUserId;
-private String actInsTime;
-private String planInsTime;
-private String originalPlanUserName;
-private String transferDesc;
-private String statusCd = "0";
-private String actUserName;
-private String authDesc;
-private String originalPlanUserId;
-private String taskType;
-private String planId;
-private String planEndTime;
-private String planUserName;
-private String communityId;
-private String actUserId;
-private String taskId;
-private String mpsId;
-public String getPlanUserId() {
+    private String actInsTime;
+    private String planInsTime;
+    private String originalPlanUserName;
+    private String transferDesc;
+    private String statusCd = "0";
+    private String actUserName;
+    private String authDesc;
+    private String originalPlanUserId;
+    private String taskType;
+    private String planId;
+    private String planEndTime;
+    private String planUserName;
+    private String communityId;
+    private String actUserId;
+    private String taskId;
+    private String mpsId;
+    private String state;
+
+    public String getPlanUserId() {
         return planUserId;
     }
-public void setPlanUserId(String planUserId) {
+
+    public void setPlanUserId(String planUserId) {
         this.planUserId = planUserId;
     }
-public String getActInsTime() {
+
+    public String getActInsTime() {
         return actInsTime;
     }
-public void setActInsTime(String actInsTime) {
+
+    public void setActInsTime(String actInsTime) {
         this.actInsTime = actInsTime;
     }
-public String getPlanInsTime() {
+
+    public String getPlanInsTime() {
         return planInsTime;
     }
-public void setPlanInsTime(String planInsTime) {
+
+    public void setPlanInsTime(String planInsTime) {
         this.planInsTime = planInsTime;
     }
-public String getOriginalPlanUserName() {
+
+    public String getOriginalPlanUserName() {
         return originalPlanUserName;
     }
-public void setOriginalPlanUserName(String originalPlanUserName) {
+
+    public void setOriginalPlanUserName(String originalPlanUserName) {
         this.originalPlanUserName = originalPlanUserName;
     }
-public String getTransferDesc() {
+
+    public String getTransferDesc() {
         return transferDesc;
     }
-public void setTransferDesc(String transferDesc) {
+
+    public void setTransferDesc(String transferDesc) {
         this.transferDesc = transferDesc;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getActUserName() {
+
+    public String getActUserName() {
         return actUserName;
     }
-public void setActUserName(String actUserName) {
+
+    public void setActUserName(String actUserName) {
         this.actUserName = actUserName;
     }
-public String getAuthDesc() {
+
+    public String getAuthDesc() {
         return authDesc;
     }
-public void setAuthDesc(String authDesc) {
+
+    public void setAuthDesc(String authDesc) {
         this.authDesc = authDesc;
     }
-public String getOriginalPlanUserId() {
+
+    public String getOriginalPlanUserId() {
         return originalPlanUserId;
     }
-public void setOriginalPlanUserId(String originalPlanUserId) {
+
+    public void setOriginalPlanUserId(String originalPlanUserId) {
         this.originalPlanUserId = originalPlanUserId;
     }
-public String getTaskType() {
+
+    public String getTaskType() {
         return taskType;
     }
-public void setTaskType(String taskType) {
+
+    public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
-public String getPlanId() {
+
+    public String getPlanId() {
         return planId;
     }
-public void setPlanId(String planId) {
+
+    public void setPlanId(String planId) {
         this.planId = planId;
     }
-public String getPlanEndTime() {
+
+    public String getPlanEndTime() {
         return planEndTime;
     }
-public void setPlanEndTime(String planEndTime) {
+
+    public void setPlanEndTime(String planEndTime) {
         this.planEndTime = planEndTime;
     }
-public String getPlanUserName() {
+
+    public String getPlanUserName() {
         return planUserName;
     }
-public void setPlanUserName(String planUserName) {
+
+    public void setPlanUserName(String planUserName) {
         this.planUserName = planUserName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getActUserId() {
+
+    public String getActUserId() {
         return actUserId;
     }
-public void setActUserId(String actUserId) {
+
+    public void setActUserId(String actUserId) {
         this.actUserId = actUserId;
     }
-public String getTaskId() {
+
+    public String getTaskId() {
         return taskId;
     }
-public void setTaskId(String taskId) {
+
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
-public String getMpsId() {
+
+    public String getMpsId() {
         return mpsId;
     }
-public void setMpsId(String mpsId) {
+
+    public void setMpsId(String mpsId) {
         this.mpsId = mpsId;
     }
 
+    public String getState() {
+        return state;
+    }
 
-
+    public void setState(String state) {
+        this.state = state;
+    }
 }

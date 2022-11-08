@@ -6,6 +6,7 @@ import com.java110.dto.maintainancePlan.MaintainancePlanDto;
 import com.java110.dto.maintainancePlanMachine.MaintainancePlanMachineDto;
 import com.java110.dto.maintainancePlanStaff.MaintainancePlanStaffDto;
 import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
+import com.java110.dto.maintainanceTaskDetail.MaintainanceTaskDetailDto;
 import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;
@@ -170,6 +171,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
             maintainanceTaskDetailPo.setPointEndTime(nowTime + "18:00:00");
             maintainanceTaskDetailPo.setSortNumber("1");
             maintainanceTaskDetailPo.setTaskDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskDetailId));
+            maintainanceTaskDetailPo.setState(MaintainanceTaskDetailDto.STATE_WAIT);
             maintainanceTaskDetailPos.add(maintainanceTaskDetailPo);
         }
         maintainanceTaskPos.add(maintainanceTaskPo);
@@ -261,7 +263,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
 
         int subDay = DateUtil.daysBetween(DateUtil.getCurrentDate(), DateUtil.getDateFromStringB(tmpMaintainancePlanDto.getStartDate()));
 
-        if(subDay % day != 0){
+        if (subDay % day != 0) {
             return false;
         }
 
@@ -269,7 +271,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
         //当前时间是否 到了 巡检任务前30分钟
         int beforeTime = 30;
 
-        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B) + " "  + "09:00:00";
+        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B) + " " + "09:00:00";
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(DateUtil.getDateFromStringA(planTime));
