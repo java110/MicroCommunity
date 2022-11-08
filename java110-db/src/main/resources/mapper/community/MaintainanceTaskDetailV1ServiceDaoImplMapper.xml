@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="maintainanceTaskDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存保养明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMaintainanceTaskDetailInfo" parameterType="Map">
+        insert into maintainance_task_detail(
+        send_flag,point_end_time,inspection_time,sort_number,machine_name,act_user_name,task_detail_id,machine_id,point_start_time,state,community_id,act_user_id,task_id
+        ) values (
+        #{sendFlag},#{pointEndTime},#{inspectionTime},#{sortNumber},#{machineName},#{actUserName},#{taskDetailId},#{machineId},#{pointStartTime},#{state},#{communityId},#{actUserId},#{taskId}
+        )
+    </insert>
+
+
+    <!-- 查询保养明细信息 add by wuxw 2018-07-03 -->
+    <select id="getMaintainanceTaskDetailInfo" parameterType="Map" resultType="Map">
+        select t.send_flag,t.send_flag sendFlag,t.point_end_time,t.point_end_time
+        pointEndTime,t.inspection_time,t.inspection_time inspectionTime,t.sort_number,t.sort_number
+        sortNumber,t.status_cd,t.status_cd statusCd,t.machine_name,t.machine_name
+        machineName,t.act_user_name,t.act_user_name actUserName,t.task_detail_id,t.task_detail_id
+        taskDetailId,t.machine_id,t.machine_id machineId,t.point_start_time,t.point_start_time
+        pointStartTime,t.state,t.community_id,t.community_id communityId,t.act_user_id,t.act_user_id
+        actUserId,t.task_id,t.task_id taskId
+        from maintainance_task_detail t
+        where 1 =1
+        <if test="sendFlag !=null and sendFlag != ''">
+            and t.send_flag= #{sendFlag}
+        </if>
+        <if test="pointEndTime !=null and pointEndTime != ''">
+            and t.point_end_time= #{pointEndTime}
+        </if>
+        <if test="inspectionTime !=null and inspectionTime != ''">
+            and t.inspection_time= #{inspectionTime}
+        </if>
+        <if test="sortNumber !=null and sortNumber != ''">
+            and t.sort_number= #{sortNumber}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            and t.act_user_name= #{actUserName}
+        </if>
+        <if test="taskDetailId !=null and taskDetailId != ''">
+            and t.task_detail_id= #{taskDetailId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="pointStartTime !=null and pointStartTime != ''">
+            and t.point_start_time= #{pointStartTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            and t.act_user_id= #{actUserId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改保养明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateMaintainanceTaskDetailInfo" parameterType="Map">
+        update maintainance_task_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="sendFlag !=null and sendFlag != ''">
+            , t.send_flag= #{sendFlag}
+        </if>
+        <if test="pointEndTime !=null and pointEndTime != ''">
+            , t.point_end_time= #{pointEndTime}
+        </if>
+        <if test="inspectionTime !=null and inspectionTime != ''">
+            , t.inspection_time= #{inspectionTime}
+        </if>
+        <if test="sortNumber !=null and sortNumber != ''">
+            , t.sort_number= #{sortNumber}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            , t.act_user_name= #{actUserName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="pointStartTime !=null and pointStartTime != ''">
+            , t.point_start_time= #{pointStartTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            , t.act_user_id= #{actUserId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            , t.task_id= #{taskId}
+        </if>
+        where 1=1
+        <if test="taskDetailId !=null and taskDetailId != ''">
+            and t.task_detail_id= #{taskDetailId}
+        </if>
+
+    </update>
+
+    <!-- 查询保养明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryMaintainanceTaskDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from maintainance_task_detail t
+        where 1 =1
+        <if test="sendFlag !=null and sendFlag != ''">
+            and t.send_flag= #{sendFlag}
+        </if>
+        <if test="pointEndTime !=null and pointEndTime != ''">
+            and t.point_end_time= #{pointEndTime}
+        </if>
+        <if test="inspectionTime !=null and inspectionTime != ''">
+            and t.inspection_time= #{inspectionTime}
+        </if>
+        <if test="sortNumber !=null and sortNumber != ''">
+            and t.sort_number= #{sortNumber}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="actUserName !=null and actUserName != ''">
+            and t.act_user_name= #{actUserName}
+        </if>
+        <if test="taskDetailId !=null and taskDetailId != ''">
+            and t.task_detail_id= #{taskDetailId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="pointStartTime !=null and pointStartTime != ''">
+            and t.point_start_time= #{pointStartTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="actUserId !=null and actUserId != ''">
+            and t.act_user_id= #{actUserId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+
+
+    </select>
+
+</mapper>
