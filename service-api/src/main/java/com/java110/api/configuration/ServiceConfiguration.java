@@ -81,6 +81,10 @@ public class ServiceConfiguration {
         exclusions.append("/app/parkingCoupon.listParkingCouponCar,");
         exclusions.append("/app/marketPic.listCommunityMarketPic,");
         exclusions.append("/app/marketGoods.listCommunityMarketGoods,");
+
+        exclusions.append("/app/equipmentAccount.listEquipmentAccount,");
+        exclusions.append("/app/inspectionTaskDetail.listInspectionTaskDetails,");
+        exclusions.append("/app/maintainanceTask.listMaintainanceTaskDetail,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
