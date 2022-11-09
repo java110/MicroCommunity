@@ -65,8 +65,13 @@ public class ListMaintainanceTaskCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+
+
            MaintainanceTaskDto maintainanceTaskDto = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskDto.class);
 
+        if (reqJson.containsKey("moreState") && reqJson.getString("moreState").contains(",")) {
+            maintainanceTaskDto.setStates(reqJson.getString("moreState").split(","));
+        }
            int count = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasksCount(maintainanceTaskDto);
 
            List<MaintainanceTaskDto> maintainanceTaskDtos = null;

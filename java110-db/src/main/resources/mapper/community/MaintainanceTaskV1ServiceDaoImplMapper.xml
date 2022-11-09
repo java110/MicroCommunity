@@ -81,6 +81,15 @@
         <if test="mpsId !=null and mpsId != ''">
             and t.mps_id= #{mpsId}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -202,6 +211,15 @@
         </if>
         <if test="mpsId !=null and mpsId != ''">
             and t.mps_id= #{mpsId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="states !=null ">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 

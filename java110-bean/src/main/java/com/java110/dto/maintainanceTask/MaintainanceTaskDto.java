@@ -39,6 +39,7 @@ public class MaintainanceTaskDto extends PageDto implements Serializable {
     private String taskId;
     private String mpsId;
     private String state;
+    private String[] states;
     private String stateName;
 
 
@@ -214,5 +215,13 @@ public class MaintainanceTaskDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }
