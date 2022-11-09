@@ -20,7 +20,13 @@
         select t.item_id,t.item_id itemId,t.title_type,t.title_type titleType,t.item_title,t.item_title
         itemTitle,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq,t.create_time createTime
         from maintainance_item t
+        <if test="standardId !=null and standardId != ''">
+            left join maintainance_standard_item msi on t.item_id = msi.item_id and msi.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="standardId !=null and standardId != ''">
+            and msi.standardId = #{standardId}
+        </if>
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
         </if>
@@ -76,7 +82,13 @@
     <select id="queryMaintainanceItemsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from maintainance_item t
+        <if test="standardId !=null and standardId != ''">
+            left join maintainance_standard_item msi on t.item_id = msi.item_id and msi.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="standardId !=null and standardId != ''">
+            and msi.standardId = #{standardId}
+        </if>
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
         </if>

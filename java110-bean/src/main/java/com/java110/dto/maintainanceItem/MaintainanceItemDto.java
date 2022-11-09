@@ -26,6 +26,7 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
     private String itemTitle;
     private String communityId;
     private String seq;
+    private String standardId;
 
 
     private Date createTime;
@@ -98,5 +99,13 @@ public class MaintainanceItemDto extends PageDto implements Serializable {
 
     public void setTitleValues(List<MaintainanceItemValueDto> titleValues) {
         this.titleValues = titleValues;
+    }
+
+    public String getStandardId() {
+        return standardId;
+    }
+
+    public void setStandardId(String standardId) {
+        this.standardId = standardId;
     }
 }
