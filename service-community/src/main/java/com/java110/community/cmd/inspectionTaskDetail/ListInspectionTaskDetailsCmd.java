@@ -9,6 +9,7 @@ import com.java110.dto.file.FileRelDto;
 import com.java110.dto.inspectionPlan.InspectionTaskDetailDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.inspectionTaskDetail.ApiInspectionTaskDetailDataVo;
@@ -57,6 +58,7 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
     private void refreshPhotos(List<ApiInspectionTaskDetailDataVo> inspectionTaskDetails) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
+        String imgUrl = MappingCache.getValue("IMG_PATH");
         for (ApiInspectionTaskDetailDataVo inspectionTaskDetail : inspectionTaskDetails) {
             if(!"20200407".equals(inspectionTaskDetail.getState())){
                 continue;
@@ -67,7 +69,7 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
             photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
-                photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                photoVo.setUrl(tmpFileRelDto.getFileRealName().startsWith("http")?tmpFileRelDto.getFileRealName():imgUrl+tmpFileRelDto.getFileRealName());
                 photoVos.add(photoVo);
             }
             inspectionTaskDetail.setPhotos(photoVos);
