@@ -25,7 +25,7 @@
         pointStartTime,t.state,t.community_id,t.community_id communityId,t.act_user_id,t.act_user_id
         actUserId,t.task_id,t.task_id taskId,mp.plan_name planName,td.name stateName,mt.plan_user_name planUserName,
         ms.standard_name standardName,ms.standard_id  standardId,mt.plan_end_time planEndTime,mt.plan_ins_time planInsTime,
-        t.create_time createTime
+        t.create_time createTime,t.description
         from maintainance_task_detail t
         left join maintainance_task mt on t.task_id = mt.task_id and mt.status_cd = '0'
         left join maintainance_plan mp on mt.plan_id = mp.plan_id and mp.status_cd = '0'
