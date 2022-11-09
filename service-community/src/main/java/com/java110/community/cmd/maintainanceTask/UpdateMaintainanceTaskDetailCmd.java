@@ -189,7 +189,7 @@ public class UpdateMaintainanceTaskDetailCmd extends Cmd {
         String pointStartTime = maintainanceTaskDetailDtos.get(0).getPointStartTime();
         String pointEndTime = maintainanceTaskDetailDtos.get(0).getPointEndTime();
         if (!StringUtil.isEmpty(pointStartTime)) {
-            maintainanceStartTime = currentDate + " " + pointStartTime + ":00";
+            maintainanceStartTime = currentDate + " " + pointStartTime ;
             Date startTime = format.parse(maintainanceStartTime);
             planStartTime = startTime.getTime();
         } else {
@@ -199,7 +199,7 @@ public class UpdateMaintainanceTaskDetailCmd extends Cmd {
             planStartTime = startTime.getTime();
         }
         if (!StringUtil.isEmpty(pointEndTime)) {
-            maintainanceEndTime = currentDate + " " + pointEndTime + ":00";
+            maintainanceEndTime = currentDate + " " + pointEndTime ;
             Date endTime = format.parse(maintainanceEndTime);
             planFinishTime = endTime.getTime();
         } else {
