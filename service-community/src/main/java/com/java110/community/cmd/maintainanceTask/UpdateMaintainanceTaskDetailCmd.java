@@ -22,6 +22,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
 import com.java110.dto.maintainanceTaskDetail.MaintainanceTaskDetailDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
@@ -144,7 +145,7 @@ public class UpdateMaintainanceTaskDetailCmd extends Cmd {
      */
     public void addPhoto(JSONObject paramInJson) {
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
+        businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId("10"));
         businessUnit.put("relTypeCd", "90000");
         businessUnit.put("saveWay", "ftp");
         businessUnit.put("objId", paramInJson.getString("taskDetailId"));
@@ -221,13 +222,15 @@ public class UpdateMaintainanceTaskDetailCmd extends Cmd {
         String maintainanceTime = maintainanceTaskDetailPoPo.getInspectionTime();
         Date maintainanceDetailTime = format.parse(maintainanceTime);
         long detailTime = maintainanceDetailTime.getTime();
-        if (detailTime < planStartTime) {  //如果巡检点签到时间小于巡检计划开始时间，签到状态就是早到
-            maintainanceTaskDetailPoPo.setState("40000");
-        } else if (detailTime > planFinishTime) {  //如果巡检点签到时间大于巡检计划结束时间，签到状态就是迟到
-            maintainanceTaskDetailPoPo.setState("50000");
-        } else {  //如果巡检点签到时间在巡检计划开始时间和巡检计划结束时间之间，签到状态就是正常
-            maintainanceTaskDetailPoPo.setState("60000");
-        }
+        maintainanceTaskDetailPoPo.setState(MaintainanceTaskDetailDto.STATE_FINISH);
+
+//        if (detailTime < planStartTime) {  //如果巡检点签到时间小于巡检计划开始时间，签到状态就是早到
+//            maintainanceTaskDetailPoPo.setState(MaintainanceTaskDetailDto.STATE_FINISH);
+//        } else if (detailTime > planFinishTime) {  //如果巡检点签到时间大于巡检计划结束时间，签到状态就是迟到
+//            maintainanceTaskDetailPoPo.setState("50000");
+//        } else {  //如果巡检点签到时间在巡检计划开始时间和巡检计划结束时间之间，签到状态就是正常
+//            maintainanceTaskDetailPoPo.setState("60000");
+//        }
 
         int flag = maintainanceTaskDetailV1InnerServiceSMOImpl.updateMaintainanceTaskDetail(maintainanceTaskDetailPoPo);
 
