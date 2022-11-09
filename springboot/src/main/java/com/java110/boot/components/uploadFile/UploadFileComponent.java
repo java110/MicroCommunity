@@ -35,4 +35,17 @@ public class UploadFileComponent {
         return addFileSMOImpl.saveFile(newPd, uploadFile);
     }
 
+    /**
+     * 上传图片
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象
+     */
+    public ResponseEntity<String> uploadPhotoImage(IPageData pd) throws Exception {
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("suffix", "jpeg");
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), paramIn.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "",
+                pd.getSessionId(), pd.getAppId(), pd.getHeaders());
+        return addFileSMOImpl.savePhotoFile(newPd);
+    }
 }

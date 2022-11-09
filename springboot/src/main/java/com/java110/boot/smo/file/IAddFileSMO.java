@@ -19,4 +19,6 @@ public interface IAddFileSMO {
      * @return ResponseEntity 对象
      */
     ResponseEntity<String> saveFile(IPageData pd, MultipartFile uploadFile) throws IOException;
+
+     ResponseEntity<String> savePhotoFile(IPageData pd);
 }

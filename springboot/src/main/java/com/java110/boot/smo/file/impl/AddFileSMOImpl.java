@@ -82,6 +82,43 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
     }
 
+    @Override
+    public ResponseEntity<String> savePhotoFile(IPageData pd) {
+
+        String images = pd.getReqData();
+        JSONObject imageObj=JSONObject.parseObject(images);
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("context", imageObj.getString("uploadFile"));
+        paramIn.put("fileName", "upload.jpg");
+
+        FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
+
+        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+//        String file = paramIn.getString("fileName");
+//        if (file.contains("mp4") || file.contains("MP4") || file.contains("AVI") || file.contains("avi")
+//                || file.contains("WMV") || file.contains("wmv")) {
+//            fileDto.setFlag("");
+//        } else {
+//            fileDto.setFlag("0");
+//        }
+
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
+        JSONObject outParam = new JSONObject();
+        outParam.put("fileId", fileName);
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        outParam.put("url", imgUrl + fileName);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
+
+//        String apiUrl = "file.saveFile" ;
+
+//        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+//                apiUrl,
+//                HttpMethod.POST);
+        return responseEntity;
+    }
+
 
 
     public RestTemplate getRestTemplate() {
