@@ -1,9 +1,11 @@
 package com.java110.dto.maintainanceTaskDetail;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -50,6 +52,8 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
     private String standardId;
     private String planEndTime;
     private String planInsTime;
+
+    private List<PhotoVo> photos;
 
 
     private Date createTime;
@@ -232,5 +236,13 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     public void setStandardId(String standardId) {
         this.standardId = standardId;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }

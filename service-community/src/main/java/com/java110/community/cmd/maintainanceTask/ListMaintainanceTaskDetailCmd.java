@@ -20,11 +20,15 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.file.FileRelDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMaintainanceTaskDetailV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.inspectionTaskDetail.ApiInspectionTaskDetailDataVo;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.maintainanceTaskDetail.MaintainanceTaskDetailDto;
 import java.util.List;
@@ -52,6 +56,10 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
     @Autowired
     private IMaintainanceTaskDetailV1InnerServiceSMO maintainanceTaskDetailV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -69,6 +77,7 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
 
            if (count > 0) {
                maintainanceTaskDetailDtos = maintainanceTaskDetailV1InnerServiceSMOImpl.queryMaintainanceTaskDetails(maintainanceTaskDetailDto);
+               refreshPhotos(maintainanceTaskDetailDtos);
            } else {
                maintainanceTaskDetailDtos = new ArrayList<>();
            }
@@ -78,5 +87,25 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshPhotos( List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos) {
+        List<PhotoVo> photoVos = null;
+        PhotoVo photoVo = null;
+        for (MaintainanceTaskDetailDto inspectionTaskDetail : maintainanceTaskDetailDtos) {
+            if(!"20200407".equals(inspectionTaskDetail.getState())){
+                continue;
+            }
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(inspectionTaskDetail.getTaskDetailId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            photoVos = new ArrayList<>();
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                photoVo = new PhotoVo();
+                photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                photoVos.add(photoVo);
+            }
+            inspectionTaskDetail.setPhotos(photoVos);
+        }
     }
 }
