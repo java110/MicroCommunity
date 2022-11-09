@@ -22,15 +22,21 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
 import com.java110.intf.community.IMaintainanceTaskV1InnerServiceSMO;
 import com.java110.po.maintainanceTask.MaintainanceTaskPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 
 /**
@@ -46,7 +52,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "maintainanceTask.updateMaintainanceTask")
 public class UpdateMaintainanceTaskCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateMaintainanceTaskCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateMaintainanceTaskCmd.class);
 
 
     @Autowired
@@ -55,7 +61,7 @@ public class UpdateMaintainanceTaskCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "taskId", "taskId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,11 +69,43 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MaintainanceTaskPo maintainanceTaskPo = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskPo.class);
-        int flag = maintainanceTaskV1InnerServiceSMOImpl.updateMaintainanceTask(maintainanceTaskPo);
+        MaintainanceTaskDto maintainanceTaskDto1 = new MaintainanceTaskDto();
+        maintainanceTaskDto1.setCommunityId(reqJson.getString("communityId"));
+        maintainanceTaskDto1.setTaskId(reqJson.getString("taskId"));
+        List<MaintainanceTaskDto> maintainanceTaskDtoList = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasks(maintainanceTaskDto1);
+        if (maintainanceTaskDtoList.size()!= 1) {
+            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "未找到保养任务信息或找到多条！");
+            cmdDataFlowContext.setResponseEntity(responseEntity);
+            return;
+        }
 
+        MaintainanceTaskDto maintainanceTaskDto = new MaintainanceTaskDto();
+        maintainanceTaskDto.setTaskId(reqJson.getString("taskId"));
+        maintainanceTaskDto.setCommunityId(reqJson.getString("communityId"));
+        List<MaintainanceTaskDto> maintainanceTaskDtos = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasks(maintainanceTaskDto);
+
+        Assert.listOnlyOne(maintainanceTaskDtos, "未找到需要修改的保养任务 或多条数据");
+
+        JSONObject businessMaintainanceTask = new JSONObject();
+        businessMaintainanceTask.putAll(BeanConvertUtil.beanCovertMap(maintainanceTaskDtos.get(0)));
+
+        MaintainanceTaskPo maintainanceTaskPo = BeanConvertUtil.covertBean(businessMaintainanceTask, MaintainanceTaskPo.class);
+        maintainanceTaskPo.setActInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        maintainanceTaskPo.setActUserId(reqJson.getString("userId"));
+        maintainanceTaskPo.setActUserName(reqJson.getString("userName"));
+        maintainanceTaskPo.setState(reqJson.getString("state"));
+        if(!StringUtil.isEmpty(reqJson.getString("taskType")) && reqJson.getString("taskType").equals("2000") ){
+//            maintainanceTaskPo.setOriginalPlanUserId(maintainanceTaskPo.getPlanUserId());
+//            maintainanceTaskPo.setOriginalPlanUserName(maintainanceTaskPo.getPlanUserName());
+            maintainanceTaskPo.setPlanUserId(reqJson.getString("staffId"));
+            maintainanceTaskPo.setPlanUserName(reqJson.getString("staffName"));
+            maintainanceTaskPo.setTaskType(reqJson.getString("taskType"));
+            maintainanceTaskPo.setTransferDesc(reqJson.getString("transferDesc"));
+        }
+
+        int flag = maintainanceTaskV1InnerServiceSMOImpl.updateMaintainanceTask(maintainanceTaskPo);
         if (flag < 1) {
-            throw new CmdException("更新数据失败");
+            throw new CmdException("删除数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

@@ -55,6 +55,8 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     private List<PhotoVo> photos;
 
+    private String description;
+
 
     private Date createTime;
 
@@ -244,5 +246,13 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     public void setPhotos(List<PhotoVo> photos) {
         this.photos = photos;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
