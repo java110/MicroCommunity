@@ -31,6 +31,7 @@
         <module>springboot</module>
         <module>java110-boot</module>
         <module>java110-doc</module>
+        <module>service-scm</module>
 
     </modules>
 
