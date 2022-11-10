@@ -45,6 +45,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String pointStartTime;
     private String pointEndTime;
     private String sortNumber;
+    private String pointObjId;
 
     //经度
     private String longitude;
@@ -391,5 +392,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setSendFlag(String sendFlag) {
         this.sendFlag = sendFlag;
+    }
+
+    public String getPointObjId() {
+        return pointObjId;
+    }
+
+    public void setPointObjId(String pointObjId) {
+        this.pointObjId = pointObjId;
     }
 }

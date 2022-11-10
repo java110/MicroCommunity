@@ -54,6 +54,8 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String url;
+
 
     public String getUseOrgName() {
         return useOrgName;
@@ -349,5 +351,13 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
 
     public void setMachineTypeName(String machineTypeName) {
         this.machineTypeName = machineTypeName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

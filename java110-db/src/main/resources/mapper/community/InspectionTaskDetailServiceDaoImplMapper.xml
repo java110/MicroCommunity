@@ -139,6 +139,9 @@
         left join t_dict td5 on it.state = td5.status_cd and td5.table_name = 'inspection_task' and
         td5.table_columns = 'state'
         where 1 = 1
+        <if test="pointObjId !=null and pointObjId != ''">
+            and ip.point_obj_id = #{pointObjId}
+        </if>
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
