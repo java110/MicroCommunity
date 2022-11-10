@@ -46,6 +46,10 @@ public class BootReplaceUtil {
             requestUrl = requestUrl.replace("report-service","127.0.0.1:8008");
         }
 
+        if(requestUrl.contains("http://scm-service")){
+            requestUrl = requestUrl.replace("scm-service","127.0.0.1:8008");
+        }
+
 
         return requestUrl;
     }
