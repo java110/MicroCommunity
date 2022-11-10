@@ -94,6 +94,7 @@ import java.util.concurrent.TimeUnit;
         "com.java110.store",
         "com.java110.user",
         "com.java110.doc",
+        "com.java110.scm",
         "com.java110.boot"
 },
         exclude = {LiquibaseAutoConfiguration.class,
@@ -113,6 +114,7 @@ import java.util.concurrent.TimeUnit;
                 "com.java110.order.cmd",
                 "com.java110.report.cmd",
                 "com.java110.store.cmd",
+                "com.java110.scm.cmd",
                 "com.java110.user.cmd"
         })
 @EnableAsync
@@ -130,6 +132,7 @@ import java.util.concurrent.TimeUnit;
         "com.java110.order.cmd",
         "com.java110.report.cmd",
         "com.java110.store.cmd",
+        "com.java110.scm.cmd",
         "com.java110.user.cmd"
 },
         cmdDocClass = ApiDocCmdPublishing.class)
