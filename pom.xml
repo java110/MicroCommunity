@@ -28,10 +28,11 @@
         <module>service-acct</module>
         <module>service-oa</module>
         <module>service-dev</module>
+        <module>service-scm</module>
         <module>springboot</module>
         <module>java110-boot</module>
         <module>java110-doc</module>
-        <module>service-scm</module>
+
 
     </modules>
 
