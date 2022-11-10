@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierTypeV1ServiceDaoImpl">
+
+
+    <!-- 保存供应商类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSupplierTypeInfo" parameterType="Map">
+        insert into supplier_type(
+        type_cd,type_name,st_id,remark
+        ) values (
+        #{typeCd},#{typeName},#{stId},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询供应商类型信息 add by wuxw 2018-07-03 -->
+    <select id="getSupplierTypeInfo" parameterType="Map" resultType="Map">
+        select t.type_cd,t.type_cd typeCd,t.type_name,t.type_name typeName,t.st_id,t.st_id stId,t.status_cd,t.status_cd
+        statusCd,t.remark
+        from supplier_type t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="stId !=null and stId != ''">
+            and t.st_id= #{stId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改供应商类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateSupplierTypeInfo" parameterType="Map">
+        update supplier_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            , t.type_cd= #{typeCd}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            , t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="stId !=null and stId != ''">
+            and t.st_id= #{stId}
+        </if>
+
+    </update>
+
+    <!-- 查询供应商类型数量 add by wuxw 2018-07-03 -->
+    <select id="querySupplierTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from supplier_type t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="stId !=null and stId != ''">
+            and t.st_id= #{stId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+
+
+    </select>
+
+</mapper>
