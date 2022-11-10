@@ -10,6 +10,7 @@ cp -r service-order/pom-cloud.xml service-order/pom.xml
 cp -r service-report/pom-cloud.xml service-report/pom.xml
 cp -r service-store/pom-cloud.xml service-store/pom.xml
 cp -r service-user/pom-cloud.xml service-user/pom.xml
+cp -r service-scm/pom-cloud.xml service-scm/pom.xml
 
 
 

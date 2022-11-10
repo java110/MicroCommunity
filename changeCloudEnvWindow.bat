@@ -88,3 +88,11 @@ set a=%%i
 echo !a!>>$)
 
 move $ service-user\pom.xml
+
+for /f "delims=" %%i in (service-scm\pom-cloud.xml) do (
+
+set a=%%i
+
+echo !a!>>$)
+
+move $ service-scm\pom.xml

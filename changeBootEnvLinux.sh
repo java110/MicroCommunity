@@ -10,6 +10,7 @@ cp -r service-order/pom-boot.xml service-order/pom.xml
 cp -r service-report/pom-boot.xml service-report/pom.xml
 cp -r service-store/pom-boot.xml service-store/pom.xml
 cp -r service-user/pom-boot.xml service-user/pom.xml
+cp -r service-scm/pom-boot.xml service-scm/pom.xml
 
 
 
