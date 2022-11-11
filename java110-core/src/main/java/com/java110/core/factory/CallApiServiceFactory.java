@@ -158,12 +158,17 @@ public class CallApiServiceFactory {
         }
 
         JSONObject resultVo = JSONObject.parseObject(responseEntity.getBody());
-
-        if (ResultVo.CODE_MACHINE_OK != resultVo.getInteger("code")) {
-            throw new SMOException(resultVo.getString("msg"));
+        Object bObj = null;
+        if(resultVo.containsKey("code")){
+            if (ResultVo.CODE_MACHINE_OK != resultVo.getInteger("code")) {
+                throw new SMOException(resultVo.getString("msg"));
+            }
+            bObj = resultVo.get("data");
+        }else{
+            bObj = resultVo;
         }
 
-        Object bObj = resultVo.get("data");
+
         JSONArray datas = null;
         if (bObj instanceof JSONObject) {
             datas = new JSONArray();
@@ -209,11 +214,15 @@ public class CallApiServiceFactory {
 
         JSONObject resultVo = JSONObject.parseObject(responseEntity.getBody());
 
-        if (!"0".equals(resultVo.getString("code"))) {
-            throw new SMOException(resultVo.getString("msg"));
+        Object bObj = null;
+        if(resultVo.containsKey("code")){
+            if (ResultVo.CODE_MACHINE_OK != resultVo.getInteger("code")) {
+                throw new SMOException(resultVo.getString("msg"));
+            }
+            bObj = resultVo.get("data");
+        }else{
+            bObj = resultVo;
         }
-
-        Object bObj = resultVo.get("data");
         JSONArray datas = null;
         if (bObj instanceof JSONObject) {
             datas = new JSONArray();
