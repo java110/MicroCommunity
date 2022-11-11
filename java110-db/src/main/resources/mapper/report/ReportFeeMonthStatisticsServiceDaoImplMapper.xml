@@ -2781,10 +2781,10 @@
             and rfms.obj_name= #{objName}
         </if>
         <if test="feeYear !=null and feeYear != ''">
-            and t.fee_year= #{feeYear}
+            and rfms.fee_year= #{feeYear}
         </if>
         <if test="feeMonth !=null and feeMonth != ''">
-            and t.fee_month= #{feeMonth}
+            and rfms.fee_month= #{feeMonth}
         </if>
         GROUP BY t.floor_num
         ) a,
@@ -2803,6 +2803,9 @@
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and curT.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and curT.fee_month= #{feeMonth}
         </if>
         GROUP BY t.floor_num
         ) b
@@ -2833,6 +2836,12 @@
         <if test="objName !=null and objName != ''">
             and rfms.obj_name= #{objName}
         </if>
+        <if test="feeYear !=null and feeYear != ''">
+            and rfms.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and rfms.fee_month= #{feeMonth}
+        </if>
         GROUP BY t.floor_num
         ) a,
         (select t.floor_num floorNum,SUM(curT.owe_amount) curOweAmount
@@ -2850,6 +2859,9 @@
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and curT.fee_year= #{feeYear}
+        </if>
+        <if test="feeMonth !=null and feeMonth != ''">
+            and curT.fee_month= #{feeMonth}
         </if>
         GROUP BY t.floor_num
         ) b
