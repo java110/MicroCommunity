@@ -320,7 +320,7 @@ public class PayOweFeeCmd extends Cmd {
         endCalender.setTime(endTime);
         BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
         cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-        businessFeeDetail.put("cycles", cycles.doubleValue());
+        businessFeeDetail.put("cycles", receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_UP).doubleValue());
         businessFeeDetail.put("receivableAmount", paramInJson.getString("receivedAmount"));
         businessFeeDetail.put("receivedAmount", paramInJson.getString("receivedAmount"));
         businessFeeDetail.put("payableAmount", paramInJson.getString("receivedAmount"));
