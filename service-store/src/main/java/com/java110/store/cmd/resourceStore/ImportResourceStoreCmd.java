@@ -38,6 +38,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.po.resourceStoreType.ResourceStoreTypePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -92,6 +93,9 @@ public class ImportResourceStoreCmd extends Cmd {
 
     @Autowired
     private IResourceStoreTypeV1InnerServiceSMO resourceStoreTypeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -154,6 +158,8 @@ public class ImportResourceStoreCmd extends Cmd {
             if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
                 resourceStorePo.setResId(GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
                 flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
+
+
             } else {
                 resourceStorePo.setResId(resourceStoreDtos.get(0).getResId());
                 double stock = Double.parseDouble(resourceStoreDtos.get(0).getStock()) + Double.parseDouble(importResourceStoreDto.getStock());
@@ -258,10 +264,22 @@ public class ImportResourceStoreCmd extends Cmd {
             purchaseApplyDetailPo.setRsId(resourceStorePo.getRssId());
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
             purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
+
+            // 保存至 物品 times表
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+            resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
+            resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
+            resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
         }
         int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
         if (saveFlag < 1) {
             throw new CmdException("采购申请失败");
         }
+
+
     }
 }
