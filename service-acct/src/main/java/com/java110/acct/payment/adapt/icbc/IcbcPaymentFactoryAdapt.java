@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.icbc.api.DefaultIcbcClient;
 import com.icbc.api.IcbcApiException;
 import com.icbc.api.IcbcConstants;
-import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1;
-import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1;
 import com.icbc.api.utils.HttpRequestParamsUtils;
 import com.icbc.api.utils.IcbcEncrypt;
 import com.icbc.api.utils.IcbcSignature;
@@ -35,6 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1;
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz;
+import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1;
 
 /**
  * 工商银行支付
@@ -195,8 +197,8 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1 request = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1();
         //根据测试环境和生产环境替换相应ip和端口
         request.setServiceUrl("https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/consumepurchase/V1");
-        CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz
-                bizContent = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz();
+        CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz
+                bizContent = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz();
         request.setBizContent(bizContent);
         //请对照接口文档用bizContent.setxxx()方法对业务上送数据进行赋值
         bizContent.setMer_id(merId);

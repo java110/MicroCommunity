@@ -6,16 +6,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.alibaba.fastjson.parser.Feature;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.db.dao.IQueryServiceDAO;
+import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.entity.service.ServiceSql;
+import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.ServiceSqlCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.BusinessException;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.ognl.Ognl;
@@ -50,6 +55,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
     @Autowired
     private IQueryServiceDAO queryServiceDAOImpl;
+
+    @Autowired(required = false)
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
     @Override
     public void commonQueryService(DataQuery dataQuery) throws BusinessException {
@@ -125,13 +133,22 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
     public ResponseEntity<String> fallBack(String fallBackInfo) throws BusinessException {
 
         JSONArray params = JSONArray.parseArray(fallBackInfo);
+        String sql = "";
         for (int paramIndex = 0; paramIndex < params.size(); paramIndex++) {
-            JSONObject param = params.getJSONObject(paramIndex);
-            String sql = param.getString("fallBackSql");
-            if (StringUtil.isEmpty(sql)) {
-                return new ResponseEntity<String>("未包含sql信息", HttpStatus.BAD_REQUEST);
+            try {
+                JSONObject param = params.getJSONObject(paramIndex);
+                sql =  param.getString("fallBackSql");
+                if (StringUtil.isEmpty(sql)) {
+                    return new ResponseEntity<String>("未包含sql信息", HttpStatus.BAD_REQUEST);
+                }
+                int flag = queryServiceDAOImpl.updateSql(sql, null);
+            }catch (Exception e){
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(sql+ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
             }
-            int flag = queryServiceDAOImpl.updateSql(sql, null);
 
         }
         return new ResponseEntity<String>("回退成功", HttpStatus.OK);
