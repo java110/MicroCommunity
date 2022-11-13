@@ -172,7 +172,7 @@ public class FtpUploadTemplate {
         String ftpPath = "/";
 
         if(fileName.contains("/")){
-            ftpPath = fileName.substring(0,fileName.lastIndexOf("/"));
+            ftpPath = fileName.substring(0,fileName.lastIndexOf("/")+1);
         }
 
         try {
@@ -188,6 +188,7 @@ public class FtpUploadTemplate {
             mkDir(ftpClient, ftpPath);// 创建目录
             // 设置上传目录 must
             ftpClient.changeWorkingDirectory(ftpPath);
+
             if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
                 LOCAL_CHARSET = "UTF-8";
             }
@@ -200,7 +201,7 @@ public class FtpUploadTemplate {
                 System.out.println("this file exist ftp");
                 ftpClient.deleteFile(fs[0].getName());
             }
-            boolean saveFlag = ftpClient.storeFile(fileName, inputStream);
+            boolean saveFlag = ftpClient.storeFile("/"+fileName, inputStream);
             if (!saveFlag) {
                 throw new IllegalArgumentException("存储文件失败");
             }
@@ -418,7 +419,7 @@ public class FtpUploadTemplate {
                 ftpClient.disconnect();
             }
             String f = new String(
-                    (fileName).getBytes("GBK"),
+                    ("/"+fileName).getBytes("GBK"),
                     FTP.DEFAULT_CONTROL_ENCODING);
             is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
             if (null == is) {
@@ -429,11 +430,11 @@ public class FtpUploadTemplate {
             logger.error("ftp通过文件名称获取远程文件流", e);
         } finally {
             try {
-                //closeConnect(ftpClient);
+                closeConnect(ftpClient);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return is;
     }
 }
