@@ -158,6 +158,11 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
             feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
             feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+
+            //处理 小数点后 0
+            feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
+            feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount()) + "");
+
             computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
             feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
             feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
