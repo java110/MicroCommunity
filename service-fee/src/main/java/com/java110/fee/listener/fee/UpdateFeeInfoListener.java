@@ -171,7 +171,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
                     // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
                     if (FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))) {
-                        businessFeeInfo.put("state", FeeStateConstant.END);
+                        businessFeeInfo.put("state", FeeConfigConstant.END);
                         //businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
                         if (!StringUtil.isNullOrNone(feeInfo.get(0).get("curDegrees"))) {
                             businessFeeInfo.put("end_time", feeInfo.get(0).get("curReadingTime"));
@@ -192,7 +192,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                         calendar.add(Calendar.DAY_OF_MONTH, -5);
                         configEndTime = calendar.getTime();
                         if (((Date) businessFeeInfo.get("endTime")).after(configEndTime)) {
-                            businessFeeInfo.put("state", FeeStateConstant.END);
+                            businessFeeInfo.put("state", FeeConfigConstant.END);
                             businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
                         }
                     }
@@ -276,7 +276,7 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
                     if (FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))) {
                         //押金的话费用直接结束
-                        businessFeeInfo.put("state", "888800010006".equals(feeInfo.get(0).get("feeTypeCd")) ? FeeStateConstant.END : FeeStateConstant.CHARGING);
+                        businessFeeInfo.put("state", "888800010006".equals(feeInfo.get(0).get("feeTypeCd")) ? FeeConfigConstant.END : FeeConfigConstant.CHARGING);
                         businessFeeInfo.put("end_time", feeInfo.get(0).get("startTime"));
                     }
 

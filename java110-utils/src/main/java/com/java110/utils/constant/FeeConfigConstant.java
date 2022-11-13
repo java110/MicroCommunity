@@ -4,7 +4,7 @@ package com.java110.utils.constant;
  * @Author wangdongguang
  * @create 2020/4/25 5:08 下午
  */
-public class FeeStateConstant {
+public class FeeConfigConstant {
     /**
      * 收费未开始
      */
@@ -19,5 +19,10 @@ public class FeeStateConstant {
      * 收费结束
      */
     public static final String END = "2009001";
+
+    /**
+     * 小数点位数
+     */
+    public static final int FEE_SCALE = 4;
 
 }

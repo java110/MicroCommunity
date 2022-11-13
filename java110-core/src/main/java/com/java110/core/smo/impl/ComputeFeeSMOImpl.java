@@ -30,6 +30,7 @@ import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
+import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -1013,7 +1014,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getBuiltUpArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1024,12 +1025,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1040,13 +1041,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("3003".equals(computingFormula)) { // 固定费用
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getRoomArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1057,11 +1058,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1072,11 +1073,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             }else if ("1102".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1087,7 +1088,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("4004".equals(computingFormula)) {  //动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
@@ -1101,7 +1102,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("5005".equals(computingFormula)) {  //(本期度数-上期度数)*单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1114,7 +1115,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal sub = curDegree.subtract(preDegree);
                     feePrice = sub.multiply(squarePrice)
                             .add(additionalAmount)
-                            .setScale(4, BigDecimal.ROUND_HALF_UP);
+                            .setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1126,7 +1127,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else if ("6006".equals(computingFormula)) {
@@ -1142,7 +1143,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 if (roomDto == null) {
@@ -1166,7 +1167,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("8008".equals(computingFormula)) {  //手动动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
@@ -1180,7 +1181,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1204,7 +1205,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else {
@@ -1230,7 +1231,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1241,7 +1242,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
@@ -1258,13 +1259,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("3003".equals(computingFormula)) { // 固定费用
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getRoomArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1276,11 +1277,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1292,11 +1293,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             }  else if ("1102".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1308,7 +1309,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             }else if ("4004".equals(computingFormula)) {
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
@@ -1322,7 +1323,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("5005".equals(computingFormula)) {
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1335,7 +1336,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal sub = curDegree.subtract(preDegree);
                     feePrice = sub.multiply(squarePrice)
                             .add(additionalAmount)
-                            .setScale(4, BigDecimal.ROUND_HALF_UP);
+                            .setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1347,7 +1348,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else if ("6006".equals(computingFormula)) {
@@ -1363,7 +1364,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeCarCustomizeFormula(feeDto, ownerCarDtos.get(0));
@@ -1378,7 +1379,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1391,7 +1392,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal sub = curDegree.subtract(preDegree);
                     feePrice = sub.multiply(squarePrice)
                             .add(additionalAmount)
-                            .setScale(4, BigDecimal.ROUND_HALF_UP);
+                            .setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1403,7 +1404,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else {
@@ -1427,7 +1428,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 }
                 feeDto.setBuiltUpArea(builtUpArea.doubleValue() + "");
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
@@ -1438,14 +1439,14 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("2002".equals(computingFormula)) { // 固定费用
                 //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
 //                BigDecimal roomDount = new BigDecimal(contractRoomDtos.size());
 //                additionalAmount = additionalAmount.multiply(roomDount);
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1457,13 +1458,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("3003".equals(computingFormula)) { // 固定费用
                 BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
                 BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDto.getRoomArea()));
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1475,11 +1476,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("1101".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1491,11 +1492,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             }else if ("1102".equals(computingFormula)) { // 租金
                 BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(roomDto.getRoomRent()));
-                feePrice = additionalAmount.setScale(4, BigDecimal.ROUND_HALF_UP);
+                feePrice = additionalAmount.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1507,7 +1508,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = additionalAmount.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("4004".equals(computingFormula)) {  //动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
@@ -1522,7 +1523,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("5005".equals(computingFormula)) {  //(本期度数-上期度数)*单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1535,7 +1536,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal sub = curDegree.subtract(preDegree);
                     feePrice = sub.multiply(squarePrice)
                             .add(additionalAmount)
-                            .setScale(4, BigDecimal.ROUND_HALF_UP);
+                            .setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
 
                     BigDecimal cycle = null;
@@ -1548,7 +1549,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = (sub.multiply(squarePrice).add(additionalAmount)).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else if ("6006".equals(computingFormula)) {
@@ -1564,7 +1565,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("7007".equals(computingFormula)) { //自定义公式
                 feePrice = computeContractCustomizeFormula(feeDto, contractRoomDtos);
@@ -1579,7 +1580,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("8008".equals(computingFormula)) {  //手动动态费用
                 feePrice = new BigDecimal(Double.parseDouble(feeDto.getAmount()));
@@ -1594,7 +1595,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if(cycle == null){
                     feeTotalPrice = new BigDecimal(0);
                 }else {
-                    feeTotalPrice = feePrice.multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                    feeTotalPrice = feePrice.multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 }
             } else if ("9009".equals(computingFormula)) {  //(本期度数-上期度数)*动态单价+附加费
                 if (StringUtil.isEmpty(feeDto.getCurDegrees())) {
@@ -1607,7 +1608,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal sub = curDegree.subtract(preDegree);
                     feePrice = sub.multiply(squarePrice)
                             .add(additionalAmount)
-                            .setScale(4, BigDecimal.ROUND_HALF_UP);
+                            .setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
@@ -1619,7 +1620,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if(cycle == null){
                         feeTotalPrice = new BigDecimal(0);
                     }else {
-                        feeTotalPrice = sub.multiply(squarePrice).add(additionalAmount).multiply(cycle).setScale(4, BigDecimal.ROUND_HALF_UP);
+                        feeTotalPrice = sub.multiply(squarePrice).add(additionalAmount).multiply(cycle).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                     }
                 }
             } else {
@@ -1627,7 +1628,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
         }
 
-        feePrice.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+        feePrice.setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
         feeAmount.put("feePrice", feePrice);
         feeAmount.put("feeTotalPrice", feeTotalPrice);
         return feeAmount;
@@ -2259,7 +2260,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
             curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
-            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(4, BigDecimal.ROUND_HALF_UP);
+            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
         }
 
         curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
@@ -2276,7 +2277,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date curEndTime = null;
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             //当期增长部分
-            rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(4, BigDecimal.ROUND_HALF_UP);
+            rateDec = preCycleAmount.multiply(new BigDecimal(rate)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
             //增长周期的倍数
             curCycle = (cycleIndex + 1) * rateCycle;
 
@@ -2287,8 +2288,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             curEndTime = curEndTimeCalender.getTime();
             if (curCycle > curOweMonth) {
                 //不足增长周期增长率
-                rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(4, BigDecimal.ROUND_HALF_UP);
-                lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+                rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+                lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 addTotalAmount = addTotalAmount.add(rateDec).add(lastRateAmountDec);
                 continue;
             }
