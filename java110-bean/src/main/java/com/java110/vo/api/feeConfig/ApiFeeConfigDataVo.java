@@ -12,8 +12,8 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String endTime;
     private String computingFormula;
     private String computingFormulaName;
-    private Double squarePrice;
-    private Double additionalAmount;
+    private String squarePrice;
+    private String additionalAmount;
     private String feeTypeCdName;
     private String feeFlagName;
     private String isDefault;
@@ -201,19 +201,20 @@ public class ApiFeeConfigDataVo implements Serializable {
         this.units = units;
     }
 
-    public Double getSquarePrice() {
+
+    public String getSquarePrice() {
         return squarePrice;
     }
 
-    public void setSquarePrice(Double squarePrice) {
+    public void setSquarePrice(String squarePrice) {
         this.squarePrice = squarePrice;
     }
 
-    public Double getAdditionalAmount() {
+    public String getAdditionalAmount() {
         return additionalAmount;
     }
 
-    public void setAdditionalAmount(Double additionalAmount) {
+    public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
     }
 }
