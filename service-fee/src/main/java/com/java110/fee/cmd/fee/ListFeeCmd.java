@@ -26,10 +26,7 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.api.fee.ApiFeeDataVo;
 import com.java110.vo.api.fee.ApiFeeVo;
 import org.slf4j.Logger;
@@ -280,13 +277,15 @@ public class ListFeeCmd extends Cmd {
      */
     private void computeFeePriceByRoom(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
-        DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
+        //BigDecimal feeTotalPrice = new BigDecimal(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
+        feeDto.setFeeTotalPrice(MoneyUtil.computePriceScale(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()),
+                feeDto.getScale(),
+                Integer.parseInt(feeDto.getDecimalPlace())));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed((df.format(curFeePrice)));
+        feeDto.setAmountOwed(MoneyUtil.computePriceScale(curFeePrice.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace())) + "");
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
@@ -308,18 +307,19 @@ public class ListFeeCmd extends Cmd {
      */
     private void computeFeePriceByContract(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
-        DecimalFormat df = new DecimalFormat("0.00");
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
+        feeDto.setFeeTotalPrice(MoneyUtil.computePriceScale(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()),
+                feeDto.getScale(),
+                Integer.parseInt(feeDto.getDecimalPlace())));
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(df.format(curFeePrice));
+        feeDto.setAmountOwed(MoneyUtil.computePriceScale(curFeePrice.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace())) + "");
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(df.format(curFeePrice) + "");
+            feeDto.setAmountOwed(MoneyUtil.computePriceScale(curFeePrice.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace())) + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
         //考虑租金递增
