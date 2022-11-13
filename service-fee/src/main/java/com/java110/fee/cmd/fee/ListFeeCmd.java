@@ -230,6 +230,10 @@ public class ListFeeCmd extends Cmd {
             } catch (Exception e) {
                 logger.error("查询费用信息 ，费用信息错误", e);
             }
+
+            //去掉多余0
+            feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
+            feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount())+"");
         }
     }
 
