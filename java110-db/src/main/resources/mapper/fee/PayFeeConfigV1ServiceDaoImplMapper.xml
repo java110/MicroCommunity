@@ -6,9 +6,13 @@
     <!-- 保存收费项目信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeConfigInfo" parameterType="Map">
         insert into pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,bill_type,computing_formula_text,square_price,payment_cd,is_default,config_id,fee_flag,fee_name,payment_cycle,start_time,end_time,community_id,deduct_from
+        fee_type_cd,computing_formula,additional_amount,bill_type,computing_formula_text,square_price,
+        payment_cd,is_default,config_id,fee_flag,fee_name,payment_cycle,start_time,end_time,community_id,deduct_from,
+        pay_online,scale,decimal_place,units
         ) values (
-        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{billType},#{computingFormulaText},#{squarePrice},#{paymentCd},#{isDefault},#{configId},#{feeFlag},#{feeName},#{paymentCycle},#{startTime},#{endTime},#{communityId},#{deductFrom}
+        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{billType},#{computingFormulaText},#{squarePrice},
+        #{paymentCd},#{isDefault},#{configId},#{feeFlag},#{feeName},#{paymentCycle},#{startTime},#{endTime},#{communityId},#{deductFrom},
+        #{payOnline},#{scale},#{decimalPlace},#{units}
         )
     </insert>
 
@@ -21,7 +25,8 @@
         statusCd,t.square_price,t.square_price squarePrice,t.payment_cd,t.payment_cd paymentCd,t.is_default,t.is_default
         isDefault,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name
         feeName,t.payment_cycle,t.payment_cycle paymentCycle,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.community_id,t.community_id communityId,t.deduct_from,t.deduct_from deductFrom
+        endTime,t.community_id,t.community_id communityId,t.deduct_from,t.deduct_from deductFrom,
+        t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units
         from pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -140,6 +145,18 @@
         </if>
         <if test="deductFrom !=null and deductFrom != ''">
             , t.deduct_from= #{deductFrom}
+        </if>
+        <if test="payOnline !=null and payOnline != ''">
+            , t.pay_online= #{payOnline}
+        </if>
+        <if test="scale !=null and scale != ''">
+            , t.scale= #{scale}
+        </if>
+        <if test="decimalPlace !=null and decimalPlace != ''">
+            , t.decimal_place= #{decimalPlace}
+        </if>
+        <if test="units !=null and units != ''">
+            , t.units= #{units}
         </if>
         where 1=1
         <if test="configId !=null and configId != ''">
