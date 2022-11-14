@@ -8,8 +8,11 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.util.MoneyUtil;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 
 /**
@@ -31,6 +34,10 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
         String orderId = orderInfo.getString("oId");
         String feeName = orderInfo.getString("feeName");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
+
+        //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
+        money = MoneyUtil.computePriceScale(money,"1",2);
+
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(orderId);
