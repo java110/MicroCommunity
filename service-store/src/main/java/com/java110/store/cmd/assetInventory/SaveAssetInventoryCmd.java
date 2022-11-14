@@ -88,33 +88,33 @@ public class SaveAssetInventoryCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         AssetInventoryPo assetInventoryPo = BeanConvertUtil.covertBean(reqJson, AssetInventoryPo.class);
 
-        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
-        purchaseApplyDto.setCommunityId(assetInventoryPo.getCommunityId());
-        purchaseApplyDto.setState(purchaseApplyDto.STATE_DEALING);//审核中
-        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
-        for (PurchaseApplyDto applyDto : purchaseApplyDtos){
-            List<PurchaseApplyDetailVo> purchaseApplyDetailVos = applyDto.getPurchaseApplyDetailVo();
-            for (PurchaseApplyDetailVo applyDetailVo : purchaseApplyDetailVos) {
-                 if (applyDetailVo.getShId() != null && assetInventoryPo.getShId() != null && applyDetailVo.getShId().equals(assetInventoryPo.getShId())) {
-                    String resOrderType =  applyDto.getResOrderType().equals("10000")? "入库":"出库";
-                    throw new CmdException("盘存失败"+applyDetailVo.getShName() + "有"+ resOrderType +"物品");
-                }
-            }
-        }
-        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
-        allocationStorehouseDto.setShIda(assetInventoryPo.getShId());
-        allocationStorehouseDto.setState(allocationStorehouseDto.STATE_AUDIT);
-        List<AllocationStorehouseDto> allocationStorehouseDtosa = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
-        if (allocationStorehouseDtosa.size() > 0){
-            //cmdDataFlowContext.setResponseEntity(ResultVo.error("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。" ));
-            throw new CmdException("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。");
-        }
-        allocationStorehouseDto.setShIdz(assetInventoryPo.getShId());
-        allocationStorehouseDtosa = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
-        if (allocationStorehouseDtosa.size() > 0){
-            //cmdDataFlowContext.setResponseEntity(ResultVo.error("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。" ));
-            throw new CmdException("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。");
-        }
+//        PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+//        purchaseApplyDto.setCommunityId(assetInventoryPo.getCommunityId());
+//        purchaseApplyDto.setState(purchaseApplyDto.STATE_DEALING);//审核中
+//        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
+//        for (PurchaseApplyDto applyDto : purchaseApplyDtos){
+//            List<PurchaseApplyDetailVo> purchaseApplyDetailVos = applyDto.getPurchaseApplyDetailVo();
+//            for (PurchaseApplyDetailVo applyDetailVo : purchaseApplyDetailVos) {
+//                 if (applyDetailVo.getShId() != null && assetInventoryPo.getShId() != null && applyDetailVo.getShId().equals(assetInventoryPo.getShId())) {
+//                    String resOrderType =  applyDto.getResOrderType().equals("10000")? "入库":"出库";
+//                    throw new CmdException("盘存失败"+applyDetailVo.getShName() + "有"+ resOrderType +"物品");
+//                }
+//            }
+//        }
+//        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+//        allocationStorehouseDto.setShIda(assetInventoryPo.getShId());
+//        allocationStorehouseDto.setState(allocationStorehouseDto.STATE_AUDIT);
+//        List<AllocationStorehouseDto> allocationStorehouseDtosa = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+//        if (allocationStorehouseDtosa.size() > 0){
+//            //cmdDataFlowContext.setResponseEntity(ResultVo.error("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。" ));
+//            throw new CmdException("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。");
+//        }
+//        allocationStorehouseDto.setShIdz(assetInventoryPo.getShId());
+//        allocationStorehouseDtosa = allocationStorehouseInnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+//        if (allocationStorehouseDtosa.size() > 0){
+//            //cmdDataFlowContext.setResponseEntity(ResultVo.error("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。" ));
+//            throw new CmdException("盘存失败"+assetInventoryPo.getShName() + "有调拨物品。");
+//        }
 
         //保存盘点 产品
         if (!reqJson.containsKey("resourceStores")) {
