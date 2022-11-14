@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="assetInventoryV1ServiceDaoImpl">
+
+
+    <!-- 保存盘点管理信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAssetInventoryInfo" parameterType="Map">
+        insert into asset_inventory(code, sh_id, remark, ai_id, inv_time, name, staff_name, sh_name, state,
+                                    community_id, opinion, staff_id)
+        values (#{code}, #{shId}, #{remark}, #{aiId}, #{invTime}, #{name}, #{staffName}, #{shName}, #{state},
+                #{communityId}, #{opinion}, #{staffId})
+    </insert>
+
+    <!-- 查询盘点管理信息 add by wuxw 2018-07-03 -->
+    <select id="getAssetInventoryInfo" parameterType="Map" resultType="Map">
+        select t.code,t.sh_id,t.sh_id shId,t.status_cd,t.status_cd statusCd,t.remark,t.ai_id,t.ai_id
+        aiId,t.create_time,t.create_time createTime,t.inv_time,t.inv_time invTime,t.name,t.staff_name,t.staff_name
+        staffName,t.sh_name,t.sh_name shName,t.state,t.community_id,t.community_id communityId,t.staff_id,t.staff_id
+        staffId,td1.`name` stateName,t.opinion,t.audit_id,t.audit_id auditId,t.audit_name,t.audit_name
+        auditName,t.audit_tel,t.audit_tel auditTel,t.audit_time,t.audit_time auditTime
+        from asset_inventory t
+        LEFT JOIN t_dict td1 on t.state = td1.status_cd and td1.table_name = 'asset_inventory' and td1.table_columns =
+        'state'
+        where 1 =1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+        <if test="auditName !=null and auditName != ''">
+            and t.audit_name= #{auditName}
+        </if>
+        <if test="auditTel !=null and auditTel != ''">
+            and t.audit_tel= #{auditTel}
+        </if>
+        <if test="auditTime !=null and auditTime != ''">
+            and t.audit_time= #{auditTime}
+        </if>
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="opinion !=null and opinion != ''">
+            and t.opinion= #{opinion}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="aiId !=null and aiId != ''">
+            and t.ai_id= #{aiId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="invTime !=null and invTime != ''">
+            and t.inv_time= #{invTime}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改盘点管理信息 add by wuxw 2018-07-03 -->
+    <update id="updateAssetInventoryInfo" parameterType="Map">
+        update asset_inventory t set t.status_cd = #{statusCd}
+        <if test="code !=null and code != ''">
+            , t.code= #{code}
+        </if>
+        <if test="opinion !=null and opinion != ''">
+            , t.opinion= #{opinion}
+        </if>
+        <if test="shId !=null and shId != ''">
+            , t.sh_id= #{shId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="invTime !=null and invTime != ''">
+            , t.inv_time= #{invTime}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="shName !=null and shName != ''">
+            , t.sh_name= #{shName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="auditId !=null and auditId != ''">
+            , t.audit_id= #{auditId}
+        </if>
+        <if test="auditName !=null and auditName != ''">
+            , t.audit_name= #{auditName}
+        </if>
+        <if test="auditTel !=null and auditTel != ''">
+            , t.audit_tel= #{auditTel}
+        </if>
+        <if test="auditTime !=null and auditTime != ''">
+            , t.audit_time= #{auditTime}
+        </if>
+        where 1=1
+        <if test="aiId !=null and aiId != ''">
+            and t.ai_id= #{aiId}
+        </if>
+    </update>
+
+    <!-- 查询盘点管理数量 add by wuxw 2018-07-03 -->
+    <select id="queryAssetInventorysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from asset_inventory t
+        where 1 =1
+        <if test="auditId !=null and auditId != ''">
+            and t.audit_id= #{auditId}
+        </if>
+        <if test="auditName !=null and auditName != ''">
+            and t.audit_name= #{auditName}
+        </if>
+        <if test="auditTel !=null and auditTel != ''">
+            and t.audit_tel= #{auditTel}
+        </if>
+        <if test="auditTime !=null and auditTime != ''">
+            and t.audit_time= #{auditTime}
+        </if>
+        <if test="opinion !=null and opinion != ''">
+            and t.opinion= #{opinion}
+        </if>
+        <if test="code !=null and code != ''">
+            and t.code= #{code}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="aiId !=null and aiId != ''">
+            and t.ai_id= #{aiId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="invTime !=null and invTime != ''">
+            and t.inv_time= #{invTime}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

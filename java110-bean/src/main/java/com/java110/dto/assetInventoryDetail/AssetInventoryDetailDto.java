@@ -1,54 +1,58 @@
-package com.java110.vo.api.purchaseApply;
+package com.java110.dto.assetInventoryDetail;
 
+import com.java110.dto.PageDto;
+
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-//采购明细表
-public class PurchaseApplyDetailVo {
-    private String id;
-    private String applyOrderId;
-    private String resId;
-    private String rsId;
+/**
+ * @ClassName FloorDto
+ * @Description 盘点明细数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class AssetInventoryDetailDto extends PageDto implements Serializable {
+
+    private String originalStock;
     private String quantity;
+    private String rsId;
+    private String applyOrderId;
     private String remark;
+    private String id;
+    private String state;
+    private String resId;
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
     private String resName;
     private String resCode;
     private String price;
     private String stock;
     private List<String> applyOrderIds;
-    private String bId;
-    private String operate;
-    private String statusCd;
-    private String description;
-    private String purchaseQuantity;
-    private String purchaseRemark;
-    private String purchasePrice;
     private String rstName;
     private String parentRstName;
     private String specName;
     private String standardPrice;
-    private String originalStock;
     private String supplierName;
     private String shName;
-    private String shId;
     private String unitCodeName;
     private String miniUnitCodeName;
     private String isFixed;
     private String isFixedName;
 
-    public String getApplyOrderId() {
-        return applyOrderId;
+
+    public String getOriginalStock() {
+        return originalStock;
     }
 
-    public void setApplyOrderId(String applyOrderId) {
-        this.applyOrderId = applyOrderId;
-    }
-
-    public String getResId() {
-        return resId;
-    }
-
-    public void setResId(String resId) {
-        this.resId = resId;
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
     }
 
     public String getQuantity() {
@@ -59,12 +63,52 @@ public class PurchaseApplyDetailVo {
         this.quantity = quantity;
     }
 
+    public String getRsId() {
+        return rsId;
+    }
+
+    public void setRsId(String rsId) {
+        this.rsId = rsId;
+    }
+
+    public String getApplyOrderId() {
+        return applyOrderId;
+    }
+
+    public void setApplyOrderId(String applyOrderId) {
+        this.applyOrderId = applyOrderId;
+    }
+
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getResId() {
+        return resId;
+    }
+
+    public void setResId(String resId) {
+        this.resId = resId;
     }
 
     public String getResName() {
@@ -107,84 +151,20 @@ public class PurchaseApplyDetailVo {
         this.applyOrderIds = applyOrderIds;
     }
 
-    public String getbId() {
-        return bId;
-    }
-
-    public void setbId(String bId) {
-        this.bId = bId;
-    }
-
-    public String getOperate() {
-        return operate;
-    }
-
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
-
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPurchaseQuantity() {
-        return purchaseQuantity;
-    }
-
-    public void setPurchaseQuantity(String purchaseQuantity) {
-        this.purchaseQuantity = purchaseQuantity;
-    }
-
-    public String getPurchaseRemark() {
-        return purchaseRemark;
-    }
-
-    public void setPurchaseRemark(String purchaseRemark) {
-        this.purchaseRemark = purchaseRemark;
-    }
-
-    public String getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(String purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
-    public String getRsId() {
-        return rsId;
-    }
-
-    public void setRsId(String rsId) {
-        this.rsId = rsId;
-    }
-
     public String getRstName() {
         return rstName;
     }
 
     public void setRstName(String rstName) {
         this.rstName = rstName;
+    }
+
+    public String getParentRstName() {
+        return parentRstName;
+    }
+
+    public void setParentRstName(String parentRstName) {
+        this.parentRstName = parentRstName;
     }
 
     public String getSpecName() {
@@ -201,14 +181,6 @@ public class PurchaseApplyDetailVo {
 
     public void setStandardPrice(String standardPrice) {
         this.standardPrice = standardPrice;
-    }
-
-    public String getOriginalStock() {
-        return originalStock;
-    }
-
-    public void setOriginalStock(String originalStock) {
-        this.originalStock = originalStock;
     }
 
     public String getSupplierName() {
@@ -243,14 +215,6 @@ public class PurchaseApplyDetailVo {
         this.miniUnitCodeName = miniUnitCodeName;
     }
 
-    public String getParentRstName() {
-        return parentRstName;
-    }
-
-    public void setParentRstName(String parentRstName) {
-        this.parentRstName = parentRstName;
-    }
-
     public String getIsFixed() {
         return isFixed;
     }
@@ -267,13 +231,19 @@ public class PurchaseApplyDetailVo {
         this.isFixedName = isFixedName;
     }
 
-    public String getShId() {
-        return shId;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setShId(String shId) {
-        this.shId = shId;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
-
-
