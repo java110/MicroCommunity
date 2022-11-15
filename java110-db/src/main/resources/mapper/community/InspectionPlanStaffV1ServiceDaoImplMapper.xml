@@ -113,4 +113,37 @@
 
     </select>
 
+    <!-- 查询员工巡检情况 -->
+    <select id="queryStaffInspectionReport" parameterType="Map" resultType="Map">
+        select
+        t.staff_name staffName,t.staff_id staffId,
+        (select count(1) from inspection_task it
+        INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+        where  it.plan_user_id = t.staff_id
+        and itd.act_user_id is not null
+        and DATE_FORMAT(it.create_time,'%Y-%m-%d') = #{queryTime}
+        ) finishCount,
+        (select count(1) from inspection_task it
+        INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+        where it.plan_user_id = t.staff_id
+        and itd.act_user_id is null
+        and DATE_FORMAT(it.create_time,'%Y-%m-%d') = #{queryTime}
+        ) waitCount,
+        (select itd.description from inspection_task it
+        INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+        where  it.plan_user_id = t.staff_id
+        and itd.act_user_id is not null
+        and DATE_FORMAT(it.create_time,'%Y-%m-%d') = #{queryTime}
+        limit 1
+        ) state
+        from inspection_plan_staff t
+        left join inspection_plan ip on t.inspection_plan_id = ip.inspection_plan_id and ip.status_cd = '0'
+        left join inspection_route_point_rel irpr on ip.inspection_route_id = irpr.inspection_route_id and irpr.status_cd= '0'
+        left join inspection_point ipo on irpr.inspection_id = ipo.inspection_id and ipo.status_cd = '0'
+        where 1=1
+        and t.status_cd = '0'
+        and t.community_id = #{communityId}
+        GROUP BY  t.staff_name ,t.staff_id
+    </select>
+
 </mapper>

@@ -72,39 +72,37 @@ public class InspectionData implements ReportExecute {
         JSONObject paramOut = new JSONObject();
 
         List sqlParams = new ArrayList();
-        String sql = "select t.inspection_name '巡检点',t.point_obj_name '位置',ips.staff_name '员工',\n" +
-                "(select count(1) from inspection_task it \n" +
+        String sql = "select t.inspection_name '巡检点',\n" +
+                "t.point_obj_name '位置',\n" +
+                "ips.staff_name '员工',\n" +
+                "(select count(1) from inspection_task it\n" +
                 "INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'\n" +
-                "where it.inspection_plan_id = ip.inspection_plan_id\n" +
-                "and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
+                "where  itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
                 "and itd.act_user_id is not null\n" +
                 "and it.create_time > ?\n" +
                 "and it.create_time < ?\n" +
                 ") '已巡检',\n" +
-                "(select count(1) from inspection_task it \n" +
+                "(select count(1) from inspection_task it\n" +
                 "INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'\n" +
-                "where it.inspection_plan_id = ip.inspection_plan_id\n" +
-                "and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
+                "where  itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
                 "and itd.act_user_id is null\n" +
                 "and it.create_time > ?\n" +
                 "and it.create_time < ?\n" +
                 ") '未巡检',\n" +
-                "(select itd.description from inspection_task it \n" +
+                "(select itd.description from inspection_task it\n" +
                 "INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'\n" +
-                "where it.inspection_plan_id = ip.inspection_plan_id\n" +
-                "and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
-                "and itd.act_user_id is not null\n" +
-                "and it.create_time > ?\n" +
-                "and it.create_time < ?\n" +
-                "limit 1\n" +
-                ") '状态'\n" +
-                " from inspection_point t \n" +
-                "left join inspection_route_point_rel irpr on t.inspection_id = irpr.inspection_id and irpr.status_cd = '0'\n" +
-                "left join inspection_plan ip on ip.inspection_route_id = irpr.inspection_route_id and ip.status_cd = '0'\n" +
-                "left join inspection_plan_staff ips on ip.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'\n" +
-                "\n" +
-                "where ips.staff_name is not null\n" +
-                "and t.status_cd = '0'\n" ;
+                "where  itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id\n" +
+                " and itd.act_user_id is not null\n" +
+                " and it.create_time > ?\n" +
+                " and it.create_time < ?\n" +
+                " limit 1\n" +
+                " ) '状态'\n" +
+                "  from inspection_point t\n" +
+                " left join inspection_route_point_rel irpr on t.inspection_id = irpr.inspection_id and irpr.status_cd = '0'\n" +
+                " left join inspection_plan ip on ip.inspection_route_id = irpr.inspection_route_id and ip.status_cd = '0'\n" +
+                " left join inspection_plan_staff ips on ip.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'\n" +
+                " where ips.staff_name is not null\n" +
+                " and t.status_cd = '0'\n" ;
         if (params.containsKey("startTime") && !StringUtils.isEmpty(params.getString("startTime"))) {
             sqlParams.add(params.get("startTime"));
             sqlParams.add(params.get("endTime"));
@@ -128,7 +126,7 @@ public class InspectionData implements ReportExecute {
             sqlParams.add(params.get("communityId"));
         }
 
-        sql += "group by t.inspection_name,t.point_obj_name,ips.staff_name\n" +
+        sql += "group by t.inspection_name,t.point_obj_name,ips.staff_name,t.inspection_id,ips.staff_id\n" +
                 "order by t.inspection_name";
 
 
@@ -137,7 +135,7 @@ public class InspectionData implements ReportExecute {
         System.out.println("datas="+datas);
 
         if (datas == null || datas.size() < 1) {
-            paramOut.put("toatl",1);
+            paramOut.put("total",1);
             paramOut.put("data",new JSONArray());
             return paramOut.toJSONString();
         }

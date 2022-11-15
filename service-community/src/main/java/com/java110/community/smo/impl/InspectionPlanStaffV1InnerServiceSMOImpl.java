@@ -20,6 +20,7 @@ import com.java110.community.dao.IInspectionPlanStaffV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
+import com.java110.dto.inspectionPlan.InspectionStaffDto;
 import com.java110.intf.community.IInspectionPlanStaffV1InnerServiceSMO;
 import com.java110.po.inspection.InspectionPlanStaffPo;
 import com.java110.utils.util.BeanConvertUtil;
@@ -83,6 +84,15 @@ public class InspectionPlanStaffV1InnerServiceSMOImpl extends BaseServiceSMO imp
     @Override
     public int queryInspectionPlanStaffsCount(@RequestBody InspectionPlanStaffDto inspectionPlanStaffDto) {
         return inspectionPlanStaffV1ServiceDaoImpl.queryInspectionPlanStaffsCount(BeanConvertUtil.beanCovertMap(inspectionPlanStaffDto));
+    }
+
+    @Override
+    public List<InspectionStaffDto> queryStaffInspectionReport(@RequestBody InspectionStaffDto inspectionStaffDto) {
+        List<InspectionStaffDto> inspectionStaffDtos = BeanConvertUtil.covertBeanList(
+                inspectionPlanStaffV1ServiceDaoImpl.queryStaffInspectionReport(
+                        BeanConvertUtil.beanCovertMap(inspectionStaffDto)), InspectionStaffDto.class);
+
+        return inspectionStaffDtos;
     }
 
 }
