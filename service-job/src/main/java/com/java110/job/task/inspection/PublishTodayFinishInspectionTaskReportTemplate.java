@@ -142,6 +142,11 @@ public class PublishTodayFinishInspectionTaskReportTemplate extends TaskSystemQu
             templateMessage.setData(data);
             //获取员工公众号地址
             String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            if(wechatUrl.endsWith("/")){
+                wechatUrl += "#/pages/inspection/inspectionTodayReport";
+            }else{
+                wechatUrl += "/#/pages/inspection/inspectionTodayReport";
+            }
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
