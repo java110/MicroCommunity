@@ -221,6 +221,9 @@
             and it.plan_ins_time &lt; #{qrCodeTime}
             and it.plan_end_time &gt; #{qrCodeTime}
         </if>
+        <if test="queryTime != null">
+            and DATE_FORMAT(it.plan_ins_time, '%Y-%m-%d') = #{queryTime}
+        </if>
         <if test="inspectionStartTime !=null and inspectionStartTime != ''">
             and t.inspection_time &gt;= #{inspectionStartTime}
         </if>

@@ -42,8 +42,9 @@ import java.util.List;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
-                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "staffName", type = "String", remark = "员工名称"),
+                @Java110ParamDoc(parentNodeName = "data",name = "finishCount", type = "String", remark = "已巡检"),
+                @Java110ParamDoc(parentNodeName = "data",name = "waitCount", type = "String", remark = "未巡检"),
         }
 )
 
