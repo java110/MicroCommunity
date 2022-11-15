@@ -407,6 +407,7 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             }
             if(tmpScheduleClassesDayDto != null ){
                 scDay.setWorkday(tmpScheduleClassesDayDto.getWorkday());
+                scDay.setWorkdayName(tmpScheduleClassesDayDto.getWorkdayName());
                 scDay.setTimes(tmpScheduleClassesDayDto.getTimes());
             }
             days.add(scDay);
