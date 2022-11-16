@@ -252,6 +252,9 @@
         <if test="machineName !=null and machineName != ''">
             and t.machine_name= #{machineName}
         </if>
+        <if test="machineNameLike !=null and machineNameLike != ''">
+            and t.machine_name like concat('%',#{machineNameLike},'%')
+        </if>
         <if test="chargeOrgId !=null and chargeOrgId != ''">
             and t.charge_org_id= #{chargeOrgId}
         </if>
