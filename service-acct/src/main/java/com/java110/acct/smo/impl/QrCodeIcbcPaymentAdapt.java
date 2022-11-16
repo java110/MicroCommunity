@@ -1,0 +1,182 @@
+package com.java110.acct.smo.impl;
+
+import com.icbc.api.IcbcApiException;
+import com.icbc.api.DefaultIcbcClient;
+import com.icbc.api.IcbcConstants;
+import com.icbc.api.request.MybankPayQrcodeScannedPayRequestV5;
+import com.icbc.api.request.MybankPayQrcodeScannedPayRequestV5.MybankPayQrcodeScannedPayRequestV5Biz;
+
+import com.icbc.api.request.MybankPayQrcodeScannedPaystatusRequestV4;
+import com.icbc.api.response.MybankPayQrcodeScannedPaystatusResponseV4;
+import com.icbc.api.response.MybankQrcodeScannedPayResponseV5;
+import com.java110.acct.smo.IQrCodePaymentSMO;
+import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.PayUtil;
+import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * 工商银行支付
+ */
+@Service
+public class QrCodeIcbcPaymentAdapt implements IQrCodePaymentSMO {
+    private static Logger logger = LoggerFactory.getLogger(QrCodeIcbcPaymentAdapt.class);
+
+    //微信支付
+    public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
+    // 微信服务商支付开关
+    public static final String WECHAT_SERVICE_PAY_SWITCH = "WECHAT_SERVICE_PAY_SWITCH";
+
+    //开关ON打开
+    public static final String WECHAT_SERVICE_PAY_SWITCH_ON = "ON";
+
+
+    private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
+
+    private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
+
+    public static final String PAY_UNIFIED_ORDER_URL = "https://api.plutuspay.com/open/v2/pay";
+
+
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+
+    @Autowired
+    private RestTemplate outRestTemplate;
+
+    @Override
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
+        logger.info("【工商银行支付】 统一下单开始, 订单编号=" + orderNum);
+        SortedMap<String, String> resultMap = new TreeMap<String, String>();
+        //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
+        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), money);
+        //添加或更新支付记录(参数跟进自己业务需求添加)
+
+        String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+
+        String privateKey = CommunitySettingFactory.getRemark(communityId, "ICBC_PRIVATE_KEY");
+        String apiPublicKey = CommunitySettingFactory.getRemark(communityId, "ICBC_PUBLIC_KEY");
+        String merId = CommunitySettingFactory.getValue(communityId, "ICBC_MER_ID");
+        String merPrtclNo = CommunitySettingFactory.getValue(communityId, "ICBC_MER_PRTCL_NO");
+        String deciveInfo = CommunitySettingFactory.getValue(communityId, "ICBC_DECIVE_INFO");
+        String appName = CommunitySettingFactory.getValue(communityId, "ICBC_APP_NAME");
+        String icbcAppId = CommunitySettingFactory.getValue(communityId, "ICBC_APP_ID");
+
+
+        //签名类型为RSA2时，需传入appid，私钥和网关公钥，签名类型使用定值IcbcConstants.SIGN_TYPE_RSA2，其他参数使用缺省值
+        DefaultIcbcClient client = new DefaultIcbcClient(icbcAppId, IcbcConstants.SIGN_TYPE_RSA, privateKey, apiPublicKey);
+        MybankPayQrcodeScannedPayRequestV5 request = new MybankPayQrcodeScannedPayRequestV5();
+        //4、根据测试环境和生产环境替换相应ip和端口
+        request.setServiceUrl("https://gw.open.icbc.com.cn/api/mybank/pay/qrcode/scanned/pay/V5");
+        //5、请对照接口文档用bizContent.setxxx()方法对业务上送数据进行赋值
+        MybankPayQrcodeScannedPayRequestV5Biz bizContent = new MybankPayQrcodeScannedPayRequestV5Biz();
+        bizContent.setMerId(merId); //商户编号
+        bizContent.setQrCode(authCode); //付款码
+        bizContent.setOutTradeNo(orderNum); //外部订单号
+        bizContent.setTradeDate(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)); //交易日期  格式:YYYYMMDD
+        bizContent.setTradeTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_N)); //交易时间hhmmss
+        //bizContent.setAttach("1231"); //商户附加信息
+        bizContent.setOrderAmt(payAmount + ""); //交易金额
+        //bizContent.setSubAppId("wxfb72f1a7d061d631"); //子商户应用号
+        //bizContent.setGoodsTag("DP");  //优惠标志
+//        JSONArray goodsDetailArray = new JSONArray();
+//        JSONObject gd1 = new JSONObject();
+//        gd1.put("goods_id", "123456");
+//        gd1.put("goods_name", "FOOD");
+//        gd1.put("quantity", 1);
+//        gd1.put("price", 100);
+//        goodsDetailArray.add(gd1);
+        //  bizContent.setGoodsDetail(goodsDetailArray);
+        // bizContent.setSubject("订单标题，128字节长度");  //订单标题，128字节长度
+        HashMap<String, Object> terminalInfo = new HashMap<>();
+        terminalInfo.put("device_type", "10");
+        terminalInfo.put("device_id", deciveInfo);//| device_id | str | true | 15 | 终端设备号: 收单机构为商户终端分配的唯一编号。 | Sxxxxxx |
+        bizContent.setTerminalInfo(terminalInfo);
+        request.setBizContent(bizContent);
+        MybankQrcodeScannedPayResponseV5 response;
+        try {
+            response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
+            if (response.getReturnCode() == 0) {
+                // 6、业务成功处理，请根据接口文档用response.getxxx()获取同步返回的业务数据
+                return new ResultVo(ResultVo.CODE_OK, "成功");
+            } else {
+                // 失败
+                //System.out.println("ReturnCode:"+response.getReturnCode());
+                //System.out.println("ReturnMsg:"+response.getReturnMsg());
+                return new ResultVo(ResultVo.CODE_ERROR, response.getReturnMsg());
+            }
+        } catch (IcbcApiException e) {
+            e.printStackTrace();
+        }
+
+        return new ResultVo(ResultVo.CODE_ERROR, "未知异常");
+    }
+
+    public ResultVo checkPayFinish(String communityId, String orderNum) {
+        SmallWeChatDto shopSmallWeChatDto = null;
+        Map<String, String> result = null;
+
+        String privateKey = CommunitySettingFactory.getRemark(communityId, "ICBC_PRIVATE_KEY");
+        String apiPublicKey = CommunitySettingFactory.getRemark(communityId, "ICBC_PUBLIC_KEY");
+        String merId = CommunitySettingFactory.getValue(communityId, "ICBC_MER_ID");
+        String merPrtclNo = CommunitySettingFactory.getValue(communityId, "ICBC_MER_PRTCL_NO");
+        String deciveInfo = CommunitySettingFactory.getValue(communityId, "ICBC_DECIVE_INFO");
+        String appName = CommunitySettingFactory.getValue(communityId, "ICBC_APP_NAME");
+        String icbcAppId = CommunitySettingFactory.getValue(communityId, "ICBC_APP_ID");
+
+
+        //签名类型为RSA2时，需传入appid，私钥和网关公钥，签名类型使用定值IcbcConstants.SIGN_TYPE_RSA2，其他参数使用缺省值
+        DefaultIcbcClient client = new DefaultIcbcClient(icbcAppId, IcbcConstants.SIGN_TYPE_RSA, privateKey, apiPublicKey);
+        MybankPayQrcodeScannedPaystatusRequestV4 request = new MybankPayQrcodeScannedPaystatusRequestV4();
+        //4、根据测试环境和生产环境替换相应ip和端口
+        request.setServiceUrl("https://gw.open.icbc.com.cn/api/mybank/pay/qrcode/scanned/paystatus/V4");
+        //5、请对照接口文档用bizContent.setxxx()方法对业务上送数据进行赋值
+        MybankPayQrcodeScannedPaystatusRequestV4.MybankPayQrcodeScannedPaystatusRequestV4Biz
+                bizContent = new MybankPayQrcodeScannedPaystatusRequestV4.MybankPayQrcodeScannedPaystatusRequestV4Biz();
+        bizContent.setMerId(merId); //商户编号
+        bizContent.setOutTradeNo(orderNum); //外部订单号
+        bizContent.setTradeDate(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)); //交易日期  格式:YYYYMMDD
+        //bizContent.setOrderId("");
+        bizContent.setDealFlag("0");
+        request.setBizContent(bizContent);
+        MybankPayQrcodeScannedPaystatusResponseV4 response;
+        try {
+            response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
+            if (response.getReturnCode() == 0) {
+                // 6、业务成功处理，请根据接口文档用response.getxxx()获取同步返回的业务数据
+                //System.out.println("response:" + JSON.toJSONString(response));
+                //System.out.println("ReturnCode:"+response.getReturnCode());
+                if ("1".equals(response.getPayStatus())) {
+                    return new ResultVo(ResultVo.CODE_OK, "成功");
+                } else if ("0".equals(response.getPayStatus())) {
+                    return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
+                } else {
+                    return new ResultVo(ResultVo.CODE_ERROR, "支付已经被取消，银行 状态码：" + response.getPayStatus());
+                }
+
+            } else {
+                // 失败
+                //System.out.println("response:" + JSON.toJSONString(response));
+                //System.out.println("ReturnCode:"+response.getReturnCode());
+                //System.out.println("ReturnMsg:"+response.getReturnMsg());
+                return new ResultVo(ResultVo.CODE_ERROR, response.getReturnMsg());
+
+            }
+        } catch (IcbcApiException e) {
+            e.printStackTrace();
+        }
+        return new ResultVo(ResultVo.CODE_ERROR, "未知异常");
+
+    }
+}

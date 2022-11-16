@@ -33,6 +33,7 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_K = "yyyyMMddHHmmssSSS";
     public static final String DATE_FORMATE_STRING_L = "MMdd";
     public static final String DATE_FORMATE_STRING_M = "yyyyMM";
+    public static final String DATE_FORMATE_STRING_N = "HHmmss";
 
     static {
         formats.put("yyyyMMddHHmmss", new SimpleDateFormat("yyyyMMddHHmmss"));
@@ -49,6 +50,7 @@ public class DateUtil {
         formats.put("yyyyMMddHHmmssSSS", new SimpleDateFormat("yyyyMMddHHmmssSSS"));
         formats.put("MMdd", new SimpleDateFormat("MMdd"));
         formats.put("yyyyMM", new SimpleDateFormat("yyyyMM"));
+        formats.put("HHmmss", new SimpleDateFormat("HHmmss"));
     }
 
 
