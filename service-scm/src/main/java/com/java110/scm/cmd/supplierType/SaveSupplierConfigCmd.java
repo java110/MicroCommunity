@@ -15,6 +15,7 @@
  */
 package com.java110.scm.cmd.supplierType;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -55,9 +56,19 @@ public class SaveSupplierConfigCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+
         Assert.hasKeyAndValue(reqJson, "supplierId", "请求报文中未包含supplierId");
-        Assert.hasKeyAndValue(reqJson, "columnKey", "请求报文中未包含columnKey");
-        Assert.hasKeyAndValue(reqJson, "columnValue", "请求报文中未包含columnValue");
+
+        if(!reqJson.containsKey("configs")){
+            throw new CmdException("未包含配置信息");
+        }
+        JSONArray configs = reqJson.getJSONArray("configs");
+        JSONObject config = null;
+        for(int configIndex = 0; configIndex < configs.size(); configIndex++) {
+            config = configs.getJSONObject(configIndex);
+            Assert.hasKeyAndValue(config, "columnKey", "请求报文中未包含columnKey");
+            Assert.hasKeyAndValue(config, "columnValue", "请求报文中未包含columnValue");
+        }
 
     }
 
@@ -70,13 +81,21 @@ public class SaveSupplierConfigCmd extends Cmd {
         supplierConfigPo.setSupplierId(reqJson.getString("supplierId"));
         supplierConfigV1InnerServiceSMOImpl.deleteSupplierConfig(supplierConfigPo);
 
+        JSONArray configs = reqJson.getJSONArray("configs");
+        JSONObject config = null;
+        for(int configIndex = 0; configIndex < configs.size(); configIndex++) {
+            config = configs.getJSONObject(configIndex);
+            supplierConfigPo = new SupplierConfigPo();
+            supplierConfigPo.setSupplierId(reqJson.getString("supplierId"));
+            supplierConfigPo.setColumnKey(config.getString("columnKey"));
+            supplierConfigPo.setColumnValue(config.getString("columnValue"));
 
-        supplierConfigPo = BeanConvertUtil.covertBean(reqJson, SupplierConfigPo.class);
-        supplierConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = supplierConfigV1InnerServiceSMOImpl.saveSupplierConfig(supplierConfigPo);
+            supplierConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            int flag = supplierConfigV1InnerServiceSMOImpl.saveSupplierConfig(supplierConfigPo);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
