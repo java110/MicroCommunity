@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
+import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.po.scheduleClasses.ScheduleClassesPo;
@@ -59,10 +61,20 @@ public class DeleteScheduleClassesCmd extends Cmd {
     @Autowired
     private IScheduleClassesTimeV1InnerServiceSMO scheduleClassesTimeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
+
+        ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
+        scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
+        int count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
+        if(count> 0){
+            throw new CmdException("请先解除人员再删除");
+        }
 
     }
 
