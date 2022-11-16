@@ -21,7 +21,7 @@
         statusCd,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey,sk.name, sk.remark
         from supplier_config t
         inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
-        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.column_key = t.column_key and sk.status_cd = '0'
         where 1 =1
         <if test="supplierId !=null and supplierId != ''">
             and t.supplier_id= #{supplierId}
@@ -74,7 +74,7 @@
         select count(1) count
         from supplier_config t
         inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
-        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.column_key = t.column_key and sk.status_cd = '0'
         where 1 =1
         <if test="supplierId !=null and supplierId != ''">
             and t.supplier_id= #{supplierId}
