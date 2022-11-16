@@ -1,6 +1,7 @@
 package com.java110.dto.supplierConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,11 @@ import java.util.Date;
 public class SupplierConfigDto extends PageDto implements Serializable {
 
     private String supplierId;
-private String configId;
-private String columnValue;
-private String columnKey;
+    private String configId;
+    private String columnValue;
+    private String columnKey;
+    private String name;
+    private String remark;
 
 
     private Date createTime;
@@ -28,25 +31,32 @@ private String columnKey;
     public String getSupplierId() {
         return supplierId;
     }
-public void setSupplierId(String supplierId) {
+
+    public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getColumnValue() {
+
+    public String getColumnValue() {
         return columnValue;
     }
-public void setColumnValue(String columnValue) {
+
+    public void setColumnValue(String columnValue) {
         this.columnValue = columnValue;
     }
-public String getColumnKey() {
+
+    public String getColumnKey() {
         return columnKey;
     }
-public void setColumnKey(String columnKey) {
+
+    public void setColumnKey(String columnKey) {
         this.columnKey = columnKey;
     }
 
@@ -65,5 +75,21 @@ public void setColumnKey(String columnKey) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

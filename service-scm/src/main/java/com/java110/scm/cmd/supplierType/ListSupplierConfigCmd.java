@@ -22,7 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.supplier.SupplierDto;
+import com.java110.dto.supplierKey.SupplierKeyDto;
 import com.java110.intf.scm.ISupplierConfigV1InnerServiceSMO;
+import com.java110.intf.scm.ISupplierKeyV1InnerServiceSMO;
+import com.java110.intf.scm.ISupplierV1InnerServiceSMO;
 import com.java110.po.supplierConfig.SupplierConfigPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -55,9 +59,16 @@ public class ListSupplierConfigCmd extends Cmd {
     @Autowired
     private ISupplierConfigV1InnerServiceSMO supplierConfigV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISupplierKeyV1InnerServiceSMO supplierKeyV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ISupplierV1InnerServiceSMO supplierV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson,"supplierId","未包含供应商");
     }
 
     @Override
@@ -72,7 +83,7 @@ public class ListSupplierConfigCmd extends Cmd {
            if (count > 0) {
                supplierConfigDtos = supplierConfigV1InnerServiceSMOImpl.querySupplierConfigs(supplierConfigDto);
            } else {
-               supplierConfigDtos = new ArrayList<>();
+               supplierConfigDtos = getSupplierKey(supplierConfigDto);
            }
 
            ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, supplierConfigDtos);
@@ -80,5 +91,38 @@ public class ListSupplierConfigCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询
+     * @param supplierConfigDto
+     * @return
+     */
+    private List<SupplierConfigDto> getSupplierKey(SupplierConfigDto supplierConfigDto) {
+
+        SupplierDto supplierDto = new SupplierDto();
+        supplierDto.setSupplierId(supplierConfigDto.getSupplierId());
+        List<SupplierDto> supplierDtos = supplierV1InnerServiceSMOImpl.querySuppliers(supplierDto);
+
+        Assert.listOnlyOne(supplierDtos,"未包含供应商");
+
+        SupplierKeyDto supplierKeyDto = new SupplierKeyDto();
+        supplierKeyDto.setBeanName(supplierDtos.get(0).getBeanName());
+        List<SupplierKeyDto> supplierKeyDtos = supplierKeyV1InnerServiceSMOImpl.querySupplierKeys(supplierKeyDto);
+
+        Assert.listOnlyOne(supplierDtos,"未包含供应商模板配置");
+
+        List<SupplierConfigDto> supplierConfigDtos = new ArrayList<>();
+        SupplierConfigDto supplierConfigDto1 = null;
+        for(SupplierKeyDto supplierKeyDto1:supplierKeyDtos){
+            supplierConfigDto1 = new SupplierConfigDto();
+            supplierConfigDto1.setSupplierId(supplierConfigDto.getSupplierId());
+            supplierConfigDto1.setColumnKey(supplierKeyDto1.getColumnKey());
+            supplierConfigDto1.setColumnValue("");
+            supplierConfigDto1.setName(supplierKeyDto1.getName());
+            supplierConfigDto1.setRemark(supplierKeyDto1.getRemark());
+            supplierConfigDtos.add(supplierConfigDto1);
+        }
+        return supplierConfigDtos;
     }
 }

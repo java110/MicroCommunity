@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.supplierConfig.SupplierConfigDto;
 import com.java110.intf.scm.ISupplierConfigV1InnerServiceSMO;
 import com.java110.po.supplierConfig.SupplierConfigPo;
 import com.java110.utils.exception.CmdException;
@@ -64,7 +65,13 @@ public class SaveSupplierConfigCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        SupplierConfigPo supplierConfigPo = BeanConvertUtil.covertBean(reqJson, SupplierConfigPo.class);
+        //删除已经存在
+        SupplierConfigPo supplierConfigPo = new SupplierConfigPo();
+        supplierConfigPo.setSupplierId(reqJson.getString("supplierId"));
+        supplierConfigV1InnerServiceSMOImpl.deleteSupplierConfig(supplierConfigPo);
+
+
+        supplierConfigPo = BeanConvertUtil.covertBean(reqJson, SupplierConfigPo.class);
         supplierConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = supplierConfigV1InnerServiceSMOImpl.saveSupplierConfig(supplierConfigPo);
 

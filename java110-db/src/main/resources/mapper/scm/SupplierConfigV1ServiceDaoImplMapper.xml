@@ -18,8 +18,10 @@
     <!-- 查询供应商配置信息 add by wuxw 2018-07-03 -->
     <select id="getSupplierConfigInfo" parameterType="Map" resultType="Map">
         select t.supplier_id,t.supplier_id supplierId,t.config_id,t.config_id configId,t.status_cd,t.status_cd
-        statusCd,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey
+        statusCd,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey,sk.name, sk.remark
         from supplier_config t
+        inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.status_cd = '0'
         where 1 =1
         <if test="supplierId !=null and supplierId != ''">
             and t.supplier_id= #{supplierId}
@@ -50,9 +52,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="supplierId !=null and supplierId != ''">
-            , t.supplier_id= #{supplierId}
-        </if>
+
         <if test="columnValue !=null and columnValue != ''">
             , t.column_value= #{columnValue}
         </if>
@@ -63,6 +63,9 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
 
     </update>
 
@@ -70,6 +73,8 @@
     <select id="querySupplierConfigsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from supplier_config t
+        inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.status_cd = '0'
         where 1 =1
         <if test="supplierId !=null and supplierId != ''">
             and t.supplier_id= #{supplierId}
