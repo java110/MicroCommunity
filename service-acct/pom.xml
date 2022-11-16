@@ -24,21 +24,21 @@
       <groupId>com.alipay.sdk</groupId>
       <artifactId>alipay-sdk-java</artifactId>
     </dependency>
-      <dependency>
-          <groupId>com.icbc</groupId>
-          <artifactId>icbc-api-sdk-cop</artifactId>
-          <version>v1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>com.icbc</groupId>
-          <artifactId>icbc-api-sdk-cop-io</artifactId>
-          <version>v1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>com.icbc</groupId>
-          <artifactId>icbc-ca</artifactId>
-          <version>v1.0</version>
-      </dependency>
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-api-sdk-cop</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-api-sdk-cop-io</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-ca</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
 
   </dependencies>
   <build>
