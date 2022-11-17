@@ -68,7 +68,7 @@ import org.slf4j.LoggerFactory;
 )
 
 @Java110ExampleDoc(
-        reqBody="http://{ip}:{port}/app/supplierCoupon.listSupplierCoupon?supplierId=123",
+        reqBody="http://{ip}:{port}/app/supplierCoupon.listSupplierCoupon?supplierId=123&page=1&row=10",
         resBody="{'code':0,'msg':'成功',data:[]}"
 )
 /**
