@@ -5,14 +5,19 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
+import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.sun.tracing.dtrace.ArgsAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -31,11 +36,27 @@ public class GetTempCarFeeOrderCmd extends Cmd {
     @Autowired
     private IGetTempCarFeeRules getTempCarFeeRulesImpl;
 
+    @Autowired
+    private IParkingBoxAreaV1InnerServiceSMO parkingBoxAreaV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "paId", "paId不能为空");
         Assert.hasKeyAndValue(reqJson, "carNum", "carNum不能为空");
+        if(StringUtil.isEmpty(reqJson.getString("paId"))){
+            Assert.hasKeyAndValue(reqJson, "boxId", "boxId不能为空");
+
+            ParkingBoxAreaDto parkingBoxAreaDto = new ParkingBoxAreaDto();
+            parkingBoxAreaDto.setDefaultArea(ParkingBoxAreaDto.DEFAULT_AREA_TRUE);
+            parkingBoxAreaDto.setBoxId(reqJson.getString("boxId"));
+            List<ParkingBoxAreaDto> parkingBoxAreaDtos = parkingBoxAreaV1InnerServiceSMOImpl.queryParkingBoxAreas(parkingBoxAreaDto);
+            if(parkingBoxAreaDtos == null || parkingBoxAreaDtos.size()< 1){
+                throw new CmdException("未找到停车场");
+            }
+            reqJson.put("paId",parkingBoxAreaDtos.get(0).getPaId());
+        }
+        Assert.hasKeyAndValue(reqJson, "paId", "paId不能为空");
+
 
     }
 
