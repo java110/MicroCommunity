@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierCouponBuyV1ServiceDaoImpl">
+
+
+    <!-- 保存优惠购买信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSupplierCouponBuyInfo" parameterType="Map">
+        insert into supplier_coupon_buy(
+        create_user_id,supplier_id,quantity,create_user_name,remark,obj_name,coupon_id,store_id,value_price,create_user_tel,name,obj_id,buy_id,store_name
+        ) values (
+        #{createUserId},#{supplierId},#{quantity},#{createUserName},#{remark},#{objName},#{couponId},#{storeId},#{valuePrice},#{createUserTel},#{name},#{objId},#{buyId},#{storeName}
+        )
+    </insert>
+
+
+    <!-- 查询优惠购买信息 add by wuxw 2018-07-03 -->
+    <select id="getSupplierCouponBuyInfo" parameterType="Map" resultType="Map">
+        select t.create_user_id,t.create_user_id createUserId,t.supplier_id,t.supplier_id
+        supplierId,t.quantity,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.remark,t.obj_name,t.obj_name objName,t.coupon_id,t.coupon_id couponId,t.store_id,t.store_id
+        storeId,t.value_price,t.value_price valuePrice,t.create_user_tel,t.create_user_tel
+        createUserTel,t.name,t.obj_id,t.obj_id objId,t.buy_id,t.buy_id buyId,t.store_name,t.store_name storeName
+        from supplier_coupon_buy t
+        where 1 =1
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="valuePrice !=null and valuePrice != ''">
+            and t.value_price= #{valuePrice}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            and t.create_user_tel= #{createUserTel}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            and t.store_name= #{storeName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改优惠购买信息 add by wuxw 2018-07-03 -->
+    <update id="updateSupplierCouponBuyInfo" parameterType="Map">
+        update supplier_coupon_buy t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            , t.supplier_id= #{supplierId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            , t.quantity= #{quantity}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            , t.obj_name= #{objName}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            , t.coupon_id= #{couponId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="valuePrice !=null and valuePrice != ''">
+            , t.value_price= #{valuePrice}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            , t.create_user_tel= #{createUserTel}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            , t.store_name= #{storeName}
+        </if>
+        where 1=1
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+
+    </update>
+
+    <!-- 查询优惠购买数量 add by wuxw 2018-07-03 -->
+    <select id="querySupplierCouponBuysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from supplier_coupon_buy t
+        where 1 =1
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="valuePrice !=null and valuePrice != ''">
+            and t.value_price= #{valuePrice}
+        </if>
+        <if test="createUserTel !=null and createUserTel != ''">
+            and t.create_user_tel= #{createUserTel}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="buyId !=null and buyId != ''">
+            and t.buy_id= #{buyId}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            and t.store_name= #{storeName}
+        </if>
+
+
+    </select>
+
+</mapper>
