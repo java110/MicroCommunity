@@ -93,7 +93,11 @@
         machineCode,t.car_inout,t.car_inout carInout,t.detail_id,t.detail_id detailId,t.car_num,t.car_num
         carNum,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
         from car_inout_detail t
+        left join car_inout ci on t.inout_id = ci.inout_id and ci.state = '0'
         where 1 =1
+        <if test="state !=null and state != ''">
+            and ci.state = #{state}
+        </if>
         <if test="inoutId !=null and inoutId != ''">
             and t.inout_id= #{inoutId}
         </if>
