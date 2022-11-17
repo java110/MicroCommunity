@@ -30,8 +30,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.supplierCouponBuy.SupplierCouponBuyDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "supplierCoupon.listSupplierCouponBuy")
 public class ListSupplierCouponBuyCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListSupplierCouponBuyCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListSupplierCouponBuyCmd.class);
     @Autowired
     private ISupplierCouponBuyV1InnerServiceSMO supplierCouponBuyV1InnerServiceSMOImpl;
 
@@ -63,22 +65,22 @@ public class ListSupplierCouponBuyCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           SupplierCouponBuyDto supplierCouponBuyDto = BeanConvertUtil.covertBean(reqJson, SupplierCouponBuyDto.class);
+        SupplierCouponBuyDto supplierCouponBuyDto = BeanConvertUtil.covertBean(reqJson, SupplierCouponBuyDto.class);
 
-           int count = supplierCouponBuyV1InnerServiceSMOImpl.querySupplierCouponBuysCount(supplierCouponBuyDto);
+        int count = supplierCouponBuyV1InnerServiceSMOImpl.querySupplierCouponBuysCount(supplierCouponBuyDto);
 
-           List<SupplierCouponBuyDto> supplierCouponBuyDtos = null;
+        List<SupplierCouponBuyDto> supplierCouponBuyDtos = null;
 
-           if (count > 0) {
-               supplierCouponBuyDtos = supplierCouponBuyV1InnerServiceSMOImpl.querySupplierCouponBuys(supplierCouponBuyDto);
-           } else {
-               supplierCouponBuyDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            supplierCouponBuyDtos = supplierCouponBuyV1InnerServiceSMOImpl.querySupplierCouponBuys(supplierCouponBuyDto);
+        } else {
+            supplierCouponBuyDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, supplierCouponBuyDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, supplierCouponBuyDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
 import com.java110.po.supplierCoupon.SupplierCouponPo;
 import com.java110.utils.exception.CmdException;
@@ -30,14 +31,46 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.supplierCoupon.SupplierCouponDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
+@Java110CmdDoc(title = "查询供应商优惠券",
+        description = "用于外系统查询供应商优惠券",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/supplierCoupon.listSupplierCoupon",
+        resource = "acctDoc",
+        author = "吴学文",
+        serviceCode = "supplierCoupon.listSupplierCoupon"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "supplierId", length = 30, remark = "供应商ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data",type="Array",length = -1,remark = "数据节点"),
+                @Java110ParamDoc(parentNodeName = "data",name="couponId",length = 30,remark = "优惠券ID"),
+                @Java110ParamDoc(parentNodeName = "data",name="name",length = 30,remark = "优惠券名称"),
+                @Java110ParamDoc(parentNodeName = "data",name="valuePrice",length = 30,remark = "售价"),
+                @Java110ParamDoc(parentNodeName = "data",name="businessKey",length = 30,remark = "业务编号"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/supplierCoupon.listSupplierCoupon?supplierId=123",
+        resBody="{'code':0,'msg':'成功',data:[]}"
+)
 /**
  * 类表述：查询
  * 服务编码：supplierCoupon.listSupplierCoupon
@@ -51,7 +84,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "supplierCoupon.listSupplierCoupon")
 public class ListSupplierCouponCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListSupplierCouponCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListSupplierCouponCmd.class);
     @Autowired
     private ISupplierCouponV1InnerServiceSMO supplierCouponV1InnerServiceSMOImpl;
 
@@ -63,22 +96,22 @@ public class ListSupplierCouponCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           SupplierCouponDto supplierCouponDto = BeanConvertUtil.covertBean(reqJson, SupplierCouponDto.class);
+        SupplierCouponDto supplierCouponDto = BeanConvertUtil.covertBean(reqJson, SupplierCouponDto.class);
 
-           int count = supplierCouponV1InnerServiceSMOImpl.querySupplierCouponsCount(supplierCouponDto);
+        int count = supplierCouponV1InnerServiceSMOImpl.querySupplierCouponsCount(supplierCouponDto);
 
-           List<SupplierCouponDto> supplierCouponDtos = null;
+        List<SupplierCouponDto> supplierCouponDtos = null;
 
-           if (count > 0) {
-               supplierCouponDtos = supplierCouponV1InnerServiceSMOImpl.querySupplierCoupons(supplierCouponDto);
-           } else {
-               supplierCouponDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            supplierCouponDtos = supplierCouponV1InnerServiceSMOImpl.querySupplierCoupons(supplierCouponDto);
+        } else {
+            supplierCouponDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, supplierCouponDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, supplierCouponDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

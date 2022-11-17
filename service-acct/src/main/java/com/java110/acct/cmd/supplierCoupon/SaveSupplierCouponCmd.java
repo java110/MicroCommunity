@@ -22,7 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
+import com.java110.dto.supplier.SupplierDto;
 import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
+import com.java110.intf.scm.ISupplierV1InnerServiceSMO;
 import com.java110.po.supplierCoupon.SupplierCouponPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +34,37 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+
+@Java110CmdDoc(title = "添加供应商优惠券",
+        description = "用于外系统添加供应商优惠券",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/supplierCoupon.saveSupplierCoupon",
+        resource = "acctDoc",
+        author = "吴学文",
+        serviceCode = "supplierCoupon.saveSupplierCoupon"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "supplierId", length = 30, remark = "供应商ID"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
+        @Java110ParamDoc(name = "businessKey", length = 64, remark = "优惠券业务ID，第三方ID"),
+        @Java110ParamDoc(name = "valuePrice", length = 64, remark = "售价")
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"supplierId\":\"123123\",\"name\":\"2号楼\",\"businessKey\":\"123123\",\"valuePrice\":\"123123\"}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：保存
@@ -52,13 +86,15 @@ public class SaveSupplierCouponCmd extends Cmd {
     @Autowired
     private ISupplierCouponV1InnerServiceSMO supplierCouponV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISupplierV1InnerServiceSMO supplierV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-Assert.hasKeyAndValue(reqJson, "supplierId", "请求报文中未包含supplierId");
-Assert.hasKeyAndValue(reqJson, "supplierName", "请求报文中未包含supplierName");
-Assert.hasKeyAndValue(reqJson, "businessKey", "请求报文中未包含businessKey");
-Assert.hasKeyAndValue(reqJson, "valuePrice", "请求报文中未包含valuePrice");
+        Assert.hasKeyAndValue(reqJson, "supplierId", "请求报文中未包含supplierId");
+        Assert.hasKeyAndValue(reqJson, "businessKey", "请求报文中未包含businessKey");
+        Assert.hasKeyAndValue(reqJson, "valuePrice", "请求报文中未包含valuePrice");
 
     }
 
@@ -66,7 +102,14 @@ Assert.hasKeyAndValue(reqJson, "valuePrice", "请求报文中未包含valuePrice
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       SupplierCouponPo supplierCouponPo = BeanConvertUtil.covertBean(reqJson, SupplierCouponPo.class);
+        SupplierDto supplierDto = new SupplierDto();
+        supplierDto.setSupplierId(reqJson.getString("supplierId"));
+        List<SupplierDto> supplierDtos = supplierV1InnerServiceSMOImpl.querySuppliers(supplierDto);
+
+        Assert.listOnlyOne(supplierDtos,"请先添加供应商");
+
+        SupplierCouponPo supplierCouponPo = BeanConvertUtil.covertBean(reqJson, SupplierCouponPo.class);
+        supplierCouponPo.setSupplierName(supplierDtos.get(0).getSupplierName());
         supplierCouponPo.setCouponId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = supplierCouponV1InnerServiceSMOImpl.saveSupplierCoupon(supplierCouponPo);
 

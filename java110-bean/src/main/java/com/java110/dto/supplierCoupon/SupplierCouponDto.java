@@ -1,6 +1,7 @@
 package com.java110.dto.supplierCoupon;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,12 @@ import java.util.Date;
 public class SupplierCouponDto extends PageDto implements Serializable {
 
     private String supplierName;
-private String supplierId;
-private String name;
-private String businessKey;
-private String remark;
-private String couponId;
-private String valuePrice;
+    private String supplierId;
+    private String name;
+    private String businessKey;
+    private String remark;
+    private String couponId;
+    private String valuePrice;
 
 
     private Date createTime;
@@ -31,43 +32,56 @@ private String valuePrice;
     public String getSupplierName() {
         return supplierName;
     }
-public void setSupplierName(String supplierName) {
+
+    public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
     }
-public String getSupplierId() {
+
+    public String getSupplierId() {
         return supplierId;
     }
-public void setSupplierId(String supplierId) {
+
+    public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getBusinessKey() {
+
+    public String getBusinessKey() {
         return businessKey;
     }
-public void setBusinessKey(String businessKey) {
+
+    public void setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getValuePrice() {
+
+    public String getValuePrice() {
         return valuePrice;
     }
-public void setValuePrice(String valuePrice) {
+
+    public void setValuePrice(String valuePrice) {
         this.valuePrice = valuePrice;
     }
 
