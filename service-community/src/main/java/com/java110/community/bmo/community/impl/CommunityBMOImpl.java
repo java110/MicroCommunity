@@ -289,6 +289,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("添加小区失败");
@@ -322,6 +326,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
@@ -354,7 +362,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
@@ -387,7 +398,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
@@ -420,7 +434,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
@@ -454,7 +471,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
@@ -488,7 +508,10 @@ public class CommunityBMOImpl implements ICommunityBMO {
         businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new IllegalArgumentException("删除小区失败");
