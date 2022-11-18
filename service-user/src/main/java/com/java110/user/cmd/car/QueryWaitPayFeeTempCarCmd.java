@@ -6,6 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.machine.CarInoutDetailDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.intf.common.ICarInoutDetailInnerServiceSMO;
@@ -62,7 +63,7 @@ public class QueryWaitPayFeeTempCarCmd extends Cmd {
 
         CarInoutDetailDto carInoutDetailDto = new CarInoutDetailDto();
         carInoutDetailDto.setMachineId(reqJson.getString("machineId"));
-        carInoutDetailDto.setState(CarInoutDetailDto.STATE_IN_FAIL);
+        carInoutDetailDto.setState(CarInoutDto.STATE_IN_FAIL);
         carInoutDetailDto.setCarInout(CarInoutDetailDto.CAR_INOUT_OUT);
         carInoutDetailDto.setPage(1);
         carInoutDetailDto.setRow(1);
