@@ -93,7 +93,14 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             try {
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
                 //如果金额为0 就排除
-                //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                tmpFeeDto.setFeeTotalPrice(
+                        MoneyUtil.computePriceScale(
+                                tmpFeeDto.getFeePrice(),
+                                tmpFeeDto.getScale(),
+                                Integer.parseInt(tmpFeeDto.getDecimalPlace())
+                        )
+                );
+
                 tmpFeeDto.setVal(val);
                 if (tmpFeeDto.getFeePrice() > 0) {
                     tmpFeeDtos.add(tmpFeeDto);
