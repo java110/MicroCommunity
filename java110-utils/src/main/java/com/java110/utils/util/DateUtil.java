@@ -159,6 +159,7 @@ public class DateUtil {
                 return sDateFormat.parse(date);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
     }
