@@ -130,7 +130,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         if (money <= 0) {
             JSONObject paramOut = new JSONObject();
             paramOut.put("oId", orderId);
-            paramIn.put("payType", TempCarPayOrderDto.PAY_TYPE_WECHAT);
+            paramOut.put("payType", TempCarPayOrderDto.PAY_TYPE_WECHAT);
             String urlOut = "tempCarFee.notifyTempCarFeeOrder";
             responseEntity = this.callCenterService(getHeaders("-1", pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
             JSONObject param = new JSONObject();
