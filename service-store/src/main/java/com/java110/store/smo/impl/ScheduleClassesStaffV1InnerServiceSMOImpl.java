@@ -282,53 +282,58 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
      * @param scheduleClassesStaffDto
      */
     private void staffIsWorkDay(ScheduleClassesDto scheduleClassesDto, ScheduleClassesStaffDto scheduleClassesStaffDto) {
-        String today = DateUtil.getFormatTimeString(scheduleClassesStaffDto.getToday(), DateUtil.DATE_FORMATE_STRING_B);
+        try {
+            String today = DateUtil.getFormatTimeString(scheduleClassesStaffDto.getToday(), DateUtil.DATE_FORMATE_STRING_B);
 
-        int scheduleCycle = Integer.parseInt(scheduleClassesDto.getScheduleCycle());
+            int scheduleCycle = Integer.parseInt(scheduleClassesDto.getScheduleCycle());
 
-        int allDay = DateUtil.daysBetween(scheduleClassesDto.getComputeTime(), today) + 1;
+            int allDay = DateUtil.daysBetween(scheduleClassesDto.getComputeTime(), today) + 1;
 
-        int day = allDay % scheduleCycle;
-
-
-        if (day == 0) {
-            day = scheduleCycle;
-        }
-
-        ScheduleClassesDayDto scheduleClassesDayDto = new ScheduleClassesDayDto();
-        scheduleClassesDayDto.setScheduleId(scheduleClassesDto.getScheduleId());
-        scheduleClassesDayDto.setDay(day + "");
-        List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
-
-        //设置问题 ，这里默认反馈在线
-        if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
-            scheduleClassesStaffDto.setWork(true);
-            return;
-        }
-
-        if(ScheduleClassesDayDto.WORKDAY_NO.equals(scheduleClassesDayDtos.get(0).getWorkday())){
-            scheduleClassesStaffDto.setWork(false);
-            return ;
-        }
+            int day = allDay % scheduleCycle;
 
 
-        List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
+            if (day == 0) {
+                day = scheduleCycle;
+            }
 
-        scheduleClassesStaffDto.setTimes(times);
+            ScheduleClassesDayDto scheduleClassesDayDto = new ScheduleClassesDayDto();
+            scheduleClassesDayDto.setScheduleId(scheduleClassesDto.getScheduleId());
+            scheduleClassesDayDto.setDay(day + "");
+            List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
 
-        String startTime = null;
-        String endTime = null;
-        for (ScheduleClassesTimeDto time : times) {
-
-            startTime = today + " " + time.getStartTime() + ":00";
-            endTime = today + " " + time.getEndTime() + ":00";
-
-            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), DateUtil.getDateFromStringA(startTime), DateUtil.getDateFromStringA(endTime))) {
+            //设置问题 ，这里默认反馈在线
+            if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
+
+            if (ScheduleClassesDayDto.WORKDAY_NO.equals(scheduleClassesDayDtos.get(0).getWorkday())) {
+                scheduleClassesStaffDto.setWork(false);
+                return;
+            }
+
+
+            List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
+
+            scheduleClassesStaffDto.setTimes(times);
+
+            String startTime = null;
+            String endTime = null;
+            for (ScheduleClassesTimeDto time : times) {
+
+                startTime = today + " " + time.getStartTime() + ":00";
+                endTime = today + " " + time.getEndTime() + ":00";
+
+                if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), DateUtil.getDateFromStringA(startTime), DateUtil.getDateFromStringA(endTime))) {
+                    scheduleClassesStaffDto.setWork(true);
+                    return;
+                }
+            }
+            scheduleClassesStaffDto.setWork(false);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
         }
-        scheduleClassesStaffDto.setWork(false);
     }
 
     @Override
