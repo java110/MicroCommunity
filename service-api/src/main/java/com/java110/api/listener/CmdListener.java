@@ -47,6 +47,12 @@ public class CmdListener extends AbstractServiceApiListener {
         Map<String, String> reqHeader = context.getRequestCurrentHeaders();
         HttpHeaders header = new HttpHeaders();
         for (String key : context.getRequestCurrentHeaders().keySet()) {
+            if("user-name".equals(key)){
+                continue;
+            }
+            if("userName".equals(key)){
+                continue;
+            }
             header.add(key, reqHeader.get(key));
         }
         if (reqHeader.containsKey(CommonConstant.USER_ID)
