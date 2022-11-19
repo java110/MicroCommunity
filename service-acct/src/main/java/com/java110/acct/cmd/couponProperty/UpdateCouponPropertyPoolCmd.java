@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.acct.cmd.couponPropertyPool;
+package com.java110.acct.cmd.couponProperty;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -21,37 +21,39 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
-import com.java110.po.couponPropertyPoolConfig.CouponPropertyPoolConfigPo;
+import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
+import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 /**
- * 类表述：删除
- * 服务编码：couponPropertyPoolConfig.deleteCouponPropertyPoolConfig
- * 请求路劲：/app/couponPropertyPoolConfig.DeleteCouponPropertyPoolConfig
- * add by 吴学文 at 2022-11-19 23:41:54 mail: 928255095@qq.com
+ * 类表述：更新
+ * 服务编码：couponProperty.updateCouponPropertyPool
+ * 请求路劲：/app/couponProperty.UpdateCouponPropertyPool
+ * add by 吴学文 at 2022-11-19 23:00:42 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "couponPropertyPool.deleteCouponPropertyPoolConfig")
-public class DeleteCouponPropertyPoolConfigCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteCouponPropertyPoolConfigCmd.class);
+@Java110Cmd(serviceCode = "couponProperty.updateCouponPropertyPool")
+public class UpdateCouponPropertyPoolCmd extends Cmd {
+
+    private static Logger logger = LoggerFactory.getLogger(UpdateCouponPropertyPoolCmd.class);
+
 
     @Autowired
-    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
+    private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "configId", "configId不能为空");
-Assert.hasKeyAndValue(reqJson, "couponId", "couponId不能为空");
+        Assert.hasKeyAndValue(reqJson, "cppId", "cppId不能为空");
 
     }
 
@@ -59,11 +61,11 @@ Assert.hasKeyAndValue(reqJson, "couponId", "couponId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CouponPropertyPoolConfigPo couponPropertyPoolConfigPo = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolConfigPo.class);
-        int flag = couponPropertyPoolConfigV1InnerServiceSMOImpl.deleteCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
+        CouponPropertyPoolPo couponPropertyPoolPo = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolPo.class);
+        int flag = couponPropertyPoolV1InnerServiceSMOImpl.updateCouponPropertyPool(couponPropertyPoolPo);
 
         if (flag < 1) {
-            throw new CmdException("删除数据失败");
+            throw new CmdException("更新数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

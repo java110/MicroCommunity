@@ -16,7 +16,7 @@
 package com.java110.po.couponPropertyPool;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-19 23:00:42 mail: 928255095@qq.com
@@ -28,83 +28,104 @@ import java.util.Date;
 public class CouponPropertyPoolPo implements Serializable {
 
     private String couponName;
-private String toType;
-private String fromType;
-private String validityDay;
-private String cppId;
-private String communityName;
-private String statusCd = "0";
-private String state;
-private String communityId;
-private String stock;
-private String fromId;
-public String getCouponName() {
+    private String toType;
+    private String fromType;
+    private String validityDay;
+    private String cppId;
+    private String communityName;
+    private String statusCd = "0";
+    private String state;
+    private String communityId;
+    private String stock;
+    private String fromId;
+
+    public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getToType() {
+
+    public String getToType() {
         return toType;
     }
-public void setToType(String toType) {
+
+    public void setToType(String toType) {
         this.toType = toType;
     }
-public String getFromType() {
+
+    public String getFromType() {
         return fromType;
     }
-public void setFromType(String fromType) {
+
+    public void setFromType(String fromType) {
         this.fromType = fromType;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getCppId() {
+
+    public String getCppId() {
         return cppId;
     }
-public void setCppId(String cppId) {
+
+    public void setCppId(String cppId) {
         this.cppId = cppId;
     }
-public String getCommunityName() {
+
+    public String getCommunityName() {
         return communityName;
     }
-public void setCommunityName(String communityName) {
+
+    public void setCommunityName(String communityName) {
         this.communityName = communityName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStock() {
+
+    public String getStock() {
         return stock;
     }
-public void setStock(String stock) {
+
+    public void setStock(String stock) {
         this.stock = stock;
     }
-public String getFromId() {
+
+    public String getFromId() {
         return fromId;
     }
-public void setFromId(String fromId) {
+
+    public void setFromId(String fromId) {
         this.fromId = fromId;
     }
-
 
 
 }

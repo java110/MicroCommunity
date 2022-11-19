@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.acct.cmd.couponPropertyPool;
+package com.java110.acct.cmd.couponProperty;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -22,44 +22,41 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
-import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
+import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
+import com.java110.po.couponPropertyPoolConfig.CouponPropertyPoolConfigPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
- * 服务编码：couponPropertyPool.saveCouponPropertyPool
- * 请求路劲：/app/couponPropertyPool.SaveCouponPropertyPool
- * add by 吴学文 at 2022-11-19 23:00:42 mail: 928255095@qq.com
+ * 服务编码：couponPropertyPoolConfig.saveCouponPropertyPoolConfig
+ * 请求路劲：/app/couponPropertyPoolConfig.SaveCouponPropertyPoolConfig
+ * add by 吴学文 at 2022-11-19 23:41:54 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "couponPropertyPool.saveCouponPropertyPool")
-public class SaveCouponPropertyPoolCmd extends Cmd {
+@Java110Cmd(serviceCode = "couponProperty.saveCouponPropertyPoolConfig")
+public class SaveCouponPropertyPoolConfigCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(SaveCouponPropertyPoolCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(SaveCouponPropertyPoolConfigCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
-    private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
+    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "couponName", "请求报文中未包含couponName");
-Assert.hasKeyAndValue(reqJson, "fromType", "请求报文中未包含fromType");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "toType", "请求报文中未包含toType");
-Assert.hasKeyAndValue(reqJson, "stock", "请求报文中未包含stock");
-Assert.hasKeyAndValue(reqJson, "validityDay", "请求报文中未包含validityDay");
+        Assert.hasKeyAndValue(reqJson, "couponId", "请求报文中未包含couponId");
+        Assert.hasKeyAndValue(reqJson, "columnKey", "请求报文中未包含columnKey");
+        Assert.hasKeyAndValue(reqJson, "columnValue", "请求报文中未包含columnValue");
 
     }
 
@@ -67,9 +64,9 @@ Assert.hasKeyAndValue(reqJson, "validityDay", "请求报文中未包含validityD
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CouponPropertyPoolPo couponPropertyPoolPo = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolPo.class);
-        couponPropertyPoolPo.setCppId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = couponPropertyPoolV1InnerServiceSMOImpl.saveCouponPropertyPool(couponPropertyPoolPo);
+        CouponPropertyPoolConfigPo couponPropertyPoolConfigPo = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolConfigPo.class);
+        couponPropertyPoolConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = couponPropertyPoolConfigV1InnerServiceSMOImpl.saveCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

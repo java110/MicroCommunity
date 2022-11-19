@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.acct.cmd.couponPropertyPool;
+package com.java110.acct.cmd.couponProperty;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -21,7 +21,6 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.po.couponPropertyPoolConfig.CouponPropertyPoolConfigPo;
 import com.java110.utils.exception.CmdException;
@@ -29,56 +28,47 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * 类表述：查询
- * 服务编码：couponPropertyPoolConfig.listCouponPropertyPoolConfig
- * 请求路劲：/app/couponPropertyPoolConfig.ListCouponPropertyPoolConfig
+ * 类表述：更新
+ * 服务编码：couponPropertyPoolConfig.updateCouponPropertyPoolConfig
+ * 请求路劲：/app/couponPropertyPoolConfig.UpdateCouponPropertyPoolConfig
  * add by 吴学文 at 2022-11-19 23:41:54 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "couponPropertyPool.listCouponPropertyPoolConfig")
-public class ListCouponPropertyPoolConfigCmd extends Cmd {
+@Java110Cmd(serviceCode = "couponProperty.updateCouponPropertyPoolConfig")
+public class UpdateCouponPropertyPoolConfigCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListCouponPropertyPoolConfigCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(UpdateCouponPropertyPoolConfigCmd.class);
+
+
     @Autowired
     private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "configId", "configId不能为空");
+Assert.hasKeyAndValue(reqJson, "couponId", "couponId不能为空");
+
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolConfigDto.class);
+       CouponPropertyPoolConfigPo couponPropertyPoolConfigPo = BeanConvertUtil.covertBean(reqJson, CouponPropertyPoolConfigPo.class);
+        int flag = couponPropertyPoolConfigV1InnerServiceSMOImpl.updateCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
 
-           int count = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigsCount(couponPropertyPoolConfigDto);
+        if (flag < 1) {
+            throw new CmdException("更新数据失败");
+        }
 
-           List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = null;
-
-           if (count > 0) {
-               couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
-           } else {
-               couponPropertyPoolConfigDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, couponPropertyPoolConfigDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }
