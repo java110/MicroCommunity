@@ -18,8 +18,10 @@
     <!-- 查询优惠券配置信息 add by wuxw 2018-07-03 -->
     <select id="getCouponPropertyPoolConfigInfo" parameterType="Map" resultType="Map">
         select t.config_id,t.config_id configId,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id
-        couponId,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey
+        couponId,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey,ck.`name`
         from coupon_property_pool_config t
+        left join coupon_property_pool cpp on t.coupon_id = cpp.cpp_id and cpp.status_cd = '0'
+        LEFT JOIN coupon_key ck on cpp.to_type = ck.bean_name and t.column_key = ck.column_key and ck.status_cd = '0'
         where 1 =1
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}

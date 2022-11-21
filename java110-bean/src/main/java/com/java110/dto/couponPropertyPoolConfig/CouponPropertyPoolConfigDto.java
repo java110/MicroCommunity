@@ -20,6 +20,7 @@ public class CouponPropertyPoolConfigDto extends PageDto implements Serializable
     private String[] couponIds;
     private String columnValue;
     private String columnKey;
+    private String name;
 
 
     private Date createTime;
@@ -82,5 +83,13 @@ public class CouponPropertyPoolConfigDto extends PageDto implements Serializable
 
     public void setCouponIds(String[] couponIds) {
         this.couponIds = couponIds;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
