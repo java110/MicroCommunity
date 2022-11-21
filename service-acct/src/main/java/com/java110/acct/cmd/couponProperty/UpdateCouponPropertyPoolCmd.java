@@ -15,17 +15,22 @@
  */
 package com.java110.acct.cmd.couponProperty;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
+import com.java110.po.couponPropertyPoolConfig.CouponPropertyPoolConfigPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +56,35 @@ public class UpdateCouponPropertyPoolCmd extends Cmd {
     @Autowired
     private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cppId", "cppId不能为空");
+
+        if(!reqJson.containsKey("toTypes")){
+            throw new CmdException("未包含用途");
+        }
+
+        JSONArray toTypes = reqJson.getJSONArray("toTypes");
+
+        if(toTypes == null || toTypes.size()< 1){
+            throw new CmdException("未包含用途");
+        }
+
+        JSONObject typeObj = null;
+        for(int typeIndex = 0;typeIndex < toTypes.size(); typeIndex++){
+            typeObj = toTypes.getJSONObject(typeIndex);
+            if(!typeObj.containsKey("columnValue")){
+                throw new CmdException(typeObj.getString("name")+"未填写值");
+            }
+
+            if(StringUtil.isEmpty(typeObj.getString("columnValue"))){
+                throw new CmdException(typeObj.getString("name")+"未填写值");
+            }
+        }
 
     }
 
@@ -66,6 +97,25 @@ public class UpdateCouponPropertyPoolCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+        CouponPropertyPoolConfigPo couponPropertyPoolConfigPo = null;
+        couponPropertyPoolConfigPo = new CouponPropertyPoolConfigPo();
+        couponPropertyPoolConfigPo.setCouponId(couponPropertyPoolPo.getCppId());
+
+        couponPropertyPoolConfigV1InnerServiceSMOImpl.deleteCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
+
+        JSONArray toTypes = reqJson.getJSONArray("toTypes");
+
+        JSONObject typeObj = null;
+
+        for(int typeIndex = 0;typeIndex < toTypes.size(); typeIndex++){
+            typeObj = toTypes.getJSONObject(typeIndex);
+            couponPropertyPoolConfigPo = new CouponPropertyPoolConfigPo();
+            couponPropertyPoolConfigPo.setColumnKey(typeObj.getString("columnKey"));
+            couponPropertyPoolConfigPo.setColumnValue(typeObj.getString("columnValue"));
+            couponPropertyPoolConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId("11"));
+            couponPropertyPoolConfigPo.setCouponId(couponPropertyPoolPo.getCppId());
+            couponPropertyPoolConfigV1InnerServiceSMOImpl.saveCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

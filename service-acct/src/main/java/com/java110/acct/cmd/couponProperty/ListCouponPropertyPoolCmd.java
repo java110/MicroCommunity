@@ -20,6 +20,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
+import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,6 +53,9 @@ public class ListCouponPropertyPoolCmd extends Cmd {
     @Autowired
     private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -67,6 +72,7 @@ public class ListCouponPropertyPoolCmd extends Cmd {
 
            if (count > 0) {
                couponPropertyPoolDtos = couponPropertyPoolV1InnerServiceSMOImpl.queryCouponPropertyPools(couponPropertyPoolDto);
+               queryConfigs(couponPropertyPoolDtos);
            } else {
                couponPropertyPoolDtos = new ArrayList<>();
            }
@@ -76,5 +82,33 @@ public class ListCouponPropertyPoolCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryConfigs(List<CouponPropertyPoolDto> couponPropertyPoolDtos) {
+
+        if(couponPropertyPoolDtos == null || couponPropertyPoolDtos.size()<1){
+            return ;
+        }
+        List<String> cppIds = new ArrayList<>();
+
+        for(CouponPropertyPoolDto couponPropertyPoolDto: couponPropertyPoolDtos){
+            cppIds.add(couponPropertyPoolDto.getCppId());
+        }
+
+        CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
+        couponPropertyPoolConfigDto.setCouponIds(cppIds.toArray(new String[cppIds.size()]));
+        List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos
+                = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
+        List<CouponPropertyPoolConfigDto> tmpCouponPropertyPoolConfigDtos = null;
+        for(CouponPropertyPoolDto couponPropertyPoolDto: couponPropertyPoolDtos){
+            tmpCouponPropertyPoolConfigDtos = new ArrayList<>();
+            for(CouponPropertyPoolConfigDto couponPropertyPoolConfigDto1: couponPropertyPoolConfigDtos){
+                if(couponPropertyPoolDto.getCppId().equals(couponPropertyPoolConfigDto1.getCouponId())){
+                    tmpCouponPropertyPoolConfigDtos.add(couponPropertyPoolConfigDto1);
+                }
+            }
+            couponPropertyPoolDto.setConfigs(tmpCouponPropertyPoolConfigDtos);
+        }
+
     }
 }

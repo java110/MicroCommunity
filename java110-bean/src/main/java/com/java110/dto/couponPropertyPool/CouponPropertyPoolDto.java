@@ -1,9 +1,11 @@
 package com.java110.dto.couponPropertyPool;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -21,7 +23,9 @@ public class CouponPropertyPoolDto extends PageDto implements Serializable {
 
     private String couponName;
     private String toType;
+    private String toTypeName;
     private String fromType;
+    private String fromTypeName;
     private String validityDay;
     private String cppId;
     private String communityName;
@@ -34,6 +38,8 @@ public class CouponPropertyPoolDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    List<CouponPropertyPoolConfigDto> configs;
 
 
     public String getCouponName() {
@@ -131,5 +137,29 @@ public class CouponPropertyPoolDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getToTypeName() {
+        return toTypeName;
+    }
+
+    public void setToTypeName(String toTypeName) {
+        this.toTypeName = toTypeName;
+    }
+
+    public String getFromTypeName() {
+        return fromTypeName;
+    }
+
+    public void setFromTypeName(String fromTypeName) {
+        this.fromTypeName = fromTypeName;
+    }
+
+    public List<CouponPropertyPoolConfigDto> getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(List<CouponPropertyPoolConfigDto> configs) {
+        this.configs = configs;
     }
 }

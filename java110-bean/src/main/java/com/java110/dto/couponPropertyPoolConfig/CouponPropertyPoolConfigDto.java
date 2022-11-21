@@ -1,6 +1,7 @@
 package com.java110.dto.couponPropertyPoolConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class CouponPropertyPoolConfigDto extends PageDto implements Serializable {
 
     private String configId;
-private String couponId;
-private String columnValue;
-private String columnKey;
+    private String couponId;
+    private String[] couponIds;
+    private String columnValue;
+    private String columnKey;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String columnKey;
     public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getColumnValue() {
+
+    public String getColumnValue() {
         return columnValue;
     }
-public void setColumnValue(String columnValue) {
+
+    public void setColumnValue(String columnValue) {
         this.columnValue = columnValue;
     }
-public String getColumnKey() {
+
+    public String getColumnKey() {
         return columnKey;
     }
-public void setColumnKey(String columnKey) {
+
+    public void setColumnKey(String columnKey) {
         this.columnKey = columnKey;
     }
 
@@ -65,5 +74,13 @@ public void setColumnKey(String columnKey) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getCouponIds() {
+        return couponIds;
+    }
+
+    public void setCouponIds(String[] couponIds) {
+        this.couponIds = couponIds;
     }
 }

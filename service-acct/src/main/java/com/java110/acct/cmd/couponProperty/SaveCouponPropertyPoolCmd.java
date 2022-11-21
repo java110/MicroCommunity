@@ -25,14 +25,18 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.couponPropertyPool.CouponPropertyPoolDto;
+import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
+import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
+import com.java110.po.couponPropertyPoolConfig.CouponPropertyPoolConfigPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import com.sun.tools.javah.Gen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +62,9 @@ public class SaveCouponPropertyPoolCmd extends Cmd {
 
     @Autowired
     private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
@@ -116,7 +123,19 @@ public class SaveCouponPropertyPoolCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
+        JSONArray toTypes = reqJson.getJSONArray("toTypes");
 
+        JSONObject typeObj = null;
+        CouponPropertyPoolConfigPo couponPropertyPoolConfigPo = null;
+        for(int typeIndex = 0;typeIndex < toTypes.size(); typeIndex++){
+            typeObj = toTypes.getJSONObject(typeIndex);
+            couponPropertyPoolConfigPo = new CouponPropertyPoolConfigPo();
+            couponPropertyPoolConfigPo.setColumnKey(typeObj.getString("columnKey"));
+            couponPropertyPoolConfigPo.setColumnValue(typeObj.getString("columnValue"));
+            couponPropertyPoolConfigPo.setConfigId(GenerateCodeFactory.getGeneratorId("11"));
+            couponPropertyPoolConfigPo.setCouponId(couponPropertyPoolPo.getCppId());
+            couponPropertyPoolConfigV1InnerServiceSMOImpl.saveCouponPropertyPoolConfig(couponPropertyPoolConfigPo);
+        }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
