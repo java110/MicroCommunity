@@ -16,7 +16,7 @@
 package com.java110.po.couponPropertyUserDetail;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-21 12:30:26 mail: 928255095@qq.com
@@ -28,62 +28,77 @@ import java.util.Date;
 public class CouponPropertyUserDetailPo implements Serializable {
 
     private String detailType;
-private String couponName;
-private String uoId;
-private String businessKey;
-private String remark;
-private String statusCd = "0";
-private String couponId;
-private String communityId;
-public String getDetailType() {
+    private String couponName;
+    private String uoId;
+    private String businessKey;
+    private String remark;
+    private String statusCd = "0";
+    private String couponId;
+    private String communityId;
+
+    public String getDetailType() {
         return detailType;
     }
-public void setDetailType(String detailType) {
+
+    public void setDetailType(String detailType) {
         this.detailType = detailType;
     }
-public String getCouponName() {
+
+    public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getUoId() {
+
+    public String getUoId() {
         return uoId;
     }
-public void setUoId(String uoId) {
+
+    public void setUoId(String uoId) {
         this.uoId = uoId;
     }
-public String getBusinessKey() {
+
+    public String getBusinessKey() {
         return businessKey;
     }
-public void setBusinessKey(String businessKey) {
+
+    public void setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

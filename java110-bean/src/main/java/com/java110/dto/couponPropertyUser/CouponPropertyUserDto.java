@@ -1,6 +1,7 @@
 package com.java110.dto.couponPropertyUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,17 +16,17 @@ import java.util.Date;
 public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     private String couponName;
-private String toType;
-private String validityDay;
-private String couponId;
-private String userName;
-private String userId;
-private String cppId;
-private String tel;
-private String state;
-private String stock;
-private String communityId;
-private String value;
+    private String toType;
+    private String validityDay;
+    private String couponId;
+    private String userName;
+    private String userId;
+    private String cppId;
+    private String tel;
+    private String state;
+    private String stock;
+    private String communityId;
+    private String value;
 
 
     private Date createTime;
@@ -36,73 +37,96 @@ private String value;
     public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getToType() {
+
+    public String getToType() {
         return toType;
     }
-public void setToType(String toType) {
+
+    public void setToType(String toType) {
         this.toType = toType;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getCppId() {
+
+    public String getCppId() {
         return cppId;
     }
-public void setCppId(String cppId) {
+
+    public void setCppId(String cppId) {
         this.cppId = cppId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStock() {
+
+    public String getStock() {
         return stock;
     }
-public void setStock(String stock) {
+
+    public void setStock(String stock) {
         this.stock = stock;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
 
