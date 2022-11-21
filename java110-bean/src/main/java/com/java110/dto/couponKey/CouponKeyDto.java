@@ -1,6 +1,7 @@
 package com.java110.dto.couponKey;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,10 @@ import java.util.Date;
 public class CouponKeyDto extends PageDto implements Serializable {
 
     private String name;
-private String keyId;
-private String beanName;
-private String remark;
-private String columnKey;
+    private String keyId;
+    private String beanName;
+    private String remark;
+    private String columnKey;
 
 
     private Date createTime;
@@ -29,31 +30,40 @@ private String columnKey;
     public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getKeyId() {
+
+    public String getKeyId() {
         return keyId;
     }
-public void setKeyId(String keyId) {
+
+    public void setKeyId(String keyId) {
         this.keyId = keyId;
     }
-public String getBeanName() {
+
+    public String getBeanName() {
         return beanName;
     }
-public void setBeanName(String beanName) {
+
+    public void setBeanName(String beanName) {
         this.beanName = beanName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getColumnKey() {
+
+    public String getColumnKey() {
         return columnKey;
     }
-public void setColumnKey(String columnKey) {
+
+    public void setColumnKey(String columnKey) {
         this.columnKey = columnKey;
     }
 

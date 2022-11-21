@@ -15,6 +15,7 @@
  */
 package com.java110.acct.cmd.couponProperty;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -30,6 +31,7 @@ import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,28 @@ public class SaveCouponPropertyPoolCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "stock", "请求报文中未包含stock");
         Assert.hasKeyAndValue(reqJson, "validityDay", "请求报文中未包含validityDay");
 
+        if(!reqJson.containsKey("toTypes")){
+            throw new CmdException("未包含用途");
+        }
+
+        JSONArray toTypes = reqJson.getJSONArray("toTypes");
+
+        if(toTypes == null || toTypes.size()< 1){
+            throw new CmdException("未包含用途");
+        }
+
+        JSONObject typeObj = null;
+        for(int typeIndex = 0;typeIndex < toTypes.size(); typeIndex++){
+            typeObj = toTypes.getJSONObject(typeIndex);
+            if(!typeObj.containsKey("columnValue")){
+                throw new CmdException(typeObj.getString("name")+"未填写值");
+            }
+
+            if(StringUtil.isEmpty(typeObj.getString("columnValue"))){
+                throw new CmdException(typeObj.getString("name")+"未填写值");
+            }
+        }
+
     }
 
     @Override
@@ -91,6 +115,8 @@ public class SaveCouponPropertyPoolCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

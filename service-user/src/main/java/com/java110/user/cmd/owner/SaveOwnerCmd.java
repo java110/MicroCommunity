@@ -15,6 +15,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
@@ -56,6 +57,9 @@ public class SaveOwnerCmd extends Cmd {
 
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
