@@ -46,7 +46,7 @@ import java.nio.charset.Charset;
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
         basePackages = {"com.java110.acct.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store",
-        "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.user"})
+        "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.user","com.java110.intf.scm"})
 
 //文档
 @Java110CmdDocDiscovery(basePackages = {"com.java110.acct.cmd","com.java110.acct.payment.business"},cmdDocClass = ApiDocCmdPublishing.class)
