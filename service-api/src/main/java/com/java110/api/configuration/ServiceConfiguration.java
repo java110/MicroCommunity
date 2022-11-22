@@ -85,6 +85,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/equipmentAccount.listEquipmentAccount,");
         exclusions.append("/app/inspectionTaskDetail.listInspectionTaskDetails,");
         exclusions.append("/app/maintainanceTask.listMaintainanceTaskDetail,");
+        exclusions.append("/app/parkingCoupon.saveParkingCouponCar,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
