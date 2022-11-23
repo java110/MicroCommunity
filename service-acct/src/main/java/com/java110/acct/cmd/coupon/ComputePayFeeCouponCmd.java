@@ -106,7 +106,6 @@ public class ComputePayFeeCouponCmd extends Cmd {
             context.setResponseEntity(ResultVo.createResponseEntity(new JSONArray()));
             return ;
         }
-
         context.setResponseEntity(ResultVo.createResponseEntity(couponRuleCppsDtos));
     }
 }

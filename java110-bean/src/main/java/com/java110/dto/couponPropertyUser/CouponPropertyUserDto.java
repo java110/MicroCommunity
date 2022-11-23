@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CouponPropertyUserDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT = "1001";
+    public static final String STATE_FINISH = "2002";
+
     private String couponName;
     private String toType;
     private String validityDay;
