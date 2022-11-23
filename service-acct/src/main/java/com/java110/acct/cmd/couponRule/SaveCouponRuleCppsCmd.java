@@ -22,15 +22,16 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.couponRuleCpps.CouponRuleCppsDto;
 import com.java110.intf.acct.ICouponRuleCppsV1InnerServiceSMO;
 import com.java110.po.couponRuleCpps.CouponRuleCppsPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 类表述：保存
@@ -55,9 +56,20 @@ public class SaveCouponRuleCppsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
-Assert.hasKeyAndValue(reqJson, "cppId", "请求报文中未包含cppId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "quantity", "请求报文中未包含quantity");
+        Assert.hasKeyAndValue(reqJson, "cppId", "请求报文中未包含cppId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "quantity", "请求报文中未包含quantity");
+
+        //查询 规则是否已经关联过 优惠券
+
+        CouponRuleCppsDto couponRuleCppsDto = new CouponRuleCppsDto();
+        couponRuleCppsDto.setRuleId(reqJson.getString("ruleId"));
+        couponRuleCppsDto.setCppId(reqJson.getString("cppId"));
+        int count = couponRuleCppsV1InnerServiceSMOImpl.queryCouponRuleCppssCount(couponRuleCppsDto);
+
+        if(count > 0){
+            throw new CmdException("该优惠券已经关联过");
+        }
 
     }
 
@@ -65,7 +77,7 @@ Assert.hasKeyAndValue(reqJson, "quantity", "请求报文中未包含quantity");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CouponRuleCppsPo couponRuleCppsPo = BeanConvertUtil.covertBean(reqJson, CouponRuleCppsPo.class);
+        CouponRuleCppsPo couponRuleCppsPo = BeanConvertUtil.covertBean(reqJson, CouponRuleCppsPo.class);
         couponRuleCppsPo.setCrcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = couponRuleCppsV1InnerServiceSMOImpl.saveCouponRuleCpps(couponRuleCppsPo);
 
