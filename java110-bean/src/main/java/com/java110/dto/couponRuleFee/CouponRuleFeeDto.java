@@ -23,6 +23,8 @@ public class CouponRuleFeeDto extends PageDto implements Serializable {
     private String communityId;
     private String feeConfigId;
     private String feeConfigName;
+    private String curTime;
+    private String cycle;
 
 
     private Date createTime;
@@ -109,5 +111,21 @@ public class CouponRuleFeeDto extends PageDto implements Serializable {
 
     public void setFeeConfigName(String feeConfigName) {
         this.feeConfigName = feeConfigName;
+    }
+
+    public String getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(String curTime) {
+        this.curTime = curTime;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
     }
 }

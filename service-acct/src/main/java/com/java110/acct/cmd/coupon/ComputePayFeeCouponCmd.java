@@ -1,19 +1,31 @@
 package com.java110.acct.cmd.coupon;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.couponRuleCpps.CouponRuleCppsDto;
+import com.java110.dto.couponRuleFee.CouponRuleFeeDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.intf.acct.ICouponRuleCppsV1InnerServiceSMO;
+import com.java110.intf.acct.ICouponRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Java110CmdDoc(title = "根据费用计算优惠券",
         description = "缴费时计算费用 是否有优惠券",
-        httpMethod = "post",
+        httpMethod = "get",
         url = "http://{ip}:{port}/app/coupon.computePayFeeCoupon",
         resource = "acctDoc",
         author = "吴学文",
@@ -42,6 +54,16 @@ import java.text.ParseException;
 )
 @Java110Cmd(serviceCode = "coupon.computePayFeeCoupon")
 public class ComputePayFeeCouponCmd extends Cmd {
+
+    @Autowired
+    private ICouponRuleFeeV1InnerServiceSMO couponRuleFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICouponRuleCppsV1InnerServiceSMO couponRuleCppsV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
@@ -53,6 +75,38 @@ public class ComputePayFeeCouponCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(reqJson.getString("feeId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
+        Assert.listOnlyOne(feeDtos,"费用不存在");
+
+        CouponRuleFeeDto couponRuleFeeDto = new CouponRuleFeeDto();
+        couponRuleFeeDto.setFeeConfigId(feeDtos.get(0).getConfigId());
+        couponRuleFeeDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        couponRuleFeeDto.setCommunityId(reqJson.getString("communityId"));
+        couponRuleFeeDto.setCycle(reqJson.getString("cycle"));
+        List<CouponRuleFeeDto> couponRuleFeeDtos = couponRuleFeeV1InnerServiceSMOImpl.queryCouponRuleFees(couponRuleFeeDto);
+
+        if(couponRuleFeeDtos == null || couponRuleFeeDtos.size()<1){
+            context.setResponseEntity(ResultVo.createResponseEntity(new JSONArray()));
+            return ;
+        }
+
+        List<String> ruleIds = new ArrayList<>();
+        for(CouponRuleFeeDto tmpCouponRuleFeeDto: couponRuleFeeDtos){
+            ruleIds.add(tmpCouponRuleFeeDto.getRuleId());
+        }
+
+        CouponRuleCppsDto couponRuleCppsDto = new CouponRuleCppsDto();
+        couponRuleCppsDto.setRuleIds(ruleIds.toArray(new String[ruleIds.size()]));
+        List<CouponRuleCppsDto> couponRuleCppsDtos = couponRuleCppsV1InnerServiceSMOImpl.queryCouponRuleCppss(couponRuleCppsDto);
+
+        if(couponRuleCppsDtos == null || couponRuleCppsDtos.size() < 1){
+            context.setResponseEntity(ResultVo.createResponseEntity(new JSONArray()));
+            return ;
+        }
+
+        context.setResponseEntity(ResultVo.createResponseEntity(couponRuleCppsDtos));
     }
 }

@@ -20,7 +20,10 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
     private String cppId;
     private String couponName;
     private String ruleId;
+    private String ruleName;
+    private String toTypeName;
     private String communityId;
+    private String[] ruleIds;
 
 
     private Date createTime;
@@ -91,5 +94,29 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
 
     public void setCouponName(String couponName) {
         this.couponName = couponName;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getToTypeName() {
+        return toTypeName;
+    }
+
+    public void setToTypeName(String toTypeName) {
+        this.toTypeName = toTypeName;
     }
 }
