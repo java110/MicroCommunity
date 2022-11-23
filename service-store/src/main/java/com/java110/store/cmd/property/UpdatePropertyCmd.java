@@ -119,6 +119,7 @@ public class UpdatePropertyCmd extends Cmd {
                 StoreAttrPo storeAttrPo = new StoreAttrPo();
                 storeAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
                 storeAttrPo.setSpecCd(StoreAttrDto.SPEC_CD_CORPORATION);
+                storeAttrPo.setStoreId(storePo.getStoreId());
                 storeAttrPo.setValue(reqJson.getString("corporation"));
                 flag = storeAttrV1InnerServiceSMOImpl.saveStoreAttr(storeAttrPo);
             } else {
