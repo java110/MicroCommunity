@@ -8,9 +8,9 @@
     <!-- 保存规则费用信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponRuleFeeInfo" parameterType="Map">
         insert into coupon_rule_fee(
-        pay_month,pay_start_time,pay_end_time,crf_id,rule_id,community_id,fee_config_id
+        pay_month,pay_start_time,pay_end_time,crf_id,rule_id,community_id,fee_config_id,fee_config_name
         ) values (
-        #{payMonth},#{payStartTime},#{payEndTime},#{crfId},#{ruleId},#{communityId},#{feeConfigId}
+        #{payMonth},#{payStartTime},#{payEndTime},#{crfId},#{ruleId},#{communityId},#{feeConfigId},#{feeConfigName}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.pay_month,t.pay_month payMonth,t.pay_start_time,t.pay_start_time
         payStartTime,t.pay_end_time,t.pay_end_time payEndTime,t.crf_id,t.crf_id crfId,t.status_cd,t.status_cd
         statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,t.fee_config_id,t.fee_config_id
-        feeConfigId
+        feeConfigId,t.fee_config_name feeConfigName
         from coupon_rule_fee t
         where 1 =1
         <if test="payMonth !=null and payMonth != ''">
@@ -78,6 +78,9 @@
         </if>
         <if test="feeConfigId !=null and feeConfigId != ''">
             , t.fee_config_id= #{feeConfigId}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            , t.fee_config_name= #{feeConfigName}
         </if>
         where 1=1
         <if test="crfId !=null and crfId != ''">

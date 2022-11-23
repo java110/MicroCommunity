@@ -21,16 +21,19 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.acct.ICouponRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.couponRuleFee.CouponRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 /**
@@ -46,16 +49,19 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "couponRule.updateCouponRuleFee")
 public class UpdateCouponRuleFeeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateCouponRuleFeeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateCouponRuleFeeCmd.class);
 
 
     @Autowired
     private ICouponRuleFeeV1InnerServiceSMO couponRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "crfId", "crfId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,7 +69,15 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CouponRuleFeePo couponRuleFeePo = BeanConvertUtil.covertBean(reqJson, CouponRuleFeePo.class);
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
+
+        CouponRuleFeePo couponRuleFeePo = BeanConvertUtil.covertBean(reqJson, CouponRuleFeePo.class);
+        couponRuleFeePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
+
         int flag = couponRuleFeeV1InnerServiceSMOImpl.updateCouponRuleFee(couponRuleFeePo);
 
         if (flag < 1) {

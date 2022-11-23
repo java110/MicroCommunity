@@ -22,15 +22,20 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.couponRuleFee.CouponRuleFeeDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.acct.ICouponRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.couponRuleFee.CouponRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,14 +57,27 @@ public class SaveCouponRuleFeeCmd extends Cmd {
     @Autowired
     private ICouponRuleFeeV1InnerServiceSMO couponRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
-Assert.hasKeyAndValue(reqJson, "feeConfigId", "请求报文中未包含feeConfigId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "payStartTime", "请求报文中未包含payStartTime");
-Assert.hasKeyAndValue(reqJson, "payEndTime", "请求报文中未包含payEndTime");
-Assert.hasKeyAndValue(reqJson, "payMonth", "请求报文中未包含payMonth");
+        Assert.hasKeyAndValue(reqJson, "feeConfigId", "请求报文中未包含feeConfigId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "payStartTime", "请求报文中未包含payStartTime");
+        Assert.hasKeyAndValue(reqJson, "payEndTime", "请求报文中未包含payEndTime");
+        Assert.hasKeyAndValue(reqJson, "payMonth", "请求报文中未包含payMonth");
+
+        CouponRuleFeeDto couponRuleFeeDto = new CouponRuleFeeDto();
+        couponRuleFeeDto.setRuleId(reqJson.getString("ruleId"));
+        couponRuleFeeDto.setFeeConfigId(reqJson.getString("feeConfigId"));
+        long count = couponRuleFeeV1InnerServiceSMOImpl.queryCouponRuleFeesCount(couponRuleFeeDto);
+
+        if(count > 0){
+            throw new CmdException("费用项已经关联");
+        }
 
     }
 
@@ -67,8 +85,15 @@ Assert.hasKeyAndValue(reqJson, "payMonth", "请求报文中未包含payMonth");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       CouponRuleFeePo couponRuleFeePo = BeanConvertUtil.covertBean(reqJson, CouponRuleFeePo.class);
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
+
+        CouponRuleFeePo couponRuleFeePo = BeanConvertUtil.covertBean(reqJson, CouponRuleFeePo.class);
         couponRuleFeePo.setCrfId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        couponRuleFeePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
         int flag = couponRuleFeeV1InnerServiceSMOImpl.saveCouponRuleFee(couponRuleFeePo);
 
         if (flag < 1) {
