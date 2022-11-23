@@ -69,7 +69,7 @@ public class ComputePayFeeCouponCmd extends Cmd {
 
         Assert.hasKeyAndValue(reqJson,"feeId","未包含费用");
         Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        Assert.hasKeyAndValue(reqJson,"cycle","未包含缴费周期");
+        Assert.hasKeyAndValue(reqJson,"cycles","未包含缴费周期");
 
     }
 
@@ -85,7 +85,7 @@ public class ComputePayFeeCouponCmd extends Cmd {
         couponRuleFeeDto.setFeeConfigId(feeDtos.get(0).getConfigId());
         couponRuleFeeDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         couponRuleFeeDto.setCommunityId(reqJson.getString("communityId"));
-        couponRuleFeeDto.setCycle(reqJson.getString("cycle"));
+        couponRuleFeeDto.setCycle(reqJson.getString("cycles"));
         List<CouponRuleFeeDto> couponRuleFeeDtos = couponRuleFeeV1InnerServiceSMOImpl.queryCouponRuleFees(couponRuleFeeDto);
 
         if(couponRuleFeeDtos == null || couponRuleFeeDtos.size()<1){
