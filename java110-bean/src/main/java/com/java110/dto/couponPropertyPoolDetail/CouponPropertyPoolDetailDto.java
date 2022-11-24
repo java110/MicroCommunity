@@ -1,6 +1,7 @@
 package com.java110.dto.couponPropertyPoolDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,14 @@ import java.util.Date;
 public class CouponPropertyPoolDetailDto extends PageDto implements Serializable {
 
     private String couponName;
-private String detailId;
-private String cppId;
-private String tel;
-private String communityId;
-private String sendCount;
-private String userName;
-private String value;
-private String userId;
+    private String detailId;
+    private String cppId;
+    private String tel;
+    private String communityId;
+    private String sendCount;
+    private String userName;
+    private String value;
+    private String couponUserId;
 
 
     private Date createTime;
@@ -33,58 +34,75 @@ private String userId;
     public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getCppId() {
+
+    public String getCppId() {
         return cppId;
     }
-public void setCppId(String cppId) {
+
+    public void setCppId(String cppId) {
         this.cppId = cppId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSendCount() {
+
+    public String getSendCount() {
         return sendCount;
     }
-public void setSendCount(String sendCount) {
+
+    public void setSendCount(String sendCount) {
         this.sendCount = sendCount;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-public String getUserId() {
-        return userId;
-    }
-public void setUserId(String userId) {
-        this.userId = userId;
+
+
+    public String getCouponUserId() {
+        return couponUserId;
     }
 
+    public void setCouponUserId(String couponUserId) {
+        this.couponUserId = couponUserId;
+    }
 
     public Date getCreateTime() {
         return createTime;
