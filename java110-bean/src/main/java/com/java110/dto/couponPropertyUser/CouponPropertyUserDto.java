@@ -20,6 +20,7 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     private String couponName;
     private String toType;
+    private String toTypeName;
     private String validityDay;
     private String couponId;
     private String userName;
@@ -149,5 +150,13 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getToTypeName() {
+        return toTypeName;
+    }
+
+    public void setToTypeName(String toTypeName) {
+        this.toTypeName = toTypeName;
     }
 }
