@@ -71,7 +71,8 @@ public class CouponPropertyPoolDetailV1ServiceDaoImpl extends BaseServiceDao imp
     public List<Map> getCouponPropertyPoolDetailInfo(Map info) throws DAOException {
         logger.debug("查询 getCouponPropertyPoolDetailInfo 入参 info : {}",info);
 
-        List<Map> businessCouponPropertyPoolDetailInfos = sqlSessionTemplate.selectList("couponPropertyPoolDetailV1ServiceDaoImpl.getCouponPropertyPoolDetailInfo",info);
+        List<Map> businessCouponPropertyPoolDetailInfos
+                = sqlSessionTemplate.selectList("couponPropertyPoolDetailV1ServiceDaoImpl.getCouponPropertyPoolDetailInfo",info);
 
         return businessCouponPropertyPoolDetailInfos;
     }

@@ -76,7 +76,8 @@ public class CouponPropertyPoolDetailV1InnerServiceSMOImpl extends BaseServiceSM
             couponPropertyPoolDetailDto.setPage((page - 1) * couponPropertyPoolDetailDto.getRow());
         }
 
-        List<CouponPropertyPoolDetailDto> couponPropertyPoolDetails = BeanConvertUtil.covertBeanList(couponPropertyPoolDetailV1ServiceDaoImpl.getCouponPropertyPoolDetailInfo(BeanConvertUtil.beanCovertMap(couponPropertyPoolDetailDto)), CouponPropertyPoolDetailDto.class);
+        List<CouponPropertyPoolDetailDto> couponPropertyPoolDetails = BeanConvertUtil.covertBeanList(
+                couponPropertyPoolDetailV1ServiceDaoImpl.getCouponPropertyPoolDetailInfo(BeanConvertUtil.beanCovertMap(couponPropertyPoolDetailDto)), CouponPropertyPoolDetailDto.class);
 
         return couponPropertyPoolDetails;
     }
