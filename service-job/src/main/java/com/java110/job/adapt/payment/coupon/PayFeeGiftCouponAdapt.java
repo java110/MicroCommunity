@@ -257,7 +257,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 
             //用户账户写入优惠券
             CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
-            couponPropertyUserDto.setUserId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
+            couponPropertyUserDto.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
             couponPropertyUserDto.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
             couponPropertyUserDto.setCppId(couponPropertyPoolDtos.get(0).getCppId());
 
