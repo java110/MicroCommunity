@@ -20,7 +20,7 @@
         select t.coupon_name,t.coupon_name couponName,t.to_type,t.to_type toType,t.validity_day,t.validity_day
         validityDay,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id couponId,t.user_name,t.user_name
         userName,t.user_id,t.user_id couponUserId,t.cpp_id,t.cpp_id cppId,t.tel,t.state,t.stock,t.community_id,t.community_id
-        communityId,t.value,td.`name` toTypeName
+        communityId,t.value,td.`name` toTypeName,t.create_time createTime
         from coupon_property_user t
         left join t_dict td on td.status_cd = t.to_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'to_type'
         where 1 =1
