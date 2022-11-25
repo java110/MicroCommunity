@@ -58,6 +58,8 @@ public class ListCouponRuleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+
+        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
     }
 
     @Override
