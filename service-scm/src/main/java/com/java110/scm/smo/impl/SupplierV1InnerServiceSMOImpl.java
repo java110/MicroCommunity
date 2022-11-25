@@ -16,10 +16,19 @@
 package com.java110.scm.smo.impl;
 
 
+import com.java110.dto.couponPropertyPool.CouponPropertyPoolDto;
+import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
+import com.java110.dto.couponPropertyUser.CouponQrCodeDto;
+import com.java110.dto.supplierCoupon.SupplierCouponDto;
+import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
+import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
 import com.java110.scm.dao.ISupplierV1ServiceDao;
 import com.java110.intf.scm.ISupplierV1InnerServiceSMO;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.po.supplier.SupplierPo;
+import com.java110.scm.supplier.ISupplierAdapt;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -44,6 +53,12 @@ public class SupplierV1InnerServiceSMOImpl extends BaseServiceSMO implements ISu
 
     @Autowired
     private ISupplierV1ServiceDao supplierV1ServiceDaoImpl;
+
+    @Autowired
+    private ICouponPropertyPoolV1InnerServiceSMO couponPropertyPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ISupplierCouponV1InnerServiceSMO supplierCouponV1InnerServiceSMOImpl;
 
 
     @Override
@@ -85,5 +100,31 @@ public class SupplierV1InnerServiceSMOImpl extends BaseServiceSMO implements ISu
     @Override
     public int querySuppliersCount(@RequestBody SupplierDto supplierDto) {
         return supplierV1ServiceDaoImpl.querySuppliersCount(BeanConvertUtil.beanCovertMap(supplierDto));    }
+
+    @Override
+    public CouponQrCodeDto generatorQrcode(@RequestBody CouponPropertyUserDto couponPropertyUserDto) {
+
+        CouponPropertyPoolDto couponPropertyPoolDto = new CouponPropertyPoolDto();
+        couponPropertyPoolDto.setCppId(couponPropertyUserDto.getCppId());
+        couponPropertyPoolDto.setCommunityId(couponPropertyUserDto.getCommunityId());
+        List<CouponPropertyPoolDto> couponPropertyPoolDtos = couponPropertyPoolV1InnerServiceSMOImpl.queryCouponPropertyPools(couponPropertyPoolDto);
+
+        Assert.listOnlyOne(couponPropertyPoolDtos, "优惠券不存在");
+
+
+        SupplierCouponDto supplierCouponDto = new SupplierCouponDto();
+        supplierCouponDto.setCouponId(couponPropertyPoolDtos.get(0).getFromId());
+        List<SupplierCouponDto> supplierCouponDtos = supplierCouponV1InnerServiceSMOImpl.querySupplierCoupons(supplierCouponDto);
+
+        Assert.listOnlyOne(supplierCouponDtos,"供应商优惠券不存在");
+
+        SupplierDto supplierDto = new SupplierDto();
+        supplierDto.setSupplierId(supplierCouponDtos.get(0).getSupplierId());
+        List<SupplierDto> supplierDtos = querySuppliers(supplierDto);
+        Assert.listOnlyOne(supplierDtos,"供应商不存在:"+supplierCouponDtos.get(0).getSupplierId());
+
+        ISupplierAdapt supplierAdapt = ApplicationContextFactory.getBean(supplierDtos.get(0).getBeanName(),ISupplierAdapt.class);
+        return supplierAdapt.generatorQrcode(couponPropertyUserDto,supplierDtos.get(0),supplierCouponDtos.get(0));
+    }
 
 }

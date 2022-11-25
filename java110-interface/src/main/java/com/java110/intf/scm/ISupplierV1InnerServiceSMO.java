@@ -16,6 +16,8 @@
 package com.java110.intf.scm;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
+import com.java110.dto.couponPropertyUser.CouponQrCodeDto;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.po.supplier.SupplierPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -65,4 +67,7 @@ public interface ISupplierV1InnerServiceSMO {
      */
     @RequestMapping(value = "/querySuppliersCount", method = RequestMethod.POST)
     int querySuppliersCount(@RequestBody SupplierDto supplierDto);
+
+    @RequestMapping(value = "/generatorQrcode", method = RequestMethod.POST)
+    CouponQrCodeDto generatorQrcode(@RequestBody CouponPropertyUserDto couponPropertyUserDto);
 }
