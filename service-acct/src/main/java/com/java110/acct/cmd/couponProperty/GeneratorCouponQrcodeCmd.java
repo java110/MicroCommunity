@@ -9,7 +9,9 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
 import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
 import com.java110.dto.couponPropertyUser.CouponQrCodeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -56,6 +58,9 @@ public class GeneratorCouponQrcodeCmd extends Cmd {
     @Autowired
     private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "couponId", "未包含优惠券ID");
@@ -68,10 +73,14 @@ public class GeneratorCouponQrcodeCmd extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
 
         //校验优惠券是否存在
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos,"用户不存在");
 
         CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
         couponPropertyUserDto.setCouponId(reqJson.getString("couponId"));
-        couponPropertyUserDto.setCouponUserId(userId);
+        couponPropertyUserDto.setTel(userDtos.get(0).getTel());
         couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
 
         List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
