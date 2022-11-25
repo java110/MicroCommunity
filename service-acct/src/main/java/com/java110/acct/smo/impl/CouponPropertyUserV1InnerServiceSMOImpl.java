@@ -17,6 +17,7 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.ICouponPropertyUserV1ServiceDao;
+import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
 import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
@@ -24,6 +25,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,8 +79,30 @@ public class CouponPropertyUserV1InnerServiceSMOImpl extends BaseServiceSMO impl
         }
 
         List<CouponPropertyUserDto> couponPropertyUsers = BeanConvertUtil.covertBeanList(couponPropertyUserV1ServiceDaoImpl.getCouponPropertyUserInfo(BeanConvertUtil.beanCovertMap(couponPropertyUserDto)), CouponPropertyUserDto.class);
-
+        resfEndTime(couponPropertyUsers);
         return couponPropertyUsers;
+    }
+
+
+    private void resfEndTime(List<CouponPropertyUserDto> couponUsers) {
+        if (couponUsers == null || couponUsers.size() < 1) {
+            return;
+        }
+
+        for (CouponPropertyUserDto couponUser : couponUsers) {
+
+            try {
+                couponUser.setEndTime(DateUtil.getAddDayString(couponUser.getCreateTime(),DateUtil.DATE_FORMATE_STRING_B,Integer.parseInt(couponUser.getValidityDay())));
+                //不计算已过期购物券金额
+                if (couponUser.getEndTime().compareTo(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)) >= 0) {
+                    couponUser.setIsExpire("Y");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
 

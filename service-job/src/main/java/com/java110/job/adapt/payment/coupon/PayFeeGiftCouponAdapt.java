@@ -256,14 +256,14 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponPropertyPoolV1InnerServiceSMOImpl.updateCouponPropertyPool(couponPropertyPoolPo);
 
             //用户账户写入优惠券
-            CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
-            couponPropertyUserDto.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
-            couponPropertyUserDto.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
-            couponPropertyUserDto.setCppId(couponPropertyPoolDtos.get(0).getCppId());
-
-            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
+//            CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
+//            couponPropertyUserDto.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
+//            couponPropertyUserDto.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
+//            couponPropertyUserDto.setCppId(couponPropertyPoolDtos.get(0).getCppId());
+//
+//            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
             CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
-            if(couponPropertyUserDtos == null || couponPropertyUserDtos.size()< 1){
+//            if(couponPropertyUserDtos == null || couponPropertyUserDtos.size()< 1){
                 couponPropertyUserPo.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
                 couponPropertyUserPo.setCppId(couponPropertyPoolDtos.get(0).getCppId());
                 couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_WAIT);
@@ -277,12 +277,13 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
                 couponPropertyUserPo.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
                 couponPropertyUserPo.setValue(value);
                 couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
-            }else{
-                couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
-                int userStock = Integer.parseInt(couponPropertyUserDtos.get(0).getStock());
-                couponPropertyUserPo.setStock((quantity+userStock)+"");
-                couponPropertyUserV1InnerServiceSMOImpl.updateCouponPropertyUser(couponPropertyUserPo);
-            }
+                //这里更新功能 关闭 因为优惠券有有效期 如果 修改显然不合适 modify by  2022-11-24 wuxw
+//            }else{
+//                couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
+//                int userStock = Integer.parseInt(couponPropertyUserDtos.get(0).getStock());
+//                couponPropertyUserPo.setStock((quantity+userStock)+"");
+//                couponPropertyUserV1InnerServiceSMOImpl.updateCouponPropertyUser(couponPropertyUserPo);
+//            }
 
 
         } finally {

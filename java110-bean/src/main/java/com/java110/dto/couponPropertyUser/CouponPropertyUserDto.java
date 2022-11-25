@@ -32,6 +32,9 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
     private String communityId;
     private String value;
 
+    private String endTime;
+    private String isExpire;
+
 
     private Date createTime;
 
@@ -158,5 +161,21 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     public void setToTypeName(String toTypeName) {
         this.toTypeName = toTypeName;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire;
     }
 }
