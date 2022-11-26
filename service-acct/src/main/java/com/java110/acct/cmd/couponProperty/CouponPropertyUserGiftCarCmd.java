@@ -189,6 +189,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         ParkingCouponCarPo parkingCouponCarPo = new ParkingCouponCarPo();
         parkingCouponCarPo.setPccId(GenerateCodeFactory.getGeneratorId("11"));
         parkingCouponCarPo.setCouponId(reqJson.getString("couponId"));
+        parkingCouponCarPo.setCouponShopId(reqJson.getString("couponId"));
         parkingCouponCarPo.setCommunityId(reqJson.getString("communityId"));
         parkingCouponCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A, 1));
@@ -197,6 +198,9 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         parkingCouponCarPo.setTypeCd("1001"); // 时长赠送
         parkingCouponCarPo.setGiveWay("4004"); //物业缴费赠送
         parkingCouponCarPo.setValue(value + "");
+        parkingCouponCarPo.setCarNum(reqJson.getString("carNum"));
+        parkingCouponCarPo.setRemark(userDtos.get(0).getName()+"-"+userDtos.get(0).getTel()+"赠送");
+        parkingCouponCarPo.setShopId(userDtos.get(0).getUserId());
 
         flag = parkingCouponCarV1InnerServiceSMOImpl.saveParkingCouponCar(parkingCouponCarPo);
 
