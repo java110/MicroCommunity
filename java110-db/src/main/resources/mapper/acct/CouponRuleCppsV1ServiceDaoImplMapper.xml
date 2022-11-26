@@ -19,7 +19,8 @@
     <select id="getCouponRuleCppsInfo" parameterType="Map" resultType="Map">
 
         select t.quantity,t.crc_id,t.crc_id crcId,t.cpp_id,t.cpp_id cppId,t.status_cd,t.status_cd
-        statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,cpp.coupon_name couponName,cr.rule_name ruleName,td.`name` toTypeName
+        statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,cpp.coupon_name couponName,cr.rule_name ruleName,td.`name` toTypeName,
+        cpp.remark
         from coupon_rule_cpps t
         left join coupon_property_pool cpp on t.cpp_id = cpp.cpp_id and cpp.status_cd = '0'
         left join t_dict td on td.status_cd = cpp.to_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'to_type'

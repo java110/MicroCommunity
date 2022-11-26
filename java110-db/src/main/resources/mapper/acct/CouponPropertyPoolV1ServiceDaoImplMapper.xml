@@ -8,9 +8,9 @@
     <!-- 保存优惠券信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponPropertyPoolInfo" parameterType="Map">
         insert into coupon_property_pool(
-        coupon_name,to_type,from_type,validity_day,cpp_id,community_name,state,community_id,stock,from_id
+        coupon_name,to_type,from_type,validity_day,cpp_id,community_name,state,community_id,stock,from_id,remark
         ) values (
-        #{couponName},#{toType},#{fromType},#{validityDay},#{cppId},#{communityName},#{state},#{communityId},#{stock},#{fromId}
+        #{couponName},#{toType},#{fromType},#{validityDay},#{cppId},#{communityName},#{state},#{communityId},#{stock},#{fromId},#{remark}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.coupon_name,t.coupon_name couponName,t.to_type,t.to_type toType,t.from_type,t.from_type
         fromType,t.validity_day,t.validity_day validityDay,t.cpp_id,t.cpp_id cppId,t.community_name,t.community_name
         communityName,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id
-        communityId,t.stock,t.from_id,t.from_id fromId,td.name fromTypeName,td1.`name` toTypeName,t.create_time createTime
+        communityId,t.stock,t.from_id,t.from_id fromId,td.name fromTypeName,td1.`name` toTypeName,t.create_time createTime,t.remark
         from coupon_property_pool t
         left join t_dict td on td.status_cd = t.from_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'from_type'
         left join t_dict td1 on td1.status_cd = t.to_type and td1.table_name = 'coupon_property_pool' and td1.table_columns = 'to_type'
@@ -98,6 +98,9 @@
         </if>
         <if test="fromId !=null and fromId != ''">
             , t.from_id= #{fromId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
         </if>
         where 1=1
         <if test="cppId !=null and cppId != ''">

@@ -38,6 +38,7 @@ public class CouponPropertyPoolPo implements Serializable {
     private String communityId;
     private String stock;
     private String fromId;
+    private String remark;
 
     public String getCouponName() {
         return couponName;
@@ -127,5 +128,11 @@ public class CouponPropertyPoolPo implements Serializable {
         this.fromId = fromId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
 
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
