@@ -29,6 +29,7 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
     private String[] ruleIds;
     private String remark;
     private String giftFrequency;
+    private String giftFrequencyName;
 
 
     private Date createTime;
@@ -139,5 +140,13 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
 
     public void setGiftFrequency(String giftFrequency) {
         this.giftFrequency = giftFrequency;
+    }
+
+    public String getGiftFrequencyName() {
+        return giftFrequencyName;
+    }
+
+    public void setGiftFrequencyName(String giftFrequencyName) {
+        this.giftFrequencyName = giftFrequencyName;
     }
 }
