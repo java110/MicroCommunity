@@ -16,7 +16,7 @@
 package com.java110.po.couponPropertyUser;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-21 12:08:05 mail: 928255095@qq.com
@@ -28,97 +28,129 @@ import java.util.Date;
 public class CouponPropertyUserPo implements Serializable {
 
     private String couponName;
-private String toType;
-private String validityDay;
-private String statusCd = "0";
-private String couponId;
-private String userName;
-private String userId;
-private String cppId;
-private String tel;
-private String state;
-private String stock;
-private String communityId;
-private String value;
-public String getCouponName() {
+    private String toType;
+    private String validityDay;
+    private String statusCd = "0";
+    private String couponId;
+    private String userName;
+    private String userId;
+    private String cppId;
+    private String tel;
+    private String state;
+    private String stock;
+    private String communityId;
+    private String value;
+    private String startTime;
+
+    public String getCouponName() {
         return couponName;
     }
-public void setCouponName(String couponName) {
+
+    public void setCouponName(String couponName) {
         this.couponName = couponName;
     }
-public String getToType() {
+
+    public String getToType() {
         return toType;
     }
-public void setToType(String toType) {
+
+    public void setToType(String toType) {
         this.toType = toType;
     }
-public String getValidityDay() {
+
+    public String getValidityDay() {
         return validityDay;
     }
-public void setValidityDay(String validityDay) {
+
+    public void setValidityDay(String validityDay) {
         this.validityDay = validityDay;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getUserName() {
+
+    public String getUserName() {
         return userName;
     }
-public void setUserName(String userName) {
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getCppId() {
+
+    public String getCppId() {
         return cppId;
     }
-public void setCppId(String cppId) {
+
+    public void setCppId(String cppId) {
         this.cppId = cppId;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getStock() {
+
+    public String getStock() {
         return stock;
     }
-public void setStock(String stock) {
+
+    public void setStock(String stock) {
         this.stock = stock;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
 
-
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 }

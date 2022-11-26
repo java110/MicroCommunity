@@ -40,6 +40,8 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String startTime;
+
 
     public String getCouponName() {
         return couponName;
@@ -177,5 +179,13 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     public void setIsExpire(String isExpire) {
         this.isExpire = isExpire;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }

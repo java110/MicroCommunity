@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.couponPropertyPool.CouponPropertyPoolDto;
 import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
 import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
@@ -24,6 +25,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
 import com.java110.po.couponPropertyPoolDetail.CouponPropertyPoolDetailPo;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
+import com.java110.po.couponRuleCpps.CouponRuleCppsPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
@@ -36,9 +38,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 缴费 赠送 优惠券
@@ -84,6 +84,10 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -187,9 +191,28 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
      */
     private void giftCoupon(List<CouponRuleCppsDto> couponRuleCppsDtos, FeeDto feeDto, PayFeeDetailPo payFeeDetailPo) {
 
+        Date startTime = null;
+        Date endTime = null;
         for (CouponRuleCppsDto couponRuleCppsDto : couponRuleCppsDtos) {
             try {
-                doGiftCoupon(couponRuleCppsDto, feeDto, payFeeDetailPo);
+                if(CouponRuleCppsDto.FREQUENCY_ONCE.equals(couponRuleCppsDto.getGiftFrequency())) { // 只赠送一次
+                    doGiftCoupon(couponRuleCppsDto, feeDto, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+                }else if(CouponRuleCppsDto.FREQUENCY_MONTH.equals(couponRuleCppsDto.getGiftFrequency())){ // 每月赠送
+                    startTime = DateUtil.getDateFromString(payFeeDetailPo.getStartTime(), DateUtil.DATE_FORMATE_STRING_B);
+                    endTime = DateUtil.getDateFromString(payFeeDetailPo.getEndTime(), DateUtil.DATE_FORMATE_STRING_B);
+                    double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+                    if (maxMonth < 1) {
+                        doGiftCoupon(couponRuleCppsDto, feeDto, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+                        continue;
+                    }
+                    Calendar calendar = Calendar.getInstance();
+                    for (int month = 0; month < maxMonth; month++) {
+                        calendar.setTime(startTime);
+                        calendar.add(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH,1);
+                        doGiftCoupon(couponRuleCppsDto, feeDto, DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_B));
+                    }
+                }
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
@@ -202,7 +225,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 
     }
 
-    private void doGiftCoupon(CouponRuleCppsDto couponRuleCppsDto, FeeDto feeDto, PayFeeDetailPo payFeeDetailPo) {
+    private void doGiftCoupon(CouponRuleCppsDto couponRuleCppsDto, FeeDto feeDto, String startTime) {
 
 
         String requestId = DistributedLock.getLockUUID();
@@ -276,6 +299,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponPropertyUserPo.setUserName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
             couponPropertyUserPo.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
             couponPropertyUserPo.setValue(value);
+            couponPropertyUserPo.setStartTime(startTime);
             couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
             //这里更新功能 关闭 因为优惠券有有效期 如果 修改显然不合适 modify by  2022-11-24 wuxw
 //            }else{
