@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class CouponRuleCppsDto extends PageDto implements Serializable {
 
+    public static final String FREQUENCY_ONCE = "100301"; // 赠送一次
+    public static final String FREQUENCY_MONTH = "1003012"; // 每月赠送一次
+
     private String quantity;
     private String crcId;
     private String cppId;
@@ -25,6 +28,7 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
     private String communityId;
     private String[] ruleIds;
     private String remark;
+    private String giftFrequency;
 
 
     private Date createTime;
@@ -127,5 +131,13 @@ public class CouponRuleCppsDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getGiftFrequency() {
+        return giftFrequency;
+    }
+
+    public void setGiftFrequency(String giftFrequency) {
+        this.giftFrequency = giftFrequency;
     }
 }

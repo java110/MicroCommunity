@@ -8,9 +8,9 @@
     <!-- 保存规则优惠券信息 add by wuxw 2018-07-03 -->
     <insert id="saveCouponRuleCppsInfo" parameterType="Map">
         insert into coupon_rule_cpps(
-        quantity,crc_id,cpp_id,rule_id,community_id
+        quantity,crc_id,cpp_id,rule_id,community_id,gift_frequency
         ) values (
-        #{quantity},#{crcId},#{cppId},#{ruleId},#{communityId}
+        #{quantity},#{crcId},#{cppId},#{ruleId},#{communityId},#{giftFrequency}
         )
     </insert>
 
@@ -20,7 +20,7 @@
 
         select t.quantity,t.crc_id,t.crc_id crcId,t.cpp_id,t.cpp_id cppId,t.status_cd,t.status_cd
         statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,cpp.coupon_name couponName,cr.rule_name ruleName,td.`name` toTypeName,
-        cpp.remark
+        cpp.remark,t.gift_frequency giftFrequency
         from coupon_rule_cpps t
         left join coupon_property_pool cpp on t.cpp_id = cpp.cpp_id and cpp.status_cd = '0'
         left join t_dict td on td.status_cd = cpp.to_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'to_type'
@@ -34,6 +34,9 @@
         </if>
         <if test="cppId !=null and cppId != ''">
             and t.cpp_id= #{cppId}
+        </if>
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            and t.gift_frequency= #{giftFrequency}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -73,10 +76,14 @@
         <if test="ruleId !=null and ruleId != ''">
             , t.rule_id= #{ruleId}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
+
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            , t.gift_frequency= #{giftFrequency}
         </if>
         where 1=1
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="crcId !=null and crcId != ''">
             and t.crc_id= #{crcId}
         </if>
@@ -102,6 +109,9 @@
         </if>
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
+        </if>
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            and t.gift_frequency= #{giftFrequency}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

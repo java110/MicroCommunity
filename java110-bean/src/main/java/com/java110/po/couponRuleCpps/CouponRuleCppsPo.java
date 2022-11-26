@@ -16,7 +16,7 @@
 package com.java110.po.couponRuleCpps;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-11-22 01:37:00 mail: 928255095@qq.com
@@ -28,48 +28,66 @@ import java.util.Date;
 public class CouponRuleCppsPo implements Serializable {
 
     private String quantity;
-private String crcId;
-private String cppId;
-private String statusCd = "0";
-private String ruleId;
-private String communityId;
-public String getQuantity() {
+    private String crcId;
+    private String cppId;
+    private String statusCd = "0";
+    private String ruleId;
+    private String communityId;
+    private String giftFrequency;
+
+    public String getQuantity() {
         return quantity;
     }
-public void setQuantity(String quantity) {
+
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-public String getCrcId() {
+
+    public String getCrcId() {
         return crcId;
     }
-public void setCrcId(String crcId) {
+
+    public void setCrcId(String crcId) {
         this.crcId = crcId;
     }
-public String getCppId() {
+
+    public String getCppId() {
         return cppId;
     }
-public void setCppId(String cppId) {
+
+    public void setCppId(String cppId) {
         this.cppId = cppId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getGiftFrequency() {
+        return giftFrequency;
+    }
 
-
+    public void setGiftFrequency(String giftFrequency) {
+        this.giftFrequency = giftFrequency;
+    }
 }
