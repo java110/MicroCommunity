@@ -264,20 +264,20 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 //            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
             CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
 //            if(couponPropertyUserDtos == null || couponPropertyUserDtos.size()< 1){
-                couponPropertyUserPo.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
-                couponPropertyUserPo.setCppId(couponPropertyPoolDtos.get(0).getCppId());
-                couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_WAIT);
-                couponPropertyUserPo.setCouponId(GenerateCodeFactory.getGeneratorId("10"));
-                couponPropertyUserPo.setCouponName(couponPropertyPoolDtos.get(0).getCouponName());
-                couponPropertyUserPo.setStock(quantity+"");
-                couponPropertyUserPo.setToType(couponPropertyPoolDtos.get(0).getToType());
-                couponPropertyUserPo.setValidityDay(couponPropertyPoolDtos.get(0).getValidityDay());
-                couponPropertyUserPo.setUserId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_ID));
-                couponPropertyUserPo.setUserName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
-                couponPropertyUserPo.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
-                couponPropertyUserPo.setValue(value);
-                couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
-                //这里更新功能 关闭 因为优惠券有有效期 如果 修改显然不合适 modify by  2022-11-24 wuxw
+            couponPropertyUserPo.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
+            couponPropertyUserPo.setCppId(couponPropertyPoolDtos.get(0).getCppId());
+            couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_WAIT);
+            couponPropertyUserPo.setCouponId(GenerateCodeFactory.getGeneratorId("10"));
+            couponPropertyUserPo.setCouponName(couponPropertyPoolDtos.get(0).getCouponName());
+            couponPropertyUserPo.setStock(quantity + "");
+            couponPropertyUserPo.setToType(couponPropertyPoolDtos.get(0).getToType());
+            couponPropertyUserPo.setValidityDay(couponPropertyPoolDtos.get(0).getValidityDay());
+            couponPropertyUserPo.setUserId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_ID));
+            couponPropertyUserPo.setUserName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
+            couponPropertyUserPo.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
+            couponPropertyUserPo.setValue(value);
+            couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
+            //这里更新功能 关闭 因为优惠券有有效期 如果 修改显然不合适 modify by  2022-11-24 wuxw
 //            }else{
 //                couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
 //                int userStock = Integer.parseInt(couponPropertyUserDtos.get(0).getStock());
