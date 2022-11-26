@@ -60,6 +60,9 @@
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
+        <if test="isStart !=null and isStart != ''">
+            and t.start_time &lt; now()
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -171,6 +174,10 @@
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
+        <if test="isStart !=null and isStart != ''">
+            and t.start_time &lt; now()
+        </if>
+
 
 
     </select>
