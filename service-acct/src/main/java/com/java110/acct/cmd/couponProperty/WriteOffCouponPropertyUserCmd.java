@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
+import com.java110.dto.couponPropertyUserDetail.CouponPropertyUserDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.ICouponPropertyUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
@@ -20,6 +21,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -171,6 +173,13 @@ public class WriteOffCouponPropertyUserCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("赠送失败");
         }
+
+        CouponPropertyUserDetailDto couponPropertyUserDetailDto = new CouponPropertyUserDetailDto();
+        couponPropertyUserDetailDto.setUoId(couponPropertyUserDetailPo.getUoId());
+        List<CouponPropertyUserDetailDto> couponPropertyUserDetailDtos
+                = couponPropertyUserDetailV1InnerServiceSMOImpl.queryCouponPropertyUserDetails(couponPropertyUserDetailDto);
+
+        context.setResponseEntity(ResultVo.createResponseEntity(couponPropertyUserDetailDtos.get(0)));
     }
 
     private String getRemark(String userId) {
