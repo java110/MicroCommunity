@@ -183,30 +183,30 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             floorDto.setFloorNum(floorNum);
             //查询楼栋
             List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-            Assert.listOnlyOne(floorDtos, "查询楼栋错误！");
+            Assert.listOnlyOne(floorDtos, ownerCarDto.getCarNum()+"查询楼栋错误！");
             UnitDto unitDto = new UnitDto();
             unitDto.setUnitNum(unitNum);
             unitDto.setFloorId(floorDtos.get(0).getFloorId());
             //查询单元
             List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-            Assert.listOnlyOne(unitDtos, "查询单元错误！");
+            Assert.listOnlyOne(unitDtos, ownerCarDto.getCarNum()+"查询单元错误！");
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomNum(roomNum);
             roomDto.setUnitId(unitDtos.get(0).getUnitId());
             //查询房屋
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            Assert.listOnlyOne(roomDtos, "查询房屋错误！");
+            Assert.listOnlyOne(roomDtos, ownerCarDto.getCarNum()+"查询房屋错误！");
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
             ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
             //查询业主房屋关系表
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋信息错误！");
+            Assert.listOnlyOne(ownerRoomRelDtos, ownerCarDto.getCarNum()+"查询业主房屋信息错误！");
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
             ownerDto.setName(ownerCarDto.getOwnerName());
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-            Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
+            Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum()+"查询业主信息错误！");
             if (ownerDtos.get(0).getOwnerTypeCd().equals("1001")) { //业主
                 ownerCarPo.setCarTypeCd("1001"); //业主车辆
             } else {

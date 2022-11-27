@@ -76,7 +76,7 @@ public class ExportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         CellStyle cs = workbook.createCellStyle();
         cs.setWrapText(true);  //关键
         cell0.setCellStyle(cs);
-        row.setHeight((short) (200 * 10));
+        row.setHeight((short) (200 * 15));
         row = sheet.createRow(1);
         row.createCell(0).setCellValue("车牌号");
         row.createCell(1).setCellValue("房屋号");
@@ -88,7 +88,7 @@ public class ExportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         row.createCell(7).setCellValue("起租时间");
         row.createCell(8).setCellValue("截止时间");
         row.createCell(9).setCellValue("停车场类型");
-        row.createCell(10).setCellValue("车位类型");
+        row.createCell(10).setCellValue("车位状态");
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 8);
         sheet.addMergedRegion(region);
     }

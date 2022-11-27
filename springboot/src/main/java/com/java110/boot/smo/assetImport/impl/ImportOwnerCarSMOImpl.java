@@ -138,7 +138,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             importOwnerCar.setOwnerName(os[5].toString());
             //获取车位
             String parkingLot = os[6].toString();
-            String[] split = parkingLot.split("-",2);
+            String[] split = parkingLot.split("-");
             importOwnerCar.setAreaNum(split[0]);
             importOwnerCar.setNum(split[1]);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -185,30 +185,30 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             floorDto.setFloorNum(floorNum);
             //查询楼栋
             List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-            Assert.listOnlyOne(floorDtos, "查询楼栋错误！");
+            Assert.listOnlyOne(floorDtos, ownerCarDto.getCarNum()+"查询楼栋错误！");
             UnitDto unitDto = new UnitDto();
             unitDto.setUnitNum(unitNum);
             unitDto.setFloorId(floorDtos.get(0).getFloorId());
             //查询单元
             List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-            Assert.listOnlyOne(unitDtos, "查询单元错误！");
+            Assert.listOnlyOne(unitDtos, ownerCarDto.getCarNum()+"查询单元错误！");
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomNum(roomNum);
             roomDto.setUnitId(unitDtos.get(0).getUnitId());
             //查询房屋
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            Assert.listOnlyOne(roomDtos, "查询房屋错误！");
+            Assert.listOnlyOne(roomDtos, ownerCarDto.getCarNum()+"查询房屋错误！");
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
             ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
             //查询业主房屋关系表
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋信息错误！");
+            Assert.listOnlyOne(ownerRoomRelDtos, ownerCarDto.getCarNum()+"查询业主房屋信息错误！");
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
             ownerDto.setName(ownerCarDto.getOwnerName());
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-            Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
+            Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum()+"查询业主信息错误！");
             if (ownerDtos.get(0).getOwnerTypeCd().equals("1001")) { //业主
                 ownerCarPo.setCarTypeCd("1001"); //业主车辆
             } else {
@@ -267,9 +267,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             ownerCarPo.setCarId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));
             ownerCarPo.setMemberId(ownerCarPo.getCarId());
             ownerCarPo.setState("1001"); //1001 正常状态，2002 车位释放欠费状态，3003 车位释放
-            //ownerCarPo.setLeaseType(OwnerCarDto.LEASE_TYPE_MONTH);
             ownerCarPo.setLeaseType(ownerCarDto.getSpaceSate());
-
             ownerCarV1InnerServiceSMOImpl.saveOwnerCar(ownerCarPo);
             ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
             parkingSpacePo.setPsId(psId); //车位id
@@ -302,3 +300,4 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         return tDate;
     }
 }
+
