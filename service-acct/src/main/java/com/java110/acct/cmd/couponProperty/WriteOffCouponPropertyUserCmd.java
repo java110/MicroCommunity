@@ -80,6 +80,10 @@ public class WriteOffCouponPropertyUserCmd extends Cmd {
 
         String couponId = CommonCache.getAndRemoveValue(reqJson.getString("couponQrcode"));
 
+        if(StringUtil.isEmpty(couponId)){
+            throw new CmdException("优惠券不存在");
+        }
+
         reqJson.put("couponId", couponId);
 
         CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
@@ -158,7 +162,11 @@ public class WriteOffCouponPropertyUserCmd extends Cmd {
         couponPropertyUserDetailPo.setCouponName(couponPropertyUserDtos.get(0).getCouponName());
         couponPropertyUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId("11"));
         couponPropertyUserDetailPo.setDetailType(couponPropertyUserDtos.get(0).getToType());
-        couponPropertyUserDetailPo.setRemark(remark + reqJson.getString("remark"));
+        if(reqJson.containsKey("remark")) {
+            couponPropertyUserDetailPo.setRemark(remark + reqJson.getString("remark"));
+        }else{
+            couponPropertyUserDetailPo.setRemark(remark);
+        }
         flag = couponPropertyUserDetailV1InnerServiceSMOImpl.saveCouponPropertyUserDetail(couponPropertyUserDetailPo);
         if (flag < 1) {
             throw new CmdException("赠送失败");
@@ -177,7 +185,7 @@ public class WriteOffCouponPropertyUserCmd extends Cmd {
             return "接口核销";
         }
 
-        return userDtos.get(0).getUserName() + "-" + userDtos.get(0).getTel() + "核销";
+        return userDtos.get(0).getName() + "-" + userDtos.get(0).getTel() + "核销";
 
     }
 }

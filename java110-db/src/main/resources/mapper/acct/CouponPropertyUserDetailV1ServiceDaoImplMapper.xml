@@ -19,7 +19,7 @@
     <select id="getCouponPropertyUserDetailInfo" parameterType="Map" resultType="Map">
         select t.detail_type,t.detail_type detailType,t.coupon_name,t.coupon_name couponName,t.uo_id,t.uo_id
         uoId,t.business_key,t.business_key businessKey,t.remark,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id
-        couponId,t.community_id,t.community_id communityId,cpu.user_name userName,cpu.tel,cpu.value
+        couponId,t.community_id,t.community_id communityId,cpu.user_name userName,cpu.tel,cpu.value,t.create_time createTime
         from coupon_property_user_detail t
         left join coupon_property_user cpu on t.coupon_id = cpu.coupon_id and cpu.status_cd = '0'
         where 1 =1
