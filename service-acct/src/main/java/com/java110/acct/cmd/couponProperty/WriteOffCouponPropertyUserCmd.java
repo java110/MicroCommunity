@@ -8,41 +8,37 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
 import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
-import com.java110.dto.couponPropertyUserDetail.CouponPropertyUserDetailDto;
-import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.acct.*;
+import com.java110.intf.acct.ICouponPropertyUserDetailV1InnerServiceSMO;
+import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
 import com.java110.po.couponPropertyUserDetail.CouponPropertyUserDetailPo;
-import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.vo.ResultVo;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.util.List;
 
-@Java110CmdDoc(title = "优惠券赠送车辆",
-        description = "业主缴费获取的优惠券赠送车辆免费停车",
+
+@Java110CmdDoc(title = "核销优惠券",
+        description = "物业手机版 或者第三方平台调用 核销功能核销优惠券",
         httpMethod = "post",
-        url = "http://{ip}:{port}/app/couponProperty.couponPropertyUserGiftCar",
+        url = "http://{ip}:{port}/app/couponProperty.writeOffCouponPropertyUser",
         resource = "acctDoc",
         author = "吴学文",
-        serviceCode = "couponProperty.couponPropertyUserGiftCar"
+        serviceCode = "couponProperty.writeOffCouponPropertyUser"
 )
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
-        @Java110ParamDoc(name = "carNum", length = 12, remark = "赠送车辆"),
-        @Java110ParamDoc(name = "couponId", length = 30, remark = "赠送优惠券"),
-        @Java110ParamDoc(name = "giftCount", type = "int", length = 11, remark = "赠送数量"),
-        @Java110ParamDoc(name = "paId", length = 30, remark = "停车场"),
+        @Java110ParamDoc(name = "couponQrcode", length = 30, remark = "核销码"),
+        @Java110ParamDoc(name = "giftCount", type = "int", length = 11, remark = "核销数量"),
 
 
 })
@@ -58,46 +54,36 @@ import java.util.List;
         reqBody = "http://{ip}:{port}/app/parkingArea.listParkingAreas?num=&typeCd=&paId=&page=1&row=10&communityId=2022112555490011",
         resBody = "{\"page\":0,\"parkingAreas\":[{\"attrs\":[{\"attrId\":\"112022112796270047\",\"communityId\":\"2022112555490011\",\"listShow\":\"Y\",\"paId\":\"102022112706900045\",\"page\":-1,\"records\":0,\"row\":0,\"specCd\":\"6185-17861\",\"specName\":\"外部编码\",\"specType\":\"2233\",\"statusCd\":\"0\",\"total\":0,\"value\":\"123\"}],\"createTime\":\"2022-11-27 01:48:27\",\"num\":\"A\",\"paId\":\"102022112706900045\",\"remark\":\"\",\"typeCd\":\"1001\"}],\"records\":1,\"rows\":0,\"total\":1}"
 )
-@Java110Cmd(serviceCode = "couponProperty.couponPropertyUserGiftCar")
-public class CouponPropertyUserGiftCarCmd extends Cmd {
+
+/**
+ * 核销优惠券
+ *
+ */
+@Java110Cmd(serviceCode = "couponProperty.writeOffCouponPropertyUser")
+public class WriteOffCouponPropertyUserCmd extends Cmd {
 
     @Autowired
     private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
 
     @Autowired
-    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
-
-
-    @Autowired
-    private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
-
-    @Autowired
     private ICouponPropertyUserDetailV1InnerServiceSMO couponPropertyUserDetailV1InnerServiceSMOImpl;
 
     @Autowired
-    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
-        Assert.hasKeyAndValue(reqJson, "carNum", "未包含车辆");
-        Assert.hasKeyAndValue(reqJson, "couponId", "未包含停车券");
-        Assert.hasKeyAndValue(reqJson, "giftCount", "未包含赠送数量");
-        Assert.hasKeyAndValue(reqJson, "paId", "未包含停车场");
+        Assert.hasKeyAndValue(reqJson, "couponQrcode", "未包含优惠券");
+        Assert.hasKeyAndValue(reqJson, "giftCount", "未包含核销数量");
 
+        String couponId = CommonCache.getAndRemoveValue(reqJson.getString("couponQrcode"));
 
-        String userId = context.getReqHeaders().get("user-id");
-
-        //校验优惠券是否存在
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        Assert.listOnlyOne(userDtos, "用户不存在");
+        reqJson.put("couponId", couponId);
 
         CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
         couponPropertyUserDto.setCouponId(reqJson.getString("couponId"));
-        couponPropertyUserDto.setTel(userDtos.get(0).getTel());
-        couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_PARKING);
         couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
 
         List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
@@ -115,28 +101,12 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         if (stock < giftCount) {
             throw new CmdException("优惠券不够赠送，当前数量为：" + stock);
         }
-
-        CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
-        couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
-        couponPropertyPoolConfigDto.setColumnKey("hours");
-        List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
-
-        Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
-
-        Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue());
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        String userId = context.getReqHeaders().get("user-id");
-
-        //校验优惠券是否存在
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        Assert.listOnlyOne(userDtos, "用户不存在");
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + reqJson.getString("couponId");
         int flag = 0;
@@ -144,8 +114,6 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         try {
             CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
             couponPropertyUserDto.setCouponId(reqJson.getString("couponId"));
-            couponPropertyUserDto.setTel(userDtos.get(0).getTel());
-            couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_PARKING);
             couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
 
             couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
@@ -180,55 +148,36 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         }
 
         //保存核销记录
-        String pccId = GenerateCodeFactory.getGeneratorId("11");
+        String userId = context.getReqHeaders().get("user-id");
+        String remark = getRemark(userId);
 
         CouponPropertyUserDetailPo couponPropertyUserDetailPo = new CouponPropertyUserDetailPo();
-        couponPropertyUserDetailPo.setBusinessKey(pccId);
+        couponPropertyUserDetailPo.setBusinessKey(StringUtil.isEmpty(userId)?"-1":userId);
         couponPropertyUserDetailPo.setCommunityId(reqJson.getString("communityId"));
         couponPropertyUserDetailPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
         couponPropertyUserDetailPo.setCouponName(couponPropertyUserDtos.get(0).getCouponName());
         couponPropertyUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId("11"));
         couponPropertyUserDetailPo.setDetailType(couponPropertyUserDtos.get(0).getToType());
-        couponPropertyUserDetailPo.setRemark("赠送"+reqJson.getString("carNum")+"停车券");
+        couponPropertyUserDetailPo.setRemark(remark + reqJson.getString("remark"));
         flag = couponPropertyUserDetailV1InnerServiceSMOImpl.saveCouponPropertyUserDetail(couponPropertyUserDetailPo);
         if (flag < 1) {
             throw new CmdException("赠送失败");
         }
+    }
 
-        CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
-        couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
-        couponPropertyPoolConfigDto.setColumnKey("hours");
-        List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
-
-        Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
-
-        double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue()) * 60;
-        value = Math.ceil(value);
-
-        ParkingCouponCarPo parkingCouponCarPo = new ParkingCouponCarPo();
-        parkingCouponCarPo.setPccId(pccId);
-        parkingCouponCarPo.setCouponId(reqJson.getString("couponId"));
-        parkingCouponCarPo.setCouponShopId(reqJson.getString("couponId"));
-        parkingCouponCarPo.setCommunityId(reqJson.getString("communityId"));
-        parkingCouponCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A, 1));
-        parkingCouponCarPo.setPaId(reqJson.getString("paId"));
-        parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_WAIT);
-        parkingCouponCarPo.setTypeCd("1001"); // 时长赠送
-        parkingCouponCarPo.setGiveWay("4004"); //物业缴费赠送
-        parkingCouponCarPo.setValue(value + "");
-        parkingCouponCarPo.setCarNum(reqJson.getString("carNum"));
-        parkingCouponCarPo.setRemark(userDtos.get(0).getName()+"-"+userDtos.get(0).getTel()+"赠送");
-        parkingCouponCarPo.setShopId(userDtos.get(0).getUserId());
-
-        flag = parkingCouponCarV1InnerServiceSMOImpl.saveParkingCouponCar(parkingCouponCarPo);
-
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+    private String getRemark(String userId) {
+        if(StringUtil.isEmpty(userId) || "-1".equals(userId)){
+            return "接口核销";
+        }
+        //校验优惠券是否存在
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            return "接口核销";
         }
 
-        context.setResponseEntity(ResultVo.success());
-
+        return userDtos.get(0).getUserName() + "-" + userDtos.get(0).getTel() + "核销";
 
     }
 }
