@@ -255,7 +255,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             if(!"1001".equals(ownerCarDto.getTypeCd()) && !"2002".equals(ownerCarDto.getTypeCd())){
                 throw new IllegalArgumentException(ownerCarDto.getCarNum()+"停车场类型应填写 1001(地上停车场)或者 2002 (地下停车场)");
             }
-            if(!"H".equals(ownerCarDto.getSpaceSate()) && !"S".equals(ownerCarDto.getTypeCd())){
+            if(!"H".equals(ownerCarDto.getSpaceSate()) && !"S".equals(ownerCarDto.getSpaceSate())){
                 throw new IllegalArgumentException(ownerCarDto.getCarNum()+"车位状态应填写 S（出售）或者 H （出租）");
             }
             //获取房屋名称
