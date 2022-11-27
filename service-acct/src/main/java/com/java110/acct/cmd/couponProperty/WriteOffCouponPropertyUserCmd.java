@@ -53,8 +53,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody = "http://{ip}:{port}/app/parkingArea.listParkingAreas?num=&typeCd=&paId=&page=1&row=10&communityId=2022112555490011",
-        resBody = "{\"page\":0,\"parkingAreas\":[{\"attrs\":[{\"attrId\":\"112022112796270047\",\"communityId\":\"2022112555490011\",\"listShow\":\"Y\",\"paId\":\"102022112706900045\",\"page\":-1,\"records\":0,\"row\":0,\"specCd\":\"6185-17861\",\"specName\":\"外部编码\",\"specType\":\"2233\",\"statusCd\":\"0\",\"total\":0,\"value\":\"123\"}],\"createTime\":\"2022-11-27 01:48:27\",\"num\":\"A\",\"paId\":\"102022112706900045\",\"remark\":\"\",\"typeCd\":\"1001\"}],\"records\":1,\"rows\":0,\"total\":1}"
+        reqBody = "{\"couponQrcode\":\"70ff0d19c69e490b9e656795811037c5\",\"communityId\":\"2022112555490011\",\"giftCount\":1}",
+        resBody = "{\"code\":0,\"data\":[{\"businessKey\":\"302022083031660031\",\"communityId\":\"2022112555490011\",\"couponId\":\"102022112610570082\",\"couponName\":\"购物券\",\"createTime\":\"2022-11-27 15:22:18\",\"detailType\":\"1011\",\"page\":-1,\"records\":0,\"remark\":\"wuxw-18909715555核销\",\"row\":0,\"statusCd\":\"0\",\"tel\":\"18909711443\",\"total\":0,\"uoId\":\"112022112729340004\",\"userName\":\"吴学文\",\"value\":\"面值:10元;\"}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
 )
 
 /**
@@ -179,7 +179,7 @@ public class WriteOffCouponPropertyUserCmd extends Cmd {
         List<CouponPropertyUserDetailDto> couponPropertyUserDetailDtos
                 = couponPropertyUserDetailV1InnerServiceSMOImpl.queryCouponPropertyUserDetails(couponPropertyUserDetailDto);
 
-        context.setResponseEntity(ResultVo.createResponseEntity(couponPropertyUserDetailDtos.get(0)));
+        context.setResponseEntity(ResultVo.createResponseEntity(couponPropertyUserDetailDtos));
     }
 
     private String getRemark(String userId) {
