@@ -2,16 +2,20 @@ package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.payFeeAudit.PayFeeAuditDto;
+import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.payFeeAudit.IDeletePayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.IGetPayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.ISavePayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.IUpdatePayFeeAuditBMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.payFeeAudit.PayFeeAuditPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -28,6 +32,9 @@ public class PayFeeAuditApi {
     @Autowired
     private IGetPayFeeAuditBMO getPayFeeAuditBMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     /**
      * 微信保存消息模板
      *
@@ -38,14 +45,21 @@ public class PayFeeAuditApi {
      */
     @RequestMapping(value = "/savePayFeeAudit", method = RequestMethod.POST)
     public ResponseEntity<String> savePayFeeAudit(@RequestBody JSONObject reqJson,
-                                                  @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "user-name") String userName) {
+                                                  @RequestHeader(value = "user-id") String userId){
+
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
         Assert.hasKeyAndValue(reqJson, "feeDetailId", "请求报文中未包含缴费ID");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
 
         PayFeeAuditPo payFeeAuditPo = BeanConvertUtil.covertBean(reqJson, PayFeeAuditPo.class);
         payFeeAuditPo.setAuditUserId(userId);

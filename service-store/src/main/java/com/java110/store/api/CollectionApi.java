@@ -5,10 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -51,13 +53,15 @@ public class CollectionApi {
     @Autowired
     private IUserStorehouseInnerServiceSMO userStorehouseInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     /**
      * 物品领用 接口类
      *
      * @param reqJson
      * @param userId
-     * @param userName
      * @param storeId
      * @return {"resourceStores":[{"resId":"852020070239060001","resName":"水性笔","resCode":"002","price":"2.00","stock":"2",
      * "description":"黑色","quantity":"1"}],"description":"123123","endUserName":"1","endUserTel":"17797173942","file":"",
@@ -66,8 +70,17 @@ public class CollectionApi {
     @RequestMapping(value = "/goodsCollection", method = RequestMethod.POST)
     public ResponseEntity<String> goodsCollection(@RequestBody JSONObject reqJson,
                                                   @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "user-name") String userName,
                                                   @RequestHeader(value = "store-id") String storeId) {
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
+
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
@@ -153,10 +166,19 @@ public class CollectionApi {
     @RequestMapping(value = "/goodsDelivery", method = RequestMethod.POST)
     public ResponseEntity<String> goodsDelivery(@RequestBody JSONObject reqJson,
                                                 @RequestHeader(value = "user-id") String userId,
-                                                @RequestHeader(value = "user-name") String userName,
                                                 @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
+
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));

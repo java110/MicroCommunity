@@ -562,7 +562,6 @@ public class RoomRenovationApi {
     @RequestMapping(value = "/saveRoomRenovationDetail", method = RequestMethod.POST)
     @Java110Transactional
     public ResponseEntity<String> saveRoomRenovationDetail(@RequestHeader(value = "user-id") String userId,
-                                                           @RequestHeader(value = "user-name") String userName,
                                                            @RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "rId", "请求报文中未包含rId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
