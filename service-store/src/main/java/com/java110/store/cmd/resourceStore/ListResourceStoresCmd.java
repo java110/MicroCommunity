@@ -52,7 +52,7 @@ public class ListResourceStoresCmd extends Cmd {
         basePrivilegeDto.setResource("/viewGroupResource");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (reqJson.containsKey("operationType") && reqJson.getString("operationType").equals("1000") && privileges.size() > 0) {
+        if ("1000".equals(reqJson.getString("operationType")) && privileges.size() > 0) {
             resourceStoreDto.setShType("");
             resourceStoreDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
         } else if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
