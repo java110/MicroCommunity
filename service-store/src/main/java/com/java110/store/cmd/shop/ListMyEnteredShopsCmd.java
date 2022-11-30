@@ -115,6 +115,7 @@ public class ListMyEnteredShopsCmd extends Cmd {
                     shopDto = new ShopDto();
                     shopDto.setShopId(tmpOrgCommunityDto.getCommunityId());
                     shopDto.setShopName(tmpOrgCommunityDto.getCommunityName());
+                    shops.add(shopDto);
                 }
             } else {
                 shops = new ArrayList<>();
