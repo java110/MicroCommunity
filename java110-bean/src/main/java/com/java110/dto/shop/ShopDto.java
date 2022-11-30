@@ -49,6 +49,7 @@ public class ShopDto extends PageDto implements Serializable {
     private String areaName;
     private String mapX;
     private String mapY;
+    private String[] notInShopId;
     private List<DistributionModeDto> distributionModeDtos;
 
     private Date createTime;
@@ -308,5 +309,13 @@ public class ShopDto extends PageDto implements Serializable {
 
     public void setServiceFee(String serviceFee) {
         this.serviceFee = serviceFee;
+    }
+
+    public String[] getNotInShopId() {
+        return notInShopId;
+    }
+
+    public void setNotInShopId(String[] notInShopId) {
+        this.notInShopId = notInShopId;
     }
 }
