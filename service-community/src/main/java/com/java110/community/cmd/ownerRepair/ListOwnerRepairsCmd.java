@@ -11,6 +11,7 @@ import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -136,6 +137,8 @@ public class ListOwnerRepairsCmd extends Cmd {
         List<PhotoVo> beforePhotos = null;  //维修前图片
         List<PhotoVo> afterPhotos = null;  //维修后图片
         PhotoVo photoVo = null;
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+
         for (RepairDto repairDto : ownerRepairs) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(repairDto.getRepairId());
@@ -151,18 +154,28 @@ public class ListOwnerRepairsCmd extends Cmd {
                 photoVos.add(photoVo);
                 if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.REL_TYPE_CD_REPAIR)) {  //维修图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
+                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
+                    }else{
+                        photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                    }
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     repairPhotos.add(photoVo);  //维修图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.BEFORE_REPAIR_PHOTOS)) {  //维修前图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl(tmpFileRelDto.getFileRealName());
-                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
+                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
+                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
+                    }else{
+                        photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                    }                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     beforePhotos.add(photoVo);  //维修前图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.AFTER_REPAIR_PHOTOS)) {  //维修后图片
                     photoVo = new PhotoVo();
-                    photoVo.setUrl(tmpFileRelDto.getFileRealName());
-                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
+                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
+                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
+                    }else{
+                        photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                    }                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     afterPhotos.add(photoVo);
                 }
             }
