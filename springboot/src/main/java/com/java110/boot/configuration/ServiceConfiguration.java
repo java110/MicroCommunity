@@ -90,11 +90,6 @@ public class ServiceConfiguration {
         exclusions.append("/app/parkingCoupon.saveParkingCouponCar,");
 
 
-
-
-
-
-
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
