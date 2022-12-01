@@ -67,6 +67,7 @@ public class ServiceConfiguration {
 //        exclusions.append("/app/unit.queryUnits,");
 //        exclusions.append("/app/room.queryRooms,");
         exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
+        exclusions.append("/app/productCategory/queryMainCategory,");
         exclusions.append("/app/product.queryPhoneMainCategoryProduct,");
         exclusions.append("/app/shop/queryShopCommunity,");
         exclusions.append("/app/shopType/queryShopType,");
