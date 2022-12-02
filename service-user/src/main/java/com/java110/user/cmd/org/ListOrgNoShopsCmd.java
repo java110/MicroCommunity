@@ -31,7 +31,7 @@ public class ListOrgNoShopsCmd extends Cmd {
     @Autowired
     private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMO;
 
-    @Autowired
+    @Autowired(required = false)
     private IShopInnerServiceSMO shopInnerServiceSMO;
 
     @Override
