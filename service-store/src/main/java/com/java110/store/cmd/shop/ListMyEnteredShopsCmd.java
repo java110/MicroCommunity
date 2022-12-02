@@ -35,7 +35,7 @@ import java.util.List;
 @Java110Cmd(serviceCode = "shop.listMyEnteredShops")
 public class ListMyEnteredShopsCmd extends Cmd {
 
-    @Autowired
+    @Autowired(required = false)
     private IShopInnerServiceSMO shopInnerServiceSMOImpl;
 
     @Autowired
