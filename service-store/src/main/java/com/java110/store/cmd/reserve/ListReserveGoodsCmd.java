@@ -20,6 +20,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.reserveGoodsDetail.ReserveGoodsDetailDto;
+import com.java110.intf.store.IReserveGoodsDetailV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -27,8 +29,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.reserveGoods.ReserveGoodsDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,36 +52,53 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "reserve.listReserveGoods")
 public class ListReserveGoodsCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListReserveGoodsCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListReserveGoodsCmd.class);
     @Autowired
     private IReserveGoodsV1InnerServiceSMO reserveGoodsV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IReserveGoodsDetailV1InnerServiceSMO reserveGoodsDetailV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
 
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ReserveGoodsDto reserveGoodsDto = BeanConvertUtil.covertBean(reqJson, ReserveGoodsDto.class);
+        ReserveGoodsDto reserveGoodsDto = BeanConvertUtil.covertBean(reqJson, ReserveGoodsDto.class);
 
-           int count = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodssCount(reserveGoodsDto);
+        int count = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodssCount(reserveGoodsDto);
 
-           List<ReserveGoodsDto> reserveGoodsDtos = null;
+        List<ReserveGoodsDto> reserveGoodsDtos = null;
 
-           if (count > 0) {
-               reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
-           } else {
-               reserveGoodsDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
+            queryContent(reserveGoodsDtos);
+        } else {
+            reserveGoodsDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, reserveGoodsDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, reserveGoodsDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryContent(List<ReserveGoodsDto> reserveGoodsDtos) {
+        if (reserveGoodsDtos == null || reserveGoodsDtos.size() != 1) {
+            return;
+        }
+        ReserveGoodsDetailDto reserveGoodsDetailDto = new ReserveGoodsDetailDto();
+        reserveGoodsDetailDto.setGoodsId(reserveGoodsDtos.get(0).getGoodsId());
+        List<ReserveGoodsDetailDto> reserveGoodsDetailDtos = reserveGoodsDetailV1InnerServiceSMOImpl.queryReserveGoodsDetails(reserveGoodsDetailDto);
+        if (reserveGoodsDetailDtos == null || reserveGoodsDetailDtos.size() < 1) {
+            return;
+        }
+        reserveGoodsDtos.get(0).setContent(reserveGoodsDetailDtos.get(0).getContent());
     }
 }

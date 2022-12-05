@@ -21,15 +21,22 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.reserveGoodsDetail.ReserveGoodsDetailDto;
+import com.java110.intf.store.IReserveGoodsDetailV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
 import com.java110.po.reserveGoods.ReserveGoodsPo;
+import com.java110.po.reserveGoodsDetail.ReserveGoodsDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -51,6 +58,9 @@ public class UpdateReserveGoodsCmd extends Cmd {
     @Autowired
     private IReserveGoodsV1InnerServiceSMO reserveGoodsV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IReserveGoodsDetailV1InnerServiceSMO reserveGoodsDetailV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "goodsId", "goodsId不能为空");
@@ -69,6 +79,27 @@ public class UpdateReserveGoodsCmd extends Cmd {
             throw new CmdException("更新数据失败");
         }
 
+        ReserveGoodsDetailDto reserveGoodsDetailDto = new ReserveGoodsDetailDto();
+        reserveGoodsDetailDto.setGoodsId(reserveGoodsPo.getGoodsId());
+        List<ReserveGoodsDetailDto> reserveGoodsDetailDtos = reserveGoodsDetailV1InnerServiceSMOImpl.queryReserveGoodsDetails(reserveGoodsDetailDto);
+        if(reserveGoodsDetailDtos == null || reserveGoodsDetailDtos.size()< 1){
+            ReserveGoodsDetailPo reserveGoodsDetailPo = new ReserveGoodsDetailPo();
+            reserveGoodsDetailPo.setGoodsId(reserveGoodsPo.getGoodsId());
+            reserveGoodsDetailPo.setCommunityId(reserveGoodsPo.getCommunityId());
+            reserveGoodsDetailPo.setContent(reqJson.getString("content"));
+            reserveGoodsDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("11"));
+            flag = reserveGoodsDetailV1InnerServiceSMOImpl.saveReserveGoodsDetail(reserveGoodsDetailPo);
+            if (flag < 1) {
+                throw new CmdException("保存详情失败");
+            }
+        }else{
+            ReserveGoodsDetailPo reserveGoodsDetailPo = new ReserveGoodsDetailPo();
+            reserveGoodsDetailPo.setGoodsId(reserveGoodsPo.getGoodsId());
+            reserveGoodsDetailPo.setCommunityId(reserveGoodsPo.getCommunityId());
+            reserveGoodsDetailPo.setContent(reqJson.getString("content"));
+            reserveGoodsDetailPo.setDetailId(reserveGoodsDetailDtos.get(0).getDetailId());
+            reserveGoodsDetailV1InnerServiceSMOImpl.updateReserveGoodsDetail(reserveGoodsDetailPo);
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

@@ -22,8 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.store.IReserveGoodsDetailV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
 import com.java110.po.reserveGoods.ReserveGoodsPo;
+import com.java110.po.reserveGoodsDetail.ReserveGoodsDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,6 +54,10 @@ public class SaveReserveGoodsCmd extends Cmd {
     @Autowired
     private IReserveGoodsV1InnerServiceSMO reserveGoodsV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IReserveGoodsDetailV1InnerServiceSMO reserveGoodsDetailV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
@@ -78,6 +84,17 @@ public class SaveReserveGoodsCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        ReserveGoodsDetailPo reserveGoodsDetailPo = new ReserveGoodsDetailPo();
+        reserveGoodsDetailPo.setGoodsId(reserveGoodsPo.getGoodsId());
+        reserveGoodsDetailPo.setCommunityId(reserveGoodsPo.getCommunityId());
+        reserveGoodsDetailPo.setContent(reqJson.getString("content"));
+        reserveGoodsDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        flag = reserveGoodsDetailV1InnerServiceSMOImpl.saveReserveGoodsDetail(reserveGoodsDetailPo);
+        if (flag < 1) {
+            throw new CmdException("保存详情失败");
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

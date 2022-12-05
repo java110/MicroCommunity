@@ -34,6 +34,8 @@ public class ReserveGoodsDto extends ReserveParamsDto implements Serializable {
 
     private Date createTime;
 
+    private String content;
+
     private String statusCd = "0";
 
 
@@ -164,5 +166,13 @@ public class ReserveGoodsDto extends ReserveParamsDto implements Serializable {
 
     public void setParamsName(String paramsName) {
         this.paramsName = paramsName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
