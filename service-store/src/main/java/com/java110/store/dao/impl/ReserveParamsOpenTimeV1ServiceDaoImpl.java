@@ -108,5 +108,14 @@ public class ReserveParamsOpenTimeV1ServiceDaoImpl extends BaseServiceDao implem
         return Integer.parseInt(businessReserveParamsOpenTimeInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int saveReserveParamsOpenTimeInfos(Map info) {
+        logger.debug("保存 saveReserveParamsOpenTimeInfos 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("reserveParamsOpenTimeV1ServiceDaoImpl.saveReserveParamsOpenTimeInfos",info);
+
+        return saveFlag;
+    }
+
 
 }

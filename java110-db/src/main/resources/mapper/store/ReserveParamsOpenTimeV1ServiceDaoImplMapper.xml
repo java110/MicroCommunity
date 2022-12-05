@@ -13,6 +13,16 @@
         #{hours},#{paramsId},#{isOpen},#{timeId},#{communityId}
         )
     </insert>
+    <!-- 保存预约时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveParamsOpenTimeInfos" parameterType="Map">
+        insert into reserve_params_open_time(
+        hours,params_id,is_open,time_id,community_id
+        ) values
+        <foreach collection="openTimes" item="item" separator=",">
+            (#{item.hours},#{item.paramsId},#{item.isOpen},#{item.timeId},#{item.communityId})
+        </foreach>
+    </insert>
+
 
 
     <!-- 查询预约时间信息 add by wuxw 2018-07-03 -->
@@ -26,6 +36,12 @@
         </if>
         <if test="paramsId !=null and paramsId != ''">
             and t.params_id= #{paramsId}
+        </if>
+        <if test="paramsIds !=null">
+            and t.params_id in
+            <foreach collection="paramsIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="isOpen !=null and isOpen != ''">
             and t.is_open= #{isOpen}
@@ -82,6 +98,12 @@
         </if>
         <if test="paramsId !=null and paramsId != ''">
             and t.params_id= #{paramsId}
+        </if>
+        <if test="paramsIds !=null">
+            and t.params_id in
+            <foreach collection="paramsIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="isOpen !=null and isOpen != ''">
             and t.is_open= #{isOpen}

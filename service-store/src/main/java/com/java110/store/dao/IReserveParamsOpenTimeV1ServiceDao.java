@@ -74,4 +74,5 @@ public interface IReserveParamsOpenTimeV1ServiceDao {
      */
     int queryReserveParamsOpenTimesCount(Map info);
 
+    int saveReserveParamsOpenTimeInfos(Map info);
 }

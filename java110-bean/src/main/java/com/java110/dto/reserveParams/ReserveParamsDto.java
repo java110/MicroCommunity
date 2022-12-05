@@ -1,8 +1,11 @@
 package com.java110.dto.reserveParams;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.reserveParamsOpenTime.ReserveParamsOpenTimeDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,66 +18,83 @@ import java.util.Date;
 public class ReserveParamsDto extends PageDto implements Serializable {
 
     private String paramWay;
-private String paramsId;
-private String maxQuantity;
-private String name;
-private String paramWayText;
-private String startTime;
-private String communityId;
-private String hoursMaxQuantity;
+    private String paramsId;
+    private String maxQuantity;
+    private String name;
+    private String paramWayText;
+    private String startTime;
+    private String communityId;
+    private String hoursMaxQuantity;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private List<ReserveParamsOpenTimeDto> openTimes;
+
 
     public String getParamWay() {
         return paramWay;
     }
-public void setParamWay(String paramWay) {
+
+    public void setParamWay(String paramWay) {
         this.paramWay = paramWay;
     }
-public String getParamsId() {
+
+    public String getParamsId() {
         return paramsId;
     }
-public void setParamsId(String paramsId) {
+
+    public void setParamsId(String paramsId) {
         this.paramsId = paramsId;
     }
-public String getMaxQuantity() {
+
+    public String getMaxQuantity() {
         return maxQuantity;
     }
-public void setMaxQuantity(String maxQuantity) {
+
+    public void setMaxQuantity(String maxQuantity) {
         this.maxQuantity = maxQuantity;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getParamWayText() {
+
+    public String getParamWayText() {
         return paramWayText;
     }
-public void setParamWayText(String paramWayText) {
+
+    public void setParamWayText(String paramWayText) {
         this.paramWayText = paramWayText;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getHoursMaxQuantity() {
+
+    public String getHoursMaxQuantity() {
         return hoursMaxQuantity;
     }
-public void setHoursMaxQuantity(String hoursMaxQuantity) {
+
+    public void setHoursMaxQuantity(String hoursMaxQuantity) {
         this.hoursMaxQuantity = hoursMaxQuantity;
     }
 
@@ -93,5 +113,13 @@ public void setHoursMaxQuantity(String hoursMaxQuantity) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ReserveParamsOpenTimeDto> getOpenTimes() {
+        return openTimes;
+    }
+
+    public void setOpenTimes(List<ReserveParamsOpenTimeDto> openTimes) {
+        this.openTimes = openTimes;
     }
 }

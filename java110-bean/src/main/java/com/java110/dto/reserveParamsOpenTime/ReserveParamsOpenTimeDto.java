@@ -1,6 +1,7 @@
 package com.java110.dto.reserveParamsOpenTime;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class ReserveParamsOpenTimeDto extends PageDto implements Serializable {
 
     private String hours;
-private String paramsId;
-private String isOpen;
-private String timeId;
-private String communityId;
+    private String paramsId;
+    private String[] paramsIds;
+    private String isOpen;
+    private String timeId;
+    private String communityId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String communityId;
     public String getHours() {
         return hours;
     }
-public void setHours(String hours) {
+
+    public void setHours(String hours) {
         this.hours = hours;
     }
-public String getParamsId() {
+
+    public String getParamsId() {
         return paramsId;
     }
-public void setParamsId(String paramsId) {
+
+    public void setParamsId(String paramsId) {
         this.paramsId = paramsId;
     }
-public String getIsOpen() {
+
+    public String getIsOpen() {
         return isOpen;
     }
-public void setIsOpen(String isOpen) {
+
+    public void setIsOpen(String isOpen) {
         this.isOpen = isOpen;
     }
-public String getTimeId() {
+
+    public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -72,5 +83,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getParamsIds() {
+        return paramsIds;
+    }
+
+    public void setParamsIds(String[] paramsIds) {
+        this.paramsIds = paramsIds;
     }
 }

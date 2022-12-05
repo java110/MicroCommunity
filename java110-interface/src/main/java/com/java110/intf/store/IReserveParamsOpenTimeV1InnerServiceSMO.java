@@ -41,6 +41,9 @@ public interface IReserveParamsOpenTimeV1InnerServiceSMO {
     @RequestMapping(value = "/saveReserveParamsOpenTime", method = RequestMethod.POST)
     public int saveReserveParamsOpenTime(@RequestBody  ReserveParamsOpenTimePo reserveParamsOpenTimePo);
 
+    @RequestMapping(value = "/saveReserveParamsOpenTimes", method = RequestMethod.POST)
+    int saveReserveParamsOpenTimes(@RequestBody List<ReserveParamsOpenTimePo> reserveParamsOpenTimePos);
+
     @RequestMapping(value = "/updateReserveParamsOpenTime", method = RequestMethod.POST)
     public int updateReserveParamsOpenTime(@RequestBody  ReserveParamsOpenTimePo reserveParamsOpenTimePo);
 

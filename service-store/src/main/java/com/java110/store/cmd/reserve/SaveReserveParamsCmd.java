@@ -22,8 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.store.IReserveParamsOpenTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveParamsV1InnerServiceSMO;
+import com.java110.po.communitySpaceOpenTime.CommunitySpaceOpenTimePo;
 import com.java110.po.reserveParams.ReserveParamsPo;
+import com.java110.po.reserveParamsOpenTime.ReserveParamsOpenTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +34,9 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +58,9 @@ public class SaveReserveParamsCmd extends Cmd {
     @Autowired
     private IReserveParamsV1InnerServiceSMO reserveParamsV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IReserveParamsOpenTimeV1InnerServiceSMO reserveParamsOpenTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
@@ -72,6 +81,24 @@ public class SaveReserveParamsCmd extends Cmd {
         reserveParamsPo.setParamsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = reserveParamsV1InnerServiceSMOImpl.saveReserveParams(reserveParamsPo);
 
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
+        List<ReserveParamsOpenTimePo> reserveParamsOpenTimePos = new ArrayList<>();
+        ReserveParamsOpenTimePo reserveParamsOpenTimePo = null;
+        for (int hours = 0; hours < 24; hours++) {
+
+            reserveParamsOpenTimePo = new ReserveParamsOpenTimePo();
+            reserveParamsOpenTimePo.setCommunityId(reqJson.getString("communityId"));
+            reserveParamsOpenTimePo.setParamsId(reserveParamsPo.getParamsId());
+            reserveParamsOpenTimePo.setIsOpen("N");
+            reserveParamsOpenTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            reserveParamsOpenTimePo.setHours(hours + "");
+            reserveParamsOpenTimePos.add(reserveParamsOpenTimePo);
+
+        }
+        flag = reserveParamsOpenTimeV1InnerServiceSMOImpl.saveReserveParamsOpenTimes(reserveParamsOpenTimePos);
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }

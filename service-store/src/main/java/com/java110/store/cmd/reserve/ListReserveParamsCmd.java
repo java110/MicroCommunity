@@ -20,6 +20,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.communitySpace.CommunitySpaceDto;
+import com.java110.dto.communitySpaceOpenTime.CommunitySpaceOpenTimeDto;
+import com.java110.dto.reserveParamsOpenTime.ReserveParamsOpenTimeDto;
+import com.java110.intf.store.IReserveParamsOpenTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveParamsV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -51,6 +55,8 @@ public class ListReserveParamsCmd extends Cmd {
   private static Logger logger = LoggerFactory.getLogger(ListReserveParamsCmd.class);
     @Autowired
     private IReserveParamsV1InnerServiceSMO reserveParamsV1InnerServiceSMOImpl;
+    @Autowired
+    private IReserveParamsOpenTimeV1InnerServiceSMO reserveParamsOpenTimeV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -79,5 +85,34 @@ public class ListReserveParamsCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshOpenTimes(List<ReserveParamsDto> reserveParamsDtos) {
+
+        if (reserveParamsDtos == null || reserveParamsDtos.size() < 1) {
+            return;
+        }
+
+        List<String> paramsIds = new ArrayList<>();
+
+        for (ReserveParamsDto reserveParamsDto : reserveParamsDtos) {
+            paramsIds.add(reserveParamsDto.getParamsId());
+        }
+
+        ReserveParamsOpenTimeDto reserveParamsOpenTimeDto = new ReserveParamsOpenTimeDto();
+        reserveParamsOpenTimeDto.setParamsIds(paramsIds.toArray(new String[paramsIds.size()]));
+        List<ReserveParamsOpenTimeDto> reserveParamsOpenTimes = reserveParamsOpenTimeV1InnerServiceSMOImpl.queryReserveParamsOpenTimes(reserveParamsOpenTimeDto);
+
+        List<ReserveParamsOpenTimeDto> tmpReserveParamsOpenTimeDtos = null;
+        for (ReserveParamsDto reserveParamsDto : reserveParamsDtos) {
+            tmpReserveParamsOpenTimeDtos = new ArrayList<>();
+            for (ReserveParamsOpenTimeDto tmpReserveParamsOpenTimeDto : reserveParamsOpenTimes) {
+                if (tmpReserveParamsOpenTimeDto.getParamsId().equals(reserveParamsDto.getParamsId())) {
+                    tmpReserveParamsOpenTimeDtos.add(tmpReserveParamsOpenTimeDto);
+                }
+            }
+            reserveParamsDto.setOpenTimes(tmpReserveParamsOpenTimeDtos);
+        }
+
     }
 }
