@@ -76,6 +76,7 @@ public class ListReserveParamsCmd extends Cmd {
 
            if (count > 0) {
                reserveParamsDtos = reserveParamsV1InnerServiceSMOImpl.queryReserveParamss(reserveParamsDto);
+               refreshOpenTimes(reserveParamsDtos);
            } else {
                reserveParamsDtos = new ArrayList<>();
            }
