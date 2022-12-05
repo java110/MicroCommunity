@@ -55,15 +55,15 @@ public class SaveReserveGoodsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "catalogId", "请求报文中未包含catalogId");
-Assert.hasKeyAndValue(reqJson, "goodsName", "请求报文中未包含goodsName");
-Assert.hasKeyAndValue(reqJson, "goodsDesc", "请求报文中未包含goodsDesc");
-Assert.hasKeyAndValue(reqJson, "type", "请求报文中未包含type");
-Assert.hasKeyAndValue(reqJson, "paramsId", "请求报文中未包含paramsId");
-Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
-Assert.hasKeyAndValue(reqJson, "startDate", "请求报文中未包含startDate");
-Assert.hasKeyAndValue(reqJson, "endDate", "请求报文中未包含endDate");
-Assert.hasKeyAndValue(reqJson, "imgUrl", "请求报文中未包含imgUrl");
+        Assert.hasKeyAndValue(reqJson, "catalogId", "请求报文中未包含catalogId");
+        Assert.hasKeyAndValue(reqJson, "goodsName", "请求报文中未包含goodsName");
+        Assert.hasKeyAndValue(reqJson, "goodsDesc", "请求报文中未包含goodsDesc");
+        Assert.hasKeyAndValue(reqJson, "type", "请求报文中未包含type");
+        Assert.hasKeyAndValue(reqJson, "paramsId", "请求报文中未包含paramsId");
+        Assert.hasKeyAndValue(reqJson, "price", "请求报文中未包含price");
+        Assert.hasKeyAndValue(reqJson, "startDate", "请求报文中未包含startDate");
+        Assert.hasKeyAndValue(reqJson, "endDate", "请求报文中未包含endDate");
+        Assert.hasKeyAndValue(reqJson, "imgUrl", "请求报文中未包含imgUrl");
 
     }
 
@@ -71,7 +71,7 @@ Assert.hasKeyAndValue(reqJson, "imgUrl", "请求报文中未包含imgUrl");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ReserveGoodsPo reserveGoodsPo = BeanConvertUtil.covertBean(reqJson, ReserveGoodsPo.class);
+        ReserveGoodsPo reserveGoodsPo = BeanConvertUtil.covertBean(reqJson, ReserveGoodsPo.class);
         reserveGoodsPo.setGoodsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = reserveGoodsV1InnerServiceSMOImpl.saveReserveGoods(reserveGoodsPo);
 

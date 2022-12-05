@@ -1,6 +1,8 @@
 package com.java110.dto.reserveGoods;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.reserveParams.ReserveParamsDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,21 +14,22 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ReserveGoodsDto extends PageDto implements Serializable {
+public class ReserveGoodsDto extends ReserveParamsDto implements Serializable {
 
     private String endDate;
-private String goodsId;
-private String sort;
-private String type;
-private String imgUrl;
-private String catalogId;
-private String paramsId;
-private String price;
-private String state;
-private String communityId;
-private String goodsName;
-private String startDate;
-private String goodsDesc;
+    private String goodsId;
+    private String sort;
+    private String type;
+    private String imgUrl;
+    private String catalogId;
+    private String paramsId;
+    private String paramsName;
+    private String price;
+    private String state;
+    private String communityId;
+    private String goodsName;
+    private String startDate;
+    private String goodsDesc;
 
 
     private Date createTime;
@@ -37,79 +40,104 @@ private String goodsDesc;
     public String getEndDate() {
         return endDate;
     }
-public void setEndDate(String endDate) {
+
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
-public String getGoodsId() {
+
+    public String getGoodsId() {
         return goodsId;
     }
-public void setGoodsId(String goodsId) {
+
+    public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
-public String getSort() {
+
+    public String getSort() {
         return sort;
     }
-public void setSort(String sort) {
+
+    public void setSort(String sort) {
         this.sort = sort;
     }
-public String getType() {
+
+    public String getType() {
         return type;
     }
-public void setType(String type) {
+
+    public void setType(String type) {
         this.type = type;
     }
-public String getImgUrl() {
+
+    public String getImgUrl() {
         return imgUrl;
     }
-public void setImgUrl(String imgUrl) {
+
+    public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-public String getCatalogId() {
+
+    public String getCatalogId() {
         return catalogId;
     }
-public void setCatalogId(String catalogId) {
+
+    public void setCatalogId(String catalogId) {
         this.catalogId = catalogId;
     }
-public String getParamsId() {
+
+    public String getParamsId() {
         return paramsId;
     }
-public void setParamsId(String paramsId) {
+
+    public void setParamsId(String paramsId) {
         this.paramsId = paramsId;
     }
-public String getPrice() {
+
+    public String getPrice() {
         return price;
     }
-public void setPrice(String price) {
+
+    public void setPrice(String price) {
         this.price = price;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getGoodsName() {
+
+    public String getGoodsName() {
         return goodsName;
     }
-public void setGoodsName(String goodsName) {
+
+    public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
     }
-public String getStartDate() {
+
+    public String getStartDate() {
         return startDate;
     }
-public void setStartDate(String startDate) {
+
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-public String getGoodsDesc() {
+
+    public String getGoodsDesc() {
         return goodsDesc;
     }
-public void setGoodsDesc(String goodsDesc) {
+
+    public void setGoodsDesc(String goodsDesc) {
         this.goodsDesc = goodsDesc;
     }
 
@@ -128,5 +156,13 @@ public void setGoodsDesc(String goodsDesc) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getParamsName() {
+        return paramsName;
+    }
+
+    public void setParamsName(String paramsName) {
+        this.paramsName = paramsName;
     }
 }
