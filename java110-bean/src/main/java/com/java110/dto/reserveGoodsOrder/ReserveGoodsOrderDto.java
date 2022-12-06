@@ -19,8 +19,12 @@ public class ReserveGoodsOrderDto extends PageDto implements Serializable {
 
     private String orderId;
     private String goodsId;
+    private String goodsName;
+
+    private String goodsNameLike;
     private String receivableAmount;
     private String payWay;
+    private String payWayName;
     private String remark;
     private String receivedAmount;
     private String type;
@@ -29,6 +33,7 @@ public class ReserveGoodsOrderDto extends PageDto implements Serializable {
     private String appointmentTime;
     private String personId;
     private String state;
+    private String stateName;
     private String personTel;
     private String communityId;
 
@@ -175,5 +180,37 @@ public class ReserveGoodsOrderDto extends PageDto implements Serializable {
 
     public void setTimes(List<ReserveGoodsOrderTimeDto> times) {
         this.times = times;
+    }
+
+    public String getPayWayName() {
+        return payWayName;
+    }
+
+    public void setPayWayName(String payWayName) {
+        this.payWayName = payWayName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsNameLike() {
+        return goodsNameLike;
+    }
+
+    public void setGoodsNameLike(String goodsNameLike) {
+        this.goodsNameLike = goodsNameLike;
     }
 }
