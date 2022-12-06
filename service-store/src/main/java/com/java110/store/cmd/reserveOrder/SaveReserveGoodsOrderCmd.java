@@ -85,7 +85,6 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "extOrderId", "请求报文中未包含extOrderId");
 
         //校验是否可以预约
         ReserveGoodsDto reserveGoodsDto = new ReserveGoodsDto();
