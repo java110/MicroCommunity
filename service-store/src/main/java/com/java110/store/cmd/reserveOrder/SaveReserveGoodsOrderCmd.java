@@ -182,6 +182,7 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
             reserveGoodsOrderTimePo = new ReserveGoodsOrderTimePo();
             reserveGoodsOrderTimePo.setCommunityId(reserveGoodsOrderPo.getCommunityId());
             reserveGoodsOrderTimePo.setGoodsId(reserveGoodsOrderPo.getGoodsId());
+            reserveGoodsOrderTimePo.setOrderId(reserveGoodsOrderPo.getOrderId());
             reserveGoodsOrderTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
             reserveGoodsOrderTimePo.setQuantity(openTimes.getJSONObject(timeIndex).getString("quantity"));
             reserveGoodsOrderTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
