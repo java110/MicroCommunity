@@ -1,6 +1,7 @@
 package com.java110.dto.reserveGoodsConfirmOrder;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,25 @@ import java.util.Date;
 public class ReserveGoodsConfirmOrderDto extends PageDto implements Serializable {
 
     private String timeId;
-private String orderId;
-private String goodsId;
-private String coId;
-private String remark;
-private String type;
-private String communityId;
+    private String orderId;
+    private String goodsId;
+    private String coId;
+    private String remark;
+    private String type;
+    private String communityId;
 
+    private String goodsName;
 
+    private String imgUrl;
+
+    private String appointmentTime;
+
+    private String hours;
+    private String quantity;
+
+    private String personName;
+
+    private String personTel;
     private Date createTime;
 
     private String statusCd = "0";
@@ -31,43 +43,56 @@ private String communityId;
     public String getTimeId() {
         return timeId;
     }
-public void setTimeId(String timeId) {
+
+    public void setTimeId(String timeId) {
         this.timeId = timeId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getGoodsId() {
+
+    public String getGoodsId() {
         return goodsId;
     }
-public void setGoodsId(String goodsId) {
+
+    public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
-public String getCoId() {
+
+    public String getCoId() {
         return coId;
     }
-public void setCoId(String coId) {
+
+    public void setCoId(String coId) {
         this.coId = coId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getType() {
+
+    public String getType() {
         return type;
     }
-public void setType(String type) {
+
+    public void setType(String type) {
         this.type = type;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -86,5 +111,61 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getPersonTel() {
+        return personTel;
+    }
+
+    public void setPersonTel(String personTel) {
+        this.personTel = personTel;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
