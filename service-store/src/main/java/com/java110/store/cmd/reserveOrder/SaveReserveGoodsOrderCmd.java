@@ -26,6 +26,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.dto.reserveGoods.ReserveGoodsDto;
+import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;
 import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;
 import com.java110.dto.reserveParams.ReserveParamsDto;
 import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
@@ -166,9 +167,9 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
         if (StringUtil.isEmpty(reserveGoodsOrderPo.getExtOrderId())) {
             reserveGoodsOrderPo.setExtOrderId("-1");
         }
-        if (StringUtil.isEmpty(reserveGoodsOrderPo.getState())) {
-            reserveGoodsOrderPo.setState(CommunitySpacePersonDto.STATE_W);
-        }
+
+        reserveGoodsOrderPo.setState(ReserveGoodsOrderDto.STATE_W);
+
         int flag = reserveGoodsOrderV1InnerServiceSMOImpl.saveReserveGoodsOrder(reserveGoodsOrderPo);
 
         if (flag < 1) {

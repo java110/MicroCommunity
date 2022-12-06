@@ -16,7 +16,11 @@ import java.util.List;
  * add by wuxw 2019/4/24
  **/
 public class ReserveGoodsOrderDto extends PageDto implements Serializable {
-
+    public static final String STATE_S = "S"; //预约成功
+    public static final String STATE_F = "F";//预约失败
+    public static final String STATE_W = "W";//待审核
+    public static final String STATE_WP = "WP";//待支付
+    public static final String STATE_CL = "CL";//取消预约
     private String orderId;
     private String goodsId;
     private String goodsName;
