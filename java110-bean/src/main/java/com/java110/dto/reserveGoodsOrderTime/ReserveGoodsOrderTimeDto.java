@@ -30,6 +30,8 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String appointmentTime;
+
 
     public String getHours() {
         return hours;
@@ -110,5 +112,13 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
 
     public void setGoodsIds(String[] goodsIds) {
         this.goodsIds = goodsIds;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
     }
 }

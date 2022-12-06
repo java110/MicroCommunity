@@ -20,7 +20,11 @@
         select t.hours,t.quantity,t.time_id,t.time_id timeId,t.order_id,t.order_id orderId,t.goods_id,t.goods_id
         goodsId,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId
         from reserve_goods_order_time t
+        left join reserve_goods_order rgo on t.goods_id = rgo.goods_id and rgo.status_cd='0'
         where 1 =1
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and rgo.appointment_time = #{appointmentTime}
+        </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
         </if>
@@ -94,7 +98,11 @@
     <select id="queryReserveGoodsOrderTimesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from reserve_goods_order_time t
+        left join reserve_goods_order rgo on t.goods_id = rgo.goods_id and rgo.status_cd='0'
         where 1 =1
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and rgo.appointment_time = #{appointmentTime}
+        </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
         </if>

@@ -15,6 +15,7 @@
  */
 package com.java110.store.cmd.reserveOrder;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,11 +23,18 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
+import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;
+import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;
+import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
+import com.java110.po.reserveGoodsOrderTime.ReserveGoodsOrderTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -52,33 +60,76 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
     @Autowired
     private IReserveGoodsOrderV1InnerServiceSMO reserveGoodsOrderV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IReserveGoodsOrderTimeV1InnerServiceSMO reserveGoodsOrderTimeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "orderId", "请求报文中未包含orderId");
         Assert.hasKeyAndValue(reqJson, "goodsId", "请求报文中未包含goodsId");
         Assert.hasKeyAndValue(reqJson, "type", "请求报文中未包含type");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
         Assert.hasKeyAndValue(reqJson, "appointmentTime", "请求报文中未包含appointmentTime");
-        Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "extOrderId", "请求报文中未包含extOrderId");
 
+        if(!reqJson.containsKey("openTimes")){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+
+        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+
+        if(openTimes == null || openTimes.size() <1){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return ;
+        }
+        ReserveGoodsOrderTimeDto reserveGoodsOrderTimeDto = null;
+        int flag = 0;
+        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+            reserveGoodsOrderTimeDto = new ReserveGoodsOrderTimeDto();
+            reserveGoodsOrderTimeDto.setCommunityId(reqJson.getString("communityId"));
+            reserveGoodsOrderTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
+            reserveGoodsOrderTimeDto.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
+            reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
+            flag = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
+            if(flag > 0){
+                throw new CmdException(reqJson.getString("appointmentTime")+","+openTimes.getJSONObject(timeIndex).getString("hours")+"已经被预约");
+            }
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         ReserveGoodsOrderPo reserveGoodsOrderPo = BeanConvertUtil.covertBean(reqJson, ReserveGoodsOrderPo.class);
         reserveGoodsOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        if(StringUtil.isEmpty(reserveGoodsOrderPo.getExtOrderId())){
+            reserveGoodsOrderPo.setExtOrderId("-1");
+        }
+        if(StringUtil.isEmpty(reserveGoodsOrderPo.getState())){
+            reserveGoodsOrderPo.setState(CommunitySpacePersonDto.STATE_W);
+        }
         int flag = reserveGoodsOrderV1InnerServiceSMOImpl.saveReserveGoodsOrder(reserveGoodsOrderPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+
+        ReserveGoodsOrderTimePo reserveGoodsOrderTimePo = null;
+        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+            reserveGoodsOrderTimePo = new ReserveGoodsOrderTimePo();
+            reserveGoodsOrderTimePo.setCommunityId(reserveGoodsOrderPo.getCommunityId());
+            reserveGoodsOrderTimePo.setGoodsId(reserveGoodsOrderPo.getGoodsId());
+            reserveGoodsOrderTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
+            reserveGoodsOrderTimePo.setQuantity(openTimes.getJSONObject(timeIndex).getString("quantity"));
+            reserveGoodsOrderTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            reserveGoodsOrderTimePo.setState(CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM);
+            reserveGoodsOrderTimeV1InnerServiceSMOImpl.saveReserveGoodsOrderTime(reserveGoodsOrderTimePo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
