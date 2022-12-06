@@ -16,6 +16,8 @@ import java.util.List;
  * add by wuxw 2019/4/24
  **/
 public class ReserveParamsDto extends PageDto implements Serializable {
+    public static final String PARAM_WAY_DAY = "1";
+    public static final String PARAM_WAY_WEEK = "2";
 
     private String paramWay;
     private String paramsId;

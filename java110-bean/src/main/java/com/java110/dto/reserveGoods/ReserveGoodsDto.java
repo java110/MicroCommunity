@@ -16,6 +16,7 @@ import java.util.Date;
  **/
 public class ReserveGoodsDto extends ReserveParamsDto implements Serializable {
 
+
     private String endDate;
     private String goodsId;
     private String sort;

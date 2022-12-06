@@ -25,20 +25,29 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.reserveGoods.ReserveGoodsDto;
 import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;
+import com.java110.dto.reserveParams.ReserveParamsDto;
 import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;
+import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
 import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
 import com.java110.po.reserveGoodsOrderTime.ReserveGoodsOrderTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.color.CMMException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -63,6 +72,9 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
     @Autowired
     private IReserveGoodsOrderTimeV1InnerServiceSMO reserveGoodsOrderTimeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IReserveGoodsV1InnerServiceSMO reserveGoodsV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "goodsId", "请求报文中未包含goodsId");
@@ -75,28 +87,74 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "extOrderId", "请求报文中未包含extOrderId");
 
-        if(!reqJson.containsKey("openTimes")){
-            cmdDataFlowContext.setResponseEntity(ResultVo.success());
-            return ;
+        //校验是否可以预约
+        ReserveGoodsDto reserveGoodsDto = new ReserveGoodsDto();
+        reserveGoodsDto.setGoodsId(reqJson.getString("goodsId"));
+        List<ReserveGoodsDto> reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
+        if ("1001".equals(reqJson.getString("type"))) {
+            Assert.listOnlyOne(reserveGoodsDtos, "就餐不存在");
+        } else {
+            Assert.listOnlyOne(reserveGoodsDtos, "服务不存在");
         }
 
-        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+        checkAppointmentTime(reqJson, reserveGoodsDtos.get(0));
 
-        if(openTimes == null || openTimes.size() <1){
+        if (!reqJson.containsKey("times")) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
-            return ;
+            return;
+        }
+
+        JSONArray openTimes = reqJson.getJSONArray("times");
+
+        if (openTimes == null || openTimes.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
         }
         ReserveGoodsOrderTimeDto reserveGoodsOrderTimeDto = null;
         int flag = 0;
-        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+        int quantity = 0;
+        for (int timeIndex = 0; timeIndex < openTimes.size(); timeIndex++) {
             reserveGoodsOrderTimeDto = new ReserveGoodsOrderTimeDto();
             reserveGoodsOrderTimeDto.setCommunityId(reqJson.getString("communityId"));
             reserveGoodsOrderTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
             reserveGoodsOrderTimeDto.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
             reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
             flag = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
-            if(flag > 0){
-                throw new CmdException(reqJson.getString("appointmentTime")+","+openTimes.getJSONObject(timeIndex).getString("hours")+"已经被预约");
+            if (flag > 0) {
+                throw new CmdException(reqJson.getString("appointmentTime") + "," + openTimes.getJSONObject(timeIndex).getString("hours") + "已经被预约");
+            }
+
+            quantity = Integer.parseInt(openTimes.getJSONObject(timeIndex).getString("quantity"));
+            if (quantity > Integer.parseInt(reserveGoodsDtos.get(0).getHoursMaxQuantity())) {
+                throw new CmdException("预约数量超过设定数量");
+            }
+        }
+    }
+
+    private void checkAppointmentTime(JSONObject reqJson, ReserveGoodsDto reserveGoodsDto) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDateFromStringB(reqJson.getString("appointmentTime")));
+        int day;
+        String[] days = reserveGoodsDto.getParamWayText().split(",");
+
+        if (ReserveParamsDto.PARAM_WAY_DAY.equals(reserveGoodsDto.getParamWay())) {
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            if (!Arrays.asList(days).contains(day + "")) {
+                throw new CmdException(reqJson.getString("appointmentTime") + "不能预约");
+            }
+        } else {
+            day = calendar.get(Calendar.DAY_OF_WEEK);
+            boolean isFirstSunday = (calendar.getFirstDayOfWeek() == Calendar.SUNDAY);
+            //获取周几
+            //若一周第一天为星期天，则-1
+            if (isFirstSunday) {
+                day = day - 1;
+                if (day == 0) {
+                    day = 7;
+                }
+            }
+            if (!Arrays.asList(days).contains(day + "")) {
+                throw new CmdException(reqJson.getString("appointmentTime") + "不能预约");
             }
         }
     }
@@ -106,10 +164,10 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         ReserveGoodsOrderPo reserveGoodsOrderPo = BeanConvertUtil.covertBean(reqJson, ReserveGoodsOrderPo.class);
         reserveGoodsOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        if(StringUtil.isEmpty(reserveGoodsOrderPo.getExtOrderId())){
+        if (StringUtil.isEmpty(reserveGoodsOrderPo.getExtOrderId())) {
             reserveGoodsOrderPo.setExtOrderId("-1");
         }
-        if(StringUtil.isEmpty(reserveGoodsOrderPo.getState())){
+        if (StringUtil.isEmpty(reserveGoodsOrderPo.getState())) {
             reserveGoodsOrderPo.setState(CommunitySpacePersonDto.STATE_W);
         }
         int flag = reserveGoodsOrderV1InnerServiceSMOImpl.saveReserveGoodsOrder(reserveGoodsOrderPo);
@@ -118,10 +176,10 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
-        JSONArray openTimes = reqJson.getJSONArray("openTimes");
+        JSONArray openTimes = reqJson.getJSONArray("times");
 
         ReserveGoodsOrderTimePo reserveGoodsOrderTimePo = null;
-        for(int timeIndex = 0 ;timeIndex < openTimes.size(); timeIndex++) {
+        for (int timeIndex = 0; timeIndex < openTimes.size(); timeIndex++) {
             reserveGoodsOrderTimePo = new ReserveGoodsOrderTimePo();
             reserveGoodsOrderTimePo.setCommunityId(reserveGoodsOrderPo.getCommunityId());
             reserveGoodsOrderTimePo.setGoodsId(reserveGoodsOrderPo.getGoodsId());
