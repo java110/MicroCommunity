@@ -20,12 +20,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
+import com.java110.intf.store.IReserveGoodsConfirmOrderV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;
+import com.java110.dto.reserveGoodsConfirmOrder.ReserveGoodsConfirmOrderDto;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +36,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：reserveGoodsOrderTime.listReserveGoodsOrderTime
- * 请求路劲：/app/reserveGoodsOrderTime.ListReserveGoodsOrderTime
- * add by 吴学文 at 2022-12-06 11:04:20 mail: 928255095@qq.com
+ * 服务编码：reserveGoodsConfirmOrder.listReserveGoodsConfirmOrder
+ * 请求路劲：/app/reserveGoodsConfirmOrder.ListReserveGoodsConfirmOrder
+ * add by 吴学文 at 2022-12-06 16:15:14 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "reserveOrder.listReserveGoodsOrderTime")
-public class ListReserveGoodsOrderTimeCmd extends Cmd {
+@Java110Cmd(serviceCode = "reserveOrder.listReserveGoodsConfirmOrder")
+public class ListReserveGoodsConfirmOrderCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListReserveGoodsOrderTimeCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(ListReserveGoodsConfirmOrderCmd.class);
     @Autowired
-    private IReserveGoodsOrderTimeV1InnerServiceSMO reserveGoodsOrderTimeV1InnerServiceSMOImpl;
+    private IReserveGoodsConfirmOrderV1InnerServiceSMO reserveGoodsConfirmOrderV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -59,19 +59,19 @@ public class ListReserveGoodsOrderTimeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ReserveGoodsOrderTimeDto reserveGoodsOrderTimeDto = BeanConvertUtil.covertBean(reqJson, ReserveGoodsOrderTimeDto.class);
+           ReserveGoodsConfirmOrderDto reserveGoodsConfirmOrderDto = BeanConvertUtil.covertBean(reqJson, ReserveGoodsConfirmOrderDto.class);
 
-           int count = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
+           int count = reserveGoodsConfirmOrderV1InnerServiceSMOImpl.queryReserveGoodsConfirmOrdersCount(reserveGoodsConfirmOrderDto);
 
-           List<ReserveGoodsOrderTimeDto> reserveGoodsOrderTimeDtos = null;
+           List<ReserveGoodsConfirmOrderDto> reserveGoodsConfirmOrderDtos = null;
 
            if (count > 0) {
-               reserveGoodsOrderTimeDtos = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimes(reserveGoodsOrderTimeDto);
+               reserveGoodsConfirmOrderDtos = reserveGoodsConfirmOrderV1InnerServiceSMOImpl.queryReserveGoodsConfirmOrders(reserveGoodsConfirmOrderDto);
            } else {
-               reserveGoodsOrderTimeDtos = new ArrayList<>();
+               reserveGoodsConfirmOrderDtos = new ArrayList<>();
            }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, reserveGoodsOrderTimeDtos);
+           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, reserveGoodsConfirmOrderDtos);
 
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
