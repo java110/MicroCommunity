@@ -17,6 +17,7 @@
 
     <!-- 查询备忘录信息 add by wuxw 2018-07-03 -->
     <select id="getNotepadInfo" parameterType="Map" resultType="Map">
+
         select t.create_user_id,t.create_user_id createUserId,t.note_id,t.note_id
         noteId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.obj_name,t.obj_name objName,t.title,t.room_id,t.room_id roomId,t.room_name,t.room_name
@@ -24,7 +25,13 @@
         objId,t.state,t.obj_type,t.obj_type objType,t.link,t.create_time createTime,td.`name` noteTypeName
         from notepad t
         left join t_dict td on td.table_name = 'notepad' and td.table_columns = 'note_type' and td.status_cd = t.note_type
+        <if test="communityId !=null and communityId != ''">
+             left join building_owner bo on t.obj_id = bo.owner_id and bo.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="communityId !=null and communityId != ''">
+            and bo.community_id = #{communityId}
+        </if>
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
         </if>
