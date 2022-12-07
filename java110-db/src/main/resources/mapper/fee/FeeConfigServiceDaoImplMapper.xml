@@ -24,7 +24,7 @@
         feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType,
         t.payment_cd,t.payment_cycle,t.computing_formula_text,t.computing_formula_text
-        computingFormulaText,t.deduct_from,t.deduct_from deductFrom
+        computingFormulaText,t.deduct_from,t.deduct_from deductFrom,t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units
         from business_pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -136,7 +136,7 @@
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
         t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from
-        deductFrom,td4.name computingFormulaName
+        deductFrom,td4.name computingFormulaName,t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units
         from pay_fee_config t
         left join t_dict td1 on t.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
         td1.table_columns = 'fee_type_cd'
@@ -348,9 +348,9 @@
         insert into pay_fee_config(fee_type_cd, computing_formula, additional_amount, status_cd, square_price,
                                    is_default, config_id, fee_flag, fee_name,
                                    start_time, end_time, community_id, b_id, bill_type, payment_cd, payment_cycle,
-                                   computing_formula_text, deduct_from)
+                                   computing_formula_text, deduct_from,pay_online,scale,decimal_place,units)
         values (#{feeTypeCd}, #{computingFormula}, #{additionalAmount}, '0', #{squarePrice}, #{isDefault}, #{configId},
                 #{feeFlag}, #{feeName}, #{startTime}, #{endTime}, #{communityId}, '-1', #{billType}, #{paymentCd},
-                #{paymentCycle}, #{computingFormulaText}, #{deductFrom})
+                #{paymentCycle}, #{computingFormulaText}, #{deductFrom}, #{payOnline},#{scale},#{decimalPlace},#{units})
     </insert>
 </mapper>

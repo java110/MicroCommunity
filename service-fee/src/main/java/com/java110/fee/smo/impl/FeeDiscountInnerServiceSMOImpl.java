@@ -18,6 +18,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -171,6 +172,14 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
             for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
                 computeDiscountDto.setValue(value);
+
+                computeDiscountDto.setDiscountPrice(
+                        MoneyUtil.computePriceScale(
+                                computeDiscountDto.getDiscountPrice(),
+                                feeDtos.get(0).getScale(),
+                                Integer.parseInt(feeDtos.get(0).getDecimalPlace())
+                        )
+                );
                 if (!StringUtil.isEmpty(computeDiscountDto.getDiscountType()) && "3003".equals(computeDiscountDto.getDiscountType())) {
                     computeDiscountDto.setArdId(feeDetailDto.getArdId());
                 }
@@ -225,6 +234,13 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         List<ComputeDiscountDto> computeDiscountDtoList = new ArrayList<>();
         for (ComputeDiscountDto computeDiscountDto : computeDiscountDtos) {
             computeDiscountDto.setValue(value);
+            computeDiscountDto.setDiscountPrice(
+                    MoneyUtil.computePriceScale(
+                            computeDiscountDto.getDiscountPrice(),
+                            feeDtos.get(0).getScale(),
+                            Integer.parseInt(feeDtos.get(0).getDecimalPlace())
+                    )
+            );
             if (!StringUtil.isEmpty(computeDiscountDto.getDiscountType()) && "3003".equals(computeDiscountDto.getDiscountType())) {
                 computeDiscountDto.setArdId(feeDetailDto.getArdId());
             }

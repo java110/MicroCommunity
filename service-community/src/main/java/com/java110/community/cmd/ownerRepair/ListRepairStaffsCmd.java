@@ -10,6 +10,7 @@ import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -72,6 +73,9 @@ public class ListRepairStaffsCmd extends Cmd {
         //刷入图片信息
         List<PhotoVo> photoVos = null;  //业主上传维修图片
         PhotoVo photoVo = null;
+
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+
         for (RepairUserDto repairUserDto : repairUserDtos) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(repairUserDto.getRepairId());
@@ -80,6 +84,11 @@ public class ListRepairStaffsCmd extends Cmd {
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 if (tmpFileRelDto.getRelTypeCd().equals("14000")) {  //维修图片
                     photoVo = new PhotoVo();
+                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
+                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
+                    }else{
+                        photoVo.setUrl(tmpFileRelDto.getFileRealName());
+                    }
                     photoVo.setUrl(tmpFileRelDto.getFileRealName());
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     photoVos.add(photoVo);

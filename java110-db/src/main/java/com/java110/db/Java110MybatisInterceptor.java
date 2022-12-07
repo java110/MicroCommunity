@@ -314,7 +314,7 @@ public class Java110MybatisInterceptor implements Interceptor {
             String[] tmpKeys = tmpKey.split(",");
 
 //            if (values.size() < tmpKeys.length) {
-//                throw new IllegalArgumentException("sql 错误 key 和value 个数不等" + sql);
+//                throw new IllegalArgumentException("sql 错误 key P和value 个数不等" + sql);
 //            }
             for (int keyIndex = 0; keyIndex < tmpKeys.length; keyIndex++) {
                 String key = tmpKeys[keyIndex].trim();

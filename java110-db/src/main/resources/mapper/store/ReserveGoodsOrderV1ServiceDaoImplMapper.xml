@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveGoodsOrderV1ServiceDaoImpl">
+
+
+    <!-- 保存预约订单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveGoodsOrderInfo" parameterType="Map">
+        insert into reserve_goods_order(
+        order_id,goods_id,receivable_amount,pay_way,remark,received_amount,type,person_name,ext_order_id,appointment_time,person_id,state,person_tel,community_id
+        ) values (
+        #{orderId},#{goodsId},#{receivableAmount},#{payWay},#{remark},#{receivedAmount},#{type},#{personName},#{extOrderId},#{appointmentTime},#{personId},#{state},#{personTel},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询预约订单信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveGoodsOrderInfo" parameterType="Map" resultType="Map">
+        select t.order_id,t.order_id orderId,t.goods_id,t.goods_id goodsId,t.receivable_amount,t.receivable_amount
+        receivableAmount,t.pay_way,t.pay_way payWay,t.remark,t.status_cd,t.status_cd
+        statusCd,t.received_amount,t.received_amount receivedAmount,t.type,t.person_name,t.person_name
+        personName,t.ext_order_id,t.ext_order_id extOrderId,t.appointment_time,t.appointment_time
+        appointmentTime,t.person_id,t.person_id personId,t.state,t.person_tel,t.person_tel
+        personTel,t.community_id,t.community_id communityId,t.create_time createTime,rg.goods_name goodsName,
+        td.name stateName,td1.name payWayName
+        from reserve_goods_order t
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'reserve_goods_order' and td.table_columns = 'state'
+        left join t_dict td1 on t.pay_way = td1.status_cd and td1.table_name = 'reserve_goods_order' and td1.table_columns = 'pay_way'
+        where 1 =1
+        <if test="goodsNameLike !=null and goodsNameLike != ''">
+             and rg.goods_name like concat('%',#{goodsNameLike},'%')
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            and t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+            and t.ext_order_id= #{extOrderId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约订单信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveGoodsOrderInfo" parameterType="Map">
+        update reserve_goods_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            , t.goods_id= #{goodsId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            , t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+            , t.ext_order_id= #{extOrderId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            , t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约订单数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveGoodsOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_goods_order t
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'reserve_goods_order' and td.table_columns = 'state'
+        left join t_dict td1 on t.pay_way = td1.status_cd and td1.table_name = 'reserve_goods_order' and td1.table_columns = 'pay_way'
+        where 1 =1
+        <if test="goodsNameLike !=null and goodsNameLike != ''">
+            and rg.goods_name like concat('%',#{goodsNameLike},'%')
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="payWay !=null and payWay != ''">
+            and t.pay_way= #{payWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="extOrderId !=null and extOrderId != ''">
+            and t.ext_order_id= #{extOrderId}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

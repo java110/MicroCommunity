@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="assetInventoryDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存盘点明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAssetInventoryDetailInfo" parameterType="Map">
+        insert into asset_inventory_detail(
+original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
+) values (
+#{originalStock},#{quantity},#{rsId},#{applyOrderId},#{remark},#{id},#{state},#{resId}
+)
+    </insert>
+
+
+    <!-- 查询盘点明细信息 add by wuxw 2018-07-03 -->
+    <select id="getAssetInventoryDetailInfo" parameterType="Map" resultType="Map">
+        select t.original_stock,t.original_stock originalStock,t.quantity,t.create_time,t.create_time
+        createTime,t.rs_id,t.rs_id rsId,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd
+        statusCd,t.remark,t.id,t.state,t.res_id,t.res_id resId
+        from asset_inventory_detail t
+        where 1 =1
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改盘点明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateAssetInventoryDetailInfo" parameterType="Map">
+        update asset_inventory_detail t set t.status_cd = #{statusCd}
+        <if test="resId !=null and resId != ''">
+            , t.res_id= #{resId}
+        </if>
+        <if test="originalStock !=null and originalStock != ''">
+            , t.original_stock= #{originalStock}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            , t.quantity= #{quantity}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            , t.rs_id= #{rsId}
+        </if>
+
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+    </update>
+
+    <!-- 查询盘点明细 -->
+    <select id="getAssetInventoryDetailsInfo" parameterType="Map" resultType="Map">
+        select
+        p.id,
+        p.apply_order_id applyOrderId,
+        p.res_id resId,p.quantity,p.remark,
+        p.original_stock originalStock,p.state,
+        r.res_name resName,r.res_code resCode,
+        r.price,r.price standardPrice,r.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
+        td1.name unitCodeName,
+        td2.name miniUnitCodeName,
+        r.is_fixed isFixed,
+        td6.name isFixedName
+        from
+        asset_inventory_detail p
+        inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
+        left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
+        left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
+        left join t_dict td6 on r.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns = 'is_fixed'
+        LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
+        LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
+        LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
+        LEFT JOIN resource_store_specification rss on r.rss_id=rss.rss_id
+        where 1=1
+        and p.status_cd = '0'
+        <if test="applyOrderIds !=null">
+            and p.apply_order_id in
+            <foreach collection="applyOrderIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and p.apply_order_id= #{applyOrderId}
+        </if>
+    </select>
+
+    <!-- 查询盘点明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryAssetInventoryDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from asset_inventory_detail t
+        where 1 =1
+        <if test="originalStock !=null and originalStock != ''">
+            and t.original_stock= #{originalStock}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="rsId !=null and rsId != ''">
+            and t.rs_id= #{rsId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+</mapper>

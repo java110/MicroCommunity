@@ -92,9 +92,9 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             headers.put("user-id", result.getUserId());
             headers.put("user_id", result.getUserId());
             headers.put("login-user-id",result.getLoginUserId());
-            if (!StringUtil.isEmpty(result.getUserName())) {
-                headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
-            }
+//            if (!StringUtil.isEmpty(result.getUserName())) {
+//                headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
+//            }
         }
 
         if (!StringUtil.isEmpty(result.getStoreId())) {

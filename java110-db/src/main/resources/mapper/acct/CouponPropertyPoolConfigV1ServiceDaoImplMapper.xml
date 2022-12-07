@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponPropertyPoolConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存优惠券配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponPropertyPoolConfigInfo" parameterType="Map">
+        insert into coupon_property_pool_config(
+        config_id,coupon_id,column_value,column_key
+        ) values (
+        #{configId},#{couponId},#{columnValue},#{columnKey}
+        )
+    </insert>
+
+
+    <!-- 查询优惠券配置信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponPropertyPoolConfigInfo" parameterType="Map" resultType="Map">
+        select t.config_id,t.config_id configId,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id
+        couponId,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey,ck.`name`
+        from coupon_property_pool_config t
+        left join coupon_property_pool cpp on t.coupon_id = cpp.cpp_id and cpp.status_cd = '0'
+        LEFT JOIN coupon_key ck on cpp.to_type = ck.bean_name and t.column_key = ck.column_key and ck.status_cd = '0'
+        where 1 =1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="couponIds !=null">
+            and t.coupon_id in
+            <foreach collection="couponIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改优惠券配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponPropertyPoolConfigInfo" parameterType="Map">
+        update coupon_property_pool_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="columnValue !=null and columnValue != ''">
+            , t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            , t.column_key= #{columnKey}
+        </if>
+        where 1=1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+
+    </update>
+
+    <!-- 查询优惠券配置数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponPropertyPoolConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_property_pool_config t
+        where 1 =1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+
+
+    </select>
+
+</mapper>

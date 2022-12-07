@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.file.FileDto;
@@ -41,6 +42,47 @@ import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.util.List;
+/**
+ * 业主提交报修 功能
+ * 请求地址为/app/ownerRepair.saveOwnerRepair
+ */
+
+@Java110CmdDoc(title = "业主报修",
+        description = "主要用于业主报修",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/ownerRepair.saveOwnerRepair",
+        resource = "communityDoc",
+        author = "张峰",
+        serviceCode = "ownerRepair.saveOwnerRepair"
+)
+//入参要求
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区编码"),
+        @Java110ParamDoc(name = "appointmentTime", length = 30, remark = "预约时间"),
+        @Java110ParamDoc(name = "context", length = 30, remark = "报修内容"),
+        @Java110ParamDoc(name = "photos", length = 30, remark = "报修图片"),
+        @Java110ParamDoc(name = "repairName", length = 30, remark = "报修人姓名"),
+        @Java110ParamDoc(name = "repairObjName", length = 30, remark = "报修人住址"),
+        @Java110ParamDoc(name = "repairObjName", length = 30, remark = "报修人所在小区"),
+        @Java110ParamDoc(name = "roomId", length = 30, remark = "房屋id"),
+        @Java110ParamDoc(name = "tel", length = 30, remark = "报修联系电话"),
+        @Java110ParamDoc(name = "userName", length = 30, remark = "业主或成员姓名"),
+        @Java110ParamDoc(name = "repairChannel", length = 30, remark = "报修渠道"),
+        @Java110ParamDoc(name = "repairType", length = 30, remark = "派单类型"),
+        @Java110ParamDoc(name = "repairObjType", length = 30, remark = "房屋？？"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "报修成功")
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"repairName\":\"测试\",\"repairType\":\"102022081592760001\",\"appointmentTime\":\"2022-11-26 15:18:00\",\"tel\":\"15239726115\",\"roomId\":\"752022090312040033\",\"photos\":[],\"context\":\"反反复复烦烦烦\",\"userId\":\"302022102708350644\",\"userName\":\"测试\",\"communityId\":\"2022032267510001\",\"bindDate\":\"2022-11-26\",\"bindTime\":\"15:18\",\"repairObjType\":\"004\",\"repairChannel\":\"Z\",\"repairObjId\":\"752022090312040033\",\"repairObjName\":\"1号楼1单元202室\"}",
+        resBody="{\"code\":0,\"msg\":\"成功\",\"page\":0,\"records\":0,\"rows\":0,\"total\":0}"
+)
 
 @Java110Cmd(serviceCode = "ownerRepair.saveOwnerRepair")
 public class SaveOwnerRepairCmd extends Cmd {

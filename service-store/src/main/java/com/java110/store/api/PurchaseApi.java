@@ -8,7 +8,9 @@ import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.*;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
@@ -51,6 +53,9 @@ public class PurchaseApi {
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -70,11 +75,18 @@ public class PurchaseApi {
     @RequestMapping(value = "/purchaseApply", method = RequestMethod.POST)
     public ResponseEntity<String> purchaseApply(@RequestBody JSONObject reqJson,
                                                 @RequestHeader(value = "user-id") String userId,
-                                                @RequestHeader(value = "user-name") String userName,
                                                 @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));
@@ -144,11 +156,19 @@ public class PurchaseApi {
     @RequestMapping(value = "/purchaseStorage", method = RequestMethod.POST)
     public ResponseEntity<String> purchaseStorage(@RequestBody JSONObject reqJson,
                                                   @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "user-name") String userName,
+
                                                   @RequestHeader(value = "store-id") String storeId) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));

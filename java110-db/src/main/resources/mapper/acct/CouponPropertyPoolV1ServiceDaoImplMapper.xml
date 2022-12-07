@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponPropertyPoolV1ServiceDaoImpl">
+
+
+    <!-- 保存优惠券信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponPropertyPoolInfo" parameterType="Map">
+        insert into coupon_property_pool(
+        coupon_name,to_type,from_type,validity_day,cpp_id,community_name,state,community_id,stock,from_id,remark
+        ) values (
+        #{couponName},#{toType},#{fromType},#{validityDay},#{cppId},#{communityName},#{state},#{communityId},#{stock},#{fromId},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询优惠券信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponPropertyPoolInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.to_type,t.to_type toType,t.from_type,t.from_type
+        fromType,t.validity_day,t.validity_day validityDay,t.cpp_id,t.cpp_id cppId,t.community_name,t.community_name
+        communityName,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id
+        communityId,t.stock,t.from_id,t.from_id fromId,td.name fromTypeName,td1.`name` toTypeName,t.create_time createTime,t.remark
+        from coupon_property_pool t
+        left join t_dict td on td.status_cd = t.from_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'from_type'
+        left join t_dict td1 on td1.status_cd = t.to_type and td1.table_name = 'coupon_property_pool' and td1.table_columns = 'to_type'
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="toType !=null and toType != ''">
+            and t.to_type= #{toType}
+        </if>
+        <if test="fromType !=null and fromType != ''">
+            and t.from_type= #{fromType}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="fromId !=null and fromId != ''">
+            and t.from_id= #{fromId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改优惠券信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponPropertyPoolInfo" parameterType="Map">
+        update coupon_property_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="toType !=null and toType != ''">
+            , t.to_type= #{toType}
+        </if>
+        <if test="fromType !=null and fromType != ''">
+            , t.from_type= #{fromType}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            , t.validity_day= #{validityDay}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        <if test="fromId !=null and fromId != ''">
+            , t.from_id= #{fromId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+
+    </update>
+
+    <!-- 查询优惠券数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponPropertyPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_property_pool t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="toType !=null and toType != ''">
+            and t.to_type= #{toType}
+        </if>
+        <if test="fromType !=null and fromType != ''">
+            and t.from_type= #{fromType}
+        </if>
+        <if test="validityDay !=null and validityDay != ''">
+            and t.validity_day= #{validityDay}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="fromId !=null and fromId != ''">
+            and t.from_id= #{fromId}
+        </if>
+
+
+    </select>
+
+</mapper>

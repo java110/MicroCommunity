@@ -16,7 +16,7 @@
 package com.java110.po.parkingCouponCar;
 
 import java.io.Serializable;
-import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-12 13:02:09 mail: 928255095@qq.com
@@ -28,111 +28,140 @@ import java.util.Date;
 public class ParkingCouponCarPo implements Serializable {
 
     private String giveWay;
-private String carNum;
-private String couponShopId;
-private String remark;
-private String statusCd = "0";
-private String couponId;
-private String pccId;
-private String typeCd;
-private String paId;
-private String startTime;
-private String shopId;
-private String state;
-private String endTime;
-private String communityId;
-private String value;
-public String getGiveWay() {
+    private String carNum;
+    private String couponShopId;
+    private String remark;
+    private String statusCd = "0";
+    private String couponId;
+    private String pccId;
+    private String typeCd;
+    private String paId;
+    private String startTime;
+    private String shopId;
+    private String state;
+    private String endTime;
+    private String communityId;
+    private String value;
+
+    public String getGiveWay() {
         return giveWay;
     }
-public void setGiveWay(String giveWay) {
+
+    public void setGiveWay(String giveWay) {
         this.giveWay = giveWay;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getCouponShopId() {
+
+    public String getCouponShopId() {
         return couponShopId;
     }
-public void setCouponShopId(String couponShopId) {
+
+    public void setCouponShopId(String couponShopId) {
         this.couponShopId = couponShopId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCouponId() {
+
+    public String getCouponId() {
         return couponId;
     }
-public void setCouponId(String couponId) {
+
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
-public String getPccId() {
+
+    public String getPccId() {
         return pccId;
     }
-public void setPccId(String pccId) {
+
+    public void setPccId(String pccId) {
         this.pccId = pccId;
     }
-public String getTypeCd() {
+
+    public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getPaId() {
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getShopId() {
+
+    public String getShopId() {
         return shopId;
     }
-public void setShopId(String shopId) {
+
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-
 
 
 }

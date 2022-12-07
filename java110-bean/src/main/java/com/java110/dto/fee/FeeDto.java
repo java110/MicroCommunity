@@ -145,6 +145,11 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String rateStartTime;
 
+    private String payOnline;
+    private String scale;
+    private String decimalPlace;
+    private String units;
+
     public String getAmount() {
         return amount;
     }
@@ -690,5 +695,37 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setMaxEndTime(Date maxEndTime) {
         this.maxEndTime = maxEndTime;
+    }
+
+    public String getPayOnline() {
+        return payOnline;
+    }
+
+    public void setPayOnline(String payOnline) {
+        this.payOnline = payOnline;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(String decimalPlace) {
+        this.decimalPlace = decimalPlace;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

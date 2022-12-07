@@ -17,6 +17,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
+import com.java110.dto.inspectionPlan.InspectionStaffDto;
 import com.java110.po.inspection.InspectionPlanStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,4 +65,12 @@ public interface IInspectionPlanStaffV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryInspectionPlanStaffsCount", method = RequestMethod.POST)
     int queryInspectionPlanStaffsCount(@RequestBody InspectionPlanStaffDto inspectionPlanStaffDto);
+
+    /**
+     * 查询员工的巡检情况
+     * @param inspectionStaffDto
+     * @return
+     */
+    @RequestMapping(value = "/queryStaffInspectionReport", method = RequestMethod.POST)
+    List<InspectionStaffDto> queryStaffInspectionReport(@RequestBody InspectionStaffDto inspectionStaffDto);
 }

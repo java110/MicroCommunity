@@ -450,6 +450,10 @@ public class FeeSharingBMOImpl implements IFeeSharingBMO {
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         payFeeConfigPo.setDeductFrom(FeeConfigDto.DEDUCT_FROM_N);
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         int saveFlag = feeConfigInnerServiceSMOImpl.saveFeeConfig(payFeeConfigPo);
 
         if (saveFlag < 1) {

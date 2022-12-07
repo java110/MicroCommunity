@@ -18,6 +18,7 @@ import com.java110.intf.fee.ITempCarFeeConfigV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
 import com.java110.po.tempCarFeeConfigAttr.TempCarFeeConfigAttrPo;
+import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -88,6 +89,10 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setSquarePrice("0");
         payFeeConfigPo.setDeductFrom(FeeConfigDto.DEDUCT_FROM_N);
+        payFeeConfigPo.setDecimalPlace("2");
+        payFeeConfigPo.setScale("1");
+        payFeeConfigPo.setUnits("元");
+        payFeeConfigPo.setPayOnline("Y");
         flag = payFeeConfigV1InnerServiceSMOImpl.savePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new CmdException("保存临时收费失败");

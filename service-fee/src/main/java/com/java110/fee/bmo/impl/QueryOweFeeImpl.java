@@ -21,10 +21,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.NumberUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +93,14 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             try {
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
                 //如果金额为0 就排除
-                //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+                tmpFeeDto.setFeeTotalPrice(
+                        MoneyUtil.computePriceScale(
+                                tmpFeeDto.getFeePrice(),
+                                tmpFeeDto.getScale(),
+                                Integer.parseInt(tmpFeeDto.getDecimalPlace())
+                        )
+                );
+
                 tmpFeeDto.setVal(val);
                 if (tmpFeeDto.getFeePrice() > 0) {
                     tmpFeeDtos.add(tmpFeeDto);
@@ -183,7 +187,14 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
+
+        feeDto.setFeeTotalPrice(
+                MoneyUtil.computePriceScale(
+                        Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()),
+                        feeDto.getScale(),
+                        Integer.parseInt(feeDto.getDecimalPlace())
+                )
+        );
 
         if (!StringUtil.isEmpty(custEndTime)) {
             Date date = DateUtil.getDateFromStringB(custEndTime);
@@ -217,6 +228,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             offlinePayFeeSwitch = MappingCache.getValue(DOMAIN_COMMON, OFFLINE_PAY_FEE_SWITCH);
         }
         feeDto.setOfflinePayFeeSwitch(offlinePayFeeSwitch);
+        //去掉多余0
+        feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
+        feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount()) + "");
         return ResultVo.createResponseEntity(feeDto);
     }
 
@@ -504,7 +518,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-        ) {
+                ) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }

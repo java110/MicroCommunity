@@ -39,6 +39,8 @@ public class NotepadDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String communityId;
+
 
     public String getCreateUserId() {
         return createUserId;
@@ -167,5 +169,13 @@ public class NotepadDto extends PageDto implements Serializable {
 
     public void setNoteTypeName(String noteTypeName) {
         this.noteTypeName = noteTypeName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

@@ -21,6 +21,7 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
     private String purchasePrice;
     private String chargeOrgName;
     private String machineName;
+    private String machineNameLike;
     private String chargeOrgId;
     private String locationDetail;
     private String firstEnableTime;
@@ -359,5 +360,13 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getMachineNameLike() {
+        return machineNameLike;
+    }
+
+    public void setMachineNameLike(String machineNameLike) {
+        this.machineNameLike = machineNameLike;
     }
 }

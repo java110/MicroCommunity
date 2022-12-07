@@ -67,6 +67,10 @@ public class ServiceConfiguration {
 //        exclusions.append("/app/unit.queryUnits,");
 //        exclusions.append("/app/room.queryRooms,");
         exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
+        exclusions.append("/app/productCategory/queryMainCategory,");
+
+        exclusions.append("/app/product.queryPhoneMainCategoryProduct,");
+
         exclusions.append("/app/shop/queryShopCommunity,");
         exclusions.append("/app/shopType/queryShopType,");
         exclusions.append("/app/housekeepingType/queryHousekeepingType,");
@@ -85,6 +89,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/equipmentAccount.listEquipmentAccount,");
         exclusions.append("/app/inspectionTaskDetail.listInspectionTaskDetails,");
         exclusions.append("/app/maintainanceTask.listMaintainanceTaskDetail,");
+        exclusions.append("/app/parkingCoupon.saveParkingCouponCar,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

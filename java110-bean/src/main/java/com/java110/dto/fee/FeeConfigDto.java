@@ -81,6 +81,11 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private double amount;
 
+    private String payOnline;
+    private String scale;
+    private String decimalPlace;
+    private String units;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -298,5 +303,37 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setComputingFormulaName(String computingFormulaName) {
         this.computingFormulaName = computingFormulaName;
+    }
+
+    public String getPayOnline() {
+        return payOnline;
+    }
+
+    public void setPayOnline(String payOnline) {
+        this.payOnline = payOnline;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(String decimalPlace) {
+        this.decimalPlace = decimalPlace;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

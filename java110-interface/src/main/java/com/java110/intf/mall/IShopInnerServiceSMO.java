@@ -57,4 +57,7 @@ public interface IShopInnerServiceSMO {
      */
     @RequestMapping(value = "/queryShopsCount", method = RequestMethod.POST)
     int queryShopsCount(@RequestBody ShopDto shopDto);
+
+    @RequestMapping(value = "/returnStoreOrder", method = RequestMethod.POST)
+    int returnStoreOrder(@RequestBody ShopDto shopDto);
 }

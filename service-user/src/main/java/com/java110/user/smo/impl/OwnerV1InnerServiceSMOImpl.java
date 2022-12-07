@@ -16,6 +16,7 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.user.dao.IOwnerV1ServiceDao;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerDto;
@@ -64,6 +65,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
     }
 
     @Override
+
     public List<OwnerDto> queryOwners(@RequestBody  OwnerDto ownerDto) {
 
         //校验是否传了 分页信息

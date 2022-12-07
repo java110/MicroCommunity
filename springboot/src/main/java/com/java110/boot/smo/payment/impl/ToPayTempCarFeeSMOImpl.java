@@ -13,6 +13,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
@@ -129,6 +130,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         if (money <= 0) {
             JSONObject paramOut = new JSONObject();
             paramOut.put("oId", orderId);
+            paramOut.put("payType", TempCarPayOrderDto.PAY_TYPE_WECHAT);
             String urlOut = "tempCarFee.notifyTempCarFeeOrder";
             responseEntity = this.callCenterService(getHeaders("-1", pd.getAppId()), paramOut.toJSONString(), urlOut, HttpMethod.POST);
             JSONObject param = new JSONObject();

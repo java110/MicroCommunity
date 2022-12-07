@@ -68,6 +68,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String nowTime;
     //二维码巡检时 的时间
     private String qrCodeTime;
+    private String queryTime;
 
     private String statusCd = "0";
     private String itemId;
@@ -400,5 +401,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setPointObjId(String pointObjId) {
         this.pointObjId = pointObjId;
+    }
+
+    public String getQueryTime() {
+        return queryTime;
+    }
+
+    public void setQueryTime(String queryTime) {
+        this.queryTime = queryTime;
     }
 }

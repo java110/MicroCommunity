@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveCatalogV1ServiceDaoImpl">
+
+
+    <!-- 保存预约目录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveCatalogInfo" parameterType="Map">
+        insert into reserve_catalog(
+        catalog_id,name,sort,state,community_id,type
+        ) values (
+        #{catalogId},#{name},#{sort},#{state},#{communityId},#{type}
+        )
+    </insert>
+
+
+    <!-- 查询预约目录信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveCatalogInfo" parameterType="Map" resultType="Map">
+        select t.catalog_id,t.catalog_id catalogId,t.name,t.status_cd,t.status_cd
+        statusCd,t.sort,t.state,t.community_id,t.community_id communityId,t.type,t.create_time createTime
+        from reserve_catalog t
+        where 1 =1
+        <if test="catalogId !=null and catalogId != ''">
+            and t.catalog_id= #{catalogId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        order by t.sort
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约目录信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveCatalogInfo" parameterType="Map">
+        update reserve_catalog t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="sort !=null and sort != ''">
+            , t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        where 1=1
+        <if test="catalogId !=null and catalogId != ''">
+            and t.catalog_id= #{catalogId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约目录数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveCatalogsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_catalog t
+        where 1 =1
+        <if test="catalogId !=null and catalogId != ''">
+            and t.catalog_id= #{catalogId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+
+
+    </select>
+
+</mapper>

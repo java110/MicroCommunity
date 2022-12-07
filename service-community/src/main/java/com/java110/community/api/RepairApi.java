@@ -8,12 +8,16 @@ import com.java110.community.bmo.repairReturnVisit.ISaveRepairReturnVisitBMO;
 import com.java110.community.bmo.repairReturnVisit.IUpdateRepairReturnVisitBMO;
 import com.java110.dto.appraise.AppraiseDto;
 import com.java110.dto.repairReturnVisit.RepairReturnVisitDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.repairReturnVisit.RepairReturnVisitPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 报修 控制类
@@ -36,6 +40,9 @@ public class RepairApi {
 
     @Autowired
     private IGetRepairReturnVisitBMO getRepairReturnVisitBMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
 
     /**
@@ -61,13 +68,22 @@ public class RepairApi {
      */
     @RequestMapping(value = "/saveRepairReturnVisit", method = RequestMethod.POST)
     public ResponseEntity<String> saveRepairReturnVisit(@RequestHeader(value = "user-id") String userId,
-                                                        @RequestHeader(value = "user-name") String userName,
+
                                                         @RequestBody JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "visitType", "请求报文中未包含满意度");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"未包含用户");
+
+
+        String userName  = userDtos.get(0).getName();
 
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
         repairReturnVisitPo.setVisitPersonId(userId);

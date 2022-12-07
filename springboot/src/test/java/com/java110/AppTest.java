@@ -24,7 +24,9 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
 
-        double amount = Double.parseDouble("0.6");
+        double amount = Double.parseDouble("0.6600");
+        System.out.println(amount);
+
         BigDecimal amountBig = new BigDecimal(amount);
         amount = amountBig.subtract(new BigDecimal(Double.parseDouble("0.6"))).doubleValue();
         System.out.println(amount);

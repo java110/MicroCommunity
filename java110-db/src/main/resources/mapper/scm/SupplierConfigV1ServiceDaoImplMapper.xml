@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存供应商配置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSupplierConfigInfo" parameterType="Map">
+        insert into supplier_config(
+        supplier_id,config_id,column_value,column_key
+        ) values (
+        #{supplierId},#{configId},#{columnValue},#{columnKey}
+        )
+    </insert>
+
+
+    <!-- 查询供应商配置信息 add by wuxw 2018-07-03 -->
+    <select id="getSupplierConfigInfo" parameterType="Map" resultType="Map">
+        select t.supplier_id,t.supplier_id supplierId,t.config_id,t.config_id configId,t.status_cd,t.status_cd
+        statusCd,t.column_value,t.column_value columnValue,t.column_key,t.column_key columnKey,sk.name, sk.remark
+        from supplier_config t
+        inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.column_key = t.column_key and sk.status_cd = '0'
+        where 1 =1
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改供应商配置信息 add by wuxw 2018-07-03 -->
+    <update id="updateSupplierConfigInfo" parameterType="Map">
+        update supplier_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="columnValue !=null and columnValue != ''">
+            , t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            , t.column_key= #{columnKey}
+        </if>
+        where 1=1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+
+    </update>
+
+    <!-- 查询供应商配置数量 add by wuxw 2018-07-03 -->
+    <select id="querySupplierConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from supplier_config t
+        inner join supplier s on t.supplier_id = s.supplier_id and s.status_cd = '0'
+        inner join supplier_key sk on s.bean_name = sk.bean_name and sk.column_key = t.column_key and sk.status_cd = '0'
+        where 1 =1
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+
+
+    </select>
+
+</mapper>

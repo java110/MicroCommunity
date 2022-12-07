@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveGoodsConfirmOrderV1ServiceDaoImpl">
+
+
+    <!-- 保存预约订单时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveGoodsConfirmOrderInfo" parameterType="Map">
+        insert into reserve_goods_confirm_order(
+        time_id,order_id,goods_id,co_id,remark,type,community_id
+        ) values (
+        #{timeId},#{orderId},#{goodsId},#{coId},#{remark},#{type},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询预约订单时间信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveGoodsConfirmOrderInfo" parameterType="Map" resultType="Map">
+        select t.time_id,t.time_id timeId,t.order_id,t.order_id orderId,t.goods_id,t.goods_id goodsId,t.co_id,t.co_id
+        coId,t.remark,t.status_cd,t.status_cd statusCd,t.type,t.community_id,t.community_id communityId,
+        rgo.person_name personName,rgo.person_tel personTel,rgo.appointment_time appointmentTime,rgco.hours,rgco.quantity,
+        rg.goods_name goodsName,rg.img_url imgUrl,t.create_time createTime
+        from reserve_goods_confirm_order t
+        left join reserve_goods_order rgo on t.order_id = rgo.order_id and t.goods_id = rgo.goods_id and rgo.status_cd = '0'
+        left join reserve_goods_order_time rgco on t.time_id = rgco.time_id and rgco.order_id = rgo.order_id and rgco.status_cd = '0'
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        where 1 =1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="coId !=null and coId != ''">
+            and t.co_id= #{coId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约订单时间信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveGoodsConfirmOrderInfo" parameterType="Map">
+        update reserve_goods_confirm_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            , t.time_id= #{timeId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            , t.order_id= #{orderId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            , t.goods_id= #{goodsId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="coId !=null and coId != ''">
+            and t.co_id= #{coId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约订单时间数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveGoodsConfirmOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_goods_confirm_order t
+        where 1 =1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="coId !=null and coId != ''">
+            and t.co_id= #{coId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

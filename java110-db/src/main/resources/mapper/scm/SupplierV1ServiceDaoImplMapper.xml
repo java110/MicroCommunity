@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierV1ServiceDaoImpl">
+
+
+    <!-- 保存供应商信息 add by wuxw 2018-07-03 -->
+    <insert id="saveSupplierInfo" parameterType="Map">
+        insert into supplier(
+        supplier_name,person_name,supplier_id,st_id,bean_name,start_time,remark,end_time,person_tel
+        ) values (
+        #{supplierName},#{personName},#{supplierId},#{stId},#{beanName},#{startTime},#{remark},#{endTime},#{personTel}
+        )
+    </insert>
+
+
+    <!-- 查询供应商信息 add by wuxw 2018-07-03 -->
+    <select id="getSupplierInfo" parameterType="Map" resultType="Map">
+        select t.supplier_name,t.supplier_name supplierName,t.person_name,t.person_name
+        personName,t.supplier_id,t.supplier_id supplierId,t.st_id,t.st_id stId,t.bean_name,t.bean_name
+        beanName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.remark,t.end_time,t.end_time
+        endTime,t.person_tel,t.person_tel personTel,st.type_name typeName,t.create_time createTime
+        from supplier t
+        left join supplier_type st on t.st_id = st.st_id and st.status_cd = '0'
+        where 1 =1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="stId !=null and stId != ''">
+            and t.st_id= #{stId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改供应商信息 add by wuxw 2018-07-03 -->
+    <update id="updateSupplierInfo" parameterType="Map">
+        update supplier t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="supplierName !=null and supplierName != ''">
+            , t.supplier_name= #{supplierName}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="stId !=null and stId != ''">
+            , t.st_id= #{stId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            , t.bean_name= #{beanName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
+        where 1=1
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+
+    </update>
+
+    <!-- 查询供应商数量 add by wuxw 2018-07-03 -->
+    <select id="querySuppliersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from supplier t
+        where 1 =1
+        <if test="supplierName !=null and supplierName != ''">
+            and t.supplier_name= #{supplierName}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="supplierId !=null and supplierId != ''">
+            and t.supplier_id= #{supplierId}
+        </if>
+        <if test="stId !=null and stId != ''">
+            and t.st_id= #{stId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+
+
+    </select>
+
+</mapper>

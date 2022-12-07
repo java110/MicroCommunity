@@ -58,6 +58,10 @@ public class UpdateFeeOwnerInfoAdapt extends DatabusAdaptImpl {
                 JSONObject businessOwner = businessMachines.getJSONObject(bOwnerIndex);
                 doOwnerInfo(business, businessOwner);
             }
+        }else {
+            if (data instanceof JSONObject) {
+                doOwnerInfo(business, data);
+            }
         }
     }
 

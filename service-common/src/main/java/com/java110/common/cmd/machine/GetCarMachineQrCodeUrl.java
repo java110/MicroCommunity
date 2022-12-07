@@ -78,7 +78,7 @@ public class GetCarMachineQrCodeUrl extends Cmd {
         smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-        ownerUrl += ("/#/pages/tempParkingFee/tempParkingFee?paId=" + getPaIds(reqJson)+"&communityId="+reqJson.getString("communityId"));
+        ownerUrl += ("/#/pages/fee/tempParkingFee?paId=" + getPaIds(reqJson)+"&communityId="+reqJson.getString("communityId"));
         if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
             ownerUrl += ("&appId=" + smallWeChatDtos.get(0).getAppId());
         }

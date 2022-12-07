@@ -96,6 +96,11 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private String roomRent;
     private String roomArea;
 
+    private String payOnline;
+    private String scale;
+    private String decimalPlace;
+    private String units;
+
 
 
 
@@ -537,5 +542,37 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setRoomArea(String roomArea) {
         this.roomArea = roomArea;
+    }
+
+    public String getPayOnline() {
+        return payOnline;
+    }
+
+    public void setPayOnline(String payOnline) {
+        this.payOnline = payOnline;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(String decimalPlace) {
+        this.decimalPlace = decimalPlace;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

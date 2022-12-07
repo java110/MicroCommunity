@@ -64,7 +64,10 @@ public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
 
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
-        Assert.listOnlyOne(userDtos, "用户不存在");
+        if(userDtos == null || userDtos.size()< 1){
+            throw new IllegalArgumentException("用户不存在");
+        }
+
         String hcCode = PREFIX_CODE + GenerateCodeFactory.getUUID();
         CommonCache.setValue(hcCode, JSONObject.toJSONString(userDtos.get(0)), CommonCache.defaultExpireTime);
         JSONObject paramOut = new JSONObject();

@@ -112,6 +112,9 @@ public class BaseController extends AppBase {
         if("java110-lang".equals(key)){
             return true;
         }
+        if("store-id".equals(key)){
+            return true;
+        }
 
         return false;
     }

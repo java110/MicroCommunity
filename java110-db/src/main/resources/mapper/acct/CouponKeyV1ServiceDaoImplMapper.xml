@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponKeyV1ServiceDaoImpl">
+
+
+    <!-- 保存优惠券键信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponKeyInfo" parameterType="Map">
+        insert into coupon_key(
+        name,key_id,bean_name,remark,column_key
+        ) values (
+        #{name},#{keyId},#{beanName},#{remark},#{columnKey}
+        )
+    </insert>
+
+
+    <!-- 查询优惠券键信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponKeyInfo" parameterType="Map" resultType="Map">
+        select t.name,t.key_id,t.key_id keyId,t.bean_name,t.bean_name beanName,t.remark,t.status_cd,t.status_cd
+        statusCd,t.column_key,t.column_key columnKey
+        from coupon_key t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改优惠券键信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponKeyInfo" parameterType="Map">
+        update coupon_key t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            , t.bean_name= #{beanName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            , t.column_key= #{columnKey}
+        </if>
+        where 1=1
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+
+    </update>
+
+    <!-- 查询优惠券键数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponKeysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_key t
+        where 1 =1
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="keyId !=null and keyId != ''">
+            and t.key_id= #{keyId}
+        </if>
+        <if test="beanName !=null and beanName != ''">
+            and t.bean_name= #{beanName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+
+
+    </select>
+
+</mapper>

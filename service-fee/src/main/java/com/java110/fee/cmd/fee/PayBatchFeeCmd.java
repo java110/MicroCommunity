@@ -27,7 +27,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.FeeFlagTypeConstant;
-import com.java110.utils.constant.FeeStateConstant;
+import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -432,7 +432,7 @@ public class PayBatchFeeCmd extends Cmd {
             calendar.add(Calendar.DAY_OF_MONTH, -5);
             maxEndTime = calendar.getTime();
             if (feeInfo.getEndTime().after(maxEndTime)) {
-                businessFee.put("state", FeeStateConstant.END);
+                businessFee.put("state", FeeConfigConstant.END);
                 businessFee.put("endTime", maxEndTime);
             }
         }

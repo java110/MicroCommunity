@@ -3,6 +3,7 @@ package com.java110.store.cmd.purchase;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -18,6 +19,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.store.bmo.purchase.IPurchaseApplyBMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
@@ -64,6 +66,9 @@ public class UrgentPurchaseApplyCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
@@ -72,6 +77,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
         String userName = context.getReqHeaders().get("user-name");
@@ -156,6 +162,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             resourceStorePo.setResOrderType(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
             resourceStorePo.setOperationType(PurchaseApplyDto.WEIGHTED_MEAN_TRUE);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
             if (resourceStoreDtos != null && resourceStoreDtos.size() == 1) {
                 //生成调拨记录
                 AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
@@ -222,6 +229,16 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 BigDecimal newMiniStock = purchaseQuantity.multiply(miniUnitStock).add(miniStock);
                 resourceStorePo1.setMiniStock(String.valueOf(newMiniStock));
                 resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo1);
+
+                // 保存至 物品 times表
+                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+                resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+                resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
+                resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+                resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
+                resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
+                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+                resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                 throw new IllegalArgumentException("查询商品错误！");
             } else {
@@ -280,6 +297,16 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 BigDecimal miniStock = purchaseQuantity.multiply(miniUnitStock);
                 resourceStoreDto1.setMiniStock(String.valueOf(miniStock));
                 resourceStoreInnerServiceSMOImpl.saveResourceStore(resourceStoreDto1);
+
+                // 保存至 物品 times表
+                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+                resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+                resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
+                resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+                resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
+                resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
+                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+                resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
             }
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

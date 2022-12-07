@@ -108,5 +108,18 @@ public class InspectionPlanStaffV1ServiceDaoImpl extends BaseServiceDao implemen
         return Integer.parseInt(businessInspectionPlanStaffInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 根据员工查询巡检情况
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryStaffInspectionReport(Map info) {
+        logger.debug("查询 queryStaffInspectionReport 入参 info : {}",info);
+
+        List<Map> businessInspectionPlanStaffInfos = sqlSessionTemplate.selectList("inspectionPlanStaffV1ServiceDaoImpl.queryStaffInspectionReport",info);
+
+        return businessInspectionPlanStaffInfos;    }
+
 
 }

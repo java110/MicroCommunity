@@ -349,10 +349,10 @@
         </if>
     </select>
 
-    <!-- 查询欠费统计信息 add by wuxw 2018-07-03 -->
+    <!-- 查询欠费统计信息 add by wuxw 2018-07-03 t.owner_tel,t.owner_tel ownerTel,-->
     <select id="queryReportAllOweFeesByRoom" parameterType="Map" resultType="Map">
         select t.config_name,t.config_name configName,t.deadline_time,t.deadline_time
-        deadlineTime,t.owner_tel,t.owner_tel ownerTel,t.update_time,t.update_time updateTime,t.owe_id,t.owe_id
+        deadlineTime,t.update_time,t.update_time updateTime,t.owe_id,t.owe_id
         oweId,t.fee_id,t.fee_id feeId,t.amount_owed,t.amount_owed amountOwed,t.payer_obj_name,t.payer_obj_name
         payerObjName,t.config_id,t.config_id configId,t.fee_name,t.fee_name
         feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id

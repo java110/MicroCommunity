@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponRuleCppsV1ServiceDaoImpl">
+
+
+    <!-- 保存规则优惠券信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponRuleCppsInfo" parameterType="Map">
+        insert into coupon_rule_cpps(
+        quantity,crc_id,cpp_id,rule_id,community_id,gift_frequency
+        ) values (
+        #{quantity},#{crcId},#{cppId},#{ruleId},#{communityId},#{giftFrequency}
+        )
+    </insert>
+
+
+    <!-- 查询规则优惠券信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponRuleCppsInfo" parameterType="Map" resultType="Map">
+
+        select t.quantity,t.crc_id,t.crc_id crcId,t.cpp_id,t.cpp_id cppId,t.status_cd,t.status_cd
+        statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,cpp.coupon_name couponName,cr.rule_name ruleName,td.`name` toTypeName,
+        cpp.remark,t.gift_frequency giftFrequency,td1.name giftFrequencyName
+        from coupon_rule_cpps t
+        left join coupon_property_pool cpp on t.cpp_id = cpp.cpp_id and cpp.status_cd = '0'
+        left join t_dict td on td.status_cd = cpp.to_type and td.table_name = 'coupon_property_pool' and td.table_columns = 'to_type'
+        left join coupon_rule cr on t.rule_id = cr.rule_id and cr.status_cd = '0'
+        left join t_dict td1 on td1.status_cd = t.gift_frequency and td1.table_name = 'coupon_rule_cpps' and td1.table_columns = 'gift_frequency'
+
+        where 1 =1
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="crcId !=null and crcId != ''">
+            and t.crc_id= #{crcId}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            and t.gift_frequency= #{giftFrequency}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改规则优惠券信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponRuleCppsInfo" parameterType="Map">
+        update coupon_rule_cpps t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            , t.quantity= #{quantity}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            , t.cpp_id= #{cppId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            , t.gift_frequency= #{giftFrequency}
+        </if>
+        where 1=1
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="crcId !=null and crcId != ''">
+            and t.crc_id= #{crcId}
+        </if>
+
+    </update>
+
+    <!-- 查询规则优惠券数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponRuleCppssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_rule_cpps t
+        where 1 =1
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="crcId !=null and crcId != ''">
+            and t.crc_id= #{crcId}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="giftFrequency !=null and giftFrequency != ''">
+            and t.gift_frequency= #{giftFrequency}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

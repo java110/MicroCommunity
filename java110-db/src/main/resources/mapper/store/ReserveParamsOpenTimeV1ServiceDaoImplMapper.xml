@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveParamsOpenTimeV1ServiceDaoImpl">
+
+
+    <!-- 保存预约时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveParamsOpenTimeInfo" parameterType="Map">
+        insert into reserve_params_open_time(
+        hours,params_id,is_open,time_id,community_id
+        ) values (
+        #{hours},#{paramsId},#{isOpen},#{timeId},#{communityId}
+        )
+    </insert>
+    <!-- 保存预约时间信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveParamsOpenTimeInfos" parameterType="Map">
+        insert into reserve_params_open_time(
+        hours,params_id,is_open,time_id,community_id
+        ) values
+        <foreach collection="openTimes" item="item" separator=",">
+            (#{item.hours},#{item.paramsId},#{item.isOpen},#{item.timeId},#{item.communityId})
+        </foreach>
+    </insert>
+
+
+
+    <!-- 查询预约时间信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveParamsOpenTimeInfo" parameterType="Map" resultType="Map">
+        select t.hours,t.params_id,t.params_id paramsId,t.is_open,t.is_open isOpen,t.time_id,t.time_id
+        timeId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.create_time createTime
+        from reserve_params_open_time t
+        where 1 =1
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="paramsIds !=null">
+            and t.params_id in
+            <foreach collection="paramsIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            and t.is_open= #{isOpen}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.hours
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约时间信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveParamsOpenTimeInfo" parameterType="Map">
+        update reserve_params_open_time t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="hours !=null and hours != ''">
+            , t.hours= #{hours}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            , t.params_id= #{paramsId}
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            , t.is_open= #{isOpen}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约时间数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveParamsOpenTimesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_params_open_time t
+        where 1 =1
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="paramsIds !=null">
+            and t.params_id in
+            <foreach collection="paramsIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="isOpen !=null and isOpen != ''">
+            and t.is_open= #{isOpen}
+        </if>
+        <if test="timeId !=null and timeId != ''">
+            and t.time_id= #{timeId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

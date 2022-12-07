@@ -29,6 +29,11 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     private String deductFrom;
 
+    private String payOnline;
+    private String scale;
+    private String decimalPlace;
+    private String units;
+
 
     public String getConfigId() {
         return configId;
@@ -86,21 +91,6 @@ public class ApiFeeConfigDataVo implements Serializable {
         this.computingFormula = computingFormula;
     }
 
-    public String getSquarePrice() {
-        return squarePrice;
-    }
-
-    public void setSquarePrice(String squarePrice) {
-        this.squarePrice = squarePrice;
-    }
-
-    public String getAdditionalAmount() {
-        return additionalAmount;
-    }
-
-    public void setAdditionalAmount(String additionalAmount) {
-        this.additionalAmount = additionalAmount;
-    }
 
     public String getFeeTypeCdName() {
         return feeTypeCdName;
@@ -177,5 +167,54 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     public void setComputingFormulaName(String computingFormulaName) {
         this.computingFormulaName = computingFormulaName;
+    }
+
+    public String getPayOnline() {
+        return payOnline;
+    }
+
+    public void setPayOnline(String payOnline) {
+        this.payOnline = payOnline;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(String decimalPlace) {
+        this.decimalPlace = decimalPlace;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
+    }
+
+
+    public String getSquarePrice() {
+        return squarePrice;
+    }
+
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
+
+    public String getAdditionalAmount() {
+        return additionalAmount;
+    }
+
+    public void setAdditionalAmount(String additionalAmount) {
+        this.additionalAmount = additionalAmount;
     }
 }

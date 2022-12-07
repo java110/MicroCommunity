@@ -31,6 +31,7 @@ import com.java110.intf.acct.IParkingCouponV1InnerServiceSMO;
 import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
 import com.java110.po.parkingCouponShop.ParkingCouponShopPo;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -109,6 +110,11 @@ public class SaveParkingCouponCarCmd extends Cmd {
 
         String codeKey = reqJson.getString("shopId") + reqJson.getString("code");
 
+        String checkCode = MappingCache.getValue("CHECK_PARKING_COUPON_QRCODE_CODE");
+
+        if ("OFF".equals(checkCode)) {
+            return;
+        }
         if (!reqJson.getString("code").equals(CommonCache.getAndRemoveValue(codeKey))) {
             throw new CmdException("非法操作");
         }

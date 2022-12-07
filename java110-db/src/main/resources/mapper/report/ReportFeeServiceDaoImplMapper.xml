@@ -65,7 +65,8 @@
         t.community_id communityId,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees
         curDegrees,mw.pre_degrees preDegrees,
         mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price mwPrice,
-        pfa2.`value` ownerTel,   pfa3.`value` ownerName,br.room_area roomArea
+        pfa2.`value` ownerTel,   pfa3.`value` ownerName,br.room_area roomArea,
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units
         from pay_fee t
         INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
@@ -112,7 +113,8 @@
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,
         td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
-        t.computing_formula_text,t.computing_formula_text computingFormulaText
+        t.computing_formula_text,t.computing_formula_text computingFormulaText,
+        t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units
         from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = td1.status_cd

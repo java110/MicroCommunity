@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveParamsV1ServiceDaoImpl">
+
+
+    <!-- 保存预约参数信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveParamsInfo" parameterType="Map">
+        insert into reserve_params(
+        param_way,params_id,max_quantity,name,param_way_text,start_time,community_id,hours_max_quantity
+        ) values (
+        #{paramWay},#{paramsId},#{maxQuantity},#{name},#{paramWayText},#{startTime},#{communityId},#{hoursMaxQuantity}
+        )
+    </insert>
+
+
+    <!-- 查询预约参数信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveParamsInfo" parameterType="Map" resultType="Map">
+        select t.param_way,t.param_way paramWay,t.params_id,t.params_id paramsId,t.max_quantity,t.max_quantity
+        maxQuantity,t.name,t.param_way_text,t.param_way_text paramWayText,t.start_time,t.start_time
+        startTime,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.hours_max_quantity,t.hours_max_quantity hoursMaxQuantity,t.create_time createTime
+        from reserve_params t
+        where 1 =1
+        <if test="paramWay !=null and paramWay != ''">
+            and t.param_way= #{paramWay}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="maxQuantity !=null and maxQuantity != ''">
+            and t.max_quantity= #{maxQuantity}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="paramWayText !=null and paramWayText != ''">
+            and t.param_way_text= #{paramWayText}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="hoursMaxQuantity !=null and hoursMaxQuantity != ''">
+            and t.hours_max_quantity= #{hoursMaxQuantity}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约参数信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveParamsInfo" parameterType="Map">
+        update reserve_params t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="paramWay !=null and paramWay != ''">
+            , t.param_way= #{paramWay}
+        </if>
+        <if test="maxQuantity !=null and maxQuantity != ''">
+            , t.max_quantity= #{maxQuantity}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="paramWayText !=null and paramWayText != ''">
+            , t.param_way_text= #{paramWayText}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="hoursMaxQuantity !=null and hoursMaxQuantity != ''">
+            , t.hours_max_quantity= #{hoursMaxQuantity}
+        </if>
+        where 1=1
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约参数数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveParamssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_params t
+        where 1 =1
+        <if test="paramWay !=null and paramWay != ''">
+            and t.param_way= #{paramWay}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="maxQuantity !=null and maxQuantity != ''">
+            and t.max_quantity= #{maxQuantity}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="paramWayText !=null and paramWayText != ''">
+            and t.param_way_text= #{paramWayText}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="hoursMaxQuantity !=null and hoursMaxQuantity != ''">
+            and t.hours_max_quantity= #{hoursMaxQuantity}
+        </if>
+
+
+    </select>
+
+</mapper>

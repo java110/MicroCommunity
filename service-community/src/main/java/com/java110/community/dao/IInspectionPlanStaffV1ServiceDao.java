@@ -74,4 +74,10 @@ public interface IInspectionPlanStaffV1ServiceDao {
      */
     int queryInspectionPlanStaffsCount(Map info);
 
+    /**
+     * 查询员工 巡检情况
+     * @param info
+     * @return
+     */
+    List<Map> queryStaffInspectionReport(Map info);
 }

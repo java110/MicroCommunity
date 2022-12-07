@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponPropertyPoolDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存赠送明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponPropertyPoolDetailInfo" parameterType="Map">
+        insert into coupon_property_pool_detail(
+        coupon_name,detail_id,cpp_id,tel,community_id,send_count,user_name,value,user_id
+        ) values (
+        #{couponName},#{detailId},#{cppId},#{tel},#{communityId},#{sendCount},#{userName},#{value},#{userId}
+        )
+    </insert>
+
+
+    <!-- 查询赠送明细信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponPropertyPoolDetailInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.detail_id,t.detail_id detailId,t.cpp_id,t.cpp_id
+        cppId,t.tel,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.send_count,t.send_count
+        sendCount,t.user_name,t.user_name userName,t.value,t.user_id,t.user_id userId,t.create_time createTime
+        from coupon_property_pool_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="couponUserId !=null and couponUserId != ''">
+            and t.user_id= #{couponUserId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改赠送明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponPropertyPoolDetailInfo" parameterType="Map">
+        update coupon_property_pool_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            , t.cpp_id= #{cppId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            , t.send_count= #{sendCount}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询赠送明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponPropertyPoolDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_property_pool_detail t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="cppId !=null and cppId != ''">
+            and t.cpp_id= #{cppId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="sendCount !=null and sendCount != ''">
+            and t.send_count= #{sendCount}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="couponUserId !=null and couponUserId != ''">
+            and t.user_id= #{couponUserId}
+        </if>
+
+
+    </select>
+
+</mapper>

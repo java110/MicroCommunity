@@ -29,6 +29,7 @@ public class PurchaseApplyDetailVo {
     private String originalStock;
     private String supplierName;
     private String shName;
+    private String shId;
     private String unitCodeName;
     private String miniUnitCodeName;
     private String isFixed;
@@ -264,6 +265,14 @@ public class PurchaseApplyDetailVo {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }
 

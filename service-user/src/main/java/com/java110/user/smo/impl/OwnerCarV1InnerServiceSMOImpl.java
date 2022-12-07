@@ -16,6 +16,7 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.user.dao.IOwnerCarV1ServiceDao;
@@ -48,6 +49,7 @@ public class OwnerCarV1InnerServiceSMOImpl extends BaseServiceSMO implements IOw
 
 
     @Override
+    @Java110Transactional
     public int saveOwnerCar(@RequestBody OwnerCarPo ownerCarPo) {
         int saveFlag = ownerCarV1ServiceDaoImpl.saveOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarPo));
         return saveFlag;

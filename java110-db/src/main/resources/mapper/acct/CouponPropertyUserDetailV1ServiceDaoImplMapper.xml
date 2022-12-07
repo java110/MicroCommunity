@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponPropertyUserDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存用户优惠券明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCouponPropertyUserDetailInfo" parameterType="Map">
+        insert into coupon_property_user_detail(
+        detail_type,coupon_name,uo_id,business_key,remark,coupon_id,community_id
+        ) values (
+        #{detailType},#{couponName},#{uoId},#{businessKey},#{remark},#{couponId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询用户优惠券明细信息 add by wuxw 2018-07-03 -->
+    <select id="getCouponPropertyUserDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_type,t.detail_type detailType,t.coupon_name,t.coupon_name couponName,t.uo_id,t.uo_id
+        uoId,t.business_key,t.business_key businessKey,t.remark,t.status_cd,t.status_cd statusCd,t.coupon_id,t.coupon_id
+        couponId,t.community_id,t.community_id communityId,cpu.user_name userName,cpu.tel,cpu.value,t.create_time createTime
+        from coupon_property_user_detail t
+        left join coupon_property_user cpu on t.coupon_id = cpu.coupon_id and cpu.status_cd = '0'
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户优惠券明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateCouponPropertyUserDetailInfo" parameterType="Map">
+        update coupon_property_user_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            , t.detail_type= #{detailType}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            , t.uo_id= #{uoId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            , t.business_key= #{businessKey}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            , t.coupon_id= #{couponId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+    </update>
+
+    <!-- 查询用户优惠券明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryCouponPropertyUserDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_property_user_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

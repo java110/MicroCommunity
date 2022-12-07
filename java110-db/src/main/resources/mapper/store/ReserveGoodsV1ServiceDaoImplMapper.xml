@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveGoodsV1ServiceDaoImpl">
+
+
+    <!-- 保存预约商品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveReserveGoodsInfo" parameterType="Map">
+        insert into reserve_goods(
+        end_date,goods_id,sort,type,img_url,catalog_id,params_id,price,state,community_id,goods_name,start_date,goods_desc
+        ) values (
+        #{endDate},#{goodsId},#{sort},#{type},#{imgUrl},#{catalogId},#{paramsId},#{price},#{state},#{communityId},#{goodsName},#{startDate},#{goodsDesc}
+        )
+    </insert>
+
+
+    <!-- 查询预约商品信息 add by wuxw 2018-07-03 -->
+    <select id="getReserveGoodsInfo" parameterType="Map" resultType="Map">
+        select t.end_date,DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,t.goods_id,t.goods_id goodsId,t.status_cd,t.status_cd
+        statusCd,t.sort,t.type,t.img_url,t.img_url imgUrl,t.catalog_id,t.catalog_id catalogId,t.params_id,t.params_id
+        paramsId,t.price,t.state,t.community_id,t.community_id communityId,t.goods_name,t.goods_name
+        goodsName,t.start_date,DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,t.goods_desc,t.goods_desc goodsDesc,t.create_time createTime,
+        rp.param_way paramWay,rp.param_way_text paramWayText,rp.max_quantity  maxQuantity,rp.name paramsName,rp.start_time startTime,
+        rp.hours_max_quantity hoursMaxQuantity
+        from reserve_goods t
+        left join reserve_params rp on t.params_id = rp.params_id and rp.status_cd='0'
+        where 1 =1
+        <if test="endDate !=null and endDate != ''">
+            and t.end_date= #{endDate}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="imgUrl !=null and imgUrl != ''">
+            and t.img_url= #{imgUrl}
+        </if>
+        <if test="catalogId !=null and catalogId != ''">
+            and t.catalog_id= #{catalogId}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="goodsName !=null and goodsName != ''">
+            and t.goods_name= #{goodsName}
+        </if>
+        <if test="startDate !=null and startDate != ''">
+            and t.start_date= #{startDate}
+        </if>
+        <if test="goodsDesc !=null and goodsDesc != ''">
+            and t.goods_desc= #{goodsDesc}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改预约商品信息 add by wuxw 2018-07-03 -->
+    <update id="updateReserveGoodsInfo" parameterType="Map">
+        update reserve_goods t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="endDate !=null and endDate != ''">
+            , t.end_date= #{endDate}
+        </if>
+        <if test="sort !=null and sort != ''">
+            , t.sort= #{sort}
+        </if>
+        <if test="type !=null and type != ''">
+            , t.type= #{type}
+        </if>
+        <if test="imgUrl !=null and imgUrl != ''">
+            , t.img_url= #{imgUrl}
+        </if>
+        <if test="catalogId !=null and catalogId != ''">
+            , t.catalog_id= #{catalogId}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            , t.params_id= #{paramsId}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="goodsName !=null and goodsName != ''">
+            , t.goods_name= #{goodsName}
+        </if>
+        <if test="startDate !=null and startDate != ''">
+            , t.start_date= #{startDate}
+        </if>
+        <if test="goodsDesc !=null and goodsDesc != ''">
+            , t.goods_desc= #{goodsDesc}
+        </if>
+        where 1=1
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+
+    </update>
+
+    <!-- 查询预约商品数量 add by wuxw 2018-07-03 -->
+    <select id="queryReserveGoodssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_goods t
+        where 1 =1
+        <if test="endDate !=null and endDate != ''">
+            and t.end_date= #{endDate}
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and t.goods_id= #{goodsId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="sort !=null and sort != ''">
+            and t.sort= #{sort}
+        </if>
+        <if test="type !=null and type != ''">
+            and t.type= #{type}
+        </if>
+        <if test="imgUrl !=null and imgUrl != ''">
+            and t.img_url= #{imgUrl}
+        </if>
+        <if test="catalogId !=null and catalogId != ''">
+            and t.catalog_id= #{catalogId}
+        </if>
+        <if test="paramsId !=null and paramsId != ''">
+            and t.params_id= #{paramsId}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="goodsName !=null and goodsName != ''">
+            and t.goods_name= #{goodsName}
+        </if>
+        <if test="startDate !=null and startDate != ''">
+            and t.start_date= #{startDate}
+        </if>
+        <if test="goodsDesc !=null and goodsDesc != ''">
+            and t.goods_desc= #{goodsDesc}
+        </if>
+
+
+    </select>
+
+</mapper>

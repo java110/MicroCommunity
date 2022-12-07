@@ -12,8 +12,8 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   <dependencies>
     <dependency>
@@ -24,6 +24,21 @@
       <groupId>com.alipay.sdk</groupId>
       <artifactId>alipay-sdk-java</artifactId>
     </dependency>
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-api-sdk-cop</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-api-sdk-cop-io</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
+      <!--<dependency>-->
+          <!--<groupId>com.icbc</groupId>-->
+          <!--<artifactId>icbc-ca</artifactId>-->
+          <!--<version>v1.0</version>-->
+      <!--</dependency>-->
 
   </dependencies>
   <build>

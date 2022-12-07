@@ -503,7 +503,8 @@
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="queryResourceStoresTotalPrice" parameterType="Map" resultType="Map">
         select IFNULL(sum(total_price),0) as totalPrice from(
-        select rsts.res_code ,sum(rsts.stock*rsts.price) total_price from resource_store t
+        select rsts.times_id,rsts.res_code,rsts.stock,rsts.price,rsts.stock*rsts.price total_price
+        from resource_store t
         inner join resource_store_times rsts on t.res_code = rsts.res_code and rsts.status_cd = '0'
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
@@ -609,7 +610,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        group by rsts.res_code
+        group by rsts.times_id,rsts.res_code,rsts.stock,rsts.price
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

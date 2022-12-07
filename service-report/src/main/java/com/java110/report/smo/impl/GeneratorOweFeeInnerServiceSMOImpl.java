@@ -10,6 +10,7 @@ import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.logSystemError.LogSystemErrorPo;
@@ -79,6 +80,9 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Override
     public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
@@ -195,6 +199,12 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
     private void generateFee(ReportFeeDto reportFeeDto, FeeConfigDto feeConfigDto) {
 
         FeeDto feeDto = BeanConvertUtil.covertBean(reportFeeDto, FeeDto.class);
+
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setFeeId(feeDto.getFeeId());
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        feeDto.setFeeAttrDtos(feeAttrDtos);
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 

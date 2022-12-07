@@ -28,6 +28,7 @@ public class InspectionPlanStaffDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
+
     public String getIpStaffId() {
         return ipStaffId;
     }
