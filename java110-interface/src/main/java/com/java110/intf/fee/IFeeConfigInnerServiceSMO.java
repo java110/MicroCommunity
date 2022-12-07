@@ -25,7 +25,6 @@ public interface IFeeConfigInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param feeConfigDto 数据对象分享
      * @return FeeConfigDto 对象数据
      */
@@ -43,9 +42,19 @@ public interface IFeeConfigInnerServiceSMO {
 
     /**
      * 保存费用配置
+     *
      * @param payFeeConfigPo 费用配置对象
      * @return
      */
     @RequestMapping(value = "/saveFeeConfig", method = RequestMethod.POST)
     int saveFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo);
+
+    /**
+     * 删除费用项
+     *
+     * @param payFeeConfigPo
+     * @return
+     */
+    @RequestMapping(value = "/deleteFeeConfig", method = RequestMethod.POST)
+    int deleteFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo);
 }

@@ -136,7 +136,6 @@ public class StaffApi {
     public ResponseEntity<String> generatorQrCode(@RequestHeader(value = "store-id") String storeId,
                                                   @RequestHeader(value = "user-id") String userId,
                                                   @RequestParam(value = "communityId") String communityId) {
-
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setObjId(communityId);
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);

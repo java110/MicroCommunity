@@ -15,6 +15,7 @@
  */
 package com.java110.fee.cmd.returnPayFee;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,15 +23,26 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
 import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.po.account.AccountPo;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
@@ -100,6 +112,18 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     @Autowired
     private IPayFeeDetailDiscountNewV1InnerServiceSMO payFeeDetailDiscountNewV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
@@ -256,6 +280,61 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                 }
             }
             //检查是否现金账户抵扣
+            String feeAccountDetailDtoList = reqJson.getString("feeAccountDetailDtoList");
+            JSONArray feeAccountDetails = JSONArray.parseArray(feeAccountDetailDtoList);
+            if (feeAccountDetails != null && feeAccountDetails.size() > 0) {
+                String ownerId = "";
+                if (!StringUtil.isEmpty(reqJson.getString("payerObjType")) && reqJson.getString("payerObjType").equals("3333")) { //房屋
+                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                    ownerRoomRelDto.setRoomId(reqJson.getString("payerObjId"));
+                    List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                    Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+                    ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+                } else if (!StringUtil.isEmpty(reqJson.getString("payerObjType")) && reqJson.getString("payerObjType").equals("6666")) { //车辆
+                    OwnerCarDto ownerCarDto = new OwnerCarDto();
+                    ownerCarDto.setCarId(reqJson.getString("payerObjId"));
+                    List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+                    Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");
+                    ownerId = ownerCarDtos.get(0).getOwnerId();
+                }
+                for (int index = 0; index < feeAccountDetails.size(); index++) {
+                    JSONObject param = feeAccountDetails.getJSONObject(index);
+                    String state = param.getString("state");
+                    if (!StringUtil.isEmpty(param.getString("state")) && param.getString("state").equals("1002")) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                        AccountDto accountDto = new AccountDto();
+                        accountDto.setObjId(ownerId);
+                        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
+                        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+                        Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
+                        BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+                        BigDecimal money = new BigDecimal(param.getString("amount"));
+                        BigDecimal newAmount = amount.add(money);
+                        AccountPo accountPo = new AccountPo();
+                        accountPo.setAcctId(accountDtos.get(0).getAcctId());
+                        accountPo.setAmount(String.valueOf(newAmount));
+                        int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+                        if (flag < 1) {
+                            throw new IllegalArgumentException("更新业主现金账户失败！");
+                        }
+                        AccountDetailPo accountDetailPo = new AccountDetailPo();
+                        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+                        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+                        accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+                        accountDetailPo.setRelAcctId("-1");
+                        accountDetailPo.setAmount(param.getString("amount"));
+                        accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+                        accountDetailPo.setObjId(ownerId);
+                        accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+                        accountDetailPo.setbId("-1");
+                        accountDetailPo.setRemark("现金账户退费");
+                        accountDetailPo.setCreateTime(new Date());
+                        int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+                        if (i < 1) {
+                            throw new IllegalArgumentException("保存业主现金账户明细失败！");
+                        }
+                    }
+                }
+            }
         }
         //不通过
         if ("1200".equals(reqJson.getString("state"))) {

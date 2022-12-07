@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.machineAuth.MachineAuthDto;
+import com.java110.po.machineAuth.MachineAuthPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public interface IMachineAuthInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param machineAuthDto 数据对象分享
      * @return MachineAuthDto 对象数据
      */
@@ -39,4 +39,19 @@ public interface IMachineAuthInnerServiceSMO {
      */
     @RequestMapping(value = "/queryMachineAuthsCount", method = RequestMethod.POST)
     int queryMachineAuthsCount(@RequestBody MachineAuthDto machineAuthDto);
+
+    /**
+     * 添加员工门禁授权
+     *
+     * @param machineAuthPo
+     * @return
+     */
+    @RequestMapping(value = "/saveMachineAuth", method = RequestMethod.POST)
+    int saveMachineAuth(@RequestBody MachineAuthPo machineAuthPo);
+
+    @RequestMapping(value = "/updateMachineAuth", method = RequestMethod.POST)
+    int updateMachineAuth(@RequestBody MachineAuthPo machineAuthPo);
+
+    @RequestMapping(value = "/deleteMachineAuth", method = RequestMethod.POST)
+    int deleteMachineAuth(@RequestBody MachineAuthPo machineAuthPo);
 }

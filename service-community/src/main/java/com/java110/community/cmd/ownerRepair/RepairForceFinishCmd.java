@@ -3,27 +3,24 @@ package com.java110.community.cmd.ownerRepair;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
-import com.java110.intf.common.IFileInnerServiceSMO;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,22 +38,13 @@ public class RepairForceFinishCmd extends Cmd {
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
 
     @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
-
-    @Autowired
-    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMO;
-
-    @Autowired
-    private IOwnerInnerServiceSMO ownerInnerServiceSMO;
-
-    @Autowired
     private IRepairPoolV1InnerServiceSMO repairPoolV1InnerServiceSMOImpl;
 
     @Autowired
     private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -69,7 +57,16 @@ public class RepairForceFinishCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = context.getReqHeaders().get("user-id");
-        String userName = context.getReqHeaders().get("user-name");
+        String userName = "";
+        if (!StringUtil.isEmpty(context.getReqHeaders().get("user-name"))) {
+            userName = context.getReqHeaders().get("user-name");
+        } else {
+            UserDto userDto = new UserDto();
+            userDto.setUserId(userId);
+            List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+            Assert.listOnlyOne(users, "查询用户错误！");
+            userName = users.get(0).getName();
+        }
 
         int flag = 0;
 
@@ -100,7 +97,7 @@ public class RepairForceFinishCmd extends Cmd {
             repairUserPo.setContext(userName + " 强制回单");
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
             flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
-            if(flag < 1){
+            if (flag < 1) {
                 throw new CmdException("修改工单失败");
             }
 
@@ -119,7 +116,7 @@ public class RepairForceFinishCmd extends Cmd {
             repairUserPo.setContext(reqJson.getString("context"));
             repairUserPo.setCommunityId(reqJson.getString("communityId"));
             flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
-            if(flag < 1){
+            if (flag < 1) {
                 throw new CmdException("修改工单失败");
             }
         }
@@ -143,7 +140,7 @@ public class RepairForceFinishCmd extends Cmd {
         //计算 应收金额
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
         int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("修改工单失败");
         }
     }

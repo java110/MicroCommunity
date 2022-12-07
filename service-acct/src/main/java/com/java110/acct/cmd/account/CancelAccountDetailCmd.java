@@ -23,7 +23,6 @@ public class CancelAccountDetailCmd extends Cmd {
     @Autowired
     private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
-
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
@@ -42,15 +41,15 @@ public class CancelAccountDetailCmd extends Cmd {
         accountDetailDto.setDetailType(AccountDetailDto.DETAIL_TYPE_IN);
         List<AccountDetailDto> accountDetailDtos = accountDetailInnerServiceSMOImpl.queryAccountDetails(accountDetailDto);
 
-        Assert.listOnlyOne(accountDetailDtos,"入账明细不存在");
+        Assert.listOnlyOne(accountDetailDtos, "入账明细不存在");
 
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setAcctId(accountDetailDtos.get(0).getAcctId());
         accountDetailPo.setObjId(accountDetailDtos.get(0).getObjId());
         accountDetailPo.setAmount(accountDetailDtos.get(0).getAmount());
-        accountDetailPo.setRemark("明细："+reqJson.getString("detailId")+"撤销，原因："+reqJson.getString("remark"));
+        accountDetailPo.setRemark("明细：" + reqJson.getString("detailId") + "撤销，原因：" + reqJson.getString("remark"));
         int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("撤销失败");
         }
 
@@ -58,7 +57,7 @@ public class CancelAccountDetailCmd extends Cmd {
         accountDetailPo1.setDetailId(accountDetailDtos.get(0).getDetailId());
         accountDetailPo1.setDetailType(AccountDetailDto.DETAIL_TYPE_IN_CANCEL);
         flag = accountDetailInnerServiceSMOImpl.updateAccountDetails(accountDetailPo1);
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("撤销失败");
         }
     }

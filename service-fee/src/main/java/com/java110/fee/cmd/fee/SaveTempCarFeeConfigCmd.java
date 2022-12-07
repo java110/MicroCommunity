@@ -64,16 +64,12 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         reqJson.put("feeConfigId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         reqJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         TempCarFeeConfigPo tempCarFeeConfigPo = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigPo.class);
-
         //处理房屋属性
         dealAttr(reqJson, context);
-
         int flag = tempCarFeeConfigV1InnerServiceSMOImpl.saveTempCarFeeConfig(tempCarFeeConfigPo);
         if (flag < 1) {
             throw new CmdException("保存临时收费失败");
         }
-
-
         //补费用项数据
         PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
         payFeeConfigPo.setAdditionalAmount("0");
@@ -96,21 +92,16 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存临时收费失败");
         }
-
     }
 
     private void dealAttr(JSONObject reqJson, ICmdDataFlowContext context) {
-
         if (!reqJson.containsKey("attrs")) {
             return;
         }
-
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
         }
-
-
         JSONObject attr = null;
         int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
@@ -124,6 +115,5 @@ public class SaveTempCarFeeConfigCmd extends Cmd {
                 throw new CmdException("保存临时收费失败");
             }
         }
-
     }
 }

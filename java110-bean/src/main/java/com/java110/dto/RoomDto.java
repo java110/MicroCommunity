@@ -19,17 +19,18 @@ public class RoomDto extends PageDto implements Serializable {
     public static final String STATE_SELL = "2001"; // 已入住
     public static final String STATE_FREE = "2002"; //未销售
     public static final String STATE_DELIVERY = "2003";//已交房
+    public static final String STATE_NO_HOME = "2004";//未入住
     public static final String STATE_RENOVATION = "2005";//已装修
-    public static final String STATE_SHOP_FIRE = "2006";//已经租
+    public static final String STATE_SHOP_FIRE = "2006";//已出租
     public static final String STATE_SHOP_SELL = "2007";//已售
     public static final String STATE_SHOP_FREE = "2008";//空闲
+    public static final String STATE_SHOP_REPAIR = "2009";//装修中
     public static final String ROOM_TYPE_ROOM = "1010301";//普通房屋
     public static final String ROOM_TYPE_SHOPS = "2020602";//商铺
 
     public static final String ROOM_SUB_TYPE_PERSON = "110";
     public static final String ROOM_SUB_TYPE_WORK = "119";
     public static final String ROOM_SUB_TYPE_HOUSE = "120";
-
 
     private String feeCoefficient;
     private String section;
@@ -80,7 +81,6 @@ public class RoomDto extends PageDto implements Serializable {
     private Date endTime;
 
     private String roomName;
-
 
     private String statusCd = "0";
 
@@ -164,7 +164,6 @@ public class RoomDto extends PageDto implements Serializable {
         this.apartment = apartment;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -188,7 +187,6 @@ public class RoomDto extends PageDto implements Serializable {
     public void setRoomAttrDto(List<RoomAttrDto> roomAttrDto) {
         this.roomAttrDto = roomAttrDto;
     }
-
 
     public String getCommunityId() {
         return communityId;

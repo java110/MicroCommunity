@@ -29,10 +29,9 @@ import java.util.List;
 
 /**
  * 查询缴费明细
- *
  */
 @RestController
-public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailInnerServiceSMO{
+public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailInnerServiceSMO {
 
     private int MAX_ROWS = 500;  // 最大行数
 
@@ -107,27 +106,39 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
                 String discountPrice = reportFeeMonthStatistics.getDiscountPrice();
                 //优惠金额(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("1")) {
-                    allPreferentialAmount = Double.valueOf(discountPrice);
+//                    allPreferentialAmount = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allPreferentialAmount = allPreferentialAmount + aDouble;
                 }
                 //减免金额(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("2")) {
-                    allDeductionAmount = Double.valueOf(discountPrice);
+                    //allDeductionAmount = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allDeductionAmount = allDeductionAmount + aDouble;
                 }
                 //滞纳金(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
-                    allLateFee = Double.valueOf(discountPrice);
+//                    allLateFee = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allLateFee = allLateFee + aDouble;
                 }
                 //空置房打折金额(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("4")) {
-                    allVacantHousingDiscount = Double.valueOf(discountPrice);
+//                    allVacantHousingDiscount = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allVacantHousingDiscount = allVacantHousingDiscount + aDouble;
                 }
                 //空置房减免金额(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("5")) {
-                    allVacantHousingReduction = Double.valueOf(discountPrice);
+//                    allVacantHousingReduction = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allVacantHousingReduction = allVacantHousingReduction + aDouble;
                 }
                 //赠送金额(大计)
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("6")) {
-                    allGiftAmount = Double.valueOf(discountPrice);
+//                    allGiftAmount = Double.valueOf(discountPrice);
+                    Double aDouble = Double.valueOf(discountPrice);
+                    allGiftAmount = allGiftAmount + aDouble;
                 }
             }
             //应收总金额(小计)

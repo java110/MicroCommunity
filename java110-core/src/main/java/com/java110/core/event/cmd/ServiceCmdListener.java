@@ -21,7 +21,7 @@ public interface ServiceCmdListener extends EventListener, Ordered {
      * @param event              事件对象
      * @param context 请求报文数据
      */
-    void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException;
+    void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException;
 
 
     /**

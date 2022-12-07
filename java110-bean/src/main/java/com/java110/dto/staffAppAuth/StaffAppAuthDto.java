@@ -25,11 +25,9 @@ public class StaffAppAuthDto extends PageDto implements Serializable {
     private String staffId;
     private String staffName;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getAuId() {
         return auId;

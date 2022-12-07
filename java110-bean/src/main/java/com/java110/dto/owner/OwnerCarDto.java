@@ -21,7 +21,6 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public static final String STATE_OWE = "2002";
     public static final String STATE_FINISH = "3003";
 
-
     public static final String CAR_TYPE_PRIMARY = "1001"; //主车辆
     public static final String CAR_TYPE_MEMBER = "1002"; //车辆成员
     public static final String CAR_TYPE_TEMP = "1003"; //临时车
@@ -95,7 +94,6 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String leaseTypeName;
 
     private List<OwnerCarAttrDto> ownerCarAttrDto;
-
 
     public String getCarColor() {
         return carColor;
@@ -456,6 +454,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     public void setPaIds(String[] paIds) {
         this.paIds = paIds;
     }
+
     public String getCarTypeCdName() {
         return carTypeCdName;
     }

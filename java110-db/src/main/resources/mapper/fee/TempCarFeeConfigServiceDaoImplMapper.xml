@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tempCarFeeConfigServiceDaoImpl">
 
@@ -12,7 +11,6 @@
         #{carType},#{operate},#{configId},#{feeName},#{paId},#{areaNum},#{startTime},#{endTime},#{bId},#{ruleId},#{communityId},#{feeConfigId}
         )
     </insert>
-
 
     <!-- 查询临时车收费标准信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessTempCarFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -55,9 +53,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </select>
-
 
     <!-- 保存临时车收费标准信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveTempCarFeeConfigInfoInstance" parameterType="Map">
@@ -97,9 +93,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </insert>
-
 
     <!-- 查询临时车收费标准信息 add by wuxw 2018-07-03 -->
     <select id="getTempCarFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -109,8 +103,9 @@
         ruleId,t.community_id,t.community_id communityId,tcfr.rule_name ruleName,td.name carTypeName,t.fee_config_id,t.fee_config_id feeConfigId
         from temp_car_fee_config t
         left join temp_car_fee_rule tcfr on t.rule_id = tcfr.rule_id and tcfr.status_cd = '0'
+        inner join pay_fee_config pfc on t.fee_config_id = pfc.config_id and pfc.status_cd = '0'
         left join t_dict td on t.car_type = td.status_cd and td.table_name = 'temp_car_fee_config' and td.table_columns = 'car_type'
-        where 1 =1
+        where 1 = 1
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
         </if>
@@ -151,9 +146,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改临时车收费标准信息 add by wuxw 2018-07-03 -->
     <update id="updateTempCarFeeConfigInfoInstance" parameterType="Map">
@@ -192,14 +185,16 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询临时车收费标准数量 add by wuxw 2018-07-03 -->
     <select id="queryTempCarFeeConfigsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from temp_car_fee_config t
-        where 1 =1
+        left join temp_car_fee_rule tcfr on t.rule_id = tcfr.rule_id and tcfr.status_cd = '0'
+        inner join pay_fee_config pfc on t.fee_config_id = pfc.config_id and pfc.status_cd = '0'
+        left join t_dict td on t.car_type = td.status_cd and td.table_name = 'temp_car_fee_config' and td.table_columns = 'car_type'
+        where 1 = 1
         <if test="carType !=null and carType != ''">
             and t.car_type= #{carType}
         </if>
@@ -237,6 +232,7 @@
             and t.fee_config_id= #{feeConfigId}
         </if>
     </select>
+
     <!-- 查询临时车 收费规则 -->
     <select id="queryTempCarFeeRules" parameterType="Map" resultType="Map">
         select
@@ -252,8 +248,7 @@
     <!-- 查询临时车 收费规则 -->
     <select id="queryTempCarFeeRuleSpecs" parameterType="Map" resultType="Map">
         select t.rule_id ruleId,t.spec_id specId,t.spec_name specName,t.seq,t.remark
-        from
-        temp_car_fee_rule_spec t
+        from temp_car_fee_rule_spec t
         where t.status_cd = '0'
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
@@ -269,5 +264,4 @@
         </if>
         order by t.seq
     </select>
-
 </mapper>

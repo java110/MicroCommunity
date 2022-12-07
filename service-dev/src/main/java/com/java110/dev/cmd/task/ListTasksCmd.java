@@ -21,7 +21,6 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.taskAttr.TaskAttrDto;
-import com.java110.intf.dev.ITaskV1InnerServiceSMO;
 import com.java110.intf.job.ITaskAttrInnerServiceSMO;
 import com.java110.intf.job.ITaskInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -29,13 +28,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.task.TaskDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "task.listTasks")
 public class ListTasksCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListTasksCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListTasksCmd.class);
 
     @Autowired
     private ITaskInnerServiceSMO taskInnerServiceSMOImpl;
@@ -65,25 +65,17 @@ public class ListTasksCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-
         TaskDto taskDto = BeanConvertUtil.covertBean(reqJson, TaskDto.class);
-
         int count = taskInnerServiceSMOImpl.queryTasksCount(taskDto);
-
         List<TaskDto> taskDtos = null;
-
         if (count > 0) {
             taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
             freshTaskAttr(taskDtos);
         } else {
             taskDtos = new ArrayList<>();
         }
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, taskDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
@@ -93,14 +85,11 @@ public class ListTasksCmd extends Cmd {
      * @param taskDtos
      */
     private void freshTaskAttr(List<TaskDto> taskDtos) {
-
         for (TaskDto taskDto : taskDtos) {
             TaskAttrDto taskAttrDto = new TaskAttrDto();
             taskAttrDto.setTaskId(taskDto.getTaskId());
             List<TaskAttrDto> taskAttrDtos = taskAttrInnerServiceSMOImpl.queryTaskAttrs(taskAttrDto);
             taskDto.setTaskAttr(taskAttrDtos);
         }
-
-
     }
 }

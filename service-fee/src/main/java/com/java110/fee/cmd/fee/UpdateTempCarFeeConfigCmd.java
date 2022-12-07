@@ -55,22 +55,21 @@ public class UpdateTempCarFeeConfigCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "查询费用项错误！");
         TempCarFeeConfigDto tempCarFeeConfigDto = new TempCarFeeConfigDto();
         tempCarFeeConfigDto.setConfigId(reqJson.getString("configId"));
         tempCarFeeConfigDto.setCommunityId(reqJson.getString("communityId"));
         List<TempCarFeeConfigDto> tempCarFeeConfigDtos = tempCarFeeConfigInnerServiceSMOImpl.queryTempCarFeeConfigs(tempCarFeeConfigDto);
-
         Assert.listOnlyOne(tempCarFeeConfigDtos, "临时车收费标准不存在");
-
         TempCarFeeConfigPo tempCarFeeConfigPo = BeanConvertUtil.covertBean(reqJson, TempCarFeeConfigPo.class);
         updateAttr(reqJson);
-
         int flag = tempCarFeeConfigV1InnerServiceSMOImpl.updateTempCarFeeConfig(tempCarFeeConfigPo);
-
         if (flag < 1) {
             throw new CmdException("修改临时车费用配置失败");
         }
-
         //补费用项数据
         PayFeeConfigPo payFeeConfigPo = new PayFeeConfigPo();
         payFeeConfigPo.setCommunityId(reqJson.getString("communityId"));
@@ -79,18 +78,14 @@ public class UpdateTempCarFeeConfigCmd extends Cmd {
         payFeeConfigPo.setStartTime(reqJson.getString("startTime"));
         payFeeConfigPo.setFeeName(reqJson.getString("feeName"));
         updateFeeConfig(BeanConvertUtil.beanCovertJson(payFeeConfigPo), context);
-
-
-
     }
 
     private void updateAttr(JSONObject reqJson) {
-        int flag;JSONArray attrs = reqJson.getJSONArray("attrs");
+        int flag;
+        JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
         }
-
-
         JSONObject attr = null;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);

@@ -1,12 +1,13 @@
-package com.java110.po.machineAuth;
+package com.java110.vo.api.machineAuth;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class MachineAuthPo implements Serializable {
+public class ApiMachineAuthDataVo implements Serializable {
 
     private String personName;
     private String machineId;
+    private String machineName;
     private String personId;
     private String startTime;
     private String state;
@@ -14,8 +15,8 @@ public class MachineAuthPo implements Serializable {
     private String communityId;
     private String personType;
     private String authId;
-    private String statusCd = "0";
-    private String bId;
+
+    private Date createTime;
 
     public String getPersonName() {
         return personName;
@@ -89,19 +90,19 @@ public class MachineAuthPo implements Serializable {
         this.authId = authId;
     }
 
-    public String getStatusCd() {
-        return statusCd;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getbId() {
-        return bId;
+    public String getMachineName() {
+        return machineName;
     }
 
-    public void setbId(String bId) {
-        this.bId = bId;
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
     }
 }

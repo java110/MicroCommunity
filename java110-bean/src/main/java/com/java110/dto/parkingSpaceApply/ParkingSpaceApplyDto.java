@@ -33,7 +33,10 @@ public class ParkingSpaceApplyDto extends PageDto implements Serializable {
     private String state;
     private String communityId;
     private String feeId;
+    //停车位编号
     private String num;
+    //停车场编号
+    private String areaNum;
     private String paId;
     private String parkingTypeName;
     private String stateName;
@@ -41,7 +44,6 @@ public class ParkingSpaceApplyDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getCarBrand() {
         return carBrand;
@@ -163,7 +165,6 @@ public class ParkingSpaceApplyDto extends PageDto implements Serializable {
         this.communityId = communityId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -226,5 +227,13 @@ public class ParkingSpaceApplyDto extends PageDto implements Serializable {
 
     public void setCarId(String carId) {
         this.carId = carId;
+    }
+
+    public String getAreaNum() {
+        return areaNum;
+    }
+
+    public void setAreaNum(String areaNum) {
+        this.areaNum = areaNum;
     }
 }
