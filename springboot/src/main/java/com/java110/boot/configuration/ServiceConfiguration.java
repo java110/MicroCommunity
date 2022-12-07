@@ -88,8 +88,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/inspectionTaskDetail.listInspectionTaskDetails,");
         exclusions.append("/app/maintainanceTask.listMaintainanceTaskDetail,");
         exclusions.append("/app/parkingCoupon.saveParkingCouponCar,");
-
-
+        exclusions.append("/app/reserve.listReserveCatalog,");
+        exclusions.append("/app/reserve.listReserveGoods,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
