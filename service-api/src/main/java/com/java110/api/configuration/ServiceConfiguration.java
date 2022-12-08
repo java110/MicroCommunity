@@ -92,6 +92,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/parkingCoupon.saveParkingCouponCar,");
         exclusions.append("/app/reserve.listReserveCatalog,");
         exclusions.append("/app/reserve.listReserveGoods,");
+        exclusions.append("/app/reserve.listReserveParams,");
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

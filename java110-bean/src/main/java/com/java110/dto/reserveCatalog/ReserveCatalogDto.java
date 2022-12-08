@@ -1,7 +1,6 @@
 package com.java110.dto.reserveCatalog;
 
 import com.java110.dto.PageDto;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,11 +15,11 @@ import java.util.Date;
 public class ReserveCatalogDto extends PageDto implements Serializable {
 
     private String catalogId;
-    private String name;
-    private String sort;
-    private String state;
-    private String communityId;
-    private String type;
+private String name;
+private String sort;
+private String state;
+private String communityId;
+private String type;
 
 
     private Date createTime;
@@ -31,48 +30,37 @@ public class ReserveCatalogDto extends PageDto implements Serializable {
     public String getCatalogId() {
         return catalogId;
     }
-
-    public void setCatalogId(String catalogId) {
+public void setCatalogId(String catalogId) {
         this.catalogId = catalogId;
     }
-
-    public String getName() {
+public String getName() {
         return name;
     }
-
-    public void setName(String name) {
+public void setName(String name) {
         this.name = name;
     }
-
-    public String getSort() {
+public String getSort() {
         return sort;
     }
-
-    public void setSort(String sort) {
+public void setSort(String sort) {
         this.sort = sort;
     }
-
-    public String getState() {
+public String getState() {
         return state;
     }
-
-    public void setState(String state) {
+public void setState(String state) {
         this.state = state;
     }
-
-    public String getCommunityId() {
+public String getCommunityId() {
         return communityId;
     }
-
-    public void setCommunityId(String communityId) {
+public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
-    public String getType() {
+public String getType() {
         return type;
     }
-
-    public void setType(String type) {
+public void setType(String type) {
         this.type = type;
     }
 
