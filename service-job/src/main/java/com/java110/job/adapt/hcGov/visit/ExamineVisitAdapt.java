@@ -119,11 +119,11 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         }
         for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
             JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
-            if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")) {
+            if (!StringUtil.isEmpty(businessVisit.getString("carNum"))) {
                 sendMessage(business, businessVisit);
             }
-            if (!StringUtil.isEmpty(businessVisit.getString("flag")) && businessVisit.getString("flag").equals("1")
-                    && !StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //审核通过时走适配器
+            if (!StringUtil.isEmpty(businessVisit.getString("carNum")) &&
+                    !StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //审核通过时走适配器
                 doAddVisit(business, businessVisit);
             }
         }
@@ -293,7 +293,7 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         body.put("psId", parkingSpaceDtos.get(0).getPsId());
         body.put("extCarId", ownerCarDtos.get(0).getCarId());
         body.put("attrs", parkingAreaAttrDtos);
+        body.put("leaseType", ownerCarDtos.get(0).getLeaseType());
         hcOwnerVisitAsynImpl.addVisit(body);
     }
-
 }

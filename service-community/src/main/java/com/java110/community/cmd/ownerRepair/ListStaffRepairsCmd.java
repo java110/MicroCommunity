@@ -27,7 +27,6 @@ import java.util.Map;
 @Java110Cmd(serviceCode = "ownerRepair.listStaffRepairs")
 public class ListStaffRepairsCmd extends Cmd {
 
-
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
 
@@ -48,9 +47,10 @@ public class ListStaffRepairsCmd extends Cmd {
 
     /**
      * 报修待办
-     * @param event              事件对象
+     *
+     * @param event   事件对象
      * @param context 数据上文对象
-     * @param reqJson            请求报文
+     * @param reqJson 请求报文
      * @throws CmdException
      * @throws ParseException
      */
@@ -61,10 +61,10 @@ public class ListStaffRepairsCmd extends Cmd {
         String userId = reqJson.getString("userId");
         String viewListStaffRepairs = CommunitySettingFactory.getValue(reqJson.getString("communityId"), VIEW_LIST_STAFF_REPAIRS);
         if (StringUtil.isEmpty(viewListStaffRepairs)) {
-            viewListStaffRepairs = MappingCache.getValue(DOMAIN_COMMON,VIEW_LIST_STAFF_REPAIRS);
+            viewListStaffRepairs = MappingCache.getValue(DOMAIN_COMMON, VIEW_LIST_STAFF_REPAIRS);
         }
         List<Map> privileges = null;
-        if("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+        if ("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
             //报修待办查看所有记录权限
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/viewListStaffRepairs");

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="staffAppAuthServiceDaoImpl">
 
-
     <!-- 保存员工微信认证信息 add by wuxw 2018-07-03 -->
     <insert id="saveStaffAppAuthInfo" parameterType="Map">
-        insert into staff_app_auth(
-        au_id,app_type,open_id,state,store_id,open_name,staff_id
-        ) values (
-        #{auId},#{appType},#{openId},#{state},#{storeId},#{openName},#{staffId}
-        )
+        insert into staff_app_auth(au_id, app_type, open_id, state, store_id, open_name, staff_id)
+        values (#{auId}, #{appType}, #{openId}, #{state}, #{storeId}, #{openName}, #{staffId})
     </insert>
-
 
     <!-- 查询员工微信认证信息 add by wuxw 2018-07-03 -->
     <select id="getStaffAppAuthInfo" parameterType="Map" resultType="Map">
@@ -50,14 +44,11 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改员工微信认证信息 add by wuxw 2018-07-03 -->
     <update id="updateStaffAppAuthInfo" parameterType="Map">
         update staff_app_auth t set t.status_cd = #{statusCd}
-
         <if test="openId !=null and openId != ''">
             , t.open_id= #{openId}
         </if>
@@ -66,6 +57,9 @@
         </if>
         <if test="openName !=null and openName != ''">
             , t.open_name= #{openName}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
         </if>
         where 1=1
         <if test="auId !=null and auId != ''">
@@ -112,8 +106,5 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
-
-
     </select>
-
 </mapper>

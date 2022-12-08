@@ -6,13 +6,14 @@
 
     <!-- 保存报修信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairInfo" parameterType="Map">
-        insert into business_repair_pool(
-        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,repair_obj_type,repair_obj_id,
-        repair_obj_name, maintenance_type,repair_channel,repair_materials,repair_fee,pay_type
-        ) values (
-        #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},
-        #{repairObjType},#{repairObjId},#{repairObjName},#{maintenanceType},#{repairChannel},#{repairMaterials},#{repairFee},#{payType}
-        )
+        insert into business_repair_pool(operate, repair_name, appointment_time, repair_type, context, repair_id, tel,
+                                         state, community_id, b_id, repair_obj_type, repair_obj_id,
+                                         repair_obj_name, maintenance_type, repair_channel, repair_materials,
+                                         repair_fee, pay_type)
+        values (#{operate}, #{repairName}, #{appointmentTime}, #{repairType}, #{context}, #{repairId}, #{tel}, #{state},
+                #{communityId}, #{bId},
+                #{repairObjType}, #{repairObjId}, #{repairObjName}, #{maintenanceType}, #{repairChannel},
+                #{repairMaterials}, #{repairFee}, #{payType})
     </insert>
 
     <!-- 查询报修信息信息（Business） add by wuxw 2018-07-03 -->
@@ -146,8 +147,10 @@
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
-        left join t_dict d1 on rs.repair_setting_type = d1.status_cd and d1.table_name = 'r_repair_setting' and d1.table_columns = 'repair_setting_type'
-        left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and rrv.status_cd = '0'
+        left join t_dict d1 on rs.repair_setting_type = d1.status_cd and d1.table_name = 'r_repair_setting' and
+        d1.table_columns = 'repair_setting_type'
+        left join r_repair_return_visit rrv on t.repair_id = rrv.repair_id and rrv.community_id = t.community_id and
+        rrv.status_cd = '0'
         left join appraise a on a.obj_id = t.repair_id and a.status_cd = '0'
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
@@ -531,7 +534,7 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
+        and ru.state in ('10002','10005','10009','11000','12000')
         <if test="staffId !=null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>
@@ -596,7 +599,7 @@
         left join t_dict td on rs.return_visit_flag = td.status_cd and td.table_name='r_repair_setting' and
         td.table_columns='return_visit_flag'
         where 1 =1
-        and ru.state in ('10002','10003','10004','10005','10009','11000','12000')
+        and ru.state in ('10002','10005','10009','11000','12000')
         <if test="staffId != null and staffId != ''">
             and ru.staff_id = #{staffId}
         </if>

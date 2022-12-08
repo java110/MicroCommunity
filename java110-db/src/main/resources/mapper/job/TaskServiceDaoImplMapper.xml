@@ -86,7 +86,7 @@
             and t.create_time= #{createTime}
         </if>
         <if test="taskName !=null and taskName != ''">
-            and t.task_name= #{taskName}
+            and t.task_name like '%${taskName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -101,7 +101,7 @@
             and t.template_id= #{templateId}
         </if>
         <if test="templateName != null and templateName != ''">
-            and tt.template_name = #{templateName}
+            and tt.template_name like '%${templateName}%'
         </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
@@ -152,7 +152,7 @@
             and t.create_time= #{createTime}
         </if>
         <if test="taskName !=null and taskName != ''">
-            and t.task_name= #{taskName}
+            and t.task_name like '%${taskName}%'
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -167,7 +167,7 @@
             and t.template_id= #{templateId}
         </if>
         <if test="templateName != null and templateName != ''">
-            and tt.template_name = #{templateName}
+            and tt.template_name like '%${templateName}%'
         </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
@@ -261,5 +261,4 @@
             and t.status_cd= #{statusCd}
         </if>
     </select>
-
 </mapper>

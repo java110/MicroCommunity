@@ -15,6 +15,7 @@
  */
 package com.java110.report.cmd.reportCustomComponent;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -27,6 +28,7 @@ import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,7 @@ import java.util.List;
 public class ListReportCustomComponentDataCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListReportCustomComponentDataCmd.class);
+
     @Autowired
     private IReportCustomComponentV1InnerServiceSMO reportCustomComponentV1InnerServiceSMOImpl;
 
@@ -122,9 +125,15 @@ public class ListReportCustomComponentDataCmd extends Cmd {
             reqJson.put("page", (page - 1) * reqJson.getIntValue("row"));
         }
         JSONObject data = queryServiceSMOImpl.execQuerySql(reqJson, sql);
+        if (!sql.trim().contains("test=\"count")) {
+            total = JSONArray.parseArray(data.getString("td")).size();
+        }
+        if (!StringUtil.isEmpty(sql) && !sql.contains("limit #page#,#row#")) {
+            sql = sql + " limit #page#,#row#";
+            data = queryServiceSMOImpl.execQuerySql(reqJson, sql);
+        }
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) total / (double) reqJson.getInteger("row")), total, data);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
-
 }

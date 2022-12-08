@@ -278,9 +278,9 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
                 body.put("extCarId", ownerCarDtos.get(0).getCarId());
                 body.put("attrs", parkingAreaAttrDtos);
                 body.put("extCommunityId", visits.get(0).getCommunityId());
+                body.put("leaseType", ownerCarDtos.get(0).getLeaseType());
                 hcOwnerVisitAsynImpl.addVisit(body);
             }
         }
     }
-
 }

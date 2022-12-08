@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-
 /**
  * 类表述：更新
  * 服务编码：parkingSpaceApply.updateParkingSpaceApply
@@ -66,14 +65,19 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(AuditParkingSpaceApplyCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
+
     @Autowired
     private IParkingSpaceApplyV1InnerServiceSMO parkingSpaceApplyV1InnerServiceSMOImpl;
+
     @Autowired
     private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
+
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeNewV1InnerServiceSMOImpl;
+
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Autowired
     private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
 
@@ -83,7 +87,6 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
-
     }
 
     @Override
@@ -91,7 +94,6 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
-
         //审核失败
         if (ParkingSpaceApplyDto.STATE_FAIL.equals(parkingSpaceApplyPo.getState())) {
             parkingSpaceApplyPo.setPsId("");
@@ -102,26 +104,20 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
             }
             return;
         }
-
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-
         parkingSpaceApplyPo.setFeeId(payFeePo.getFeeId());
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.updateParkingSpaceApply(parkingSpaceApplyPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
         parkingSpaceApplyDto.setApplyId(parkingSpaceApplyPo.getApplyId());
         List<ParkingSpaceApplyDto> parkingSpaceApplyDtos = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplys(parkingSpaceApplyDto);
-
         if (parkingSpaceApplyDtos == null || parkingSpaceApplyDtos.size() < 1) {
             throw new CmdException("未查询到申请单，请联系管理员");
         }
         ParkingSpaceApplyDto parkingSpaceApply = parkingSpaceApplyDtos.get(0);
-
         //2、审核的时，判断车辆是否在owner_car中有，有就跳过。  没有的话写入owner_car，--都要写入pay_fee。
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
@@ -156,7 +152,6 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         } else {
             catId = ownerCarDtos.get(0).getCarId();
         }
-
         // 将车位状态 修改为已出租状态
         ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
         parkingSpacePo.setPsId(parkingSpaceApply.getPsId());

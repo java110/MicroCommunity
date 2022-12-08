@@ -21,15 +21,22 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
+import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
+import com.java110.po.parking.ParkingSpacePo;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+
+import java.util.List;
+
 /**
  * 类表述：删除
  * 服务编码：parkingSpaceApply.deleteParkingSpaceApply
@@ -42,29 +49,44 @@ import com.java110.core.log.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "parkingSpaceApply.deleteParkingSpaceApply")
 public class DeleteParkingSpaceApplyCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteParkingSpaceApplyCmd.class);
+
+    private static Logger logger = LoggerFactory.getLogger(DeleteParkingSpaceApplyCmd.class);
 
     @Autowired
     private IParkingSpaceApplyV1InnerServiceSMO parkingSpaceApplyV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingSpaceV1InnerServiceSMO parkingSpaceV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
-Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-       ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
+        ParkingSpaceApplyPo parkingSpaceApplyPo = BeanConvertUtil.covertBean(reqJson, ParkingSpaceApplyPo.class);
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.deleteParkingSpaceApply(parkingSpaceApplyPo);
-
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
-
+        if (!StringUtil.isEmpty(reqJson.getString("state")) && (reqJson.getString("state").equals("2002")
+                || reqJson.getString("state").equals("3003"))) { //审核通过待缴费状态或完成状态
+            if (!StringUtil.isEmpty(reqJson.getString("psId"))) {
+                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+                parkingSpaceDto.setPsId(reqJson.getString("psId"));
+                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceV1InnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+                Assert.listOnlyOne(parkingSpaceDtos, "查询车位失败");
+                ParkingSpacePo parkingSpacePo = new ParkingSpacePo();
+                parkingSpacePo.setPsId(parkingSpaceDtos.get(0).getPsId());
+                parkingSpacePo.setState("F"); //出售 S，出租 H ，空闲 F
+                int i = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+                if (i < 1) {
+                    throw new CmdException("更新数据失败");
+                }
+            }
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

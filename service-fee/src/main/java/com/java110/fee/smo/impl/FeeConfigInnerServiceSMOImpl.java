@@ -1,6 +1,5 @@
 package com.java110.fee.smo.impl;
 
-
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -34,21 +33,14 @@ public class FeeConfigInnerServiceSMOImpl extends BaseServiceSMO implements IFee
 
     @Override
     public List<FeeConfigDto> queryFeeConfigs(@RequestBody FeeConfigDto feeConfigDto) {
-
         //校验是否传了 分页信息
-
         int page = feeConfigDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             feeConfigDto.setPage((page - 1) * feeConfigDto.getRow());
         }
-
         List<FeeConfigDto> feeConfigs = BeanConvertUtil.covertBeanList(feeConfigServiceDaoImpl.getFeeConfigInfo(BeanConvertUtil.beanCovertMap(feeConfigDto)), FeeConfigDto.class);
-
-
         return feeConfigs;
     }
-
 
     @Override
     public int queryFeeConfigsCount(@RequestBody FeeConfigDto feeConfigDto) {
@@ -58,6 +50,11 @@ public class FeeConfigInnerServiceSMOImpl extends BaseServiceSMO implements IFee
     @Override
     public int saveFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo) {
         return feeConfigServiceDaoImpl.saveFeeConfig(BeanConvertUtil.beanCovertMap(payFeeConfigPo));
+    }
+
+    @Override
+    public int deleteFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo) {
+        return feeConfigServiceDaoImpl.deleteFeeConfig(BeanConvertUtil.beanCovertMap(payFeeConfigPo));
     }
 
     public IFeeConfigServiceDao getFeeConfigServiceDaoImpl() {

@@ -76,14 +76,15 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
             return orderDtos;
         }
         String[] userIds = getUserIds(orderDtos);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (OrderDto orderDto : orderDtos) {
-            for (UserDto userDto : users) {
-                if (orderDto.getUserId().equals(userDto.getUserId())) {
-                    orderDto.setUserName(userDto.getUserName());
-                    break;
+        if(userIds != null && userIds.length > 0) {
+            //根据 userId 查询用户信息
+            List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+            for (OrderDto orderDto : orderDtos) {
+                for (UserDto userDto : users) {
+                    if (orderDto.getUserId().equals(userDto.getUserId())) {
+                        orderDto.setUserName(userDto.getUserName());
+                        break;
+                    }
                 }
             }
         }

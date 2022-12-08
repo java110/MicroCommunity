@@ -11,42 +11,42 @@ import java.util.*;
 
 /**
  * select t.inspection_name '巡检点',t.point_obj_name '位置',ips.staff_name '员工',
- (select count(1) from inspection_task it
- INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
- where it.inspection_plan_id = ip.inspection_plan_id
- and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
- and itd.act_user_id is not null
- ) '已巡检',
- (select count(1) from inspection_task it
- INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
- where it.inspection_plan_id = ip.inspection_plan_id
- and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
- and itd.act_user_id is null
- ) '未巡检',
- (select itd.description from inspection_task it
- INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
- where it.inspection_plan_id = ip.inspection_plan_id
- and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
- and itd.act_user_id is not null
- limit 1
- ) '状态'
- from inspection_point t
- left join inspection_route_point_rel irpr on t.inspection_id = irpr.inspection_id and irpr.status_cd = '0'
- left join inspection_plan ip on ip.inspection_route_id = irpr.inspection_route_id and ip.status_cd = '0'
- left join inspection_plan_staff ips on ip.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'
-
- where ips.staff_name is not null
- and t.community_id = #communityId#
- and t.status_cd = '0'
- <if test="startTime != null and startTime != ''">
- and ip.create_time &gt; #startTime#
- </if>
- <if test="endTime != null and endTime != ''">
- and ip.create_time &lt; #endTime#
- </if>
-
- group by t.inspection_name,t.point_obj_name,ips.staff_name
- order by t.inspection_name
+ * (select count(1) from inspection_task it
+ * INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+ * where it.inspection_plan_id = ip.inspection_plan_id
+ * and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
+ * and itd.act_user_id is not null
+ * ) '已巡检',
+ * (select count(1) from inspection_task it
+ * INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+ * where it.inspection_plan_id = ip.inspection_plan_id
+ * and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
+ * and itd.act_user_id is null
+ * ) '未巡检',
+ * (select itd.description from inspection_task it
+ * INNER JOIN inspection_task_detail itd on it.task_id = itd.task_id and itd.status_cd = '0'
+ * where it.inspection_plan_id = ip.inspection_plan_id
+ * and itd.inspection_id = t.inspection_id and it.plan_user_id = ips.staff_id
+ * and itd.act_user_id is not null
+ * limit 1
+ * ) '状态'
+ * from inspection_point t
+ * left join inspection_route_point_rel irpr on t.inspection_id = irpr.inspection_id and irpr.status_cd = '0'
+ * left join inspection_plan ip on ip.inspection_route_id = irpr.inspection_route_id and ip.status_cd = '0'
+ * left join inspection_plan_staff ips on ip.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'
+ * <p>
+ * where ips.staff_name is not null
+ * and t.community_id = #communityId#
+ * and t.status_cd = '0'
+ * <if test="startTime != null and startTime != ''">
+ * and ip.create_time &gt; #startTime#
+ * </if>
+ * <if test="endTime != null and endTime != ''">
+ * and ip.create_time &lt; #endTime#
+ * </if>
+ * <p>
+ * group by t.inspection_name,t.point_obj_name,ips.staff_name
+ * order by t.inspection_name
  */
 
 public class InspectionData implements ReportExecute {
@@ -132,7 +132,7 @@ public class InspectionData implements ReportExecute {
 
         List datas = queryServiceDAOImpl.executeSql(sql, sqlParams.toArray());
 
-        System.out.println("datas="+datas);
+        System.out.println("datas=" + datas);
 
         if (datas == null || datas.size() < 1) {
             paramOut.put("total",1);
@@ -153,11 +153,11 @@ public class InspectionData implements ReportExecute {
             }
 
             td.put(dataObj.get("员工").toString(), dataObj.get("已巡检") + "/" + dataObj.get("未巡检"));
-            td.put(dataObj.get("员工").toString()+"巡检状态", dataObj.get("状态"));
+            td.put(dataObj.get("员工").toString() + "巡检状态", dataObj.get("状态"));
         }
 
-        paramOut.put("total",params.get("row"));
-        paramOut.put("data",tds);
+        paramOut.put("total", params.get("row"));
+        paramOut.put("data", tds);
 
         return paramOut.toJSONString();
     }

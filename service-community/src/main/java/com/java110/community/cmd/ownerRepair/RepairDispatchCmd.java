@@ -89,19 +89,16 @@ public class RepairDispatchCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "action", "未包含处理动作");
 
-        if(!reqJson.containsKey("userId")){
-            reqJson.put("userId",context.getReqHeaders().get("user-id"));
+        if (!reqJson.containsKey("userId")) {
+            reqJson.put("userId", context.getReqHeaders().get("user-id"));
         }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
-
+//        RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
         String action = reqJson.getString("action");
-
-
         switch (action) {
             case ACTION_DISPATCH:
                 dispacthRepair(context, reqJson);
@@ -123,7 +120,6 @@ public class RepairDispatchCmd extends Cmd {
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "当前用户没有需要处理订单或存在多条");
         int flag = 0;
-
         //待评价
         if (RepairDto.STATE_APPRAISE.equals(repairDtos.get(0).getState())) {
             FeeAttrDto feeAttrDto = new FeeAttrDto();
@@ -142,7 +138,6 @@ public class RepairDispatchCmd extends Cmd {
                     context.setResponseEntity(responseEntity);
                     return;
                 }
-
                 PayFeePo payFeePo = new PayFeePo();
                 payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
                 payFeePo.setFeeId(feeDtos.get(0).getFeeId());
@@ -160,60 +155,49 @@ public class RepairDispatchCmd extends Cmd {
 //                if (flag < 1) {
 //                    throw new CmdException("删除费用失败");
 //                }
-
             }
-
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK);
-
             context.setResponseEntity(responseEntity);
         }
-
-
-        String userId = reqJson.getString("userId");
-        String userName = reqJson.getString("userName");
-
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
         repairUserDto.setState(RepairUserDto.STATE_DOING);
-        repairUserDto.setStaffId(userId);
+        repairUserDto.setStaffId(reqJson.getString("userId"));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
         if (repairUserDtos != null && repairUserDtos.size() != 1) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
             context.setResponseEntity(responseEntity);
             return;
         }
-        String ruId = repairUserDtos.get(0).getRuId();
-        RepairUserPo repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
-        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserPo.setState(RepairUserDto.STATE_BACK);
-        repairUserPo.setContext(reqJson.getString("context"));
-        repairUserPo.setCommunityId(reqJson.getString("communityId"));
+//        String ruId = repairUserDtos.get(0).getRuId();
+//        RepairUserPo repairUserPo = new RepairUserPo();
+//        repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
+//        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        repairUserPo.setState(RepairUserDto.STATE_BACK);
+//        repairUserPo.setContext(reqJson.getString("context"));
+//        repairUserInnerServiceSMOImpl.updateRepairUser(repairUserPo);
         //处理人信息
-        repairUserPo = new RepairUserPo();
-        repairUserPo.setRuId("-1");
-        repairUserPo.setState(RepairUserDto.STATE_DOING);
-        repairUserPo.setRepairId(reqJson.getString("repairId"));
-        repairUserPo.setStaffId(reqJson.getString("staffId"));
-        repairUserPo.setStaffName(reqJson.getString("staffName"));
-        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        repairUserDto = new RepairUserDto();
-        repairUserDto.setRepairId(reqJson.getString("repairId"));
-        repairUserDto.setStaffId(reqJson.getString("staffId"));
-        repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserDto.setRuId(repairUserDtos.get(0).getPreRuId());
-        repairUserDto.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP});
-        repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-
-        if (repairUserDtos == null || repairUserDtos.size() < 1) {
+//        repairUserPo = new RepairUserPo();
+//        repairUserPo.setRuId("-1");
+//        repairUserPo.setState(RepairUserDto.STATE_DOING);
+//        repairUserPo.setRepairId(reqJson.getString("repairId"));
+//        repairUserPo.setStaffId(reqJson.getString("staffId"));
+//        repairUserPo.setStaffName(reqJson.getString("staffName"));
+        RepairUserDto repair = new RepairUserDto();
+        repair.setRepairId(reqJson.getString("repairId"));
+        repair.setStaffId(reqJson.getString("staffId"));
+        repair.setCommunityId(reqJson.getString("communityId"));
+//        repair.setRuId(repairUserDtos.get(0).getPreRuId());
+        repair.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP});
+        List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repair);
+        if (repairUsers == null || repairUsers.size() < 1) { //指派的不能退单
             if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())
-                    || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())
-            ) {
+                    || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())) {
                 modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_WAIT);//维修单变成未派单
                 //把自己改成退单
                 RepairUserPo repairUser = new RepairUserPo();
-                repairUser.setRuId(ruId);
+                repairUser.setRuId(repairUserDtos.get(0).getRuId());
                 repairUser.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 repairUser.setState(RepairUserDto.STATE_BACK);
                 repairUser.setContext(reqJson.getString("context"));
@@ -229,24 +213,32 @@ public class RepairDispatchCmd extends Cmd {
                 return;
             }
         }
-
         //把自己改成退单
         RepairUserPo repairUser = new RepairUserPo();
-        repairUser.setRuId(ruId);
+        repairUser.setRuId(repairUserDtos.get(0).getRuId());
         repairUser.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUser.setState(RepairUserDto.STATE_BACK);
         repairUser.setContext(reqJson.getString("context"));
         repairUser.setCommunityId(reqJson.getString("communityId"));
-        flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
+        flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUser);
         if (flag < 1) {
             throw new CmdException("修改用户失败");
         }
-        repairUserPo.setPreStaffId(repairUserDtos.get(0).getPreStaffId());
-        repairUserPo.setPreStaffName(repairUserDtos.get(0).getPreStaffName());
-        repairUserPo.setPreRuId(repairUserDtos.get(0).getPreRuId());
-        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
-        repairUserPo.setContext("");
+        RepairUserPo repairUserPo = new RepairUserPo();
+        repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+        repairUserPo.setRepairId(reqJson.getString("repairId"));
+        repairUserPo.setbId("-1");
         repairUserPo.setCommunityId(reqJson.getString("communityId"));
+        repairUserPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        repairUserPo.setState(RepairUserDto.STATE_DOING);
+        repairUserPo.setContext("");
+        repairUserPo.setStaffId(repairUserDtos.get(0).getPreStaffId());
+        repairUserPo.setStaffName(repairUserDtos.get(0).getPreStaffName());
+        repairUserPo.setPreStaffId(repairUserDtos.get(0).getStaffId());
+        repairUserPo.setPreStaffName(repairUserDtos.get(0).getStaffName());
+        repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
+        repairUserPo.setPreRuId(repairUserDtos.get(0).getRuId());
         flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
         if (flag < 1) {
             throw new CmdException("修改用户失败");

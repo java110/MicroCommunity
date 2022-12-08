@@ -29,7 +29,6 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.ImageUtils;
@@ -90,13 +89,11 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
-
         JSONObject data = business.getData();
         JSONArray businessRepairUsers = new JSONArray();
-        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
+        System.out.println("收到日志：>>>>>>>>>>>>>" + data.toJSONString());
         if (data.containsKey(RepairUserPo.class.getSimpleName())) {
             Object bObj = data.get(RepairUserPo.class.getSimpleName());
-
             if (bObj instanceof JSONObject) {
                 businessRepairUsers.add(bObj);
             } else if (bObj instanceof List) {
@@ -104,36 +101,28 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             } else {
                 businessRepairUsers = (JSONArray) bObj;
             }
-
         } else {
             if (data instanceof JSONObject) {
                 businessRepairUsers.add(data);
             }
         }
-
-        //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
         for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessRepairUsers.size(); bOwnerRepairIndex++) {
             JSONObject businessRepairUser = businessRepairUsers.getJSONObject(bOwnerRepairIndex);
-            doDealOwnerRepair(business, businessRepairUser);
+            doDealOwnerRepair(businesses, businessRepairUser);
         }
-
-
     }
 
-    private void doDealOwnerRepair(Business business, JSONObject businessRepairUser) {
-
+    private void doDealOwnerRepair(List<Business> businesses, JSONObject businessRepairUser) {
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRuId(businessRepairUser.getString("ruId"));
-        repairUserDto.setStatusCd("0");
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
-        //获取员工处理状态(10001 处理中；10002 结单；10003 退单；10004 转单；10005 提交)
+        //获取员工处理状态(10001 处理中；10002 结单；10003 退单；10004 转单；10005 提交；10006 已派单；10007 已评价；10008 已回访；10009 待支付；11000 待评价；12000 已支付；12001 暂停)
         String state = repairUserDtos.get(0).getState();
         if (!state.equals("10005")) {
             //获取报修id
             String repairId = repairUserDtos.get(0).getRepairId();
             RepairDto repairDto = new RepairDto();
             repairDto.setRepairId(repairId);
-            repairDto.setStatusCd("0");
             List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
             //查询报修状态(1000 未派单；1100 接单；1200 退单；1300 转单；1400 申请支付；1500 支付失败；1700 待评价；1800 电话回访；1900 办理完成；2000 未办理结单)
             String repairState = repairDtos.get(0).getState();
@@ -156,23 +145,28 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             CommunityDto communityDto = new CommunityDto();
             communityDto.setCommunityId(communityId);
             List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
-            //派单方式(100表示抢单；200表示指派；300表示轮训)
-            String repairWay = repairDtos.get(0).getRepairWay();
-            if (repairState.equals("1100") && repairWay.equals("200")) {
-                //获取维修员工的id
-                String staffId = repairUserDtos.get(1).getStaffId();
-                //获取用户id
-                String preStaffId = repairUserDtos.get(0).getPreStaffId();
+            if (repairState.equals("1100") && businessRepairUser.getString("state").equals("10006")) { //派单
                 JSONObject paramIn = new JSONObject();
+                for (Business business : businesses) {
+                    String businessTypeCd = business.getBusinessTypeCd();
+                    if (!StringUtil.isEmpty(businessTypeCd) && businessTypeCd.equals("130200030001")) {
+                        JSONObject data = business.getData();
+                        if (!StringUtil.isEmpty(data.getString("state")) && data.getString("state").equals("10001")) {
+                            paramIn.put("staffId", data.getString("staffId"));
+                            paramIn.put("staffName", data.getString("staffName"));
+                        } else if (data.getString("state").equals("10006")) {
+                            paramIn.put("preStaffId", data.getString("preStaffId"));
+                            paramIn.put("preStaffName", data.getString("preStaffName"));
+                        }
+                    }
+                }
                 paramIn.put("repairName", repairName);
                 paramIn.put("repairObjName", repairObjName);
                 paramIn.put("tel", tel);
                 paramIn.put("communityId", communityId);
                 paramIn.put("context", context);
                 paramIn.put("time", time);
-                paramIn.put("staffId", staffId);
                 paramIn.put("repairObjId", repairObjId);
-                paramIn.put("preStaffId", preStaffId);
                 paramIn.put("repairId", repairId);
                 //给维修师傅推送信息
                 sendMsg(paramIn, communityDtos.get(0));
@@ -180,47 +174,29 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 publishMsg(paramIn, communityDtos.get(0));
                 //为企业微信群发消息
                 sendMsgToWechatGroup(paramIn, communityDtos.get(0));
-            } else if (repairState.equals("1100") && (repairWay.equals("100") || repairWay.equals("300"))) {
-                String staffId = "";
-                if (repairUserDtos.size() > 1) {
-                    staffId = repairUserDtos.get(1).getStaffId();
-                } else {
-                    //获取维修员工的id
-                    staffId = repairUserDtos.get(0).getStaffId();
-                }
-                //获取用户id
-                String preStaffId = repairUserDtos.get(0).getPreStaffId();
+            } else if (repairState.equals("1100") && !businessRepairUser.getString("state").equals("10006")) {
                 JSONObject paramIn = new JSONObject();
-                paramIn.put("staffId", staffId);
+                paramIn.put("staffId", businessRepairUser.getString("staffId"));
                 paramIn.put("context", context);
                 paramIn.put("time", time);
                 paramIn.put("repairObjId", repairObjId);
-                paramIn.put("preStaffId", preStaffId);
+                paramIn.put("preStaffId", businessRepairUser.getString("preStaffId"));
                 paramIn.put("repairName", repairName);
                 paramIn.put("tel", tel);
                 paramIn.put("repairObjName", repairObjName);
+                //抢单成功给维修师傅推送信息
+                publishMessage(paramIn, communityDtos.get(0));
                 //抢单成功给业主推送信息
                 publishMsg(paramIn, communityDtos.get(0));
-                if (repairUserDtos.size() > 1) {
-                    //给维修师傅推送信息
-                    sendMsg(paramIn, communityDtos.get(0));
-                } else {
-                    //抢单成功给维修师傅推送信息
-                    publishMessage(paramIn, communityDtos.get(0));
-                }
             } else if (repairState.equals("1300")) {   //转单
-                //获取维修员工id
-                String staffId = repairUserDtos.get(0).getStaffId();
-                //获取上级用户姓名
-                String preStaffName = repairUserDtos.get(0).getPreStaffName();
                 JSONObject paramIn = new JSONObject();
                 paramIn.put("repairName", repairName);
                 paramIn.put("repairObjName", repairObjName);
                 paramIn.put("tel", tel);
                 paramIn.put("context", context);
                 paramIn.put("time", time);
-                paramIn.put("staffId", staffId);
-                paramIn.put("preStaffName", preStaffName);
+                paramIn.put("staffId", businessRepairUser.getString("staffId"));
+                paramIn.put("preStaffName", businessRepairUser.getString("preStaffName"));
                 //给维修师傅推送信息
                 sendMessage(paramIn, communityDtos.get(0));
             }
@@ -332,6 +308,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         //根据 userId 查询到openId
         StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
         staffAppAuthDto.setStaffId(paramIn.getString("staffId"));
+        staffAppAuthDto.setStaffName(paramIn.getString("staffName"));
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
         if (staffAppAuthDtos.size() > 0) {
@@ -434,7 +411,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             image.put("base64", ImageUtils.getBase64ByImgUrl(imageUrl));
             image.put("md5", ImageUtils.getMd5ByImgUrl(imageUrl));
             responseEntity = outRestTemplate.postForEntity(url, rebootParam.toJSONString(), String.class);
-            logger.debug("返回信息："+responseEntity);
+            logger.debug("返回信息：" + responseEntity);
         }
 
     }
@@ -507,9 +484,9 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 templateMessage.setData(data);
                 //获取业主公众号地址
                 String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
-                if(!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")){
+                if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                     wechatUrl += ("&wAppId=" + weChatDto.getAppId());
-                }else{
+                } else {
                     wechatUrl += ("?wAppId=" + weChatDto.getAppId());
                 }
 

@@ -15,15 +15,15 @@ import java.util.Date;
  **/
 public class NoticeDto extends PageDto implements Serializable {
 
-    public static final String STATE_WAIT = "1000";// 等待房屋
-    public static final String STATE_DOING = "2000";//处理中
-    public static final String STATE_FINISH = "3000";//处理完成
+    public static final String STATE_WAIT = "1000";// 待通知
+    public static final String STATE_DOING = "2000";//通知中
+    public static final String STATE_FINISH = "3000";//通知完成
 
     public static final String OBJ_TYPE_COMMUNITY = "001";//小区
     public static final String OBJ_TYPE_FLOOR = "002";//楼栋
     public static final String OBJ_TYPE_UNIT = "003";//单元
-    public static final String OBJ_TYPE_ROOM = "004";//单元
-    public static final String OBJ_TYPE_ALL = "005";//单元
+    public static final String OBJ_TYPE_ROOM = "004";//房屋
+    public static final String OBJ_TYPE_ALL = "005";//全部发送
 
     public static final String NOTICE_TYPE_OWNER_WECHAT = "1003";//发送给业主微信
 

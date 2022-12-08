@@ -49,7 +49,4 @@ public interface IPrivilegeInnerServiceSMO {
     @RequestMapping(value = "/queryPrivilegeUsers", method = RequestMethod.POST)
     List<UserDto> queryPrivilegeUsers(@RequestBody BasePrivilegeDto privilegeDto);
 
-
-
-
 }

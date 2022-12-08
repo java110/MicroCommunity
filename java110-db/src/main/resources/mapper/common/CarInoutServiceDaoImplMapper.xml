@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="carInoutServiceDaoImpl">
 
     <!-- 保存进出场信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCarInoutInfo" parameterType="Map">
-        insert into business_car_inout(
-        in_time,inout_id,operate,car_num,state,community_id,b_id,out_time
-        ) values (
-        #{inTime},#{inoutId},#{operate},#{carNum},#{state},#{communityId},#{bId},#{outTime}
-        )
+        insert into business_car_inout(in_time, inout_id, operate, car_num, state, community_id, b_id, out_time)
+        values (#{inTime}, #{inoutId}, #{operate}, #{carNum}, #{state}, #{communityId}, #{bId}, #{outTime})
     </insert>
-
 
     <!-- 查询进出场信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCarInoutInfo" parameterType="Map" resultType="Map">
@@ -44,9 +39,7 @@
         <if test="outTime !=null ">
             and t.out_time= #{outTime}
         </if>
-
     </select>
-
 
     <!-- 保存进出场信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCarInoutInfoInstance" parameterType="Map">
@@ -76,9 +69,7 @@
         <if test="outTime !=null ">
             and t.out_time= #{outTime}
         </if>
-
     </insert>
-
 
     <!-- 查询进出场信息 add by wuxw 2018-07-03 -->
     <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
@@ -120,13 +111,17 @@
         <if test="outTime !=null ">
             and t.out_time= #{outTime}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.in_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.out_time &lt; #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改进出场信息 add by wuxw 2018-07-03 -->
     <update id="updateCarInoutInfoInstance" parameterType="Map">
@@ -156,7 +151,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询进出场数量 add by wuxw 2018-07-03 -->
@@ -197,8 +191,11 @@
         <if test="outTime !=null ">
             and t.out_time= #{outTime}
         </if>
-
-
+        <if test="startTime != null and startTime != ''">
+            and t.in_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.out_time &lt; #{endTime}
+        </if>
     </select>
-
 </mapper>

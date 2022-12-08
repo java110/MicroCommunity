@@ -12,6 +12,7 @@ public class StaffAppAuthPo implements Serializable {
     private String storeId;
     private String openName;
     private String staffId;
+    private String createTime;
 
     public String getAuId() {
         return auId;
@@ -77,5 +78,11 @@ public class StaffAppAuthPo implements Serializable {
         this.staffId = staffId;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
 
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }

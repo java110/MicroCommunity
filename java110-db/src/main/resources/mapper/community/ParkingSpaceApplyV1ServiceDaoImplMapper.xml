@@ -25,13 +25,14 @@
         startTime,t.apply_person_id,t.apply_person_id applyPersonId,t.end_time,t.end_time
         endTime,t.state,t.community_id,t.community_id communityId,
         t1.num ,t1.pa_id paId,t3.name parkingTypeName,t4.name stateName,
-        t2.car_id carId
+        t2.car_id carId,par.num areaNum
         from parking_space_apply t
-        left join parking_space t1 on t.ps_id = t1.ps_id  and t1.status_cd =0
-        left join owner_car t2 on t.apply_person_id = t2.owner_id and t.community_id =t2.community_id  and t.car_num = t2.car_num and t2.status_cd =0
-        left join t_dict t3 on t1.parking_type  = t3.status_cd and t3.table_name ='parking_space' and t3.table_columns ='parking_type'
-        left join t_dict t4 on t1.state  = t4.status_cd and t4.table_name ='parking_space' and t4.table_columns ='state'
-        where 1 =1
+        left join parking_space t1 on t.ps_id = t1.ps_id and t1.status_cd = '0'
+        left join parking_area par on t1.pa_id = par.pa_id and par.status_cd = '0'
+        left join owner_car t2 on t.apply_person_id = t2.owner_id and t.community_id =t2.community_id and t.car_num = t2.car_num and t2.status_cd =0
+        left join t_dict t3 on t1.parking_type = t3.status_cd and t3.table_name ='parking_space' and t3.table_columns ='parking_type'
+        left join t_dict t4 on t1.state = t4.status_cd and t4.table_name ='parking_space' and t4.table_columns ='state'
+        where 1 = 1
         <if test="carBrand !=null and carBrand != ''">
             and t.car_brand= #{carBrand}
         </if>

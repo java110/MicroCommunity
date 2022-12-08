@@ -1,10 +1,10 @@
 package com.java110.common.smo.impl;
 
-
 import com.java110.common.dao.IMachineAuthServiceDao;
 import com.java110.dto.machineAuth.MachineAuthDto;
 import com.java110.intf.common.IMachineAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.po.machineAuth.MachineAuthPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -34,7 +34,7 @@ public class MachineAuthInnerServiceSMOImpl extends BaseServiceSMO implements IM
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<MachineAuthDto> queryMachineAuths(@RequestBody  MachineAuthDto machineAuthDto) {
+    public List<MachineAuthDto> queryMachineAuths(@RequestBody MachineAuthDto machineAuthDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class MachineAuthInnerServiceSMOImpl extends BaseServiceSMO implements IM
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
      * @param machineAuth 小区设备权限信息
-     * @param users 用户列表
+     * @param users       用户列表
      */
     private void refreshMachineAuth(MachineAuthDto machineAuth, List<UserDto> users) {
         for (UserDto user : users) {
@@ -80,7 +80,7 @@ public class MachineAuthInnerServiceSMOImpl extends BaseServiceSMO implements IM
      * @param machineAuths 小区楼信息
      * @return 批量userIds 信息
      */
-     private String[] getUserIds(List<MachineAuthDto> machineAuths) {
+    private String[] getUserIds(List<MachineAuthDto> machineAuths) {
         List<String> userIds = new ArrayList<String>();
         for (MachineAuthDto machineAuth : machineAuths) {
             userIds.add(machineAuth.getAuthId());
@@ -91,7 +91,23 @@ public class MachineAuthInnerServiceSMOImpl extends BaseServiceSMO implements IM
 
     @Override
     public int queryMachineAuthsCount(@RequestBody MachineAuthDto machineAuthDto) {
-        return machineAuthServiceDaoImpl.queryMachineAuthsCount(BeanConvertUtil.beanCovertMap(machineAuthDto));    }
+        return machineAuthServiceDaoImpl.queryMachineAuthsCount(BeanConvertUtil.beanCovertMap(machineAuthDto));
+    }
+
+    @Override
+    public int saveMachineAuth(@RequestBody MachineAuthPo machineAuthPo) {
+        return machineAuthServiceDaoImpl.saveMachineAuth(BeanConvertUtil.beanCovertMap(machineAuthPo));
+    }
+
+    @Override
+    public int updateMachineAuth(@RequestBody MachineAuthPo machineAuthPo) {
+        return machineAuthServiceDaoImpl.updateMachineAuthInfoInstance(BeanConvertUtil.beanCovertMap(machineAuthPo));
+    }
+
+    @Override
+    public int deleteMachineAuth(@RequestBody MachineAuthPo machineAuthPo) {
+        return machineAuthServiceDaoImpl.deleteMachineAuth(BeanConvertUtil.beanCovertMap(machineAuthPo));
+    }
 
     public IMachineAuthServiceDao getMachineAuthServiceDaoImpl() {
         return machineAuthServiceDaoImpl;

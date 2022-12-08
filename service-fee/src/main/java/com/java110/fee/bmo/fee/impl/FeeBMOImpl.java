@@ -347,7 +347,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (!FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getDeadlineTime();
         }
-        if(maxEndTime != null) { //这里数据问题的情况下
+        if (maxEndTime != null) { //这里数据问题的情况下
             Date endTime = DateUtil.getDateFromStringA(paramInJson.getString("endTime"));
             if (endTime.getTime() >= maxEndTime.getTime()) {
                 feeMap.put("state", FeeDto.STATE_FINISH);
@@ -414,11 +414,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
         PayFeeDetailPo payFeeDetail = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
         payFeeDetail.setbId("-1");
+        if (StringUtil.isEmpty(payFeeDetail.getPayableAmount())) {
+            payFeeDetail.setPayableAmount("0.0");
+        }
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetail);
         if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
         }
-
         return businessFeeDetail;
     }
 

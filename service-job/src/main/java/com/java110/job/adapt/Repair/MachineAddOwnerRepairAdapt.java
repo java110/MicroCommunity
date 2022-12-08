@@ -23,7 +23,6 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
@@ -35,6 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,13 +74,11 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
-
         JSONObject data = business.getData();
         JSONArray businessOwnerRepairs = new JSONArray();
-        System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
+        System.out.println("收到日志：>>>>>>>>>>>>>" + data.toJSONString());
         if (data.containsKey(RepairPoolPo.class.getSimpleName())) {
             Object bObj = data.get(RepairPoolPo.class.getSimpleName());
-
             if (bObj instanceof JSONObject) {
                 businessOwnerRepairs.add(bObj);
             } else if (bObj instanceof List) {
@@ -88,27 +86,22 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             } else {
                 businessOwnerRepairs = (JSONArray) bObj;
             }
-
         } else {
             if (data instanceof JSONObject) {
                 businessOwnerRepairs.add(data);
             }
         }
-
         //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
         for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessOwnerRepairs.size(); bOwnerRepairIndex++) {
             JSONObject businessOwnerRepair = businessOwnerRepairs.getJSONObject(bOwnerRepairIndex);
             doDealOwnerRepair(business, businessOwnerRepair);
         }
-
-
     }
 
     private void doDealOwnerRepair(Business business, JSONObject businessOwnerRepair) {
-
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(businessOwnerRepair.getString("repairId"));
-        repairDto.setStatusCd("0");
+//        repairDto.setStatusCd("0");
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         //获取报修类型
         String repairTypeName = repairDtos.get(0).getRepairTypeName();
@@ -180,7 +173,12 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         basePrivilegeDto.setCommunityId(communityMemberDtos.get(0).getCommunityId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         String url = sendMsgUrl + accessToken;
+        List<String> userIds = new ArrayList<>();
         for (UserDto userDto : userDtos) {
+            if (userIds.contains(userDto.getUserId())) {
+                continue;
+            }
+            userIds.add(userDto.getUserId());
             //根据 userId 查询到openId
             StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
             staffAppAuthDto.setStaffId(userDto.getUserId());

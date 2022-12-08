@@ -88,7 +88,6 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) throws Exception {
-
         JSONObject data = business.getData();
         JSONArray businessRepairUsers = new JSONArray();
         System.out.println("收到日志：>>>>>>>>>>>>>"+data.toJSONString());
@@ -102,25 +101,19 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             } else {
                 businessRepairUsers = (JSONArray) bObj;
             }
-
         } else {
             if (data instanceof JSONObject) {
                 businessRepairUsers.add(data);
             }
         }
-
         //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
         for (int bOwnerRepairIndex = 0; bOwnerRepairIndex < businessRepairUsers.size(); bOwnerRepairIndex++) {
             JSONObject businessRepairUser = businessRepairUsers.getJSONObject(bOwnerRepairIndex);
             doDealOwnerRepair(business, businessRepairUser);
         }
-
-
     }
 
     private void doDealOwnerRepair(Business business, JSONObject businessRepairUser) {
-
-
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRuId(businessRepairUser.getString("ruId"));
         repairUserDto.setStatusCd("0");
@@ -187,7 +180,6 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             //获取价格
             String price = "";
             //这里建议查询 报修所在费用的 固定费
-
 //            for (Business bus : businesses) {
 //                if (bus.getBusinessTypeCd().equals("600100030001")) {  //保存费用信息
 //                    JSONObject data = bus.getData();

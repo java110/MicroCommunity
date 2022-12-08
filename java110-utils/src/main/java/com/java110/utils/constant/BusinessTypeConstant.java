@@ -792,15 +792,16 @@ public class BusinessTypeConstant {
      * 11开头  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_REPAIR_USER="130200030001";
+
     /**
      *  报修派单变更 11开头  4修改
      */
     public static final String BUSINESS_TYPE_UPDATE_REPAIR_USER="130200040001";
+
     /**
      *  作废报修派单信息  11开头  5修改
      */
     public static final String BUSINESS_TYPE_DELETE_REPAIR_USER ="130200050001";
-
 
     /**
      *  保存组织

@@ -206,6 +206,9 @@
         <if test="ownerName !=null and ownerName != ''">
             and bow.name like '%${ownerName}%'
         </if>
+        <if test="link !=null and link != ''">
+            and bow.link = #{link}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -368,6 +371,9 @@
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and bow.name like '%${ownerName}%'
+        </if>
+        <if test="link !=null and link != ''">
+            and bow.link = #{link}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
