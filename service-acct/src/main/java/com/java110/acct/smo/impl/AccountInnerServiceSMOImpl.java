@@ -209,7 +209,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             }
             accountDetailPo.setObjType(accounts.get(0).getObjType());
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key,requestId);
         }
         accountDetailPo.setDetailType(AccountDetailDto.DETAIL_TYPE_OUT);
         if(StringUtil.isEmpty(accountDetailPo.getDetailId())) {
