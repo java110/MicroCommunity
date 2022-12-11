@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralUserDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存积分核销信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralUserDetailInfo" parameterType="Map">
+        insert into integral_user_detail(
+        create_user_id,uo_id,acct_id,remark,acct_name,user_name,detail_type,use_quantity,money,acct_detail_id,business_key,tel,community_id
+        ) values (
+        #{createUserId},#{uoId},#{acctId},#{remark},#{acctName},#{userName},#{detailType},#{useQuantity},#{money},#{acctDetailId},#{businessKey},#{tel},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询积分核销信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralUserDetailInfo" parameterType="Map" resultType="Map">
+        select t.create_user_id,t.create_user_id createUserId,t.uo_id,t.uo_id uoId,t.acct_id,t.acct_id
+        acctId,t.remark,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.user_name,t.user_name
+        userName,t.detail_type,t.detail_type detailType,t.use_quantity,t.use_quantity
+        useQuantity,t.money,t.acct_detail_id,t.acct_detail_id acctDetailId,t.business_key,t.business_key
+        businessKey,t.tel,t.community_id,t.community_id communityId,t.create_time createTime
+        from integral_user_detail t
+        where 1 =1
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="useQuantity !=null and useQuantity != ''">
+            and t.use_quantity= #{useQuantity}
+        </if>
+        <if test="money !=null and money != ''">
+            and t.money= #{money}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改积分核销信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralUserDetailInfo" parameterType="Map">
+        update integral_user_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            , t.acct_id= #{acctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            , t.acct_name= #{acctName}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            , t.detail_type= #{detailType}
+        </if>
+        <if test="useQuantity !=null and useQuantity != ''">
+            , t.use_quantity= #{useQuantity}
+        </if>
+        <if test="money !=null and money != ''">
+            , t.money= #{money}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            , t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            , t.business_key= #{businessKey}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+
+    </update>
+
+    <!-- 查询积分核销数量 add by wuxw 2018-07-03 -->
+    <select id="queryIntegralUserDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from integral_user_detail t
+        where 1 =1
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="uoId !=null and uoId != ''">
+            and t.uo_id= #{uoId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="useQuantity !=null and useQuantity != ''">
+            and t.use_quantity= #{useQuantity}
+        </if>
+        <if test="money !=null and money != ''">
+            and t.money= #{money}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="businessKey !=null and businessKey != ''">
+            and t.business_key= #{businessKey}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

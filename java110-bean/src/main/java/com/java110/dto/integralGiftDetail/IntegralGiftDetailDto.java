@@ -18,13 +18,16 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
     private String configName;
     private String createUserId;
     private String quantity;
-    private String configId;
     private String detailId;
+    private String acctId;
+    private String userName;
+    private String acctName;
+    private String configId;
+    private String acctDetailId;
     private String ruleName;
     private String tel;
     private String communityId;
     private String ruleId;
-    private String userName;
 
 
     private Date createTime;
@@ -56,6 +59,38 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
         this.quantity = quantity;
     }
 
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId;
+    }
+
+    public String getAcctId() {
+        return acctId;
+    }
+
+    public void setAcctId(String acctId) {
+        this.acctId = acctId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAcctName() {
+        return acctName;
+    }
+
+    public void setAcctName(String acctName) {
+        this.acctName = acctName;
+    }
+
     public String getConfigId() {
         return configId;
     }
@@ -64,12 +99,12 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
         this.configId = configId;
     }
 
-    public String getDetailId() {
-        return detailId;
+    public String getAcctDetailId() {
+        return acctDetailId;
     }
 
-    public void setDetailId(String detailId) {
-        this.detailId = detailId;
+    public void setAcctDetailId(String acctDetailId) {
+        this.acctDetailId = acctDetailId;
     }
 
     public String getRuleName() {
@@ -102,14 +137,6 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
 
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
 
