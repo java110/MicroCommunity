@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.integralRuleConfig.IntegralRuleConfigDto;
 import com.java110.intf.acct.IIntegralRuleConfigV1InnerServiceSMO;
 import com.java110.po.integralRuleConfig.IntegralRuleConfigPo;
 import com.java110.utils.exception.CmdException;
@@ -57,7 +58,16 @@ public class SaveIntegralRuleConfigCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+//查询 规则是否已经关联过 优惠券
 
+        IntegralRuleConfigDto integralRuleConfigDto = new IntegralRuleConfigDto();
+        integralRuleConfigDto.setRuleId(reqJson.getString("ruleId"));
+        integralRuleConfigDto.setConfigId(reqJson.getString("configId"));
+        int count = integralRuleConfigV1InnerServiceSMOImpl.queryIntegralRuleConfigsCount(integralRuleConfigDto);
+
+        if(count > 0){
+            throw new CmdException("该积分标准已经关联过");
+        }
     }
 
     @Override

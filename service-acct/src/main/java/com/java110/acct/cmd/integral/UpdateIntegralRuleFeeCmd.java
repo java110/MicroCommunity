@@ -21,7 +21,9 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.acct.IIntegralRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.integralRuleFee.IntegralRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -30,6 +32,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -45,24 +49,33 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "integral.updateIntegralRuleFee")
 public class UpdateIntegralRuleFeeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateIntegralRuleFeeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateIntegralRuleFeeCmd.class);
 
 
     @Autowired
     private IIntegralRuleFeeV1InnerServiceSMO integralRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ircId", "ircId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-       IntegralRuleFeePo integralRuleFeePo = BeanConvertUtil.covertBean(reqJson, IntegralRuleFeePo.class);
+        Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
+        IntegralRuleFeePo integralRuleFeePo = BeanConvertUtil.covertBean(reqJson, IntegralRuleFeePo.class);
+        integralRuleFeePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
         int flag = integralRuleFeeV1InnerServiceSMOImpl.updateIntegralRuleFee(integralRuleFeePo);
 
         if (flag < 1) {

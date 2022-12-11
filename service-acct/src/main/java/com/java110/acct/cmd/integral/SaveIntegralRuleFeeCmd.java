@@ -22,7 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.couponRuleFee.CouponRuleFeeDto;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.integralRuleFee.IntegralRuleFeeDto;
 import com.java110.intf.acct.IIntegralRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.integralRuleFee.IntegralRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +35,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,24 +58,38 @@ public class SaveIntegralRuleFeeCmd extends Cmd {
     @Autowired
     private IIntegralRuleFeeV1InnerServiceSMO integralRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "feeConfigId", "请求报文中未包含feeConfigId");
-        Assert.hasKeyAndValue(reqJson, "feeConfigName", "请求报文中未包含feeConfigName");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "payStartTime", "请求报文中未包含payStartTime");
         Assert.hasKeyAndValue(reqJson, "payEndTime", "请求报文中未包含payEndTime");
         Assert.hasKeyAndValue(reqJson, "payMonth", "请求报文中未包含payMonth");
+        IntegralRuleFeeDto integralRuleFeeDto = new IntegralRuleFeeDto();
+        integralRuleFeeDto.setRuleId(reqJson.getString("ruleId"));
+        integralRuleFeeDto.setFeeConfigId(reqJson.getString("feeConfigId"));
+        long count = integralRuleFeeV1InnerServiceSMOImpl.queryIntegralRuleFeesCount(integralRuleFeeDto);
 
+        if(count > 0){
+            throw new CmdException("费用项已经关联");
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
+        Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
         IntegralRuleFeePo integralRuleFeePo = BeanConvertUtil.covertBean(reqJson, IntegralRuleFeePo.class);
         integralRuleFeePo.setIrfId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        integralRuleFeePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
         int flag = integralRuleFeeV1InnerServiceSMOImpl.saveIntegralRuleFee(integralRuleFeePo);
 
         if (flag < 1) {
