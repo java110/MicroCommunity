@@ -20,13 +20,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.acct.IIntegralConfigV1InnerServiceSMO;
+import com.java110.intf.acct.IIntegralRuleV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.integralConfig.IntegralConfigDto;
+import com.java110.dto.integralRule.IntegralRuleDto;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -39,20 +39,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：integralConfig.listIntegralConfig
- * 请求路劲：/app/integralConfig.ListIntegralConfig
- * add by 吴学文 at 2022-12-11 22:02:59 mail: 928255095@qq.com
+ * 服务编码：integralRule.listIntegralRule
+ * 请求路劲：/app/integralRule.ListIntegralRule
+ * add by 吴学文 at 2022-12-11 22:09:01 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "integral.listIntegralConfig")
-public class ListIntegralConfigCmd extends Cmd {
+@Java110Cmd(serviceCode = "integral.listIntegralRule")
+public class ListIntegralRuleCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListIntegralConfigCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListIntegralRuleCmd.class);
     @Autowired
-    private IIntegralConfigV1InnerServiceSMO integralConfigV1InnerServiceSMOImpl;
+    private IIntegralRuleV1InnerServiceSMO integralRuleV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -64,19 +64,19 @@ public class ListIntegralConfigCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        IntegralConfigDto integralConfigDto = BeanConvertUtil.covertBean(reqJson, IntegralConfigDto.class);
+        IntegralRuleDto integralRuleDto = BeanConvertUtil.covertBean(reqJson, IntegralRuleDto.class);
 
-        int count = integralConfigV1InnerServiceSMOImpl.queryIntegralConfigsCount(integralConfigDto);
+        int count = integralRuleV1InnerServiceSMOImpl.queryIntegralRulesCount(integralRuleDto);
 
-        List<IntegralConfigDto> integralConfigDtos = null;
+        List<IntegralRuleDto> integralRuleDtos = null;
 
         if (count > 0) {
-            integralConfigDtos = integralConfigV1InnerServiceSMOImpl.queryIntegralConfigs(integralConfigDto);
+            integralRuleDtos = integralRuleV1InnerServiceSMOImpl.queryIntegralRules(integralRuleDto);
         } else {
-            integralConfigDtos = new ArrayList<>();
+            integralRuleDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, integralConfigDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, integralRuleDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
