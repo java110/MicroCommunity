@@ -61,7 +61,7 @@ public class UpdateIntegralRuleFeeCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "ircId", "ircId不能为空");
+        Assert.hasKeyAndValue(reqJson, "irfId", "irfId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }

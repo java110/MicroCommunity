@@ -17,6 +17,7 @@ package com.java110.po.integralRuleFee;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-12-11 22:15:21 mail: 928255095@qq.com
@@ -28,69 +29,86 @@ import java.util.Date;
 public class IntegralRuleFeePo implements Serializable {
 
     private String payMonth;
-private String irfId;
-private String feeConfigName;
-private String payStartTime;
-private String payEndTime;
-private String statusCd = "0";
-private String ruleId;
-private String communityId;
-private String feeConfigId;
-public String getPayMonth() {
+    private String irfId;
+    private String feeConfigName;
+    private String payStartTime;
+    private String payEndTime;
+    private String statusCd = "0";
+    private String ruleId;
+    private String communityId;
+    private String feeConfigId;
+
+    public String getPayMonth() {
         return payMonth;
     }
-public void setPayMonth(String payMonth) {
+
+    public void setPayMonth(String payMonth) {
         this.payMonth = payMonth;
     }
-public String getIrfId() {
+
+    public String getIrfId() {
         return irfId;
     }
-public void setIrfId(String irfId) {
+
+    public void setIrfId(String irfId) {
         this.irfId = irfId;
     }
-public String getFeeConfigName() {
+
+    public String getFeeConfigName() {
         return feeConfigName;
     }
-public void setFeeConfigName(String feeConfigName) {
+
+    public void setFeeConfigName(String feeConfigName) {
         this.feeConfigName = feeConfigName;
     }
-public String getPayStartTime() {
+
+    public String getPayStartTime() {
         return payStartTime;
     }
-public void setPayStartTime(String payStartTime) {
+
+    public void setPayStartTime(String payStartTime) {
         this.payStartTime = payStartTime;
     }
-public String getPayEndTime() {
+
+    public String getPayEndTime() {
         return payEndTime;
     }
-public void setPayEndTime(String payEndTime) {
+
+    public void setPayEndTime(String payEndTime) {
         this.payEndTime = payEndTime;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeConfigId() {
+
+    public String getFeeConfigId() {
         return feeConfigId;
     }
-public void setFeeConfigId(String feeConfigId) {
+
+    public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
     }
-
 
 
 }
