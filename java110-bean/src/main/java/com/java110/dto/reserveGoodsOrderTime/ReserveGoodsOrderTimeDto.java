@@ -39,7 +39,7 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
     private String appointmentTime;
     private String personName;
     private String personTel;
-    private String goodName;
+    private String goodsName;
     private String receivedAmount;
     private String stateName;
 
@@ -149,13 +149,7 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
         this.personTel = personTel;
     }
 
-    public String getGoodName() {
-        return goodName;
-    }
 
-    public void setGoodName(String goodName) {
-        this.goodName = goodName;
-    }
 
     public String getReceivedAmount() {
         return receivedAmount;
@@ -171,5 +165,13 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 }
