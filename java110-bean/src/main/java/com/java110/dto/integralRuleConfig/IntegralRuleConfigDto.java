@@ -1,6 +1,7 @@
 package com.java110.dto.integralRuleConfig;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,20 @@ import java.util.Date;
 public class IntegralRuleConfigDto extends PageDto implements Serializable {
 
     private String configId;
-private String ircId;
-private String ruleId;
-private String communityId;
+    private String configName;
+
+    private String squarePrice;
+    private String computingFormula;
+
+    private String additionalAmount;
+    private String scale;
+
+    private String computingFormulaName;
+
+    private String scaleName;
+    private String ircId;
+    private String ruleId;
+    private String communityId;
 
 
     private Date createTime;
@@ -28,25 +40,32 @@ private String communityId;
     public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getIrcId() {
+
+    public String getIrcId() {
         return ircId;
     }
-public void setIrcId(String ircId) {
+
+    public void setIrcId(String ircId) {
         this.ircId = ircId;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -65,5 +84,61 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
+
+    public String getSquarePrice() {
+        return squarePrice;
+    }
+
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
+
+    public String getComputingFormula() {
+        return computingFormula;
+    }
+
+    public void setComputingFormula(String computingFormula) {
+        this.computingFormula = computingFormula;
+    }
+
+    public String getAdditionalAmount() {
+        return additionalAmount;
+    }
+
+    public void setAdditionalAmount(String additionalAmount) {
+        this.additionalAmount = additionalAmount;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getComputingFormulaName() {
+        return computingFormulaName;
+    }
+
+    public void setComputingFormulaName(String computingFormulaName) {
+        this.computingFormulaName = computingFormulaName;
+    }
+
+    public String getScaleName() {
+        return scaleName;
+    }
+
+    public void setScaleName(String scaleName) {
+        this.scaleName = scaleName;
     }
 }

@@ -55,8 +55,8 @@ public class SaveIntegralRuleConfigCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
-Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -64,7 +64,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       IntegralRuleConfigPo integralRuleConfigPo = BeanConvertUtil.covertBean(reqJson, IntegralRuleConfigPo.class);
+        IntegralRuleConfigPo integralRuleConfigPo = BeanConvertUtil.covertBean(reqJson, IntegralRuleConfigPo.class);
         integralRuleConfigPo.setIrcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = integralRuleConfigV1InnerServiceSMOImpl.saveIntegralRuleConfig(integralRuleConfigPo);
 
