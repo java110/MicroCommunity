@@ -156,7 +156,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", paymentOrderDto.getOrderId());
         freshFees(paramIn);
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "fee.payOweFee", JSONObject.class, "-1");
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), paramIn, "fee.payOweFee", JSONObject.class, "-1");
 
     }
 
