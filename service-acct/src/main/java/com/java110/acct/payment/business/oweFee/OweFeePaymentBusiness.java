@@ -42,8 +42,7 @@ import java.util.List;
  * 欠费缴费
  */
 @Service("oweFee")
-public class OweFeePaymentBusiness implements IPaymentBusiness{
-
+public class OweFeePaymentBusiness implements IPaymentBusiness {
 
 
     private final static Logger logger = LoggerFactory.getLogger(OweFeePaymentBusiness.class);
@@ -74,7 +73,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
 
 
     @Override
-    public PaymentOrderDto unified(ICmdDataFlowContext context,JSONObject reqJson) {
+    public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
 
         String ownerId = reqJson.getString("ownerId");
         String roomId = reqJson.getString("roomId");
@@ -85,9 +84,9 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
         }
 
         FeeDto feeDto = new FeeDto();
-        if(!StringUtil.isEmpty(ownerId)){
+        if (!StringUtil.isEmpty(ownerId)) {
             feeDto.setOwnerId(ownerId);
-        }else {
+        } else {
             feeDto.setPayerObjId(roomId);
             feeDto.setPayerObjType(payObjType);
         }
@@ -136,7 +135,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
-        paymentOrderDto.setName(feeName+"欠费费用");
+        paymentOrderDto.setName(feeName + "欠费费用");
 
         JSONObject saveFees = new JSONObject();
         saveFees.put("orderId", orderId);
@@ -171,8 +170,8 @@ public class OweFeePaymentBusiness implements IPaymentBusiness{
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             fee = fees.getJSONObject(feeIndex);
             if (fee.containsKey("deadlineTime")) {
-                fee.put("startTime", fee.getString("endTime"));
-                fee.put("endTime", fee.getString("deadlineTime"));
+                fee.put("startTime", DateUtil.getFormatTimeString(fee.getDate("endTime"), DateUtil.DATE_FORMATE_STRING_A));
+                fee.put("endTime", DateUtil.getFormatTimeString(fee.getDate("deadlineTime"), DateUtil.DATE_FORMATE_STRING_A));
                 fee.put("receivedAmount", fee.getString("feePrice"));
                 fee.put("state", "");
             }
