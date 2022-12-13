@@ -237,7 +237,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
         //向积分账户中充值积分
         AccountDto accountDto = new AccountDto();
         accountDto.setObjId(ownerId);
-        accountDto.setObjType(AccountDto.ACCT_TYPE_INTEGRAL);
+        accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL);
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
         if (accountDtos == null || accountDtos.size() < 1) {
