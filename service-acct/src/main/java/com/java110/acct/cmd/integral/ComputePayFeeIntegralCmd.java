@@ -98,7 +98,7 @@ public class ComputePayFeeIntegralCmd extends Cmd {
         List<IntegralRuleFeeDto> integralRuleFeeDtos = integralRuleFeeV1InnerServiceSMOImpl.queryIntegralRuleFees(integralRuleFeeDto);
 
         if(integralRuleFeeDtos == null || integralRuleFeeDtos.size()<1){
-            context.setResponseEntity(ResultVo.createResponseEntity(new JSONArray()));
+            context.setResponseEntity(ResultVo.createResponseEntity(0));
             return ;
         }
 
@@ -112,7 +112,7 @@ public class ComputePayFeeIntegralCmd extends Cmd {
         List<IntegralRuleConfigDto> integralRuleConfigDtos = integralRuleConfigV1InnerServiceSMOImpl.queryIntegralRuleConfigs(integralRuleConfigDto);
 
         if(integralRuleConfigDtos == null || integralRuleConfigDtos.size() < 1){
-            context.setResponseEntity(ResultVo.createResponseEntity(new JSONArray()));
+            context.setResponseEntity(ResultVo.createResponseEntity(0));
             return ;
         }
 
