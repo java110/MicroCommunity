@@ -74,7 +74,7 @@ public class UseIntegralCmd extends Cmd {
         useMoneyDec = useMoneyDec.divide(new BigDecimal(settingMoney),2, BigDecimal.ROUND_HALF_UP);
 
         long quantity = new Double(Math.ceil(useMoneyDec.doubleValue())).longValue();
-        long oldQuantity = Long.parseLong(accountDtos.get(0).getAmount());
+        long oldQuantity = new Double(Double.parseDouble(accountDtos.get(0).getAmount())).longValue();
 
         if (quantity > oldQuantity) {
             throw new CmdException("当前积分不够(" + oldQuantity + ")");
