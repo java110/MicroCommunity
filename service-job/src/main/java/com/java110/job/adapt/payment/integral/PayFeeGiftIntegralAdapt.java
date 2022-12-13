@@ -32,6 +32,7 @@ import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.couponPropertyPool.CouponPropertyPoolPo;
 import com.java110.po.couponPropertyPoolDetail.CouponPropertyPoolDetailPo;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
+import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.integralGiftDetail.IntegralGiftDetailPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
@@ -240,7 +241,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
         if (accountDtos == null || accountDtos.size() < 1) {
-            accountDtos = addAccountDto(accountDto);
+            accountDtos = addAccountDto(accountDto,payFeeDetailPo);
         }
 
         AccountDetailPo accountDetailPo = new AccountDetailPo();
@@ -269,7 +270,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
 
     }
 
-    private List<AccountDto> addAccountDto(AccountDto accountDto) {
+    private List<AccountDto> addAccountDto(AccountDto accountDto, PayFeeDetailPo payFeeDetailPo) {
         if (StringUtil.isEmpty(accountDto.getObjId())) {
             return new ArrayList<>();
         }
@@ -287,7 +288,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
             accountPo.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL);
             OwnerDto tmpOwnerDto = new OwnerDto();
             tmpOwnerDto.setMemberId(accountDto.getObjId());
-            tmpOwnerDto.setCommunityId(accountDto.getObjId());
+            tmpOwnerDto.setCommunityId(payFeeDetailPo.getCommunityId());
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
             Assert.listOnlyOne(ownerDtos, "业主不存在");
             accountPo.setAcctName(ownerDtos.get(0).getName());
