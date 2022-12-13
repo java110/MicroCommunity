@@ -66,9 +66,12 @@ public class UseIntegralCmd extends Cmd {
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
         Assert.listOnlyOne(accountDtos, "账户不存在");
 
-
+        double settingMoney = Double.parseDouble(integralSettingDtos.get(0).getMoney());
+        if(settingMoney == 0){
+            settingMoney = 1;
+        }
         BigDecimal useMoneyDec = new BigDecimal(Double.parseDouble(reqJson.getString("useMoney")));
-        useMoneyDec = useMoneyDec.divide(new BigDecimal(Double.parseDouble(integralSettingDtos.get(0).getMoney()))).setScale(2, BigDecimal.ROUND_HALF_UP);
+        useMoneyDec = useMoneyDec.divide(new BigDecimal(settingMoney),2, BigDecimal.ROUND_HALF_UP);
 
         long quantity = new Double(Math.ceil(useMoneyDec.doubleValue())).longValue();
         long oldQuantity = Long.parseLong(accountDtos.get(0).getAmount());
