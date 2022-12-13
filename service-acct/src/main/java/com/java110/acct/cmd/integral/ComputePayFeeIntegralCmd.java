@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.doc.annotation.*;
 import com.java110.dto.couponRuleCpps.CouponRuleCppsDto;
 import com.java110.dto.couponRuleFee.CouponRuleFeeDto;
@@ -70,6 +71,9 @@ public class ComputePayFeeIntegralCmd extends Cmd {
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
@@ -125,39 +129,10 @@ public class ComputePayFeeIntegralCmd extends Cmd {
 
         long quantity = 0;
         for(IntegralRuleConfigDto integralRuleConfigDto:integralRuleConfigDtos){
-            quantity += computeOneIntegralQuantity(integralRuleConfigDto,reqJson);
+            quantity += computeFeeSMOImpl.computeOneIntegralQuantity(integralRuleConfigDto,reqJson);
         }
         return quantity;
     }
 
-    /**
-     * 计算计算积分
-     * @param integralRuleConfigDto
-     * @return
-     */
-    private long computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto,JSONObject reqJson) {
-       String computingFormula = integralRuleConfigDto.getComputingFormula();
-       BigDecimal amountDec = null;
-       long amount = 0;
-       if(IntegralRuleConfigDto.COMPUTING_FORMULA_AREA.equals(computingFormula)){ //面积乘以单价
-           BigDecimal areaDec = new BigDecimal(Double.parseDouble(reqJson.getString("area")));
-           BigDecimal squarePriceDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getSquarePrice()));
-           amountDec = areaDec.multiply(squarePriceDec).setScale(2,BigDecimal.ROUND_HALF_UP);
-       }else if(IntegralRuleConfigDto.COMPUTING_FORMULA_MONEY.equals(computingFormula)){ // 金额乘以单价
-           BigDecimal aDec = new BigDecimal(Double.parseDouble(reqJson.getString("amount")));
-           BigDecimal squarePriceDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getSquarePrice()));
-           amountDec = aDec.multiply(squarePriceDec).setScale(2,BigDecimal.ROUND_HALF_UP);
-       }else if(IntegralRuleConfigDto.COMPUTING_FORMULA_FIXED.equals(computingFormula)){ // 固定积分
-           amountDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getAdditionalAmount()));
-       }else{
-           amountDec = new BigDecimal(0);
-       }
 
-       if(IntegralRuleConfigDto.SCALE_UP.equals(integralRuleConfigDto.getScale())){
-           amount = new Double(Math.ceil(amountDec.doubleValue())).longValue();
-       }else{
-           amount = new Double(Math.floor(amountDec.doubleValue())).longValue();
-       }
-       return amount;
-    }
 }

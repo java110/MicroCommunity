@@ -37,6 +37,7 @@ public class IntegralRuleConfigDto extends PageDto implements Serializable {
     private String scaleName;
     private String ircId;
     private String ruleId;
+    private String ruleName;
     private String[] ruleIds;
 
     private String communityId;
@@ -45,6 +46,8 @@ public class IntegralRuleConfigDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String quantity;
 
 
     public String getConfigId() {
@@ -158,5 +161,21 @@ public class IntegralRuleConfigDto extends PageDto implements Serializable {
 
     public void setRuleIds(String[] ruleIds) {
         this.ruleIds = ruleIds;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }

@@ -74,9 +74,6 @@
         <if test="payMonth !=null and payMonth != ''">
             , t.pay_month= #{payMonth}
         </if>
-        <if test="irfId !=null and irfId != ''">
-            , t.irf_id= #{irfId}
-        </if>
         <if test="feeConfigName !=null and feeConfigName != ''">
             , t.fee_config_name= #{feeConfigName}
         </if>
@@ -89,13 +86,16 @@
         <if test="ruleId !=null and ruleId != ''">
             , t.rule_id= #{ruleId}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="feeConfigId !=null and feeConfigId != ''">
             , t.fee_config_id= #{feeConfigId}
         </if>
         where 1=1
+        <if test="irfId !=null and irfId != ''">
+            and t.irf_id= #{irfId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询积分规则费用数量 add by wuxw 2018-07-03 -->
