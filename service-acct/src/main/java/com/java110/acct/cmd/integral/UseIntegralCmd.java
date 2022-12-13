@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.integralSetting.IntegralSettingDto;
 import com.java110.dto.user.UserDto;
@@ -105,6 +106,7 @@ public class UseIntegralCmd extends Cmd {
         integralUserDetailPo.setUserName(userDtos.get(0).getName());
         integralUserDetailPo.setTel(userDtos.get(0).getTel());
         integralUserDetailPo.setCommunityId(reqJson.getString("communityId"));
+        integralUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId("11"));
         integralUserDetailV1InnerServiceSMOImpl.saveIntegralUserDetail(integralUserDetailPo);
     }
 }
