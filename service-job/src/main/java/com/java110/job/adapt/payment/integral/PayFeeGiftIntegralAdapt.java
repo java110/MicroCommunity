@@ -261,7 +261,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
             } catch (Exception e) {
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
-                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_COUPON);
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_INTEGRAL);
                 logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
                 saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
                 logger.error("通知异常", e);
