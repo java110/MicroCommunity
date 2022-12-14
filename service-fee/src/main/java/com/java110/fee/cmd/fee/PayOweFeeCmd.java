@@ -123,6 +123,9 @@ public class PayOweFeeCmd extends Cmd {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
+            if(paramObj.containsKey("oId")) {
+                feeObj.put("oId", paramObj.getString("oId"));
+            }
             String remark = paramObj.getString("remark");
             feeObj.put("remark", remark);
             if (!feeObj.containsKey("primeRate") && AppDto.OWNER_WECHAT_PAY.equals(appId)) {  //微信公众号支付
@@ -159,7 +162,9 @@ public class PayOweFeeCmd extends Cmd {
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos));
     }
 
-    private void getFeeReceiptDetailPo(ICmdDataFlowContext dataFlowContext, JSONObject paramObj, List<FeeReceiptDetailPo> feeReceiptDetailPos, List<FeeReceiptPo> feeReceiptPos) {
+    private void getFeeReceiptDetailPo(ICmdDataFlowContext dataFlowContext, JSONObject paramObj,
+                                       List<FeeReceiptDetailPo> feeReceiptDetailPos,
+                                       List<FeeReceiptPo> feeReceiptPos) {
         int flag = 0;
         if (!paramObj.containsKey("primeRate")) {
             paramObj.put("primeRate", "6");
@@ -333,6 +338,12 @@ public class PayOweFeeCmd extends Cmd {
         paramInJson.put("feeInfo", feeDto);
         paramInJson.put("cycles", cycles.doubleValue());
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
+        if(paramInJson.containsKey("oId")) {
+            payFeeDetailPo.setPayOrderId(paramInJson.getString("oId"));
+        }else{
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+
+        }
 
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 

@@ -179,6 +179,7 @@ public class PayBatchFeeCmd extends Cmd {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

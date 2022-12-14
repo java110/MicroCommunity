@@ -71,6 +71,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String ardId;
     private String[] states;
 
+    private String payOrderId;
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -348,5 +350,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPayableAmount(String payableAmount) {
         this.payableAmount = payableAmount;
+    }
+
+    public String getPayOrderId() {
+        return payOrderId;
+    }
+
+    public void setPayOrderId(String payOrderId) {
+        this.payOrderId = payOrderId;
     }
 }

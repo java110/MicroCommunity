@@ -103,7 +103,7 @@ public class RentingPayFeeConfirmCmd extends Cmd {
             payFeeDetailPo.setReceivableAmount(receivableAmount + "");
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
-
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
             payFeeDetailPo.setState("1400");
             //添加单元信息
             flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
@@ -157,6 +157,8 @@ public class RentingPayFeeConfirmCmd extends Cmd {
             payFeeDetailPo.setReceivableAmount(receivableAmount + "");
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+
             //添加单元信息
             flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
@@ -209,6 +211,8 @@ public class RentingPayFeeConfirmCmd extends Cmd {
             payFeeDetailPo.setReceivableAmount(receivableAmount + "");
             payFeeDetailPo.setReceivedAmount(receivableAmount + "");
             payFeeDetailPo.setCommunityId(rentingPoolDto.getCommunityId());
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+
             //添加单元信息
             flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {

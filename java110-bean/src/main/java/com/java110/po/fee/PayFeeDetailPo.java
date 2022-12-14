@@ -29,6 +29,8 @@ public class PayFeeDetailPo implements Serializable {
 
     private String state;
 
+    private String payOrderId;
+
     public String getDetailId() {
         return detailId;
     }
@@ -147,5 +149,13 @@ public class PayFeeDetailPo implements Serializable {
 
     public void setPayableAmount(String payableAmount) {
         this.payableAmount = payableAmount;
+    }
+
+    public String getPayOrderId() {
+        return payOrderId;
+    }
+
+    public void setPayOrderId(String payOrderId) {
+        this.payOrderId = payOrderId;
     }
 }
