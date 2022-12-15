@@ -63,7 +63,8 @@ public class UpdateInspectionTaskCmd extends Cmd {
         businessInspectionTask.putAll(BeanConvertUtil.beanCovertMap(inspectionTaskDtos.get(0)));
 
         InspectionTaskPo inspectionTaskPo = BeanConvertUtil.covertBean(businessInspectionTask, InspectionTaskPo.class);
-        inspectionTaskPo.setActInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        //这里时间不做修改，有可能还没有巡检
+        //inspectionTaskPo.setActInsTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         inspectionTaskPo.setActUserId(reqJson.getString("userId"));
         inspectionTaskPo.setActUserName(reqJson.getString("userName"));
         inspectionTaskPo.setState(reqJson.getString("state"));
