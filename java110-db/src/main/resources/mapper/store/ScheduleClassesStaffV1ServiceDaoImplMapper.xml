@@ -21,6 +21,7 @@
         storeId,t.scs_id,t.scs_id scsId,t.schedule_id,t.schedule_id scheduleId,t.staff_id,t.staff_id staffId,
         t.create_time createTime
         from schedule_classes_staff t
+        INNER JOIN schedule_classes sc on t.schedule_id = sc.schedule_id and sc.state = '1001'
         <if test="orgId !=null and orgId != ''">
             left join u_org_staff_rel osr on t.staff_id = osr.staff_id and osr.status_cd = '0'
         </if>
@@ -86,6 +87,7 @@
     <select id="queryScheduleClassesStaffsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from schedule_classes_staff t
+        INNER JOIN schedule_classes sc on t.schedule_id = sc.schedule_id and sc.state = '1001'
         <if test="orgId !=null and orgId != ''">
             left join u_org_staff_rel osr on t.staff_id = osr.staff_id and osr.status_cd = '0'
         </if>
