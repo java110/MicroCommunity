@@ -193,6 +193,15 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String icbcAppId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "ICBC_APP_ID");
         String appId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "APP_ID");
 
+        System.out.println("appId="+appId);
+        System.out.println("privateKey="+privateKey);
+        System.out.println("apiPublicKey="+apiPublicKey);
+        System.out.println("merId="+merId);
+        System.out.println("merPrtclNo="+merPrtclNo);
+        System.out.println("deciveInfo="+deciveInfo);
+        System.out.println("appName="+appName);
+        System.out.println("icbcAppId="+icbcAppId);
+
 
         DefaultIcbcClient client = new DefaultIcbcClient(appId, IcbcConstants.SIGN_TYPE_RSA, privateKey, apiPublicKey);
         CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1 request = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1();
