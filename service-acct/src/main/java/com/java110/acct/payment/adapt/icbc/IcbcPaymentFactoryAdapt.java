@@ -193,7 +193,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String icbcAppId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "ICBC_APP_ID");
 
 
-        DefaultIcbcClient client = new DefaultIcbcClient(smallWeChatDto.getAppId(), IcbcConstants.SIGN_TYPE_RSA2, privateKey, apiPublicKey);
+        DefaultIcbcClient client = new DefaultIcbcClient(smallWeChatDto.getAppId(), IcbcConstants.SIGN_TYPE_RSA, privateKey, apiPublicKey);
         CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1 request = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1();
         //根据测试环境和生产环境替换相应ip和端口
         request.setServiceUrl("https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/consumepurchase/V1");
