@@ -218,10 +218,10 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         bizContent.setOpen_id(openid);
        // bizContent.setMer_acct("6212880200000038618");
         bizContent.setExpire_time("120");
-        bizContent.setNotify_type("HS");
-        bizContent.setResult_type("1");
-        bizContent.setPay_limit("no_credit");
-        bizContent.setOrder_apd_inf("");
+       // bizContent.setNotify_type("HS");
+        //bizContent.setResult_type("1");
+     //   bizContent.setPay_limit("no_credit");
+ //       bizContent.setOrder_apd_inf("");
         CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1 response;
 
         response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
