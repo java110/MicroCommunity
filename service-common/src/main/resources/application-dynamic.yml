@@ -58,7 +58,7 @@ spring:
       min-idle: 0
       timeout: 0
   activiti:
-    databaseSchemaUpdate: "false"
+    database-schema-update: false
 
 feign:
   client:
