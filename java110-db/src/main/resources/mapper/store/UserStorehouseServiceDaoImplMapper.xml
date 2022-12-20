@@ -104,7 +104,7 @@
         rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,
         td.name unitCodeName,td1.name miniUnitCodeName,u.name userName,rs.is_fixed isFixed,td2.name isFixedName
         from user_storehouse t
-        left join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0'
+        left join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0' and t.res_id = rs.res_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
