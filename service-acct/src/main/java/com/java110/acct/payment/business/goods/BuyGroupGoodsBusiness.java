@@ -40,7 +40,7 @@ public class BuyGroupGoodsBusiness implements IPaymentBusiness {
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
         paymentOrderDto.setName(feeName);
-        paramIn.put("payAmount",money+"");
+        reqJson.put("payAmount",money+"");
         return paymentOrderDto;
     }
 
