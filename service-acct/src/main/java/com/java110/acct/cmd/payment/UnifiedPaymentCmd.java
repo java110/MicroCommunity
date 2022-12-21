@@ -101,8 +101,11 @@ public class UnifiedPaymentCmd extends Cmd{
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}",JSONObject.toJSONString(paymentOrderDto));
 
+        String env = MappingCache.getValue("HC_ENV");
+
         // 3.0 如果支付金额为0 直接调用 支付完通知接口
-        if (paymentOrderDto.getMoney() <= 0) {
+        // 这里 演示环境不向微信下单
+        if (paymentOrderDto.getMoney() <= 0 || "DEV".equals(env) || "TEST".equals(env)) {
             paymentBusiness.notifyPayment(paymentOrderDto,reqJson);
             JSONObject param = new JSONObject();
             param.put("code", "100");
