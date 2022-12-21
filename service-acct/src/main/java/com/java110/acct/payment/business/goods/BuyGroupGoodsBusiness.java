@@ -30,7 +30,7 @@ public class BuyGroupGoodsBusiness implements IPaymentBusiness {
         paramIn.put("valueId",reqJson.getString("valueId"));
         paramIn.put("goodsNum",reqJson.getString("goodsNum"));
         paramIn.put("groupId",reqJson.getString("groupId"));
-        JSONObject orderInfo = CallApiServiceFactory.getForApi(appId, reqJson, "/app/storeOrder.computeGroupProductPrice",
+        JSONObject orderInfo = CallApiServiceFactory.getForApi(appId, paramIn, "/app/storeOrder.computeGroupProductPrice",
                 JSONObject.class);
         String orderId = GenerateCodeFactory.getGeneratorId("11");
         String feeName = "购买商品";
