@@ -30,7 +30,7 @@ public class BuyGroupGoodsBusiness implements IPaymentBusiness {
         paramIn.put("valueId",reqJson.getString("valueId"));
         paramIn.put("goodsNum",reqJson.getString("goodsNum"));
         paramIn.put("groupId",reqJson.getString("groupId"));
-        JSONObject orderInfo = CallApiServiceFactory.getForApi(appId, null, "/app/storeOrder.computeGroupProductPrice"+CallApiServiceFactory.mapToUrlParam(paramIn),
+        JSONObject orderInfo = CallApiServiceFactory.getForApi(appId, null, "storeOrder.computeGroupProductPrice"+CallApiServiceFactory.mapToUrlParam(paramIn),
                 JSONObject.class);
         String orderId = GenerateCodeFactory.getGeneratorId("11");
         String feeName = "购买商品";
@@ -49,7 +49,7 @@ public class BuyGroupGoodsBusiness implements IPaymentBusiness {
         JSONObject paramIn = new JSONObject();
         paramIn.put("orderId", paymentOrderDto.getOrderId());
         paramIn.put("payOrderId",paymentOrderDto.getTransactionId());
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "/app/cart.unifiedGroupProductOrder", JSONObject.class, "-1");
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "cart.unifiedGroupProductOrder", JSONObject.class, "-1");
 
     }
 }
