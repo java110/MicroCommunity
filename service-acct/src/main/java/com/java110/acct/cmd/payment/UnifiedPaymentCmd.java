@@ -87,6 +87,9 @@ public class UnifiedPaymentCmd extends Cmd{
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         logger.debug(">>>>>>>>>>>>>>>>支付参数报文,{}",reqJson.toJSONString());
+        String appId = context.getReqHeaders().get("app-id");
+        String userId = context.getReqHeaders().get("user-id");
+
 
         //1.0 查询当前支付的业务
 
@@ -98,6 +101,9 @@ public class UnifiedPaymentCmd extends Cmd{
 
         //2.0 相应业务 下单 返回 单号 ，金额，
         PaymentOrderDto paymentOrderDto =  paymentBusiness.unified(context,reqJson);
+        paymentOrderDto.setAppId(appId);
+        paymentOrderDto.setUserId(userId);
+
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}",JSONObject.toJSONString(paymentOrderDto));
 
