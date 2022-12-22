@@ -237,6 +237,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1 response;
 
         response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
+
         if (response.getReturnCode() == 0) {
             // 6、业务成功处理，请根据接口文档用response.getxxx()获取同步返回的业务数据
             System.out.println("ReturnCode:" + response.getReturnCode());
