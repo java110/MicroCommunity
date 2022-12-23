@@ -91,6 +91,11 @@ public class ServiceConfiguration {
         exclusions.append("/app/reserve.listReserveCatalog,");
         exclusions.append("/app/reserve.listReserveGoods,");
         exclusions.append("/app/reserve.listReserveParams,");
+        exclusions.append("/app/productGroup.listProductGroup,");//拼团商品
+        exclusions.append("/app/product/queryGroupProduct,");//拼团商品
+        exclusions.append("/app/product/querySeckillProduct,");//秒杀商品
+
+        exclusions.append("/app/productSeckill.listProductSeckill,");//秒杀商品
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
