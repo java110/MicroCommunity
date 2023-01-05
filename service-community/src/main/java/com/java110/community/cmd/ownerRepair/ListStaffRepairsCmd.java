@@ -70,9 +70,11 @@ public class ListStaffRepairsCmd extends Cmd {
             basePrivilegeDto.setResource("/viewListStaffRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        }else{
+            ownerRepairDto.setStaffId(userId);
         }
         if (privileges == null || privileges.size() == 0) {
-            ownerRepairDto.setStaffId(reqJson.getString("userId"));
+            ownerRepairDto.setStaffId(userId);
         }
         int count = repairInnerServiceSMOImpl.queryStaffRepairsCount(ownerRepairDto);
         List<RepairDto> ownerRepairs = null;
