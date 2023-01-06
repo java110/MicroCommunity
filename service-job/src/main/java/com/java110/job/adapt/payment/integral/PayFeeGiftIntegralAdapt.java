@@ -157,6 +157,11 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
 
             Assert.listOnlyOne(feeDtos, "未查询到费用信息");
 
+            if(businessPayFeeDetail.containsKey("receivedAmount")
+                    && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+                return ;
+            }
+
             IntegralRuleFeeDto integralRuleFeeDto = new IntegralRuleFeeDto();
             integralRuleFeeDto.setFeeConfigId(feeDtos.get(0).getConfigId());
             integralRuleFeeDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
