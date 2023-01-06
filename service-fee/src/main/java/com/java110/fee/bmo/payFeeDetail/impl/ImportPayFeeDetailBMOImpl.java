@@ -268,6 +268,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
         payFeeDetailPo.setCreateTime(importRoomFee.getCreateTime());
         payFeeDetailPo.setState("1400");
+        payFeeDetailPo.setPayableAmount(importRoomFee.getAmount());
         int saved = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 
         if (saved < 1) {
