@@ -307,12 +307,12 @@
     <insert id="saveFeeDetail" parameterType="Map">
         insert into
         pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id,state,start_time,end_time,payable_amount
+        prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,fee_id,state,start_time,end_time,payable_amount
         <if test="createTime != null and createTime != ''">
             ,create_time
         </if>
         )
-        values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},'0',#{receivedAmount},#{communityId},'-1',#{feeId},#{state},
+        values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{communityId},#{feeId},#{state},
         #{startTime},#{endTime},#{payableAmount}
         <if test="createTime != null and createTime != ''">
             ,#{createTime}
