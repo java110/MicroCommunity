@@ -25,11 +25,13 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
 import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
@@ -37,6 +39,7 @@ import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -45,6 +48,7 @@ import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
 import com.java110.po.returnPayFee.ReturnPayFeePo;
 import com.java110.utils.exception.CmdException;
@@ -63,7 +67,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 类表述：更新
+ * 类表述：退费审核接口
  * 服务编码：returnPayFee.updateReturnPayFee
  * 请求路劲：/app/returnPayFee.UpdateReturnPayFee
  * add by 吴学文 at 2022-02-21 12:20:03 mail: 928255095@qq.com
@@ -125,6 +129,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
+
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
     private static final String SPEC_MONTH = "89002020980014"; //月份
@@ -168,6 +175,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("state", "1300");
             reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+            reqJson.put("payOrderId",feeDetailDto.getPayOrderId());
             addFeeDetail(reqJson);
 
             reqJson.put("state", "1100");
@@ -335,6 +343,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                     }
                 }
             }
+            //提交线上退费
+            returnOnlinePayMoney(feeDetailDto);
+
         }
         //不通过
         if ("1200".equals(reqJson.getString("state"))) {
@@ -440,6 +451,32 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+    }
+
+    /**
+     * 发起退款
+     *
+     * @param feeDetailDto
+     */
+    private void returnOnlinePayMoney(FeeDetailDto feeDetailDto) {
+
+        if(StringUtil.isEmpty(feeDetailDto.getPayOrderId())){
+            return;
+        }
+
+        OnlinePayDto onlinePayDto = new OnlinePayDto();
+        onlinePayDto.setOrderId(feeDetailDto.getPayOrderId());
+        List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
+        if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
+            return;
+        }
+
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setOrderId(onlinePayDtos.get(0).getOrderId());
+        onlinePayPo.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayPo.setState(OnlinePayDto.STATE_WT);
+        onlinePayPo.setRefundFee(feeDetailDto.getReceivedAmount());
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 
 }

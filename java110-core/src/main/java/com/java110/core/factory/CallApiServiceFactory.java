@@ -63,6 +63,26 @@ public class CallApiServiceFactory {
      * @param <T>
      * @return
      */
+    public static <T> T getForApi(String appId, T param, String serviceCode, Class<T> t,String userId) {
+
+        IPageData pd = PageData.newInstance().builder(userId, "未知", "", "", "", "", "", "", appId);
+
+        List<T> list = getForApis(pd, param, serviceCode, t);
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 查询
+     *
+     * @param param       传入对象
+     * @param serviceCode 服务编码
+     * @param t           返回类
+     * @param <T>
+     * @return
+     */
     public static <T> T postForApi(String appId, T param, String serviceCode, Class<T> t, String userId) {
 
         IPageData pd = PageData.newInstance().builder(userId, "未知", "", "", "", "", "", "", appId);

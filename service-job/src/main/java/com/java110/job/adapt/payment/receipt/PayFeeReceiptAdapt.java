@@ -145,6 +145,13 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             //查询业主信息
             OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
 
+            // if received amount lt zero
+
+            if(businessPayFeeDetail.containsKey("receivedAmount")
+                    && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+                return ;
+            }
+
             //添加单元信息
             FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
             FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();

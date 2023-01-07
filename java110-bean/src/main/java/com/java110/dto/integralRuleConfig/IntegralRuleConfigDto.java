@@ -15,6 +15,14 @@ import java.util.Date;
  **/
 public class IntegralRuleConfigDto extends PageDto implements Serializable {
 
+    //计算公式 1001 面积*单价 2002 金额乘以单价 3003 固定积分
+    public static final String COMPUTING_FORMULA_AREA = "1001";
+    public static final String COMPUTING_FORMULA_MONEY = "2002";
+    public static final String COMPUTING_FORMULA_FIXED = "3003";
+
+    public static final String SCALE_UP = "3";
+    public static final String SCALE_DOWN = "4";
+
     private String configId;
     private String configName;
 
@@ -29,12 +37,17 @@ public class IntegralRuleConfigDto extends PageDto implements Serializable {
     private String scaleName;
     private String ircId;
     private String ruleId;
+    private String ruleName;
+    private String[] ruleIds;
+
     private String communityId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String quantity;
 
 
     public String getConfigId() {
@@ -140,5 +153,29 @@ public class IntegralRuleConfigDto extends PageDto implements Serializable {
 
     public void setScaleName(String scaleName) {
         this.scaleName = scaleName;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }

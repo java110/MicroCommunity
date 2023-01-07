@@ -1,6 +1,7 @@
 package com.java110.dto.integralRuleFee;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,13 +16,16 @@ import java.util.Date;
 public class IntegralRuleFeeDto extends PageDto implements Serializable {
 
     private String payMonth;
-private String irfId;
-private String feeConfigName;
-private String payStartTime;
-private String payEndTime;
-private String ruleId;
-private String communityId;
-private String feeConfigId;
+    private String irfId;
+    private String feeConfigName;
+    private String payStartTime;
+    private String payEndTime;
+    private String ruleId;
+    private String communityId;
+    private String feeConfigId;
+
+    private String curTime;
+    private String cycle;
 
 
     private Date createTime;
@@ -32,49 +36,64 @@ private String feeConfigId;
     public String getPayMonth() {
         return payMonth;
     }
-public void setPayMonth(String payMonth) {
+
+    public void setPayMonth(String payMonth) {
         this.payMonth = payMonth;
     }
-public String getIrfId() {
+
+    public String getIrfId() {
         return irfId;
     }
-public void setIrfId(String irfId) {
+
+    public void setIrfId(String irfId) {
         this.irfId = irfId;
     }
-public String getFeeConfigName() {
+
+    public String getFeeConfigName() {
         return feeConfigName;
     }
-public void setFeeConfigName(String feeConfigName) {
+
+    public void setFeeConfigName(String feeConfigName) {
         this.feeConfigName = feeConfigName;
     }
-public String getPayStartTime() {
+
+    public String getPayStartTime() {
         return payStartTime;
     }
-public void setPayStartTime(String payStartTime) {
+
+    public void setPayStartTime(String payStartTime) {
         this.payStartTime = payStartTime;
     }
-public String getPayEndTime() {
+
+    public String getPayEndTime() {
         return payEndTime;
     }
-public void setPayEndTime(String payEndTime) {
+
+    public void setPayEndTime(String payEndTime) {
         this.payEndTime = payEndTime;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeConfigId() {
+
+    public String getFeeConfigId() {
         return feeConfigId;
     }
-public void setFeeConfigId(String feeConfigId) {
+
+    public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
     }
 
@@ -93,5 +112,21 @@ public void setFeeConfigId(String feeConfigId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(String curTime) {
+        this.curTime = curTime;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
     }
 }

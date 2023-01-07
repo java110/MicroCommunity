@@ -35,7 +35,9 @@ public class ListAllocationUserStorehousesCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String storeId = context.getReqHeaders().get("store-id");
         AllocationUserStorehouseDto allocationUserStorehouseDto = BeanConvertUtil.covertBean(reqJson, AllocationUserStorehouseDto.class);
+        allocationUserStorehouseDto.setStoreId(storeId);
 
         int count = allocationUserStorehouseInnerServiceSMOImpl.queryAllocationUserStorehousesCount(allocationUserStorehouseDto);
 

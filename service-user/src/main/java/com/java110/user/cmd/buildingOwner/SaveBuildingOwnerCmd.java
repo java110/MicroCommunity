@@ -35,7 +35,7 @@ import com.java110.core.log.LoggerFactory;
 /**
  * 类表述：保存
  * 服务编码：buildingOwner.saveBuildingOwner
- * 请求路劲：/app/buildingOwner.SaveBuildingOwner
+ * 请求路劲：http://ip:port/app/buildingOwner.saveBuildingOwner
  * add by 吴学文 at 2021-10-08 17:43:55 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn

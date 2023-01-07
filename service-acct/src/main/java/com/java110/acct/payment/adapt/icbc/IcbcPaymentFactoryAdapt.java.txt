@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.icbc.api.DefaultIcbcClient;
 import com.icbc.api.IcbcApiException;
 import com.icbc.api.IcbcConstants;
-import com.icbc.api.utils.HttpRequestParamsUtils;
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1;
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz;
+import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1;
 import com.icbc.api.utils.IcbcEncrypt;
 import com.icbc.api.utils.IcbcSignature;
 import com.icbc.api.utils.WebUtils;
@@ -13,7 +15,6 @@ import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.acct.payment.adapt.plutus.PlutusPaymentFactoryAdapt;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CommunitySettingFactory;
-import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
@@ -24,54 +25,54 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
-import com.java110.utils.util.*;
-import org.bouncycastle.util.encoders.Base64;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.PayUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1;
-import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1.CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1Biz;
-import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1;
-
 /**
  * 工商银行支付
- *
+ * <p>
  * 这个适配器使用需要 安装 工商银行的 jar 安装到maven
  * 这里 以免影响 编译 所以这个Java 改名为txt
- *
+ * <p>
  * 如果需要工商银行支付
  * 1、将 工商银行提供的 icbc-api-sdk-cop icbc-api-sdk-cop-io  icbc-ca 安装到自己的私有仓库 怎么安装请百度
- *
+ * <p>
  * 2、根据你安装的 命令 会 有如下的三个jar的依赖包，将这三个系诶到 service-acct 下的pom.xml 文件中
- *
+ * <p>
  * <dependency>
- <groupId>com.icbc</groupId>
- <artifactId>icbc-api-sdk-cop</artifactId>
- <version>v1.0</version>
- </dependency>
- <dependency>
- <groupId>com.icbc</groupId>
- <artifactId>icbc-api-sdk-cop-io</artifactId>
- <version>v1.0</version>
- </dependency>
- <dependency>
- <groupId>com.icbc</groupId>
- <artifactId>icbc-ca</artifactId>
- <version>v1.0</version>
- </dependency>
-
- *
+ * <groupId>com.icbc</groupId>
+ * <artifactId>icbc-api-sdk-cop</artifactId>
+ * <version>v1.0</version>
+ * </dependency>
+ * <dependency>
+ * <groupId>com.icbc</groupId>
+ * <artifactId>icbc-api-sdk-cop-io</artifactId>
+ * <version>v1.0</version>
+ * </dependency>
+ * <dependency>
+ * <groupId>com.icbc</groupId>
+ * <artifactId>icbc-ca</artifactId>
+ * <version>v1.0</version>
+ * </dependency>
+ * <p>
+ * <p>
  * 3、将 此类  文件 名去掉最后的TXT  修改 为Java 后缀
- *
+ * <p>
  * 4、执行mvn clean install 执行打包测试
- *
+ * <p>
  * 5、如果要二次开发优化参考 工商银行协议
  * https://open.icbc.com.cn/icbc/apip/api_detail.html?apiId=10000000000000137000&baseUrl=%2Fcardbusiness%2Faggregatepay%2Fb2c%2Fonline&resUrl=%2Fconsumepurchase&version=V1&apiName=聚合支付B2C线上消费下单&serviceId=P0067&resourceId=10000000000000009800
+ *
  * @desc add by 吴学文 15:33
  */
 @Service("icbcPaymentFactory")
@@ -133,7 +134,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             ownerAppUserDto.setAppType(appType);
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-            if(ownerAppUserDtos == null || ownerAppUserDtos.size() < 1){
+            if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
                 throw new IllegalArgumentException("未找到开放账号信息");
             }
             openId = ownerAppUserDtos.get(0).getOpenId();
@@ -191,9 +192,19 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String deciveInfo = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "ICBC_DECIVE_INFO");
         String appName = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "ICBC_APP_NAME");
         String icbcAppId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "ICBC_APP_ID");
+        String appId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "APP_ID");
+
+        System.out.println("appId=" + appId);
+        System.out.println("privateKey=" + privateKey);
+        System.out.println("apiPublicKey=" + apiPublicKey);
+        System.out.println("merId=" + merId);
+        System.out.println("merPrtclNo=" + merPrtclNo);
+        System.out.println("deciveInfo=" + deciveInfo);
+        System.out.println("appName=" + appName);
+        System.out.println("icbcAppId=" + icbcAppId);
 
 
-        DefaultIcbcClient client = new DefaultIcbcClient(smallWeChatDto.getAppId(), IcbcConstants.SIGN_TYPE_RSA2, privateKey, apiPublicKey);
+        DefaultIcbcClient client = new DefaultIcbcClient(appId, IcbcConstants.SIGN_TYPE_RSA2, privateKey, apiPublicKey);
         CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1 request = new CardbusinessAggregatepayB2cOnlineConsumepurchaseRequestV1();
         //根据测试环境和生产环境替换相应ip和端口
         request.setServiceUrl("https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/consumepurchase/V1");
@@ -216,15 +227,17 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         bizContent.setShop_appid(smallWeChatDto.getAppId());
         bizContent.setIcbc_appid(icbcAppId);
         bizContent.setOpen_id(openid);
-       // bizContent.setMer_acct("6212880200000038618");
+        // bizContent.setMer_acct("6212880200000038618");
         bizContent.setExpire_time("120");
-        bizContent.setNotify_type("HS");
+        //bizContent.setNotify_type("HS");
+         bizContent.setNotify_type("HS");
         bizContent.setResult_type("1");
-        bizContent.setPay_limit("no_credit");
-        bizContent.setOrder_apd_inf("");
+           bizContent.setPay_limit("no_credit");
+               bizContent.setOrder_apd_inf("");
         CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1 response;
 
         response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
+
         if (response.getReturnCode() == 0) {
             // 6、业务成功处理，请根据接口文档用response.getxxx()获取同步返回的业务数据
             System.out.println("ReturnCode:" + response.getReturnCode());
@@ -260,7 +273,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
         }
 
-        Map<String, String> params=new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
 
         params.put("from", json.getString("from"));
         params.put("api", json.getString("api"));
@@ -268,14 +281,14 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("charset", json.getString("charset"));
         params.put("format", json.getString("format"));
         params.put("encrypt_type", json.getString("encrypt_type"));
-        params.put("timestamp",json.getString("timestamp") );
-        params.put("biz_content",json.getString("biz_content") );
+        params.put("timestamp", json.getString("timestamp"));
+        params.put("biz_content", json.getString("biz_content"));
         params.put("sign_type", json.getString("sign_type"));//目前上行网关签名暂时仅支持RSA
 
-        String path="/app/payment/notify/icbc/992020011134400001\"";
-        String signStr= WebUtils.buildOrderedSignStr(path, params);
+        String path = "/app/payment/notify/icbc/992020011134400001\"";
+        String signStr = WebUtils.buildOrderedSignStr(path, params);
         String results = null;
-        String responseBizContent= null;
+        String responseBizContent = null;
 
 
         String apiPublicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "ICBC_PUBLIC_KEY");
@@ -283,8 +296,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String privateKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "ICBC_PRIVATE_KEY");
 
 
-
-        boolean flag= false;
+        boolean flag = false;
         String content = "";
         try {
             flag = IcbcSignature.verify(signStr, json.getString("sign_type"), apiPublicKey, json.getString("charset"), json.getString("sign"));
@@ -292,15 +304,13 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             e.printStackTrace();
         }
         if (!flag) {
-            responseBizContent= "{\"return_code\":-12345,\"return_msg\":\"icbc sign not pass.\"}";
-        }else
-        {
+            responseBizContent = "{\"return_code\":-12345,\"return_msg\":\"icbc sign not pass.\"}";
+        } else {
 
             /**********biz_content解密**********/
-            if ("AES".equals(json.getString("encrypt_type")))
-            {
+            if ("AES".equals(json.getString("encrypt_type"))) {
                 try {
-                    content= IcbcEncrypt.decryptContent( json.getString("biz_content"), json.getString("encrypt_type"), theKey, json.getString("charset"));
+                    content = IcbcEncrypt.decryptContent(json.getString("biz_content"), json.getString("encrypt_type"), theKey, json.getString("charset"));
                 } catch (IcbcApiException e) {
                     e.printStackTrace();
                 }
@@ -312,35 +322,34 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             paymentOrderDto.setOrderId(map.getString("out_trade_no"));
             paymentOrderDto.setTransactionId(map.getString("order_id"));
 
-            String msg_id=map.get("msg_id").toString();
+            String msg_id = map.get("msg_id").toString();
             //业务返回参数设置
-            int return_code=0;
-            String return_msg="success.";
-            responseBizContent="{\"return_code\":"+return_code+",\"return_msg\":\""+return_msg+"\",\"msg_id\":\""+msg_id+"\","
-                    +"\"busi_param_rp\":\"thisisresponseparameter\"}";
+            int return_code = 0;
+            String return_msg = "success.";
+            responseBizContent = "{\"return_code\":" + return_code + ",\"return_msg\":\"" + return_msg + "\",\"msg_id\":\"" + msg_id + "\","
+                    + "\"busi_param_rp\":\"thisisresponseparameter\"}";
 
             /**********response_biz_content加密**********/
 
-            if ("AES".equals(json.getString("encrypt_type")))
-            {
+            if ("AES".equals(json.getString("encrypt_type"))) {
                 try {
-                    responseBizContent=IcbcEncrypt.encryptContent(responseBizContent, json.getString("encrypt_type"), theKey, json.getString("charset"));
+                    responseBizContent = IcbcEncrypt.encryptContent(responseBizContent, json.getString("encrypt_type"), theKey, json.getString("charset"));
                 } catch (IcbcApiException e) {
                     e.printStackTrace();
                 }
-                responseBizContent="\""+responseBizContent+"\"";
+                responseBizContent = "\"" + responseBizContent + "\"";
             }
         }
 
 
-        signStr="\"response_biz_content\":"+responseBizContent+","+"\"sign_type\":"+"\"RSA\"";
-        String sign= null;
+        signStr = "\"response_biz_content\":" + responseBizContent + "," + "\"sign_type\":" + "\"RSA\"";
+        String sign = null;
         try {
-            sign = IcbcSignature.sign(signStr, "RSA", privateKey, json.getString("charset"),theKey);
+            sign = IcbcSignature.sign(signStr, "RSA", privateKey, json.getString("charset"), theKey);
         } catch (IcbcApiException e) {
             e.printStackTrace();
         }
-        results="{"+signStr+",\"sign\":\""+sign+"\"}";
+        results = "{" + signStr + ",\"sign\":\"" + sign + "\"}";
 
         paymentOrderDto.setResponseEntity(new ResponseEntity<String>(results, HttpStatus.OK));
         return paymentOrderDto;

@@ -417,6 +417,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (StringUtil.isEmpty(payFeeDetail.getPayableAmount())) {
             payFeeDetail.setPayableAmount("0.0");
         }
+        payFeeDetail.setPayOrderId(paramInJson.getString("oId"));
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetail);
         if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");

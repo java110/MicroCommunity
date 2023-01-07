@@ -29,6 +29,9 @@
         <if test="appointmentTime !=null and appointmentTime != ''">
             and rgo.appointment_time = #{appointmentTime}
         </if>
+        <if test="personTel !=null and personTel != ''">
+            and rgo.person_tel = #{personTel}
+        </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
         </if>
@@ -106,6 +109,9 @@
         where 1 =1
         <if test="appointmentTime !=null and appointmentTime != ''">
             and rgo.appointment_time = #{appointmentTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and rgo.person_tel = #{personTel}
         </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}

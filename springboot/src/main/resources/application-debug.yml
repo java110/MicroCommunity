@@ -48,6 +48,8 @@ spring:
       max-idle: 50
       min-idle: 20
       timeout: 0
+  activiti:
+    database-schema-update: false
 
 feign:
   client:

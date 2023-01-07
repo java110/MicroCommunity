@@ -439,8 +439,10 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             scDay = new ScheduleClassesDayDto();
             Calendar today = Calendar.getInstance();
             today.setTime(DateUtil.getDateFromStringB(curMonth + "-" + day));
-            int week = today.get(Calendar.WEEK_OF_MONTH);
+            int week = 1;//today.get(Calendar.WEEK_OF_MONTH);
             curDay = today.get(Calendar.DAY_OF_WEEK);
+
+
 
             //一周第一天是否为星期天
             boolean isFirstSunday = (today.getFirstDayOfWeek() == Calendar.SUNDAY);
@@ -456,6 +458,15 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             scDay.setDay(day + "");
             //计算 排班
             for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
+                week = today.get(Calendar.WEEK_OF_MONTH);
+                if("1".equals(scheduleClassesDayDto1.getWeekFlag())){ // 如果是 1 则 周默认为 1
+                    week = 1;
+                }
+
+                if(week > Integer.parseInt(scheduleClassesDayDto1.getWeekFlag())){
+                    week = week % Integer.parseInt(scheduleClassesDayDto1.getWeekFlag());
+                }
+
                 if ((curDay + "").equals(scheduleClassesDayDto1.getDay()) && (week + "").equals(scheduleClassesDayDto1.getWeekFlag())) {
                     tmpScheduleClassesDayDto = scheduleClassesDayDto1;
                 }

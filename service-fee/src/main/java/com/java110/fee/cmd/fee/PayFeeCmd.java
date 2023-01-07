@@ -294,6 +294,7 @@ public class PayFeeCmd extends Cmd {
                     feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
                 }
             }
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

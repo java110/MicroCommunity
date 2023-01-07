@@ -162,6 +162,8 @@ public class PayFeePreTempCarInoutCmd extends Cmd {
         double receivableAmount = money;
         businessFeeDetail.put("receivableAmount", receivableAmount);
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
+        payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
         if (flag < 1) {

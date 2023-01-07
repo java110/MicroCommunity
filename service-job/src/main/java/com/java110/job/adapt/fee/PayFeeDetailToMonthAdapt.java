@@ -111,6 +111,10 @@ public class PayFeeDetailToMonthAdapt extends DatabusAdaptImpl {
      * @param businessPayFeeDetail
      */
     private void doPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
+        if(businessPayFeeDetail.containsKey("receivedAmount")
+                && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+            return ;
+        }
         payFeeDetailToMonthImpl.doPayFeeDetail(business,businessPayFeeDetail);
     }
 

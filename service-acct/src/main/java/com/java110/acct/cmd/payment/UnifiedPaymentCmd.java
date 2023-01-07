@@ -87,6 +87,9 @@ public class UnifiedPaymentCmd extends Cmd{
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         logger.debug(">>>>>>>>>>>>>>>>支付参数报文,{}",reqJson.toJSONString());
+        String appId = context.getReqHeaders().get("app-id");
+        String userId = context.getReqHeaders().get("user-id");
+
 
         //1.0 查询当前支付的业务
 
@@ -98,8 +101,23 @@ public class UnifiedPaymentCmd extends Cmd{
 
         //2.0 相应业务 下单 返回 单号 ，金额，
         PaymentOrderDto paymentOrderDto =  paymentBusiness.unified(context,reqJson);
+        paymentOrderDto.setAppId(appId);
+        paymentOrderDto.setUserId(userId);
+
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}",JSONObject.toJSONString(paymentOrderDto));
+
+        String env = MappingCache.getValue("HC_ENV");
+
+        // 这里 演示环境不向微信下单
+        if ("DEV".equals(env) || "TEST".equals(env)) {
+            paymentBusiness.notifyPayment(paymentOrderDto,reqJson);
+            JSONObject param = new JSONObject();
+            param.put("code", "100");
+            param.put("msg", "演示环境不触发支付");
+            context.setResponseEntity(new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK));
+            return ;
+        }
 
         // 3.0 如果支付金额为0 直接调用 支付完通知接口
         if (paymentOrderDto.getMoney() <= 0) {
