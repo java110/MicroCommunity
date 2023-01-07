@@ -136,16 +136,24 @@ public class CheckInCmd extends Cmd {
         attendanceClassesDto.setClassesObjIds(orgIds.toArray(new String[orgIds.size()]));
         List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
 
-        Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
+        if(attendanceClassesDtos == null || attendanceClassesDtos.size() < 1){
+            throw new CmdException("班次不存在");
+        }
 
+       // Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
+        for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
+            doCheckInAttendanceLog(context, reqJson, storeUserDtos, userDtos, tmpAttendanceClassesDto);
+        }
+    }
 
+    private void doCheckInAttendanceLog(ICmdDataFlowContext context, JSONObject reqJson, List<StoreUserDto> storeUserDtos, List<UserDto> userDtos, AttendanceClassesDto attendanceClassesDto) {
         AttendanceLogPo attendanceLogPo = new AttendanceLogPo();
         attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
         attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
         attendanceLogPo.setStaffId(reqJson.getString("staffId"));
         attendanceLogPo.setClockTime(reqJson.getString("checkTime"));
-        attendanceLogPo.setDepartmentId(attendanceClassesDtos.get(0).getClassesObjId());
-        attendanceLogPo.setDepartmentName(attendanceClassesDtos.get(0).getClassesObjName());
+        attendanceLogPo.setDepartmentId(attendanceClassesDto.getClassesObjId());
+        attendanceLogPo.setDepartmentName(attendanceClassesDto.getClassesObjName());
         attendanceLogPo.setStaffName(userDtos.get(0).getName());
 
         int flag = attendanceLogInnerServiceSMOImpl.saveAttendanceLog(attendanceLogPo);
@@ -158,7 +166,7 @@ public class CheckInCmd extends Cmd {
 
         AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
         attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("checkTime"));
-        attendanceClassesTaskDetailDto.setClassId(attendanceClassesDtos.get(0).getClassesId());
+        attendanceClassesTaskDetailDto.setClassId(attendanceClassesDto.getClassesId());
         attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
