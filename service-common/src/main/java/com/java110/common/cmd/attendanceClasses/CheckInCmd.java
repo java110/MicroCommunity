@@ -98,7 +98,7 @@ public class CheckInCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含员工");
-        Assert.hasKeyAndValue(reqJson, "clockTime", "未包含考勤时间");
+        Assert.hasKeyAndValue(reqJson, "checkTime", "未包含考勤时间");
     }
 
     @Override
@@ -143,7 +143,7 @@ public class CheckInCmd extends Cmd {
         attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
         attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
         attendanceLogPo.setStaffId(reqJson.getString("staffId"));
-        attendanceLogPo.setClockTime(reqJson.getString("clockTime"));
+        attendanceLogPo.setClockTime(reqJson.getString("checkTime"));
         attendanceLogPo.setDepartmentId(attendanceClassesDtos.get(0).getClassesObjId());
         attendanceLogPo.setDepartmentName(attendanceClassesDtos.get(0).getClassesObjName());
         attendanceLogPo.setStaffName(userDtos.get(0).getName());
@@ -157,7 +157,7 @@ public class CheckInCmd extends Cmd {
         // 查询是否为上班
 
         AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
-        attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("clockTime"));
+        attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("checkTime"));
         attendanceClassesTaskDetailDto.setClassId(attendanceClassesDtos.get(0).getClassesId());
         attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
@@ -183,7 +183,7 @@ public class CheckInCmd extends Cmd {
 
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = new AttendanceClassesTaskDetailPo();
         attendanceClassesTaskDetailPo.setDetailId(nowAttendanceClassesTaskDetailDto.getDetailId());
-        attendanceClassesTaskDetailPo.setCheckTime(reqJson.getString("clockTime"));
+        attendanceClassesTaskDetailPo.setCheckTime(reqJson.getString("checkTime"));
         attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("clockTime"))));
         attendanceClassesTaskDetailPo.setFacePath(photo);
         flag = attendanceClassesTaskDetailInnerServiceSMOImpl.updateAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
