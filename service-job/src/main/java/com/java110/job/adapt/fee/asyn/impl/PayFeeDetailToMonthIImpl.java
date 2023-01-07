@@ -79,11 +79,11 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo = null;
         BigDecimal discountAmount = new BigDecimal(0.0);
 
-        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
-            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-        }else{
+//        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
+//            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
+//        }else{
             commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-        }
+//        }
 
 
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);

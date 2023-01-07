@@ -24,6 +24,7 @@ import com.java110.job.adapt.report.ReportOwnerPayFeeAdapt;
 import com.java110.job.adapt.report.asyn.ISaveReportOwnerPayFee;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -59,6 +60,8 @@ public class SaveReportOwnerPayFeeImpl implements ISaveReportOwnerPayFee {
         try {
             dateSub = analyseDate(DateUtil.getDateFromString(payFeeDetailPo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A),
                     DateUtil.getDateFromString(payFeeDetailPo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+
+
         } catch (ParseException e) {
             logger.error("出错了", e);
             return;
@@ -71,6 +74,55 @@ public class SaveReportOwnerPayFeeImpl implements ISaveReportOwnerPayFee {
         BigDecimal amount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
         amount = amount.divide(new BigDecimal(dateSub.size()), BigDecimal.ROUND_HALF_UP);
 
+        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
+            doBailefuCommonOwnerPayFee(payFeeDetailPo, feeDto, dateSub, amount);
+        }else{
+            doCommonOwnerPayFee(payFeeDetailPo, feeDto, dateSub, amount);
+        }
+
+
+    }
+
+    private void doBailefuCommonOwnerPayFee(PayFeeDetailPo payFeeDetailPo, FeeDto feeDto, List<String> dateSub, BigDecimal amount) {
+        Date createTime = null;
+        Date startTime = null;
+        try {
+            createTime = DateUtil.getDateFromString(payFeeDetailPo.getCreateTime(), DateUtil.DATE_FORMATE_STRING_B);
+        } catch (ParseException e) {
+            logger.error("出错了", e);
+            return;
+        }
+        BigDecimal oweFee = new BigDecimal(0);
+
+        for (String dateStr : dateSub) {
+            try {
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.setTime(DateUtil.getDateFromStringB(dateStr));
+                startTimeCal.set(Calendar.DAY_OF_MONTH, 1);
+                startTime = startTimeCal.getTime();
+
+                Calendar createTimeCal = Calendar.getInstance();
+                createTimeCal.setTime(createTime);
+                createTimeCal.set(Calendar.DAY_OF_MONTH, 1);
+                createTime = createTimeCal.getTime();
+
+                if (startTime.getTime() < createTime.getTime()) {
+                    dealOwnerPayFee(dateStr, payFeeDetailPo, feeDto, 0.0);
+                    oweFee = oweFee.add(amount);
+                } else if (startTime.getTime() == createTime.getTime()) {
+                    oweFee = oweFee.add(amount);
+                    dealOwnerPayFee(dateStr, payFeeDetailPo, feeDto, oweFee.doubleValue());
+                } else {
+                    dealOwnerPayFee(dateStr, payFeeDetailPo, feeDto, amount.doubleValue());
+                }
+            } catch (Exception e) {
+                logger.error("出错了", e);
+                return;
+            }
+        }
+    }
+
+    private void doCommonOwnerPayFee(PayFeeDetailPo payFeeDetailPo, FeeDto feeDto, List<String> dateSub, BigDecimal amount) {
         for (String dateStr : dateSub) {
             try {
                 dealOwnerPayFee(dateStr, payFeeDetailPo, feeDto, amount.doubleValue());

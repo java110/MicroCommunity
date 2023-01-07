@@ -83,6 +83,10 @@ public class ReportOwnerPayFeeAdapt extends DatabusAdaptImpl {
     }
 
     private void doSendPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
+        if(businessPayFeeDetail.containsKey("receivedAmount")
+                && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+            return ;
+        }
         //查询缴费明细
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
 
