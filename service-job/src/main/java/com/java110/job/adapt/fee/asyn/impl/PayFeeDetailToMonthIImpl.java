@@ -145,7 +145,7 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             if (calendar.getTime().getTime() < createTime.getTime()) {
                 tmpPayFeeDetailMonthPo.setReceivedAmount("0");
                 oweFee = oweFee.add(priRecDec);
-            } else if (calendar.getTime().getTime() < createTime.getTime()) {
+            } else if (calendar.getTime().getTime() == createTime.getTime()) {
                 oweFee = oweFee.add(priRecDec);
                 tmpPayFeeDetailMonthPo.setReceivedAmount(oweFee.doubleValue() + "");
             } else {
