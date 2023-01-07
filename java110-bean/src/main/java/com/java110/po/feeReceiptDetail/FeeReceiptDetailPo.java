@@ -16,7 +16,7 @@ public class FeeReceiptDetailPo implements Serializable {
     private String feeId;
     private String cycle;
     private String squarePrice;
-
+    private String createTime;
     public String getArea() {
         return area;
     }
@@ -111,5 +111,13 @@ public class FeeReceiptDetailPo implements Serializable {
 
     public void setSquarePrice(String squarePrice) {
         this.squarePrice = squarePrice;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
