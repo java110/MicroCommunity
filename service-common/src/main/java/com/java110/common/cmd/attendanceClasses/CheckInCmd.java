@@ -192,7 +192,7 @@ public class CheckInCmd extends Cmd {
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = new AttendanceClassesTaskDetailPo();
         attendanceClassesTaskDetailPo.setDetailId(nowAttendanceClassesTaskDetailDto.getDetailId());
         attendanceClassesTaskDetailPo.setCheckTime(reqJson.getString("checkTime"));
-        attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("clockTime"))));
+        attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("checkTime"))));
         attendanceClassesTaskDetailPo.setFacePath(photo);
         flag = attendanceClassesTaskDetailInnerServiceSMOImpl.updateAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
 
@@ -224,23 +224,23 @@ public class CheckInCmd extends Cmd {
      * 考勤状态计算
      *
      * @param nowAttendanceClassesTaskDetailDto
-     * @param clockTime
+     * @param checkTime
      * @return
      */
-    private String getState(AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto, Date clockTime) {
+    private String getState(AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto, Date checkTime) {
 
         Date value = DateUtil.getDateFromStringA(nowAttendanceClassesTaskDetailDto.getValue());
 
         if (AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(nowAttendanceClassesTaskDetailDto.getSpecCd())) {
 
-            if (clockTime.after(value)) {
+            if (checkTime.after(value)) {
                 return AttendanceClassesTaskDetailDto.STATE_LATE;
             }
             return AttendanceClassesTaskDetailDto.STATE_NORMAL;
         }
 
 
-        if (clockTime.before(value)) {
+        if (checkTime.before(value)) {
             return AttendanceClassesTaskDetailDto.STATE_LEAVE;
         }
         return AttendanceClassesTaskDetailDto.STATE_NORMAL;
