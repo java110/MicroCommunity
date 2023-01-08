@@ -63,7 +63,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
             String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
             String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
-            //String ftpPath = java110Properties.getFtpPath();
+            //String ftpPath = "hc/";
 
             fileName = ftpUploadTemplate.upload(fileDto.getContext(), ftpServer,
                         ftpPort, ftpUserName,
@@ -77,7 +77,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         //return BeanConvertUtil.covertBeanList(fileServiceDaoImpl.getFiles(BeanConvertUtil.beanCovertMap(fileDto)), FileDto.class);
         List<FileDto> fileDtos = new ArrayList<>();
         String fileName = fileDto.getFileSaveName();
-        String ftpPath = java110Properties.getFtpPath();
+        String ftpPath = "hc/";
         String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (fileName.contains("/")) {
             ftpPath += fileName.substring(0, fileName.lastIndexOf("/") + 1);

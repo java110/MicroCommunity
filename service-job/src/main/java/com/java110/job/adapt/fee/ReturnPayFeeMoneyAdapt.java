@@ -212,7 +212,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         List<FileDto> fileDtos = new ArrayList<>();
 
         byte[] context = null;
-        String ftpPath = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
+        String ftpPath = "hc/";
 
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {

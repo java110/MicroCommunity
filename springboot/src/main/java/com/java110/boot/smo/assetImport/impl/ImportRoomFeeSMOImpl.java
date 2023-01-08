@@ -111,11 +111,11 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
             if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
                 fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                         java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                        java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                        java110Properties.getFtpUserPassword(), "hc/");
             } else {
                 fileName = ossUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                         java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                        java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                        java110Properties.getFtpUserPassword(), "hc/");
             }
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(fileName, HttpStatus.OK);
             return responseEntity;

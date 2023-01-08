@@ -48,18 +48,18 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
 
 //        String fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
 //                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-//                java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+//                java110Properties.getFtpUserPassword(), "hc/");
 //
         String fileName = "";
         String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                    java110Properties.getFtpUserPassword(), "hc/");
         } else {
             fileName = ossUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
+                    java110Properties.getFtpUserPassword(), "hc/");
         }
         JSONObject outParam = new JSONObject();
         outParam.put("fileName", uploadFile.getOriginalFilename());
