@@ -47,6 +47,8 @@ public class CommunityDto extends PageDto implements Serializable {
 
     private String communityArea;
 
+    private String qrCode;
+
     private List<CommunityAttrDto> communityAttrDtos;
 
 
@@ -287,5 +289,13 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setFeePrice(String feePrice) {
         this.feePrice = feePrice;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }

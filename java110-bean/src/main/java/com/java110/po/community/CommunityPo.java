@@ -28,6 +28,8 @@ public class CommunityPo implements Serializable {
     private String payFeeMonth;
     private String feePrice;
 
+    private String qrCode;
+
 
     private String statusCd = "0";
 
@@ -149,5 +151,13 @@ public class CommunityPo implements Serializable {
 
     public void setFeePrice(String feePrice) {
         this.feePrice = feePrice;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }
