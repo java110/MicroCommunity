@@ -102,6 +102,7 @@ public class ListAppUserBindingOwnersCmd extends Cmd {
                     ownerAppUserDto.setAreaName(tmpCommunityDto.getAreaName());
                     ownerAppUserDto.setParentAreaCode(tmpCommunityDto.getParentAreaCode());
                     ownerAppUserDto.setParentAreaName(tmpCommunityDto.getParentAreaName());
+                    ownerAppUserDto.setCommunityQrCode(tmpCommunityDto.getQrCode());
                 }
             }
         }

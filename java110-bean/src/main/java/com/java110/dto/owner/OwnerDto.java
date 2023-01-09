@@ -36,6 +36,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String communityName;
     private String sCommunityTel;
 
+    private String communityQrCode;
+
     private String roomId;
     private String[] roomIds;
     private String sex;
@@ -423,5 +425,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCommunityQrCode() {
+        return communityQrCode;
+    }
+
+    public void setCommunityQrCode(String communityQrCode) {
+        this.communityQrCode = communityQrCode;
     }
 }

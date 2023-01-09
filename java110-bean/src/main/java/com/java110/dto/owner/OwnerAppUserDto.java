@@ -41,6 +41,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String[] userIds;
     private String oldAppUserId;
     private String sCommunityTel;
+    private String communityQrCode;
     private String defaultCommunityId;
 
 
@@ -300,5 +301,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
+    }
+
+    public String getCommunityQrCode() {
+        return communityQrCode;
+    }
+
+    public void setCommunityQrCode(String communityQrCode) {
+        this.communityQrCode = communityQrCode;
     }
 }
