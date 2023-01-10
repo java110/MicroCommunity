@@ -60,7 +60,10 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             throw new IllegalArgumentException("时间格式错误");
         }
 
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+        double maxMonth = 1;
+        if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+        }
 
         if (maxMonth < 1) {
             return;

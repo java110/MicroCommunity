@@ -57,11 +57,10 @@ public class SaveReportOwnerPayFeeImpl implements ISaveReportOwnerPayFee {
     @Async
     public void saveData(PayFeeDetailPo payFeeDetailPo, FeeDto feeDto) {
         List<String> dateSub = null;
+        List<String> tmpDateSub = null;
         try {
             dateSub = analyseDate(DateUtil.getDateFromString(payFeeDetailPo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A),
                     DateUtil.getDateFromString(payFeeDetailPo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-
-
         } catch (ParseException e) {
             logger.error("出错了", e);
             return;
@@ -71,14 +70,20 @@ public class SaveReportOwnerPayFeeImpl implements ISaveReportOwnerPayFee {
             return;
         }
 
+        if(FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) { //一次性不离散
+            tmpDateSub = dateSub;
+            dateSub = new ArrayList<>();
+            dateSub.add(tmpDateSub.get(0));
+        }
+
         BigDecimal amount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
         amount = amount.divide(new BigDecimal(dateSub.size()), BigDecimal.ROUND_HALF_UP);
 
-        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
-            doBailefuCommonOwnerPayFee(payFeeDetailPo, feeDto, dateSub, amount);
-        }else{
+//        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
+//            doBailefuCommonOwnerPayFee(payFeeDetailPo, feeDto, dateSub, amount);
+//        }else{
             doCommonOwnerPayFee(payFeeDetailPo, feeDto, dateSub, amount);
-        }
+//        }
 
 
     }
