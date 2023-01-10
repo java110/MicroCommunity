@@ -98,6 +98,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/product/querySeckillProduct,");//秒杀商品
 
         exclusions.append("/app/productSeckill.listProductSeckill,");//秒杀商品
+        exclusions.append("/app/system.listRegisterProtocol,");//查询注册信息
+
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

@@ -36,8 +36,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：registerProtocol.listRegisterProtocol
- * 请求路劲：/app/registerProtocol.ListRegisterProtocol
+ *
+ *
+ * 服务编码：system.listRegisterProtocol
+ * 请求路劲：/app/system.ListRegisterProtocol
  * add by 吴学文 at 2023-01-10 16:48:42 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn

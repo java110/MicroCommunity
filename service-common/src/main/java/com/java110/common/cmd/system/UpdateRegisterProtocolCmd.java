@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：更新
- * 服务编码：registerProtocol.updateRegisterProtocol
- * 请求路劲：/app/registerProtocol.UpdateRegisterProtocol
+ * 服务编码：system.updateRegisterProtocol
+ * 请求路劲：/app/system.UpdateRegisterProtocol
  * add by 吴学文 at 2023-01-10 16:48:42 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
