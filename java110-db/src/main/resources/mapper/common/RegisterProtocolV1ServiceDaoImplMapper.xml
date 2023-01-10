@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="registerProtocolV1ServiceDaoImpl">
+
+
+    <!-- 保存注册协议信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRegisterProtocolInfo" parameterType="Map">
+        insert into register_protocol(
+        merchant_protocol,user_protocol,protolcol_id
+        ) values (
+        #{merchantProtocol},#{userProtocol},#{protolcolId}
+        )
+    </insert>
+
+
+    <!-- 查询注册协议信息 add by wuxw 2018-07-03 -->
+    <select id="getRegisterProtocolInfo" parameterType="Map" resultType="Map">
+        select t.merchant_protocol,t.merchant_protocol merchantProtocol,t.user_protocol,t.user_protocol
+        userProtocol,t.protolcol_id,t.protolcol_id protolcolId,t.status_cd,t.status_cd statusCd
+        from register_protocol t
+        where 1 =1
+        <if test="merchantProtocol !=null and merchantProtocol != ''">
+            and t.merchant_protocol= #{merchantProtocol}
+        </if>
+        <if test="userProtocol !=null and userProtocol != ''">
+            and t.user_protocol= #{userProtocol}
+        </if>
+        <if test="protolcolId !=null and protolcolId != ''">
+            and t.protolcol_id= #{protolcolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改注册协议信息 add by wuxw 2018-07-03 -->
+    <update id="updateRegisterProtocolInfo" parameterType="Map">
+        update register_protocol t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="merchantProtocol !=null and merchantProtocol != ''">
+            , t.merchant_protocol= #{merchantProtocol}
+        </if>
+        <if test="userProtocol !=null and userProtocol != ''">
+            , t.user_protocol= #{userProtocol}
+        </if>
+        where 1=1
+        <if test="protolcolId !=null and protolcolId != ''">
+            and t.protolcol_id= #{protolcolId}
+        </if>
+
+    </update>
+
+    <!-- 查询注册协议数量 add by wuxw 2018-07-03 -->
+    <select id="queryRegisterProtocolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from register_protocol t
+        where 1 =1
+        <if test="merchantProtocol !=null and merchantProtocol != ''">
+            and t.merchant_protocol= #{merchantProtocol}
+        </if>
+        <if test="userProtocol !=null and userProtocol != ''">
+            and t.user_protocol= #{userProtocol}
+        </if>
+        <if test="protolcolId !=null and protolcolId != ''">
+            and t.protolcol_id= #{protolcolId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
+</mapper>
