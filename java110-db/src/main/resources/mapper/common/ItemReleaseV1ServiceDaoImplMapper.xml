@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itemReleaseV1ServiceDaoImpl">
+
+    <!-- 保存放行管理信息 add by wuxw 2018-07-03 -->
+    <insert id="saveItemReleaseInfo" parameterType="Map">
+        insert into item_release(
+        amount,apply_company,id_card,pass_time,car_num,remark,apply_person,ir_id,apply_tel,type_id,state,community_id
+        ) values (
+        #{amount},#{applyCompany},#{idCard},#{passTime},#{carNum},#{remark},#{applyPerson},#{irId},#{applyTel},#{typeId},#{state},#{communityId}
+        )
+    </insert>
+
+    <!-- 查询放行管理信息 add by wuxw 2018-07-03 -->
+    <select id="getItemReleaseInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.apply_company,t.apply_company applyCompany,t.id_card,t.id_card idCard,t.pass_time,t.pass_time
+        passTime,t.car_num,t.car_num carNum,t.remark,t.status_cd,t.status_cd statusCd,t.apply_person,t.apply_person
+        applyPerson,t.ir_id,t.ir_id irId,t.apply_tel,t.apply_tel applyTel,t.type_id,t.type_id
+        typeId,t.state,t.community_id,t.community_id communityId
+        from item_release t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="applyCompany !=null and applyCompany != ''">
+            and t.apply_company= #{applyCompany}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="passTime !=null and passTime != ''">
+            and t.pass_time= #{passTime}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyPerson !=null and applyPerson != ''">
+            and t.apply_person= #{applyPerson}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            and t.apply_tel= #{applyTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改放行管理信息 add by wuxw 2018-07-03 -->
+    <update id="updateItemReleaseInfo" parameterType="Map">
+        update item_release t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="applyCompany !=null and applyCompany != ''">
+            , t.apply_company= #{applyCompany}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="passTime !=null and passTime != ''">
+            , t.pass_time= #{passTime}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="applyPerson !=null and applyPerson != ''">
+            , t.apply_person= #{applyPerson}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            , t.apply_tel= #{applyTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            , t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+    </update>
+
+    <!-- 查询放行管理数量 add by wuxw 2018-07-03 -->
+    <select id="queryItemReleasesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from item_release t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="applyCompany !=null and applyCompany != ''">
+            and t.apply_company= #{applyCompany}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="passTime !=null and passTime != ''">
+            and t.pass_time= #{passTime}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="applyPerson !=null and applyPerson != ''">
+            and t.apply_person= #{applyPerson}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            and t.apply_tel= #{applyTel}
+        </if>
+        <if test="typeId !=null and typeId != ''">
+            and t.type_id= #{typeId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+</mapper>
