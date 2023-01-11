@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,32 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+@Java110CmdDoc(title = "删除物品放行",
+        description = "删除业主申请的物品放行功能",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/itemRelease.deleteItemRelease",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "itemRelease.deleteItemRelease"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "irId", length = 30, remark = "放行ID"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'irId':'123','communityId':'123'}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 
 /**
  * 类表述：删除

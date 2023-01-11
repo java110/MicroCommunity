@@ -1,6 +1,7 @@
 package com.java110.dto.itemReleaseRes;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,9 @@ import java.util.Date;
 public class ItemReleaseResDto extends PageDto implements Serializable {
 
     private String resName;
-private String irId;
-private String communityId;
-private String resId;
+    private String irId;
+    private String communityId;
+    private String resId;
 
 
     private Date createTime;
@@ -28,25 +29,32 @@ private String resId;
     public String getResName() {
         return resName;
     }
-public void setResName(String resName) {
+
+    public void setResName(String resName) {
         this.resName = resName;
     }
-public String getIrId() {
+
+    public String getIrId() {
         return irId;
     }
-public void setIrId(String irId) {
+
+    public void setIrId(String irId) {
         this.irId = irId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getResId() {
+
+    public String getResId() {
         return resId;
     }
-public void setResId(String resId) {
+
+    public void setResId(String resId) {
         this.resId = resId;
     }
 

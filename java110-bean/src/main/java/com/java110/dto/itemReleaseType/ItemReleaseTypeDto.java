@@ -1,6 +1,7 @@
 package com.java110.dto.itemReleaseType;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,11 @@ import java.util.Date;
 public class ItemReleaseTypeDto extends PageDto implements Serializable {
 
     private String typeName;
-private String typeId;
-private String remark;
-private String communityId;
-private String flowId;
-private String flowName;
+    private String typeId;
+    private String remark;
+    private String communityId;
+    private String flowId;
+    private String flowName;
 
 
     private Date createTime;
@@ -30,37 +31,48 @@ private String flowName;
     public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getTypeId() {
+
+    public String getTypeId() {
         return typeId;
     }
-public void setTypeId(String typeId) {
+
+    public void setTypeId(String typeId) {
         this.typeId = typeId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getFlowName() {
+
+    public String getFlowName() {
         return flowName;
     }
-public void setFlowName(String flowName) {
+
+    public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
 

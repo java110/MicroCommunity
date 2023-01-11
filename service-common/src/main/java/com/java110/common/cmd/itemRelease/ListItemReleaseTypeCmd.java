@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -37,6 +38,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Java110CmdDoc(title = "查询放行物品类型",
+        description = "查询放行物品类型，供物业端使用",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/itemRelease.listItemReleaseType",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "itemRelease.listItemReleaseType"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", length = -1, defaultValue = "成功", remark = "数据"),
+                @Java110ParamDoc(parentNodeName = "data", name = "resName", type = "String", length = -1,  remark = "物品名称"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://{ip}:{port}/app/itemRelease.listItemReleaseType?communityId=123123",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：查询
  * 服务编码：itemReleaseType.listItemReleaseType

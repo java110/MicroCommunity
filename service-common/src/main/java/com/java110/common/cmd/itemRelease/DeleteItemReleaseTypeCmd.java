@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.po.itemReleaseType.ItemReleaseTypePo;
 import com.java110.utils.exception.CmdException;
@@ -30,7 +31,31 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+@Java110CmdDoc(title = "删除物品放行类型",
+        description = "删除物品放行类型，物品放行类型 比如大型物品 小型物品等",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/itemRelease.deleteItemReleaseType",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "itemRelease.deleteItemReleaseType"
+)
 
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "typeId", length = 30, remark = "放行ID"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'typeId':'123','communityId':'123'}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：删除
  * 服务编码：itemReleaseType.deleteItemReleaseType

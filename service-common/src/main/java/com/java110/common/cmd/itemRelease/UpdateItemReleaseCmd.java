@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
 import com.java110.utils.exception.CmdException;
@@ -33,6 +34,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
+@Java110CmdDoc(title = "修改物品放行",
+        description = "修改物品放行",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/itemRelease.updateItemRelease",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "itemRelease.updateItemRelease"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
+        @Java110ParamDoc(name = "irId", length = 30, remark = "放行ID"),
+        @Java110ParamDoc(name = "applyCompany", length = 30, remark = "申请单位"),
+        @Java110ParamDoc(name = "applyPerson", length = 30, remark = "申请人"),
+        @Java110ParamDoc(name = "idCard", length = 30, remark = "身份证"),
+        @Java110ParamDoc(name = "applyTel", length = 30, remark = "申请电话"),
+        @Java110ParamDoc(name = "passTime", length = 30, remark = "通信时间"),
+        @Java110ParamDoc(name = "amount", length = 30, remark = "数量"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'irId':'123','typeId':'123','communityId':'123','applyCompany':'123','applyPerson':'123','idCard':'123','applyTel':'123','passTime':'123','amount':'123'}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：更新
  * 服务编码：itemRelease.updateItemRelease

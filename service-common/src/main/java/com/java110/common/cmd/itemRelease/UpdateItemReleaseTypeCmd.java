@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.po.itemReleaseType.ItemReleaseTypePo;
 import com.java110.utils.exception.CmdException;
@@ -32,6 +33,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Java110CmdDoc(title = "修改物品放行类型",
+        description = "修改物品放行类型",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/itemRelease.updateItemReleaseType",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "itemRelease.updateItemReleaseType"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
+        @Java110ParamDoc(name = "typeName", length = 30, remark = "类型名称"),
+        @Java110ParamDoc(name = "typeId", length = 30, remark = "放行ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{'typeName':'123','typeId':'123','communityId':'123'}",
+        resBody="{'code':0,'msg':'成功'}"
+)
 /**
  * 类表述：更新
  * 服务编码：itemReleaseType.updateItemReleaseType
