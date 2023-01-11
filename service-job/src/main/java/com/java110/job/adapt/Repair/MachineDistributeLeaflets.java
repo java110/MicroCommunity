@@ -543,6 +543,11 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         staffAppAuthDto.setStaffId(paramIn.getString("staffId"));
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+
+        if(staffAppAuthDtos == null || staffAppAuthDtos.size() < 1){
+            logger.error("员工未做员工认证");
+            return;
+        }
         String openId = staffAppAuthDtos.get(0).getOpenId();
         String url = sendMsgUrl + accessToken;
         Data data = new Data();
