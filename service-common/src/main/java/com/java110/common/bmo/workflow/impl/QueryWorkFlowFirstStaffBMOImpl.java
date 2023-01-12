@@ -163,8 +163,11 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
 
-        //表单 部署
-        deployForm(oaWorkflowDtos.get(0));
+        //普通流程需要部署 表单 其他类型不需要部署
+        if(OaWorkflowDto.FLOW_TYPE_PUBLIC.equals(oaWorkflowDtos.get(0).getFlowType())) {
+            //表单 部署
+            deployForm(oaWorkflowDtos.get(0));
+        }
 
         String deploymentid = "";
         try {
