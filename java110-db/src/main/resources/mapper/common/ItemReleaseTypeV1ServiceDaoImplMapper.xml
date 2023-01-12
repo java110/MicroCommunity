@@ -16,7 +16,8 @@
     <!-- 查询放行类型信息 add by wuxw 2018-07-03 -->
     <select id="getItemReleaseTypeInfo" parameterType="Map" resultType="Map">
         select t.type_name,t.type_name typeName,t.type_id,t.type_id typeId,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName
+        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,
+        t.create_time createTime
         from item_release_type t
         where 1 =1
         <if test="typeName !=null and typeName != ''">

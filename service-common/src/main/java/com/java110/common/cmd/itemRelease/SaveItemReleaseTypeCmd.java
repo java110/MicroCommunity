@@ -23,8 +23,14 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.itemReleaseType.ItemReleaseTypePo;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -80,6 +86,13 @@ public class SaveItemReleaseTypeCmd extends Cmd {
     @Autowired
     private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
@@ -90,10 +103,33 @@ public class SaveItemReleaseTypeCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setStoreId(storeId);
+        oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+        oaWorkflowPo.setFlowName(reqJson.getString("typeName")+"审批流程");
+        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
+
+        //创建model
+        WorkflowModelDto workflowModelDto = new WorkflowModelDto();
+        workflowModelDto.setName(oaWorkflowPo.getFlowName());
+        workflowModelDto.setKey(oaWorkflowPo.getFlowId());
+        workflowModelDto = workflowInnerServiceSMOImpl.createModel(workflowModelDto);
+
+        oaWorkflowPo.setModelId(workflowModelDto.getModelId());
+        oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
 
         ItemReleaseTypePo itemReleaseTypePo = BeanConvertUtil.covertBean(reqJson, ItemReleaseTypePo.class);
         itemReleaseTypePo.setTypeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = itemReleaseTypeV1InnerServiceSMOImpl.saveItemReleaseType(itemReleaseTypePo);
+        itemReleaseTypePo.setFlowId(oaWorkflowPo.getFlowId());
+        itemReleaseTypePo.setFlowName(oaWorkflowPo.getFlowName());
+         flag = itemReleaseTypeV1InnerServiceSMOImpl.saveItemReleaseType(itemReleaseTypePo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

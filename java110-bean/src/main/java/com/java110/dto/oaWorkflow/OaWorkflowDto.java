@@ -18,6 +18,8 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "W";//待部署
     public static final String STATE_COMPLAINT = "C";//部署完成
 
+    public static final String FLOW_TYPE_ITEM_RELEASE="物品放行";
+
     private String userId;
     private String describle;
     private String modelId;
