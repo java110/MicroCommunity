@@ -1,6 +1,7 @@
 package com.java110.dto.itemReleaseType;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ItemReleaseTypeDto extends PageDto implements Serializable {
+public class ItemReleaseTypeDto extends OaWorkflowDto implements Serializable {
 
     private String typeName;
     private String typeId;

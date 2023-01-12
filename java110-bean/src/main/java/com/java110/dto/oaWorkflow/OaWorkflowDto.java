@@ -37,6 +37,8 @@ public class OaWorkflowDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String[] flowIds;
+
 
     public String getDescrible() {
         return describle;
@@ -149,5 +151,13 @@ public class OaWorkflowDto extends PageDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String[] getFlowIds() {
+        return flowIds;
+    }
+
+    public void setFlowIds(String[] flowIds) {
+        this.flowIds = flowIds;
     }
 }

@@ -21,7 +21,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -56,13 +58,13 @@ import org.slf4j.LoggerFactory;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Array", length = -1, defaultValue = "成功", remark = "数据"),
-                @Java110ParamDoc(parentNodeName = "data", name = "resName", type = "String", length = -1,  remark = "物品名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "resName", type = "String", length = -1, remark = "物品名称"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="http://{ip}:{port}/app/itemRelease.listItemReleaseType?communityId=123123",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "http://{ip}:{port}/app/itemRelease.listItemReleaseType?communityId=123123",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 /**
  * 类表述：查询
@@ -81,10 +83,13 @@ public class ListItemReleaseTypeCmd extends Cmd {
     @Autowired
     private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
@@ -98,6 +103,7 @@ public class ListItemReleaseTypeCmd extends Cmd {
 
         if (count > 0) {
             itemReleaseTypeDtos = itemReleaseTypeV1InnerServiceSMOImpl.queryItemReleaseTypes(itemReleaseTypeDto);
+            refreshWorkflow(itemReleaseTypeDtos);
         } else {
             itemReleaseTypeDtos = new ArrayList<>();
         }
@@ -107,5 +113,28 @@ public class ListItemReleaseTypeCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询工作流信息
+     *
+     * @param itemReleaseTypeDtos
+     */
+    private void refreshWorkflow(List<ItemReleaseTypeDto> itemReleaseTypeDtos) {
+        List<String> flowIds = new ArrayList<>();
+        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
+            flowIds.add(itemReleaseTypeDto.getFlowId());
+        }
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setFlowIds(flowIds.toArray(new String[flowIds.size()]));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
+            for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+                if (itemReleaseTypeDto.getFlowId().equals(tmpOaWorkflowDto.getFlowId())) {
+                    BeanConvertUtil.covertBean(tmpOaWorkflowDto, itemReleaseTypeDto);
+                }
+            }
+        }
     }
 }
