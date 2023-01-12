@@ -14,6 +14,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.store.bmo.purchase.IPurchaseApplyBMO;
 import com.java110.store.bmo.purchase.IResourceEnterBMO;
 import com.java110.utils.cache.MappingCache;
@@ -55,6 +56,9 @@ public class PurchaseApi {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
@@ -219,6 +223,17 @@ public class PurchaseApi {
             }
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+            // 保存至 物品 times表
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+            resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
+            resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
+            resourceStoreTimesPo.setResCode(resourceStore.getString("resCode"));
+            resourceStoreTimesPo.setStoreId(storeId);
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
+
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
