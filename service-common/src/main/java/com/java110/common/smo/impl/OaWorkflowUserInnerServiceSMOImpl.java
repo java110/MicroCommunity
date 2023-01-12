@@ -660,9 +660,11 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Override
     public List<JSONObject> queryFirstAuditStaff(@RequestBody OaWorkflowXmlDto oaWorkflowXmlDto) {
+        String bpmnXml = oaWorkflowXmlDto.getBpmnXml();
+        bpmnXml = bpmnXml.replaceAll("camunda:assignee", "activiti:assignee");
         List<JSONObject> tasks = new ArrayList<>();
         XMLInputFactory xif = XMLInputFactory.newInstance();
-        InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(oaWorkflowXmlDto.getBpmnXml().getBytes()), StandardCharsets.UTF_8);
+        InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(bpmnXml.getBytes()), StandardCharsets.UTF_8);
         XMLStreamReader xtr = null;
         try {
             xtr = xif.createXMLStreamReader(in);
