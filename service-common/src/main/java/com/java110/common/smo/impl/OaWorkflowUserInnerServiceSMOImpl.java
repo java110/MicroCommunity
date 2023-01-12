@@ -7,7 +7,9 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
@@ -16,30 +18,38 @@ import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
+import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.*;
+import org.activiti.bpmn.model.Process;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.query.Query;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.activiti.validation.ValidationError;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 //@Service("resourceEntryStoreSMOImpl")
 @RestController
@@ -423,6 +433,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
         return true;
     }
+
     @Java110Transactional
     public boolean goBackTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
@@ -587,6 +598,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             throw new IllegalArgumentException("任务已处理");
         }
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+
         FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
         //获取当前节点输出连线
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
@@ -645,6 +657,88 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         tasks.add(taskObj);
         return tasks;
     }
+
+    @Override
+    public List<JSONObject> queryFirstAuditStaff(@RequestBody OaWorkflowXmlDto oaWorkflowXmlDto) {
+        List<JSONObject> tasks = new ArrayList<>();
+        XMLInputFactory xif = XMLInputFactory.newInstance();
+        InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(oaWorkflowXmlDto.getBpmnXml().getBytes()), StandardCharsets.UTF_8);
+        XMLStreamReader xtr = null;
+        try {
+            xtr = xif.createXMLStreamReader(in);
+        } catch (XMLStreamException e) {
+            throw new RuntimeException(e);
+        }
+        BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+
+        Process process = bpmnModel.getProcesses().get(0);
+        Collection<FlowElement> flowElements = process.getFlowElements();
+        StartEvent startEvent = null;
+        for (FlowElement flowElement : flowElements) {
+            //假设是开始节点
+            if(flowElement instanceof StartEvent){
+                 startEvent = (StartEvent)flowElement;
+            }
+        }
+        if(startEvent == null){
+            throw new SMOException("流程文件未包含开始节点");
+        }
+        List<SequenceFlow> outgoingFlows = startEvent.getOutgoingFlows();
+
+        UserTask submitUser = getUserTask(outgoingFlows);
+
+        if(submitUser == null){
+            throw new SMOException("未包含提交者");
+        }
+
+        UserTask auditUser = getUserTask(submitUser.getOutgoingFlows());
+        if(auditUser == null){
+            throw new SMOException("未包含审核人员");
+        }
+        String assignee = auditUser.getAssignee();
+        JSONObject taskObj = null;
+        taskObj = new JSONObject();
+        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人 表示结束
+        if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
+            taskObj.put("assignee", assignee); // 下一节点处理人
+        }
+        if ("${startUserId}".equals(assignee)) {
+            taskObj.put("assignee", "-2"); // 开始人
+        }
+        if ("${nextUserId}".equals(assignee)) {
+            taskObj.put("assignee", "-2"); // 需要前台指定
+        }
+        tasks.add(taskObj);
+        return tasks;
+    }
+
+    private static UserTask getUserTask(List<SequenceFlow> outgoingFlows) {
+        for (SequenceFlow outgoingFlow : outgoingFlows) {
+            //获取输出节点元素
+            FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+            //排除非用户任务接点
+            if (targetFlowElement instanceof UserTask) {
+                //判断输出节点的el表达式
+                Map vars = new HashMap();
+                vars.put("auditCode", "1200");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                vars.put("auditCode", "1400");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                //结束
+                vars.put("auditCode", "1500");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                return ((UserTask) targetFlowElement);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * el表达式判断

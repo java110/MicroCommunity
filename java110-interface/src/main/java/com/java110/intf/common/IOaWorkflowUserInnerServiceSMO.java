@@ -3,6 +3,8 @@ package com.java110.intf.common;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.entity.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,4 +109,12 @@ public interface IOaWorkflowUserInnerServiceSMO {
 
     @RequestMapping(value = "/nextAllNodeTaskList", method = RequestMethod.POST)
     List<JSONObject> nextAllNodeTaskList(@RequestBody JSONObject reqJson);
+
+    /**
+     *
+     * @param oaWorkflowXmlDto
+     * @return
+     */
+    @RequestMapping(value = "/queryFirstAuditStaff", method = RequestMethod.POST)
+    List<JSONObject> queryFirstAuditStaff(@RequestBody OaWorkflowXmlDto oaWorkflowXmlDto);
 }
