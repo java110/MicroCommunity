@@ -235,6 +235,7 @@ public class SaveItemReleaseCmd extends Cmd {
         flowJson.put("processInstanceId",result.getString("processInstanceId"));
         flowJson.put("createUserId",userId);
         flowJson.put("nextUserId",reqJson.getJSONObject("audit").getString("staffId"));
+        flowJson.put("storeId",storeId);
         oaWorkflowUserInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
 
 
