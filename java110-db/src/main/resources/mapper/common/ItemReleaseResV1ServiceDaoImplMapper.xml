@@ -67,15 +67,16 @@
         <if test="amount !=null and amount != ''">
             , t.amount= #{amount}
         </if>
-        <if test="irId !=null and irId != ''">
-            , t.ir_id= #{irId}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         where 1=1
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

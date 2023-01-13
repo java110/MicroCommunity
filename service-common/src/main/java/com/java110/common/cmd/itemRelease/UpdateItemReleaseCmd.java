@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.itemRelease;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -23,16 +24,29 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.itemRelease.ItemReleaseDto;
+import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IItemReleaseResV1InnerServiceSMO;
+import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
+import com.java110.po.itemReleaseRes.ItemReleaseResPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Java110CmdDoc(title = "修改物品放行",
@@ -85,23 +99,96 @@ public class UpdateItemReleaseCmd extends Cmd {
     @Autowired
     private IItemReleaseV1InnerServiceSMO itemReleaseV1InnerServiceSMOImpl;
 
+
+
+    @Autowired
+    private IItemReleaseResV1InnerServiceSMO itemReleaseResV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
+    public static final String CODE_PREFIX_ID = "10";
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "irId", "irId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        //校验物品是否存在
+        if(!reqJson.containsKey("resNames")){
+            throw new CmdException("未包含物品");
+        }
 
+        JSONArray resNames = reqJson.getJSONArray("resNames");
+        if(resNames == null || resNames.size() < 1){
+            throw new CmdException("未包含物品");
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
+        ItemReleaseTypeDto itemReleaseTypeDto = new ItemReleaseTypeDto();
+        itemReleaseTypeDto.setTypeId(reqJson.getString("typeId"));
+        itemReleaseTypeDto.setCommunityId(reqJson.getString("communityId"));
+        List<ItemReleaseTypeDto> itemReleaseTypeDtos = itemReleaseTypeV1InnerServiceSMOImpl.queryItemReleaseTypes(itemReleaseTypeDto);
+        Assert.listOnlyOne(itemReleaseTypeDtos,"未包含放行类型");
+
+        //查询用户名称
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
 
         ItemReleasePo itemReleasePo = BeanConvertUtil.covertBean(reqJson, ItemReleasePo.class);
+        itemReleasePo.setState("");
         int flag = itemReleaseV1InnerServiceSMOImpl.updateItemRelease(itemReleasePo);
 
         if (flag < 1) {
-            throw new CmdException("更新数据失败");
+            throw new CmdException("修改数据失败");
         }
+
+        ItemReleaseResPo itemReleaseResPo = null;
+        itemReleaseResPo = new ItemReleaseResPo();
+        itemReleaseResPo.setIrId(itemReleasePo.getIrId());
+        itemReleaseResPo.setCommunityId(itemReleasePo.getCommunityId());
+        flag = itemReleaseResV1InnerServiceSMOImpl.deleteItemReleaseRes(itemReleaseResPo);
+        if (flag < 1) {
+            throw new CmdException("修改数据失败");
+        }
+
+        JSONArray resNames = reqJson.getJSONArray("resNames");
+        JSONObject resNameObj = null;
+
+        List<ItemReleaseResPo> itemReleaseResPos = new ArrayList<>();
+        for(int resNameIndex = 0; resNameIndex< resNames.size(); resNameIndex++){
+            resNameObj = resNames.getJSONObject(resNameIndex);
+            itemReleaseResPo = new ItemReleaseResPo();
+            itemReleaseResPo.setAmount(resNameObj.getString("amount"));
+            itemReleaseResPo.setResName(resNameObj.getString("resName"));
+            itemReleaseResPo.setResId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            itemReleaseResPo.setIrId(itemReleasePo.getIrId());
+            itemReleaseResPo.setCommunityId(itemReleasePo.getCommunityId());
+            itemReleaseResPos.add(itemReleaseResPo);
+        }
+
+        flag = itemReleaseResV1InnerServiceSMOImpl.saveItemReleaseReses(itemReleaseResPos);
+
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
