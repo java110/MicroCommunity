@@ -41,6 +41,10 @@ public interface IItemReleaseResV1InnerServiceSMO {
     @RequestMapping(value = "/saveItemReleaseRes", method = RequestMethod.POST)
     public int saveItemReleaseRes(@RequestBody  ItemReleaseResPo itemReleaseResPo);
 
+
+    @RequestMapping(value = "/saveItemReleaseReses", method = RequestMethod.POST)
+    public int saveItemReleaseReses(@RequestBody  List<ItemReleaseResPo> itemReleaseResPos);
+
     @RequestMapping(value = "/updateItemReleaseRes", method = RequestMethod.POST)
     public int updateItemReleaseRes(@RequestBody  ItemReleaseResPo itemReleaseResPo);
 

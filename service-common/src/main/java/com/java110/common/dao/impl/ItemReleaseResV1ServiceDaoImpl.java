@@ -61,6 +61,17 @@ public class ItemReleaseResV1ServiceDaoImpl extends BaseServiceDao implements II
     }
 
 
+    @Override
+    public int saveItemReleaseResesInfo(Map info) {
+        logger.debug("保存 saveItemReleaseResesInfo 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("itemReleaseResV1ServiceDaoImpl.saveItemReleaseResesInfo",info);
+
+        return saveFlag;
+    }
+
+
+
     /**
      * 查询放行物品信息（instance）
      * @param info bId 信息

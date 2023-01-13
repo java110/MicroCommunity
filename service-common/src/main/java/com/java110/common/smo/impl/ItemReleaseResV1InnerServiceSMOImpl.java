@@ -26,10 +26,14 @@ import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -49,6 +53,14 @@ public class ItemReleaseResV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     @Override
     public int saveItemReleaseRes(@RequestBody  ItemReleaseResPo itemReleaseResPo) {
         int saveFlag = itemReleaseResV1ServiceDaoImpl.saveItemReleaseResInfo(BeanConvertUtil.beanCovertMap(itemReleaseResPo));
+        return saveFlag;
+    }
+
+    @RequestMapping(value = "/saveItemReleaseReses", method = RequestMethod.POST)
+    public int saveItemReleaseReses(@RequestBody  List<ItemReleaseResPo> itemReleaseResPos){
+        Map info = new HashMap<>();
+        info.put("itemReleaseResPos",itemReleaseResPos);
+        int saveFlag = itemReleaseResV1ServiceDaoImpl.saveItemReleaseResesInfo(info);
         return saveFlag;
     }
 

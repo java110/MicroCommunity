@@ -16,6 +16,7 @@ import java.util.Date;
 public class ItemReleaseResDto extends PageDto implements Serializable {
 
     private String resName;
+    private String amount;
     private String irId;
     private String communityId;
     private String resId;
@@ -73,5 +74,13 @@ public class ItemReleaseResDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 }

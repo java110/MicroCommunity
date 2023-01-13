@@ -17,6 +17,7 @@ package com.java110.po.itemReleaseRes;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-01-11 15:49:03 mail: 928255095@qq.com
@@ -28,41 +29,57 @@ import java.util.Date;
 public class ItemReleaseResPo implements Serializable {
 
     private String resName;
-private String irId;
-private String statusCd = "0";
-private String communityId;
-private String resId;
-public String getResName() {
+    private String amount;
+    private String irId;
+    private String statusCd = "0";
+    private String communityId;
+    private String resId;
+
+    public String getResName() {
         return resName;
     }
-public void setResName(String resName) {
+
+    public void setResName(String resName) {
         this.resName = resName;
     }
-public String getIrId() {
+
+    public String getIrId() {
         return irId;
     }
-public void setIrId(String irId) {
+
+    public void setIrId(String irId) {
         this.irId = irId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getResId() {
+
+    public String getResId() {
         return resId;
     }
-public void setResId(String resId) {
+
+    public void setResId(String resId) {
         this.resId = resId;
     }
 
+    public String getAmount() {
+        return amount;
+    }
 
-
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 }

@@ -74,4 +74,5 @@ public interface IItemReleaseResV1ServiceDao {
      */
     int queryItemReleaseRessCount(Map info);
 
+    int saveItemReleaseResesInfo(Map info);
 }

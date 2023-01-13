@@ -25,6 +25,8 @@ public interface IOaWorkflowUserInnerServiceSMO {
      */
     @RequestMapping(value = "/startProcess", method = RequestMethod.POST)
     JSONObject startProcess(@RequestBody JSONObject reqJson);
+    @RequestMapping(value = "/autoFinishFirstTask", method = RequestMethod.POST)
+    boolean autoFinishFirstTask(@RequestBody JSONObject reqJson);
 
     /**
      * 查询用户任务数

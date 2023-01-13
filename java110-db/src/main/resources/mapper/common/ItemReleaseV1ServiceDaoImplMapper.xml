@@ -7,23 +7,20 @@
     <!-- 保存放行管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveItemReleaseInfo" parameterType="Map">
         insert into item_release(
-        amount,apply_company,id_card,pass_time,car_num,remark,apply_person,ir_id,apply_tel,type_id,state,community_id
+        apply_company,id_card,pass_time,car_num,remark,apply_person,ir_id,apply_tel,type_id,state,community_id
         ) values (
-        #{amount},#{applyCompany},#{idCard},#{passTime},#{carNum},#{remark},#{applyPerson},#{irId},#{applyTel},#{typeId},#{state},#{communityId}
+        #{applyCompany},#{idCard},#{passTime},#{carNum},#{remark},#{applyPerson},#{irId},#{applyTel},#{typeId},#{state},#{communityId}
         )
     </insert>
 
     <!-- 查询放行管理信息 add by wuxw 2018-07-03 -->
     <select id="getItemReleaseInfo" parameterType="Map" resultType="Map">
-        select t.amount,t.apply_company,t.apply_company applyCompany,t.id_card,t.id_card idCard,t.pass_time,t.pass_time
+        select t.apply_company,t.apply_company applyCompany,t.id_card,t.id_card idCard,t.pass_time,t.pass_time
         passTime,t.car_num,t.car_num carNum,t.remark,t.status_cd,t.status_cd statusCd,t.apply_person,t.apply_person
         applyPerson,t.ir_id,t.ir_id irId,t.apply_tel,t.apply_tel applyTel,t.type_id,t.type_id
         typeId,t.state,t.community_id,t.community_id communityId
         from item_release t
         where 1 =1
-        <if test="amount !=null and amount != ''">
-            and t.amount= #{amount}
-        </if>
         <if test="applyCompany !=null and applyCompany != ''">
             and t.apply_company= #{applyCompany}
         </if>
@@ -71,9 +68,6 @@
     <!-- 修改放行管理信息 add by wuxw 2018-07-03 -->
     <update id="updateItemReleaseInfo" parameterType="Map">
         update item_release t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
         <if test="amount !=null and amount != ''">
             , t.amount= #{amount}
         </if>
@@ -104,12 +98,13 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         where 1=1
         <if test="irId !=null and irId != ''">
             and t.ir_id= #{irId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
     </update>
 
@@ -118,9 +113,6 @@
         select count(1) count
         from item_release t
         where 1 =1
-        <if test="amount !=null and amount != ''">
-            and t.amount= #{amount}
-        </if>
         <if test="applyCompany !=null and applyCompany != ''">
             and t.apply_company= #{applyCompany}
         </if>

@@ -28,7 +28,7 @@ import java.util.Date;
  */
 public class ItemReleasePo implements Serializable {
 
-    private String amount;
+
     private String applyCompany;
     private String idCard;
     private String passTime;
@@ -42,13 +42,6 @@ public class ItemReleasePo implements Serializable {
     private String state;
     private String communityId;
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 
     public String getApplyCompany() {
         return applyCompany;

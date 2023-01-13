@@ -129,7 +129,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     /**
      * 自动提交第一步
      */
-    private void autoFinishFirstTask(JSONObject reqJson) {
+    public boolean autoFinishFirstTask(@RequestBody JSONObject reqJson) {
         Task task = null;
         TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(reqJson.getString("createUserId")).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
@@ -143,7 +143,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         reqJson.put("taskId", task.getId());
         reqJson.put("auditCode", "10000");
         reqJson.put("auditMessage", "提交");
-        completeTask(reqJson);
+        return completeTask(reqJson);
     }
 
     /**
