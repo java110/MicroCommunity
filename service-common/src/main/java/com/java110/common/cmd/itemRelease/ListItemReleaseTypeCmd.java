@@ -83,8 +83,7 @@ public class ListItemReleaseTypeCmd extends Cmd {
     @Autowired
     private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
 
-    @Autowired
-    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -103,7 +102,7 @@ public class ListItemReleaseTypeCmd extends Cmd {
 
         if (count > 0) {
             itemReleaseTypeDtos = itemReleaseTypeV1InnerServiceSMOImpl.queryItemReleaseTypes(itemReleaseTypeDto);
-            refreshWorkflow(itemReleaseTypeDtos);
+
         } else {
             itemReleaseTypeDtos = new ArrayList<>();
         }
@@ -115,26 +114,5 @@ public class ListItemReleaseTypeCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 查询工作流信息
-     *
-     * @param itemReleaseTypeDtos
-     */
-    private void refreshWorkflow(List<ItemReleaseTypeDto> itemReleaseTypeDtos) {
-        List<String> flowIds = new ArrayList<>();
-        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
-            flowIds.add(itemReleaseTypeDto.getFlowId());
-        }
 
-        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
-        oaWorkflowDto.setFlowIds(flowIds.toArray(new String[flowIds.size()]));
-        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
-        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
-            for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
-                if (itemReleaseTypeDto.getFlowId().equals(tmpOaWorkflowDto.getFlowId())) {
-                    BeanConvertUtil.covertBean(tmpOaWorkflowDto, itemReleaseTypeDto);
-                }
-            }
-        }
-    }
 }

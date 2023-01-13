@@ -17,8 +17,10 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.IItemReleaseTypeV1ServiceDao;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.itemReleaseType.ItemReleaseTypePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -44,7 +46,8 @@ public class ItemReleaseTypeV1InnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Autowired
     private IItemReleaseTypeV1ServiceDao itemReleaseTypeV1ServiceDaoImpl;
-
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Override
     public int saveItemReleaseType(@RequestBody  ItemReleaseTypePo itemReleaseTypePo) {
@@ -77,9 +80,35 @@ public class ItemReleaseTypeV1InnerServiceSMOImpl extends BaseServiceSMO impleme
         }
 
         List<ItemReleaseTypeDto> itemReleaseTypes = BeanConvertUtil.covertBeanList(itemReleaseTypeV1ServiceDaoImpl.getItemReleaseTypeInfo(BeanConvertUtil.beanCovertMap(itemReleaseTypeDto)), ItemReleaseTypeDto.class);
-
+        refreshWorkflow(itemReleaseTypes);
         return itemReleaseTypes;
     }
+    /**
+     * 查询工作流信息
+     *
+     * @param itemReleaseTypeDtos
+     */
+    private void refreshWorkflow(List<ItemReleaseTypeDto> itemReleaseTypeDtos) {
+        if(itemReleaseTypeDtos == null || itemReleaseTypeDtos.size()< 1){
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
+            flowIds.add(itemReleaseTypeDto.getFlowId());
+        }
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setFlowIds(flowIds.toArray(new String[flowIds.size()]));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        for (ItemReleaseTypeDto itemReleaseTypeDto : itemReleaseTypeDtos) {
+            for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+                if (itemReleaseTypeDto.getFlowId().equals(tmpOaWorkflowDto.getFlowId())) {
+                    BeanConvertUtil.covertBean(tmpOaWorkflowDto, itemReleaseTypeDto);
+                }
+            }
+        }
+    }
+
 
 
     @Override
