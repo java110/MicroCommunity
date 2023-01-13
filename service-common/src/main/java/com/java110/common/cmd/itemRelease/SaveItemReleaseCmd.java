@@ -161,7 +161,6 @@ public class SaveItemReleaseCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
 
         ItemReleaseTypeDto itemReleaseTypeDto = new ItemReleaseTypeDto();
@@ -171,7 +170,7 @@ public class SaveItemReleaseCmd extends Cmd {
         Assert.listOnlyOne(itemReleaseTypeDtos,"未包含放行类型");
 
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
-        oaWorkflowDto.setStoreId(storeId);
+        oaWorkflowDto.setStoreId(itemReleaseTypeDtos.get(0).getStoreId());
         oaWorkflowDto.setFlowId(itemReleaseTypeDtos.get(0).getFlowId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
@@ -226,7 +225,7 @@ public class SaveItemReleaseCmd extends Cmd {
         flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
         flowJson.put("id",itemReleasePo.getIrId());
         flowJson.put("auditMessage","提交审核");
-        flowJson.put("storeId",storeId);
+        flowJson.put("storeId",itemReleaseTypeDtos.get(0).getStoreId());
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
         JSONObject result = oaWorkflowUserInnerServiceSMOImpl.startProcess(flowJson);
 
@@ -235,7 +234,7 @@ public class SaveItemReleaseCmd extends Cmd {
         flowJson.put("processInstanceId",result.getString("processInstanceId"));
         flowJson.put("createUserId",userId);
         flowJson.put("nextUserId",reqJson.getJSONObject("audit").getString("staffId"));
-        flowJson.put("storeId",storeId);
+        flowJson.put("storeId",itemReleaseTypeDtos.get(0).getStoreId());
         oaWorkflowUserInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
 
 
