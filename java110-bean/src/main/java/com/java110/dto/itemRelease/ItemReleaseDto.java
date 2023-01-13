@@ -1,6 +1,7 @@
 package com.java110.dto.itemRelease;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,14 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ItemReleaseDto extends PageDto implements Serializable {
+public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
+
+    //状态 W待审核 D 审核中 C 审核完成 D 审核失败
+    public static final String STATE_WAIT = "W"; //W待审核
+    public static final String STATE_DOING = "D"; //审核中
+    public static final String STATE_COMPLETE = "C"; //审核完成
+    public static final String STATE_FAIT = "W"; //审核失败
+
 
     private String amount;
     private String applyCompany;
@@ -27,6 +35,8 @@ public class ItemReleaseDto extends PageDto implements Serializable {
     private String typeId;
     private String state;
     private String communityId;
+
+    private String stateName;
 
 
     private Date createTime;
@@ -145,5 +155,13 @@ public class ItemReleaseDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

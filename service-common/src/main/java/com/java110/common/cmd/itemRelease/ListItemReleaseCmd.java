@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.intf.common.IItemReleaseResV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
 import com.java110.utils.exception.CmdException;
@@ -82,6 +83,9 @@ public class ListItemReleaseCmd extends Cmd {
     @Autowired
     private IItemReleaseV1InnerServiceSMO itemReleaseV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IItemReleaseResV1InnerServiceSMO itemReleaseResV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -99,6 +103,7 @@ public class ListItemReleaseCmd extends Cmd {
 
            if (count > 0) {
                itemReleaseDtos = itemReleaseV1InnerServiceSMOImpl.queryItemReleases(itemReleaseDto);
+
            } else {
                itemReleaseDtos = new ArrayList<>();
            }
@@ -109,4 +114,6 @@ public class ListItemReleaseCmd extends Cmd {
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
     }
+
+
 }

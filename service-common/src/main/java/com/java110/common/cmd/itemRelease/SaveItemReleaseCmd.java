@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.itemRelease.ItemReleaseDto;
 import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.user.UserDto;
@@ -191,6 +192,7 @@ public class SaveItemReleaseCmd extends Cmd {
 
         ItemReleasePo itemReleasePo = BeanConvertUtil.covertBean(reqJson, ItemReleasePo.class);
         itemReleasePo.setIrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        itemReleasePo.setState(ItemReleaseDto.STATE_WAIT);
         int flag = itemReleaseV1InnerServiceSMOImpl.saveItemRelease(itemReleasePo);
 
         if (flag < 1) {
