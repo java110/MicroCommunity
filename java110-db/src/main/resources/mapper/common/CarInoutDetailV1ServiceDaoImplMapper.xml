@@ -138,8 +138,8 @@
     <select id="queryCarInoutDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from car_inout_detail t
-        left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
-        left join car_inout_payment cip on cip.inout_id = ci.inout_id and cip.community_id = ci.community_id
+<!--        left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id-->
+<!--        left join car_inout_payment cip on cip.inout_id = ci.inout_id and cip.community_id = ci.community_id-->
         where 1 = 1
         <if test="inoutId !=null and inoutId != ''">
             and t.inout_id= #{inoutId}
