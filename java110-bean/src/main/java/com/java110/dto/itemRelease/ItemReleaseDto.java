@@ -31,6 +31,7 @@ public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
     private String remark;
     private String applyPerson;
     private String irId;
+    private String[] irIds;
     private String applyTel;
     private String typeId;
     private String state;
@@ -163,5 +164,13 @@ public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String[] getIrIds() {
+        return irIds;
+    }
+
+    public void setIrIds(String[] irIds) {
+        this.irIds = irIds;
     }
 }

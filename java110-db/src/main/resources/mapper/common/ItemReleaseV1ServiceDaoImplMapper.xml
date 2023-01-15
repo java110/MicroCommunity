@@ -49,6 +49,12 @@
         <if test="irId !=null and irId != ''">
             and t.ir_id= #{irId}
         </if>
+        <if test="irIds !=null ">
+            and t.ir_id in
+            <foreach collection="irIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="applyTel !=null and applyTel != ''">
             and t.apply_tel= #{applyTel}
         </if>
@@ -142,6 +148,12 @@
         </if>
         <if test="irId !=null and irId != ''">
             and t.ir_id= #{irId}
+        </if>
+        <if test="irIds !=null ">
+            and t.ir_id in
+            <foreach collection="irIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="applyTel !=null and applyTel != ''">
             and t.apply_tel= #{applyTel}
