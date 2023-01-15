@@ -41,6 +41,7 @@ public class ItemReleasePo implements Serializable {
     private String typeId;
     private String state;
     private String communityId;
+    private String createUserId;
 
 
     public String getApplyCompany() {
@@ -139,5 +140,11 @@ public class ItemReleasePo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getCreateUserId() {
+        return createUserId;
+    }
 
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
 }

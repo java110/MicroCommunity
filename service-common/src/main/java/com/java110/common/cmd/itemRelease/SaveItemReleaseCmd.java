@@ -193,6 +193,7 @@ public class SaveItemReleaseCmd extends Cmd {
         ItemReleasePo itemReleasePo = BeanConvertUtil.covertBean(reqJson, ItemReleasePo.class);
         itemReleasePo.setIrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         itemReleasePo.setState(ItemReleaseDto.STATE_WAIT);
+        itemReleasePo.setCreateUserId(userId);
         int flag = itemReleaseV1InnerServiceSMOImpl.saveItemRelease(itemReleasePo);
 
         if (flag < 1) {

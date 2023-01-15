@@ -42,6 +42,8 @@ public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
 
     private Date createTime;
 
+    private String createUserId;
+
     private String statusCd = "0";
 
 
@@ -172,5 +174,13 @@ public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
 
     public void setIrIds(String[] irIds) {
         this.irIds = irIds;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }
