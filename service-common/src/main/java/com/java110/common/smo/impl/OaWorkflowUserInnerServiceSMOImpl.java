@@ -159,6 +159,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return query.count();
     }
 
+
+
+
     /**
      * 获取用户任务
      *
@@ -192,6 +195,8 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         }
         return tasks;
     }
+
+
 
 
     /**
@@ -266,6 +271,127 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return tasks;
     }
 
+    /**
+     * 查询用户任务数
+     *
+     * @param user{
+     *            userId:''
+     *            processDefinitionkeys
+     * }
+     * @return
+     */
+    public long getDefinitionKeysUserTaskCount(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(user.getProcessDefinitionKeys());
+        query.taskAssignee(user.getUserId());
+        return query.count();
+    }
+
+    /**
+     * 获取用户任务
+     *
+     * @param user 用户信息
+     */
+    public List<JSONObject> getDefinitionKeysUserTasks(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(user.getProcessDefinitionKeys());
+
+        query.taskAssignee(user.getUserId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
+        } else {
+            list = query.list();
+        }
+        JSONObject taskBusinessKeyMap = null;
+        List<JSONObject> tasks = new ArrayList<>();
+        for (Task task : list) {
+            taskBusinessKeyMap = new JSONObject();
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
+            tasks.add(taskBusinessKeyMap);
+        }
+        return tasks;
+    }
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    public long getDefinitionKeysUserHistoryTaskCount(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+//        Query query = historyService.createHistoricTaskInstanceQuery()
+//                .processDefinitionKey("complaint")
+//                .taskAssignee(user.getUserId());
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKeyIn(user.getProcessDefinitionKeys())
+                .taskAssignee(user.getUserId())
+                .finished();
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaint");
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaitDealUser");
+        }
+
+        Query query = historicTaskInstanceQuery;
+
+        return query.count();
+    }
+
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    public List<JSONObject> getDefinitionKeysUserHistoryTasks(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKeyIn(user.getProcessDefinitionKeys())
+                .taskAssignee(user.getUserId())
+                .finished();
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaint");
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaitDealUser");
+        }
+
+        Query query = historicTaskInstanceQuery.orderByHistoricTaskInstanceStartTime().desc();
+
+        List<HistoricTaskInstance> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
+        } else {
+            list = query.list();
+        }
+        JSONObject taskBusinessKeyMap = null;
+        List<JSONObject> tasks = new ArrayList<>();
+        List<String> complaintIds = new ArrayList<>();
+        for (HistoricTaskInstance task : list) {
+            taskBusinessKeyMap = new JSONObject();
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
+            tasks.add(taskBusinessKeyMap);
+        }
+
+        return tasks;
+    }
 
     @Java110Transactional
     public boolean completeTask(@RequestBody JSONObject reqJson) {

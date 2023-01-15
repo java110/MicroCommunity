@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,6 +63,40 @@ public interface IOaWorkflowUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
     List<JSONObject> getUserHistoryTasks(@RequestBody AuditUser user);
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/getDefinitionKeysUserTaskCount", method = RequestMethod.POST)
+     long getDefinitionKeysUserTaskCount(@RequestBody AuditUser user) ;
+
+    /**
+     * 获取用户任务
+     *
+     * @param user 用户信息
+     */
+    @RequestMapping(value = "/getDefinitionKeysUserTasks", method = RequestMethod.POST)
+    List<JSONObject> getDefinitionKeysUserTasks(@RequestBody AuditUser user) ;
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/getDefinitionKeysUserHistoryTaskCount", method = RequestMethod.POST)
+    long getDefinitionKeysUserHistoryTaskCount(@RequestBody AuditUser user) ;
+
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    @RequestMapping(value = "/getDefinitionKeysUserHistoryTasks", method = RequestMethod.POST)
+    List<JSONObject> getDefinitionKeysUserHistoryTasks(@RequestBody AuditUser user) ;
 
 
     /**
