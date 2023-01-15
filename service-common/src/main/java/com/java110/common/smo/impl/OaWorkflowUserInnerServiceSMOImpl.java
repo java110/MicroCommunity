@@ -160,8 +160,6 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     }
 
 
-
-
     /**
      * 获取用户任务
      *
@@ -195,8 +193,6 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         }
         return tasks;
     }
-
-
 
 
     /**
@@ -274,10 +270,9 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     /**
      * 查询用户任务数
      *
-     * @param user{
-     *            userId:''
-     *            processDefinitionkeys
-     * }
+     * @param user{ userId:''
+     *              processDefinitionkeys
+     *              }
      * @return
      */
     public long getDefinitionKeysUserTaskCount(@RequestBody AuditUser user) {
@@ -402,12 +397,12 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         //判断是否为结束流程
-        if ("1500".equals(reqJson.getString("auditCode"))) {
-            doTaskFinish(reqJson);
-        } else {
-            //扩展 工作流功能
-            doTaskAuditAgree(reqJson);
-        }
+//        if ("1500".equals(reqJson.getString("auditCode"))) {
+//            doTaskFinish(reqJson);
+//        } else {
+//            //扩展 工作流功能
+//            doTaskAuditAgree(reqJson);
+//        }
 
         String processInstanceId = task.getProcessInstanceId();
         Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
@@ -418,8 +413,11 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         taskService.complete(reqJson.getString("taskId"), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
+            doTaskFinish(reqJson);
             return true;
         }
+        //扩展 工作流功能
+        doTaskAuditAgree(reqJson);
         return false;
     }
 
@@ -804,23 +802,23 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         StartEvent startEvent = null;
         for (FlowElement flowElement : flowElements) {
             //假设是开始节点
-            if(flowElement instanceof StartEvent){
-                 startEvent = (StartEvent)flowElement;
+            if (flowElement instanceof StartEvent) {
+                startEvent = (StartEvent) flowElement;
             }
         }
-        if(startEvent == null){
+        if (startEvent == null) {
             throw new SMOException("流程文件未包含开始节点");
         }
         List<SequenceFlow> outgoingFlows = startEvent.getOutgoingFlows();
 
         UserTask submitUser = getUserTask(outgoingFlows);
 
-        if(submitUser == null){
+        if (submitUser == null) {
             throw new SMOException("未包含提交者");
         }
 
         UserTask auditUser = getUserTask(submitUser.getOutgoingFlows());
-        if(auditUser == null){
+        if (auditUser == null) {
             throw new SMOException("未包含审核人员");
         }
         String assignee = auditUser.getAssignee();
