@@ -31,7 +31,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IItemReleaseResV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
@@ -134,7 +134,7 @@ public class SaveItemReleaseCmd extends Cmd {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
 
     @Override

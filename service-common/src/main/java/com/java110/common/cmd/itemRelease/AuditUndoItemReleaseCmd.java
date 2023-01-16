@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.itemRelease.ItemReleaseDto;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -23,7 +23,7 @@ import java.util.List;
 public class AuditUndoItemReleaseCmd extends Cmd {
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     @Autowired
     private IItemReleaseV1InnerServiceSMO itemReleaseV1InnerServiceSMOImpl;

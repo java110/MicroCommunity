@@ -1,7 +1,6 @@
 package com.java110.api.smo.undo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.undo.IUndoSMO;
 import com.java110.core.context.IPageData;
@@ -9,7 +8,7 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.utils.exception.SMOException;
 import com.java110.vo.ResultVo;
@@ -34,7 +33,7 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
     private RestTemplate restTemplate;
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
 
     @Autowired

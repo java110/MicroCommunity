@@ -9,7 +9,7 @@ import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
@@ -47,7 +47,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     @Autowired
     private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;

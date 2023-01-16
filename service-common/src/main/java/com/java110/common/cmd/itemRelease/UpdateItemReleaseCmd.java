@@ -24,14 +24,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.itemRelease.ItemReleaseDto;
 import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
-import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IItemReleaseResV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseV1InnerServiceSMO;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
@@ -39,7 +37,6 @@ import com.java110.po.itemReleaseRes.ItemReleaseResPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -114,7 +111,7 @@ public class UpdateItemReleaseCmd extends Cmd {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     public static final String CODE_PREFIX_ID = "10";
 

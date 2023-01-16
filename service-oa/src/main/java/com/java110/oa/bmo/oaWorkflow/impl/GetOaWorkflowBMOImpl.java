@@ -1,13 +1,10 @@
 package com.java110.oa.bmo.oaWorkflow.impl;
 
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
-import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflow.IGetOaWorkflowBMO;
-import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +22,7 @@ public class GetOaWorkflowBMOImpl implements IGetOaWorkflowBMO {
 
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
 
     /**

@@ -7,13 +7,12 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
-import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
 import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -31,12 +30,10 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.query.Query;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
-import org.activiti.validation.ValidationError;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +50,9 @@ import java.util.*;
 
 //@Service("resourceEntryStoreSMOImpl")
 @RestController
-public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements IOaWorkflowUserInnerServiceSMO {
+public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implements IOaWorkflowActivitiInnerServiceSMO {
 
-    private static Logger logger = LoggerFactory.getLogger(OaWorkflowUserInnerServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(OaWorkflowActivitiInnerServiceSMOImpl.class);
     @Autowired
     private ProcessEngine processEngine;
 
@@ -271,7 +268,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
      * 查询用户任务数
      *
      * @param user{ userId:''
-     *              processDefinitionkeys
+     *              processDefinitionkeys:[]
      *              }
      * @return
      */
@@ -285,7 +282,10 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     /**
      * 获取用户任务
      *
-     * @param user 用户信息
+     * @param user 用户信息{
+     *             processDefinitionKeys:[],
+     *
+     * }
      */
     public List<JSONObject> getDefinitionKeysUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
