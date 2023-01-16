@@ -32,6 +32,7 @@ public class AuditUndoItemReleaseCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务");
         Assert.hasKeyAndValue(reqJson, "irId", "未包含放行");
+        Assert.hasKeyAndValue(reqJson, "flowId", "未包含流程");
         Assert.hasKeyAndValue(reqJson, "auditCode", "未包含状态");
         Assert.hasKeyAndValue(reqJson, "auditMessage", "未包含状态说明");
 
@@ -39,6 +40,8 @@ public class AuditUndoItemReleaseCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        String storeId = context.getReqHeaders().get("store-id");
 
         ItemReleaseDto itemReleaseDto = new ItemReleaseDto();
         itemReleaseDto.setIrId(reqJson.getString("irId"));
@@ -49,6 +52,9 @@ public class AuditUndoItemReleaseCmd extends Cmd {
         //状态 W待审核 D 审核中 C 审核完成 D 审核失败
         ItemReleasePo itemReleasePo = new ItemReleasePo();
         itemReleasePo.setIrId(itemReleaseDtos.get(0).getIrId());
+        reqJson.put("id",reqJson.getString("irId"));
+        reqJson.put("storeId",storeId);
+
 
         //业务办理
         if ("1100".equals(reqJson.getString("auditCode"))
