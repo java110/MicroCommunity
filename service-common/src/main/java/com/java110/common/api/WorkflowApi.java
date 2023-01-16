@@ -44,17 +44,6 @@ public class WorkflowApi {
     @Autowired
     private IQueryWorkFlowFirstStaffBMO queryWorkFlowFirstStaffBMOImpl;
 
-    @RequestMapping(value = "/getFirstStaff", method = RequestMethod.GET)
-    public ResponseEntity<String> getFirstStaff(@RequestParam(name = "flowType") String flowType,
-                                                @RequestParam(name = "communityId") String communityId,
-                                                @RequestHeader(value = "store-id") String storeId) {
-        WorkflowDto workflowDto = new WorkflowDto();
-        workflowDto.setCommunityId(communityId);
-        workflowDto.setFlowType(flowType);
-        workflowDto.setStoreId(storeId);
-        return queryWorkFlowFirstStaffBMOImpl.query(workflowDto);
-    }
-
     /**
      * 更新流程
      *
