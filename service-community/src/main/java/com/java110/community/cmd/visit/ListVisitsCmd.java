@@ -6,9 +6,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.visit.VisitDto;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.visit.ApiVisitDataVo;
@@ -22,6 +24,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
+@Java110CmdDoc(title = "查询访客",
+        description = "供pc端查询访客人员",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/visit.listVisits",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "visit.listVisits"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "分页信息"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "visits", type = "Array", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "visits",name = "vId", type = "String", remark = "访客ID"),
+                @Java110ParamDoc(parentNodeName = "visits",name = "vName", type = "String", remark = "访客名称"),
+                @Java110ParamDoc(parentNodeName = "visits",name = "visitGender", type = "String", remark = "访客性别"),
+                @Java110ParamDoc(parentNodeName = "visits",name = "phoneNumber", type = "String", remark = "手机号"),
+                @Java110ParamDoc(parentNodeName = "visits",name = "visitTime", type = "String", remark = "访问时间"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="ttp://localhost:3000/app/visit.listVisits?page=1&row=10&communityId=2022121921870161",
+        resBody="{\"page\":0,\"records\":0,\"rows\":0,\"total\":0,\"visits\":[]}"
+)
 @Java110Cmd(serviceCode = "visit.listVisits")
 public class ListVisitsCmd extends Cmd {
 
@@ -37,6 +73,9 @@ public class ListVisitsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+
+        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+
     }
 
     @Override
