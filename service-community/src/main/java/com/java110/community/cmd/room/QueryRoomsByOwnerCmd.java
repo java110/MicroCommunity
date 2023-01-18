@@ -11,6 +11,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,19 @@ public class QueryRoomsByOwnerCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含communityId信息");
         //Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         //Assert.hasLength(reqJson.getString("ownerId"), "业主ID不能为空");
+
+        String ownerId = reqJson.getString("ownerId");
+
+        String ownerNameLike = reqJson.getString("ownerNameLike");
+
+        if(StringUtil.isEmpty(ownerId) && StringUtil.isEmpty(ownerNameLike)){
+            throw new IllegalArgumentException("未包含业主信息");
+        }
     }
 
     @Override
