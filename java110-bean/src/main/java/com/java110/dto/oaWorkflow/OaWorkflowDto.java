@@ -19,7 +19,7 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     public static final String STATE_COMPLAINT = "C";//部署完成
 
     public static final String FLOW_TYPE_ITEM_RELEASE="2002";//物品放行
-
+    public static final String FLOW_TYPE_VISIT="3003";// 访客审核
     public static final String FLOW_TYPE_PUBLIC="1001";//物品放行
 
     private String userId;
