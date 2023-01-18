@@ -30,6 +30,8 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     private String statusCd = "0";
 
+    private String timesId;
+
     public String getApplyOrderId() {
         return applyOrderId;
     }
@@ -124,5 +126,13 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }
