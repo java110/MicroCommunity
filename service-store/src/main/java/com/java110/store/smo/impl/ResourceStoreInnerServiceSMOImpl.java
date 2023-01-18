@@ -78,20 +78,24 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             resourceStoreDtos.add(resourceStoreDto);
         }
 
+        if (resourceResourceStores == null || resourceResourceStores.size() < 1 || resourceResourceStores.size() > 15) {
+            return resourceResourceStores;
+        }
+
         ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
         resourceStoreTimesDto.setStoreId(resourceResourceStoreDto.getStoreId());
         resourceStoreTimesDto.setResCodes(resCodes.toArray(new String[resCodes.size()]));
         List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
 
-        if(resourceStoreTimesDtos == null || resourceStoreTimesDtos.size()< 1){
+        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
             return resourceStoreDtos;
         }
 
         List<ResourceStoreTimesDto> times = null;
         for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
             times = new ArrayList<>();
-            for(ResourceStoreTimesDto tmpResourceStoreTimesDto: resourceStoreTimesDtos){
-                if(resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())){
+            for (ResourceStoreTimesDto tmpResourceStoreTimesDto : resourceStoreTimesDtos) {
+                if (resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())) {
                     times.add(tmpResourceStoreTimesDto);
                 }
             }
@@ -122,8 +126,8 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             BigDecimal stock = new BigDecimal(stores.get(0).get("stock").toString());
             BigDecimal newStock = new BigDecimal(resourceStorePo.getStock().toString());
             BigDecimal totalStock = stock.add(newStock);
-            BigDecimal zeroStock = new BigDecimal (0);
-            if (totalStock.compareTo(zeroStock)== -1) {
+            BigDecimal zeroStock = new BigDecimal(0);
+            if (totalStock.compareTo(zeroStock) == -1) {
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
@@ -139,7 +143,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 BigDecimal newPrice = new BigDecimal(resourceStorePo.getPurchasePrice());
                 //获取均价
                 BigDecimal averagePriceTotal = ((newPrice.multiply(newStock)).add(price.multiply(stock)));
-                BigDecimal averagePrice=averagePriceTotal.divide(totalStock,2,BigDecimal.ROUND_HALF_UP);
+                BigDecimal averagePrice = averagePriceTotal.divide(totalStock, 2, BigDecimal.ROUND_HALF_UP);
                 resourceStorePo.setAveragePrice(averagePrice.toString());
             }
             if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE)) {
