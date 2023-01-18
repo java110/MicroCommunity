@@ -5,8 +5,10 @@ import com.java110.dto.PageDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreServiceDao;
@@ -43,6 +45,9 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
     @Override
     public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
         //校验是否传了 分页信息
@@ -53,7 +58,10 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<ResourceStoreDto> resourceResourceStores = BeanConvertUtil.covertBeanList(resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto)), ResourceStoreDto.class);
         //获取图片地址
         List<ResourceStoreDto> resourceStoreDtos = new ArrayList<>();
+        List<String> resCodes = new ArrayList<>();
         for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+
+            resCodes.add(resourceStoreDto.getResCode());
             //获取资源id
             String resId = resourceStoreDto.getResId();
             FileRelDto fileRelDto = new FileRelDto();
@@ -68,6 +76,26 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 resourceStoreDto.setFileUrls(fileUrls);
             }
             resourceStoreDtos.add(resourceStoreDto);
+        }
+
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setStoreId(resourceResourceStoreDto.getStoreId());
+        resourceStoreTimesDto.setResCodes(resCodes.toArray(new String[resCodes.size()]));
+        List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+        if(resourceStoreTimesDtos == null || resourceStoreTimesDtos.size()< 1){
+            return resourceStoreDtos;
+        }
+
+        List<ResourceStoreTimesDto> times = null;
+        for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+            times = new ArrayList<>();
+            for(ResourceStoreTimesDto tmpResourceStoreTimesDto: resourceStoreTimesDtos){
+                if(resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())){
+                    times.add(tmpResourceStoreTimesDto);
+                }
+            }
+            resourceStoreDto.setTimes(times);
         }
         return resourceStoreDtos;
     }

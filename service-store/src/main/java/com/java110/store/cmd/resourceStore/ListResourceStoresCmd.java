@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 查询物品
+ * add by wuxw 2023-01-19
+ */
 @Java110Cmd(serviceCode = "resourceStore.listResourceStores")
 public class ListResourceStoresCmd extends Cmd {
 

@@ -43,6 +43,12 @@
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
         </if>
+        <if test="resCodes != null ">
+            and t.res_code in
+            <foreach collection="resCodes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="timesId !=null and timesId != ''">
             and t.times_id= #{timesId}
         </if>
@@ -107,6 +113,12 @@
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
+        </if>
+        <if test="resCodes != null ">
+            and t.res_code in
+            <foreach collection="resCodes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="timesId !=null and timesId != ''">
             and t.times_id= #{timesId}
