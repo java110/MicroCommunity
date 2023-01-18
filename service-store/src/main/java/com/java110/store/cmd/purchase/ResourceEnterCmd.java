@@ -156,7 +156,7 @@ public class ResourceEnterCmd extends Cmd{
             resourceStoreTimesPo.setResCode(resourceStoreDtos.get(0).getResCode());
             resourceStoreTimesPo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-            resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         //获取订单号
         String applyOrderId = purchaseApplyPo.getApplyOrderId();

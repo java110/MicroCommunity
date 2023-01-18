@@ -84,8 +84,8 @@ public class UpdateVisitCmd extends Cmd {
             reqJson.put("psId", "-1");
         }
         //flag审核操作 并且 审核通过 state=1 并且业主车辆不存在的情况先existCar=false
-        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")
-                && reqJson.containsKey("state") && !StringUtil.isEmpty(reqJson.getString("state")) && reqJson.getString("state").equals("1")
+        if ("1".equals(reqJson.getString("flag"))
+                && "1".equals(reqJson.getString("state"))
                 && !existCar) {
             //获取预约车免费时长的值
             String freeTime = CommunitySettingFactory.getValue(reqJson.getString("communityId"), CAR_FREE_TIME);
@@ -137,9 +137,9 @@ public class UpdateVisitCmd extends Cmd {
             }
         }
         String result = "";
-        if (reqJson.containsKey("state") && !StringUtil.isEmpty(reqJson.getString("state")) && reqJson.getString("state").equals("1")) {
+        if ("1".equals(reqJson.getString("state"))) {
             result = "审核通过！";
-        } else if (reqJson.containsKey("state") && !StringUtil.isEmpty(reqJson.getString("state")) && reqJson.getString("state").equals("2")) {
+        } else if ("2".equals(reqJson.getString("state"))) {
             result = "审核不通过！";
         }
         if (existCar) {
