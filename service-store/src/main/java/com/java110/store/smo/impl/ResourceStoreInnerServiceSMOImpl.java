@@ -79,7 +79,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         if (resourceResourceStores == null || resourceResourceStores.size() < 1 || resourceResourceStores.size() > 15) {
-            return resourceResourceStores;
+            return resourceStoreDtos;
         }
 
         ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
@@ -92,7 +92,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<ResourceStoreTimesDto> times = null;
-        for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+        for (ResourceStoreDto resourceStoreDto : resourceStoreDtos) {
             times = new ArrayList<>();
             for (ResourceStoreTimesDto tmpResourceStoreTimesDto : resourceStoreTimesDtos) {
                 if (resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())) {
