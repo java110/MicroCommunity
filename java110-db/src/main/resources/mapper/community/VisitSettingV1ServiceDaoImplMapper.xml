@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="visitSettingV1ServiceDaoImpl">
+
+
+    <!-- 保存访客设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveVisitSettingInfo" parameterType="Map">
+        insert into visit_setting(
+        car_num_way,face_way,type_name,audit_way,remark,community_id,flow_id,flow_name,setting_id
+        ) values (
+        #{carNumWay},#{faceWay},#{typeName},#{auditWay},#{remark},#{communityId},#{flowId},#{flowName},#{settingId}
+        )
+    </insert>
+
+
+    <!-- 查询访客设置信息 add by wuxw 2018-07-03 -->
+    <select id="getVisitSettingInfo" parameterType="Map" resultType="Map">
+        select t.car_num_way,t.car_num_way carNumWay,t.face_way,t.face_way faceWay,t.type_name,t.type_name
+        typeName,t.audit_way,t.audit_way auditWay,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
+        flowName,t.setting_id,t.setting_id settingId
+        from visit_setting t
+        where 1 =1
+        <if test="carNumWay !=null and carNumWay != ''">
+            and t.car_num_way= #{carNumWay}
+        </if>
+        <if test="faceWay !=null and faceWay != ''">
+            and t.face_way= #{faceWay}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改访客设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateVisitSettingInfo" parameterType="Map">
+        update visit_setting t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="carNumWay !=null and carNumWay != ''">
+            , t.car_num_way= #{carNumWay}
+        </if>
+        <if test="faceWay !=null and faceWay != ''">
+            , t.face_way= #{faceWay}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            , t.type_name= #{typeName}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            , t.audit_way= #{auditWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            , t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            , t.flow_name= #{flowName}
+        </if>
+        where 1=1
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+    </update>
+
+    <!-- 查询访客设置数量 add by wuxw 2018-07-03 -->
+    <select id="queryVisitSettingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from visit_setting t
+        where 1 =1
+        <if test="carNumWay !=null and carNumWay != ''">
+            and t.car_num_way= #{carNumWay}
+        </if>
+        <if test="faceWay !=null and faceWay != ''">
+            and t.face_way= #{faceWay}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+
+
+    </select>
+
+</mapper>
