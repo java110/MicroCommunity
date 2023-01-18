@@ -13,14 +13,19 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.feeReceipt.FeeReceiptPo;
@@ -87,6 +92,12 @@ public class PayOweFeeCmd extends Cmd {
     private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
 
     @Autowired
+    private IOwnerCarNewV1InnerServiceSMO ownerCarNewV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
 
@@ -123,7 +134,7 @@ public class PayOweFeeCmd extends Cmd {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
-            if(paramObj.containsKey("oId")) {
+            if (paramObj.containsKey("oId")) {
                 feeObj.put("oId", paramObj.getString("oId"));
             }
             String remark = paramObj.getString("remark");
@@ -182,6 +193,9 @@ public class PayOweFeeCmd extends Cmd {
         addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos);
         modifyOweFee(paramObj, dataFlowContext);
 
+        //修改车辆
+        updateCarEndTime(paramObj);
+
         //判断是否有派单属性ID
         FeeAttrDto feeAttrDto = new FeeAttrDto();
         feeAttrDto.setCommunityId(paramObj.getString("communityId"));
@@ -197,7 +211,7 @@ public class PayOweFeeCmd extends Cmd {
             repairPoolPo.setCommunityId(paramObj.getString("communityId"));
             repairPoolPo.setState(RepairDto.STATE_APPRAISE);
             flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
-            if(flag < 1){
+            if (flag < 1) {
                 throw new CmdException("修改失败");
             }
         }
@@ -240,7 +254,7 @@ public class PayOweFeeCmd extends Cmd {
                 repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
                 repairUser.setRepairEvent("auditUser");
                 flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
-                if(flag < 1){
+                if (flag < 1) {
                     throw new CmdException("修改失败");
                 }
             } else {  //如果是员工代客报修或电话报修，状态就变成已支付
@@ -249,7 +263,7 @@ public class PayOweFeeCmd extends Cmd {
                 repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 repairUserPo.setContext("已支付" + paramObj.getString("receivedAmount") + "元");
                 flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
-                if(flag < 1){
+                if (flag < 1) {
                     throw new CmdException("修改失败");
                 }
             }
@@ -281,7 +295,7 @@ public class PayOweFeeCmd extends Cmd {
         if (!FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getDeadlineTime();
         }
-        if(maxEndTime != null) { //这里数据问题的情况下
+        if (maxEndTime != null) { //这里数据问题的情况下
             Date endTime = DateUtil.getDateFromStringA(paramInJson.getString("endTime"));
             if (endTime.getTime() >= maxEndTime.getTime()) {
                 feeMap.put("state", FeeDto.STATE_FINISH);
@@ -289,7 +303,7 @@ public class PayOweFeeCmd extends Cmd {
         }
 
         businessFee.putAll(feeMap);
-        PayFeePo payFeePo =  BeanConvertUtil.covertBean(businessFee,PayFeePo.class);
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessFee, PayFeePo.class);
         int flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
         if (flag < 1) {
             throw new CmdException("修改失败");
@@ -297,8 +311,8 @@ public class PayOweFeeCmd extends Cmd {
     }
 
     public void addOweFeeDetail(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext,
-                                      List<FeeReceiptDetailPo> feeReceiptDetailPos,
-                                      List<FeeReceiptPo> feeReceiptPos) {
+                                List<FeeReceiptDetailPo> feeReceiptDetailPos,
+                                List<FeeReceiptPo> feeReceiptPos) {
 
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
@@ -327,8 +341,8 @@ public class PayOweFeeCmd extends Cmd {
         cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
         businessFeeDetail.put("cycles", receivedAmount.divide(feePrice, 2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-        if(!paramInJson.containsKey("receivableAmount") || StringUtil.isEmpty(paramInJson.getString("receivableAmount"))){
-            paramInJson.put("receivableAmount",paramInJson.getString("receivedAmount"));
+        if (!paramInJson.containsKey("receivableAmount") || StringUtil.isEmpty(paramInJson.getString("receivableAmount"))) {
+            paramInJson.put("receivableAmount", paramInJson.getString("receivedAmount"));
         }
 
         businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
@@ -338,9 +352,9 @@ public class PayOweFeeCmd extends Cmd {
         paramInJson.put("feeInfo", feeDto);
         paramInJson.put("cycles", cycles.doubleValue());
         PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessFeeDetail, PayFeeDetailPo.class);
-        if(paramInJson.containsKey("oId")) {
+        if (paramInJson.containsKey("oId")) {
             payFeeDetailPo.setPayOrderId(paramInJson.getString("oId"));
-        }else{
+        } else {
             payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
 
         }
@@ -378,6 +392,69 @@ public class PayOweFeeCmd extends Cmd {
         feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
         feeReceiptPo.setPayObjName(ownerDto.getName());
         feeReceiptPos.add(feeReceiptPo);
+    }
+
+    private void updateCarEndTime(JSONObject paramObj) {
+        int flag;
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(paramObj.getString("feeId"));
+        feeDto.setCommunityId(paramObj.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return;
+        }
+        if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDtos.get(0).getPayerObjType())) {
+            return;
+        }
+        Date feeEndTime = feeDtos.get(0).getEndTime();
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(paramObj.getString("communityId"));
+        ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
+        ownerCarDto.setCarTypeCd("1001"); //业主车辆
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            return;
+        }
+        //获取车位id
+        String psId = ownerCarDtos.get(0).getPsId();
+        //获取车辆状态(1001 正常状态，2002 欠费状态  3003 车位释放)
+        String carState = ownerCarDtos.get(0).getState();
+        if (!StringUtil.isEmpty(psId) && "3003".equals(carState)) {
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setPsId(psId);
+            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
+            //获取车位状态(出售 S，出租 H ，空闲 F)
+            String state = parkingSpaceDtos.get(0).getState();
+            if (!StringUtil.isEmpty(state) && !state.equals("F")) {
+                throw new IllegalArgumentException("车位已被使用，不能再缴费！");
+            }
+        }
+
+
+        Calendar endTimeCalendar = null;
+        //车位费用续租
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            //后付费 加一个月
+            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())) {
+                endTimeCalendar = Calendar.getInstance();
+                endTimeCalendar.setTime(feeEndTime);
+                endTimeCalendar.add(Calendar.MONTH, 1);
+                feeEndTime = endTimeCalendar.getTime();
+            }
+            if (tmpOwnerCarDto.getEndTime().getTime() >= feeEndTime.getTime()) {
+                continue;
+            }
+            OwnerCarPo ownerCarPo = new OwnerCarPo();
+            ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
+            ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+            flag = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
+            if (flag < 1) {
+                throw new CmdException("缴费失败");
+            }
+        }
     }
 
 }

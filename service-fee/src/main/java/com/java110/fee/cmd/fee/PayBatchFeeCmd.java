@@ -324,8 +324,17 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new IllegalArgumentException("车位已被使用，不能再缴费！");
             }
         }
+
+        Calendar endTimeCalendar = null;
         //车位费用续租
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            //后付费 加一个月
+            if(FeeConfigDto.PAYMENT_CD_AFTER.equals(feeInfo.getPaymentCd())){
+                endTimeCalendar = Calendar.getInstance();
+                endTimeCalendar.setTime(feeEndTime);
+                endTimeCalendar.add(Calendar.MONTH,1);
+                feeEndTime = endTimeCalendar.getTime();
+            }
             if (tmpOwnerCarDto.getEndTime().getTime() >= feeEndTime.getTime()) {
                 continue;
             }
