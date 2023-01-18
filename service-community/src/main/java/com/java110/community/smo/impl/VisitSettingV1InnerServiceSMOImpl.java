@@ -17,8 +17,11 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IVisitSettingV1ServiceDao;
+import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.visitSetting.VisitSettingPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -44,7 +47,8 @@ public class VisitSettingV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Autowired
     private IVisitSettingV1ServiceDao visitSettingV1ServiceDaoImpl;
-
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Override
     public int saveVisitSetting(@RequestBody  VisitSettingPo visitSettingPo) {
@@ -77,8 +81,34 @@ public class VisitSettingV1InnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         List<VisitSettingDto> visitSettings = BeanConvertUtil.covertBeanList(visitSettingV1ServiceDaoImpl.getVisitSettingInfo(BeanConvertUtil.beanCovertMap(visitSettingDto)), VisitSettingDto.class);
-
+        refreshWorkflow(visitSettings);
         return visitSettings;
+    }
+
+    /**
+     * 查询工作流信息
+     *
+     * @param visitSettings
+     */
+    private void refreshWorkflow(List<VisitSettingDto> visitSettings) {
+        if(visitSettings == null || visitSettings.size()< 1){
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (VisitSettingDto visitSettingDto : visitSettings) {
+            flowIds.add(visitSettingDto.getFlowId());
+        }
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setFlowIds(flowIds.toArray(new String[flowIds.size()]));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        for (VisitSettingDto visitSettingDto : visitSettings) {
+            for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+                if (visitSettingDto.getFlowId().equals(tmpOaWorkflowDto.getFlowId())) {
+                    BeanConvertUtil.covertBean(tmpOaWorkflowDto, visitSettingDto);
+                }
+            }
+        }
     }
 
 

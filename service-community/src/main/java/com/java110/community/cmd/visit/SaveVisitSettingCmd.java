@@ -22,7 +22,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.visitSetting.VisitSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -52,6 +57,12 @@ public class SaveVisitSettingCmd extends Cmd {
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
@@ -66,9 +77,32 @@ public class SaveVisitSettingCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setStoreId(storeId);
+        oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+        oaWorkflowPo.setFlowName(reqJson.getString("typeName")+"审批流程");
+        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
+
+        //创建model
+        WorkflowModelDto workflowModelDto = new WorkflowModelDto();
+        workflowModelDto.setName(oaWorkflowPo.getFlowName());
+        workflowModelDto.setKey(oaWorkflowPo.getFlowId());
+        workflowModelDto = workflowInnerServiceSMOImpl.createModel(workflowModelDto);
+
+        oaWorkflowPo.setModelId(workflowModelDto.getModelId());
+        oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
         VisitSettingPo visitSettingPo = BeanConvertUtil.covertBean(reqJson, VisitSettingPo.class);
         visitSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = visitSettingV1InnerServiceSMOImpl.saveVisitSetting(visitSettingPo);
+        visitSettingPo.setFlowId(oaWorkflowPo.getFlowId());
+        visitSettingPo.setFlowName(oaWorkflowPo.getFlowName());
+        flag = visitSettingV1InnerServiceSMOImpl.saveVisitSetting(visitSettingPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

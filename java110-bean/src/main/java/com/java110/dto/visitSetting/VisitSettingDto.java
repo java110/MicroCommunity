@@ -1,6 +1,8 @@
 package com.java110.dto.visitSetting;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,17 +14,17 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class VisitSettingDto extends PageDto implements Serializable {
+public class VisitSettingDto extends OaWorkflowDto implements Serializable {
 
     private String carNumWay;
-private String faceWay;
-private String typeName;
-private String auditWay;
-private String remark;
-private String communityId;
-private String flowId;
-private String flowName;
-private String settingId;
+    private String faceWay;
+    private String typeName;
+    private String auditWay;
+    private String remark;
+    private String communityId;
+    private String flowId;
+    private String flowName;
+    private String settingId;
 
 
     private Date createTime;
@@ -33,55 +35,72 @@ private String settingId;
     public String getCarNumWay() {
         return carNumWay;
     }
-public void setCarNumWay(String carNumWay) {
+
+    public void setCarNumWay(String carNumWay) {
         this.carNumWay = carNumWay;
     }
-public String getFaceWay() {
+
+    public String getFaceWay() {
         return faceWay;
     }
-public void setFaceWay(String faceWay) {
+
+    public void setFaceWay(String faceWay) {
         this.faceWay = faceWay;
     }
-public String getTypeName() {
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getAuditWay() {
+
+    public String getAuditWay() {
         return auditWay;
     }
-public void setAuditWay(String auditWay) {
+
+    public void setAuditWay(String auditWay) {
         this.auditWay = auditWay;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getFlowName() {
+
+    public String getFlowName() {
         return flowName;
     }
-public void setFlowName(String flowName) {
+
+    public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
-public String getSettingId() {
+
+    public String getSettingId() {
         return settingId;
     }
-public void setSettingId(String settingId) {
+
+    public void setSettingId(String settingId) {
         this.settingId = settingId;
     }
 
