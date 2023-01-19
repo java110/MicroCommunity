@@ -437,8 +437,9 @@ public class PayOweFeeCmd extends Cmd {
         Calendar endTimeCalendar = null;
         //车位费用续租
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
-            //后付费 加一个月
-            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())) {
+            //后付费 或者信用期车辆 加一个月
+            if(FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
+                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())){
                 endTimeCalendar = Calendar.getInstance();
                 endTimeCalendar.setTime(feeEndTime);
                 endTimeCalendar.add(Calendar.MONTH, 1);
