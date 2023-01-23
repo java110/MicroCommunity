@@ -28,6 +28,8 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
     private String endTime;
     private String communityId;
     private String personType;
+    private String personTypeName;
+
 
     private String statusCd = "0";
     private String personFace;
@@ -145,5 +147,13 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
 
     public void setPersonFace(String personFace) {
         this.personFace = personFace;
+    }
+
+    public String getPersonTypeName() {
+        return personTypeName;
+    }
+
+    public void setPersonTypeName(String personTypeName) {
+        this.personTypeName = personTypeName;
     }
 }

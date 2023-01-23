@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
+import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
@@ -65,6 +66,14 @@ public class SaveAccessControlWhiteCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "personType", "请求报文中未包含personType");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
+
+        AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
+        accessControlWhiteDto.setCommunityId(reqJson.getString("communityId"));
+        accessControlWhiteDto.setTel(reqJson.getString("tel"));
+        int count = accessControlWhiteV1InnerServiceSMOImpl.queryAccessControlWhitesCount(accessControlWhiteDto);
+        if (count > 0) {
+            throw new CmdException(reqJson.getString("personName") + "-" + reqJson.getString("tel") + ",人员已存在，您可以删除重新添加，或者修改");
+        }
 
     }
 
