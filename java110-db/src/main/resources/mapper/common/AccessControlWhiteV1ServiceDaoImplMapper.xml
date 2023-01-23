@@ -21,9 +21,11 @@
         accessControlKey,t.status_cd,t.status_cd statusCd,t.person_name,t.person_name
         personName,t.machine_id,t.machine_id machineId,t.acw_id,t.acw_id acwId,t.person_id,t.person_id
         personId,t.tel,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.person_type,t.person_type personType,t.create_time createTime,m.machine_code,m.machine_name machineName
+        communityId,t.person_type,t.person_type personType,t.create_time createTime,m.machine_code,m.machine_name machineName,
+        td.`name` personTypeName
         from access_control_white t
         left join machine m on t.machine_id = m.machine_id and m.status_cd = '0'
+        left join t_dict td on t.person_type = td.status_cd and td.table_name ='access_control_white' and td.table_columns = 'person_type'
         where 1 =1
         <if test="thirdId !=null and thirdId != ''">
             and t.third_id= #{thirdId}
