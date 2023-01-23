@@ -20,7 +20,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -53,6 +57,9 @@ public class ListAccessControlWhiteCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -69,6 +76,7 @@ public class ListAccessControlWhiteCmd extends Cmd {
 
         if (count > 0) {
             accessControlWhiteDtos = accessControlWhiteV1InnerServiceSMOImpl.queryAccessControlWhites(accessControlWhiteDto);
+            refreshPhoto(accessControlWhiteDtos);
         } else {
             accessControlWhiteDtos = new ArrayList<>();
         }
@@ -78,5 +86,37 @@ public class ListAccessControlWhiteCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshPhoto(List<AccessControlWhiteDto> accessControlWhiteDtos) {
+        if(accessControlWhiteDtos == null || accessControlWhiteDtos.size() < 1){
+            return;
+        }
+
+        List<String> acwId = new ArrayList<>();
+        for(AccessControlWhiteDto accessControlWhiteDto: accessControlWhiteDtos){
+            acwId.add(accessControlWhiteDto.getAcwId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(acwId.toArray(new String[acwId.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size() < 1){
+            return ;
+        }
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        for(AccessControlWhiteDto accessControlWhiteDto: accessControlWhiteDtos){
+            for(FileRelDto tmpFileRelDto : fileRelDtos){
+                if(!accessControlWhiteDto.getAcwId().equals(tmpFileRelDto.getObjId())){
+                    continue;
+                }
+                if(tmpFileRelDto.getFileSaveName().startsWith("http")){
+                    accessControlWhiteDto.setPersonFace(tmpFileRelDto.getFileSaveName() );
+                }else{
+                    accessControlWhiteDto.setPersonFace(imgUrl +tmpFileRelDto.getFileSaveName() );
+                }
+            }
+        }
     }
 }

@@ -30,6 +30,7 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
     private String personType;
 
     private String statusCd = "0";
+    private String personFace;
 
 
     public String getThirdId() {
@@ -136,5 +137,13 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPersonFace() {
+        return personFace;
+    }
+
+    public void setPersonFace(String personFace) {
+        this.personFace = personFace;
     }
 }

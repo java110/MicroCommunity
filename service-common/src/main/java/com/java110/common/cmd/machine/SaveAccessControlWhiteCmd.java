@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
@@ -52,6 +53,9 @@ public class SaveAccessControlWhiteCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
@@ -75,6 +79,9 @@ public class SaveAccessControlWhiteCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        photoSMOImpl.savePhoto(reqJson, accessControlWhitePo.getAcwId(), reqJson.getString("communityId"));
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
