@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IPhotoSMO;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
@@ -33,6 +34,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Java110CmdDoc(title = "修改门禁授权白名单",
+        description = "主要用于员工，外卖和访客修改授权门禁白名单",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/machine.updateAccessControlWhite",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "machine.updateAccessControlWhite"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "acwId", length = 30, remark = "ID"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "machineId", length = 30, remark = "门禁ID"),
+        @Java110ParamDoc(name = "personName", length = 30, remark = "人员名称"),
+        @Java110ParamDoc(name = "tel", length = 30, remark = "电话"),
+        @Java110ParamDoc(name = "idCard", length = 30, remark = "身份证"),
+        @Java110ParamDoc(name = "personType", length = 30, remark = "人员类型 1001\t员工\n" +
+                "2002\t外卖人员\n" +
+                "3003\t快递人员\n" +
+                "4004\t访客人员\n" +
+                "5005\t其他人员"),
+        @Java110ParamDoc(name = "startTime", length = 30, remark = "开始时间 YYYY-MM-DD hh24:mi:ss"),
+        @Java110ParamDoc(name = "endTime", length = 30, remark = "结束时间 YYYY-MM-DD hh24:mi:ss"),
+        @Java110ParamDoc(name = "accessControlKey", length = 30, remark = "门禁卡号 非必填"),
+        @Java110ParamDoc(name = "photo", length = 30, remark = "人脸 "),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"acwId\":\"xxx\",\"machineId\":\"102023012407190005\",\"personName\":\"张快递\",\"tel\":\"18909714562\",\"idCard\":\"\",\"personType\":\"3003\",\"startTime\":\"2023-01-05 02:10:00\",\"endTime\":\"2023-02-08 02:10:00\",\"accessControlKey\":\"\",\"photo\":\"https://java110.oss-cn-beijing.aliyuncs.com/hc/img/20230124/ec4cfb4f-4953-44f2-89ab-383dc955b005.jpg\",\"communityId\":\"2022121921870161\"}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 /**
  * 类表述：更新
  * 服务编码：machine.updateAccessControlWhite

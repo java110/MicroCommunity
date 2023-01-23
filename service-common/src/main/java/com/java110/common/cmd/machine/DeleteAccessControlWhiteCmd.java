@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+@Java110CmdDoc(title = "删除门禁授权白名单",
+        description = "主要用于员工，外卖和访客删除授权门禁白名单",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/machine.deleteAccessControlWhite",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "machine.deleteAccessControlWhite"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "acwId", length = 30, remark = "ID"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\"acwId\":\"xxx\",\"communityId\":\"2022121921870161\"}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 /**
  * 类表述：删除
  * 服务编码：machine.deleteAccessControlWhite

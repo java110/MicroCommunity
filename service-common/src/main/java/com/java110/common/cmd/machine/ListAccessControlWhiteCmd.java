@@ -20,6 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
@@ -39,6 +40,39 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+@Java110CmdDoc(title = "查询门禁授权白名单",
+        description = "主要用于员工，外卖和访客授权门禁白名单",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/machine.listAccessControlWhite",
+        resource = "commonDoc",
+        author = "吴学文",
+        serviceCode = "machine.listAccessControlWhite"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page",type = "int",length = 11, remark = "分页信息"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Array", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "acwId", type = "String", remark = "ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "machineId", type = "String", remark = "门禁ID"),
+                @Java110ParamDoc(parentNodeName = "data",name = "personName", type = "String", remark = "人员"),
+                @Java110ParamDoc(parentNodeName = "data",name = "personTypeName", type = "String", remark = "人员类型"),
+                @Java110ParamDoc(parentNodeName = "data",name = "tel", type = "String", remark = "电话"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://ip:port/app/machine.listAccessControlWhite?communityId=2022121921870161&page=1&row=10",
+        resBody="{\"code\":0,\"data\":[{\"accessControlKey\":\"123123\",\"acwId\":\"102023012465380033\",\"communityId\":\"2022121921870161\",\"createTime\":\"2023-01-24 02:31:32\",\"endTime\":\"2023-01-26 02:10:00\",\"idCard\":\"\",\"machineCode\":\"M99889\",\"machineId\":\"102023012407190005\",\"machineName\":\"测试门禁\",\"page\":-1,\"personFace\":\"https://java110.oss-cn-beijing.aliyuncs.com/hc/img/20230124/c2a3feb4-ad04-47f8-896e-47e5f6f37869.jpg\",\"personId\":\"302023012495700039\",\"personName\":\"张发发\",\"personType\":\"2002\",\"personTypeName\":\"外卖人员\",\"records\":0,\"row\":0,\"startTime\":\"2023-01-24 02:10:00\",\"statusCd\":\"0\",\"tel\":\"18909711445\",\"total\":0}],\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+)
 
 /**
  * 类表述：查询

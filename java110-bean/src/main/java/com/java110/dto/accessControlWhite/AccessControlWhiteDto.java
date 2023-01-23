@@ -22,6 +22,8 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
     private String idCard;
     private String accessControlKey;
     private String personName;
+
+    private String personNameLike;
     private String machineId;
     private String acwId;
     private String personId;
@@ -157,5 +159,13 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
 
     public void setPersonTypeName(String personTypeName) {
         this.personTypeName = personTypeName;
+    }
+
+    public String getPersonNameLike() {
+        return personNameLike;
+    }
+
+    public void setPersonNameLike(String personNameLike) {
+        this.personNameLike = personNameLike;
     }
 }

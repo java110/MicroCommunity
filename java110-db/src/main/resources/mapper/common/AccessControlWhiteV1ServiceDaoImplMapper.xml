@@ -42,6 +42,9 @@
         <if test="personName !=null and personName != ''">
             and t.person_name= #{personName}
         </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name like concat('%',#{personNameLike},'%')
+        </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>
@@ -139,6 +142,9 @@
         </if>
         <if test="personName !=null and personName != ''">
             and t.person_name= #{personName}
+        </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name like concat('%',#{personNameLike},'%')
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
