@@ -23,8 +23,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
+import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
@@ -36,6 +39,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -63,11 +68,15 @@ public class SaveVisitSettingCmd extends Cmd {
     @Autowired
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
         Assert.hasKeyAndValue(reqJson, "faceWay", "请求报文中未包含faceWay");
         Assert.hasKeyAndValue(reqJson, "carNumWay", "请求报文中未包含carNumWay");
+        Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
         Assert.hasKeyAndValue(reqJson, "auditWay", "请求报文中未包含auditWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
@@ -98,10 +107,17 @@ public class SaveVisitSettingCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
+        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+        parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
+        parkingAreaDto.setPaId(reqJson.getString("paId"));
+        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+        Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
+
         VisitSettingPo visitSettingPo = BeanConvertUtil.covertBean(reqJson, VisitSettingPo.class);
         visitSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         visitSettingPo.setFlowId(oaWorkflowPo.getFlowId());
         visitSettingPo.setFlowName(oaWorkflowPo.getFlowName());
+        visitSettingPo.setPaNum(parkingAreaDtos.get(0).getNum());
         flag = visitSettingV1InnerServiceSMOImpl.saveVisitSetting(visitSettingPo);
 
         if (flag < 1) {

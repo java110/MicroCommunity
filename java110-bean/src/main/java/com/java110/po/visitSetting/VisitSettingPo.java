@@ -17,6 +17,7 @@ package com.java110.po.visitSetting;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-01-18 14:43:29 mail: 928255095@qq.com
@@ -28,76 +29,112 @@ import java.util.Date;
 public class VisitSettingPo implements Serializable {
 
     private String carNumWay;
-private String faceWay;
-private String typeName;
-private String auditWay;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String flowId;
-private String flowName;
-private String settingId;
-public String getCarNumWay() {
+    private String faceWay;
+    private String typeName;
+    private String auditWay;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String flowId;
+    private String flowName;
+    private String settingId;
+
+    private String paId;
+    private String paNum;
+
+    public String getCarNumWay() {
         return carNumWay;
     }
-public void setCarNumWay(String carNumWay) {
+
+    public void setCarNumWay(String carNumWay) {
         this.carNumWay = carNumWay;
     }
-public String getFaceWay() {
+
+    public String getFaceWay() {
         return faceWay;
     }
-public void setFaceWay(String faceWay) {
+
+    public void setFaceWay(String faceWay) {
         this.faceWay = faceWay;
     }
-public String getTypeName() {
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getAuditWay() {
+
+    public String getAuditWay() {
         return auditWay;
     }
-public void setAuditWay(String auditWay) {
+
+    public void setAuditWay(String auditWay) {
         this.auditWay = auditWay;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getFlowName() {
+
+    public String getFlowName() {
         return flowName;
     }
-public void setFlowName(String flowName) {
+
+    public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
-public String getSettingId() {
+
+    public String getSettingId() {
         return settingId;
     }
-public void setSettingId(String settingId) {
+
+    public void setSettingId(String settingId) {
         this.settingId = settingId;
     }
 
+    public String getPaId() {
+        return paId;
+    }
 
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
 
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
+    }
 }

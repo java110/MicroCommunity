@@ -16,6 +16,9 @@ import java.util.Date;
  **/
 public class VisitSettingDto extends OaWorkflowDto implements Serializable {
 
+    public static final String AUDIT_WAY_YES = "Y";
+    public static final String AUDIT_WAY_NO = "N";
+
     private String carNumWay;
     private String faceWay;
     private String typeName;
@@ -30,6 +33,11 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+
+    private String paId;
+
+    private String paNum;
 
 
     public String getCarNumWay() {
@@ -119,5 +127,21 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
     }
 }

@@ -13,10 +13,12 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
+import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
+import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -65,6 +67,9 @@ public class SaveVisitCmd extends Cmd {
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
+
 
     //键
     public static final String IS_NEED_REVIEW = "IS_NEED_REVIEW";
@@ -106,7 +111,15 @@ public class SaveVisitCmd extends Cmd {
         photoSMOImpl.savePhoto(reqJson, reqJson.getString("vId"), reqJson.getString("communityId"));
 
         // 是否需要审核
-        hasAuditVisit(visitPo,reqJson);
+        if(hasAuditVisit(visitPo,reqJson)){
+            return; // 需要审核结束，审核时处理 相应 送图片 和车牌数据
+        }
+
+
+
+
+
+
 
     }
 
@@ -115,8 +128,23 @@ public class SaveVisitCmd extends Cmd {
      * @param visitPo
      * @param reqJson
      */
-    private void hasAuditVisit(VisitPo visitPo, JSONObject reqJson) {
+    private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson) {
 
+
+        VisitSettingDto visitSettingDto = new VisitSettingDto();
+        visitSettingDto.setCommunityId(reqJson.getString("communityId"));
+        List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
+
+        if(visitSettingDtos == null || visitSettingDtos.size()< 1){
+            return false;
+        }
+
+        // 需要审核
+        if(VisitSettingDto.AUDIT_WAY_YES.equals(visitSettingDtos.get(0).getAuditWay())){
+            return false;
+        }
+
+        return true;
 
     }
 

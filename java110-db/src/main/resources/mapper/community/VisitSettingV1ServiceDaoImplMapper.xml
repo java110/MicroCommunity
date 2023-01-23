@@ -8,9 +8,9 @@
     <!-- 保存访客设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveVisitSettingInfo" parameterType="Map">
         insert into visit_setting(
-        car_num_way,face_way,type_name,audit_way,remark,community_id,flow_id,flow_name,setting_id
+        car_num_way,face_way,type_name,audit_way,remark,community_id,flow_id,flow_name,setting_id,pa_id,pa_num
         ) values (
-        #{carNumWay},#{faceWay},#{typeName},#{auditWay},#{remark},#{communityId},#{flowId},#{flowName},#{settingId}
+        #{carNumWay},#{faceWay},#{typeName},#{auditWay},#{remark},#{communityId},#{flowId},#{flowName},#{settingId},#{paId},#{paNum}
         )
     </insert>
 
@@ -19,8 +19,8 @@
     <select id="getVisitSettingInfo" parameterType="Map" resultType="Map">
         select t.car_num_way,t.car_num_way carNumWay,t.face_way,t.face_way faceWay,t.type_name,t.type_name
         typeName,t.audit_way,t.audit_way auditWay,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
-        flowName,t.setting_id,t.setting_id settingId
+        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name,
+        flowName,t.setting_id,t.setting_id settingId,t.pa_id paId, t.pa_num paNum
         from visit_setting t
         where 1 =1
         <if test="carNumWay !=null and carNumWay != ''">
@@ -90,6 +90,12 @@
         </if>
         <if test="flowName !=null and flowName != ''">
             , t.flow_name= #{flowName}
+        </if>
+        <if test="paId !=null and paId != ''">
+            , t.pa_id= #{paId}
+        </if>
+        <if test="paNum !=null and paNum != ''">
+            , t.pa_num= #{paNum}
         </if>
         where 1=1
         <if test="settingId !=null and settingId != ''">
