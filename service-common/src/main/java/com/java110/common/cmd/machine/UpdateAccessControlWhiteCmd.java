@@ -21,6 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
@@ -51,6 +52,9 @@ public class UpdateAccessControlWhiteCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "acwId", "acwId不能为空");
@@ -68,6 +72,8 @@ public class UpdateAccessControlWhiteCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
+        photoSMOImpl.savePhoto(reqJson, accessControlWhitePo.getAcwId(), reqJson.getString("communityId"));
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

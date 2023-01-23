@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.po.file.FileRelPo;
@@ -12,6 +13,8 @@ import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PhotoSMOImpl implements IPhotoSMO {
@@ -66,14 +69,27 @@ public class PhotoSMOImpl implements IPhotoSMO {
 
         }
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
         businessUnit.put("relTypeCd", "11000");
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", objId);
         businessUnit.put("fileRealName", reqJson.getString("photo"));
         businessUnit.put("fileSaveName", reqJson.getString("photo"));
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(objId);
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size()< 1){
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            return fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+        }
+
         FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-        return fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+        fileRelPo.setFileRelId(fileRelDtos.get(0).getFileRelId());
+        return fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
+
+
     }
 
 }
