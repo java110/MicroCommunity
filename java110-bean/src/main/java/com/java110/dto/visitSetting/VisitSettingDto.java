@@ -19,6 +19,9 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
     public static final String AUDIT_WAY_YES = "Y";
     public static final String AUDIT_WAY_NO = "N";
 
+    public static final String FACE_WAY_NO = "N";
+    public static final String CAR_NUM_WAY_NO = "N";
+
     private String carNumWay;
     private String faceWay;
     private String typeName;
