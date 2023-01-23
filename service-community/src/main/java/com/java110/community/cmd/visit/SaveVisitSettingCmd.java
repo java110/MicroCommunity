@@ -35,6 +35,7 @@ import com.java110.po.visitSetting.VisitSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -107,17 +108,21 @@ public class SaveVisitSettingCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
-        ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
-        parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
-        parkingAreaDto.setPaId(reqJson.getString("paId"));
-        List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-        Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
+
 
         VisitSettingPo visitSettingPo = BeanConvertUtil.covertBean(reqJson, VisitSettingPo.class);
         visitSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         visitSettingPo.setFlowId(oaWorkflowPo.getFlowId());
         visitSettingPo.setFlowName(oaWorkflowPo.getFlowName());
-        visitSettingPo.setPaNum(parkingAreaDtos.get(0).getNum());
+
+        if(!StringUtil.isEmpty(visitSettingPo.getPaId())) {
+            ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+            parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
+            parkingAreaDto.setPaId(reqJson.getString("paId"));
+            List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+            Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
+            visitSettingPo.setPaNum(parkingAreaDtos.get(0).getNum());
+        }
         flag = visitSettingV1InnerServiceSMOImpl.saveVisitSetting(visitSettingPo);
 
         if (flag < 1) {

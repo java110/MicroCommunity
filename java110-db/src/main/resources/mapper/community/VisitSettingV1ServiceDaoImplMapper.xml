@@ -19,7 +19,7 @@
     <select id="getVisitSettingInfo" parameterType="Map" resultType="Map">
         select t.car_num_way,t.car_num_way carNumWay,t.face_way,t.face_way faceWay,t.type_name,t.type_name
         typeName,t.audit_way,t.audit_way auditWay,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name,
+        statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
         flowName,t.setting_id,t.setting_id settingId,t.pa_id paId, t.pa_num paNum
         from visit_setting t
         where 1 =1
