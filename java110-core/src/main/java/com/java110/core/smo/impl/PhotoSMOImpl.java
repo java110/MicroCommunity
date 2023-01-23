@@ -42,14 +42,25 @@ public class PhotoSMOImpl implements IPhotoSMO {
             photo = fileName;
         }
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
         businessUnit.put("relTypeCd", "11000");
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", objId);
         businessUnit.put("fileRealName", photo);
         businessUnit.put("fileSaveName", photo);
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(objId);
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size()< 1){
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            return fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+        }
+
         FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-        return fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+        fileRelPo.setFileRelId(fileRelDtos.get(0).getFileRelId());
+        return fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
     }
 
     @Override

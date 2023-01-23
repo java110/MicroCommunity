@@ -70,6 +70,7 @@ public class SaveAccessControlWhiteCmd extends Cmd {
         AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
         accessControlWhiteDto.setCommunityId(reqJson.getString("communityId"));
         accessControlWhiteDto.setTel(reqJson.getString("tel"));
+        accessControlWhiteDto.setMachineId(reqJson.getString("machineId"));
         int count = accessControlWhiteV1InnerServiceSMOImpl.queryAccessControlWhitesCount(accessControlWhiteDto);
         if (count > 0) {
             throw new CmdException(reqJson.getString("personName") + "-" + reqJson.getString("tel") + ",人员已存在，您可以删除重新添加，或者修改");

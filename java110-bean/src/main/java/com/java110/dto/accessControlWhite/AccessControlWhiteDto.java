@@ -16,6 +16,8 @@ import java.util.Date;
  **/
 public class AccessControlWhiteDto extends MachineDto implements Serializable {
 
+    public static final String PERSON_TYPE_VISIT = "4004";
+
     private String thirdId;
     private String idCard;
     private String accessControlKey;

@@ -9,23 +9,22 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
+import com.java110.dto.RoomDto;
+import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.CarBlackWhiteDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
-import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IVisitInnerServiceSMO;
-import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
-import com.java110.intf.community.IVisitV1InnerServiceSMO;
+import com.java110.intf.common.*;
+import com.java110.intf.community.*;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
+import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.file.FileRelPo;
@@ -42,10 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Java110Cmd(serviceCode = "visit.saveVisit")
 public class SaveVisitCmd extends Cmd {
@@ -77,6 +73,16 @@ public class SaveVisitCmd extends Cmd {
     @Autowired
     private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
+
+    public static final String CODE_PREFIX_ID = "10";
 
     //键
     public static final String IS_NEED_REVIEW = "IS_NEED_REVIEW";
@@ -138,19 +144,85 @@ public class SaveVisitCmd extends Cmd {
         }
 
         // 同步访客人脸
-        synchronousVisitFace(visitPo, faceWay);
+        synchronousVisitFace(visitPo, faceWay, reqJson.getString("photo"));
 
     }
 
-    private void synchronousVisitFace(VisitPo visitPo, String faceWay) {
-        if (VisitSettingDto.FACE_WAY_NO.equals(faceWay)) {
+    private void synchronousVisitFace(VisitPo visitPo, String faceWay, String photo) {
+        if (VisitSettingDto.FACE_WAY_NO.equals(faceWay) || StringUtil.isEmpty(photo)) {
             return;
+        }
+        // 查询 访问业主可以访问的门禁设备
+        RoomDto roomDto = new RoomDto();
+        roomDto.setOwnerId(visitPo.getOwnerId());
+        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+        List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+
+        //拿到小区ID
+        String communityId = visitPo.getCommunityId();
+        //根据小区ID查询现有设备
+        MachineDto machineDto = new MachineDto();
+        machineDto.setCommunityId(communityId);
+        //String[] locationObjIds = new String[]{communityId};
+        List<String> locationObjIds = new ArrayList<>();
+        locationObjIds.add(communityId);
+        for (RoomDto tRoomDto : rooms) {
+            locationObjIds.add(tRoomDto.getUnitId());
+            locationObjIds.add(tRoomDto.getRoomId());
+            locationObjIds.add(tRoomDto.getFloorId());
+        }
+
+        machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
+        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+        if (machineDtos == null || machineDtos.size() < 1) {
+            return;
+        }
+
+        // 同步到 门禁白名单中
+        for (MachineDto tmpMachineDto : machineDtos) {
+            if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
+                continue;
+            }
+            AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
+            accessControlWhiteDto.setCommunityId(communityId);
+            accessControlWhiteDto.setTel(visitPo.getPhoneNumber());
+            accessControlWhiteDto.setMachineId(tmpMachineDto.getMachineId());
+            List<AccessControlWhiteDto> accessControlWhiteDtos = accessControlWhiteV1InnerServiceSMOImpl.queryAccessControlWhites(accessControlWhiteDto);
+            AccessControlWhitePo accessControlWhitePo = new AccessControlWhitePo();
+            if (accessControlWhiteDtos == null || accessControlWhiteDtos.size() < 1) {
+                accessControlWhitePo.setAcwId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+                accessControlWhitePo.setCommunityId(visitPo.getCommunityId());
+                accessControlWhitePo.setEndTime(visitPo.getDepartureTime());
+                accessControlWhitePo.setIdCard("");
+                accessControlWhitePo.setMachineId(tmpMachineDto.getMachineId());
+                accessControlWhitePo.setPersonName(visitPo.getvName());
+                accessControlWhitePo.setPersonType(AccessControlWhiteDto.PERSON_TYPE_VISIT);
+                accessControlWhitePo.setStartTime(visitPo.getVisitTime());
+                accessControlWhitePo.setTel(visitPo.getPhoneNumber());
+                accessControlWhitePo.setThirdId(visitPo.getvId());
+                int flag = accessControlWhiteV1InnerServiceSMOImpl.saveAccessControlWhite(accessControlWhitePo);
+                if (flag < 1) {
+                    throw new CmdException("同步门禁白名单失败");
+                }
+            } else {
+                accessControlWhitePo.setAcwId(accessControlWhiteDtos.get(0).getAcwId());
+                accessControlWhitePo.setStartTime(visitPo.getVisitTime());
+                accessControlWhitePo.setEndTime(visitPo.getDepartureTime());
+                int flag = accessControlWhiteV1InnerServiceSMOImpl.updateAccessControlWhite(accessControlWhitePo);
+                if (flag < 1) {
+                    throw new CmdException("保存数据失败");
+                }
+            }
+
+            photoSMOImpl.savePhoto(photo, accessControlWhitePo.getAcwId(), accessControlWhitePo.getCommunityId());
+
         }
     }
 
     /**
      * 预约车辆 加入 白名单 是最合适的
      * 不应该加入到业主车辆中
+     *
      * @param visitPo
      * @param carNumWay
      * @param visitSettingDto
