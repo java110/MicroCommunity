@@ -427,6 +427,7 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
         oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
         oaWorkflowDataDto.setPage(1);
         oaWorkflowDataDto.setRow(1);
+        oaWorkflowDataDto.setHis("N");
         List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
 
         if (oaWorkflowDataDtos == null || oaWorkflowDataDtos.size() < 1) {
