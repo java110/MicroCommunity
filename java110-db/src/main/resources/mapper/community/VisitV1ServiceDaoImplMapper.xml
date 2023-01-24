@@ -23,8 +23,9 @@
         stateRemark,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
         phoneNumber,t.free_time,t.free_time freeTime,t.visit_case,t.visit_case
         visitCase,t.state,t.community_id,t.community_id communityId,t.entourage,t.record_state,t.record_state
-        recordState
+        recordState,t.create_time createTime,td.name stateName,t.car_num carNum
         from s_visit_info t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}
@@ -159,6 +160,7 @@
     <select id="queryVisitsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from s_visit_info t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}

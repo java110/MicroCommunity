@@ -10,11 +10,14 @@ import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
+import com.java110.intf.community.IVisitV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -68,13 +71,16 @@ import java.util.Map;
 public class ListVisitsCmd extends Cmd {
 
     @Autowired
-    private IVisitInnerServiceSMO visitInnerServiceSMOImpl;
+    private IVisitV1InnerServiceSMO visitV1InnerServiceSMO;
 
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
     //键
     public static final String CAR_FREE_TIME = "CAR_FREE_TIME";
@@ -115,10 +121,10 @@ public class ListVisitsCmd extends Cmd {
                     && "PC".equals(reqJson.getString("channel"))) {
                 visitDto.setUserId("");
             }
-            int count = visitInnerServiceSMOImpl.queryVisitsCount(visitDto);
+            int count = visitV1InnerServiceSMO.queryVisitsCount(visitDto);
             List<ApiVisitDataVo> visits = new ArrayList<>();
             if (count > 0) {
-                List<VisitDto> visitDtos = visitInnerServiceSMOImpl.queryVisits(visitDto);
+                List<VisitDto> visitDtos = visitV1InnerServiceSMO.queryVisits(visitDto);
                 for (VisitDto visit : visitDtos) {
                     ApiVisitDataVo apiVisitDataVo = BeanConvertUtil.covertBean(visit, ApiVisitDataVo.class);
                     if (!StringUtil.isEmpty(visit.getFileSaveName())) {
@@ -129,6 +135,9 @@ public class ListVisitsCmd extends Cmd {
             } else {
                 visits = new ArrayList<>();
             }
+
+            //刷入流程ID
+            refreshOwners(visits, reqJson);
 
             //刷入流程ID
             refreshSetting(visits, reqJson);
@@ -144,6 +153,34 @@ public class ListVisitsCmd extends Cmd {
             responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiVisitVo), HttpStatus.OK);
         }
         context.setResponseEntity(responseEntity);
+
+    }
+
+    private void refreshOwners(List<ApiVisitDataVo> visits, JSONObject reqJson) {
+
+        if(visits == null || visits.size() < 1){
+            return ;
+        }
+
+        List<String> ownerIds = new ArrayList<>();
+        for(ApiVisitDataVo apiVisitDataVo: visits){
+            ownerIds.add(apiVisitDataVo.getOwnerId());
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+       List<OwnerDto> ownerDtos =  ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        for(ApiVisitDataVo apiVisitDataVo: visits){
+            for(OwnerDto tmpOwnerDto : ownerDtos){
+                if(!apiVisitDataVo.getOwnerId().equals(tmpOwnerDto.getOwnerId())){
+                    continue;
+                }
+                apiVisitDataVo.setOwnerName(tmpOwnerDto.getName());
+            }
+        }
 
     }
 

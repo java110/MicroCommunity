@@ -7,6 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.itemRelease.ItemReleaseDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.dto.workflow.WorkflowDto;
@@ -16,6 +17,7 @@ import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -46,6 +48,9 @@ public class QueryUndoVisitCmd extends Cmd {
 
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -88,6 +93,9 @@ public class QueryUndoVisitCmd extends Cmd {
 
             // 输入flowId
             refreshSetting(datas,reqJson);
+
+            //刷新 业主
+            refreshOwners(datas, reqJson);
         } else {
             datas = new ArrayList<>();
         }
@@ -96,6 +104,35 @@ public class QueryUndoVisitCmd extends Cmd {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+
+    }
+
+
+    private void refreshOwners(List<JSONObject> datas, JSONObject reqJson) {
+
+        if(datas == null || datas.size() < 1){
+            return ;
+        }
+
+        List<String> ownerIds = new ArrayList<>();
+        for(JSONObject apiVisitDataVo: datas){
+            ownerIds.add(apiVisitDataVo.getString("ownerId"));
+        }
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos =  ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        for(JSONObject apiVisitDataVo: datas){
+            for(OwnerDto tmpOwnerDto : ownerDtos){
+                if(!apiVisitDataVo.getString("ownerId").equals(tmpOwnerDto.getOwnerId())){
+                    continue;
+                }
+                apiVisitDataVo.put("ownerName",tmpOwnerDto.getName());
+            }
+        }
 
     }
 

@@ -42,6 +42,12 @@
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
         </if>
+        <if test="ownerIds !=null">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
@@ -140,6 +146,12 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="ownerIds !=null">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}

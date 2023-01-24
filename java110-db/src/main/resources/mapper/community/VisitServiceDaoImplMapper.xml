@@ -189,6 +189,12 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
+        <if test="vIds !=null">
+            and t.v_id in
+            <foreach collection="vIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="visitTime !=null ">
             and t.visit_time= #{visitTime}
         </if>
