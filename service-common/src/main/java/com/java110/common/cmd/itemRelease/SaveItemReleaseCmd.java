@@ -134,7 +134,7 @@ public class SaveItemReleaseCmd extends Cmd {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
 
 
     @Override
@@ -230,7 +230,7 @@ public class SaveItemReleaseCmd extends Cmd {
         flowJson.put("auditMessage","提交审核");
         flowJson.put("storeId",itemReleaseTypeDtos.get(0).getStoreId());
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
-        JSONObject result = oaWorkflowUserInnerServiceSMOImpl.startProcess(flowJson);
+        JSONObject result = oaWorkflowActivitiInnerServiceSMOImpl.startProcess(flowJson);
 
         //提交者提交
         flowJson = new JSONObject();
@@ -242,7 +242,7 @@ public class SaveItemReleaseCmd extends Cmd {
         flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
 
 
-        oaWorkflowUserInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
+        oaWorkflowActivitiInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
 
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

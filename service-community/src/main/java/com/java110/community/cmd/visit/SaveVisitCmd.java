@@ -14,16 +14,15 @@ import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.common.*;
 import com.java110.intf.community.*;
-import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.po.car.OwnerCarPo;
@@ -82,6 +81,15 @@ public class SaveVisitCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
+
     public static final String CODE_PREFIX_ID = "10";
 
     //键
@@ -108,6 +116,7 @@ public class SaveVisitCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
+        String storeId = context.getReqHeaders().get("store-id");
         reqJson.put("vId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_vId));
         //随行人数
         if (StringUtil.isEmpty(reqJson.getString("entourage"))) {
@@ -124,7 +133,7 @@ public class SaveVisitCmd extends Cmd {
         photoSMOImpl.savePhoto(reqJson, reqJson.getString("vId"), reqJson.getString("communityId"));
 
         // 是否需要审核
-        if (hasAuditVisit(visitPo, reqJson)) {
+        if (hasAuditVisit(visitPo, reqJson,storeId,userId)) {
             return; // 需要审核结束，审核时处理 相应 送图片 和车牌数据
         }
 
@@ -254,7 +263,7 @@ public class SaveVisitCmd extends Cmd {
      * @param visitPo
      * @param reqJson
      */
-    private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson) {
+    private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson,String storeId,String userId) {
 
 
         VisitSettingDto visitSettingDto = new VisitSettingDto();
@@ -266,9 +275,46 @@ public class SaveVisitCmd extends Cmd {
         }
 
         // 需要审核
-        if (VisitSettingDto.AUDIT_WAY_YES.equals(visitSettingDtos.get(0).getAuditWay())) {
+        if (!VisitSettingDto.AUDIT_WAY_YES.equals(visitSettingDtos.get(0).getAuditWay())) {
             return false;
         }
+
+
+        //触发 审批流程
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(storeId);
+        oaWorkflowDto.setFlowId(visitPo.getvId());
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+        if (!OaWorkflowDto.STATE_COMPLAINT.equals(oaWorkflowDtos.get(0).getState())) {
+            throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
+        }
+
+        if (StringUtil.isEmpty(oaWorkflowDtos.get(0).getProcessDefinitionKey())) {
+            throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
+        }
+
+        //启动任务
+        JSONObject flowJson = new JSONObject();
+        flowJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        flowJson.put("createUserId",userId);
+        flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
+        flowJson.put("id",visitPo.getvId());
+        flowJson.put("auditMessage","提交审核");
+        flowJson.put("storeId",storeId);
+        reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        JSONObject result = oaWorkflowActivitiInnerServiceSMOImpl.startProcess(flowJson);
+
+        //提交者提交
+        flowJson = new JSONObject();
+        flowJson.put("processInstanceId",result.getString("processInstanceId"));
+        flowJson.put("createUserId",userId);
+        flowJson.put("nextUserId",userId); // 这里要求流程 下一处理人必须要指定
+        flowJson.put("storeId",storeId);
+        flowJson.put("id",visitPo.getvId());
+        flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
+
+        oaWorkflowActivitiInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
 
         return true;
 
