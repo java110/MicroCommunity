@@ -19,6 +19,8 @@ public class VisitDto extends PageDto implements Serializable {
     public static final String STATE_C = "1"; //表示审核通过
     public static final String STATE_F = "2"; //表示审核拒绝
 
+    public static final String STATE_D = "3"; // 审核中
+
     private String departureTime;
     private String vName;
     private String visitGender;

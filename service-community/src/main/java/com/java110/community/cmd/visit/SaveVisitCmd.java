@@ -133,7 +133,7 @@ public class SaveVisitCmd extends Cmd {
         photoSMOImpl.savePhoto(reqJson, reqJson.getString("vId"), reqJson.getString("communityId"));
 
         // 是否需要审核
-        if (hasAuditVisit(visitPo, reqJson,storeId,userId)) {
+        if (hasAuditVisit(visitPo, reqJson, storeId, userId)) {
             return; // 需要审核结束，审核时处理 相应 送图片 和车牌数据
         }
 
@@ -155,6 +155,14 @@ public class SaveVisitCmd extends Cmd {
         // 同步访客人脸
         synchronousVisitFace(visitPo, faceWay, reqJson.getString("photo"));
 
+        visitPo = new VisitPo();
+        visitPo.setState(VisitDto.STATE_C);
+        visitPo.setvId(reqJson.getString("vId"));
+        visitPo.setCommunityId(reqJson.getString("communityId"));
+        flag = visitV1InnerServiceSMOImpl.updateVisit(visitPo);
+        if (flag < 1) {
+            throw new CmdException("修改访客状态失败");
+        }
     }
 
     private void synchronousVisitFace(VisitPo visitPo, String faceWay, String photo) {
@@ -263,7 +271,7 @@ public class SaveVisitCmd extends Cmd {
      * @param visitPo
      * @param reqJson
      */
-    private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson,String storeId,String userId) {
+    private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson, String storeId, String userId) {
 
 
         VisitSettingDto visitSettingDto = new VisitSettingDto();
@@ -297,24 +305,33 @@ public class SaveVisitCmd extends Cmd {
         //启动任务
         JSONObject flowJson = new JSONObject();
         flowJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
-        flowJson.put("createUserId",userId);
-        flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
-        flowJson.put("id",visitPo.getvId());
-        flowJson.put("auditMessage","提交审核");
-        flowJson.put("storeId",storeId);
+        flowJson.put("createUserId", userId);
+        flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
+        flowJson.put("id", visitPo.getvId());
+        flowJson.put("auditMessage", "提交审核");
+        flowJson.put("storeId", storeId);
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
         JSONObject result = oaWorkflowActivitiInnerServiceSMOImpl.startProcess(flowJson);
 
         //提交者提交
         flowJson = new JSONObject();
-        flowJson.put("processInstanceId",result.getString("processInstanceId"));
-        flowJson.put("createUserId",userId);
-        flowJson.put("nextUserId",userId); // 这里要求流程 下一处理人必须要指定
-        flowJson.put("storeId",storeId);
-        flowJson.put("id",visitPo.getvId());
-        flowJson.put("flowId",oaWorkflowDtos.get(0).getFlowId());
+        flowJson.put("processInstanceId", result.getString("processInstanceId"));
+        flowJson.put("createUserId", userId);
+        flowJson.put("nextUserId", userId); // 这里要求流程 下一处理人必须要指定
+        flowJson.put("storeId", storeId);
+        flowJson.put("id", visitPo.getvId());
+        flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
 
         oaWorkflowActivitiInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
+
+        visitPo = new VisitPo();
+        visitPo.setState(VisitDto.STATE_D);
+        visitPo.setvId(reqJson.getString("vId"));
+        visitPo.setCommunityId(reqJson.getString("communityId"));
+        int flag = visitV1InnerServiceSMOImpl.updateVisit(visitPo);
+        if (flag < 1) {
+            throw new CmdException("修改访客状态失败");
+        }
 
         return true;
 
