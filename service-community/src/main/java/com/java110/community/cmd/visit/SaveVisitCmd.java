@@ -291,7 +291,7 @@ public class SaveVisitCmd extends Cmd {
         //触发 审批流程
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(storeId);
-        oaWorkflowDto.setFlowId(visitPo.getvId());
+        oaWorkflowDto.setFlowId(visitSettingDtos.get(0).getFlowId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
         if (!OaWorkflowDto.STATE_COMPLAINT.equals(oaWorkflowDtos.get(0).getState())) {
