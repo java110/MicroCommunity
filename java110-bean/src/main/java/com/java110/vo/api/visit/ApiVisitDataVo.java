@@ -31,6 +31,8 @@ public class ApiVisitDataVo implements Serializable {
     private String fileSaveName;
     private String url;
 
+    private String flowId;
+
     public String getvId() {
         return vId;
     }
@@ -245,5 +247,13 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }

@@ -55,6 +55,8 @@ public class VisitDto extends PageDto implements Serializable {
     private String fileRelName;
     private String fileSaveName;
 
+    private String flowId;
+
     public String getvName() {
         return vName;
     }
@@ -317,5 +319,13 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setFileSaveName(String fileSaveName) {
         this.fileSaveName = fileSaveName;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }
