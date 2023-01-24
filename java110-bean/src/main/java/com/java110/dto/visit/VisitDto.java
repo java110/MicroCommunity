@@ -28,6 +28,8 @@ public class VisitDto extends PageDto implements Serializable {
     private String ownerName;
     private String userId;
     private String vId;
+    private String[] vIds;
+
     private String visitTime;
     private String phoneNumber;
     private String visitCase;
@@ -327,5 +329,13 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setFlowId(String flowId) {
         this.flowId = flowId;
+    }
+
+    public String[] getvIds() {
+        return vIds;
+    }
+
+    public void setvIds(String[] vIds) {
+        this.vIds = vIds;
     }
 }
