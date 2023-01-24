@@ -150,7 +150,32 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         }
         getItemReleaseCount(result, doing);
 
+        getVisitCount(result, doing);
+
         return ResultVo.createResponseEntity(doing);
+    }
+
+    private void getVisitCount(ComponentValidateResult result, JSONObject data) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_VISIT);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            data.put("visitUndoCount", "0");
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(result.getUserId());
+        auditUser.setProcessDefinitionKeys(flowIds);
+
+        long itemReleaseCount = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+        data.put("visitUndoCount", itemReleaseCount);
     }
 
     private void getItemReleaseCount(ComponentValidateResult result, JSONObject data) {
