@@ -51,9 +51,9 @@ import java.nio.charset.Charset;
         "com.java110.config.properties.code", "com.java110.db","com.java110.doc"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
-        basePackages = {"com.java110.store.listener"})
+        basePackages = {"com.java110.scm.listener"})
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
-        basePackages = {"com.java110.store.cmd"})
+        basePackages = {"com.java110.scm.cmd"})
 @EnableFeignClients(basePackages = {
         "com.java110.intf.community",
         "com.java110.intf.fee",

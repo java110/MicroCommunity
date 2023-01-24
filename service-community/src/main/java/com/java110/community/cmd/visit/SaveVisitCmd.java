@@ -15,6 +15,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
@@ -22,6 +23,7 @@ import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.common.*;
 import com.java110.intf.community.*;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.po.car.CarBlackWhitePo;
@@ -89,6 +91,9 @@ public class SaveVisitCmd extends Cmd {
 
     @Autowired
     private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
 
     public static final String CODE_PREFIX_ID = "10";
 
@@ -200,7 +205,7 @@ public class SaveVisitCmd extends Cmd {
         flowJson = new JSONObject();
         flowJson.put("processInstanceId", result.getString("processInstanceId"));
         flowJson.put("createUserId", userId);
-        flowJson.put("nextUserId", userId); // 这里要求流程 下一处理人必须要指定
+        flowJson.put("nextUserId", nextAuditStaff(storeId, visitSettingDtos.get(0).getFlowId())); // 这里要求流程 下一处理人必须要指定
         flowJson.put("storeId", storeId);
         flowJson.put("id", visitPo.getvId());
         flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
@@ -215,8 +220,33 @@ public class SaveVisitCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("修改访客状态失败");
         }
-
         return true;
+    }
+
+    private String nextAuditStaff(String storeId, String flowId) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setFlowId(flowId);
+        oaWorkflowDto.setStoreId(storeId);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+
+        OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
+        oaWorkflowXmlDto.setFlowId(oaWorkflowDtos.get(0).getFlowId());
+        List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
+        Assert.listOnlyOne(oaWorkflowXmlDtos, "流程不存在");
+
+        List<JSONObject> tasks = oaWorkflowActivitiInnerServiceSMOImpl.queryFirstAuditStaff(oaWorkflowXmlDtos.get(0));
+
+        if (tasks == null || tasks.size() < 1) {
+            throw new CmdException("流程未设置下一步审核人");
+        }
+        String assignee = tasks.get(0).getString("assignee");
+
+        if (assignee.startsWith("-")) {
+            throw new CmdException("流程未设置下一步审核人");
+        }
+        return assignee;
 
     }
 
