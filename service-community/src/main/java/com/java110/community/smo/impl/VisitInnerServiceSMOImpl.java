@@ -69,7 +69,7 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
      */
     private void refreshVisit(VisitDto visit, List<UserDto> users) {
         for (UserDto user : users) {
-            if (!StringUtil.isEmpty(visit.getUserId()) && visit.getUserId().equals(user.getUserId())) {
+            if (!StringUtil.isEmpty(visit.getCreateUserId()) && visit.getCreateUserId().equals(user.getUserId())) {
                 BeanConvertUtil.covertBean(user, visit);
             }
         }
@@ -84,7 +84,7 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
     private String[] getUserIds(List<VisitDto> visits) {
         List<String> userIds = new ArrayList<String>();
         for (VisitDto visit : visits) {
-            userIds.add(visit.getUserId());
+            userIds.add(visit.getCreateUserId());
         }
 
         return userIds.toArray(new String[userIds.size()]);

@@ -119,7 +119,7 @@ public class ListVisitsCmd extends Cmd {
             VisitDto visitDto = BeanConvertUtil.covertBean(reqJson, VisitDto.class);
             if (reqJson.containsKey("channel") && !StringUtil.isEmpty(reqJson.getString("channel"))
                     && "PC".equals(reqJson.getString("channel"))) {
-                visitDto.setUserId("");
+                visitDto.setCreateUserId("");
             }
             int count = visitV1InnerServiceSMO.queryVisitsCount(visitDto);
             List<ApiVisitDataVo> visits = new ArrayList<>();

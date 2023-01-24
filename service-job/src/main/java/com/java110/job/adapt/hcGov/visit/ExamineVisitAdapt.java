@@ -277,7 +277,7 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         body.put("vName", visits.get(0).getvName());
         body.put("visitGender", visits.get(0).getVisitGender());
         body.put("phoneNumber", visits.get(0).getPhoneNumber());
-        body.put("userId", visits.get(0).getUserId());
+        body.put("userId", visits.get(0).getCreateUserId());
         body.put("communityId", visits.get(0).getCommunityId());
         body.put("ownerId", visits.get(0).getOwnerId());
         body.put("visitCase", visits.get(0).getVisitCase());

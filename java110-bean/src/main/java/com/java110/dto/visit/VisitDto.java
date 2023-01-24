@@ -26,7 +26,7 @@ public class VisitDto extends PageDto implements Serializable {
     private String visitGender;
     private String ownerId;
     private String ownerName;
-    private String userId;
+    private String createUserId;
     private String vId;
     private String[] vIds;
 
@@ -83,12 +83,12 @@ public class VisitDto extends PageDto implements Serializable {
         this.ownerId = ownerId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getCreateUserId() {
+        return createUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 
     public String getvId() {

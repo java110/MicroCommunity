@@ -19,7 +19,7 @@
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
         select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd
         statusCd,t.ps_id,t.ps_id psId,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id
-        ownerId,t.reason_type,t.reason_type reasonType,t.user_id,t.user_id userId,t.state_remark,t.state_remark
+        ownerId,t.reason_type,t.reason_type reasonType,t.user_id,t.user_id createUserId,t.state_remark,t.state_remark
         stateRemark,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
         phoneNumber,t.free_time,t.free_time freeTime,t.visit_case,t.visit_case
         visitCase,t.state,t.community_id,t.community_id communityId,t.entourage,t.record_state,t.record_state
@@ -48,8 +48,8 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
@@ -183,8 +183,8 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
