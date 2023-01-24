@@ -131,6 +131,8 @@ public class QueryUndoVisitCmd extends Cmd {
                     continue;
                 }
                 apiVisitDataVo.put("ownerName",tmpOwnerDto.getName());
+                apiVisitDataVo.put("ownerTel",tmpOwnerDto.getLink());
+
             }
         }
 

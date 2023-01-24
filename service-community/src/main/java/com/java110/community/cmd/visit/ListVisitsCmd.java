@@ -179,6 +179,7 @@ public class ListVisitsCmd extends Cmd {
                     continue;
                 }
                 apiVisitDataVo.setOwnerName(tmpOwnerDto.getName());
+                apiVisitDataVo.setOwnerTel(tmpOwnerDto.getLink());
             }
         }
 

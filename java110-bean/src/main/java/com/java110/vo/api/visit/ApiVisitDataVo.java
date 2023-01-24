@@ -11,6 +11,8 @@ public class ApiVisitDataVo implements Serializable {
     private String communityId;
     private String ownerId;
     private String ownerName;
+
+    private String ownerTel;
     private String visitCase;
     private String visitTime;
     private String freeTime;
@@ -256,5 +258,13 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getOwnerTel() {
+        return ownerTel;
+    }
+
+    public void setOwnerTel(String ownerTel) {
+        this.ownerTel = ownerTel;
     }
 }
