@@ -164,14 +164,12 @@
         t.car_num,t.car_num carNum,t.entourage,t.reason_type,t.reason_type
         reasonType,t.state,t.state_remark,t.state_remark stateRemark,td.name stateName,t.create_time,
         t.create_time createTime,t.ps_id,t.ps_id psId,t.free_time,t.free_time freeTime,
-        t.record_state,t.record_state recordState,ps.num parkingSpaceNum,pa.num parkingAreaName,bo.name ownerName,
-        fr.file_real_name fileRealName,fr.file_save_name fileSaveName
+        t.record_state,t.record_state recordState,ps.num parkingSpaceNum,pa.num parkingAreaName,bo.name ownerName
         from s_visit_info t
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and  pa.status_cd = '0'
         left join building_owner bo on t.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
-        left join file_rel fr on fr.obj_id = t.v_id and fr.status_cd = '0'
         where 1 = 1
         <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}

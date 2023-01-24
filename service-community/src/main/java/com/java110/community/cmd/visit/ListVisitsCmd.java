@@ -8,10 +8,14 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -68,6 +72,9 @@ public class ListVisitsCmd extends Cmd {
 
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     //键
     public static final String CAR_FREE_TIME = "CAR_FREE_TIME";
@@ -126,6 +133,9 @@ public class ListVisitsCmd extends Cmd {
             //刷入流程ID
             refreshSetting(visits, reqJson);
 
+            // 刷入人脸
+            refreshPhoto(visits, reqJson);
+
             ApiVisitVo apiVisitVo = new ApiVisitVo();
             apiVisitVo.setTotal(count);
             apiVisitVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
@@ -135,6 +145,35 @@ public class ListVisitsCmd extends Cmd {
         }
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void refreshPhoto(List<ApiVisitDataVo> visits, JSONObject reqJson) {
+
+        List<String> vIds = new ArrayList<>();
+        for(ApiVisitDataVo apiVisitDataVo: visits){
+            vIds.add(apiVisitDataVo.getvId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(vIds.toArray(new String[vIds.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if(fileRelDtos == null || fileRelDtos.size() < 1){
+            return ;
+        }
+        String imgUrl = MappingCache.getValue("IMG_PATH");
+        for(ApiVisitDataVo apiVisitDataVo: visits){
+            for(FileRelDto tmpFileRelDto : fileRelDtos){
+                if(!apiVisitDataVo.getvId().equals(tmpFileRelDto.getObjId())){
+                    continue;
+                }
+                if(tmpFileRelDto.getFileSaveName().startsWith("http")){
+                    apiVisitDataVo.setUrl(tmpFileRelDto.getFileSaveName() );
+                }else{
+                    apiVisitDataVo.setUrl(imgUrl +tmpFileRelDto.getFileSaveName() );
+                }
+            }
+        }
     }
 
     private void refreshSetting(List<ApiVisitDataVo> visits, JSONObject reqJson) {
