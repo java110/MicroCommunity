@@ -23,6 +23,8 @@ public class OwnerSettledSettingDto extends OaWorkflowDto implements Serializabl
     private String settingId;
     private String settingName;
 
+    private String auditWay;
+
 
     private Date createTime;
 
@@ -92,5 +94,13 @@ public class OwnerSettledSettingDto extends OaWorkflowDto implements Serializabl
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAuditWay() {
+        return auditWay;
+    }
+
+    public void setAuditWay(String auditWay) {
+        this.auditWay = auditWay;
     }
 }

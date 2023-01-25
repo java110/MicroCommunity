@@ -7,9 +7,9 @@
     <!-- 保存业主入驻流程信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerSettledSettingInfo" parameterType="Map">
         insert into owner_settled_setting(
-        remark,community_id,flow_id,flow_name,setting_id,setting_name
+        remark,community_id,flow_id,flow_name,setting_id,setting_name,audit_way
         ) values (
-        #{remark},#{communityId},#{flowId},#{flowName},#{settingId},#{settingName}
+        #{remark},#{communityId},#{flowId},#{flowName},#{settingId},#{settingName},#{auditWay}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getOwnerSettledSettingInfo" parameterType="Map" resultType="Map">
         select t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id
         flowId,t.flow_name,t.flow_name flowName,t.setting_id,t.setting_id settingId,t.setting_name,t.setting_name
-        settingName
+        settingName,t.audit_way auditWay
         from owner_settled_setting t
         where 1 =1
         <if test="remark !=null and remark != ''">
@@ -29,6 +29,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
         </if>
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
@@ -59,11 +62,12 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="flowId !=null and flowId != ''">
             , t.flow_id= #{flowId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            , t.audit_way= #{auditWay}
         </if>
         <if test="flowName !=null and flowName != ''">
             , t.flow_name= #{flowName}
@@ -74,6 +78,9 @@
         where 1=1
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -91,6 +98,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
         </if>
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
