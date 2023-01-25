@@ -18,6 +18,14 @@ public interface IPhotoSMO {
 
     /**
      * 保存图片公共类，供cmd 调用
+     * @param photo
+     * @param objId
+     * @return
+     */
+    int savePhoto(String photo,String objId, String communityId,String relTypeCd);
+
+    /**
+     * 保存图片公共类，供cmd 调用
      * @param reqJson
      * @param objId
      * @return

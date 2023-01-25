@@ -26,8 +26,12 @@ public class PhotoSMOImpl implements IPhotoSMO {
     @Autowired(required = false)
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    public int savePhoto(String photo, String objId, String communityId){
+        return savePhoto(photo,objId,communityId,"11000");
+    }
+
     @Override
-    public int savePhoto(String photo, String objId, String communityId) {
+    public int savePhoto(String photo, String objId, String communityId,String relTypeCd) {
         if (StringUtil.isEmpty(photo)) {
             return 0;
         }
@@ -42,7 +46,7 @@ public class PhotoSMOImpl implements IPhotoSMO {
             photo = fileName;
         }
         JSONObject businessUnit = new JSONObject();
-        businessUnit.put("relTypeCd", "11000");
+        businessUnit.put("relTypeCd", relTypeCd);
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", objId);
         businessUnit.put("fileRealName", photo);

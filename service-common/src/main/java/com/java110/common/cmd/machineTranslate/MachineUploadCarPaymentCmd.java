@@ -133,6 +133,7 @@ public class MachineUploadCarPaymentCmd extends Cmd {
         carInoutDto.setPaId(machineDto.getLocationObjId());
         carInoutDto.setStates(new String[]{
                 CarInoutDto.STATE_IN,
+                CarInoutDto.STATE_PAY,
                 CarInoutDto.STATE_REPAY
         });
         List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);

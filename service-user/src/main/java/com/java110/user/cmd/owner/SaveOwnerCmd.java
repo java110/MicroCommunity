@@ -7,25 +7,29 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -68,7 +72,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"name\": \"王王\",\n" +
                 "\t\"age\": \"\",\n" +
                 "\t\"link\": \"18909718888\",\n" +
@@ -81,7 +85,7 @@ import java.util.List;
                 "\t\"idCard\": \"\",\n" +
                 "\t\"communityId\": \"2022121921870161\"\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 @Java110Cmd(serviceCode = "owner.saveOwner")
 public class SaveOwnerCmd extends Cmd {
@@ -109,6 +113,17 @@ public class SaveOwnerCmd extends Cmd {
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -186,31 +201,58 @@ public class SaveOwnerCmd extends Cmd {
                 throw new CmdException("保存业主房屋关系失败");
             }
         }
-        if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
-            JSONObject businessUnit = new JSONObject();
-            String _photo = reqJson.getString("ownerPhoto");
-            if(_photo.length()> 512){
-                FileDto fileDto = new FileDto();
-                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                fileDto.setFileName(fileDto.getFileId());
-                fileDto.setContext(_photo);
-                fileDto.setSuffix("jpeg");
-                fileDto.setCommunityId(reqJson.getString("communityId"));
-                _photo = fileInnerServiceSMOImpl.saveFile(fileDto);
-            }
-            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
-            businessUnit.put("relTypeCd", "10000");
-            businessUnit.put("saveWay", "table");
-            businessUnit.put("objId", reqJson.getString("memberId"));
-            businessUnit.put("fileRealName", _photo);
-            businessUnit.put("fileSaveName", _photo);
-            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-            flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-            if (flag < 1) {
-                throw new CmdException("保存业主房屋关系失败");
-            }
-        }
+
+        //保存照片
+        photoSMOImpl.savePhoto(reqJson.getString("ownerPhoto"),
+                reqJson.getString("memberId"),
+                reqJson.getString("communityId"),
+                "10000");
         dealOwnerAttr(reqJson, cmdDataFlowContext);
+
+        String autoUser = MappingCache.getValue("OWNER", "AUTO_GENERATOR_OWNER_USER");
+
+        if (!"OFF".equals(autoUser)) {
+            return;
+        }
+
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(ownerPo.getCommunityId());
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        Assert.listNotNull(communityDtos, "未包含小区信息");
+        CommunityDto tmpCommunityDto = communityDtos.get(0);
+
+        UserPo userPo = new UserPo();
+        userPo.setUserId(GenerateCodeFactory.getUserId());
+        userPo.setName(ownerPo.getName());
+        userPo.setTel(ownerPo.getLink());
+        userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
+        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
+        userPo.setAge(ownerPo.getAge());
+        userPo.setAddress(ownerPo.getAddress());
+        userPo.setSex(ownerPo.getSex());
+        flag = userV1InnerServiceSMOImpl.saveUser(userPo);
+        if (flag < 1) {
+            throw new CmdException("注册失败");
+        }
+
+        OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
+        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
+        ownerAppUserPo.setState("12000");
+        ownerAppUserPo.setAppTypeCd("10010");
+        ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
+        ownerAppUserPo.setMemberId(ownerPo.getMemberId());
+        ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
+        ownerAppUserPo.setCommunityId(ownerPo.getCommunityId());
+        ownerAppUserPo.setAppUserName(ownerPo.getName());
+        ownerAppUserPo.setIdCard(ownerPo.getIdCard());
+        ownerAppUserPo.setAppType("WECHAT");
+        ownerAppUserPo.setLink(ownerPo.getLink());
+        ownerAppUserPo.setUserId(userPo.getUserId());
+
+        flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+        if (flag < 1) {
+            throw new CmdException("添加用户业主关系失败");
+        }
     }
 
     /**
