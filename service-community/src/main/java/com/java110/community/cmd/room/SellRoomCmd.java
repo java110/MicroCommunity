@@ -25,7 +25,7 @@ import java.text.ParseException;
         description = "对应后台 业主入驻房屋功能",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/room.sellRoom",
-        resource = "roomDoc",
+        resource = "communityDoc",
         author = "吴学文",
         serviceCode = "room.sellRoom"
 )
