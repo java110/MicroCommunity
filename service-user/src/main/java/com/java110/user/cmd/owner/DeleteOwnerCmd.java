@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -27,6 +28,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+@Java110CmdDoc(title = "删除业主",
+        description = "第三方系统，比如招商系统删除业主信息",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/owner.deleteOwner",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "owner.deleteOwner"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "memberId", length = 30, remark = "业主ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\n" +
+                "\t\"memberId\": 123123123,\n" +
+                "\t\"communityId\": \"2022121921870161\"\n" +
+                "}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 @Java110Cmd(serviceCode = "owner.deleteOwner")
 public class DeleteOwnerCmd extends Cmd {
 

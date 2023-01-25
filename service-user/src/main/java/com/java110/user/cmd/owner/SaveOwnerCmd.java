@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
@@ -34,6 +35,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/**
+ * 保存 业主
+ */
+@Java110CmdDoc(title = "添加业主",
+        description = "第三方系统，比如招商系统同步业主信息",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/owner.saveOwner",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "owner.saveOwner"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "业主名称"),
+        @Java110ParamDoc(name = "link", length = 11, remark = "业主手机号"),
+        @Java110ParamDoc(name = "idCard", length = 30, remark = "业主身份证号"),
+        @Java110ParamDoc(name = "address", length = 512, remark = "地址"),
+        @Java110ParamDoc(name = "sex", length = 12, remark = "性别 男 1 女 0"),
+        @Java110ParamDoc(name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
+        @Java110ParamDoc(name = "remark", length = 512, remark = "备注"),
+        @Java110ParamDoc(name = "ownerId", length = 30, remark = "业主 时 填写-1 家庭成员时填写业主ID"),
+        @Java110ParamDoc(name = "ownerPhoto", length = -1, remark = "业主人脸 用于同步门禁 人脸开门"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\n" +
+                "\t\"name\": \"王王\",\n" +
+                "\t\"age\": \"\",\n" +
+                "\t\"link\": \"18909718888\",\n" +
+                "\t\"address\": \"张三\",\n" +
+                "\t\"sex\": \"0\",\n" +
+                "\t\"ownerTypeCd\": \"1001\",\n" +
+                "\t\"remark\": \"\",\n" +
+                "\t\"ownerId\": -1,\n" +
+                "\t\"ownerPhoto\": \"\",\n" +
+                "\t\"idCard\": \"\",\n" +
+                "\t\"communityId\": \"2022121921870161\"\n" +
+                "}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 @Java110Cmd(serviceCode = "owner.saveOwner")
 public class SaveOwnerCmd extends Cmd {
 

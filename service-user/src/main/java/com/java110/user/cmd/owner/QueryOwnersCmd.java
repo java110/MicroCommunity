@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.file.FileRelDto;
@@ -27,6 +28,66 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Java110CmdDoc(title = "查询业主",
+        description = "第三方系统，比如招商系统查询业主信息",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/owner.queryOwners",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "owner.queryOwners"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "业主名称"),
+        @Java110ParamDoc(name = "link", length = 11, remark = "业主手机号"),
+        @Java110ParamDoc(name = "idCard", length = 30, remark = "业主身份证号"),
+        @Java110ParamDoc(name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
+        @Java110ParamDoc(name = "ownerId", length = 30, remark = "业主ID，家庭成员业主ID"),
+        @Java110ParamDoc(name = "memberId", length = 30, remark = "业主ID，主键ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "owners", type = "Array", length = -1, defaultValue = "成功", remark = "数据"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "communityId", length = 30, remark = "小区ID"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "name", length = 64, remark = "业主名称"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "link", length = 11, remark = "业主手机号"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "idCard", length = 30, remark = "业主身份证号"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "address", length = 512, remark = "地址"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "sex", length = 12, remark = "性别 男 1 女 0"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "remark", length = 512, remark = "备注"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "memberId", length = 30, remark = "业主ID"),
+                @Java110ParamDoc(parentNodeName = "owners",name = "ownerPhoto", length = -1, remark = "业主人脸 用于同步门禁 人脸开门"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://ip:port/app/owner.queryOwners?ownerTypeCd=1001&page=1&row=10&communityId=2022121921870161",
+        resBody="{\n" +
+                "\t\"owners\": [{\n" +
+                "\t\t\"address\": \"张三\",\n" +
+                "\t\t\"idCard\": \"\",\n" +
+                "\t\t\"link\": \"18909718888\",\n" +
+                "\t\t\"memberId\": \"772023012589770046\",\n" +
+                "\t\t\"name\": \"王王\",\n" +
+                "\t\t\"ownerId\": \"772023012589770046\",\n" +
+                "\t\t\"ownerTypeCd\": \"1001\",\n" +
+                "\t\t\"remark\": \"\",\n" +
+                "\t\t\"sex\": \"0\",\n" +
+                "\t\t\"userName\": \"人和物业\"\n" +
+                "\t}],\n" +
+                "\t\"page\": 0,\n" +
+                "\t\"records\": 1,\n" +
+                "\t\"rows\": 0,\n" +
+                "\t\"total\": 1\n" +
+                "}"
+)
 @Java110Cmd(serviceCode = "owner.queryOwners")
 public class QueryOwnersCmd extends Cmd {
 

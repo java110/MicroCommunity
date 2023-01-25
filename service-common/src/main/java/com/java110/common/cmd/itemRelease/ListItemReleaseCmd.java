@@ -49,6 +49,8 @@ import org.slf4j.LoggerFactory;
 )
 
 @Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "放行小区"),
 })
 
