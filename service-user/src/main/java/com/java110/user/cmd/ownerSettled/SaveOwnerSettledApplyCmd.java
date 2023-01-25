@@ -25,6 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledRoomsV1InnerServiceSMO;
@@ -94,9 +95,12 @@ public class SaveOwnerSettledApplyCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
 
         OwnerSettledApplyPo ownerSettledApplyPo = BeanConvertUtil.covertBean(reqJson, OwnerSettledApplyPo.class);
         ownerSettledApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        ownerSettledApplyPo.setCreateUserId(userId);
+        ownerSettledApplyPo.setState(OwnerSettledApplyDto.STATE_WAIT);
         int flag = ownerSettledApplyV1InnerServiceSMOImpl.saveOwnerSettledApply(ownerSettledApplyPo);
 
         if (flag < 1) {

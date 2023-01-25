@@ -27,8 +27,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "ownerSettled.listOwnerSettledApply")
 public class ListOwnerSettledApplyCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListOwnerSettledApplyCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListOwnerSettledApplyCmd.class);
     @Autowired
     private IOwnerSettledApplyV1InnerServiceSMO ownerSettledApplyV1InnerServiceSMOImpl;
 
@@ -61,22 +63,23 @@ public class ListOwnerSettledApplyCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           OwnerSettledApplyDto ownerSettledApplyDto = BeanConvertUtil.covertBean(reqJson, OwnerSettledApplyDto.class);
 
-           int count = ownerSettledApplyV1InnerServiceSMOImpl.queryOwnerSettledApplysCount(ownerSettledApplyDto);
+        OwnerSettledApplyDto ownerSettledApplyDto = BeanConvertUtil.covertBean(reqJson, OwnerSettledApplyDto.class);
 
-           List<OwnerSettledApplyDto> ownerSettledApplyDtos = null;
+        int count = ownerSettledApplyV1InnerServiceSMOImpl.queryOwnerSettledApplysCount(ownerSettledApplyDto);
 
-           if (count > 0) {
-               ownerSettledApplyDtos = ownerSettledApplyV1InnerServiceSMOImpl.queryOwnerSettledApplys(ownerSettledApplyDto);
-           } else {
-               ownerSettledApplyDtos = new ArrayList<>();
-           }
+        List<OwnerSettledApplyDto> ownerSettledApplyDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerSettledApplyDtos);
+        if (count > 0) {
+            ownerSettledApplyDtos = ownerSettledApplyV1InnerServiceSMOImpl.queryOwnerSettledApplys(ownerSettledApplyDto);
+        } else {
+            ownerSettledApplyDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerSettledApplyDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

@@ -1,6 +1,8 @@
 package com.java110.dto.ownerSettledSetting;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,14 +14,14 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class OwnerSettledSettingDto extends PageDto implements Serializable {
+public class OwnerSettledSettingDto extends OaWorkflowDto implements Serializable {
 
     private String remark;
-private String communityId;
-private String flowId;
-private String flowName;
-private String settingId;
-private String settingName;
+    private String communityId;
+    private String flowId;
+    private String flowName;
+    private String settingId;
+    private String settingName;
 
 
     private Date createTime;
@@ -30,37 +32,48 @@ private String settingName;
     public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getFlowName() {
+
+    public String getFlowName() {
         return flowName;
     }
-public void setFlowName(String flowName) {
+
+    public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
-public String getSettingId() {
+
+    public String getSettingId() {
         return settingId;
     }
-public void setSettingId(String settingId) {
+
+    public void setSettingId(String settingId) {
         this.settingId = settingId;
     }
-public String getSettingName() {
+
+    public String getSettingName() {
         return settingName;
     }
-public void setSettingName(String settingName) {
+
+    public void setSettingName(String settingName) {
         this.settingName = settingName;
     }
 

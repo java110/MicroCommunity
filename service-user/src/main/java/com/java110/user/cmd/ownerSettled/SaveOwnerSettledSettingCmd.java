@@ -22,7 +22,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.ownerSettledSetting.OwnerSettledSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -52,6 +57,12 @@ public class SaveOwnerSettledSettingCmd extends Cmd {
     @Autowired
     private IOwnerSettledSettingV1InnerServiceSMO ownerSettledSettingV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "settingName", "请求报文中未包含settingName");
@@ -63,9 +74,32 @@ public class SaveOwnerSettledSettingCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setStoreId(storeId);
+        oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+        oaWorkflowPo.setFlowName(reqJson.getString("settingName")+"审批流程");
+        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_OWNER_SETTLED);
+
+        //创建model
+        WorkflowModelDto workflowModelDto = new WorkflowModelDto();
+        workflowModelDto.setName(oaWorkflowPo.getFlowName());
+        workflowModelDto.setKey(oaWorkflowPo.getFlowId());
+        workflowModelDto = workflowInnerServiceSMOImpl.createModel(workflowModelDto);
+
+        oaWorkflowPo.setModelId(workflowModelDto.getModelId());
+        oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
         OwnerSettledSettingPo ownerSettledSettingPo = BeanConvertUtil.covertBean(reqJson, OwnerSettledSettingPo.class);
         ownerSettledSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = ownerSettledSettingV1InnerServiceSMOImpl.saveOwnerSettledSetting(ownerSettledSettingPo);
+        ownerSettledSettingPo.setFlowId(oaWorkflowPo.getFlowId());
+        ownerSettledSettingPo.setFlowName(oaWorkflowPo.getFlowName());
+        flag = ownerSettledSettingV1InnerServiceSMOImpl.saveOwnerSettledSetting(ownerSettledSettingPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

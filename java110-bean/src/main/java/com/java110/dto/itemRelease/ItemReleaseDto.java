@@ -20,7 +20,7 @@ public class ItemReleaseDto extends ItemReleaseTypeDto implements Serializable {
     public static final String STATE_WAIT = "W"; //W待审核
     public static final String STATE_DOING = "D"; //审核中
     public static final String STATE_COMPLETE = "C"; //审核完成
-    public static final String STATE_FAIT = "W"; //审核失败
+    public static final String STATE_FAIT = "F"; //审核失败
 
 
     private String amount;
