@@ -68,9 +68,9 @@ public class AuditUndoOwnerSettledCmd extends Cmd {
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
             if (isLastTask) {
-                ownerSettledApplyPo.setState(VisitDto.STATE_C);
+                ownerSettledApplyPo.setState(OwnerSettledApplyDto.STATE_COMPLETE);
             } else {
-                ownerSettledApplyPo.setState(VisitDto.STATE_D);
+                ownerSettledApplyPo.setState(OwnerSettledApplyDto.STATE_DOING);
             }
             ownerSettledApplyV1InnerServiceSMOImpl.updateOwnerSettledApply(ownerSettledApplyPo);
             //完成当前流程 插入下一处理人
@@ -78,14 +78,14 @@ public class AuditUndoOwnerSettledCmd extends Cmd {
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             oaWorkflowUserInnerServiceSMOImpl.changeTaskToOtherUser(reqJson);
             //reqJson.put("state", "1004"); //工单转单
-            ownerSettledApplyPo.setState(VisitDto.STATE_D);
+            ownerSettledApplyPo.setState(OwnerSettledApplyDto.STATE_DOING);
             ownerSettledApplyV1InnerServiceSMOImpl.updateOwnerSettledApply(ownerSettledApplyPo);
         } else if ("1200".equals(reqJson.getString("auditCode"))
                 || "1400".equals(reqJson.getString("auditCode"))
         ) { //退回操作
             oaWorkflowUserInnerServiceSMOImpl.goBackTask(reqJson);
             //reqJson.put("state", "1003"); //工单退单
-            ownerSettledApplyPo.setState(VisitDto.STATE_F);
+            ownerSettledApplyPo.setState(OwnerSettledApplyDto.STATE_FAIT);
             ownerSettledApplyV1InnerServiceSMOImpl.updateOwnerSettledApply(ownerSettledApplyPo);
         } else {
             throw new IllegalArgumentException("不支持的类型");

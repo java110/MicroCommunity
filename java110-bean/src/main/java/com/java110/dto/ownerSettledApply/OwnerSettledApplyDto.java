@@ -14,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Serializable {
+public class OwnerSettledApplyDto extends PageDto implements Serializable {
 
     //状态 W待审核 D 审核中 C 审核完成 D 审核失败
     public static final String STATE_WAIT = "W"; //W待审核
@@ -39,9 +39,13 @@ public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Seri
     private String roomCount;
 
 
-    private Date createTime;
+    private String createTime;
 
     private String statusCd = "0";
+
+    private String flowId;
+    private String flowName;
+    private String auditWay;
 
 
     public String getApplyId() {
@@ -93,11 +97,12 @@ public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Seri
     }
 
 
-    public Date getCreateTime() {
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -147,5 +152,35 @@ public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Seri
 
     public void setApplyIds(String[] applyIds) {
         this.applyIds = applyIds;
+    }
+
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
+
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
+
+
+    public String getAuditWay() {
+        return auditWay;
+    }
+
+
+    public void setAuditWay(String auditWay) {
+        this.auditWay = auditWay;
     }
 }

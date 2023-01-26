@@ -82,7 +82,7 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
     public int updateOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
         int saveFlag = ownerSettledApplyV1ServiceDaoImpl.updateOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
 
-        if(saveFlag < 1 || !VisitDto.STATE_C.equals(ownerSettledApplyPo.getState())){
+        if(saveFlag < 1 || !OwnerSettledApplyDto.STATE_COMPLETE.equals(ownerSettledApplyPo.getState())){
             return saveFlag;
         }
 
