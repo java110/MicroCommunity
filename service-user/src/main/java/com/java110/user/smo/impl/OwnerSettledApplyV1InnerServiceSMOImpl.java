@@ -95,6 +95,7 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
         }
 
         for(OwnerSettledApplyDto tmpOwnerSettledApplyDto: ownerSettledApplys){
+            settings.get(0).setRemark("");
             BeanConvertUtil.covertBean(settings.get(0),tmpOwnerSettledApplyDto);
         }
 
