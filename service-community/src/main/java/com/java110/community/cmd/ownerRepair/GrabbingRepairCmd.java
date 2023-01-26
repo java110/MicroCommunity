@@ -72,6 +72,11 @@ public class GrabbingRepairCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = context.getReqHeaders().get("user-id");
+
+        if(userId.startsWith("-") || StringUtil.isEmpty(userId)){
+            userId = reqJson.getString("userId");
+        }
+
         Assert.hasLength(userId, "员工不存在");
 
         UserDto userDto = new UserDto();
