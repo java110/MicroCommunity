@@ -17,8 +17,8 @@
 
     <!-- 查询业主入驻房屋信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerSettledRoomsInfo" parameterType="Map" resultType="Map">
-        select t.apply_id,t.apply_id applyId,t.status_cd,t.status_cd statusCd,t.start_time,t.start_time
-        startTime,t.osr_id,t.osr_id osrId,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        select t.apply_id,t.apply_id applyId,t.status_cd,t.status_cd statusCd,DATE_FORMAT(t.start_time, '%Y-%m-%d')
+        startTime,t.osr_id,t.osr_id osrId,t.end_time,DATE_FORMAT(t.end_time, '%Y-%m-%d')  endTime,t.community_id,t.community_id
         communityId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName
         from owner_settled_rooms t
         where 1 =1
