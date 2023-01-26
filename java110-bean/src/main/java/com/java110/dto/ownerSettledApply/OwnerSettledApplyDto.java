@@ -23,6 +23,7 @@ public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Seri
     public static final String STATE_FAIT = "F"; //审核失败
 
     private String applyId;
+    private String[] applyIds;
     private String createUserId;
     private String remark;
     private String state;
@@ -138,5 +139,13 @@ public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Seri
 
     public void setRoomCount(String roomCount) {
         this.roomCount = roomCount;
+    }
+
+    public String[] getApplyIds() {
+        return applyIds;
+    }
+
+    public void setApplyIds(String[] applyIds) {
+        this.applyIds = applyIds;
     }
 }

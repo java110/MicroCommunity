@@ -16,8 +16,19 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.ownerSettledRooms.OwnerSettledRoomsDto;
 import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
+import com.java110.dto.visit.VisitDto;
+import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerSettledRoomsV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
+import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.po.room.RoomPo;
 import com.java110.user.dao.IOwnerSettledApplyV1ServiceDao;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
 import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
@@ -50,6 +61,16 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
     @Autowired
     private IOwnerSettledSettingV1InnerServiceSMO ownerSettledSettingV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerSettledRoomsV1InnerServiceSMO ownerSettledRoomsV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+
 
     @Override
     public int saveOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
@@ -60,6 +81,56 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
     @Override
     public int updateOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
         int saveFlag = ownerSettledApplyV1ServiceDaoImpl.updateOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
+
+        if(saveFlag < 1 || !VisitDto.STATE_C.equals(ownerSettledApplyPo.getState())){
+            return saveFlag;
+        }
+
+        OwnerSettledApplyDto ownerSettledApplyDto = new OwnerSettledApplyDto();
+        ownerSettledApplyDto.setApplyId(ownerSettledApplyPo.getApplyId());
+        List<OwnerSettledApplyDto> ownerSettledApplyDtos = queryOwnerSettledApplys(ownerSettledApplyDto);
+
+        if(ownerSettledApplyDtos == null || ownerSettledApplyDtos.size()<1){
+            return saveFlag;
+        }
+
+        OwnerSettledRoomsDto ownerSettledRoomsDto = new OwnerSettledRoomsDto();
+        ownerSettledRoomsDto.setApplyId(ownerSettledApplyPo.getApplyId());
+        List<OwnerSettledRoomsDto> ownerSettledRoomsDtos = ownerSettledRoomsV1InnerServiceSMOImpl.queryOwnerSettledRoomss(ownerSettledRoomsDto);
+
+        if(ownerSettledRoomsDtos == null || ownerSettledRoomsDtos.size() < 1){
+            return saveFlag;
+        }
+        List<RoomDto> roomDtos = null;
+        OwnerRoomRelPo ownerRoomRelPo = null;
+        RoomPo roomPo = null;
+        for(OwnerSettledRoomsDto tmpOwnerSettledRoomsDto:ownerSettledRoomsDtos){
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(tmpOwnerSettledRoomsDto.getRoomId());
+            roomDto.setCommunityId(tmpOwnerSettledRoomsDto.getCommunityId());
+            roomDto.setState(RoomDto.STATE_FREE);
+            roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
+            if(roomDtos == null || roomDtos.size() < 1){
+                continue;
+            }
+
+            ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setOwnerId(ownerSettledApplyDtos.get(0).getOwnerId());
+            ownerRoomRelPo.setRemark("审核入驻");
+            ownerRoomRelPo.setRoomId(tmpOwnerSettledRoomsDto.getRoomId());
+            ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+            ownerRoomRelPo.setState("2001");
+            ownerRoomRelPo.setStartTime(tmpOwnerSettledRoomsDto.getStartTime());
+            ownerRoomRelPo.setEndTime(tmpOwnerSettledRoomsDto.getEndTime());
+            ownerRoomRelPo.setUserId("-1");
+            ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
+
+            roomPo = new RoomPo();
+            roomPo.setRoomId(tmpOwnerSettledRoomsDto.getRoomId());
+            roomPo.setState(RoomDto.STATE_SELL);
+            roomV1InnerServiceSMOImpl.updateRoom(roomPo);
+        }
+
         return saveFlag;
     }
 
