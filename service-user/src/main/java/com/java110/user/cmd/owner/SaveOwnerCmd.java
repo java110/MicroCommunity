@@ -211,7 +211,7 @@ public class SaveOwnerCmd extends Cmd {
 
         String autoUser = MappingCache.getValue("OWNER", "AUTO_GENERATOR_OWNER_USER");
 
-        if (!"OFF".equals(autoUser)) {
+        if (!"ON".equals(autoUser)) {
             return;
         }
 
