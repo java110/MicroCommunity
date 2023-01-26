@@ -152,7 +152,32 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
         getVisitCount(result, doing);
 
+        getOwnerSettledApplyCount(result, doing);
+
         return ResultVo.createResponseEntity(doing);
+    }
+
+    private void getOwnerSettledApplyCount(ComponentValidateResult result, JSONObject data) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_OWNER_SETTLED);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            data.put("ownerSettledApplyCount", "0");
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(result.getUserId());
+        auditUser.setProcessDefinitionKeys(flowIds);
+
+        long itemReleaseCount = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+        data.put("ownerSettledApplyCount", itemReleaseCount);
     }
 
     private void getVisitCount(ComponentValidateResult result, JSONObject data) {
