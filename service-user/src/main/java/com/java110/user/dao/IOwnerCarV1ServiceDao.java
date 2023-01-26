@@ -74,4 +74,10 @@ public interface IOwnerCarV1ServiceDao {
      */
     int queryOwnerCarsCount(Map info);
 
+    /**
+     * 查询 业主
+     * @param info
+     * @return
+     */
+    List<Map> queryOwnerCarCountByOwnerIds(Map info);
 }

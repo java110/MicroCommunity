@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
@@ -68,4 +69,12 @@ public interface IOwnerV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryOwnersBindCount", method = RequestMethod.POST)
     int queryOwnersBindCount(@RequestBody OwnerDto ownerDto);
+
+    /**
+     * 查询 业主成员数
+     * @param ownerIds
+     * @return
+     */
+    @RequestMapping(value = "/queryOwnerMembersCount", method = RequestMethod.POST)
+    List<Map> queryOwnerMembersCount(@RequestBody List<String> ownerIds);
 }

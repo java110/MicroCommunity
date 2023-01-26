@@ -123,8 +123,19 @@
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
-
-
     </select>
+
+    <select id="queryRoomCountByOwnerIds" parameterType="Map" resultType="Map">
+        select t.owner_id ownerId,count(1) roomCount
+        from
+        building_owner_room_rel t
+        where t.status_cd = '0'
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.owner_id
+    </select>
+
 
 </mapper>

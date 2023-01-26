@@ -104,5 +104,13 @@ public class RepairPoolNewV1ServiceDaoImpl extends BaseServiceDao implements IRe
         return Integer.parseInt(businessRepairPoolNewInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryRepairCountByOwnerTels(Map info) {
+        logger.debug("查询 queryRepairCountByOwnerTels 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("repairPoolNewV1ServiceDaoImpl.queryRepairCountByOwnerTels", info);
+        return result;
+    }
+
 
 }

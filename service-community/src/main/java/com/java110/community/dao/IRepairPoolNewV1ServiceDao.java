@@ -74,4 +74,5 @@ public interface IRepairPoolNewV1ServiceDao {
      */
     int queryRepairPoolNewsCount(Map info);
 
+    List<Map> queryRepairCountByOwnerTels(Map info);
 }

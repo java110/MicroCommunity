@@ -93,4 +93,6 @@ public interface IReportOweFeeServiceDao {
     int deleteInvalidFee(Map reportFeeDto);
 
     List<Map> queryInvalidOweFee(Map reportFeeDto);
+
+    List<Map> queryOweFeesByOwnerIds(Map info);
 }

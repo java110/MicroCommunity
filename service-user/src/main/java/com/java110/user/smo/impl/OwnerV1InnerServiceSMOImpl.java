@@ -28,7 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -89,6 +91,15 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
     @Override
     public int queryOwnersBindCount(@RequestBody OwnerDto ownerDto) {
         return ownerV1ServiceDaoImpl.queryOwnersBindCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
+    @Override
+    public List<Map> queryOwnerMembersCount(@RequestBody List<String> ownerIds) {
+
+        Map info = new HashMap();
+        info.put("ownerIds",ownerIds.toArray(new String[ownerIds.size()]));
+        List<Map> result = ownerV1ServiceDaoImpl.queryOwnerMembersCount(info);
+        return result;
     }
 
 }

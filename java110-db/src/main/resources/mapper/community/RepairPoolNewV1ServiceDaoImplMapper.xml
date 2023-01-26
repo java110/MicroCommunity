@@ -203,4 +203,18 @@
 
     </select>
 
+
+    <select id="queryRepairCountByOwnerTels" parameterType="Map" resultType="Map">
+        select t.tel ownerTel,count(1) repairCount
+        from
+        r_repair_pool t
+        where t.status_cd = '0'
+        and t.community_id = #{communityId}
+        and t.tel in
+        <foreach collection="ownerTels" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.tel
+    </select>
+
 </mapper>

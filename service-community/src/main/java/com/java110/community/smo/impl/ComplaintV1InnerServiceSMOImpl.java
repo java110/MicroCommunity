@@ -29,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -85,5 +87,12 @@ public class ComplaintV1InnerServiceSMOImpl extends BaseServiceSMO implements IC
     @Override
     public int queryComplaintsCount(@RequestBody ComplaintDto complaintDto) {
         return complaintV1ServiceDaoImpl.queryComplaintsCount(BeanConvertUtil.beanCovertMap(complaintDto));    }
+
+    @Override
+    public List<Map> queryComplaintCountByOwnerTels(@RequestBody Map ownerTels) {
+
+        List<Map> result = complaintV1ServiceDaoImpl.queryComplaintCountByOwnerTels(ownerTels);
+        return result;
+    }
 
 }

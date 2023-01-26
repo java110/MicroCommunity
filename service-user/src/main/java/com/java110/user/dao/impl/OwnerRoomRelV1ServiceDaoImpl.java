@@ -39,19 +39,17 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
     private static Logger logger = LoggerFactory.getLogger(OwnerRoomRelV1ServiceDaoImpl.class);
 
 
-
-
-
     /**
      * 保存业主房屋关系表信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public int saveOwnerRoomRelInfo(Map info) throws DAOException {
-        logger.debug("保存 saveOwnerRoomRelInfo 入参 info : {}",info);
+        logger.debug("保存 saveOwnerRoomRelInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.insert("ownerRoomRelV1ServiceDaoImpl.saveOwnerRoomRelInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("ownerRoomRelV1ServiceDaoImpl.saveOwnerRoomRelInfo", info);
 
         return saveFlag;
     }
@@ -59,15 +57,16 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
 
     /**
      * 查询业主房屋关系表信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getOwnerRoomRelInfo(Map info) throws DAOException {
-        logger.debug("查询 getOwnerRoomRelInfo 入参 info : {}",info);
+        logger.debug("查询 getOwnerRoomRelInfo 入参 info : {}", info);
 
-        List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.getOwnerRoomRelInfo",info);
+        List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.getOwnerRoomRelInfo", info);
 
         return businessOwnerRoomRelInfos;
     }
@@ -75,26 +74,28 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
 
     /**
      * 修改业主房屋关系表信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public int updateOwnerRoomRelInfo(Map info) throws DAOException {
-        logger.debug("修改 updateOwnerRoomRelInfo 入参 info : {}",info);
+        logger.debug("修改 updateOwnerRoomRelInfo 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("ownerRoomRelV1ServiceDaoImpl.updateOwnerRoomRelInfo",info);
+        int saveFlag = sqlSessionTemplate.update("ownerRoomRelV1ServiceDaoImpl.updateOwnerRoomRelInfo", info);
 
         return saveFlag;
     }
 
-     /**
+    /**
      * 查询业主房屋关系表数量
+     *
      * @param info 业主房屋关系表信息
      * @return 业主房屋关系表数量
      */
     @Override
     public int queryOwnerRoomRelsCount(Map info) {
-        logger.debug("查询 queryOwnerRoomRelsCount 入参 info : {}",info);
+        logger.debug("查询 queryOwnerRoomRelsCount 入参 info : {}", info);
 
         List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.queryOwnerRoomRelsCount", info);
         if (businessOwnerRoomRelInfos.size() < 1) {
@@ -102,6 +103,14 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
         }
 
         return Integer.parseInt(businessOwnerRoomRelInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryRoomCountByOwnerIds(Map info) {
+        logger.debug("查询 queryRoomCountByOwnerIds 入参 info : {}", info);
+
+        List<Map> result = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.queryRoomCountByOwnerIds", info);
+        return result;
     }
 
 

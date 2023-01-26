@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
  * add by 吴学文 at 2021-12-06 22:28:18 mail: 928255095@qq.com
@@ -57,6 +60,11 @@ public class RepairPoolV1InnerServiceSMOImpl extends BaseServiceSMO implements I
        repairPoolNewPo.setStatusCd("1");
        int saveFlag = repairPoolNewV1ServiceDaoImpl.updateRepairPoolNewInfo(BeanConvertUtil.beanCovertMap(repairPoolNewPo));
        return saveFlag;
+    }
+
+    @Override
+    public List<Map> queryRepairCountByOwnerTels(@RequestBody Map info) {
+        return repairPoolNewV1ServiceDaoImpl.queryRepairCountByOwnerTels(info);
     }
 
 //    @Override

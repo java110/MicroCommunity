@@ -28,7 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -86,5 +88,13 @@ public class OwnerRoomRelV1InnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryOwnerRoomRelsCount(@RequestBody OwnerRoomRelDto ownerRoomRelDto) {
         return ownerRoomRelV1ServiceDaoImpl.queryOwnerRoomRelsCount(BeanConvertUtil.beanCovertMap(ownerRoomRelDto));    }
+
+    @Override
+    public List<Map> queryRoomCountByOwnerIds(@RequestBody List<String> ownerIds) {
+        Map info = new HashMap();
+        info.put("ownerIds",ownerIds.toArray(new String[ownerIds.size()]));
+        List<Map> result = ownerRoomRelV1ServiceDaoImpl.queryRoomCountByOwnerIds(info);
+        return result;
+    }
 
 }

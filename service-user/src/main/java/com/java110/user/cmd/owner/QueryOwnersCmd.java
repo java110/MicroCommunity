@@ -14,6 +14,7 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.user.bmo.owner.IQueryOwnerStatisticsBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -103,6 +104,9 @@ public class QueryOwnersCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IQueryOwnerStatisticsBMO queryOwnerStatisticsBMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
@@ -129,6 +133,10 @@ public class QueryOwnersCmd extends Cmd {
         List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+
+            // 查询统计数据
+            ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
+
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", reqJson.getString("userId"));
             for (OwnerDto ownerDto : ownerDtoList) {
                 //查询照片
