@@ -248,6 +248,7 @@ public class SaveOwnerCmd extends Cmd {
         ownerAppUserPo.setAppType("WECHAT");
         ownerAppUserPo.setLink(ownerPo.getLink());
         ownerAppUserPo.setUserId(userPo.getUserId());
+        ownerAppUserPo.setOpenId("-1");
 
         flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
         if (flag < 1) {
