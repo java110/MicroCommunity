@@ -1,6 +1,7 @@
 package com.java110.dto.ownerSettledApply;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class OwnerSettledApplyDto extends PageDto implements Serializable {
+public class OwnerSettledApplyDto extends OwnerSettledSettingDto implements Serializable {
 
     //状态 W待审核 D 审核中 C 审核完成 D 审核失败
     public static final String STATE_WAIT = "W"; //W待审核

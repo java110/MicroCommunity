@@ -21,8 +21,12 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
+import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledRoomsV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
 import com.java110.po.ownerSettledApply.OwnerSettledApplyPo;
 import com.java110.po.ownerSettledRooms.OwnerSettledRoomsPo;
 import com.java110.utils.exception.CmdException;
@@ -32,6 +36,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -52,6 +58,12 @@ public class DeleteOwnerSettledApplyCmd extends Cmd {
 
     @Autowired
     private IOwnerSettledRoomsV1InnerServiceSMO ownerSettledRoomsV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerSettledSettingV1InnerServiceSMO ownerSettledSettingV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -79,6 +91,20 @@ public class DeleteOwnerSettledApplyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        //是否开启了流程
+        OwnerSettledSettingDto ownerSettledSettingDto = new OwnerSettledSettingDto();
+        ownerSettledSettingDto.setCommunityId(reqJson.getString("communityId"));
+        ownerSettledSettingDto.setAuditWay("Y");
+        List<OwnerSettledSettingDto> ownerSettledSettingDtos
+                = ownerSettledSettingV1InnerServiceSMOImpl.queryOwnerSettledSettings(ownerSettledSettingDto);
+        //不需要走审核流程
+        if (ownerSettledSettingDtos == null || ownerSettledSettingDtos.size() < 1) {
+
+            return;
+        }
+
+        //oaWorkflowActivitiInnerServiceSMOImpl.
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

@@ -16,6 +16,8 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
+import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
 import com.java110.user.dao.IOwnerSettledApplyV1ServiceDao;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
 import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
@@ -45,28 +47,31 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
     @Autowired
     private IOwnerSettledApplyV1ServiceDao ownerSettledApplyV1ServiceDaoImpl;
 
+    @Autowired
+    private IOwnerSettledSettingV1InnerServiceSMO ownerSettledSettingV1InnerServiceSMOImpl;
+
 
     @Override
-    public int saveOwnerSettledApply(@RequestBody  OwnerSettledApplyPo ownerSettledApplyPo) {
+    public int saveOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
         int saveFlag = ownerSettledApplyV1ServiceDaoImpl.saveOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateOwnerSettledApply(@RequestBody  OwnerSettledApplyPo ownerSettledApplyPo) {
+    @Override
+    public int updateOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
         int saveFlag = ownerSettledApplyV1ServiceDaoImpl.updateOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteOwnerSettledApply(@RequestBody  OwnerSettledApplyPo ownerSettledApplyPo) {
-       ownerSettledApplyPo.setStatusCd("1");
-       int saveFlag = ownerSettledApplyV1ServiceDaoImpl.updateOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
-       return saveFlag;
+    @Override
+    public int deleteOwnerSettledApply(@RequestBody OwnerSettledApplyPo ownerSettledApplyPo) {
+        ownerSettledApplyPo.setStatusCd("1");
+        int saveFlag = ownerSettledApplyV1ServiceDaoImpl.updateOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyPo));
+        return saveFlag;
     }
 
     @Override
-    public List<OwnerSettledApplyDto> queryOwnerSettledApplys(@RequestBody  OwnerSettledApplyDto ownerSettledApplyDto) {
+    public List<OwnerSettledApplyDto> queryOwnerSettledApplys(@RequestBody OwnerSettledApplyDto ownerSettledApplyDto) {
 
         //校验是否传了 分页信息
 
@@ -78,12 +83,28 @@ public class OwnerSettledApplyV1InnerServiceSMOImpl extends BaseServiceSMO imple
 
         List<OwnerSettledApplyDto> ownerSettledApplys = BeanConvertUtil.covertBeanList(ownerSettledApplyV1ServiceDaoImpl.getOwnerSettledApplyInfo(BeanConvertUtil.beanCovertMap(ownerSettledApplyDto)), OwnerSettledApplyDto.class);
 
+        if (ownerSettledApplys == null || ownerSettledApplys.size() < 1) {
+            return ownerSettledApplys;
+        }
+        OwnerSettledSettingDto ownerSettledSettingDto = new OwnerSettledSettingDto();
+        ownerSettledSettingDto.setCommunityId(ownerSettledApplys.get(0).getCommunityId());
+       List<OwnerSettledSettingDto> settings = ownerSettledSettingV1InnerServiceSMOImpl.queryOwnerSettledSettings(ownerSettledSettingDto);
+
+        if (settings == null || settings.size() < 1) {
+            return ownerSettledApplys;
+        }
+
+        for(OwnerSettledApplyDto tmpOwnerSettledApplyDto: ownerSettledApplys){
+            BeanConvertUtil.covertBean(settings.get(0),tmpOwnerSettledApplyDto);
+        }
+
         return ownerSettledApplys;
     }
 
 
     @Override
     public int queryOwnerSettledApplysCount(@RequestBody OwnerSettledApplyDto ownerSettledApplyDto) {
-        return ownerSettledApplyV1ServiceDaoImpl.queryOwnerSettledApplysCount(BeanConvertUtil.beanCovertMap(ownerSettledApplyDto));    }
+        return ownerSettledApplyV1ServiceDaoImpl.queryOwnerSettledApplysCount(BeanConvertUtil.beanCovertMap(ownerSettledApplyDto));
+    }
 
 }
