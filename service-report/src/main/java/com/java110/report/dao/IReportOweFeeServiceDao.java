@@ -95,4 +95,6 @@ public interface IReportOweFeeServiceDao {
     List<Map> queryInvalidOweFee(Map reportFeeDto);
 
     List<Map> queryOweFeesByOwnerIds(Map info);
+
+    List<Map> queryOweFeesByRoomIds(Map info);
 }

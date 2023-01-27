@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -101,6 +102,11 @@ public class ContractRoomInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public int queryContractRoomsCount(@RequestBody ContractRoomDto contractRoomDto) {
         return contractRoomServiceDaoImpl.queryContractRoomsCount(BeanConvertUtil.beanCovertMap(contractRoomDto));
+    }
+
+    @Override
+    public List<Map> queryContractByRoomIds(@RequestBody Map info) {
+        return contractRoomServiceDaoImpl.queryContractByRoomIds(info);
     }
 
     public IContractRoomServiceDao getContractRoomServiceDaoImpl() {

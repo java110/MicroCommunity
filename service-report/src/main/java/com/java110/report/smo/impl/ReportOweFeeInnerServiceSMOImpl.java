@@ -71,6 +71,11 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
     }
 
     @Override
+    public List<Map> queryOweFeesByRoomIds(@RequestBody Map info) {
+        return reportOweFeeServiceDaoImpl.queryOweFeesByRoomIds(info);
+    }
+
+    @Override
     public List<ReportOweFeeDto> queryReportOweFees(@RequestBody ReportOweFeeDto reportOweFeeDto) {
 
         //校验是否传了 分页信息

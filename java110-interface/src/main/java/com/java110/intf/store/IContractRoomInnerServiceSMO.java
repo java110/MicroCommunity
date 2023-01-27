@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IContractRoomInnerServiceSMO
@@ -50,4 +51,7 @@ public interface IContractRoomInnerServiceSMO {
      */
     @RequestMapping(value = "/queryContractRoomsCount", method = RequestMethod.POST)
     int queryContractRoomsCount(@RequestBody ContractRoomDto contractRoomDto);
+
+    @RequestMapping(value = "/queryContractByRoomIds", method = RequestMethod.POST)
+    List<Map> queryContractByRoomIds(@RequestBody Map info);
 }

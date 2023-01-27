@@ -94,5 +94,13 @@ public class ContractRoomServiceDaoImpl extends BaseServiceDao implements IContr
         return Integer.parseInt(businessContractRoomInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryContractByRoomIds(Map info) {
+        logger.debug("查询合同房屋数据 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("contractRoomServiceDaoImpl.queryContractByRoomIds", info);
+        return result;
+    }
+
 
 }

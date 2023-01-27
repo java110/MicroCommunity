@@ -118,5 +118,18 @@
 
 
     </select>
+    <select id="queryContractByRoomIds" parameterType="Map" resultType="Map">
+        select  t.room_id roomId,count(t.contract_id) contractCount
+        from contract_room t
+        where t.status_cd = '0'
+        and t.room_id in
+        <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.room_id
+
+
+    </select>
+
 
 </mapper>

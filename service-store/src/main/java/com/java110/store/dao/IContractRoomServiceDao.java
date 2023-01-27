@@ -58,4 +58,5 @@ public interface IContractRoomServiceDao {
      */
     int queryContractRoomsCount(Map info);
 
+    List<Map> queryContractByRoomIds(Map info);
 }
