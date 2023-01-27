@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IContractInnerServiceSMO
@@ -49,4 +50,12 @@ public interface IContractInnerServiceSMO {
      */
     @RequestMapping(value = "/queryContractsCount", method = RequestMethod.POST)
     int queryContractsCount(@RequestBody ContractDto contractDto);
+
+    /**
+     * 查询业主合同
+     * @param info
+     * @return
+     */
+    @RequestMapping(value = "/queryContractsByOwnerIds", method = RequestMethod.POST)
+    List<Map> queryContractsByOwnerIds(@RequestBody Map info);
 }

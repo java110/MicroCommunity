@@ -4,6 +4,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
@@ -38,6 +39,9 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
 
     @Autowired
     private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     @Override
     public List<OwnerDto> query(List<OwnerDto> ownerDtos) {
@@ -76,7 +80,25 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
         // 查询业主欠费
         queryOwnerOweFee(ownerIds,ownerDtos);
 
+        // 查询业主合同
+        queryOwnerContractCount(ownerIds,ownerDtos);
+
         return ownerDtos;
+    }
+
+    private void queryOwnerContractCount(List<String> ownerIds, List<OwnerDto> ownerDtos) {
+        Map info = new HashMap();
+        info.put("communityId",ownerDtos.get(0).getCommunityId());
+        info.put("ownerIds",ownerIds.toArray(new String[ownerIds.size()]));
+        List<Map> contractsCount = contractInnerServiceSMOImpl.queryContractsByOwnerIds(info);
+
+        for(OwnerDto ownerDto : ownerDtos) {
+            for (Map count : contractsCount) {
+                if(ownerDto.getOwnerId().equals(count.get("ownerId"))){
+                    ownerDto.setContractCount(count.get("contractCount").toString());
+                }
+            }
+        }
     }
 
     /**

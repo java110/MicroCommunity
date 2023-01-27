@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -71,6 +72,11 @@ public class ContractInnerServiceSMOImpl extends BaseServiceSMO implements ICont
     @Override
     public int queryContractsCount(@RequestBody ContractDto contractDto) {
         return contractServiceDaoImpl.queryContractsCount(BeanConvertUtil.beanCovertMap(contractDto));
+    }
+
+    @Override
+    public List<Map> queryContractsByOwnerIds(@RequestBody Map info) {
+        return contractServiceDaoImpl.queryContractsByOwnerIds(info);
     }
 
     public IContractServiceDao getContractServiceDaoImpl() {

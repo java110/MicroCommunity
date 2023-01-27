@@ -58,4 +58,5 @@ public interface IContractServiceDao {
      */
     int queryContractsCount(Map info);
 
+    List<Map> queryContractsByOwnerIds(Map info);
 }

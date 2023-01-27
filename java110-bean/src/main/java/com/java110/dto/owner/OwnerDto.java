@@ -96,6 +96,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String repairCount;
 
     private String oweFee;
+    private String contractCount;
 
     public String getSex() {
         return sex;
@@ -490,5 +491,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOweFee(String oweFee) {
         this.oweFee = oweFee;
+    }
+
+    public String getContractCount() {
+        return contractCount;
+    }
+
+    public void setContractCount(String contractCount) {
+        this.contractCount = contractCount;
     }
 }

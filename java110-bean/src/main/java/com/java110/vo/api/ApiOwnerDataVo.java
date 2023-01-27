@@ -59,6 +59,7 @@ public class ApiOwnerDataVo extends Vo {
 
     private double oweFee;
 
+    private String contractCount;
     public String getOwnerId() {
         return ownerId;
     }
@@ -241,5 +242,13 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setOweFee(double oweFee) {
         this.oweFee = oweFee;
+    }
+
+    public String getContractCount() {
+        return contractCount;
+    }
+
+    public void setContractCount(String contractCount) {
+        this.contractCount = contractCount;
     }
 }
