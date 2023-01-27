@@ -6,13 +6,16 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -38,13 +41,21 @@ public class ListOwnerRepairsCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
+
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        hasOwnerId(reqJson);
+
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
 
         if (!StringUtil.isEmpty(ownerRepairDto.getRoomId()) && ownerRepairDto.getRoomId().contains(",")) {
@@ -106,6 +117,18 @@ public class ListOwnerRepairsCmd extends Cmd {
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
         context.setResponseEntity(responseEntity);
+    }
+
+    private void hasOwnerId(JSONObject reqJson) {
+        if(reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))){
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setMemberId(reqJson.getString("ownerId"));
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+            if(ownerDtos != null && ownerDtos.size() > 0){
+                reqJson.put("tel",ownerDtos.get(0).getLink());
+            }
+        }
     }
 
     private void refreshRepair(List<RepairDto> ownerRepairs) {
