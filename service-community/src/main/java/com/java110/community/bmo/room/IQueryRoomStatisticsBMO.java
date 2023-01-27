@@ -16,4 +16,11 @@ public interface IQueryRoomStatisticsBMO {
      * @return
      */
     List<RoomDto> query(List<RoomDto> roomDtos);
+
+    /**
+     * 查询房屋统计信息
+     * @param roomDtos
+     * @return
+     */
+    List<RoomDto> queryRoomOweFee(List<RoomDto> roomDtos);
 }

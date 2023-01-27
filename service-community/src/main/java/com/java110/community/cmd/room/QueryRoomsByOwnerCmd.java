@@ -1,6 +1,7 @@
 package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -61,6 +62,11 @@ public class QueryRoomsByOwnerCmd extends Cmd {
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
 
+    @Autowired
+    private IQueryRoomStatisticsBMO queryRoomStatisticsBMOImpl;
+
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含communityId信息");
@@ -85,6 +91,8 @@ public class QueryRoomsByOwnerCmd extends Cmd {
 
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+        roomDtoList = queryRoomStatisticsBMOImpl.queryRoomOweFee(roomDtoList);
+
         apiRoomVo.setTotal(roomDtoList.size());
         apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         apiRoomVo.setRecords(1);

@@ -91,6 +91,20 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         return roomDtos;
     }
 
+    @Override
+    public List<RoomDto> queryRoomOweFee(List<RoomDto> roomDtos) {
+        if (roomDtos == null || roomDtos.size() < 1) {
+            return roomDtos;
+        }
+        List<String> roomIds = new ArrayList<>();
+        for (RoomDto roomDto : roomDtos) {
+            roomIds.add(roomDto.getRoomId());
+        }
+        // 查询房屋 合同
+        queryRoomOweFee(roomIds, roomDtos);
+        return roomDtos;
+    }
+
     /**
      * 查询
      *
