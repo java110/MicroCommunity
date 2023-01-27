@@ -88,27 +88,46 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             refreshOwner(owner, users, ownerAttrDtos);
         }
 
-       updateOwnerPhone(owners) ;
+        updateOwnerPhone(owners);
         return owners;
     }
 
     private boolean updateOwnerPhone(List<OwnerDto> owners) {
-        if(owners.size() != 1){
+        if (owners.size() > 15) {
             return true;
         }
 
+        List<String> memberIds = new ArrayList<>();
+
+        for (OwnerDto tmpOwnerDto : owners) {
+            memberIds.add(tmpOwnerDto.getMemberId());
+        }
+
         FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(owners.get(0).getMemberId());
+        //fileRelDto.setObjId(owners.get(0).getMemberId());
+        fileRelDto.setObjIds(memberIds.toArray(new String[memberIds.size()]));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
 
-        if(fileRelDtos == null || fileRelDtos.size()< 1){
+        if (fileRelDtos == null || fileRelDtos.size() < 1) {
             return true;
         }
 
         String imgUrl = MappingCache.getValue("IMG_PATH");
-        String ownerUrl = imgUrl + fileRelDtos.get(0).getFileSaveName();
 
-        owners.get(0).setUrl(ownerUrl);
+        for (OwnerDto tmpOwnerDto : owners) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (!tmpOwnerDto.getMemberId().equals(tmpFileRelDto.getObjId())) {
+                    continue;
+                }
+
+                if (fileRelDtos.get(0).getFileSaveName().startsWith("http")) {
+                    tmpOwnerDto.setUrl(fileRelDtos.get(0).getFileSaveName());
+                } else {
+                    tmpOwnerDto.setUrl(imgUrl + fileRelDtos.get(0).getFileSaveName());
+                }
+            }
+        }
+
         return false;
     }
 
@@ -275,7 +294,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         for (OwnerDto owner : owners) {
             refreshOwner(owner, users, ownerAttrDtos);
         }
-        updateOwnerPhone(owners) ;
+        updateOwnerPhone(owners);
         return owners;
     }
 
