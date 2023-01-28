@@ -12,16 +12,19 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.user.*;
+import com.java110.po.account.AccountPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
@@ -31,12 +34,14 @@ import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -125,6 +130,9 @@ public class SaveOwnerCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
@@ -209,6 +217,10 @@ public class SaveOwnerCmd extends Cmd {
                 "10000");
         dealOwnerAttr(reqJson, cmdDataFlowContext);
 
+        //业主 开通 现金账户，不然配合商城 会存在bug
+        addAccountDto(ownerPo.getMemberId(),ownerPo.getCommunityId());
+
+
         String autoUser = MappingCache.getValue("OWNER", "AUTO_GENERATOR_OWNER_USER");
 
         if (!"ON".equals(autoUser)) {
@@ -253,6 +265,34 @@ public class SaveOwnerCmd extends Cmd {
         flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
         if (flag < 1) {
             throw new CmdException("添加用户业主关系失败");
+        }
+    }
+
+    private void addAccountDto(String ownerId,String communityId) {
+        if (StringUtil.isEmpty(ownerId)) {
+            return ;
+        }
+        //开始锁代码
+        String requestId = DistributedLock.getLockUUID();
+        String key = this.getClass().getSimpleName() + "AddCountDto" +ownerId;
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            AccountPo accountPo = new AccountPo();
+            accountPo.setAmount("0");
+            accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+            accountPo.setObjId(ownerId);
+            accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
+            accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+            OwnerDto tmpOwnerDto = new OwnerDto();
+            tmpOwnerDto.setMemberId(ownerId);
+            tmpOwnerDto.setCommunityId(communityId);
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            accountPo.setAcctName(ownerDtos.get(0).getName());
+            accountPo.setPartId(communityId);
+            accountInnerServiceSMOImpl.saveAccount(accountPo);
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
         }
     }
 
