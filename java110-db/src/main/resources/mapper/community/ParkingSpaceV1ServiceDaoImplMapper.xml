@@ -30,6 +30,12 @@
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
+        <if test="nums !=null">
+            and t.num in
+            <foreach collection="nums" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
@@ -103,6 +109,12 @@
         </if>
         <if test="num !=null and num != ''">
             and t.num= #{num}
+        </if>
+        <if test="nums !=null">
+            and t.num in
+            <foreach collection="nums" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}

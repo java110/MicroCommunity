@@ -44,6 +44,31 @@ public class EditParkingSpaceCmd extends Cmd {
         if (reqJson.getString("psId").startsWith("-")) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "停车位ID必须为已有ID");
         }
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        parkingSpaceDto.setPsId(reqJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+        }
+
+        //不修改 车位类型
+        if (!reqJson.containsKey("parkingType")) {
+            return;
+        }
+
+        // 不修改 车位类型
+        if (parkingSpaceDtos.get(0).getParkingType().equals(reqJson.getString("parkingType"))) {
+            return;
+        }
+
+        if (ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(reqJson.getString("parkingType"))
+                || ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpaceDtos.get(0).getParkingType())
+        ) {
+            throw  new CmdException("子母车位不能修改为其他车位，其他车位也不能修改为子母车位！");
+        }
     }
 
     @Override
@@ -59,16 +84,19 @@ public class EditParkingSpaceCmd extends Cmd {
         }
 
         parkingSpaceDto = parkingSpaceDtos.get(0);
+
         JSONObject businessParkingSpace = new JSONObject();
 
         businessParkingSpace.putAll(reqJson);
         businessParkingSpace.put("state", parkingSpaceDto.getState());
         ParkingSpacePo parkingSpacePo = BeanConvertUtil.covertBean(businessParkingSpace, ParkingSpacePo.class);
         //parkingSpaceInnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
-        int flag =  parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
+        int flag = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
 
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("修改车位失败");
         }
+
     }
+
 }

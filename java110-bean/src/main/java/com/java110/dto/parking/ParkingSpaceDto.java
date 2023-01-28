@@ -17,13 +17,18 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public static final String STATE_FREE = "F";
     public static final String STATE_HIRE = "H";
+    public static final String STATE_SELL = "S";
+
+    public static final String NUM_MOTHER = "母";
 
     public static final String TYPE_CD_COMMON = "1";
+    public static final String TYPE_CD_SON_MOTHER = "2";
 
     private String area;
     private String typeCd;
     private String typeCdName;
     private String num;
+    private String[] nums;
     private String psId;
     private String paId;
     private String remark;
@@ -252,5 +257,13 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public void setPaIds(String[] paIds) {
         this.paIds = paIds;
+    }
+
+    public String[] getNums() {
+        return nums;
+    }
+
+    public void setNums(String[] nums) {
+        this.nums = nums;
     }
 }
