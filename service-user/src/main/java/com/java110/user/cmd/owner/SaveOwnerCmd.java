@@ -130,8 +130,6 @@ public class SaveOwnerCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-    @Autowired
-    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -217,8 +215,7 @@ public class SaveOwnerCmd extends Cmd {
                 "10000");
         dealOwnerAttr(reqJson, cmdDataFlowContext);
 
-        //业主 开通 现金账户，不然配合商城 会存在bug
-        addAccountDto(ownerPo.getMemberId(),ownerPo.getCommunityId());
+
 
 
         String autoUser = MappingCache.getValue("OWNER", "AUTO_GENERATOR_OWNER_USER");
@@ -268,33 +265,7 @@ public class SaveOwnerCmd extends Cmd {
         }
     }
 
-    private void addAccountDto(String ownerId,String communityId) {
-        if (StringUtil.isEmpty(ownerId)) {
-            return ;
-        }
-        //开始锁代码
-        String requestId = DistributedLock.getLockUUID();
-        String key = this.getClass().getSimpleName() + "AddCountDto" +ownerId;
-        try {
-            DistributedLock.waitGetDistributedLock(key, requestId);
-            AccountPo accountPo = new AccountPo();
-            accountPo.setAmount("0");
-            accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
-            accountPo.setObjId(ownerId);
-            accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
-            accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
-            OwnerDto tmpOwnerDto = new OwnerDto();
-            tmpOwnerDto.setMemberId(ownerId);
-            tmpOwnerDto.setCommunityId(communityId);
-            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
-            Assert.listOnlyOne(ownerDtos, "业主不存在");
-            accountPo.setAcctName(ownerDtos.get(0).getName());
-            accountPo.setPartId(communityId);
-            accountInnerServiceSMOImpl.saveAccount(accountPo);
-        } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
-        }
-    }
+
 
     /**
      * 生成小区楼ID

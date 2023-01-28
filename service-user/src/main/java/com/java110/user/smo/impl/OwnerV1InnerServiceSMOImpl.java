@@ -17,13 +17,20 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.account.AccountDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.po.account.AccountPo;
 import com.java110.user.dao.IOwnerV1ServiceDao;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.lock.DistributedLock;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,29 +53,62 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
     @Autowired
     private IOwnerV1ServiceDao ownerV1ServiceDaoImpl;
 
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Override
-    public int saveOwner(@RequestBody  OwnerPo ownerPo) {
+    public int saveOwner(@RequestBody OwnerPo ownerPo) {
         int saveFlag = ownerV1ServiceDaoImpl.saveOwnerInfo(BeanConvertUtil.beanCovertMap(ownerPo));
+
+        //业主 开通 现金账户，不然配合商城 会存在bug
+        addAccountDto(ownerPo.getMemberId(), ownerPo.getCommunityId());
         return saveFlag;
     }
 
-     @Override
-    public int updateOwner(@RequestBody  OwnerPo ownerPo) {
+    private void addAccountDto(String ownerId, String communityId) {
+        if (StringUtil.isEmpty(ownerId)) {
+            return;
+        }
+        //开始锁代码
+        String requestId = DistributedLock.getLockUUID();
+        String key = this.getClass().getSimpleName() + "AddCountDto" + ownerId;
+        try {
+            DistributedLock.waitGetDistributedLock(key, requestId);
+            AccountPo accountPo = new AccountPo();
+            accountPo.setAmount("0");
+            accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
+            accountPo.setObjId(ownerId);
+            accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
+            accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+            OwnerDto tmpOwnerDto = new OwnerDto();
+            tmpOwnerDto.setMemberId(ownerId);
+            tmpOwnerDto.setCommunityId(communityId);
+            List<OwnerDto> ownerDtos = queryOwners(tmpOwnerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            accountPo.setAcctName(ownerDtos.get(0).getName());
+            accountPo.setPartId(communityId);
+            accountInnerServiceSMOImpl.saveAccount(accountPo);
+        } finally {
+            DistributedLock.releaseDistributedLock(requestId, key);
+        }
+    }
+
+    @Override
+    public int updateOwner(@RequestBody OwnerPo ownerPo) {
         int saveFlag = ownerV1ServiceDaoImpl.updateOwnerInfo(BeanConvertUtil.beanCovertMap(ownerPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteOwner(@RequestBody  OwnerPo ownerPo) {
-       ownerPo.setStatusCd("1");
-       int saveFlag = ownerV1ServiceDaoImpl.updateOwnerInfo(BeanConvertUtil.beanCovertMap(ownerPo));
-       return saveFlag;
+    @Override
+    public int deleteOwner(@RequestBody OwnerPo ownerPo) {
+        ownerPo.setStatusCd("1");
+        int saveFlag = ownerV1ServiceDaoImpl.updateOwnerInfo(BeanConvertUtil.beanCovertMap(ownerPo));
+        return saveFlag;
     }
 
     @Override
 
-    public List<OwnerDto> queryOwners(@RequestBody  OwnerDto ownerDto) {
+    public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
 
         //校验是否传了 分页信息
 
@@ -86,7 +126,8 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
     @Override
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
-        return ownerV1ServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));    }
+        return ownerV1ServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
 
     @Override
     public int queryOwnersBindCount(@RequestBody OwnerDto ownerDto) {
@@ -97,7 +138,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
     public List<Map> queryOwnerMembersCount(@RequestBody List<String> ownerIds) {
 
         Map info = new HashMap();
-        info.put("ownerIds",ownerIds.toArray(new String[ownerIds.size()]));
+        info.put("ownerIds", ownerIds.toArray(new String[ownerIds.size()]));
         List<Map> result = ownerV1ServiceDaoImpl.queryOwnerMembersCount(info);
         return result;
     }
