@@ -27,7 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -85,4 +87,11 @@ public class ParkingSpaceV1InnerServiceSMOImpl extends BaseServiceSMO implements
         return parkingSpaceV1ServiceDaoImpl.queryParkingSpacesCount(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
     }
 
+    @Override
+    public int saveParkingSpaces(@RequestBody List<ParkingSpacePo> parkingSpacePos) {
+        Map info = new HashMap();
+        info.put("parkingSpacePos",parkingSpacePos);
+        int saveFlag = parkingSpaceV1ServiceDaoImpl.saveParkingSpaceInfos(info);
+        return saveFlag;
+    }
 }

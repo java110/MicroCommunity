@@ -126,4 +126,14 @@
 
     </select>
 
+    <!-- 保存车位信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingSpaceInfos" parameterType="Map">
+        insert into parking_space(
+        area,parking_type,num,pa_id,ps_id,remark,state,community_id
+        ) values
+        <foreach collection="parkingSpacePos" item="item" separator=",">
+            (#{item.area},#{item.parkingType},#{item.num},#{item.paId},#{item.psId},#{item.remark},#{item.state},#{item.communityId})
+        </foreach>
+    </insert>
+
 </mapper>
