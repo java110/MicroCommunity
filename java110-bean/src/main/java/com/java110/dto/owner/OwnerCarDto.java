@@ -95,6 +95,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String leaseTypeName;
 
+    private String memberCarCount;
+
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
     public String getCarColor() {
@@ -471,5 +473,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLeaseTypes(String[] leaseTypes) {
         this.leaseTypes = leaseTypes;
+    }
+
+    public String getMemberCarCount() {
+        return memberCarCount;
+    }
+
+    public void setMemberCarCount(String memberCarCount) {
+        this.memberCarCount = memberCarCount;
     }
 }
