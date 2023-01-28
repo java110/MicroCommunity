@@ -16,6 +16,7 @@ import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,13 +42,15 @@ public class BatchSaveParkingSpaceCmd extends Cmd {
         List<ParkingSpacePo> parkingSpacePos = new ArrayList<>();
 
         ParkingSpacePo parkingSpacePo = null;
+        Calendar createTime = Calendar.getInstance();
         for (int i = reqJson.getIntValue("startNum"); i <= reqJson.getIntValue("endNum"); i++) {
+            createTime.add(Calendar.SECOND,1);
             parkingSpacePo = BeanConvertUtil.covertBean(reqJson, ParkingSpacePo.class);
             parkingSpacePo.setNum(reqJson.getString("preNum") + i);
             parkingSpacePo.setState("F");
             parkingSpacePo.setPsId(GenerateCodeFactory.getPsId(GenerateCodeFactory.CODE_PREFIX_psId));
             parkingSpacePo.setbId("-1");
-            parkingSpacePo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            parkingSpacePo.setCreateTime(DateUtil.getFormatTimeString(createTime.getTime(),DateUtil.DATE_FORMATE_STRING_A));
             parkingSpacePos.add(parkingSpacePo);
         }
 
