@@ -11,7 +11,10 @@ public final class MappingConstant {
     }
 
 
+    // 系统开关
+    public static final String DOMAIN_SYSTEM_SWITCH = "SYSTEM_SWITCH";
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
+
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
 
     //私钥

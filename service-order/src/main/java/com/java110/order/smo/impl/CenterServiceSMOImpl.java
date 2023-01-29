@@ -1304,7 +1304,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private void saveLogMessage(String requestJson,String responseJson){
 
         try{
-            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))){
+            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_LOG_ON_OFF))){
                 JSONObject log = new JSONObject();
                 log.put("request",requestJson);
                 log.put("response",responseJson);

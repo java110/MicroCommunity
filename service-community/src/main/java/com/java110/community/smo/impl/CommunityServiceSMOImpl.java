@@ -73,7 +73,7 @@ public class CommunityServiceSMOImpl extends BaseServiceSMO implements ICommunit
     private void saveLogMessage(BusinessServiceDataFlow businessServiceDataFlow) {
 
         try {
-            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_LOG_ON_OFF))) {
                 for (DataFlowLog dataFlowLog : businessServiceDataFlow.getLogDatas()) {
                     KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_LOG_NAME, "", JSONObject.toJSONString(dataFlowLog));
                 }
