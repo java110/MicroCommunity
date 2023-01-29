@@ -22,6 +22,7 @@ import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.user.UserPo;
 import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -76,7 +77,7 @@ public class OwnerRegisterCmd extends Cmd {
         smsDto.setCode(reqJson.getString("msgCode"));
         smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
 
-        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN,SendSmsFactory.SMS_SEND_SWITCH))) {
             throw new IllegalArgumentException(smsDto.getMsg());
         }
     }

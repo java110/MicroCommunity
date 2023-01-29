@@ -26,6 +26,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -139,7 +140,7 @@ public class ListAccessControlWhiteCmd extends Cmd {
         if(fileRelDtos == null || fileRelDtos.size() < 1){
             return ;
         }
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for(AccessControlWhiteDto accessControlWhiteDto: accessControlWhiteDtos){
             for(FileRelDto tmpFileRelDto : fileRelDtos){
                 if(!accessControlWhiteDto.getAcwId().equals(tmpFileRelDto.getObjId())){

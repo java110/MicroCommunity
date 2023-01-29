@@ -10,6 +10,7 @@ import com.java110.core.client.OssUploadTemplate;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.COSUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.StringUtil;
@@ -48,7 +49,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
 
         //int saveFileFlag = fileServiceDaoImpl.saveFile(BeanConvertUtil.beanCovertMap(fileDto));
         String fileName = "";
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
 
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ossUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
@@ -84,7 +85,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length());
         }
         String context = "";
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             context = ossUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),

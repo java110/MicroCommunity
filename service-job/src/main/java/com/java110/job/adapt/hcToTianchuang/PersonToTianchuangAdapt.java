@@ -47,6 +47,7 @@ import com.java110.po.machine.MachineAttrPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -220,7 +221,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         fileRelDto.setObjId(machineRecordPo.getMachineRecordId());
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         String url = "";
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         if (fileRelDtos != null && fileRelDtos.size() > 0) {
             url = imgUrl + fileRelDtos.get(0).getFileRealName();
         }

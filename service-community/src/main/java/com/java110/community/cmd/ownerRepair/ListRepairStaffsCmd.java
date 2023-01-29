@@ -11,6 +11,7 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -74,7 +75,7 @@ public class ListRepairStaffsCmd extends Cmd {
         List<PhotoVo> photoVos = null;  //业主上传维修图片
         PhotoVo photoVo = null;
 
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
 
         for (RepairUserDto repairUserDto : repairUserDtos) {
             FileRelDto fileRelDto = new FileRelDto();

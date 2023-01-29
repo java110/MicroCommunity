@@ -11,6 +11,7 @@ import com.java110.dto.advert.AdvertItemDto;
 import com.java110.intf.common.IAdvertInnerServiceSMO;
 import com.java110.intf.common.IAdvertItemInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -86,7 +87,7 @@ public class ListAdvertPhotoCmd extends Cmd {
      */
     private void getAdvertItem(List<AdvertDto> advertDtos, JSONArray advertPhotoAndVideos) {
         JSONObject photoAndVideo = null;
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for (AdvertDto advertDto : advertDtos) {
 
             AdvertItemDto advertItemDto = new AdvertItemDto();

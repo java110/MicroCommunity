@@ -15,6 +15,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.owner.OwnerPo;
 import com.java110.user.dao.IOwnerServiceDao;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -112,7 +113,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             return true;
         }
 
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
 
         for (OwnerDto tmpOwnerDto : owners) {
             for (FileRelDto tmpFileRelDto : fileRelDtos) {

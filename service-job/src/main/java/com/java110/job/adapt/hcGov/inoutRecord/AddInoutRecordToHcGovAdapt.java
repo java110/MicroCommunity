@@ -32,6 +32,7 @@ import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -118,7 +119,7 @@ public class AddInoutRecordToHcGovAdapt extends DatabusAdaptImpl {
         fileRelDto.setObjId(machineRecordPo.getMachineRecordId());
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         String url = "";
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         if (fileRelDtos != null && fileRelDtos.size() > 0) {
             url = imgUrl + fileRelDtos.get(0).getFileRealName();
         }

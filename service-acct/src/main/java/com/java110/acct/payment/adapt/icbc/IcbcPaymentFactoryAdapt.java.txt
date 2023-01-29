@@ -115,7 +115,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/icbc/992020011134400001";
+        String notifyUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL") + "/app/payment/notify/icbc/992020011134400001";
 
         String openId = reqJson.getString("openId");
 

@@ -21,6 +21,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -71,7 +72,7 @@ public class AppUserBindingOwnerCmd extends Cmd {
         smsDto.setCode(reqJson.getString("msgCode"));
         smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
 
-        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN,SendSmsFactory.SMS_SEND_SWITCH))) {
             throw new IllegalArgumentException(smsDto.getMsg());
         }
     }

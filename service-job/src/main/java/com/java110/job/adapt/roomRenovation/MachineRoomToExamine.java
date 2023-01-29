@@ -23,6 +23,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IRoomRenovationsInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -208,7 +209,7 @@ public class MachineRoomToExamine extends DatabusAdaptImpl {
             data.setRemark(new Content("如有其它问题，请联系" + communityDto.getName() + "客服，联系电话" + tel + "，感谢您的使用。"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

@@ -154,7 +154,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         String serviceCode = dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE);
 
-        String logServiceCode = MappingCache.getValue(MappingCache.LOG_SERVICE_CODE);
+        String logServiceCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingCache.LOG_SERVICE_CODE);
 
         //日志查询不记录
         if ("/transactionLog/queryTransactionLog".equals(serviceCode)
@@ -641,7 +641,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
      */
     private void saveCostTimeLogMessage(DataFlow dataFlow) {
         try {
-            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_COST_TIME_ON_OFF))) {
                 List<DataFlowLinksCost> dataFlowLinksCosts = dataFlow.getLinksCostDates();
                 JSONObject costDate = new JSONObject();
                 JSONArray costDates = new JSONArray();

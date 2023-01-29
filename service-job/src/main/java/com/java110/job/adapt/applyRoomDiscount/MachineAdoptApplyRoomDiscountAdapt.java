@@ -28,6 +28,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -186,7 +187,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
                 data.setRemark(new Content("请及时处理！"));
                 templateMessage.setData(data);
                 //获取员工公众号地址
-                String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+                String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -264,7 +265,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("空置房申请验房已通过，系统已为您安排下一步审核流程，请耐心等待！"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -341,7 +342,7 @@ public class MachineAdoptApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("感谢您的使用，如有疑问请联系相关物业人员。"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

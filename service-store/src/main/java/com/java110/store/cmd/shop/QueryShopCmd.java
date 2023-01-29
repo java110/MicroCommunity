@@ -14,6 +14,7 @@ import com.java110.intf.common.IAreaInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.store.IStoreShopV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -130,8 +131,8 @@ public class QueryShopCmd extends Cmd {
      * @param shopDtos
      */
     private void freshShopImg(List<ShopDto> shopDtos) {
-        String imgUrl = MappingCache.getValue("IMG_PATH");
-        String mallUrl = MappingCache.getValue("MALL_URL");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        String mallUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"MALL_URL");
 
         imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
         mallUrl += (!StringUtil.isEmpty(mallUrl) && mallUrl.endsWith("/") ? "" : "/");

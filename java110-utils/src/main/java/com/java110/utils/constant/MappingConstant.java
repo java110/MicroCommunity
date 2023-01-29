@@ -13,6 +13,16 @@ public final class MappingConstant {
 
     // 系统开关
     public static final String DOMAIN_SYSTEM_SWITCH = "SYSTEM_SWITCH";
+
+    // 短信配置
+    public static final String SMS_DOMAIN = "SMS_DOMAIN";
+
+    // 存储配置
+    public static final String FILE_DOMAIN = "FILE_DOMAIN";
+
+    // 平台URL
+    public static final String URL_DOMAIN ="URL_DOMAIN";
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
