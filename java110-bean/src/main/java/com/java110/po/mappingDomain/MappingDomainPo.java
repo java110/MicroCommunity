@@ -17,6 +17,7 @@ package com.java110.po.mappingDomain;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-01-29 14:09:04 mail: 928255095@qq.com
@@ -28,41 +29,58 @@ import java.util.Date;
 public class MappingDomainPo implements Serializable {
 
     private String domain;
-private String remark;
-private String statusCd = "0";
-private String id;
-private String seq;
-public String getDomain() {
+
+    private String domainName;
+    private String remark;
+    private String statusCd = "0";
+    private String id;
+    private String seq;
+
+    public String getDomain() {
         return domain;
     }
-public void setDomain(String domain) {
+
+    public void setDomain(String domain) {
         this.domain = domain;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getId() {
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
+    public String getDomainName() {
+        return domainName;
+    }
 
-
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
+    }
 }

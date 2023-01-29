@@ -1,6 +1,7 @@
 package com.java110.dto.mappingDomain;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,12 @@ import java.util.Date;
 public class MappingDomainDto extends PageDto implements Serializable {
 
     private String domain;
-private String remark;
-private String id;
-private String seq;
+
+    private String domainName;
+
+    private String remark;
+    private String id;
+    private String seq;
 
 
     private Date createTime;
@@ -28,25 +32,32 @@ private String seq;
     public String getDomain() {
         return domain;
     }
-public void setDomain(String domain) {
+
+    public void setDomain(String domain) {
         this.domain = domain;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getId() {
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
 
@@ -65,5 +76,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
 }
