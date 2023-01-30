@@ -47,6 +47,8 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     private String staffId;
 
+    private String staffName;
+
     private String[] taskIds;
 
 
@@ -57,6 +59,10 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     private String leaveValue;
     private String lateValue;
+
+    private String startTime;
+
+    private String endTime;
 
 
     public String getCheckTime() {
@@ -219,5 +225,29 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 }

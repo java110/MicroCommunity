@@ -11,6 +11,8 @@ import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,6 +109,10 @@ public class AttendanceClassesTaskInnerServiceSMOImpl extends BaseServiceSMO imp
             return;
         }
         List<AttendanceClassesTaskDetailDto> tmpAttendanceClassesTaskDetailDtos = null;
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        for (AttendanceClassesTaskDetailDto tmpAttendanceClassesTaskDetailDto : attendanceClassesTaskDetailDtos) {
+            tmpAttendanceClassesTaskDetailDto.setFacePath(imgUrl + tmpAttendanceClassesTaskDetailDto.getFacePath());
+        }
         for (AttendanceClassesTaskDto attendanceClassesTaskDto : attendanceClassesTasks) {
             tmpAttendanceClassesTaskDetailDtos = new ArrayList<>();
             for (AttendanceClassesTaskDetailDto tmpAttendanceClassesTaskDetailDto : attendanceClassesTaskDetailDtos) {

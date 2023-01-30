@@ -1,6 +1,7 @@
 package com.java110.common.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
@@ -92,6 +93,12 @@ public class AttendanceClassesTaskDetailServiceDaoImpl extends BaseServiceDao im
         }
 
         return Integer.parseInt(businessAttendanceClassesTaskDetailInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryWaitSendMsgDetail(Map info) {
+        List<Map> result = sqlSessionTemplate.selectList("attendanceClassesTaskDetailServiceDaoImpl.queryWaitSendMsgDetail", info);
+        return result;
     }
 
 

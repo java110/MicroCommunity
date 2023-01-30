@@ -161,4 +161,19 @@
 
     </select>
 
+
+    <select id="queryWaitSendMsgDetail" parameterType="Map" resultType="Map">
+        select t.check_time,t.check_time checkTime,t.detail_id,t.detail_id detailId,t.spec_cd,t.spec_cd
+        specCd,t.status_cd,t.status_cd statusCd,t.remark,t.face_path,t.face_path facePath,t.state,t.store_id,t.store_id
+        storeId,t.value,t.task_id,t.task_id taskId,t.leave_value leaveValue,t.late_value lateValue,act.staff_id staffId, act.staff_name staffName
+        from attendance_classes_task_detail t
+        left join attendance_classes_task act on t.task_id = act.task_id and act.status_cd = '0'
+        where 1 =1
+        <if test="startTime != null and startTime != ''">
+        and t.`value` &gt; #{startTime}
+        and t.`value` &lt;= #{endTime}
+        </if>
+        and t.status_cd = '0'
+        and t.state = '10000'
+    </select>
 </mapper>

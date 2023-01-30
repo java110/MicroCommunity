@@ -3,11 +3,13 @@ package com.java110.common.cmd.attendanceClasses;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.smo.impl.AttendanceClassesTaskDetailInnerServiceSMOImpl;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.client.FileUploadTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
@@ -94,6 +96,9 @@ public class CheckInCmd extends Cmd {
     @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
@@ -102,6 +107,7 @@ public class CheckInCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         StoreUserDto storeUserDto = new StoreUserDto();
@@ -147,6 +153,19 @@ public class CheckInCmd extends Cmd {
     }
 
     private void doCheckInAttendanceLog(ICmdDataFlowContext context, JSONObject reqJson, List<StoreUserDto> storeUserDtos, List<UserDto> userDtos, AttendanceClassesDto attendanceClassesDto) {
+
+        String photo = "";
+        if (reqJson.containsKey("photo") && !StringUtil.isEmpty(reqJson.getString("photo"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(reqJson.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId("-1");
+            photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+        }
+
+
         AttendanceLogPo attendanceLogPo = new AttendanceLogPo();
         attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
         attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
@@ -155,6 +174,7 @@ public class CheckInCmd extends Cmd {
         attendanceLogPo.setDepartmentId(attendanceClassesDto.getClassesObjId());
         attendanceLogPo.setDepartmentName(attendanceClassesDto.getClassesObjName());
         attendanceLogPo.setStaffName(userDtos.get(0).getName());
+        attendanceLogPo.setFacePath(photo);
 
         int flag = attendanceLogInnerServiceSMOImpl.saveAttendanceLog(attendanceLogPo);
 
@@ -175,16 +195,6 @@ public class CheckInCmd extends Cmd {
             return;
         }
 
-        String photo = "";
-        if (reqJson.containsKey("photo") && !StringUtil.isEmpty(reqJson.getString("photo"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId("-1");
-            photo = fileInnerServiceSMOImpl.saveFile(fileDto);
-        }
 
         //当前考勤的 记录
         AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto = attendanceClassesTaskDetailDtos.get(0);

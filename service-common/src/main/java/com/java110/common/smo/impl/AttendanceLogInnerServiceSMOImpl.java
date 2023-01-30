@@ -7,6 +7,8 @@ import com.java110.dto.PageDto;
 import com.java110.dto.attendanceClasses.AttendanceLogDto;
 import com.java110.intf.common.IAttendanceLogInnerServiceSMO;
 import com.java110.po.attendanceLog.AttendanceLogPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,6 +65,15 @@ public class AttendanceLogInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<AttendanceLogDto> attendanceLogs = BeanConvertUtil.covertBeanList(attendanceLogServiceDaoImpl.getAttendanceLogInfo(BeanConvertUtil.beanCovertMap(attendanceLogDto)), AttendanceLogDto.class);
+
+        if (attendanceLogs == null || attendanceLogs.size() < 1) {
+            return attendanceLogs;
+        }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        for (AttendanceLogDto tmpAttendanceLogDto : attendanceLogs) {
+            tmpAttendanceLogDto.setFacePath(imgUrl + tmpAttendanceLogDto.getFacePath());
+        }
 
         return attendanceLogs;
     }
