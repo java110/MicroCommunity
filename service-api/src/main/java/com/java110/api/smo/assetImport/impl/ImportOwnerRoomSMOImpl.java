@@ -181,8 +181,9 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 if (tmpImportOwnerRoomDto.getFloorNum().equals(importOwnerRoomDto.getFloorNum())
                         && tmpImportOwnerRoomDto.getUnitNum().equals(importOwnerRoomDto.getUnitNum())
                         && tmpImportOwnerRoomDto.getRoomNum().equals(importOwnerRoomDto.getRoomNum())
-                        && OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+                        && OwnerDto.OWNER_TYPE_CD_OWNER.equals(tmpImportOwnerRoomDto.getOwnerTypeCd())) {
                     hasOwnerType = true;
+                    break;
                 }
             }
 
