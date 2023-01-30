@@ -29,6 +29,8 @@ import com.java110.doc.registrar.ApiDocCmdPublishing;
 import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.intf.dev.ICacheV1InnerServiceSMO;
 import com.java110.service.init.ServiceStartInit;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import okhttp3.ConnectionPool;
@@ -217,7 +219,7 @@ public class BootApplicationStart {
         logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
 
         //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
-        //String mapping = MappingCache.getValue("java110_hc_version");
+        //String mapping = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"java110_hc_version");
         String mapping = "";
         if (StringUtil.isEmpty(mapping)) {
             ICacheV1InnerServiceSMO devServiceCacheSMOImpl = (ICacheV1InnerServiceSMO) ApplicationContextFactory.getBean(ICacheV1InnerServiceSMO.class);
