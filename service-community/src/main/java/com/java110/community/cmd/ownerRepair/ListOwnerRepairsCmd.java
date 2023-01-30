@@ -14,6 +14,7 @@ import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -160,7 +161,7 @@ public class ListOwnerRepairsCmd extends Cmd {
         List<PhotoVo> beforePhotos = null;  //维修前图片
         List<PhotoVo> afterPhotos = null;  //维修后图片
         PhotoVo photoVo = null;
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
 
         for (RepairDto repairDto : ownerRepairs) {
             FileRelDto fileRelDto = new FileRelDto();

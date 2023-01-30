@@ -4,6 +4,7 @@ import com.java110.dto.storeAds.StoreAdsDto;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
 import com.java110.store.bmo.storeAds.IGetStoreAdsBMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class GetStoreAdsBMOImpl implements IGetStoreAdsBMO {
     }
 
     private void freshAdsUrl(List<StoreAdsDto> storeAdsDtos) {
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for (StoreAdsDto tmpStoreAdsDto : storeAdsDtos) {
             tmpStoreAdsDto.setUrl(imgUrl + tmpStoreAdsDto.getUrl());
         }

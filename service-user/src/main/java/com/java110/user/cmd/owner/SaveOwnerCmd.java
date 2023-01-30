@@ -32,6 +32,7 @@ import com.java110.po.owner.OwnerPo;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
@@ -153,7 +154,7 @@ public class SaveOwnerCmd extends Cmd {
             smsDto.setTel(reqJson.getString("link"));
             smsDto.setCode(reqJson.getString("msgCode"));
             smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
-            if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
+            if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN,SendSmsFactory.SMS_SEND_SWITCH))) {
                 throw new IllegalArgumentException(smsDto.getMsg());
             }
         }
@@ -218,7 +219,7 @@ public class SaveOwnerCmd extends Cmd {
 
 
 
-        String autoUser = MappingCache.getValue("OWNER", "AUTO_GENERATOR_OWNER_USER");
+        String autoUser = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "AUTO_GENERATOR_OWNER_USER");
 
         if (!"ON".equals(autoUser)) {
             return;

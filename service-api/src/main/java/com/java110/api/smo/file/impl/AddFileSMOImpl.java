@@ -9,6 +9,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.api.smo.file.IAddFileSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
@@ -57,7 +58,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
         JSONObject outParam = new JSONObject();
         outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         outParam.put("url", imgUrl + fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
@@ -88,7 +89,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
         JSONObject outParam = new JSONObject();
         outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         outParam.put("url", imgUrl + fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);

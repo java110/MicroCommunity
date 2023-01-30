@@ -10,6 +10,7 @@ import com.java110.core.factory.SendSmsFactory;
 import com.java110.api.smo.IRegisterServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -129,7 +130,7 @@ public class RegisterServiceSMOImpl extends DefaultAbstractComponentSMO implemen
 
         verifyStr = "演示环境验证码:" + verifyCode;
         try {
-            if ("ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
+            if ("ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN,SendSmsFactory.SMS_SEND_SWITCH))) {
                 //开始发送验证码
                 //AliSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
 

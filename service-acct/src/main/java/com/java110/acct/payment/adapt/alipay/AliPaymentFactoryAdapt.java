@@ -23,6 +23,7 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
@@ -92,7 +93,7 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String communityId = reqJson.getString("communityId");
-        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/common/992020011134400001";
+        String notifyUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL") + "/app/payment/notify/common/992020011134400001";
 
         String openId = reqJson.getString("openId");
 

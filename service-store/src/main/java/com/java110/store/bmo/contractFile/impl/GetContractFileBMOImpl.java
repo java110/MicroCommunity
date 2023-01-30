@@ -4,6 +4,7 @@ import com.java110.dto.contractFile.ContractFileDto;
 import com.java110.intf.store.IContractFileInnerServiceSMO;
 import com.java110.store.bmo.contractFile.IGetContractFileBMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class GetContractFileBMOImpl implements IGetContractFileBMO {
     }
 
     private void freshUrl(List<ContractFileDto> contractFileDtos) {
-        String imgPath = MappingCache.getValue("IMG_PATH");
+        String imgPath = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for(ContractFileDto contractFileDto : contractFileDtos){
             contractFileDto.setFileSaveName(imgPath+contractFileDto.getFileSaveName());
         }

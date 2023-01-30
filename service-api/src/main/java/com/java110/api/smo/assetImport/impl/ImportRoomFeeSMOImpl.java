@@ -20,6 +20,7 @@ import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -108,7 +109,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
     public ResponseEntity<String> importFile(MultipartFile uploadFile) throws Exception {
         try {
             String fileName = "";
-            String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+            String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
             if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
                 fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                         java110Properties.getFtpPort(), java110Properties.getFtpUserName(),

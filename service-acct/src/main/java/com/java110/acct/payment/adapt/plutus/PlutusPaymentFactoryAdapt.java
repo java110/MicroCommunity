@@ -15,6 +15,7 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -87,7 +88,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL")+"/app/payment/notify/wechat/992020011134400001";
+        String notifyUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL")+"/app/payment/notify/wechat/992020011134400001";
 
         String openId = reqJson.getString("openId");
 

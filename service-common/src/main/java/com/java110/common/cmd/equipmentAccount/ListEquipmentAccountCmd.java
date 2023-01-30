@@ -25,6 +25,7 @@ import com.java110.dto.machineType.MachineTypeDto;
 import com.java110.intf.common.IMachineTypeV1InnerServiceSMO;
 import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -73,7 +74,7 @@ public class ListEquipmentAccountCmd extends Cmd {
         int count = equipmentAccountV1InnerServiceSMOImpl.queryEquipmentAccountsCount(equipmentAccountDto);
 
         List<EquipmentAccountDto> equipmentAccountDtos = null;
-        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+        String ownerUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
 
 
         if (count > 0) {

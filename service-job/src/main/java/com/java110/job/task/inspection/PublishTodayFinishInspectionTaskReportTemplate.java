@@ -20,6 +20,7 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -141,7 +142,7 @@ public class PublishTodayFinishInspectionTaskReportTemplate extends TaskSystemQu
             data.setRemark(new Content("感谢您的使用！"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             if(wechatUrl.endsWith("/")){
                 wechatUrl += "#/pages/inspection/inspectionTodayReport";
             }else{

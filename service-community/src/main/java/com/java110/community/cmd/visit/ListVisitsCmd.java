@@ -19,6 +19,7 @@ import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -199,7 +200,7 @@ public class ListVisitsCmd extends Cmd {
         if(fileRelDtos == null || fileRelDtos.size() < 1){
             return ;
         }
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for(ApiVisitDataVo apiVisitDataVo: visits){
             for(FileRelDto tmpFileRelDto : fileRelDtos){
                 if(!apiVisitDataVo.getvId().equals(tmpFileRelDto.getObjId())){

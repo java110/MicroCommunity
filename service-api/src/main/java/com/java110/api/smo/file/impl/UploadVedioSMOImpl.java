@@ -8,6 +8,7 @@ import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IUploadVedioSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
 //                java110Properties.getFtpUserPassword(), "hc/");
 //
         String fileName = "";
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),

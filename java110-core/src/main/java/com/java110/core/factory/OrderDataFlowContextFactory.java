@@ -65,7 +65,7 @@ public class OrderDataFlowContextFactory {
      * @return
      */
     public static void addCostTime(IOrderDataFlowContext dataFlow, String linksCode, String linksName, Date startDate) {
-        if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
+        if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, DateUtil.getCurrentDate());
             //dataFlow.addLinksCostDates(dataFlowLinksCost);
         }
@@ -112,7 +112,7 @@ public class OrderDataFlowContextFactory {
      * @return
      */
     public static void addCostTime(IOrderDataFlowContext dataFlow, String linksCode, String linksName, Date startDate, Date endDate) {
-        if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
+        if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, endDate);
             //dataFlow.addLinksCostDates(dataFlowLinksCost);
         }

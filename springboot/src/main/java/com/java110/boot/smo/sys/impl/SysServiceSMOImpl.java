@@ -5,6 +5,7 @@ import com.java110.boot.smo.DefaultAbstractComponentSMO;
 import com.java110.boot.smo.sys.ISysServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class SysServiceSMOImpl extends DefaultAbstractComponentSMO implements IS
         if (StringUtil.isEmpty(logo)) {
             logo = "HC";
         }
-        String apiUrl = MappingCache.getValue("SYS_API_URL");
+        String apiUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"SYS_API_URL");
 
         JSONObject sysInfo = new JSONObject();
         sysInfo.put("logo", logo);

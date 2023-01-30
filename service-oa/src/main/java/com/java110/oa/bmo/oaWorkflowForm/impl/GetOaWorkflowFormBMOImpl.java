@@ -18,6 +18,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
 import com.java110.po.workflowDataFile.WorkflowDataFilePo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -140,7 +141,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         if (workflowDataFileDtos == null || workflowDataFileDtos.size() < 1) {
             return;
         }
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for(WorkflowDataFileDto tmpWorkflowDataFileDto: workflowDataFileDtos){
             tmpWorkflowDataFileDto.setRealFileName(imgUrl + tmpWorkflowDataFileDto.getRealFileName());
         }
