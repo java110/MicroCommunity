@@ -16,6 +16,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -104,7 +105,7 @@ public class GrabbingRepairCmd extends Cmd {
             repair.setCommunityId(reqJson.getString("communityId"));
             int i = repairInnerServiceSMOImpl.queryStaffRepairsCount(repair);
             //取出开关映射的值(维修师傅未处理最大单数)
-            String repairNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_NUMBER);
+            String repairNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_NUMBER);
             if (i >= Integer.parseInt(repairNumber)) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "您有超过" + Integer.parseInt(repairNumber) + "条未处理的订单急需处理，请处理完成后再进行抢单！");
                 context.setResponseEntity(responseEntity);

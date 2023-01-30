@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -24,7 +25,7 @@ public class DeleteAppUserBindingOwnerCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "appUserId", "绑定ID不能为空");
 
-        String env = MappingCache.getValue("HC_ENV");
+        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV");
 
         if ("DEV".equals(env) || "TEST".equals(env)) {
             throw new IllegalArgumentException("演示环境不能解绑，解绑后演示账号手机端无法登陆");

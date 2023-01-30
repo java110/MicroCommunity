@@ -13,6 +13,7 @@ import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -254,8 +255,8 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             Date nowTime = new Date();
             //默认48小时
             Integer autoEvaluateHour = 48;
-            if (StringUtil.isEmpty(MappingCache.getValue("autoEvaluateHour"))) {
-                autoEvaluateHour = Integer.valueOf(MappingCache.getValue("autoEvaluateHour"));
+            if (StringUtil.isEmpty(MappingCache.getValue(MappingConstant.REPAIR_DOMAIN,"autoEvaluateHour"))) {
+                autoEvaluateHour = Integer.valueOf(MappingCache.getValue(MappingConstant.REPAIR_DOMAIN,"autoEvaluateHour"));
             }
             if ((nowTime.getTime() - startTime.getTime()) > autoEvaluateHour * 1000 * 60 * 60) {
                 //超过两天未评价，状态变为待回访状态

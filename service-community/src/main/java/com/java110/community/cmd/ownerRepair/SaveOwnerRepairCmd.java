@@ -30,6 +30,7 @@ import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -166,7 +167,7 @@ public class SaveOwnerRepairCmd extends Cmd {
         //查询报修业主处理中的报修费
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
         //取出开关映射的值(维修师傅未处理最大单数)
-        String repairFeeNumber = MappingCache.getValue(DOMAIN_COMMON, REPAIR_FEE_NUMBER);
+        String repairFeeNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_FEE_NUMBER);
         if (feeDtos != null && StringUtil.isInteger(repairFeeNumber) && feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该房屋存在" + Integer.parseInt(repairFeeNumber) + "条未处理的费用，请缴费后再进行报修！");
             context.setResponseEntity(responseEntity);

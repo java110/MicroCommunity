@@ -30,6 +30,13 @@ public final class MappingConstant {
     // 商城公众号
     public static final String MALL_WECHAT_DOMAIN ="MALL_WECHAT";
 
+    // 工单配置
+    public static final String REPAIR_DOMAIN ="REPAIR_DOMAIN";
+
+    //环境配置
+    public static final String ENV_DOMAIN = "ENV_DOMAIN";
+
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";

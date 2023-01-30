@@ -12,6 +12,7 @@ import com.java110.doc.annotation.*;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -107,7 +108,7 @@ public class UnifiedPaymentCmd extends Cmd{
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}",JSONObject.toJSONString(paymentOrderDto));
 
-        String env = MappingCache.getValue("HC_ENV");
+        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV");
 
         // 这里 演示环境不向微信下单
         if ("DEV".equals(env) || "TEST".equals(env)) {

@@ -18,6 +18,7 @@ package com.java110.core.context;
 
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 
 /**
@@ -85,7 +86,7 @@ public class Environment {
     }
 
     public static void isDevEnv(){
-        String env = MappingCache.getValue("HC_ENV");
+        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV");
         if ("DEV".equals(env) || "TEST".equals(env)) {
             throw new IllegalArgumentException("为了保证体验 此功能演示环境不开放");
         }
