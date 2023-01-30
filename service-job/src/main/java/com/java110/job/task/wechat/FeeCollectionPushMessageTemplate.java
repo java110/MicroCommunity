@@ -36,6 +36,7 @@ import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -462,8 +463,8 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         }
         String url = sendTemplate + accessToken;
 
-        String oweRoomUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
-        String oweCarUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
+        String oweRoomUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweCarUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
         Miniprogram miniprogram = null;
         if (oweRoomUrl.contains("@@")) {
             miniprogram = new Miniprogram();
