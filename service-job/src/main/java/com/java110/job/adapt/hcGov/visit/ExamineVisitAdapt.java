@@ -30,6 +30,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.VisitPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -223,7 +224,7 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
             }
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

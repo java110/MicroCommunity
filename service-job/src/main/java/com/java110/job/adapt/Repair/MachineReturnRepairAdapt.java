@@ -28,6 +28,7 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -346,7 +347,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
                 data.setRemark(new Content("请点击查看详情，对我们的工作进行评价，以便提供更优质的服务，感谢您的配合和使用，祝您生活愉快，阖家欢乐！"));
                 templateMessage.setData(data);
                 //获取业主公众号地址
-                String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+                String wechatUrl = UrlCache.getOwnerUrl();
                 templateMessage.setUrl(wechatUrl);
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -417,7 +418,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("请您及时缴费，感谢您的配合和使用，祝您生活愉快，阖家欢乐！"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

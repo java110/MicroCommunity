@@ -9,6 +9,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public class ToPayInGoOutSMOImpl extends AppAbstractComponentSMO implements IToP
         ResponseEntity responseEntity = null;
 
 
-        String ownerUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL")
+        String ownerUrl = UrlCache.getOwnerUrl()
                 + "/#/pages/reportInfoDetail/reportInfoDetail?settingId=" +
                 paramIn.getString("settingId") +
                 "&communityId=" + paramIn.getString("communityId");

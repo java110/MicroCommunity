@@ -39,6 +39,7 @@ import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.po.wechatSubscribe.WechatSubscribePo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
@@ -363,7 +364,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         if (wechatSubscribeDtos == null || wechatSubscribeDtos.size() < 1) {
             return;
         }
-        String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+        String wechatUrl = UrlCache.getOwnerUrl();
         Miniprogram miniprogram = null;
         if (wechatUrl.startsWith("https://") || wechatUrl.startsWith("http://")) {
             miniprogram = new Miniprogram();
@@ -477,7 +478,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                         data.setRemark(new Content("如有疑问请联系相关物业人员"));
                         templateMessage.setData(data);
                         //获取业主公众号地址
-                        String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+                        String wechatUrl = UrlCache.getOwnerUrl();
                         if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                             wechatUrl += ("&wAppId=" + weChatDto.getAppId());
                         } else {
@@ -547,7 +548,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
     }
 
     private void doSend(List<OwnerAppUserDto> ownerAppUserDtos, NoticeDto noticeDto, String templateId, String accessToken, SmallWeChatDto weChatDto) {
-        String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL") + "/#/pages/notice/detail/detail?noticeId=";
+        String wechatUrl = UrlCache.getOwnerUrl() + "/#/pages/notice/detail/detail?noticeId=";
         ResponseEntity<String> responseEntity = null;
         String sendTemplate = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.SEND_TEMPLATE_URL);
         if (StringUtil.isEmpty(sendTemplate)) {

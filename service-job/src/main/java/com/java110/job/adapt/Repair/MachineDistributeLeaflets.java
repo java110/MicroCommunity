@@ -31,6 +31,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.StringUtil;
@@ -484,7 +485,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 data.setRemark(new Content("您的报修已受理，请保持电话畅通，以便维修人员及时跟您取得联系！感谢您的使用！"));
                 templateMessage.setData(data);
                 //获取业主公众号地址
-                String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+                String wechatUrl = UrlCache.getOwnerUrl();
                 if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                     wechatUrl += ("&wAppId=" + weChatDto.getAppId());
                 } else {

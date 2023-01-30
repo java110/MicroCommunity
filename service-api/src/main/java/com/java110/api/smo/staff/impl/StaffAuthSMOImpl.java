@@ -12,6 +12,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -109,7 +110,7 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramAuth.toJSONString(),
                 "/staff/updateStaffAppAuth", HttpMethod.POST);
-        url = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+        url = UrlCache.getOwnerUrl();
         if(url.contains("/#/")){
             if(url.contains("?")){
                 url += ("&wAppId="+smallWeChatDto.getAppId());
@@ -148,7 +149,7 @@ public class StaffAuthSMOImpl extends DefaultAbstractComponentSMO implements ISt
         }
 
         String openUrl = "";
-        String url = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+        String url = UrlCache.getOwnerUrl();
         url = url
                 + "/app/loginStaffWechatAuth?appId=992020061452450002&staffId="
                 + staffId + "&storeId=" + storeId + "&wId=" + WechatFactory.getWId(smallWeChatDto.getAppId())

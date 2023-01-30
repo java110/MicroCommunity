@@ -2,6 +2,7 @@ package com.java110.boot.properties;
 
 
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.StringUtil;
@@ -120,7 +121,7 @@ public class WechatAuthProperties {
     public String getWxNotifyUrl() {
         String wxNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wxNotifyUrl");
         if (!StringUtil.isEmpty(wxNotifyUrlCache)) {
-            return wxNotifyUrlCache;
+            return UrlCache.getOwnerUrl()+wxNotifyUrlCache;
         }
         return wxNotifyUrl;
     }
@@ -130,7 +131,7 @@ public class WechatAuthProperties {
     }
 
     public String getWechatAppId() {
-        String wechatAppIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppId");
+        String wechatAppIdCache = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppId");
         if (!StringUtil.isEmpty(wechatAppIdCache)) {
             return wechatAppIdCache;
         }
@@ -142,7 +143,7 @@ public class WechatAuthProperties {
     }
 
     public String getWechatAppSecret() {
-        String wechatAppSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wechatAppSecret");
+        String wechatAppSecretCache = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppSecret");
         if (!StringUtil.isEmpty(wechatAppSecretCache)) {
             return wechatAppSecretCache;
         }
@@ -164,7 +165,7 @@ public class WechatAuthProperties {
     public String getRentingNotifyUrl() {
         String rentingNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "rentingNotifyUrl");
         if (!StringUtil.isEmpty(rentingNotifyUrlCache)) {
-            return rentingNotifyUrlCache;
+            return UrlCache.getMallAppUrl()+rentingNotifyUrlCache;
         }
         return rentingNotifyUrl;
     }
@@ -176,7 +177,7 @@ public class WechatAuthProperties {
     public String getOweFeeNotifyUrl() {
         String oweFeeNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "oweFeeNotifyUrl");
         if (!StringUtil.isEmpty(oweFeeNotifyUrlCache)) {
-            return oweFeeNotifyUrlCache;
+            return UrlCache.getOwnerUrl()+oweFeeNotifyUrlCache;
         }
         return oweFeeNotifyUrl;
     }
@@ -188,7 +189,7 @@ public class WechatAuthProperties {
     public String getGoodsNotifyUrl() {
         String goodsNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "goodsNotifyUrl");
         if (!StringUtil.isEmpty(goodsNotifyUrlCache)) {
-            return goodsNotifyUrlCache;
+            return UrlCache.getMallAppUrl()+goodsNotifyUrlCache;
         }
         return goodsNotifyUrl;
     }
@@ -200,7 +201,7 @@ public class WechatAuthProperties {
     public String getTempCarFeeNotifyUrl() {
         String tempCarFeeNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "tempCarFeeNotifyUrl");
         if (!StringUtil.isEmpty(tempCarFeeNotifyUrlCache)) {
-            return tempCarFeeNotifyUrlCache;
+            return UrlCache.getOwnerUrl()+tempCarFeeNotifyUrlCache;
         }
         return tempCarFeeNotifyUrl;
     }

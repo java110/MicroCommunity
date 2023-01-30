@@ -28,6 +28,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.notice.NoticePo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -265,7 +266,7 @@ public class MachineNoticeAdapt extends DatabusAdaptImpl {
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
                 templateMessage.setData(data);
                 //获取业主公众号地址
-                String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+                String wechatUrl = UrlCache.getOwnerUrl();
                 if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                     wechatUrl += ("&wAppId=" + weChatDto.getAppId());
                 } else {

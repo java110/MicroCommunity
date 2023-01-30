@@ -23,6 +23,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -184,7 +185,7 @@ public class MachineApprovalApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("感谢您的使用！"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -261,7 +262,7 @@ public class MachineApprovalApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("感谢您的使用，如有疑问请联系相关物业人员。"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

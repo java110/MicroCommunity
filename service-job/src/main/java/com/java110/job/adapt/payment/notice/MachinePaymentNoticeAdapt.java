@@ -44,6 +44,7 @@ import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
@@ -512,7 +513,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             if(wechatUrl.contains("?")){
                 wechatUrl += ( "&wAppId="+smallWeChatDtos.get(0).getAppId());
             }else{
