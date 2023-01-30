@@ -17,6 +17,7 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
@@ -122,7 +123,7 @@ public class ReturnPayFeeToPlutusAdapt extends DatabusAdaptImpl {
         if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
             privateKey = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "PLUTUS_PRIVATE_KEY");
             devId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "PLUTUS_DEV_ID");
-            payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
+            payPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
             publicKey = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "PLUTUS_PUBLIC_KEY");
         } else {
             privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");

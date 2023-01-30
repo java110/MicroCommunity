@@ -2,6 +2,7 @@ package com.java110.boot.properties;
 
 
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.StringUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -84,7 +85,7 @@ public class WechatAuthProperties {
     }
 
     public String getKey() {
-        String keyCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
+        String keyCache = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
         if (!StringUtil.isEmpty(keyCache)) {
             return keyCache;
         }
@@ -97,7 +98,7 @@ public class WechatAuthProperties {
     }
 
     public String getMchId() {
-        String mchIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
+        String mchIdCache = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId");
         if (!StringUtil.isEmpty(mchIdCache)) {
             return mchIdCache;
         }

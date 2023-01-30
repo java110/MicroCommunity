@@ -9,6 +9,7 @@ import com.java110.core.factory.PlutusFactory;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
@@ -72,7 +73,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             shopSmallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            shopSmallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
+            shopSmallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
             shopSmallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "payPassword"));
         } else {
             shopSmallWeChatDto = smallWeChatDtos.get(0);

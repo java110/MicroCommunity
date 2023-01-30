@@ -23,6 +23,9 @@ public final class MappingConstant {
     // 平台URL
     public static final String URL_DOMAIN ="URL_DOMAIN";
 
+    // 微信商户
+    public static final String WECHAT_STORE_DOMAIN ="WECHAT_STORE";
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
