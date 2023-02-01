@@ -52,7 +52,7 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
         ownerDto.setCommunityId(ownerPo.getCommunityId());
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        if (ownerDtos == null) { // 不是业主 不管他
+        if (ownerDtos == null || ownerDtos.size() <1) { // 不是业主 不管他
             return;
         }
 
