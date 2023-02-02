@@ -13,6 +13,7 @@ import com.java110.community.bmo.roomRenovationRecord.IGetRoomRenovationRecordBM
 import com.java110.community.bmo.roomRenovationRecord.ISaveRoomRenovationRecordBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.communitySetting.CommunitySettingDto;
 import com.java110.dto.fee.FeeAttrDto;
@@ -109,6 +110,9 @@ public class RoomRenovationApi {
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
 
     /**
      * 微信保存消息模板
@@ -433,22 +437,25 @@ public class RoomRenovationApi {
         roomRenovationRecordPo.setStaffName(users.get(0).getName());
         roomRenovationRecordPo.setIsTrue(isTrue);
         saveRoomRenovationRecordBMO.saveRecord(roomRenovationRecordPo);
+        for (String photo : photos) {
+            photoSMOImpl.savePhoto(photo,roomRenovationRecordPo.getRecordId(),roomRenovationPo.getCommunityId(),"19000");
+        }
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setObjId(roomRenovationRecordPo.getRecordId());
         //table表示表存储 ftp表示ftp文件存储
         fileRelPo.setSaveWay("ftp");
         fileRelPo.setCreateTime(new Date());
-        //图片上传
-        if (photos != null && photos.size() > 0) {
-            //19000表示装修图片
-            fileRelPo.setRelTypeCd("19000");
-            for (String photo : photos) {
-                fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                fileRelPo.setFileRealName(photo);
-                fileRelPo.setFileSaveName(photo);
-                fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-            }
-        }
+//        //图片上传
+//        if (photos != null && photos.size() > 0) {
+//            //19000表示装修图片
+//            fileRelPo.setRelTypeCd("19000");
+//            for (String photo : photos) {
+//                fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+//                fileRelPo.setFileRealName(photo);
+//                fileRelPo.setFileSaveName(photo);
+//                fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+//            }
+//        }
         //视频上传
         if (!StringUtil.isEmpty(videoName)) {
             //21000表示装修视频
