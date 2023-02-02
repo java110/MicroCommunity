@@ -19,9 +19,9 @@
     <select id="getOwnerRoomRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.remark,t.status_cd,t.status_cd statusCd,t.start_time,t.start_time
         startTime,t.state,t.end_time,t.end_time endTime,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
-        userId,t.room_id,t.room_id roomId
+        userId,t.room_id,t.room_id roomId,bo.name ownerName,bo.link
         from building_owner_room_rel t
-        left join building_owner bo on t.owner_id = bo.owner_id and bo.status_cd = '0'
+        left join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
         where 1 =1
         <if test="ownerNameLike !=null and ownerNameLike != ''">
             and bo.`name` like concat('%',#{ownerNameLike},'%')

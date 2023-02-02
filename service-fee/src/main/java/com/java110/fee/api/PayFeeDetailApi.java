@@ -34,10 +34,6 @@ public class PayFeeDetailApi {
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含费用对象");
         Assert.hasKeyAndValue(reqJson, "batchId", "请求报文中未包含批次");
 
-
-
-
-
         return importPayFeeDetailImpl.importPayFeeDetail(reqJson);
     }
 }
