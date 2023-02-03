@@ -1017,7 +1017,7 @@
         <if test="yearMonth !=null and yearMonth != ''">
             and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
-        group by t.config_id,t.fee_name,pfc.start_time
+        group by t.fee_name ,td.name ,pfc.fee_type_cd,pfc.start_time ,t.create_time
         ) t
     </select>
 
@@ -1089,7 +1089,7 @@
         <if test="yearMonth !=null and yearMonth != ''">
             and concat(t.fee_year,lpad(t.fee_month,2,0)) = #{yearMonth}
         </if>
-        group by t.config_id,t.fee_name,pfc.start_time
+        group by t.fee_name,td.name ,pfc.fee_type_cd,t.config_id ,t.create_time
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -1361,7 +1361,7 @@
     <select id="queryFeeDetail" parameterType="Map" resultType="Map">
         select t.config_id configId,t.obj_id objId,t.obj_name objName,t.obj_type objType,t.fee_name feeName,t.fee_create_time feeCreateTime,pfa.`value`
         ownerName,br.built_up_area builtUpArea ,max(t.deadline_time)
-        deadlineTime,t.create_time createTime,max(t.update_time) updateTime,SUM(t.his_owe_amount)
+        deadlineTime,max(t.create_time) createTime,max(t.update_time) updateTime,SUM(t.his_owe_amount)
         hisOweAmount,SUM(t.cur_receivable_amount) curReceivableAmount,
         SUM(t.cur_received_amount) curReceivedAmount,SUM(t.his_owe_received_amount)
         hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
@@ -1532,7 +1532,7 @@
             and t.create_time &lt;= #{endTime}
         </if>
         and t.amount_owed > 0 and pf.end_time &lt; now()
-        group by t.fee_name,t.payer_obj_id,t.payer_obj_name
+        group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.create_time
         HAVING oweAmount > 0
         ) t
     </select>
@@ -1590,7 +1590,8 @@
             and t.create_time &lt;= #{endTime}
         </if>
         and t.amount_owed > 0 and pf.end_time &lt; now()
-        group by t.fee_name,t.payer_obj_id,t.payer_obj_name,pfa.`value`,br.built_up_area
+        group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.update_time
+        updateTime,pfa.`value` ,br.built_up_area
         HAVING oweAmount > 0
         order by t.payer_obj_name
         <if test="page != -1 and page != null ">
