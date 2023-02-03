@@ -327,7 +327,7 @@
         p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price
         purchasePrice,p.original_stock originalStock,
         r.res_name resName,r.res_code resCode,
-        r.price,r.price standardPrice,r.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
+        r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
         td1.name unitCodeName,
         td2.name miniUnitCodeName
         from
@@ -339,6 +339,7 @@
         LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
         LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
         LEFT JOIN resource_store_specification rss on r.rss_id=rss.rss_id
+        left join resource_store_times rstime on p.times_id = rstime.times_id and rstime.status_cd = '0'
         where 1=1
         and p.status_cd = '0'
         <if test="applyOrderIds !=null">

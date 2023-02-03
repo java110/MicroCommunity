@@ -115,6 +115,7 @@ public class GoodsCollectionCmd extends Cmd {
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             purchaseApplyDetailPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
             purchaseApplyDetailPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+            purchaseApplyDetailPo.setOriginalStock(resourceStoreTimesDtos.get(0).getStock());
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

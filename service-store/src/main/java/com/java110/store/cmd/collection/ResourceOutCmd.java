@@ -265,7 +265,7 @@ public class ResourceOutCmd extends Cmd {
         stock = stock - quantity;
         resourceStoreTimesPo = new ResourceStoreTimesPo();
         resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
-        resourceStoreTimesPo.setStock((stock - quantity) + "");
+        resourceStoreTimesPo.setStock(stock + "");
         resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
     }
 }
