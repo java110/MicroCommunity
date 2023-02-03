@@ -336,92 +336,12 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         Calendar calender = Calendar.getInstance();
         calender.setTime(endTime);
-        int year = calender.get(Calendar.YEAR);
-        int month = calender.get(Calendar.MONTH);
 
         ReportFeeMonthStatisticsPo tmpReportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         tmpReportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
         tmpReportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_A));
         tmpReportFeeMonthStatisticsPo.setOweAmount("0");
         reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsOwe(BeanConvertUtil.beanCovertMap(tmpReportFeeMonthStatisticsPo));
-    }
-
-    /**
-     * 解决上线前 欠费数据
-     *
-     * @param tmpReportCarDto
-     * @param tmpReportFeeDto
-     */
-    private void dealBeforeUploadCarFee(ReportFeeDto tmpReportFeeDto, ReportCarDto tmpReportCarDto) {
-
-
-        Calendar preMonthDate = Calendar.getInstance();
-        preMonthDate.set(Calendar.DAY_OF_MONTH, 1);
-        preMonthDate.add(Calendar.DAY_OF_MONTH, -1);
-
-        //当月一日
-        Calendar curMonthDate = Calendar.getInstance();
-        curMonthDate.set(Calendar.DAY_OF_MONTH, 1);
-        curMonthDate.set(Calendar.HOUR_OF_DAY, 0);
-        curMonthDate.set(Calendar.MINUTE, 0);
-        curMonthDate.set(Calendar.SECOND, 0);
-        if (tmpReportFeeDto.getEndTime().getTime() > curMonthDate.getTime().getTime()) { //说明没有欠费
-            return;
-        }
-
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
-        reportFeeMonthStatisticsDto.setCommunityId(tmpReportCarDto.getCommunityId());
-        reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
-        reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
-        reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
-        reportFeeMonthStatisticsDto.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
-        reportFeeMonthStatisticsDto.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
-        List<ReportFeeMonthStatisticsDto> statistics = BeanConvertUtil.covertBeanList(
-                reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
-                ReportFeeMonthStatisticsDto.class);
-        //上个月有数据 不处理
-        if (statistics != null && statistics.size() > 0) {
-            return;
-        }
-
-        if (tmpReportFeeDto.getDeadlineTime().getTime() < curMonthDate.getTime().getTime()) {
-            curMonthDate.setTime(tmpReportFeeDto.getDeadlineTime());
-        }
-
-        double receivableAmount = 0.0;
-        if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
-            receivableAmount = tmpReportFeeDto.getFeePrice();
-        } else {
-            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curMonthDate.getTime());
-            BigDecimal curDegree = new BigDecimal(month);
-            receivableAmount = curDegree.multiply(new BigDecimal(tmpReportFeeDto.getFeePrice())).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        }
-
-
-        ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
-        reportFeeMonthStatisticsPo.setDeadlineTime(DateUtil.getFormatTimeString(curMonthDate.getTime(), DateUtil.DATE_FORMATE_STRING_A));
-
-        reportFeeMonthStatisticsPo.setOweAmount(receivableAmount + "");
-        reportFeeMonthStatisticsPo.setReceivedAmount("0");
-        reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
-        reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
-        reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
-        reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
-        reportFeeMonthStatisticsPo.setFeeCreateTime(DateUtil.getFormatTimeString(tmpReportFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-        reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-        reportFeeMonthStatisticsPo.setFeeMonth((preMonthDate.get(Calendar.MONTH) + 1) + "");
-        reportFeeMonthStatisticsPo.setFeeYear(preMonthDate.get(Calendar.YEAR) + "");
-        reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getFormatTimeString(DateUtil.getFirstDate(), DateUtil.DATE_FORMATE_STRING_A));
-        reportFeeMonthStatisticsPo.setObjId(tmpReportCarDto.getCarId());
-        reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
-        reportFeeMonthStatisticsPo.setFeeName(tmpReportFeeDto.getFeeName());
-        reportFeeMonthStatisticsPo.setObjName(tmpReportCarDto.getCarNum() + "(" + tmpReportCarDto.getAreaNum() + "停车场" + tmpReportCarDto.getNum() + "车位)");
-        reportFeeMonthStatisticsPo.setObjNameNum(tmpReportCarDto.getAreaNum() + "-" + tmpReportCarDto.getNum() + "-" + tmpReportCarDto.getCarNum());
-        reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
-
-
     }
 
     /**
@@ -466,8 +386,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
         reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId()); //这里不能注释，因为一个费用多次创建时会存在覆盖 存在bug问题
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
-        int year = DateUtil.getYear();
-        int month = DateUtil.getMonth();
+
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
         List<ReportFeeMonthStatisticsDto> statistics = BeanConvertUtil.covertBeanList(
@@ -484,11 +403,6 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         tmpReportFeeDto.setDeadlineTime(targetEndDate);
         double oweAmount = getOweAmount(tmpReportFeeDto, reportRoomDto, null); //欠费
-
-        //double receivableAmount = getReceivableAmount(tmpReportFeeDto, receivedAmount); //应收
-        //解决上线时 之前欠费没有刷入导致费用金额对不上问题处理
-        //dealBeforeUploadRoomFee(reportRoomDto, tmpReportFeeDto);
-
         double feePrice = computeFeeSMOImpl.getReportFeePrice(tmpReportFeeDto, reportRoomDto, null);
         tmpReportFeeDto.setFeePrice(feePrice);
 
@@ -497,8 +411,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (!ListUtil.isNull(statistics)) {
             ReportFeeMonthStatisticsDto statistic = statistics.get(0);
             reportFeeMonthStatisticsPo.setStatisticsId(statistic.getStatisticsId());
-            //reportFeeMonthStatisticsPo.setReceivableAmount(receivableAmount + "");
-            //reportFeeMonthStatisticsPo.setReceivedAmount("0");
+
             reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
             reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
             reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -523,64 +436,46 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             reportFeeMonthStatisticsPo.setPreReceivedAmount(MoneyUtil.computePriceScale(getReceivedAmount(tmpReportFeeDto, 3),
                     tmpReportFeeDto.getScale(),
                     Integer.parseInt(tmpReportFeeDto.getDecimalPlace())) + "");
-            /*if (!StringUtil.isEmpty(statistic.getObjType()) && statistic.getObjType().equals("3333")) { //房屋
-                if (!StringUtil.isEmpty(statistic.getObjId())) {
-                    //获取付费对象ID
-                    String objId = statistic.getObjId();
-                    RoomDto roomDto = new RoomDto();
-                    roomDto.setRoomId(objId);
-                    List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                    if (roomDtos != null && roomDtos.size() == 1) {
-                        String roomNum = roomDtos.get(0).getRoomNum();
-                        UnitDto unitDto = new UnitDto();
-                        unitDto.setUnitId(roomDtos.get(0).getUnitId());
-                        List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-                        if (unitDtos != null && unitDtos.size() == 1) {
-                            String unitNum = unitDtos.get(0).getUnitNum();
-                            FloorDto floorDto = new FloorDto();
-                            floorDto.setFloorId(unitDtos.get(0).getFloorId());
-                            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-                            if(floorDtos != null && floorDtos.size() == 1){
-                                String floorNum = floorDtos.get(0).getFloorNum();
-                                statistic.setObjNameNum(floorNum + "-" + unitNum + "-" + roomNum);
-                            }
-                        }
-                    }
-                }
-            }*/
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
-            reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
-            reportFeeMonthStatisticsPo.setReceivedAmount("0");
-            reportFeeMonthStatisticsPo.setReceivableAmount("0");
-            reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
-            reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
-            reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
-            reportFeeMonthStatisticsPo.setFeeCreateTime(DateUtil.getFormatTimeString(tmpReportFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-            reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-            reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
-            reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
-            reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
-            reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
-            reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-            reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
-            if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
-                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
-                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
+            //如果是 水费 电费 煤气费
+            if (!FeeConfigDto.FEE_TYPE_CD_METER.equals(tmpReportFeeDto.getFeeTypeCd())
+                    && !FeeConfigDto.FEE_TYPE_CD_WATER.equals(tmpReportFeeDto.getFeeTypeCd())
+                    && !FeeConfigDto.FEE_TYPE_CD_GAS.equals(tmpReportFeeDto.getFeeTypeCd())
+            ) {
+                reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
+                reportFeeMonthStatisticsPo.setReceivedAmount("0");
+                reportFeeMonthStatisticsPo.setReceivableAmount("0");
+                reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
+                reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
+                reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
+                reportFeeMonthStatisticsPo.setFeeCreateTime(DateUtil.getFormatTimeString(tmpReportFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+                reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
+                reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
+                reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
+                reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
+                reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
+                reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+                reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
+                if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
+                    reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+                    reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
+                } else {
+                    reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
+                    reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
+                }
+                //计算历史欠费
+                reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
+                reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
+                reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+                reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+                reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
+                reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
             } else {
-                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
-                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
+                //处理水电费，水电费根据开始时间要在相应月补充数据
+                dealMeteWater(reportFeeMonthStatisticsPo, tmpReportFeeDto);
             }
-            //计算历史欠费
-            reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
-            reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
-            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
-            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
-            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
-            reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
-            //处理水电费，水电费根据开始时间要在相应月补充数据
-            dealMeteWater(reportFeeMonthStatisticsPo, tmpReportFeeDto);
         }
 
 
@@ -606,7 +501,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (!FeeConfigDto.FEE_TYPE_CD_METER.equals(tmpReportFeeDto.getFeeTypeCd())
                 && !FeeConfigDto.FEE_TYPE_CD_WATER.equals(tmpReportFeeDto.getFeeTypeCd())
                 && !FeeConfigDto.FEE_TYPE_CD_GAS.equals(tmpReportFeeDto.getFeeTypeCd())
-                ) {
+        ) {
             return;
         }
         //根据费用开始时间 计算月份
