@@ -438,39 +438,40 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                     Integer.parseInt(tmpReportFeeDto.getDecimalPlace())) + "");
             reportFeeMonthStatisticsServiceDaoImpl.updateReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
         } else {
+
+            reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
+            reportFeeMonthStatisticsPo.setReceivedAmount("0");
+            reportFeeMonthStatisticsPo.setReceivableAmount("0");
+            reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
+            reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
+            reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
+            reportFeeMonthStatisticsPo.setFeeCreateTime(DateUtil.getFormatTimeString(tmpReportFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+            reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
+            reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
+            reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
+            reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
+            reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
+            reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
+            if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
+                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
+                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
+            } else {
+                reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
+                reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
+            }
+            //计算历史欠费
+            reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
+            reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
+            reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
+            reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
+            reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             //如果是 水费 电费 煤气费
             if (!FeeConfigDto.FEE_TYPE_CD_METER.equals(tmpReportFeeDto.getFeeTypeCd())
                     && !FeeConfigDto.FEE_TYPE_CD_WATER.equals(tmpReportFeeDto.getFeeTypeCd())
                     && !FeeConfigDto.FEE_TYPE_CD_GAS.equals(tmpReportFeeDto.getFeeTypeCd())
             ) {
-                reportFeeMonthStatisticsPo.setOweAmount(oweAmount + "");
-                reportFeeMonthStatisticsPo.setReceivedAmount("0");
-                reportFeeMonthStatisticsPo.setReceivableAmount("0");
-                reportFeeMonthStatisticsPo.setStatisticsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_statisticsId));
-                reportFeeMonthStatisticsPo.setCommunityId(tmpReportFeeDto.getCommunityId());
-                reportFeeMonthStatisticsPo.setConfigId(tmpReportFeeDto.getConfigId());
-                reportFeeMonthStatisticsPo.setFeeCreateTime(DateUtil.getFormatTimeString(tmpReportFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-                reportFeeMonthStatisticsPo.setFeeId(tmpReportFeeDto.getFeeId());
-                reportFeeMonthStatisticsPo.setFeeMonth(DateUtil.getMonth() + "");
-                reportFeeMonthStatisticsPo.setFeeYear(DateUtil.getYear() + "");
-                reportFeeMonthStatisticsPo.setCurMaxTime(DateUtil.getNextMonthFirstDay(DateUtil.DATE_FORMATE_STRING_A));
-                reportFeeMonthStatisticsPo.setObjId(reportRoomDto.getRoomId());
-                reportFeeMonthStatisticsPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-                reportFeeMonthStatisticsPo.setFeeName(StringUtil.isEmpty(tmpReportFeeDto.getImportFeeName()) ? tmpReportFeeDto.getFeeName() : tmpReportFeeDto.getImportFeeName());
-                if (RoomDto.ROOM_TYPE_ROOM.equals(reportRoomDto.getRoomType())) {
-                    reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getUnitNum() + "单元" + reportRoomDto.getRoomNum() + "室");
-                    reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getUnitNum() + "-" + reportRoomDto.getRoomNum());
-                } else {
-                    reportFeeMonthStatisticsPo.setObjName(reportRoomDto.getFloorNum() + "栋" + reportRoomDto.getRoomNum() + "室");
-                    reportFeeMonthStatisticsPo.setObjNameNum(reportRoomDto.getFloorNum() + "-" + reportRoomDto.getRoomNum());
-                }
-                //计算历史欠费
-                reportFeeMonthStatisticsPo.setHisOweAmount(getHisOweAmount(tmpReportFeeDto) + "");
-                reportFeeMonthStatisticsPo.setCurReceivableAmount(getCurFeeReceivableAmount(tmpReportFeeDto) + "");
-                reportFeeMonthStatisticsPo.setCurReceivedAmount(getReceivedAmount(tmpReportFeeDto, 1) + "");
-                reportFeeMonthStatisticsPo.setHisOweReceivedAmount(getReceivedAmount(tmpReportFeeDto, 2) + "");
-                reportFeeMonthStatisticsPo.setPreReceivedAmount(getReceivedAmount(tmpReportFeeDto, 3) + "");
-                reportFeeMonthStatisticsPo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 reportFeeMonthStatisticsServiceDaoImpl.saveReportFeeMonthStatisticsInfo(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsPo));
             } else {
                 //处理水电费，水电费根据开始时间要在相应月补充数据
