@@ -515,7 +515,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         reportFeeMonthStatisticsDto.setCommunityId(tmpReportFeeDto.getCommunityId());
         reportFeeMonthStatisticsDto.setConfigId(tmpReportFeeDto.getConfigId());
         reportFeeMonthStatisticsDto.setObjId(tmpReportFeeDto.getPayerObjId());
-        //reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
+        reportFeeMonthStatisticsDto.setFeeId(tmpReportFeeDto.getFeeId());
         reportFeeMonthStatisticsDto.setObjType(tmpReportFeeDto.getPayerObjType());
         reportFeeMonthStatisticsDto.setFeeYear(curYear);
         reportFeeMonthStatisticsDto.setFeeMonth(curMonth);
