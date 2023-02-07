@@ -666,4 +666,17 @@ public class DateUtil {
         resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
         return resMonth;
     }
+
+    /**
+     * 通过时间秒毫秒数判断两个时间的间隔
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int differentDaysUp(Date date1,Date date2)
+    {
+        double days = ((date2.getTime() - date1.getTime()) / (1000*3600*24*1.00));
+        return new Double(Math.ceil(days)).intValue();
+    }
+
 }
