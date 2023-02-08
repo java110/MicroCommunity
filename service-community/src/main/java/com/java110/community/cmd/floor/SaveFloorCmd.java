@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
         @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
         @Java110ParamDoc(name = "floorArea", length = 64, remark = "面积"),
         @Java110ParamDoc(name = "floorNum", length = 64, remark = "编号"),
-        @Java110ParamDoc(name = "seq",type = "int",length = 11, remark = "排序"),
+        @Java110ParamDoc(name = "seq", type = "int", length = 11, remark = "排序"),
 })
 
 @Java110ResponseDoc(
@@ -46,8 +46,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"floorId\":\"\",\"name\":\"2号楼\",\"floorName\":\"\",\"floorArea\":\"22\",\"floorNum\":\"2\",\"remark\":\"2\",\"errorInfo\":\"\",\"seq\":\"22\",\"communityId\":\"2022081539020475\"}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{\"floorId\":\"\",\"name\":\"2号楼\",\"floorName\":\"\",\"floorArea\":\"22\",\"floorNum\":\"2\",\"remark\":\"2\",\"errorInfo\":\"\",\"seq\":\"22\",\"communityId\":\"2022081539020475\"}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 
 
@@ -75,6 +75,16 @@ public class SaveFloorCmd extends Cmd {
         if (floorCount > 0) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
         }
+
+        floorDto = new FloorDto();
+        floorDto.setFloorName(reqJson.getString("name"));
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+
+        floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
+
+        if (floorCount > 0) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋名称已经存在");
+        }
     }
 
     @Override
@@ -89,7 +99,7 @@ public class SaveFloorCmd extends Cmd {
         businessFloor.put("floorNum", reqJson.getString("floorNum"));
         businessFloor.put("communityId", reqJson.getString("communityId"));
         businessFloor.put("floorArea", reqJson.getString("floorArea"));
-        businessFloor.put("seq",reqJson.getString("seq"));
+        businessFloor.put("seq", reqJson.getString("seq"));
         FloorPo floorPo = BeanConvertUtil.covertBean(businessFloor, FloorPo.class);
         int flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
 
