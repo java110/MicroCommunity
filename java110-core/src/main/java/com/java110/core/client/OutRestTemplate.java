@@ -11,6 +11,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -80,7 +81,7 @@ public class OutRestTemplate extends RestTemplate {
 
         String logServiceCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingCache.CALL_OUT_LOG);
 
-        if("OFF".equals(logServiceCode.toLowerCase()) || url.startsWith(ServiceConstant.BOOT_SERVICE_ORDER_URL)){
+        if(StringUtil.isEmpty(logServiceCode) || "OFF".equalsIgnoreCase(logServiceCode) || url.startsWith(ServiceConstant.BOOT_SERVICE_ORDER_URL)){
             return;
         }
 

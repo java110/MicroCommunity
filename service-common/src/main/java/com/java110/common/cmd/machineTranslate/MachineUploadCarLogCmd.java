@@ -186,13 +186,22 @@ public class MachineUploadCarLogCmd extends Cmd {
                     tempCarName = tmpOwnerCarDto.getLeaseTypeName();
                 }
             }
+
+            //主副车辆中 有一个车辆在场，这个车场当做临时车处理
+            if (hasInParkingArea(ownerCarDtos.get(0).getCarId(), reqJson.getString("carNum"), reqJson.getString("communityId"), paIds)) {
+                tempCar = CAR_TYPE_NO_DATA;
+                tempCarName = "临时车";
+            }
+
+            int day = DateUtil.differentDaysUp(ownerCarDtos.get(0).getEndTime(),DateUtil.getCurrentDate());
+
+            if(day <= -5){
+                tempCar = CAR_TYPE_NO_DATA;
+                tempCarName = "临时车";
+            }
         }
 
-        //主副车辆中 有一个车辆在场，这个车场当做临时车处理
-        if (hasInParkingArea(ownerCarDtos.get(0).getCarId(), reqJson.getString("carNum"), reqJson.getString("communityId"), paIds)) {
-            tempCar = CAR_TYPE_NO_DATA;
-            tempCarName = "临时车";
-        }
+
 
 
         //进场处理

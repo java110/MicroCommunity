@@ -94,17 +94,64 @@ public class YidongSendMessageFactory {
         return result;
     }
 
-    public static void sendMessage(String tel, String code) {
+//    public static void sendMessage(String tel, String code) {
+//
+//        String apId = MappingCache.getValue(YIDONG_SMS_DOMAIN, "apId");
+//        String secretKey = MappingCache.getValue(YIDONG_SMS_DOMAIN, "secretKey");
+//        String ecName = MappingCache.getValue(YIDONG_SMS_DOMAIN, "ecName");
+//        String sign = MappingCache.getValue(YIDONG_SMS_DOMAIN, "sign");
+//        String addSerial = MappingCache.getValue(YIDONG_SMS_DOMAIN, "addSerial");
+//        String templateId = MappingCache.getValue(YIDONG_SMS_DOMAIN, "templateId");
+//        String url = MappingCache.getValue(YIDONG_SMS_DOMAIN, "yidong_url");
+//
+//        String mac = getMac(ecName, apId, secretKey, templateId, tel, code, sign, addSerial);
+//
+//        //开始发送验证码
+//        String reqParam = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+//                "<WsSubmitTempletReq>\n" +
+//                "  <apId>" + apId + "</apId>\n" +
+//                "  <secretKey>" + secretKey + "</secretKey>\n" +
+//                "  <ecName>" + ecName + "</ecName>\n" +
+//                "  <mobiles>\n" +
+//                "    <string>" + tel + "</string>\n" +
+//                "  </mobiles>\n" +
+//                "  <params>\n" +
+//                "    <string>" + code + "</string>\n" +
+//                "  </params>\n" +
+//                "  <sign>" + sign + "</sign>\n" +
+//                "  <addSerial>" + addSerial + "</addSerial>\n" +
+//                "  <mac>" + mac + "</mac>\n" +
+//                "  <templateId>" + templateId + "</templateId>\n" +
+//                "</WsSubmitTempletReq>";
+//
+//        reqParam = WEBSERVICE_BODY.replace("REQUESTBODY",reqParam);
+//        logger.debug("请求移动公司请求报文：{}",reqParam);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("Content-Type","text/xml;charset=UTF-8");
+//        outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate",OutRestTemplate.class);
+//        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(reqParam, httpHeaders);
+//        try {
+//            ResponseEntity<String> responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+//            logger.debug("移动公司返回报文,{}",responseEntity);
+//        }catch (HttpStatusCodeException e){
+//            logger.error("调用异常",e);
+//        }catch (Exception e){
+//            logger.error("调用异常",e);
+//        }
+//
+//    }
 
+    public static void sendMessage(String tel, String code) {
         String apId = MappingCache.getValue(YIDONG_SMS_DOMAIN, "apId");
         String secretKey = MappingCache.getValue(YIDONG_SMS_DOMAIN, "secretKey");
         String ecName = MappingCache.getValue(YIDONG_SMS_DOMAIN, "ecName");
         String sign = MappingCache.getValue(YIDONG_SMS_DOMAIN, "sign");
         String addSerial = MappingCache.getValue(YIDONG_SMS_DOMAIN, "addSerial");
-        String templateId = MappingCache.getValue(YIDONG_SMS_DOMAIN, "templateId");
         String url = MappingCache.getValue(YIDONG_SMS_DOMAIN, "yidong_url");
 
-        String mac = getMac(ecName, apId, secretKey, templateId, tel, code, sign, addSerial);
+        String param = "您的验证码是："+code+",验证码有效期5分钟";
+
+        String mac = getMac(ecName, apId, secretKey, tel, param, sign, addSerial);
 
         //开始发送验证码
         String reqParam = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -115,16 +162,13 @@ public class YidongSendMessageFactory {
                 "  <mobiles>\n" +
                 "    <string>" + tel + "</string>\n" +
                 "  </mobiles>\n" +
-                "  <params>\n" +
-                "    <string>" + code + "</string>\n" +
-                "  </params>\n" +
+                "    <content>" + param + "</string>\n" +
                 "  <sign>" + sign + "</sign>\n" +
                 "  <addSerial>" + addSerial + "</addSerial>\n" +
                 "  <mac>" + mac + "</mac>\n" +
-                "  <templateId>" + templateId + "</templateId>\n" +
                 "</WsSubmitTempletReq>";
 
-        reqParam = WEBSERVICE_BODY.replace("REQUESTBODY",reqParam);
+        reqParam = WEBSERVICE_BODY2.replace("REQUESTBODY",reqParam);
         logger.debug("请求移动公司请求报文：{}",reqParam);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type","text/xml;charset=UTF-8");
@@ -138,6 +182,7 @@ public class YidongSendMessageFactory {
         }catch (Exception e){
             logger.error("调用异常",e);
         }
+
 
     }
 

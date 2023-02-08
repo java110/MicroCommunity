@@ -337,6 +337,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCommunityId(feeDto.getCommunityId());
             ownerCarDto.setCarId(feeDto.getPayerObjId());
+            ownerCarDto.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
             Assert.listOnlyOne(ownerCarDtos, "未找到车辆信息");
             if ("1001".equals(computingFormula)) { //面积*单价+附加费

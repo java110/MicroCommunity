@@ -219,6 +219,9 @@ public class QueryOwnersCmd extends Cmd {
         List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(tmpOwnerDto);
+            // 查询统计数据
+            ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
+
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
             for (OwnerDto ownerDto : ownerDtoList) {
                 //对业主身份证号隐藏处理
