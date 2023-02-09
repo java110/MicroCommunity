@@ -160,7 +160,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         if (TRADE_TYPE_JSAPI.equals(tradeType)) {
             resultMap.putAll(JSONObject.toJavaObject(resMap, Map.class));
-            resultMap.put("sign", resultMap.get("paySign"));
+            //resultMap.put("sign", resultMap.get("paySign"));
         } else if (TRADE_TYPE_APP.equals(tradeType)) {
             resultMap.put("appId", smallWeChatDto.getAppId());
             resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
