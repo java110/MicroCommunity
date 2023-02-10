@@ -69,34 +69,39 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
     @Override
     public ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto) {
 
-        String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
-        payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_PAYMENT_NOTIFY_ADAPT : payNotifyAdapt;
+        try {
+            String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
+            payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_PAYMENT_NOTIFY_ADAPT : payNotifyAdapt;
 //支付适配器IPayNotifyAdapt
-        logger.debug("适配器：" + payNotifyAdapt);
-        IPaymentFactoryAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPaymentFactoryAdapt.class);
-        PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto.getParam());
-        logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
+            logger.debug("适配器：" + payNotifyAdapt);
+            IPaymentFactoryAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPaymentFactoryAdapt.class);
+            PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto.getParam());
+            logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
 
-        if (StringUtil.isEmpty(paymentOrderDto.getOrderId())) {
+            if (StringUtil.isEmpty(paymentOrderDto.getOrderId())) {
+                return paymentOrderDto.getResponseEntity();
+            }
+
+            String paramIn = CommonCache.getAndRemoveValue("unifiedPayment_" + paymentOrderDto.getOrderId());
+
+            JSONObject reqJson = JSONObject.parseObject(paramIn);
+
+            IPaymentBusiness paymentBusiness = ApplicationContextFactory.getBean(reqJson.getString("business"), IPaymentBusiness.class);
+
+            if (paymentBusiness == null) {
+                throw new CmdException("当前支付业务不支持");
+            }
+
+            paymentOrderDto.setAppId(notifyPaymentOrderDto.getAppId());
+
+            //2.0 相应业务 下单 返回 单号 ，金额，
+            paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
+
+
             return paymentOrderDto.getResponseEntity();
+        }catch (Exception e){
+            logger.error("通知是配置异常",e);
+            throw e;
         }
-
-        String paramIn = CommonCache.getAndRemoveValue("unifiedPayment_" + paymentOrderDto.getOrderId());
-
-        JSONObject reqJson = JSONObject.parseObject(paramIn);
-
-        IPaymentBusiness paymentBusiness = ApplicationContextFactory.getBean(reqJson.getString("business"), IPaymentBusiness.class);
-
-        if (paymentBusiness == null) {
-            throw new CmdException("当前支付业务不支持");
-        }
-
-        paymentOrderDto.setAppId(notifyPaymentOrderDto.getAppId());
-
-        //2.0 相应业务 下单 返回 单号 ，金额，
-        paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
-
-
-        return paymentOrderDto.getResponseEntity();
     }
 }

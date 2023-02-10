@@ -193,7 +193,7 @@ public class MachineUploadCarLogCmd extends Cmd {
                 tempCarName = "临时车";
             }
 
-            int day = DateUtil.differentDaysUp(ownerCarDtos.get(0).getEndTime(),DateUtil.getCurrentDate());
+            int day = DateUtil.differentDaysUp(DateUtil.getCurrentDate(),ownerCarDtos.get(0).getEndTime());
 
             if(day <= -5){
                 tempCar = CAR_TYPE_NO_DATA;

@@ -23,7 +23,9 @@ import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -161,6 +163,9 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         if (TRADE_TYPE_JSAPI.equals(tradeType)) {
             resultMap.putAll(JSONObject.toJavaObject(resMap, Map.class));
             //resultMap.put("sign", resultMap.get("paySign"));
+            resultMap.put("appId", resultMap.get("appid"));
+            resultMap.put("timeStamp", resultMap.get("timestamp"));
+            resultMap.put("nonceStr", resultMap.get("noncestr"));
         } else if (TRADE_TYPE_APP.equals(tradeType)) {
             resultMap.put("appId", smallWeChatDto.getAppId());
             resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
@@ -236,12 +241,17 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                bizContent.setOrder_apd_inf("");
         CardbusinessAggregatepayB2cOnlineConsumepurchaseResponseV1 response;
 
+        System.out.println("request:" + JSON.toJSONString(request));
+
+
         response = client.execute(request, System.currentTimeMillis() + "");//msgId消息通讯唯一编号，要求每次调用独立生成，APP级唯一
 
         if (response.getReturnCode() == 0) {
             // 6、业务成功处理，请根据接口文档用response.getxxx()获取同步返回的业务数据
             System.out.println("ReturnCode:" + response.getReturnCode());
             System.out.println("response:" + JSON.toJSONString(response));
+            CommonCache.setValue("icbc_"+icbcAppId,smallWeChatDto.getAppId(),CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+            CommonCache.setValue("icbc_community_"+icbcAppId,smallWeChatDto.getObjId(),CommonCache.PAY_DEFAULT_EXPIRE_TIME);
             return JSONObject.parseObject(response.getWx_data_package());
         } else {
             // 失败
@@ -257,17 +267,17 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         JSONObject json = JSON.parseObject(param);
 
-        String appId;
-        if (json.containsKey("wId")) {
-            String wId = json.get("wId").toString();
-            wId = wId.replace(" ", "+");
-            appId = WechatFactory.getAppId(wId);
-        } else {
-            appId = json.get("appid").toString();
+        String appId = CommonCache.getAndRemoveValue("icbc_"+json.getString("app_id"));
+
+        if(StringUtil.isEmpty(appId)){
+            throw new IllegalArgumentException("支付通知失败");
         }
+
+        String communityId =   CommonCache.getAndRemoveValue("icbc_community_"+json.getString("app_id"));
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("appId", appId);
+        paramIn.put("communityId", communityId);
         SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
         if (smallWeChatDto == null) {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
@@ -280,12 +290,11 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("app_id", json.getString("app_id"));
         params.put("charset", json.getString("charset"));
         params.put("format", json.getString("format"));
-        params.put("encrypt_type", json.getString("encrypt_type"));
         params.put("timestamp", json.getString("timestamp"));
         params.put("biz_content", json.getString("biz_content"));
         params.put("sign_type", json.getString("sign_type"));//目前上行网关签名暂时仅支持RSA
 
-        String path = "/app/payment/notify/icbc/992020011134400001\"";
+        String path ="/app/payment/notify/icbc/992020011134400001";
         String signStr = WebUtils.buildOrderedSignStr(path, params);
         String results = null;
         String responseBizContent = null;
@@ -298,6 +307,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         boolean flag = false;
         String content = "";
+        System.out.println("signStr="+signStr);
         try {
             flag = IcbcSignature.verify(signStr, json.getString("sign_type"), apiPublicKey, json.getString("charset"), json.getString("sign"));
         } catch (IcbcApiException e) {
@@ -314,6 +324,8 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 } catch (IcbcApiException e) {
                     e.printStackTrace();
                 }
+            }else{
+                content = json.getString("biz_content");
             }
             /**********合作方/分行 业务逻辑处理**********/
             JSONObject map = JSONObject.parseObject(content);
