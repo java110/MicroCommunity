@@ -193,7 +193,7 @@ public class CarOutParkingAreaAdapt extends DatabusAdaptImpl {
             return remark;
         }
 
-        remark = "物业费欠费"+oweFee+"元，请点击详情交费！";
+        remark = "物业费欠费" + oweFee + "元，请点击详情交费！";
 
         return remark;
     }

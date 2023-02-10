@@ -150,6 +150,7 @@ public class AccessControlWhiteV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
     @Override
     public int queryAccessControlWhitesCount(@RequestBody AccessControlWhiteDto accessControlWhiteDto) {
+
         return accessControlWhiteV1ServiceDaoImpl.queryAccessControlWhitesCount(BeanConvertUtil.beanCovertMap(accessControlWhiteDto));
     }
 

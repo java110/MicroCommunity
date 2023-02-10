@@ -35,7 +35,7 @@ public class SendSmsFactory {
 
         if (!StringUtils.isEmpty(smsCompany) && SMS_COMPANY_ALI.equals(smsCompany.trim())) {
             AliSendMessageFactory.sendMessage(tel, code);
-        }else if(SMS_COMPANY_ALI.equals(smsCompany.trim())){
+        }else if(SMS_COMPANY_YIDONG.equals(smsCompany.trim())){
             YidongSendMessageFactory.sendMessage(tel,code);
         } else {
             TencentSendMessageFactory.sendMessage(tel, code);
@@ -47,7 +47,7 @@ public class SendSmsFactory {
         ResultVo resultVo = null;
         if (SMS_COMPANY_ALI.equals(smsConfigDto.getSmsType().trim())) {
             resultVo = AliSendMessageFactory.sendOweFeeSms(tel, param,smsConfigDto);
-        } else if(SMS_COMPANY_ALI.equals(smsConfigDto.getSmsType().trim())){
+        } else if(SMS_COMPANY_YIDONG.equals(smsConfigDto.getSmsType().trim())){
             resultVo = YidongSendMessageFactory.sendOweFeeSms(tel, param,smsConfigDto);
         } else {
             resultVo = TencentSendMessageFactory.sendOweFeeSms(tel, param,smsConfigDto);
