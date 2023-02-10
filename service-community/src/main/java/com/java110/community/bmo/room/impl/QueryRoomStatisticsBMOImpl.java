@@ -10,6 +10,7 @@ import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -260,6 +261,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : ownerRoomCounts) {
+                if(StringUtil.isEmpty(roomDto.getOwnerId())){
+                    continue;
+                }
                 if (roomDto.getOwnerId().equals(count.get("ownerId"))) {
                     roomDto.setRoomCount(count.get("roomCount").toString());
                 }
