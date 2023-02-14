@@ -12,9 +12,11 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
+import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
+import com.java110.po.car.CarBlackWhitePo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.VisitPo;
 import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
@@ -28,6 +30,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -51,11 +54,16 @@ public class UpdateVisitCmd extends Cmd {
     @Autowired
     private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
+
     //键
     public static final String CAR_FREE_TIME = "CAR_FREE_TIME";
 
     //键
     public static final String ASCRIPTION_CAR_AREA_ID = "ASCRIPTION_CAR_AREA_ID";
+
+    public static final String CODE_PREFIX_ID = "10";
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -150,7 +158,10 @@ public class UpdateVisitCmd extends Cmd {
         }
         reqJson.put("stateRemark", result);
         updateVisit(reqJson);
-
+        if (reqJson.containsKey("state") && reqJson.getString("state").equals("1")
+                && !StringUtil.isEmpty(reqJson.getString("carNum"))) {
+            addBlackWhite(reqJson);
+        }
         if (existCar) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "访客信息审核成功,车辆已经存在预约，请您在预约到期后，再次进行车辆预约，谢谢！");
             context.setResponseEntity(responseEntity);
@@ -214,14 +225,36 @@ public class UpdateVisitCmd extends Cmd {
      * @return 订单服务能够接受的报文
      */
     public void updateVisit(JSONObject paramInJson) {
-
         JSONObject businessVisit = new JSONObject();
         businessVisit.putAll(paramInJson);
-
         VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
         int flag = visitV1InnerServiceSMOImpl.updateVisit(visitPo);
         if (flag < 1) {
             throw new CmdException("修改访客失败");
         }
+    }
+
+    /**
+     * 添加白名单
+     *
+     * @param paramInJson
+     */
+    public void addBlackWhite(JSONObject paramInJson) {
+        CarBlackWhitePo carBlackWhitePo = new CarBlackWhitePo();
+        carBlackWhitePo.setBwId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        carBlackWhitePo.setbId("-1");
+        carBlackWhitePo.setCommunityId(paramInJson.getString("communityId"));
+        carBlackWhitePo.setBlackWhite("2222"); //1111 黑名单 2222 白名单
+        carBlackWhitePo.setCarNum(paramInJson.getString("carNum"));
+        carBlackWhitePo.setStartTime(paramInJson.getString("visitTime"));
+        carBlackWhitePo.setEndTime(paramInJson.getString("freeTime"));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        carBlackWhitePo.setCreateTime(simpleDateFormat.format(new Date()));
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto); //查询车位
+        Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
+        carBlackWhitePo.setPaId(parkingSpaceDtos.get(0).getPaId());
+        carBlackWhiteV1InnerServiceSMOImpl.saveCarBlackWhite(carBlackWhitePo);
     }
 }

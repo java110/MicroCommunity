@@ -8,7 +8,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionPlan.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
-import com.java110.intf.community.IInspectionPlanInnerServiceSMO;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
@@ -30,8 +29,10 @@ public class ListInspectionPlansCmd extends Cmd {
 
     @Autowired
     private IInspectionPlanV1InnerServiceSMO inspectionPlanV1InnerServiceSMOImpl;
+
     @Autowired
     private IOrgStaffRelInnerServiceSMO iOrgStaffRelInnerServiceSMO;
+
     @Autowired
     private IInspectionRouteInnerServiceSMO inspectionRouteInnerServiceSMOImpl;
 
@@ -102,7 +103,6 @@ public class ListInspectionPlansCmd extends Cmd {
                     }
                 }
             }
-
         } else {
             inspectionPlans = new ArrayList<>();
         }

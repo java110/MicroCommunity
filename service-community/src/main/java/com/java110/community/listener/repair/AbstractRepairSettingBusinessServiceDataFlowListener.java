@@ -19,8 +19,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractRepairSettingBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(AbstractRepairSettingBusinessServiceDataFlowListener.class);
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractRepairSettingBusinessServiceDataFlowListener.class);
 
     /**
      * 获取 DAO工具类
@@ -49,7 +49,7 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         businessRepairSettingInfo.put("payFeeFlag", businessRepairSettingInfo.get("pay_fee_flag"));
         businessRepairSettingInfo.put("priceScope", businessRepairSettingInfo.get("price_scope"));
         businessRepairSettingInfo.put("returnVisitFlag", businessRepairSettingInfo.get("return_visit_flag"));
-
+        businessRepairSettingInfo.put("isShow", businessRepairSettingInfo.get("is_show"));
         businessRepairSettingInfo.remove("bId");
         businessRepairSettingInfo.put("statusCd", statusCd);
     }
@@ -61,7 +61,7 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
      * @param businessRepairSetting 报修设置信息
      */
     protected void autoSaveDelBusinessRepairSetting(Business business, JSONObject businessRepairSetting) {
-//自动插入DEL
+        //自动插入DEL
         Map info = new HashMap();
         info.put("settingId", businessRepairSetting.getString("settingId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -86,7 +86,7 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
         currentRepairSettingInfo.put("payFeeFlag", currentRepairSettingInfo.get("pay_fee_flag"));
         currentRepairSettingInfo.put("priceScope", currentRepairSettingInfo.get("price_scope"));
         currentRepairSettingInfo.put("returnVisitFlag", currentRepairSettingInfo.get("return_visit_flag"));
-
+        currentRepairSettingInfo.put("isShow", currentRepairSettingInfo.get("is_show"));
         currentRepairSettingInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRepairSettingServiceDaoImpl().saveBusinessRepairSettingInfo(currentRepairSettingInfo);
         for (Object key : currentRepairSettingInfo.keySet()) {
@@ -95,6 +95,4 @@ public abstract class AbstractRepairSettingBusinessServiceDataFlowListener exten
             }
         }
     }
-
-
 }

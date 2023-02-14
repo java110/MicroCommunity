@@ -33,7 +33,6 @@ public class InspectionPlanPo implements Serializable {
     private String beforeTime;
     private String canReexamine;
 
-
     public String getInspectionPlanId() {
         return inspectionPlanId;
     }

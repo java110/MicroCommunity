@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="carBlackWhiteV1ServiceDaoImpl">
 
-
     <!-- 保存车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <insert id="saveCarBlackWhiteInfo" parameterType="Map">
-        insert into car_black_white(
-        black_white,pa_id,car_num,start_time,end_time,community_id,bw_id
-        ) values (
-        #{blackWhite},#{paId},#{carNum},#{startTime},#{endTime},#{communityId},#{bwId}
-        )
+        insert into car_black_white(black_white, pa_id, car_num, start_time, end_time, community_id, bw_id, b_id,
+                                    create_time)
+        values (#{blackWhite}, #{paId}, #{carNum}, #{startTime}, #{endTime}, #{communityId}, #{bwId}, #{bId},
+                #{createTime})
     </insert>
-
 
     <!-- 查询车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <select id="getCarBlackWhiteInfo" parameterType="Map" resultType="Map">
@@ -54,9 +50,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改车辆黑白名单信息 add by wuxw 2018-07-03 -->
     <update id="updateCarBlackWhiteInfo" parameterType="Map">
@@ -86,7 +80,6 @@
         <if test="bwId !=null and bwId != ''">
             and t.bw_id= #{bwId}
         </if>
-
     </update>
 
     <!-- 查询车辆黑白名单数量 add by wuxw 2018-07-03 -->
@@ -116,16 +109,11 @@
             and t.end_time &gt; now()
             and t.start_time &lt; now()
         </if>
-
-
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
         <if test="bwId !=null and bwId != ''">
             and t.bw_id= #{bwId}
         </if>
-
-
     </select>
-
 </mapper>

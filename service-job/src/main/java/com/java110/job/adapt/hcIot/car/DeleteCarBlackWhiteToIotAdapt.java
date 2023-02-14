@@ -65,7 +65,7 @@ public class DeleteCarBlackWhiteToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        JSONArray  businessCarBlackWhites = new JSONArray();
+        JSONArray businessCarBlackWhites = new JSONArray();
         if (data.containsKey(CarBlackWhitePo.class.getSimpleName())) {
             Object bObj = data.get(CarBlackWhitePo.class.getSimpleName());
             if (bObj instanceof JSONObject) {
@@ -75,7 +75,7 @@ public class DeleteCarBlackWhiteToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessCarBlackWhites = (JSONArray) bObj;
             }
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessCarBlackWhites.add(data);
             }
@@ -101,6 +101,9 @@ public class DeleteCarBlackWhiteToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("carNum", carBlackWhiteDtos.get(0).getCarNum());
         postParameters.put("extPaId", carBlackWhiteDtos.get(0).getPaId());
         postParameters.put("extCommunityId", carBlackWhiteDtos.get(0).getCommunityId());
+        postParameters.put("startTime", carBlackWhiteDtos.get(0).getStartTime());
+        postParameters.put("endTime", carBlackWhiteDtos.get(0).getEndTime());
+        postParameters.put("blackWhite", carBlackWhiteDtos.get(0).getBlackWhite());
         hcCarBlackWhiteAsynImpl.deleteCarBlackWhite(postParameters);
     }
 }

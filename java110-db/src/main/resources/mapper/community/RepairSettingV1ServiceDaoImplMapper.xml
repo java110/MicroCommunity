@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repairSettingV1ServiceDaoImpl">
 
-
     <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveRepairSettingInfo" parameterType="Map">
-        insert into r_repair_setting(
-        price_scope,pay_fee_flag,return_visit_flag,repair_type_name,repair_type,remark,community_id,public_area,repair_way,repair_setting_type,setting_id
-        ) values (
-        #{priceScope},#{payFeeFlag},#{returnVisitFlag},#{repairTypeName},#{repairType},#{remark},#{communityId},#{publicArea},#{repairWay},#{repairSettingType},#{settingId}
-        )
+        insert into r_repair_setting(price_scope, pay_fee_flag, return_visit_flag, repair_type_name, repair_type,
+                                     remark, community_id, public_area, repair_way, repair_setting_type, setting_id,
+                                     is_show)
+        values (#{priceScope}, #{payFeeFlag}, #{returnVisitFlag}, #{repairTypeName}, #{repairType}, #{remark},
+                #{communityId}, #{publicArea}, #{repairWay}, #{repairSettingType}, #{settingId}, #{isShow})
     </insert>
-
-
     <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
     <select id="getRepairSettingInfo" parameterType="Map" resultType="Map">
         select t.price_scope,t.price_scope priceScope,t.pay_fee_flag,t.pay_fee_flag
@@ -22,7 +18,7 @@
         repairTypeName,t.repair_type,t.repair_type repairType,t.remark,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.public_area,t.public_area
         publicArea,t.repair_way,t.repair_way repairWay,t.repair_setting_type,t.repair_setting_type
-        repairSettingType,t.setting_id,t.setting_id settingId
+        repairSettingType,t.setting_id,t.setting_id settingId,t.is_show,t.is_show isShow
         from r_repair_setting t
         where 1 =1
         <if test="priceScope !=null and priceScope != ''">
@@ -61,13 +57,14 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改报修设置信息 add by wuxw 2018-07-03 -->
     <update id="updateRepairSettingInfo" parameterType="Map">
@@ -105,11 +102,13 @@
         <if test="repairSettingType !=null and repairSettingType != ''">
             , t.repair_setting_type= #{repairSettingType}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
+        </if>
         where 1=1
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
-
     </update>
 
     <!-- 查询报修设置数量 add by wuxw 2018-07-03 -->
@@ -153,8 +152,8 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
-
-
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
     </select>
-
 </mapper>

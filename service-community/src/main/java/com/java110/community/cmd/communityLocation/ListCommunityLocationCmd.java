@@ -23,9 +23,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.community.CommunityLocationDto;
-import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
-import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.community.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -90,12 +88,20 @@ public class ListCommunityLocationCmd extends Cmd {
                     List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
                     Assert.listOnlyOne(unitDtos, "查询单元错误");
                     communityLocation.setFloorId(unitDtos.get(0).getFloorId());
-                    communityLocation.setUnitNum(unitDtos.get(0).getUnitNum());
+                    communityLocation.setUnitId(unitDtos.get(0).getUnitId());
                     FloorDto floorDto = new FloorDto();
                     floorDto.setFloorId(unitDtos.get(0).getFloorId());
                     List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
                     Assert.listOnlyOne(floorDtos, "查询楼栋错误");
-                    communityLocation.setFloorNum(floorDtos.get(0).getFloorNum());
+                } else if (!StringUtil.isEmpty(communityLocation.getLocationType()) && communityLocation.getLocationType().equals("6000")
+                        && !StringUtil.isEmpty(communityLocation.getLocationObjId()) && !communityLocation.getLocationObjId().equals("-1")) { //楼栋
+                    communityLocation.setFloorId(communityLocation.getLocationObjId());
+                } else if (!StringUtil.isEmpty(communityLocation.getLocationType()) && communityLocation.getLocationType().equals("7000")
+                        && !StringUtil.isEmpty(communityLocation.getLocationObjId()) && !communityLocation.getLocationObjId().equals("-1")) { //停车场
+                    communityLocation.setPaId(communityLocation.getLocationObjId());
+                } else if (!StringUtil.isEmpty(communityLocation.getLocationType()) && communityLocation.getLocationType().equals("4000")
+                        && !StringUtil.isEmpty(communityLocation.getLocationObjId()) && !communityLocation.getLocationObjId().equals("-1")) { //岗亭
+                    communityLocation.setBoxId(communityLocation.getLocationObjId());
                 }
                 communityLocationDtos.add(communityLocation);
             }

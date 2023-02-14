@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="roomServiceDaoImpl">
 
@@ -13,7 +12,6 @@
                 #{roomNum}, #{unitId}, #{bId}, #{apartment}, #{state},
                 #{communityId}, #{roomType}, #{roomSubType}, #{roomRent}, #{roomArea})
     </insert>
-
 
     <!-- 查询小区房屋信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRoomInfo" parameterType="Map" resultType="Map">
@@ -71,9 +69,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </select>
-
 
     <!-- 保存小区房屋信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRoomInfoInstance" parameterType="Map">
@@ -93,7 +89,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -197,7 +192,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
         order by t.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
@@ -278,7 +272,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -318,7 +311,6 @@
         <if test="roomSubType !=null and roomSubType != ''">
             and t.room_sub_type= #{roomSubType}
         </if>
-
     </select>
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
@@ -401,7 +393,6 @@
         <if test="unitNum !=null and unitNum != ''">
             and u.unit_num= #{unitNum}
         </if>
-
     </select>
 
     <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
@@ -431,7 +422,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -501,7 +491,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -616,7 +605,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
         and borr.`room_id` is null
         <if test="page != -1 and page != null">
             limit #{page},#{row}
@@ -851,9 +839,9 @@
         <if test="link !=null and link != ''">
             and bo.link= #{link}
         </if>
-        <!--        <if test="statusCd !=null and statusCd != ''">-->
-        <!--            and bo.status_cd= #{statusCd}-->
-        <!--        </if>-->
+        <!--<if test="statusCd !=null and statusCd != ''">
+            and bo.status_cd= #{statusCd}
+        </if>-->
         <if test="remark !=null and remark != ''">
             and bo.remark= #{remark}
         </if>
@@ -872,6 +860,7 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and bo.owner_type_cd= #{ownerTypeCd}
         </if>
+        order by f.floor_num,u.unit_num,t.room_num desc
     </select>
 
     <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
@@ -882,7 +871,6 @@
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
         t.room_type roomType,t.room_type,f.floor_num floorNum
         ,t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
-
         FROM
         building_room t
         INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'

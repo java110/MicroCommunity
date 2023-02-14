@@ -35,7 +35,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 类表述：查询
  * 服务编码：repairSetting.listRepairSetting
@@ -50,6 +49,7 @@ import java.util.List;
 public class ListRepairSettingsCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListRepairSettingsCmd.class);
+
     @Autowired
     private IRepairSettingInnerServiceSMO repairSettingInnerServiceSMOImpl;
 

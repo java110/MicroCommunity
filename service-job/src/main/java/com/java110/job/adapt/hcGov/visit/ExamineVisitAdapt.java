@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -89,6 +90,9 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
+
+    @Autowired
+    private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
 
     private static Logger logger = LoggerFactory.getLogger(ExamineVisitAdapt.class);
 
@@ -294,6 +298,15 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         body.put("extCarId", ownerCarDtos.get(0).getCarId());
         body.put("attrs", parkingAreaAttrDtos);
         body.put("leaseType", ownerCarDtos.get(0).getLeaseType());
+        CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
+        carBlackWhiteDto.setCarNum(visits.get(0).getCarNum());
+        carBlackWhiteDto.setBlackWhite("2222"); //1111 黑名单 2222 白名单
+        carBlackWhiteDto.setStartTime(visitPo.getVisitTime());
+        carBlackWhiteDto.setEndTime(visitPo.getFreeTime());
+        carBlackWhiteDto.setCommunityId(visitPo.getCommunityId());
+        List<CarBlackWhiteDto> carBlackWhiteDtos = carBlackWhiteV1InnerServiceSMOImpl.queryCarBlackWhites(carBlackWhiteDto);
+        Assert.listOnlyOne(carBlackWhiteDtos, "查询白名单错误！");
+        body.put("extBwId", carBlackWhiteDtos.get(0).getBwId());
         hcOwnerVisitAsynImpl.addVisit(body);
     }
 }

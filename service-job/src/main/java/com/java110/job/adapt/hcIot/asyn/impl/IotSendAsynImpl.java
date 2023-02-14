@@ -1673,6 +1673,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     public void saveTranslateLog(MachineTranslateDto machineTranslateDto) {
         machineTranslateDto.setbId("-1");
         machineTranslateDto.setObjBId("-1");
+        machineTranslateDto.setCommunityId("-1");
         machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
     }
@@ -1687,6 +1688,7 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machineTranslateErrorPo.setReqHeader("");
         machineTranslateErrorPo.setResBody(resJson);
         machineTranslateErrorPo.setReqPath(url);
+        machineTranslateErrorPo.setCommunityId("-1");
         machineTranslateErrorPo.setReqType(MachineTranslateErrorDto.REQ_TYPE_URL);
         machineTranslateErrorInnerServiceSMOImpl.saveMachineTranslateError(machineTranslateErrorPo);
     }

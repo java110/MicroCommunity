@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repairSettingServiceDaoImpl">
 
     <!-- 保存报修设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRepairSettingInfo" parameterType="Map">
-        insert into business_repair_setting(
-        operate,repair_type_name,repair_type,repair_setting_type,remark,b_id,community_id,repair_way,setting_id,public_area,pay_fee_flag,price_scope,return_visit_flag
-        ) values (
-        #{operate},#{repairTypeName},#{repairType},#{repairSettingType},#{remark},#{bId},#{communityId},#{repairWay},#{settingId},#{publicArea},#{payFeeFlag},#{priceScope},#{returnVisitFlag}
-        )
+        insert into business_repair_setting(operate, repair_type_name, repair_type, repair_setting_type, remark, b_id,
+                                            community_id, repair_way, setting_id, public_area, pay_fee_flag,
+                                            price_scope, return_visit_flag, is_show)
+        values (#{operate}, #{repairTypeName}, #{repairType}, #{repairSettingType}, #{remark}, #{bId}, #{communityId},
+                #{repairWay}, #{settingId}, #{publicArea}, #{payFeeFlag}, #{priceScope}, #{returnVisitFlag}, #{isShow})
     </insert>
 
     <!-- 查询报修设置信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessRepairSettingInfo" parameterType="Map" resultType="Map">
         select t.operate,t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
-        repairType,t.repair_setting_type,t.repair_setting_type repairSettingType,t.remark,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.repair_way,t.repair_way
+        repairType,t.repair_setting_type,t.repair_setting_type repairSettingType,t.remark,t.b_id,t.b_id
+        bId,t.community_id,t.community_id communityId,t.repair_way,t.repair_way
         repairWay,t.setting_id,t.setting_id settingId,t.public_area,t.public_area
         publicArea,t.pay_fee_flag,t.pay_fee_flag payFeeFlag
         ,t.price_scope,t.price_scope priceScope,t.return_visit_flag,t.return_visit_flag returnVisitFlag
+        ,t.is_show,t.is_show isShow
         from business_repair_setting t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -49,16 +50,20 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
     </select>
 
     <!-- 保存报修设置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveRepairSettingInfoInstance" parameterType="Map">
         insert into r_repair_setting(
-        repair_type_name,repair_type,repair_setting_type,remark,status_cd,b_id,community_id,repair_way,setting_id,public_area,pay_fee_flag,price_scope,return_visit_flag
-        ) select t.repair_type_name,t.repair_type,t.repair_setting_type,t.remark,'0',t.b_id,t.community_id,t.repair_way,t.setting_id
-        ,t.public_area,t.pay_fee_flag,t.price_scope,t.return_visit_flag
-        from
-        business_repair_setting t where 1=1
+        repair_type_name,repair_type,repair_setting_type,remark,status_cd,b_id,community_id,repair_way,setting_id,public_area
+        ,pay_fee_flag,price_scope,return_visit_flag,is_show
+        ) select
+        t.repair_type_name,t.repair_type,t.repair_setting_type,t.remark,'0',t.b_id,t.community_id,t.repair_way,t.setting_id
+        ,t.public_area,t.pay_fee_flag,t.price_scope,t.return_visit_flag,t.is_show
+        from business_repair_setting t where 1=1
         and t.operate= 'ADD'
         <if test="repairTypeName !=null and repairTypeName != ''">
             and t.repair_type_name= #{repairTypeName}
@@ -84,21 +89,28 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
     </insert>
 
     <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
     <select id="getRepairSettingInfo" parameterType="Map" resultType="Map">
         select t.repair_type_name,t.repair_type_name repairTypeName,t.repair_type,t.repair_type
-        repairType,t.repair_setting_type,t.repair_setting_type repairSettingType,t.remark,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
+        repairType,t.repair_setting_type,t.repair_setting_type repairSettingType,t.remark,t.status_cd,t.status_cd
+        statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
         communityId,t.repair_way,t.repair_way repairWay,t.setting_id,t.setting_id settingId,t.create_time
         createTime,d.name repairWayName,d2.name repairSettingTypeName,
         t.public_area,t.public_area publicArea,t.pay_fee_flag,t.pay_fee_flag payFeeFlag
         ,t.price_scope,t.price_scope priceScope,t.return_visit_flag,t.return_visit_flag returnVisitFlag,d1.name
-        returnVisitFlagName
+        returnVisitFlagName,t.is_show,t.is_show isShow
         from r_repair_setting t
-        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns ='repair_way'
-        left join t_dict d1 on t.return_visit_flag = d1.status_cd and d1.table_name = 'r_repair_setting' and d1.table_columns = 'return_visit_flag'
-        left join t_dict d2 on t.repair_setting_type = d2.status_cd and d2.table_name = 'r_repair_setting' and d2.table_columns = 'repair_setting_type'
+        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns
+        ='repair_way'
+        left join t_dict d1 on t.return_visit_flag = d1.status_cd and d1.table_name = 'r_repair_setting' and
+        d1.table_columns = 'return_visit_flag'
+        left join t_dict d2 on t.repair_setting_type = d2.status_cd and d2.table_name = 'r_repair_setting' and
+        d2.table_columns = 'repair_setting_type'
         where 1 =1
         <if test="repairTypeName !=null and repairTypeName != ''">
             and t.repair_type_name like '%${repairTypeName}%'
@@ -135,6 +147,9 @@
         </if>
         <if test="returnVisitFlag !=null and returnVisitFlag != ''">
             and t.return_visit_flag= #{returnVisitFlag}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -178,6 +193,9 @@
         <if test="priceScope !=null and priceScope != ''">
             , t.price_scope= #{priceScope}
         </if>
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
+        </if>
         where 1=1
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -191,7 +209,8 @@
     <select id="queryRepairSettingsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_setting t
-        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns = 'repair_way'
+        left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns =
+        'repair_way'
         where 1 =1
         <if test="repairTypeName !=null and repairTypeName != ''">
             and t.repair_type_name like '%${repairTypeName}%'
@@ -220,7 +239,6 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
-
         <if test="publicArea !=null and publicArea != ''">
             and t.public_area= #{publicArea}
         </if>
@@ -229,6 +247,9 @@
         </if>
         <if test="returnVisitFlag !=null and returnVisitFlag != ''">
             and t.return_visit_flag= #{returnVisitFlag}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
         </if>
     </select>
 </mapper>
