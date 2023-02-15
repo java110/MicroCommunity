@@ -15,6 +15,12 @@ import java.util.Date;
  **/
 public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
 
+
+    public static final String STATE_WAIT_CONFIRM = "W"; //待核销
+    public static final String STATE_FINISH = "C"; // 核销完成
+
+    public static final String STATE_CL = "CL";//取消预约
+
     private String hours;
     private String quantity;
     private String timeId;
@@ -31,6 +37,11 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
     private String appointmentTime;
+    private String personName;
+    private String personTel;
+    private String goodsName;
+    private String receivedAmount;
+    private String stateName;
 
 
     public String getHours() {
@@ -120,5 +131,47 @@ public class ReserveGoodsOrderTimeDto extends PageDto implements Serializable {
 
     public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getPersonTel() {
+        return personTel;
+    }
+
+    public void setPersonTel(String personTel) {
+        this.personTel = personTel;
+    }
+
+
+
+    public String getReceivedAmount() {
+        return receivedAmount;
+    }
+
+    public void setReceivedAmount(String receivedAmount) {
+        this.receivedAmount = receivedAmount;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 }

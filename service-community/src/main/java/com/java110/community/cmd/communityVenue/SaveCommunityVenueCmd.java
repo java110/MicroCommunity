@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.ICommunityVenueV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.communityVenue.CommunityVenuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -52,6 +53,9 @@ public class SaveCommunityVenueCmd extends Cmd {
     @Autowired
     private ICommunityVenueV1InnerServiceSMO communityVenueV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
@@ -66,6 +70,8 @@ public class SaveCommunityVenueCmd extends Cmd {
         CommunityVenuePo communityVenuePo = BeanConvertUtil.covertBean(reqJson, CommunityVenuePo.class);
         communityVenuePo.setVenueId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = communityVenueV1InnerServiceSMOImpl.saveCommunityVenue(communityVenuePo);
+
+
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

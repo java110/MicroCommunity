@@ -12,6 +12,7 @@ import com.java110.dto.account.AccountDto;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.ComputeDiscountDto;
@@ -46,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -363,26 +365,46 @@ public class PayFeeConfirmCmd extends Cmd {
     }
 
     private void dealOwnerCartEndTime(JSONObject paramObj) {
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(paramObj.getString("feeId"));
+        feeDto.setCommunityId(paramObj.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return;
+        }
         //为停车费单独处理
-        if (paramObj.containsKey("carPayerObjType")
-                && FeeDto.PAYER_OBJ_TYPE_CAR.equals(paramObj.getString("carPayerObjType"))) {
-            Date feeEndTime = (Date) paramObj.get("carFeeEndTime");
-            OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setCommunityId(paramObj.getString("communityId"));
-            ownerCarDto.setCarId(paramObj.getString("carPayerObjId"));
-            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            //车位费用续租
-            if (ownerCarDtos != null) {
-                for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
-                    if (tmpOwnerCarDto.getEndTime().getTime() < feeEndTime.getTime()) {
-                        OwnerCarPo ownerCarPo = new OwnerCarPo();
-                        ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
-                        ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
-                        int fage = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
-                        if (fage < 1) {
-                            throw new CmdException("更新费用信息失败");
-                        }
-                    }
+        if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDtos.get(0).getPayerObjType())) {
+            return;
+        }
+        Date feeEndTime = feeDtos.get(0).getEndTime();
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(paramObj.getString("communityId"));
+        ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+
+        Calendar endTimeCalendar = null;
+        //车位费用续租
+        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+            return;
+        }
+        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            //后付费 或者信用期车辆 加一个月
+            if(FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
+                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())){
+                endTimeCalendar = Calendar.getInstance();
+                endTimeCalendar.setTime(feeEndTime);
+                endTimeCalendar.add(Calendar.MONTH, 1);
+                feeEndTime = endTimeCalendar.getTime();
+            }
+            if (tmpOwnerCarDto.getEndTime().getTime() < feeEndTime.getTime()) {
+                OwnerCarPo ownerCarPo = new OwnerCarPo();
+                ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
+                ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+                int fage = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
+                if (fage < 1) {
+                    throw new CmdException("更新费用信息失败");
                 }
             }
         }

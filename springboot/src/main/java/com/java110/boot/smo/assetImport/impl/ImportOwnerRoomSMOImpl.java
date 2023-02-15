@@ -164,13 +164,14 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             // 校验成员之前是否存在 业主角色
             hasOwnerType = false;
             for (int preRoomIndex = 0; preRoomIndex < roomIndex; preRoomIndex++) {
-                tmpImportOwnerRoomDto = ownerRooms.get(roomIndex);
+                tmpImportOwnerRoomDto = ownerRooms.get(preRoomIndex);
 
                 if (tmpImportOwnerRoomDto.getFloorNum().equals(importOwnerRoomDto.getFloorNum())
                         && tmpImportOwnerRoomDto.getUnitNum().equals(importOwnerRoomDto.getUnitNum())
                         && tmpImportOwnerRoomDto.getRoomNum().equals(importOwnerRoomDto.getRoomNum())
                         && OwnerDto.OWNER_TYPE_CD_OWNER.equals(tmpImportOwnerRoomDto.getOwnerTypeCd())) {
                     hasOwnerType = true;
+                    break;
                 }
             }
 

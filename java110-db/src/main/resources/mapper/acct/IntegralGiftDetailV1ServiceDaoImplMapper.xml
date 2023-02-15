@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralGiftDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存积分赠送信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralGiftDetailInfo" parameterType="Map">
+        insert into integral_gift_detail(
+        config_name,create_user_id,quantity,detail_id,acct_id,user_name,acct_name,config_id,acct_detail_id,rule_name,tel,community_id,rule_id
+        ) values (
+        #{configName},#{createUserId},#{quantity},#{detailId},#{acctId},#{userName},#{acctName},#{configId},#{acctDetailId},#{ruleName},#{tel},#{communityId},#{ruleId}
+        )
+    </insert>
+
+
+    <!-- 查询积分赠送信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralGiftDetailInfo" parameterType="Map" resultType="Map">
+        select t.config_name,t.config_name configName,t.create_user_id,t.create_user_id
+        createUserId,t.quantity,t.detail_id,t.detail_id detailId,t.acct_id,t.acct_id acctId,t.status_cd,t.status_cd
+        statusCd,t.user_name,t.user_name userName,t.acct_name,t.acct_name acctName,t.config_id,t.config_id
+        configId,t.acct_detail_id,t.acct_detail_id acctDetailId,t.rule_name,t.rule_name
+        ruleName,t.tel,t.community_id,t.community_id communityId,t.rule_id,t.rule_id ruleId,t.create_time createTime
+        from integral_gift_detail t
+        where 1 =1
+        <if test="configName !=null and configName != ''">
+            and t.config_name= #{configName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="ruleName !=null and ruleName != ''">
+            and t.rule_name= #{ruleName}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改积分赠送信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralGiftDetailInfo" parameterType="Map">
+        update integral_gift_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="configName !=null and configName != ''">
+            , t.config_name= #{configName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            , t.quantity= #{quantity}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            , t.acct_id= #{acctId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            , t.acct_name= #{acctName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            , t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="ruleName !=null and ruleName != ''">
+            , t.rule_name= #{ruleName}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+
+    </update>
+
+    <!-- 查询积分赠送数量 add by wuxw 2018-07-03 -->
+    <select id="queryIntegralGiftDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from integral_gift_detail t
+        where 1 =1
+        <if test="configName !=null and configName != ''">
+            and t.config_name= #{configName}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="quantity !=null and quantity != ''">
+            and t.quantity= #{quantity}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="acctName !=null and acctName != ''">
+            and t.acct_name= #{acctName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="ruleName !=null and ruleName != ''">
+            and t.rule_name= #{ruleName}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+
+
+    </select>
+
+</mapper>

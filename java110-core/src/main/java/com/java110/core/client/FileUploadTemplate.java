@@ -1,6 +1,7 @@
 package com.java110.core.client;
 
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.COSUtil;
 import com.java110.utils.util.OSSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class FileUploadTemplate {
 
         String newfileName = ROOT_PATH+ fileName;
 
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
 
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             newfileName = ossUploadTemplate.upload(inputStream, newfileName);
@@ -54,7 +55,7 @@ public class FileUploadTemplate {
 
         InputStream inputStream = null;
 
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
 
         if (OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             inputStream = ossUploadTemplate.download(fileName);

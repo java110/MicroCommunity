@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerSettledSettingV1ServiceDaoImpl">
+
+    <!-- 保存业主入驻流程信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerSettledSettingInfo" parameterType="Map">
+        insert into owner_settled_setting(
+        remark,community_id,flow_id,flow_name,setting_id,setting_name,audit_way
+        ) values (
+        #{remark},#{communityId},#{flowId},#{flowName},#{settingId},#{settingName},#{auditWay}
+        )
+    </insert>
+
+
+    <!-- 查询业主入驻流程信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerSettledSettingInfo" parameterType="Map" resultType="Map">
+        select t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id
+        flowId,t.flow_name,t.flow_name flowName,t.setting_id,t.setting_id settingId,t.setting_name,t.setting_name
+        settingName,t.audit_way auditWay
+        from owner_settled_setting t
+        where 1 =1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            and t.setting_name= #{settingName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业主入驻流程信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerSettledSettingInfo" parameterType="Map">
+        update owner_settled_setting t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="flowId !=null and flowId != ''">
+            , t.flow_id= #{flowId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            , t.audit_way= #{auditWay}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            , t.flow_name= #{flowName}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            , t.setting_name= #{settingName}
+        </if>
+        where 1=1
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询业主入驻流程数量 add by wuxw 2018-07-03 -->
+    <select id="queryOwnerSettledSettingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_settled_setting t
+        where 1 =1
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="auditWay !=null and auditWay != ''">
+            and t.audit_way= #{auditWay}
+        </if>
+        <if test="flowId !=null and flowId != ''">
+            and t.flow_id= #{flowId}
+        </if>
+        <if test="flowName !=null and flowName != ''">
+            and t.flow_name= #{flowName}
+        </if>
+        <if test="settingId !=null and settingId != ''">
+            and t.setting_id= #{settingId}
+        </if>
+        <if test="settingName !=null and settingName != ''">
+            and t.setting_name= #{settingName}
+        </if>
+
+
+    </select>
+
+</mapper>

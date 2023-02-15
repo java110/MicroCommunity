@@ -7,6 +7,8 @@ import com.java110.boot.smo.payment.IToPayBackCitySMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,7 @@ public class ToPayBackCitySMOImpl extends AppAbstractComponentSMO implements ITo
 
         ResponseEntity responseEntity = null;
 
-        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
+        String ownerUrl = UrlCache.getOwnerUrl()
                 + "/#/pages/reportInfoBack/reportInfoBack?communityId="
                 + paramIn.getString( "communityId" ) ;
         Map result = new HashMap(  );

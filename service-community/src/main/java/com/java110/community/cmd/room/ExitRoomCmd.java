@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
@@ -25,6 +26,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+@Java110CmdDoc(title = "业主房屋关系解绑",
+        description = "对应后台 业主退房房屋功能",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/room.exitRoom",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "room.exitRoom"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "roomId", length = 30, remark = "房屋ID"),
+        @Java110ParamDoc(name = "ownerId", length = 30, remark = "业主ID"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\n" +
+                "\t\"ownerId\": 121231,\n" +
+                "\t\"roomId\": \"123123\",\n" +
+                "\t\"communityId\": \"2022121921870161\"\n" +
+                "}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 @Java110Cmd(serviceCode = "room.exitRoom")
 public class ExitRoomCmd extends Cmd {
 
@@ -53,13 +84,13 @@ public class ExitRoomCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求报文中未包含ownerId节点");
         Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
-        Assert.jsonObjectHaveKey(reqJson, "storeId", "请求报文中未包含storeId节点");
+        //Assert.jsonObjectHaveKey(reqJson, "storeId", "请求报文中未包含storeId节点");
 
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(reqJson.getString("roomId"), "roomId不能为空");
-        Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
+        //Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
     }
 
     @Override

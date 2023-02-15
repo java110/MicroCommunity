@@ -30,6 +30,12 @@
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
+        <if test="nums !=null">
+            and t.num in
+            <foreach collection="nums" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
@@ -44,6 +50,12 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="states !=null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -104,6 +116,12 @@
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
+        <if test="nums !=null">
+            and t.num in
+            <foreach collection="nums" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="paId !=null and paId != ''">
             and t.pa_id= #{paId}
         </if>
@@ -119,11 +137,27 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="states !=null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
 
 
     </select>
+
+    <!-- 保存车位信息 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingSpaceInfos" parameterType="Map">
+        insert into parking_space(
+        area,parking_type,num,pa_id,ps_id,remark,state,community_id,create_time
+        ) values
+        <foreach collection="parkingSpacePos" item="item" separator=",">
+            (#{item.area},#{item.parkingType},#{item.num},#{item.paId},#{item.psId},#{item.remark},#{item.state},#{item.communityId},#{item.createTime})
+        </foreach>
+    </insert>
 
 </mapper>

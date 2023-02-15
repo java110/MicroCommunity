@@ -25,6 +25,7 @@ import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -203,7 +204,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("请您及时确认信息，并安排相关人员进行处理，感谢您的使用！"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

@@ -8,9 +8,9 @@
     <!-- 保存考勤日志信息 add by wuxw 2018-07-03 -->
     <insert id="saveAttendanceLogInfo" parameterType="Map">
         insert into attendance_log(
-        department_name,department_id,staff_name,log_id,store_id,staff_id,clock_time
+        department_name,department_id,staff_name,log_id,store_id,staff_id,clock_time,face_path
         ) values (
-        #{departmentName},#{departmentId},#{staffName},#{logId},#{storeId},#{staffId},#{clockTime}
+        #{departmentName},#{departmentId},#{staffName},#{logId},#{storeId},#{staffId},#{clockTime},#{facePath}
         )
     </insert>
 
@@ -19,7 +19,8 @@
     <select id="getAttendanceLogInfo" parameterType="Map" resultType="Map">
         select t.department_name,t.department_name departmentName,t.department_id,t.department_id
         departmentId,t.staff_name,t.staff_name staffName,t.log_id,t.log_id logId,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,t.clock_time,t.clock_time clockTime
+        statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,t.clock_time,t.clock_time clockTime,
+        t.face_path facePath
         from attendance_log t
         where 1 =1
         <if test="departmentName !=null and departmentName != ''">
@@ -77,6 +78,9 @@
         </if>
         <if test="clockTime !=null and clockTime != ''">
             , t.clock_time= #{clockTime}
+        </if>
+        <if test="facePath !=null and facePath != ''">
+            , t.face_path = #{facePath}
         </if>
         where 1=1
         <if test="logId !=null and logId != ''">

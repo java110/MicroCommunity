@@ -177,5 +177,18 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
         return businessReportOweFeeInfos;
     }
 
+    @Override
+    public List<Map> queryOweFeesByOwnerIds(Map info) {
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByOwnerIds", info);
+        return businessReportOweFeeInfos;
+    }
+
+    @Override
+    public List<Map> queryOweFeesByRoomIds(Map info) {
+        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByRoomIds", info);
+        return businessReportOweFeeInfos;
+    }
+
+
 
 }

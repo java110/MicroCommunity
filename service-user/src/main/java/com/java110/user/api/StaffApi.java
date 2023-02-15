@@ -11,6 +11,8 @@ import com.java110.user.bmo.staffAppAuth.IGetStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.ISaveStaffAppAuthBMO;
 import com.java110.user.bmo.staffAppAuth.IUpdateStaffAppAuthBMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -141,7 +143,7 @@ public class StaffApi {
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setWechatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
+        String ownerUrl = UrlCache.getOwnerUrl()
                 + "/app/staffAuth?storeId=" + storeId + "&staffId=" + userId
                 + "&communityId=" + communityId + "&appId=" + AppDto.WECHAT_OWNER_APP_ID;
 

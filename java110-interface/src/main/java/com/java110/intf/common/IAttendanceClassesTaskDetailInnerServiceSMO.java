@@ -50,4 +50,7 @@ public interface IAttendanceClassesTaskDetailInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAttendanceClassesTaskDetailsCount", method = RequestMethod.POST)
     int queryAttendanceClassesTaskDetailsCount(@RequestBody AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto);
+
+    @RequestMapping(value = "/queryWaitSendMsgDetail", method = RequestMethod.POST)
+    List<AttendanceClassesTaskDetailDto> queryWaitSendMsgDetail(@RequestBody AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto);
 }

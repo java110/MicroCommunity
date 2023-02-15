@@ -150,9 +150,11 @@ public class ModifyCarToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("personName", ownerCarDtos.get(0).getOwnerName());
         postParameters.put("personTel", ownerCarDtos.get(0).getLink());
         postParameters.put("personId", ownerCarDtos.get(0).getOwnerId());
-        postParameters.put("extCarId", ownerCarDtos.get(0).getCarId());
+        postParameters.put("extCarId", ownerCarDtos.get(0).getMemberId());
         postParameters.put("parkingNum", parkingSpaceCount);
         postParameters.put("leaseType", ownerCarDtos.get(0).getLeaseType());
+        postParameters.put("primaryCarId", ownerCarDtos.get(0).getCarId());
+        postParameters.put("carType", ownerCarDtos.get(0).getCarType());
         postParameters.put("extCommunityId", ownerCarDtos.get(0).getCommunityId());
         postParameters.put("attrs", parkingAreaAttrDtos);
         hcOwnerCarAsynImpl.updateOwnerCar(postParameters);

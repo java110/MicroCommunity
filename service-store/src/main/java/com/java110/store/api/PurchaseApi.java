@@ -14,6 +14,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.store.bmo.purchase.IPurchaseApplyBMO;
 import com.java110.store.bmo.purchase.IResourceEnterBMO;
 import com.java110.utils.cache.MappingCache;
@@ -55,6 +56,9 @@ public class PurchaseApi {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
@@ -153,74 +157,5 @@ public class PurchaseApi {
      * @param reqJson
      * @return
      */
-    @RequestMapping(value = "/purchaseStorage", method = RequestMethod.POST)
-    public ResponseEntity<String> purchaseStorage(@RequestBody JSONObject reqJson,
-                                                  @RequestHeader(value = "user-id") String userId,
 
-                                                  @RequestHeader(value = "store-id") String storeId) {
-        Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
-        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
-        Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
-        Assert.listOnlyOne(userDtos,"未包含用户");
-
-
-        String userName  = userDtos.get(0).getName();
-        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
-        purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
-        purchaseApplyPo.setDescription(reqJson.getString("description"));
-        purchaseApplyPo.setUserId(userId);
-        purchaseApplyPo.setUserName(userName);
-        purchaseApplyPo.setEndUserName(reqJson.getString("endUserName"));
-        purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
-        purchaseApplyPo.setStoreId(storeId);
-        purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_END);
-        purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        purchaseApplyPo.setDescription("直接采购入库");
-        purchaseApplyPo.setCreateUserId(userId);
-        purchaseApplyPo.setCreateUserName(userName);
-        purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
-        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
-        JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
-        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-        for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
-            JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
-            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
-            purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
-            purchaseApplyDetailPo.setRemark("直接采购入库");
-            purchaseApplyDetailPo.setOriginalStock(resourceStore.getString("stock"));
-            purchaseApplyDetailPo.setQuantity(purchaseApplyDetailPo.getPurchaseQuantity());
-            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-            //增加库存
-            ResourceStorePo resourceStorePo = new ResourceStorePo();
-            resourceStorePo.setPurchasePrice(purchaseApplyDetailPo.getPrice());
-            resourceStorePo.setResId(purchaseApplyDetailPo.getResId());
-            resourceStorePo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
-            resourceStorePo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
-            //获取采购数量
-            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getPurchaseQuantity());
-            //获取原有最小计量总数
-            BigDecimal miniStock = new BigDecimal(resourceStore.getString("miniStock"));
-            //获取最小单位数量
-            BigDecimal newMiniStock = new BigDecimal(0);
-            if (StringUtil.isEmpty(resourceStore.getString("miniUnitStock"))) {
-                throw new IllegalArgumentException("最小计量单位数量不能为空！");
-            }
-            BigDecimal miniUnitStock = new BigDecimal(resourceStore.getString("miniUnitStock"));
-            //计算最小计量总数
-            if (StringUtil.isEmpty(resourceStore.getString("miniStock"))) {
-                newMiniStock = purchaseQuantity.multiply(miniUnitStock);
-            } else {
-                newMiniStock = (purchaseQuantity.multiply(miniUnitStock)).add(miniStock);
-            }
-            resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
-            resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
-        }
-        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return purchaseApplyBMOImpl.apply(purchaseApplyPo,reqJson);
-    }
 }

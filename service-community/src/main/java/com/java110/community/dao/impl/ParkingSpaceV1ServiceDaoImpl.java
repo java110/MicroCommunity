@@ -108,5 +108,17 @@ public class ParkingSpaceV1ServiceDaoImpl extends BaseServiceDao implements IPar
         return Integer.parseInt(businessParkingSpaceInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 保存车位信息 到 instance
+     * @param info   bId 信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int saveParkingSpaceInfos(Map info) throws DAOException {
+        logger.debug("保存 saveParkingSpaceInfos 入参 info : {}",info);
 
+        int saveFlag = sqlSessionTemplate.insert("parkingSpaceV1ServiceDaoImpl.saveParkingSpaceInfos",info);
+
+        return saveFlag;
+    }
 }

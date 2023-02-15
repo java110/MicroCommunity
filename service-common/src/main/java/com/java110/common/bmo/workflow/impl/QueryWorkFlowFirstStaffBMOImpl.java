@@ -25,6 +25,7 @@ import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.user.IOrgInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -163,14 +164,20 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
 
-        //表单 部署
-        deployForm(oaWorkflowDtos.get(0));
+        //普通流程需要部署 表单 其他类型不需要部署
+        if(OaWorkflowDto.FLOW_TYPE_PUBLIC.equals(oaWorkflowDtos.get(0).getFlowType())) {
+            //表单 部署
+            deployForm(oaWorkflowDtos.get(0));
+        }
 
         String deploymentid = "";
         try {
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
             bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
+            if(bpmnBytes == null || bpmnBytes.length< 1){
+                throw new CmdException("未设置流程");
+            }
             String processName = modelData.getName() + ".bpmn20.xml";
             ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
             Deployment deployment = repositoryService.createDeployment().name(oaWorkflowDtos.get(0).getFlowName())
@@ -184,6 +191,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
                 .createProcessDefinitionQuery()
                 .deploymentId(deploymentid)
                 .singleResult();
+
         //更新部门流程关系表
         workflowModelDto.setDeploymentId(deploymentid);
 

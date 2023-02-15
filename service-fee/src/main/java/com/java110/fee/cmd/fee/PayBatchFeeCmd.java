@@ -179,6 +179,7 @@ public class PayBatchFeeCmd extends Cmd {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
+            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
@@ -323,8 +324,18 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new IllegalArgumentException("车位已被使用，不能再缴费！");
             }
         }
+
+        Calendar endTimeCalendar = null;
         //车位费用续租
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+            //后付费 或者信用期车辆 加一个月
+            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeInfo.getPaymentCd())
+                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())) {
+                endTimeCalendar = Calendar.getInstance();
+                endTimeCalendar.setTime(feeEndTime);
+                endTimeCalendar.add(Calendar.MONTH, 1);
+                feeEndTime = endTimeCalendar.getTime();
+            }
             if (tmpOwnerCarDto.getEndTime().getTime() >= feeEndTime.getTime()) {
                 continue;
             }
@@ -402,11 +413,11 @@ public class PayBatchFeeCmd extends Cmd {
         }
         feeInfo.setEndTime(endCalender.getTime());
         Date maxEndTime = feeInfo.getDeadlineTime();
-        if(FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())){
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
             maxEndTime = feeInfo.getConfigEndTime();
         }
         //判断 结束时间 是否大于 费用项 结束时间，这里 容错一下，如果 费用结束时间大于 费用项结束时间 30天 走报错 属于多缴费
-        if(maxEndTime != null) {
+        if (maxEndTime != null) {
             if (feeInfo.getEndTime().getTime() - maxEndTime.getTime() > 30 * 24 * 60 * 60 * 1000L) {
                 throw new IllegalArgumentException("缴费超过了 费用项结束时间");
             }

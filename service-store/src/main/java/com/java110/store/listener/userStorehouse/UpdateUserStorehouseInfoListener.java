@@ -1,4 +1,4 @@
-package com.java110.store.listener.userUserStorehousehouse;
+package com.java110.store.listener.userStorehouse;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

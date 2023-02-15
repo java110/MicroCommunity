@@ -29,6 +29,8 @@ import com.java110.doc.registrar.ApiDocCmdPublishing;
 import com.java110.doc.registrar.ApiDocPublishing;
 import com.java110.intf.dev.ICacheV1InnerServiceSMO;
 import com.java110.service.init.ServiceStartInit;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import okhttp3.ConnectionPool;
@@ -42,6 +44,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 
@@ -152,9 +155,16 @@ public class BootApplicationStart {
     public OutRestTemplate outRestTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         OutRestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(OutRestTemplate.class);
+        restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
+
+        //设置超时时间
+        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        httpRequestFactory.setConnectionRequestTimeout(5000);
+        httpRequestFactory.setConnectTimeout(5000);
+        httpRequestFactory.setReadTimeout(5000);
+        restTemplate.setRequestFactory(httpRequestFactory);
         return restTemplate;
     }
-
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -209,7 +219,7 @@ public class BootApplicationStart {
         logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
 
         //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
-        //String mapping = MappingCache.getValue("java110_hc_version");
+        //String mapping = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"java110_hc_version");
         String mapping = "";
         if (StringUtil.isEmpty(mapping)) {
             ICacheV1InnerServiceSMO devServiceCacheSMOImpl = (ICacheV1InnerServiceSMO) ApplicationContextFactory.getBean(ICacheV1InnerServiceSMO.class);

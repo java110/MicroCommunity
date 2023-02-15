@@ -9,7 +9,7 @@ import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
@@ -18,6 +18,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IGetOaWorkflowFormBMO;
 import com.java110.po.workflowDataFile.WorkflowDataFilePo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -47,7 +48,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowUserInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     @Autowired
     private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;
@@ -140,7 +141,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         if (workflowDataFileDtos == null || workflowDataFileDtos.size() < 1) {
             return;
         }
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         for(WorkflowDataFileDto tmpWorkflowDataFileDto: workflowDataFileDtos){
             tmpWorkflowDataFileDto.setRealFileName(imgUrl + tmpWorkflowDataFileDto.getRealFileName());
         }
@@ -436,7 +437,8 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
         oaWorkflowFormDto.setRow(1);
         oaWorkflowFormDto.setPage(1);
         List<OaWorkflowFormDto> oaWorkflowFormDtos = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowForms(oaWorkflowFormDto);
-        Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+        //Assert.listOnlyOne(oaWorkflowFormDtos, "未包含流程表单，请先设置表单");
+        OaWorkflowFormDto tmpOaWorkflowFormDto = (oaWorkflowFormDtos == null || oaWorkflowFormDtos.size() < 1)?null:oaWorkflowFormDtos.get(0);
 
         OaWorkflowDataDto oaWorkflowDataDto = new OaWorkflowDataDto();
         oaWorkflowDataDto.setFlowId(paramIn.getString("flowId"));
@@ -455,7 +457,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
                 datas.add(BeanConvertUtil.beanCovertJson(oaWorkflowDataDto1));
             }
             //刷新 表单数据
-            freshFormData(datas, paramIn, oaWorkflowFormDtos.get(0));
+            freshFormData(datas, paramIn, tmpOaWorkflowFormDto);
         }
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) paramIn.getInteger("row")), count, datas);
@@ -470,33 +472,19 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
      * @param datas
      */
     private void freshFormData(List<JSONObject> datas, JSONObject paramIn, OaWorkflowFormDto oaWorkflowFormDto) {
-        List<String> ids = new ArrayList<>();
+
         List<String> userIds = new ArrayList<>();
         for (JSONObject data : datas) {
-            ids.add(data.getString("id"));
             if (!StringUtil.isEmpty(data.getString("staffId"))) {
                 userIds.add(data.getString("staffId"));
             }
         }
-        if (ids.size() < 1) {
-            return;
-        }
 
-        Map paramMap = new HashMap();
-        paramMap.put("storeId", paramIn.getString("storeId"));
-        paramMap.put("ids", ids.toArray(new String[ids.size()]));
-        paramMap.put("tableName", oaWorkflowFormDto.getTableName());
-        paramMap.put("page", 1);
-        paramMap.put("row", ids.size());
-        List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
+        //输入formData
+        refreshFormData(oaWorkflowFormDto,datas,paramIn);
+
         long duration = 0L;
         for (JSONObject data : datas) {
-            for (Map form : formDatas) {
-                if (data.getString("id").equals(form.get("id"))) {
-                    data.putAll(form);
-                }
-            }
-
             if (data.containsKey("startTime") && data.containsKey("endTime")) {
                 try {
                     if (data.getString("endTime") == null) {
@@ -526,6 +514,35 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
                 if (data.getString("staffId").equals(userDto1.getUserId())) {
                     data.put("orgName", userDto1.getOrgName());
                     data.put("staffName", userDto1.getUserName());
+                }
+            }
+        }
+    }
+
+    private void refreshFormData(OaWorkflowFormDto oaWorkflowFormDto, List<JSONObject> datas, JSONObject paramIn) {
+        if(oaWorkflowFormDto == null){
+            return ;
+        }
+
+        List<String> ids = new ArrayList<>();
+        for (JSONObject data : datas) {
+            ids.add(data.getString("id"));
+        }
+        if (ids.size() < 1) {
+            return;
+        }
+
+        Map paramMap = new HashMap();
+        paramMap.put("storeId", paramIn.getString("storeId"));
+        paramMap.put("ids", ids.toArray(new String[ids.size()]));
+        paramMap.put("tableName", oaWorkflowFormDto.getTableName());
+        paramMap.put("page", 1);
+        paramMap.put("row", ids.size());
+        List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
+        for (JSONObject data : datas) {
+            for (Map form : formDatas) {
+                if (data.getString("id").equals(form.get("id"))) {
+                    data.putAll(form);
                 }
             }
         }

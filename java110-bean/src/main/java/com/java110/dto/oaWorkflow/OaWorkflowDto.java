@@ -18,6 +18,12 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "W";//待部署
     public static final String STATE_COMPLAINT = "C";//部署完成
 
+    public static final String FLOW_TYPE_ITEM_RELEASE="2002";//物品放行
+    public static final String FLOW_TYPE_VISIT="3003";// 访客审核
+    public static final String FLOW_TYPE_PUBLIC="1001";//物品放行
+
+    public static final String FLOW_TYPE_OWNER_SETTLED="4004";// 业主入驻房屋流程
+
     private String userId;
     private String describle;
     private String modelId;
@@ -34,6 +40,8 @@ public class OaWorkflowDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String[] flowIds;
 
 
     public String getDescrible() {
@@ -147,5 +155,13 @@ public class OaWorkflowDto extends PageDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String[] getFlowIds() {
+        return flowIds;
+    }
+
+    public void setFlowIds(String[] flowIds) {
+        this.flowIds = flowIds;
     }
 }

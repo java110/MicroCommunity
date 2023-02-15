@@ -16,6 +16,7 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.store.dao.IResourceStoreTimesV1ServiceDao;
@@ -52,21 +53,40 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
         return saveFlag;
     }
 
-     @Override
-    public int updateResourceStoreTimes(@RequestBody  ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
+    @Override
+    public int updateResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
         int saveFlag = resourceResourceStoreTimesTimesV1ServiceDaoImpl.updateResourceStoreTimesInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteResourceStoreTimes(@RequestBody  ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
-       resourceResourceStoreTimesTimesPo.setStatusCd("1");
-       int saveFlag = resourceResourceStoreTimesTimesV1ServiceDaoImpl.updateResourceStoreTimesInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesPo));
-       return saveFlag;
+
+    @Override
+    public int saveOrUpdateResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceStoreTimesPo) {
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setStoreId(resourceStoreTimesPo.getStoreId());
+        resourceStoreTimesDto.setPrice(resourceStoreTimesPo.getPrice());
+        resourceStoreTimesDto.setResCode(resourceStoreTimesPo.getResCode());
+        List<ResourceStoreTimesDto> resourceStoreTimesDtos = queryResourceStoreTimess(resourceStoreTimesDto);
+        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
+            return saveResourceStoreTimes(resourceStoreTimesPo);
+        }
+        int stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock()) + Integer.parseInt(resourceStoreTimesPo.getStock());
+        resourceStoreTimesPo.setStock(stock + "");
+        resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+        return updateResourceStoreTimes(resourceStoreTimesPo);
+    }
+
+
+    @Override
+    public int deleteResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceResourceStoreTimesTimesPo) {
+        resourceResourceStoreTimesTimesPo.setStatusCd("1");
+        int saveFlag = resourceResourceStoreTimesTimesV1ServiceDaoImpl.updateResourceStoreTimesInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesPo));
+        return saveFlag;
     }
 
     @Override
-    public List<ResourceStoreTimesDto> queryResourceStoreTimess(@RequestBody  ResourceStoreTimesDto resourceResourceStoreTimesTimesDto) {
+    public List<ResourceStoreTimesDto> queryResourceStoreTimess(@RequestBody ResourceStoreTimesDto resourceResourceStoreTimesTimesDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +104,7 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
     @Override
     public int queryResourceStoreTimessCount(@RequestBody ResourceStoreTimesDto resourceResourceStoreTimesTimesDto) {
-        return resourceResourceStoreTimesTimesV1ServiceDaoImpl.queryResourceStoreTimessCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesDto));    }
+        return resourceResourceStoreTimesTimesV1ServiceDaoImpl.queryResourceStoreTimessCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesDto));
+    }
 
 }

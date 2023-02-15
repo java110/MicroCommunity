@@ -238,7 +238,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
                 resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
                 resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-                resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
+                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                 throw new IllegalArgumentException("查询商品错误！");
             } else {
@@ -306,7 +306,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
                 resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
                 resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-                resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
+                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             }
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

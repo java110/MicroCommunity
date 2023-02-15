@@ -6,6 +6,8 @@ import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IToPayBackCitySMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -50,7 +52,7 @@ public class ToPayBackCitySMOImpl extends AppAbstractComponentSMO implements ITo
 
         ResponseEntity responseEntity = null;
 
-        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL")
+        String ownerUrl = UrlCache.getOwnerUrl()
                 + "/#/pages/reportInfoBack/reportInfoBack?communityId="
                 + paramIn.getString( "communityId" ) ;
         Map result = new HashMap(  );

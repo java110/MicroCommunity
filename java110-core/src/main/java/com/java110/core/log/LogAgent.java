@@ -34,7 +34,7 @@ public class LogAgent extends LoggerEngine{
      * @return
      */
     public static boolean sendLog(TransactionLog transactionLog){
-        if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))) {
+        if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_LOG_ON_OFF))) {
             try {
                 KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_LOG_NAME, "", transactionLog.toString());
             }catch (Exception e){

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralSettingV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存积分设置信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralSettingInfo" parameterType="Map">
+        insert into integral_setting(
+money,third_flag,remark,third_url,community_id,setting_id
+) values (
+#{money},#{thirdFlag},#{remark},#{thirdUrl},#{communityId},#{settingId}
+)
+    </insert>
+
+
+
+    <!-- 查询积分设置信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralSettingInfo" parameterType="Map" resultType="Map">
+        select  t.money,t.third_flag,t.third_flag thirdFlag,t.remark,t.third_url,t.third_url thirdUrl,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.setting_id,t.setting_id settingId 
+from integral_setting t 
+where 1 =1 
+<if test="money !=null and money != ''">
+   and t.money= #{money}
+</if> 
+<if test="thirdFlag !=null and thirdFlag != ''">
+   and t.third_flag= #{thirdFlag}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="thirdUrl !=null and thirdUrl != ''">
+   and t.third_url= #{thirdUrl}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改积分设置信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralSettingInfo" parameterType="Map">
+        update  integral_setting t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="money !=null and money != ''">
+, t.money= #{money}
+</if> 
+<if test="thirdFlag !=null and thirdFlag != ''">
+, t.third_flag= #{thirdFlag}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="thirdUrl !=null and thirdUrl != ''">
+, t.third_url= #{thirdUrl}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="settingId !=null and settingId != ''">
+and t.setting_id= #{settingId}
+</if> 
+
+    </update>
+
+    <!-- 查询积分设置数量 add by wuxw 2018-07-03 -->
+     <select id="queryIntegralSettingsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from integral_setting t 
+where 1 =1 
+<if test="money !=null and money != ''">
+   and t.money= #{money}
+</if> 
+<if test="thirdFlag !=null and thirdFlag != ''">
+   and t.third_flag= #{thirdFlag}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="thirdUrl !=null and thirdUrl != ''">
+   and t.third_url= #{thirdUrl}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="settingId !=null and settingId != ''">
+   and t.setting_id= #{settingId}
+</if> 
+
+
+     </select>
+
+</mapper>

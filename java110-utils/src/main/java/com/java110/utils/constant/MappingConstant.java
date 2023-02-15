@@ -11,7 +11,34 @@ public final class MappingConstant {
     }
 
 
+    // 系统开关
+    public static final String DOMAIN_SYSTEM_SWITCH = "SYSTEM_SWITCH";
+
+    // 短信配置
+    public static final String SMS_DOMAIN = "SMS_DOMAIN";
+
+    // 存储配置
+    public static final String FILE_DOMAIN = "FILE_DOMAIN";
+
+    // 平台URL
+    public static final String URL_DOMAIN ="URL_DOMAIN";
+
+    // 微信商户
+    public static final String WECHAT_STORE_DOMAIN ="WECHAT_STORE";
+
+
+    // 商城公众号
+    public static final String MALL_WECHAT_DOMAIN ="MALL_WECHAT";
+
+    // 工单配置
+    public static final String REPAIR_DOMAIN ="REPAIR_DOMAIN";
+
+    //环境配置
+    public static final String ENV_DOMAIN = "ENV_DOMAIN";
+
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
+
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
 
     //私钥

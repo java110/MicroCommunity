@@ -23,6 +23,8 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.systemInfo.SystemInfoDto;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -69,8 +71,8 @@ public class ListSystemInfoCmd extends Cmd {
 
         if (count > 0) {
             systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
-            systemInfoDtos.get(0).setOwnerUrl(MappingCache.getValue("OWNER_WECHAT_URL"));
-            systemInfoDtos.get(0).setPropertyUrl(MappingCache.getValue("STAFF_WECHAT_URL"));
+            systemInfoDtos.get(0).setOwnerUrl(UrlCache.getOwnerUrl());
+            systemInfoDtos.get(0).setPropertyUrl(UrlCache.getPropertyPhoneUrl());
         } else {
             systemInfoDtos = new ArrayList<>();
         }

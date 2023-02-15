@@ -16,6 +16,7 @@
 package com.java110.boot.controller.app;
 
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ public class EnvController {
 
     @RequestMapping(path = "/getEnv", method = RequestMethod.GET)
     public ResponseEntity<String> getEnv(HttpServletRequest request) {
-        String env = MappingCache.getValue("HC_ENV");
+        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV");
         return new ResponseEntity<>(env, HttpStatus.OK);
     }
 

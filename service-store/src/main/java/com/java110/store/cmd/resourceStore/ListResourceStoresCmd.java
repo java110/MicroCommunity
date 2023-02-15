@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 查询物品
+ * add by wuxw 2023-01-19
+ */
 @Java110Cmd(serviceCode = "resourceStore.listResourceStores")
 public class ListResourceStoresCmd extends Cmd {
 
@@ -76,6 +80,7 @@ public class ListResourceStoresCmd extends Cmd {
         if (count > 0) {
             resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
             //查询总价
+            //queryResourceStoreAndResourceTotalPrice(resourceStores);
             resourceStoreDto.setPage(Integer.valueOf(reqJson.getString("page")));
             subTotalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
             resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);

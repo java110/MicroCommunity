@@ -299,4 +299,16 @@
 
     </select>
 
+
+    <select id="queryContractsByOwnerIds" parameterType="Map" resultType="Map">
+        select t.obj_id ownerId,count(t.contract_id) contractCount
+        from contract t
+        where t.status_cd = '0'
+        and t.obj_id in
+        <foreach collection="ownerIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.obj_id
+    </select>
+
 </mapper>

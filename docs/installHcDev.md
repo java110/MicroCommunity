@@ -1,7 +1,7 @@
 ## HC小区管理系统安装教程（开发环境）
 
 1、下载代码 <br/>
-git clone https://github.com/java110/MicroCommunity.git <br/>
+git clone https://gitee.com/wuxw7/MicroCommunity.git <br/>
 执行 mvn clean package  和 mvn clean install<br/><br/>
 2、添加hosts<br/>
 127.0.0.1 dev.db.java110.com <br/>
@@ -82,7 +82,7 @@ dataSource.yml 中修改password密码<br/>
 6、启动模块service-开头服务下的*ServiceApplicationStart.java文件中的main方法<br/>
 注意启动是没有顺序的，但是我们优先推荐您启动service-eureka<br/>
 7、下载前段代码 <br/>
-git clone https://github.com/java110/MicroCommunityWeb.git <br/>
+git clone https://gitee.com/java110/MicroCommunityWeb.git <br/>
 8、修改app.js 中的地址<br/>
 ```shell script
 app.use('/callComponent', proxy('http://192.168.100.108:8008', opts));

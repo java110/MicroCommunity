@@ -52,7 +52,7 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", paymentOrderDto.getOrderId());
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "fee.payFeeConfirm", JSONObject.class, "-1");
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), paramIn, "fee.payFeeConfirm", JSONObject.class, "-1");
 
     }
 

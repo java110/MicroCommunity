@@ -75,7 +75,11 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
         if (orderDtos == null || orderDtos.size() < 1) {
             return orderDtos;
         }
+
         String[] userIds = getUserIds(orderDtos);
+        if(userIds == null || userIds.length <1){
+            return orderDtos;
+        }
         if(userIds != null && userIds.length > 0) {
             //根据 userId 查询用户信息
             List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);

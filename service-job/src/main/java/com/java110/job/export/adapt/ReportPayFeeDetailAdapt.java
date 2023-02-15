@@ -7,6 +7,7 @@ import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Row;
@@ -118,7 +119,7 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt{
             row.createCell(6).setCellValue(dataObj.getString("primeRate"));
             row.createCell(7).setCellValue(dataObj.getString("startTime"));
             row.createCell(8).setCellValue(dataObj.getString("endTime"));
-            row.createCell(9).setCellValue(dataObj.getString("createTime"));
+            row.createCell(9).setCellValue(DateUtil.getFormatTimeString(dataObj.getDate("createTime"),DateUtil.DATE_FORMATE_STRING_A));
             row.createCell(10).setCellValue(dataObj.getDouble("receivableAmount"));
             row.createCell(11).setCellValue(dataObj.getDouble("receivedAmount"));
             row.createCell(12).setCellValue(dataObj.getDouble("preferentialAmount"));

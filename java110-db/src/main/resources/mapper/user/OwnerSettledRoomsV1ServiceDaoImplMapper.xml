@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerSettledRoomsV1ServiceDaoImpl">
+
+
+    <!-- 保存业主入驻房屋信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerSettledRoomsInfo" parameterType="Map">
+        insert into owner_settled_rooms(
+        apply_id,start_time,osr_id,end_time,community_id,room_id,room_name
+        ) values (
+        #{applyId},#{startTime},#{osrId},#{endTime},#{communityId},#{roomId},#{roomName}
+        )
+    </insert>
+
+
+    <!-- 查询业主入驻房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerSettledRoomsInfo" parameterType="Map" resultType="Map">
+        select t.apply_id,t.apply_id applyId,t.status_cd,t.status_cd statusCd,DATE_FORMAT(t.start_time, '%Y-%m-%d')
+        startTime,t.osr_id,t.osr_id osrId,t.end_time,DATE_FORMAT(t.end_time, '%Y-%m-%d')  endTime,t.community_id,t.community_id
+        communityId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName
+        from owner_settled_rooms t
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="osrId !=null and osrId != ''">
+            and t.osr_id= #{osrId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业主入驻房屋信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerSettledRoomsInfo" parameterType="Map">
+        update owner_settled_rooms t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        where 1=1
+        <if test="osrId !=null and osrId != ''">
+            and t.osr_id= #{osrId}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </update>
+
+    <!-- 查询业主入驻房屋数量 add by wuxw 2018-07-03 -->
+    <select id="queryOwnerSettledRoomssCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_settled_rooms t
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="osrId !=null and osrId != ''">
+            and t.osr_id= #{osrId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+
+
+    </select>
+
+</mapper>

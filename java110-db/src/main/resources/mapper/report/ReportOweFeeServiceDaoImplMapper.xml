@@ -776,4 +776,27 @@
         and community_id = #{communityId}
     </update>
 
+
+    <select id="queryOweFeesByOwnerIds" parameterType="Map" resultType="Map">
+        select  t.owner_id ownerId,SUM(t.amount_owed) oweFee
+        from report_owe_fee t
+        where t.community_id = #{communityId}
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.owner_id
+    </select>
+    <select id="queryOweFeesByRoomIds" parameterType="Map" resultType="Map">
+        select  t.payer_obj_id roomId,SUM(t.amount_owed) oweFee
+        from report_owe_fee t
+        where t.community_id =  #{communityId}
+        and t.payer_obj_type = '3333'
+        and t.payer_obj_id in
+        <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.payer_obj_id
+    </select>
+
 </mapper>

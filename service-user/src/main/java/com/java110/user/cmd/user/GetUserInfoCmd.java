@@ -10,6 +10,7 @@ import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class GetUserInfoCmd extends Cmd {
         resultUserInfo.put("tel", tmpUserInfo.getString("tel")); // 这里不加密了 因为前台很多地方直接 关联出 用户的手机号 所以 加密了 没法处理 modify by wuxw 2022-07-04
         resultUserInfo.put("email", tmpUserInfo.getString("email"));
         resultUserInfo.put("userId", tmpUserInfo.getString("userId"));
-        String watermark = MappingCache.getValue("watermark");
+        String watermark = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,"watermark");
         resultUserInfo.put("watermark", watermark);
 
         responseEntity = new ResponseEntity<String>(resultUserInfo.toJSONString(), HttpStatus.OK);

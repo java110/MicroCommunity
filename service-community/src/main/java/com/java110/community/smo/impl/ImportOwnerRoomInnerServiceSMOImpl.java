@@ -209,7 +209,6 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setRemark("房产导入");
             ownerPo.setUserId(importOwnerRoomDto.getUserId());
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
-
             if (flag < 1) {
                 throw new IllegalArgumentException("导入业主失败");
             }

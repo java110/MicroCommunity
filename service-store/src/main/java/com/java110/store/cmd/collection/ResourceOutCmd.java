@@ -3,6 +3,7 @@ package com.java110.store.cmd.collection;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -47,10 +48,10 @@ import java.util.List;
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "applyOrderId", length = 30, remark = "采购申请单订单ID"),
-        @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array",length = 30, remark = "采购物品信息"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int",length = 30, remark = "数量"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String",length = 30, remark = "采购明细ID"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String",length = 30, remark = "物品ID"),
+        @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array", length = 30, remark = "采购物品信息"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int", length = 30, remark = "数量"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String", length = 30, remark = "采购明细ID"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String", length = 30, remark = "物品ID"),
 })
 
 @Java110ResponseDoc(
@@ -61,8 +62,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10','id':'123123','resId':'343434'}]}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10','id':'123123','resId':'343434'}]}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 
 /**
@@ -100,6 +101,7 @@ public class ResourceOutCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
@@ -151,7 +153,7 @@ public class ResourceOutCmd extends Cmd {
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
 
             //加入 从库存中扣减
-            subResourceStoreTimesStock(resourceStores.get(0).getResCode(), purchaseApplyDetailPo.getPurchaseQuantity());
+            subResourceStoreTimesStock(resourceStores.get(0).getResCode(), purchaseApplyDetailPo);
 
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
@@ -220,7 +222,10 @@ public class ResourceOutCmd extends Cmd {
                 }
                 userStorehouseInnerServiceSMOImpl.updateUserStorehouses(userStorehousePo);
             }
+
         }
+
+        //
         //获取订单号
         String applyOrderId = purchaseApplyPo.getApplyOrderId();
         PurchaseApplyPo purchaseApply = new PurchaseApplyPo();
@@ -233,14 +238,16 @@ public class ResourceOutCmd extends Cmd {
 
     /**
      * 从times中扣减
+     *
      * @param resCode
-     * @param applyQuantity
+     * @param purchaseApplyDetailPo
      */
-    private void subResourceStoreTimesStock(String resCode, String applyQuantity) {
-
+    private void subResourceStoreTimesStock(String resCode, PurchaseApplyDetailPo purchaseApplyDetailPo) {
+        String applyQuantity = purchaseApplyDetailPo.getPurchaseQuantity();
         ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
         resourceStoreTimesDto.setResCode(resCode);
-        resourceStoreTimesDto.setHasStock("Y");
+        resourceStoreTimesDto.setTimesId(purchaseApplyDetailPo.getTimesId());
+        //resourceStoreTimesDto.setHasStock("Y");
         List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
 
         if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
@@ -249,21 +256,16 @@ public class ResourceOutCmd extends Cmd {
         int stock = 0;
         int quantity = Integer.parseInt(applyQuantity);
         ResourceStoreTimesPo resourceStoreTimesPo = null;
-        for (ResourceStoreTimesDto resourceStoreTimesDto1 : resourceStoreTimesDtos) {
-            stock = Integer.parseInt(resourceStoreTimesDto1.getStock());
-            if (stock > quantity) {
-                stock = stock - quantity;
-                resourceStoreTimesPo = new ResourceStoreTimesPo();
-                resourceStoreTimesPo.setTimesId(resourceStoreTimesDto1.getTimesId());
-                resourceStoreTimesPo.setStock(stock + "");
-                resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
-                break;
-            }
-            quantity = quantity - stock;
-            resourceStoreTimesPo = new ResourceStoreTimesPo();
-            resourceStoreTimesPo.setTimesId(resourceStoreTimesDto1.getTimesId());
-            resourceStoreTimesPo.setStock("0");
-            resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
+
+        stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
+        if (stock < quantity) {
+            throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "价格为：" + resourceStoreTimesDtos.get(0).getPrice() + "的库存" + resourceStoreTimesDtos.get(0).getStock() + ",库存不足");
         }
+
+        stock = stock - quantity;
+        resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+        resourceStoreTimesPo.setStock(stock + "");
+        resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
     }
 }

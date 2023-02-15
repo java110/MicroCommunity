@@ -74,4 +74,5 @@ public interface IParkingSpaceV1ServiceDao {
      */
     int queryParkingSpacesCount(Map info);
 
+    int saveParkingSpaceInfos(Map info);
 }

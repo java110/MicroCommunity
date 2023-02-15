@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralRuleConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存积分规则标准信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralRuleConfigInfo" parameterType="Map">
+        insert into integral_rule_config(
+        config_id,irc_id,rule_id,community_id
+        ) values (
+        #{configId},#{ircId},#{ruleId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询积分规则标准信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralRuleConfigInfo" parameterType="Map" resultType="Map">
+        select t.config_id,t.config_id configId,t.irc_id,t.irc_id ircId,t.status_cd,t.status_cd
+        statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,
+        ic.square_price squarePrice,ic.config_name
+        configName,ic.computing_formula computingFormula,ic.additional_amount additionalAmount,ic.scale,td.name computingFormulaName,td1.`name` scaleName,
+        ir.rule_name ruleName
+        from integral_rule_config t
+        left join integral_config ic on t.config_id = ic.config_id and ic.status_cd = '0'
+        left join integral_rule ir on t.rule_id = ir.rule_id and ir.status_cd = '0'
+        left join t_dict td on ic.computing_formula = td.status_cd and td.table_name = 'integral_config' and td.table_columns = 'computing_formula'
+        left join t_dict td1 on ic.scale = td1.status_cd and td1.table_name = 'integral_config' and td1.table_columns = 'scale'
+        where 1 =1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="ircId !=null and ircId != ''">
+            and t.irc_id= #{ircId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改积分规则标准信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralRuleConfigInfo" parameterType="Map">
+        update integral_rule_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="ircId !=null and ircId != ''">
+            and t.irc_id= #{ircId}
+        </if>
+
+    </update>
+
+    <!-- 查询积分规则标准数量 add by wuxw 2018-07-03 -->
+    <select id="queryIntegralRuleConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from integral_rule_config t
+        where 1 =1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="ircId !=null and ircId != ''">
+            and t.irc_id= #{ircId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

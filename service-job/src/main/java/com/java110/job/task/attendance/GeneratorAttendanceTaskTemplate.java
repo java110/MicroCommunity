@@ -9,15 +9,18 @@ import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,6 +52,9 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
@@ -161,6 +167,11 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
             return;
         }
 
+        UserDto userDto = new UserDto();
+        userDto.setUserId(tmpOrgStaffRelDto.getStaffId());
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos,"员工不存在");
+
 
         AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
         attendanceClassesTaskPo.setStaffId(tmpOrgStaffRelDto.getStaffId());
@@ -169,7 +180,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesTaskPo.setTaskMonth(month + "");
         attendanceClassesTaskPo.setTaskDay(day + "");
         attendanceClassesTaskPo.setState(AttendanceClassesTaskDto.STATE_WAIT);
-        attendanceClassesTaskPo.setStaffName(tmpOrgStaffRelDto.getStaffName());
+        attendanceClassesTaskPo.setStaffName(userDtos.get(0).getName());
         attendanceClassesTaskPo.setStoreId(tmpStoreDto.getStoreId());
         attendanceClassesTaskPo.setTaskId(GenerateCodeFactory.getGeneratorId("11"));
 

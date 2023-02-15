@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存积分标准信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralConfigInfo" parameterType="Map">
+        insert into integral_config(
+        square_price,config_name,computing_formula,config_id,additional_amount,scale,community_id
+        ) values (
+        #{squarePrice},#{configName},#{computingFormula},#{configId},#{additionalAmount},#{scale},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询积分标准信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralConfigInfo" parameterType="Map" resultType="Map">
+        select t.square_price,t.square_price squarePrice,t.config_name,t.config_name
+        configName,t.computing_formula,t.computing_formula computingFormula,t.config_id,t.config_id
+        configId,t.additional_amount,t.additional_amount additionalAmount,t.scale,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,td.name computingFormulaName,td1.`name` scaleName
+        from integral_config t
+        left join t_dict td on t.computing_formula = td.status_cd and td.table_name = 'integral_config' and td.table_columns = 'computing_formula'
+        left join t_dict td1 on t.scale = td1.status_cd and td1.table_name = 'integral_config' and td1.table_columns = 'scale'
+        where 1 =1
+        <if test="squarePrice !=null and squarePrice != ''">
+            and t.square_price= #{squarePrice}
+        </if>
+        <if test="configName !=null and configName != ''">
+            and t.config_name= #{configName}
+        </if>
+        <if test="computingFormula !=null and computingFormula != ''">
+            and t.computing_formula= #{computingFormula}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="additionalAmount !=null and additionalAmount != ''">
+            and t.additional_amount= #{additionalAmount}
+        </if>
+        <if test="scale !=null and scale != ''">
+            and t.scale= #{scale}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改积分标准信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralConfigInfo" parameterType="Map">
+        update integral_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="squarePrice !=null and squarePrice != ''">
+            , t.square_price= #{squarePrice}
+        </if>
+        <if test="configName !=null and configName != ''">
+            , t.config_name= #{configName}
+        </if>
+        <if test="computingFormula !=null and computingFormula != ''">
+            , t.computing_formula= #{computingFormula}
+        </if>
+        <if test="additionalAmount !=null and additionalAmount != ''">
+            , t.additional_amount= #{additionalAmount}
+        </if>
+        <if test="scale !=null and scale != ''">
+            , t.scale= #{scale}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+
+    </update>
+
+    <!-- 查询积分标准数量 add by wuxw 2018-07-03 -->
+    <select id="queryIntegralConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from integral_config t
+        where 1 =1
+        <if test="squarePrice !=null and squarePrice != ''">
+            and t.square_price= #{squarePrice}
+        </if>
+        <if test="configName !=null and configName != ''">
+            and t.config_name= #{configName}
+        </if>
+        <if test="computingFormula !=null and computingFormula != ''">
+            and t.computing_formula= #{computingFormula}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="additionalAmount !=null and additionalAmount != ''">
+            and t.additional_amount= #{additionalAmount}
+        </if>
+        <if test="scale !=null and scale != ''">
+            and t.scale= #{scale}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

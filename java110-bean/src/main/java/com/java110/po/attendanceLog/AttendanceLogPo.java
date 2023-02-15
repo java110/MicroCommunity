@@ -14,6 +14,8 @@ public class AttendanceLogPo implements Serializable {
     private String staffId;
     private String clockTime;
 
+    private String facePath;
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -78,5 +80,11 @@ public class AttendanceLogPo implements Serializable {
         this.clockTime = clockTime;
     }
 
+    public String getFacePath() {
+        return facePath;
+    }
 
+    public void setFacePath(String facePath) {
+        this.facePath = facePath;
+    }
 }

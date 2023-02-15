@@ -23,4 +23,14 @@ public class UserLevelConstant {
      * 普通用户
      */
     public static final String USER_LEVEL_ORDINARY = "02";
+
+    /**
+     * 普通用户
+     */
+    public static final String USER_LEVEL_MALL = "03";
+
+    /**
+     * 临时人员
+     */
+    public static final String USER_LEVEL_TEMP = "05";
 }

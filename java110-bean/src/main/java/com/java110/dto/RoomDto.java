@@ -84,6 +84,20 @@ public class RoomDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String ownerTel; // 这个程序用，对外不输出
+
+    private String memberCount;
+    private String carCount;
+    private String roomCount;
+    private String complaintCount;
+    private String repairCount;
+    private String roomOweFee;
+    private String oweFee;
+
+    private String contractCount;
+
+
+
     public String getFeeCoefficient() {
         return feeCoefficient;
     }
@@ -434,5 +448,77 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setUnitIds(String[] unitIds) {
         this.unitIds = unitIds;
+    }
+
+    public String getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(String memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public String getCarCount() {
+        return carCount;
+    }
+
+    public void setCarCount(String carCount) {
+        this.carCount = carCount;
+    }
+
+    public String getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(String roomCount) {
+        this.roomCount = roomCount;
+    }
+
+    public String getComplaintCount() {
+        return complaintCount;
+    }
+
+    public void setComplaintCount(String complaintCount) {
+        this.complaintCount = complaintCount;
+    }
+
+    public String getRepairCount() {
+        return repairCount;
+    }
+
+    public void setRepairCount(String repairCount) {
+        this.repairCount = repairCount;
+    }
+
+    public String getRoomOweFee() {
+        return roomOweFee;
+    }
+
+    public void setRoomOweFee(String roomOweFee) {
+        this.roomOweFee = roomOweFee;
+    }
+
+    public String getOweFee() {
+        return oweFee;
+    }
+
+    public void setOweFee(String oweFee) {
+        this.oweFee = oweFee;
+    }
+
+    public String getContractCount() {
+        return contractCount;
+    }
+
+    public void setContractCount(String contractCount) {
+        this.contractCount = contractCount;
+    }
+
+    public String getOwnerTel() {
+        return ownerTel;
+    }
+
+    public void setOwnerTel(String ownerTel) {
+        this.ownerTel = ownerTel;
     }
 }

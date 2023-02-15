@@ -2,17 +2,20 @@ package com.java110.fee.bmo.payFeeDetail.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.entity.assetImport.ImportRoomFee;
 import com.java110.fee.bmo.payFeeDetail.IImportPayFeeBMODetail;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.StatusConstant;
@@ -49,6 +52,12 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
     /**
      * @param reqJson
@@ -158,6 +167,17 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePos = new ArrayList<>();
                 payFeePos.add(payFeePo);
                 feeInnerServiceSMOImpl.saveFee(payFeePos);
+                List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
+                //查询业主信息
+                if (!FeeDto.FEE_FLAG_CYCLE.equals(tmpFeeConfigDto.getFeeFlag())) {
+                    feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                            importRoomFee.getEndTime()));
+                }
+                feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_ID, importRoomFee.getOwnerId()));
+                feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_LINK, importRoomFee.getOwnerLink()));
+                feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_NAME, importRoomFee.getOwnerName()));
+                feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -200,6 +220,8 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         List<PayFeePo> payFeePos = null;
         if (feeDtos == null || feeDtos.size() < 1) {
             try {
+                List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
+
                 PayFeePo payFeePo = new PayFeePo();
                 payFeePo.setCommunityId(importRoomFee.getCommunityId());
                 payFeePo.setConfigId(feeDto.getConfigId());
@@ -223,6 +245,23 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
                 payFeePos = new ArrayList<>();
                 payFeePos.add(payFeePo);
                 feeInnerServiceSMOImpl.saveFee(payFeePos);
+
+                //查询业主信息
+                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                ownerRoomRelDto.setRoomId(importRoomFee.getRoomId());
+                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+                    if (!FeeDto.FEE_FLAG_CYCLE.equals(tmpFeeConfigDto.getFeeFlag())) {
+                        feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                                importRoomFee.getEndTime()));
+                    }
+                    feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_ID, ownerRoomRelDtos.get(0).getOwnerId()));
+                    feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_LINK, ownerRoomRelDtos.get(0).getLink()));
+                    feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_NAME, ownerRoomRelDtos.get(0).getOwnerName()));
+                    feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+                }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -238,6 +277,18 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         }
 
     }
+
+    public FeeAttrPo addFeeAttr(PayFeePo payFeePo, String specCd, String value) {
+        FeeAttrPo feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(payFeePo.getCommunityId());
+        feeAttrPo.setSpecCd(specCd);
+        feeAttrPo.setValue(value);
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        return feeAttrPo;
+
+    }
+
 
     private void doImportFeeDetail(FeeDto tmpFeeDto, ImportRoomFee importRoomFee) throws ParseException {
 //        FeeDetailDto feeDetailDto = new FeeDetailDto();
@@ -268,6 +319,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
         payFeeDetailPo.setCreateTime(importRoomFee.getCreateTime());
         payFeeDetailPo.setState("1400");
+        payFeeDetailPo.setPayableAmount(importRoomFee.getAmount());
         int saved = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 
         if (saved < 1) {

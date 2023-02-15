@@ -1,6 +1,7 @@
 package com.java110.dto.resourceStore;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -73,6 +74,8 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     //是否是固定物品
     private String isFixed;
     private String isFixedName;
+
+    private List<ResourceStoreTimesDto> times;
 
     public String getResName() {
         return resName;
@@ -400,5 +403,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setShObjIds(String[] shObjIds) {
         this.shObjIds = shObjIds;
+    }
+
+    public List<ResourceStoreTimesDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ResourceStoreTimesDto> times) {
+        this.times = times;
     }
 }

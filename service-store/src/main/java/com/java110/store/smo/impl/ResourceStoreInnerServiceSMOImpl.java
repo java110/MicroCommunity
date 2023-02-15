@@ -5,8 +5,10 @@ import com.java110.dto.PageDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreServiceDao;
@@ -43,6 +45,9 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
     @Override
     public List<ResourceStoreDto> queryResourceStores(@RequestBody ResourceStoreDto resourceResourceStoreDto) {
         //校验是否传了 分页信息
@@ -53,7 +58,10 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<ResourceStoreDto> resourceResourceStores = BeanConvertUtil.covertBeanList(resourceResourceStoreServiceDaoImpl.getResourceStoreInfo(BeanConvertUtil.beanCovertMap(resourceResourceStoreDto)), ResourceStoreDto.class);
         //获取图片地址
         List<ResourceStoreDto> resourceStoreDtos = new ArrayList<>();
+        List<String> resCodes = new ArrayList<>();
         for (ResourceStoreDto resourceStoreDto : resourceResourceStores) {
+
+            resCodes.add(resourceStoreDto.getResCode());
             //获取资源id
             String resId = resourceStoreDto.getResId();
             FileRelDto fileRelDto = new FileRelDto();
@@ -68,6 +76,30 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 resourceStoreDto.setFileUrls(fileUrls);
             }
             resourceStoreDtos.add(resourceStoreDto);
+        }
+
+        if (resourceResourceStores == null || resourceResourceStores.size() < 1 || resourceResourceStores.size() > 15) {
+            return resourceStoreDtos;
+        }
+
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setStoreId(resourceResourceStoreDto.getStoreId());
+        resourceStoreTimesDto.setResCodes(resCodes.toArray(new String[resCodes.size()]));
+        List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
+            return resourceStoreDtos;
+        }
+
+        List<ResourceStoreTimesDto> times = null;
+        for (ResourceStoreDto resourceStoreDto : resourceStoreDtos) {
+            times = new ArrayList<>();
+            for (ResourceStoreTimesDto tmpResourceStoreTimesDto : resourceStoreTimesDtos) {
+                if (resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())) {
+                    times.add(tmpResourceStoreTimesDto);
+                }
+            }
+            resourceStoreDto.setTimes(times);
         }
         return resourceStoreDtos;
     }
@@ -94,8 +126,8 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             BigDecimal stock = new BigDecimal(stores.get(0).get("stock").toString());
             BigDecimal newStock = new BigDecimal(resourceStorePo.getStock().toString());
             BigDecimal totalStock = stock.add(newStock);
-            BigDecimal zeroStock = new BigDecimal (0);
-            if (totalStock.compareTo(zeroStock)== -1) {
+            BigDecimal zeroStock = new BigDecimal(0);
+            if (totalStock.compareTo(zeroStock) == -1) {
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
@@ -111,7 +143,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 BigDecimal newPrice = new BigDecimal(resourceStorePo.getPurchasePrice());
                 //获取均价
                 BigDecimal averagePriceTotal = ((newPrice.multiply(newStock)).add(price.multiply(stock)));
-                BigDecimal averagePrice=averagePriceTotal.divide(totalStock,2,BigDecimal.ROUND_HALF_UP);
+                BigDecimal averagePrice = averagePriceTotal.divide(totalStock, 2, BigDecimal.ROUND_HALF_UP);
                 resourceStorePo.setAveragePrice(averagePrice.toString());
             }
             if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE)) {

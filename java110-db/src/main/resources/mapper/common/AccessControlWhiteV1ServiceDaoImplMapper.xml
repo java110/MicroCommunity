@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accessControlWhiteV1ServiceDaoImpl">
+
+
+    <!-- 保存门禁白名单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccessControlWhiteInfo" parameterType="Map">
+        insert into access_control_white(
+        third_id,id_card,access_control_key,person_name,machine_id,acw_id,person_id,tel,start_time,end_time,community_id,person_type
+        ) values (
+        #{thirdId},#{idCard},#{accessControlKey},#{personName},#{machineId},#{acwId},#{personId},#{tel},#{startTime},#{endTime},#{communityId},#{personType}
+        )
+    </insert>
+
+
+    <!-- 查询门禁白名单信息 add by wuxw 2018-07-03 -->
+    <select id="getAccessControlWhiteInfo" parameterType="Map" resultType="Map">
+        select t.third_id,t.third_id thirdId,t.id_card,t.id_card idCard,t.access_control_key,t.access_control_key
+        accessControlKey,t.status_cd,t.status_cd statusCd,t.person_name,t.person_name
+        personName,t.machine_id,t.machine_id machineId,t.acw_id,t.acw_id acwId,t.person_id,t.person_id
+        personId,t.tel,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.person_type,t.person_type personType,t.create_time createTime,m.machine_code machineCode,m.machine_name machineName,
+        td.`name` personTypeName
+        from access_control_white t
+        left join machine m on t.machine_id = m.machine_id and m.status_cd = '0'
+        left join t_dict td on t.person_type = td.status_cd and td.table_name ='access_control_white' and td.table_columns = 'person_type'
+        where 1 =1
+        <if test="thirdId !=null and thirdId != ''">
+            and t.third_id= #{thirdId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="accessControlKey !=null and accessControlKey != ''">
+            and t.access_control_key= #{accessControlKey}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name like concat('%',#{personNameLike},'%')
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acwId !=null and acwId != ''">
+            and t.acw_id= #{acwId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改门禁白名单信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccessControlWhiteInfo" parameterType="Map">
+        update access_control_white t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="thirdId !=null and thirdId != ''">
+            , t.third_id= #{thirdId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="accessControlKey !=null and accessControlKey != ''">
+            , t.access_control_key= #{accessControlKey}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="personType !=null and personType != ''">
+            , t.person_type= #{personType}
+        </if>
+        where 1=1
+        <if test="acwId !=null and acwId != ''">
+            and t.acw_id= #{acwId}
+        </if>
+
+    </update>
+
+    <!-- 查询门禁白名单数量 add by wuxw 2018-07-03 -->
+    <select id="queryAccessControlWhitesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from access_control_white t
+        where 1 =1
+        <if test="thirdId !=null and thirdId != ''">
+            and t.third_id= #{thirdId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="accessControlKey !=null and accessControlKey != ''">
+            and t.access_control_key= #{accessControlKey}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="personNameLike !=null and personNameLike != ''">
+            and t.person_name like concat('%',#{personNameLike},'%')
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acwId !=null and acwId != ''">
+            and t.acw_id= #{acwId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -75,4 +75,6 @@ public interface IOwnerV1ServiceDao {
     int queryOwnersCount(Map info);
 
     int queryOwnersBindCount(Map map);
+
+    List<Map> queryOwnerMembersCount(Map info);
 }

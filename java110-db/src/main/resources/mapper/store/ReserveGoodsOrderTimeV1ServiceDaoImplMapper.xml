@@ -18,12 +18,19 @@
     <!-- 查询预约订单时间信息 add by wuxw 2018-07-03 -->
     <select id="getReserveGoodsOrderTimeInfo" parameterType="Map" resultType="Map">
         select t.hours,t.quantity,t.time_id,t.time_id timeId,t.order_id,t.order_id orderId,t.goods_id,t.goods_id
-        goodsId,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId
+        goodsId,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,rgo.person_name personName,
+        rgo.person_tel personTel,rgo.appointment_time appointmentTime,rg.goods_name goodsName,rgo.received_amount receivedAmount,rgo.state,
+        td.`name` stateName
         from reserve_goods_order_time t
-        left join reserve_goods_order rgo on t.goods_id = rgo.goods_id and rgo.status_cd='0'
+        left join reserve_goods_order rgo on t.order_id = rgo.order_id and rgo.status_cd='0'
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        left join t_dict td on td.table_name = 'reserve_goods_order_time' and td.table_columns = 'state' and t.state = td.status_cd
         where 1 =1
         <if test="appointmentTime !=null and appointmentTime != ''">
             and rgo.appointment_time = #{appointmentTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and rgo.person_tel = #{personTel}
         </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}
@@ -102,6 +109,9 @@
         where 1 =1
         <if test="appointmentTime !=null and appointmentTime != ''">
             and rgo.appointment_time = #{appointmentTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and rgo.person_tel = #{personTel}
         </if>
         <if test="hours !=null and hours != ''">
             and t.hours= #{hours}

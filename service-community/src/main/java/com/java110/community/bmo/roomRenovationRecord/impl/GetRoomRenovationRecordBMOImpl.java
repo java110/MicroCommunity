@@ -4,6 +4,7 @@ import com.java110.community.bmo.roomRenovationRecord.IGetRoomRenovationRecordBM
 import com.java110.intf.community.IRoomRenovationRecordInnerServiceSMO;
 import com.java110.po.roomRenovationRecord.RoomRenovationRecordPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class GetRoomRenovationRecordBMOImpl implements IGetRoomRenovationRecordB
         List<RoomRenovationRecordPo> roomRenovationRecordPos = new ArrayList<>();
         if (count > 0) {
             List<RoomRenovationRecordPo> roomRenovationRecordList = roomRenovationRecordInnerServiceSMOImpl.queryRoomRenovationRecords(roomRenovationRecordPo);
-            String imgUrl = MappingCache.getValue("IMG_PATH");
+            String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
             for (RoomRenovationRecordPo renovationRecordPo : roomRenovationRecordList) {
                 if (!StringUtil.isEmpty(renovationRecordPo.getFileRealName()) && renovationRecordPo.getRelTypeCd().equals("19000")) {
                     renovationRecordPo.setUrl(imgUrl +

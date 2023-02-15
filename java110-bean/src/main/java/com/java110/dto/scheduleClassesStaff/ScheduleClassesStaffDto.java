@@ -34,6 +34,8 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     private String curDate;
 
+    private String orgId;
+
     List<ScheduleClassesDayDto> days;
 
     List<ScheduleClassesTimeDto> times;
@@ -163,5 +165,13 @@ public class ScheduleClassesStaffDto extends PageDto implements Serializable {
 
     public void setTimes(List<ScheduleClassesTimeDto> times) {
         this.times = times;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 }

@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -87,7 +88,18 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public ResponseEntity<Object> exportExcelData(IPageData pd) throws Exception {
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        Map pdHeaders = pd.getHeaders();
+        if (!StringUtil.isEmpty(result.getStoreId())) {
+            pdHeaders.remove("store-id");
+            pdHeaders.put("store-id", result.getStoreId());
+        }
+        if (!StringUtil.isEmpty(result.getLoginUserId())) {
+            pdHeaders.remove("user-id");
+            pdHeaders.remove("user_id");
+            pdHeaders.put("user-id", result.getUserId());
+            pdHeaders.put("user_id", result.getUserId());
+            pdHeaders.put("login-user-id",result.getLoginUserId());
+        }
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "pagePath", "请求中未包含页面");
 

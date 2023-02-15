@@ -5,24 +5,25 @@
 
     <!-- 保存访客信息 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfo" parameterType="Map">
-        insert into s_visit_info(departure_time, v_name, ps_id, visit_gender, owner_id, reason_type, user_id,
-                                 state_remark, v_id, visit_time, phone_number, free_time, visit_case, state,
-                                 community_id, entourage, record_state, car_num, status_cd)
-        values (#{departureTime}, #{vName}, #{psId}, #{visitGender}, #{ownerId}, #{reasonType}, #{userId},
-                #{stateRemark}, #{vId}, #{visitTime}, #{phoneNumber}, #{freeTime}, #{visitCase}, #{state},
-                #{communityId}, #{entourage}, #{recordState}, #{carNum}, #{statusCd})
+        insert into s_visit_info(
+        departure_time,v_name,ps_id,visit_gender,owner_id,reason_type,user_id,state_remark,v_id,visit_time,phone_number,free_time,visit_case,state,community_id,entourage,record_state,car_num,status_cd
+        ) values (
+        #{departureTime},#{vName},#{psId},#{visitGender},#{ownerId},#{reasonType},#{userId},#{stateRemark},#{vId},#{visitTime},#{phoneNumber},#{freeTime},#{visitCase},#{state},#{communityId},#{entourage},#{recordState},#{carNum},#{statusCd}
+        )
     </insert>
+
 
     <!-- 查询访客信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
         select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd
         statusCd,t.ps_id,t.ps_id psId,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id
-        ownerId,t.reason_type,t.reason_type reasonType,t.user_id,t.user_id userId,t.state_remark,t.state_remark
+        ownerId,t.reason_type,t.reason_type reasonType,t.user_id,t.user_id createUserId,t.state_remark,t.state_remark
         stateRemark,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
         phoneNumber,t.free_time,t.free_time freeTime,t.visit_case,t.visit_case
         visitCase,t.state,t.community_id,t.community_id communityId,t.entourage,t.record_state,t.record_state
-        recordState
+        recordState,t.create_time createTime,td.name stateName,t.car_num carNum
         from s_visit_info t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}
@@ -45,14 +46,20 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
         </if>
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
+        </if>
+        <if test="vIds !=null">
+            and t.v_id in
+            <foreach collection="vIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="visitTime !=null and visitTime != ''">
             and t.visit_time= #{visitTime}
@@ -82,7 +89,9 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
+
 
     <!-- 修改访客信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitInfo" parameterType="Map">
@@ -148,6 +157,7 @@
     <select id="queryVisitsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from s_visit_info t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}
@@ -170,14 +180,20 @@
         <if test="reasonType !=null and reasonType != ''">
             and t.reason_type= #{reasonType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="createUserId !=null and createUserId != ''">
+            and t.user_id= #{createUserId}
         </if>
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
         </if>
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
+        </if>
+        <if test="vIds !=null">
+            and t.v_id in
+            <foreach collection="vIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="visitTime !=null and visitTime != ''">
             and t.visit_time= #{visitTime}
@@ -203,5 +219,7 @@
         <if test="recordState !=null and recordState != ''">
             and t.record_state= #{recordState}
         </if>
+
+
     </select>
 </mapper>

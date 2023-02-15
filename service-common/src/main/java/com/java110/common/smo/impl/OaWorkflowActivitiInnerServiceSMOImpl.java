@@ -8,18 +8,22 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.intf.common.IOaWorkflowUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
+import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.*;
+import org.activiti.bpmn.model.Process;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -36,16 +40,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 //@Service("resourceEntryStoreSMOImpl")
 @RestController
-public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements IOaWorkflowUserInnerServiceSMO {
+public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implements IOaWorkflowActivitiInnerServiceSMO {
 
-    private static Logger logger = LoggerFactory.getLogger(OaWorkflowUserInnerServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(OaWorkflowActivitiInnerServiceSMOImpl.class);
     @Autowired
     private ProcessEngine processEngine;
 
@@ -119,7 +126,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
     /**
      * 自动提交第一步
      */
-    private void autoFinishFirstTask(JSONObject reqJson) {
+    public boolean autoFinishFirstTask(@RequestBody JSONObject reqJson) {
         Task task = null;
         TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(reqJson.getString("createUserId")).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
@@ -133,7 +140,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         reqJson.put("taskId", task.getId());
         reqJson.put("auditCode", "10000");
         reqJson.put("auditMessage", "提交");
-        completeTask(reqJson);
+        return completeTask(reqJson);
     }
 
     /**
@@ -148,6 +155,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         query.taskAssignee(user.getUserId());
         return query.count();
     }
+
 
     /**
      * 获取用户任务
@@ -256,6 +264,129 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         return tasks;
     }
 
+    /**
+     * 查询用户任务数
+     *
+     * @param user{ userId:''
+     *              processDefinitionkeys:[]
+     *              }
+     * @return
+     */
+    public long getDefinitionKeysUserTaskCount(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(user.getProcessDefinitionKeys());
+        query.taskAssignee(user.getUserId());
+        return query.count();
+    }
+
+    /**
+     * 获取用户任务
+     *
+     * @param user 用户信息{
+     *             processDefinitionKeys:[],
+     *
+     * }
+     */
+    public List<JSONObject> getDefinitionKeysUserTasks(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKeyIn(user.getProcessDefinitionKeys());
+
+        query.taskAssignee(user.getUserId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
+        } else {
+            list = query.list();
+        }
+        JSONObject taskBusinessKeyMap = null;
+        List<JSONObject> tasks = new ArrayList<>();
+        for (Task task : list) {
+            taskBusinessKeyMap = new JSONObject();
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
+            tasks.add(taskBusinessKeyMap);
+        }
+        return tasks;
+    }
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    public long getDefinitionKeysUserHistoryTaskCount(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+//        Query query = historyService.createHistoricTaskInstanceQuery()
+//                .processDefinitionKey("complaint")
+//                .taskAssignee(user.getUserId());
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKeyIn(user.getProcessDefinitionKeys())
+                .taskAssignee(user.getUserId())
+                .finished();
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaint");
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaitDealUser");
+        }
+
+        Query query = historicTaskInstanceQuery;
+
+        return query.count();
+    }
+
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    public List<JSONObject> getDefinitionKeysUserHistoryTasks(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKeyIn(user.getProcessDefinitionKeys())
+                .taskAssignee(user.getUserId())
+                .finished();
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaint");
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
+            historicTaskInstanceQuery.taskName("complaitDealUser");
+        }
+
+        Query query = historicTaskInstanceQuery.orderByHistoricTaskInstanceStartTime().desc();
+
+        List<HistoricTaskInstance> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
+        } else {
+            list = query.list();
+        }
+        JSONObject taskBusinessKeyMap = null;
+        List<JSONObject> tasks = new ArrayList<>();
+        List<String> complaintIds = new ArrayList<>();
+        for (HistoricTaskInstance task : list) {
+            taskBusinessKeyMap = new JSONObject();
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put("taskId", task.getId());
+            taskBusinessKeyMap.put("id", business_key);
+            tasks.add(taskBusinessKeyMap);
+        }
+
+        return tasks;
+    }
 
     @Java110Transactional
     public boolean completeTask(@RequestBody JSONObject reqJson) {
@@ -266,12 +397,12 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         //判断是否为结束流程
-        if ("1500".equals(reqJson.getString("auditCode"))) {
-            doTaskFinish(reqJson);
-        } else {
-            //扩展 工作流功能
-            doTaskAuditAgree(reqJson);
-        }
+//        if ("1500".equals(reqJson.getString("auditCode"))) {
+//            doTaskFinish(reqJson);
+//        } else {
+//            //扩展 工作流功能
+//            doTaskAuditAgree(reqJson);
+//        }
 
         String processInstanceId = task.getProcessInstanceId();
         Authentication.setAuthenticatedUserId(reqJson.getString("nextUserId"));
@@ -282,8 +413,11 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         taskService.complete(reqJson.getString("taskId"), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
+            doTaskFinish(reqJson);
             return true;
         }
+        //扩展 工作流功能
+        doTaskAuditAgree(reqJson);
         return false;
     }
 
@@ -293,6 +427,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataDto.setBusinessKey(reqJson.getString("id"));
         oaWorkflowDataDto.setPage(1);
         oaWorkflowDataDto.setRow(1);
+        oaWorkflowDataDto.setHis("N");
         List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
 
         if (oaWorkflowDataDtos == null || oaWorkflowDataDtos.size() < 1) {
@@ -423,6 +558,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         oaWorkflowDataInnerServiceSMOImpl.saveOaWorkflowData(oaWorkflowDataPo);
         return true;
     }
+
     @Java110Transactional
     public boolean goBackTask(@RequestBody JSONObject reqJson) {
         TaskService taskService = processEngine.getTaskService();
@@ -587,6 +723,7 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
             throw new IllegalArgumentException("任务已处理");
         }
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+
         FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
         //获取当前节点输出连线
         List<SequenceFlow> outgoingFlows = flowNode.getOutgoingFlows();
@@ -645,6 +782,90 @@ public class OaWorkflowUserInnerServiceSMOImpl extends BaseServiceSMO implements
         tasks.add(taskObj);
         return tasks;
     }
+
+    @Override
+    public List<JSONObject> queryFirstAuditStaff(@RequestBody OaWorkflowXmlDto oaWorkflowXmlDto) {
+        String bpmnXml = oaWorkflowXmlDto.getBpmnXml();
+        bpmnXml = bpmnXml.replaceAll("camunda:assignee", "activiti:assignee");
+        List<JSONObject> tasks = new ArrayList<>();
+        XMLInputFactory xif = XMLInputFactory.newInstance();
+        InputStreamReader in = new InputStreamReader(new ByteArrayInputStream(bpmnXml.getBytes()), StandardCharsets.UTF_8);
+        XMLStreamReader xtr = null;
+        try {
+            xtr = xif.createXMLStreamReader(in);
+        } catch (XMLStreamException e) {
+            throw new RuntimeException(e);
+        }
+        BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+
+        Process process = bpmnModel.getProcesses().get(0);
+        Collection<FlowElement> flowElements = process.getFlowElements();
+        StartEvent startEvent = null;
+        for (FlowElement flowElement : flowElements) {
+            //假设是开始节点
+            if (flowElement instanceof StartEvent) {
+                startEvent = (StartEvent) flowElement;
+            }
+        }
+        if (startEvent == null) {
+            throw new SMOException("流程文件未包含开始节点");
+        }
+        List<SequenceFlow> outgoingFlows = startEvent.getOutgoingFlows();
+
+        UserTask submitUser = getUserTask(outgoingFlows);
+
+        if (submitUser == null) {
+            throw new SMOException("未包含提交者");
+        }
+
+        UserTask auditUser = getUserTask(submitUser.getOutgoingFlows());
+        if (auditUser == null) {
+            throw new SMOException("未包含审核人员");
+        }
+        String assignee = auditUser.getAssignee();
+        JSONObject taskObj = null;
+        taskObj = new JSONObject();
+        taskObj.put("assignee", "-1"); //  默认 不需要指定下一个处理人 表示结束
+        if (!StringUtil.isEmpty(assignee) && assignee.indexOf("${") < 0) {
+            taskObj.put("assignee", assignee); // 下一节点处理人
+        }
+        if ("${startUserId}".equals(assignee)) {
+            taskObj.put("assignee", "-2"); // 开始人
+        }
+        if ("${nextUserId}".equals(assignee)) {
+            taskObj.put("assignee", "-2"); // 需要前台指定
+        }
+        tasks.add(taskObj);
+        return tasks;
+    }
+
+    private static UserTask getUserTask(List<SequenceFlow> outgoingFlows) {
+        for (SequenceFlow outgoingFlow : outgoingFlows) {
+            //获取输出节点元素
+            FlowElement targetFlowElement = outgoingFlow.getTargetFlowElement();
+            //排除非用户任务接点
+            if (targetFlowElement instanceof UserTask) {
+                //判断输出节点的el表达式
+                Map vars = new HashMap();
+                vars.put("auditCode", "1200");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                vars.put("auditCode", "1400");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                //结束
+                vars.put("auditCode", "1500");
+                if (isCondition(outgoingFlow.getConditionExpression(), vars)) {
+                    continue;
+                }
+                return ((UserTask) targetFlowElement);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * el表达式判断

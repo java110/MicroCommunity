@@ -6,6 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.exception.CmdException;
@@ -46,5 +47,18 @@ public class SaveParkingSpaceCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        if(!ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpacePo.getParkingType())){
+            return ;
+        }
+
+        //如果是子母车位 创建子车位
+        parkingSpacePo.setPsId(GenerateCodeFactory.getPsId(GenerateCodeFactory.CODE_PREFIX_psId));
+        parkingSpacePo.setNum(parkingSpacePo.getNum()+ParkingSpaceDto.NUM_MOTHER);
+        flag = parkingSpaceV1InnerServiceSMOImpl.saveParkingSpace(parkingSpacePo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
     }
 }

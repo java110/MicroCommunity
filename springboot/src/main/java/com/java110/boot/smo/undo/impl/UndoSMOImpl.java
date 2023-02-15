@@ -4,7 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.boot.smo.DefaultAbstractComponentSMO;
 import com.java110.boot.smo.undo.IUndoSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.workflow.WorkflowDto;
+import com.java110.entity.audit.AuditUser;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.utils.exception.SMOException;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +31,13 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> listUndos(IPageData pd) throws SMOException {
@@ -134,8 +148,83 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         } else {
             doing.put("allocation", "0");
         }
+        getItemReleaseCount(result, doing);
+
+        getVisitCount(result, doing);
+
+        getOwnerSettledApplyCount(result, doing);
 
         return ResultVo.createResponseEntity(doing);
+    }
+
+    private void getOwnerSettledApplyCount(ComponentValidateResult result, JSONObject data) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_OWNER_SETTLED);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            data.put("ownerSettledApplyCount", "0");
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(result.getUserId());
+        auditUser.setProcessDefinitionKeys(flowIds);
+
+        long itemReleaseCount = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+        data.put("ownerSettledApplyCount", itemReleaseCount);
+    }
+
+
+    private void getVisitCount(ComponentValidateResult result, JSONObject data) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_VISIT);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            data.put("visitUndoCount", "0");
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(result.getUserId());
+        auditUser.setProcessDefinitionKeys(flowIds);
+
+        long itemReleaseCount = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+        data.put("visitUndoCount", itemReleaseCount);
+    }
+
+    private void getItemReleaseCount(ComponentValidateResult result, JSONObject data) {
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            data.put("itemReleaseCount", "0");
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
+        AuditUser auditUser = new AuditUser();
+        auditUser.setUserId(result.getUserId());
+        auditUser.setProcessDefinitionKeys(flowIds);
+
+        long itemReleaseCount = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+        data.put("itemReleaseCount", itemReleaseCount);
     }
 
     public RestTemplate getRestTemplate() {

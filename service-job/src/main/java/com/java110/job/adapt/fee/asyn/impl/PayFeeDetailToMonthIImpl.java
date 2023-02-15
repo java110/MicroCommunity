@@ -60,7 +60,10 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             throw new IllegalArgumentException("时间格式错误");
         }
 
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+        double maxMonth = 1;
+        if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+        }
 
         if (maxMonth < 1) {
             return;
@@ -79,11 +82,11 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo = null;
         BigDecimal discountAmount = new BigDecimal(0.0);
 
-        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
-            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-        }else{
+//        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
+//            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
+//        }else{
             commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-        }
+//        }
 
 
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
@@ -145,7 +148,7 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             if (calendar.getTime().getTime() < createTime.getTime()) {
                 tmpPayFeeDetailMonthPo.setReceivedAmount("0");
                 oweFee = oweFee.add(priRecDec);
-            } else if (calendar.getTime().getTime() < createTime.getTime()) {
+            } else if (calendar.getTime().getTime() == createTime.getTime()) {
                 oweFee = oweFee.add(priRecDec);
                 tmpPayFeeDetailMonthPo.setReceivedAmount(oweFee.doubleValue() + "");
             } else {

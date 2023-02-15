@@ -63,7 +63,7 @@
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
         insert into purchase_apply_detail
-        (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark,original_stock)
+        (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark,original_stock,times_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -79,7 +79,8 @@
             #{item.price},
             #{item.purchaseQuantity},
             #{item.purchaseRemark},
-            #{item.originalStock}
+            #{item.originalStock},
+            #{item.timesId}
             )
         </foreach>
     </insert>
@@ -326,7 +327,7 @@
         p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price
         purchasePrice,p.original_stock originalStock,
         r.res_name resName,r.res_code resCode,
-        r.price,r.price standardPrice,r.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
+        r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
         td1.name unitCodeName,
         td2.name miniUnitCodeName
         from
@@ -338,6 +339,7 @@
         LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
         LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
         LEFT JOIN resource_store_specification rss on r.rss_id=rss.rss_id
+        left join resource_store_times rstime on p.times_id = rstime.times_id and rstime.status_cd = '0'
         where 1=1
         and p.status_cd = '0'
         <if test="applyOrderIds !=null">
@@ -467,9 +469,9 @@
 
     <!--查询下级用户id-->
     <select id="getActRuTaskUserId" parameterType="Map" resultType="Map">
-        SELECT ASSIGNEE_ taskUserId FROM act_ru_task t
-        LEFT JOIN act_hi_procinst ahp on t.PROC_INST_ID_=ahp.ID_
-        LEFT JOIN act_ru_execution are on t.EXECUTION_ID_=are.ID_
+        SELECT ASSIGNEE_ taskUserId FROM ACT_RU_TASK t
+        LEFT JOIN ACT_HI_PROCINST ahp on t.PROC_INST_ID_=ahp.ID_
+        LEFT JOIN ACT_RU_EXECUTION are on t.EXECUTION_ID_=are.ID_
         where 1 = 1
         <if test="actRuTaskId !=null and actRuTaskId != ''">
             and ahp.ID_ = #{actRuTaskId}
@@ -484,8 +486,8 @@
 
     <!--获得获取流程任务id-->
     <select id="getActRuTaskId" parameterType="Map" resultType="Map">
-        SELECT art.ID_ actRuTaskId FROM act_ru_execution are
-        LEFT JOIN act_ru_task art ON are.PROC_INST_ID_=art.PROC_INST_ID_
+        SELECT art.ID_ actRuTaskId FROM ACT_RU_EXECUTION are
+        LEFT JOIN ACT_RU_TASK art ON are.PROC_INST_ID_=art.PROC_INST_ID_
         where 1 = 1
         <if test="businessKey !=null and businessKey != ''">
             and are.BUSINESS_KEY_ = #{businessKey}
@@ -494,7 +496,7 @@
 
     <!-- 修改流程任务信息 -->
     <update id="updateActRuTaskById" parameterType="Map">
-        update act_ru_task t set SUSPENSION_STATE_=1
+        update ACT_RU_TASK t set SUSPENSION_STATE_=1
         <if test="assigneeUser != null and assigneeUser != ''">
             ,t.ASSIGNEE_ = #{assigneeUser}
         </if>

@@ -59,7 +59,6 @@ spring:
       timeout: 0
   activiti:
     database-schema-update: false
-    databaseSchemaUpdate: false
 
 feign:
   client:

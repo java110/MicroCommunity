@@ -24,7 +24,7 @@ import java.util.List;
 
 
 
-@Java110CmdDoc(title = "生成核销码",
+@Java110CmdDoc(title = "优惠券核销码",
         description = "供业主端生成优惠券核销码",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/couponProperty.generatorCouponQrcode",

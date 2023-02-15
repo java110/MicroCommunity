@@ -25,6 +25,8 @@ import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
@@ -73,7 +75,7 @@ public class UnlicensedCarMachineQrCodeUrl extends Cmd {
         smallWeChatDto.setObjId(reqJson.getString("communityId"));
         smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        String ownerUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+        String ownerUrl = UrlCache.getOwnerUrl();
         ownerUrl += ("/#/pages/unlicensedCarIn/unlicensedCarIn?communityId=" +
                 reqJson.getString("communityId") + "&machineId=" +
                 reqJson.getString("machineId"));

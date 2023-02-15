@@ -11,6 +11,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -61,7 +62,7 @@ public class ListStaffRepairsCmd extends Cmd {
         String userId = reqJson.getString("userId");
         String viewListStaffRepairs = CommunitySettingFactory.getValue(reqJson.getString("communityId"), VIEW_LIST_STAFF_REPAIRS);
         if (StringUtil.isEmpty(viewListStaffRepairs)) {
-            viewListStaffRepairs = MappingCache.getValue(DOMAIN_COMMON, VIEW_LIST_STAFF_REPAIRS);
+            viewListStaffRepairs = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, VIEW_LIST_STAFF_REPAIRS);
         }
         List<Map> privileges = null;
         if ("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
@@ -70,9 +71,11 @@ public class ListStaffRepairsCmd extends Cmd {
             basePrivilegeDto.setResource("/viewListStaffRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        }else{
+            ownerRepairDto.setStaffId(userId);
         }
         if (privileges == null || privileges.size() == 0) {
-            ownerRepairDto.setStaffId(reqJson.getString("userId"));
+            ownerRepairDto.setStaffId(userId);
         }
         int count = repairInnerServiceSMOImpl.queryStaffRepairsCount(ownerRepairDto);
         List<RepairDto> ownerRepairs = null;

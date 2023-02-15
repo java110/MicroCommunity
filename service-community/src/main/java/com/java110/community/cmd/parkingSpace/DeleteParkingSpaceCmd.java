@@ -6,6 +6,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.po.parking.ParkingSpacePo;
@@ -16,6 +17,8 @@ import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Java110Cmd(serviceCode = "parkingSpace.deleteParkingSpace")
 public class DeleteParkingSpaceCmd extends Cmd {
@@ -32,19 +35,64 @@ public class DeleteParkingSpaceCmd extends Cmd {
 
         Assert.jsonObjectHaveKey(reqJson, "psId", "请求报文中未包含psId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+
+        if(!ParkingSpaceDto.STATE_FREE.equals(reqJson.getString("state"))){
+            throw new CmdException("车位不是空闲，不能做删除");
+        }
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setPsId(reqJson.getString("psId"));
+        parkingSpaceDto.setTypeCd(ParkingSpaceDto.TYPE_CD_SON_MOTHER);
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceV1InnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        //不是子母车位
+        if(parkingSpaceDtos == null || parkingSpaceDtos.size() < 1){
+            return ;
+        }
+
+        List<String> nums = new ArrayList<>();
+        nums.add(parkingSpaceDtos.get(0).getNum());
+        if(parkingSpaceDtos.get(0).getNum().endsWith(ParkingSpaceDto.NUM_MOTHER)){
+            nums.add(parkingSpaceDtos.get(0).getNum().replace(ParkingSpaceDto.NUM_MOTHER,""));
+        }else{
+            nums.add(parkingSpaceDtos.get(0).getNum()+ParkingSpaceDto.NUM_MOTHER);
+        }
+
+        parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setNums(nums.toArray(new String[nums.size()]));
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        parkingSpaceDto.setStates(new String[]{ParkingSpaceDto.STATE_HIRE,ParkingSpaceDto.STATE_SELL});
+        int flag = parkingSpaceV1InnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
+
+        if(flag > 0){
+            throw new CmdException("子母车位非空闲");
+        }
+
+        reqJson.put("sonMotherNums",nums);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("F")) {
+
+        //非 子母车位
+        if(!reqJson.containsKey("sonMotherNums")){
             deleteParkingSpace(reqJson);
-        } else if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("S")) {
-            throw new IllegalArgumentException("车位已出售，不能删除！");
-        } else if (reqJson.containsKey("state") && !StringUtil.isEmpty("state") && reqJson.getString("state").equals("H")) {
-            throw new IllegalArgumentException("车位已出租，不能删除！");
-        } else {
-            throw new IllegalArgumentException("未知车位！");
+            return ;
+        }
+        List<String> nums =  reqJson.getObject("sonMotherNums",List.class);
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setNums(nums.toArray(new String[nums.size()]));
+        parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceV1InnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        JSONObject paramIn = null;
+        for(ParkingSpaceDto tmpParkingSpaceDto: parkingSpaceDtos){
+            paramIn = new JSONObject();
+            paramIn.put("psId",tmpParkingSpaceDto.getPsId());
+            deleteParkingSpace(reqJson);
         }
     }
 

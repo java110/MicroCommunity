@@ -132,7 +132,7 @@
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
         t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType,
-        t3.name leaseTypeName,t4.name carTypeCdName
+        t3.name leaseTypeName,t4.name carTypeCdName,count(moc.member_id) memberCarCount
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
@@ -142,6 +142,7 @@
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
+        left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002'
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd = #{statusCd}
@@ -175,6 +176,13 @@
         </if>
         <if test="carNumLike !=null and carNumLike != ''">
             and t.car_num like  concat('%',#{carNumLike},'%')
+        </if>
+
+        <if test="memberCarNum !=null and memberCarNum != ''">
+            and moc.car_num= #{memberCarNum}
+        </if>
+        <if test="memberCarNumLike !=null and memberCarNumLike != ''">
+            and moc.car_num like  concat('%',#{memberCarNumLike},'%')
         </if>
         <if test="carNums !=null">
             and t.car_num in
@@ -245,6 +253,12 @@
         <if test="valid == 2">
             and t.ps_id= '-1'
         </if>
+        GROUP BY t.car_color,t.car_brand,t.car_type,t1.name,
+        t.car_num,t.ps_id,t.remark,t.status_cd,t.owner_id,
+        t.b_id,t.user_id,t.car_id,t.create_time
+        ,t.community_id ,bow.name,bow.id_card ,bow.link,t2.name,t.start_time,t.end_time,t.state,
+        t.car_type_cd,t.member_id,ps.num,t.lease_type ,
+        t3.name ,t4.name
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -320,6 +334,9 @@
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
         left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
         t.community_id
+        <if test="memberCarNumLike !=null and memberCarNumLike != ''">
+            left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002'
+        </if>
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd = #{statusCd}
@@ -347,6 +364,12 @@
         </if>
         <if test="carNumLike !=null and carNumLike != ''">
             and t.car_num like  concat('%',#{carNumLike},'%')
+        </if>
+        <if test="memberCarNum !=null and memberCarNum != ''">
+            and moc.car_num= #{memberCarNum}
+        </if>
+        <if test="memberCarNumLike !=null and memberCarNumLike != ''">
+            and moc.car_num like  concat('%',#{memberCarNumLike},'%')
         </if>
         <if test="carNums !=null">
             and t.car_num in

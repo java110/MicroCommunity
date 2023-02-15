@@ -17,13 +17,24 @@ package com.java110.job.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.smallWeChat.TemplateDataDto;
+import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.entity.order.Business;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
+import com.java110.job.adapt.payment.notice.MachinePaymentNoticeAdapt;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 
 import java.util.List;
@@ -32,6 +43,14 @@ import java.util.List;
  * @desc add by 吴学文 15:21
  */
 public abstract class DatabusAdaptImpl implements IDatabusAdapt {
+    private static Logger logger = LoggerFactory.getLogger(DatabusAdaptImpl.class);
+
+
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmallWechatAttrInnerServiceSMO smallWechatAttrInnerServiceSMOImpl;
 
     /**
      * 封装头信息
@@ -173,5 +192,37 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
      */
     public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
 
+    }
+
+    /**
+     * 查询模板信息
+     * @param communityId
+     * @param specCd
+     * @return
+     */
+    protected TemplateDataDto getOwnerTemplateId(String communityId, String specCd){
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setWeChatType("1100");
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityId);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
+            logger.info("未配置微信公众号信息,定时任务执行结束");
+            return null;
+        }
+        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
+        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
+        smallWechatAttrDto.setCommunityId(communityId);
+        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
+        smallWechatAttrDto.setSpecCd(specCd);
+        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
+        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
+            logger.info("未配置微信公众号消息模板");
+            return null;
+        }
+        String templateId = smallWechatAttrDtos.get(0).getValue();
+        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
+
+        return new TemplateDataDto(templateId,accessToken,smallWeChatDtos.get(0).getAppId());
     }
 }

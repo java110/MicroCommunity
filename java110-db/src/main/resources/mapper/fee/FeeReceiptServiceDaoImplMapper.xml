@@ -9,8 +9,14 @@
     <insert id="saveFeeReceiptInfo" parameterType="Map">
         insert into fee_receipt(
         amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name
+        <if test="createTime != null">
+            ,create_time
+        </if>
         ) values (
         #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName}
+        <if test="createTime != null">
+            ,#{createTime}
+        </if>
         )
     </insert>
 

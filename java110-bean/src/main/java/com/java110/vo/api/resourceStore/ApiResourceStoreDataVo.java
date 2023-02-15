@@ -1,5 +1,6 @@
 package com.java110.vo.api.resourceStore;
 
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.dto.resourceSupplier.ResourceSupplierDto;
 
 import java.io.Serializable;
@@ -58,6 +59,7 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String isFixed;
     private String isFixedName;
 
+    private List<ResourceStoreTimesDto> times;
     public String getResId() {
         return resId;
     }
@@ -328,5 +330,13 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public List<ResourceStoreTimesDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ResourceStoreTimesDto> times) {
+        this.times = times;
     }
 }

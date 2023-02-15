@@ -20,7 +20,7 @@
         select t.fee_price,t.fee_price feePrice,t.address,t.city_code,t.city_code cityCode,t.status_cd,t.status_cd
         statusCd,t.map_y,t.map_y mapY,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.map_x,t.map_x
         mapX,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.name,t.tel,t.state,t.community_id,t.community_id
-        communityId,t.community_area,t.community_area communityArea
+        communityId,t.community_area,t.community_area communityArea,t.qr_code qrCode
         from s_community t
         where 1 =1
         <if test="feePrice !=null and feePrice != ''">
@@ -111,6 +111,9 @@
         </if>
         <if test="communityArea !=null and communityArea != ''">
             , t.community_area= #{communityArea}
+        </if>
+        <if test="qrCode !=null and qrCode != ''">
+            , t.qr_code= #{qrCode}
         </if>
         where 1=1
         <if test="communityId !=null and communityId != ''">

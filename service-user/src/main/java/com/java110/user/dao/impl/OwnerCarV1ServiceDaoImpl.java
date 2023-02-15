@@ -104,5 +104,13 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
         return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryOwnerCarCountByOwnerIds(Map info) {
+        logger.debug("查询 queryOwnerCarCountByOwnerIds 入参 info : {}", info);
+
+        List<Map> result = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.queryOwnerCarCountByOwnerIds", info);
+        return result;
+    }
+
 
 }

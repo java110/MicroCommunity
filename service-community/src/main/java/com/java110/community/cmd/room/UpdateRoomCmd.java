@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.UnitDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.*;
@@ -25,6 +26,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
 
+
+@Java110CmdDoc(title = "修改房屋",
+        description = "对应后台 修改房屋功能",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/room.updateRoom",
+        resource = "communityDoc",
+        author = "吴学文",
+        serviceCode = "room.updateRoom"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "roomNum", length = 64, remark = "房号"),
+        @Java110ParamDoc(name = "layer", length = 12, remark = "层数"),
+        @Java110ParamDoc(name = "unitId", length = 30, remark = "单元ID"),
+        @Java110ParamDoc(name = "roomId", length = 30, remark = "单元ID"),
+        @Java110ParamDoc(name = "section", length = 12, remark = "房屋个数"),
+        @Java110ParamDoc(name = "apartment", length = 12, remark = "固定 10102"),
+        @Java110ParamDoc(name = "builtUpArea", length = 12, remark = "建筑面积"),
+        @Java110ParamDoc(name = "feeCoefficient", length = 12, remark = "算费系数 固定1"),
+        @Java110ParamDoc(name = "roomSubType", length = 12, remark = "房屋类型 110\t住宅\n" +
+                "120\t办公室\n" +
+                "119\t宿舍"),
+        @Java110ParamDoc(name = "roomArea", length = 12, remark = "室内面积"),
+        @Java110ParamDoc(name = "roomRent", length = 12, remark = "办公室 或者宿舍 时租金"),
+        @Java110ParamDoc(name = "remark", length = 512, remark = "备注"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\n" +
+                "\t\"roomNum\": \"88488\",\n" +
+                "\t\"layer\": \"1\",\n" +
+                "\t\"unitId\":\"123123123\",\n" +
+                "\t\"section\": \"0\",\n" +
+                "\t\"apartment\": \"10102\",\n" +
+                "\t\"builtUpArea\": \"110\",\n" +
+                "\t\"feeCoefficient\": \"1.00\",\n" +
+                "\t\"roomId\": \"123123123123\",\n" +
+                "\t\"remark\": \"sdf\",\n" +
+                "\t\"roomSubType\": \"110\",\n" +
+                "\t\"roomArea\": \"110\",\n" +
+                "\t\"roomRent\": \"0\",\n" +
+                "\t\"communityId\": \"2022121921870161\",\n" +
+                "}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 @Java110Cmd(serviceCode = "room.updateRoom")
 public class UpdateRoomCmd extends Cmd {
 

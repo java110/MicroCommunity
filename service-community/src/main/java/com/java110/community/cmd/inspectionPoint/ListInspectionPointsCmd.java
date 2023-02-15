@@ -17,6 +17,7 @@ import com.java110.intf.community.IInspectionInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -94,7 +95,7 @@ public class ListInspectionPointsCmd extends Cmd {
     }
 
     private void refreshInspections(List<ApiInspectionPointDataVo> inspectionPoints) {
-        String staffWechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+        String staffWechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         for (ApiInspectionPointDataVo apiInspectionPointDataVo : inspectionPoints) {
             apiInspectionPointDataVo.setUrl(staffWechatUrl
                     + "pages/excuteOneQrCodeInspection/excuteOneQrCodeInspection?inspectionId="

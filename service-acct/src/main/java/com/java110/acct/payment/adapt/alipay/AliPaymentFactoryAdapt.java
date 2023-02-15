@@ -23,6 +23,8 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
@@ -92,7 +94,7 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String communityId = reqJson.getString("communityId");
-        String notifyUrl = MappingCache.getValue("OWNER_WECHAT_URL") + "/app/payment/notify/common/992020011134400001";
+        String notifyUrl = UrlCache.getOwnerUrl()+ "/app/payment/notify/common/992020011134400001";
 
         String openId = reqJson.getString("openId");
 
@@ -119,7 +121,7 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         logger.debug("【小程序支付】 统一下单开始, 订单编号=" + paymentOrderDto.getOrderId());
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
-        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), paymentOrderDto.getMoney());
+        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV"), paymentOrderDto.getMoney());
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
         ResultVo resMap = null;
@@ -265,8 +267,8 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            smallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
-            smallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key"));
+            smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
+            smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
             return smallWeChatDto;
         }
 

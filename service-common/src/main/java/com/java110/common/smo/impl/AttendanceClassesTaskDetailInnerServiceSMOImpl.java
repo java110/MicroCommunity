@@ -73,6 +73,11 @@ public class AttendanceClassesTaskDetailInnerServiceSMOImpl extends BaseServiceS
         return attendanceClassesTaskDetailServiceDaoImpl.queryAttendanceClassesTaskDetailsCount(BeanConvertUtil.beanCovertMap(attendanceClassesTaskDetailDto));
     }
 
+    @Override
+    public List<AttendanceClassesTaskDetailDto> queryWaitSendMsgDetail(@RequestBody AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto) {
+        return BeanConvertUtil.covertBeanList(attendanceClassesTaskDetailServiceDaoImpl.queryWaitSendMsgDetail(BeanConvertUtil.beanCovertMap(attendanceClassesTaskDetailDto)), AttendanceClassesTaskDetailDto.class);
+    }
+
     public IAttendanceClassesTaskDetailServiceDao getAttendanceClassesTaskDetailServiceDaoImpl() {
         return attendanceClassesTaskDetailServiceDaoImpl;
     }

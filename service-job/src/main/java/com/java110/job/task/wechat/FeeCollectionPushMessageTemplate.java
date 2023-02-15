@@ -36,6 +36,7 @@ import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -386,6 +387,11 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
             param.put("date2", DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B));
             param.put("mount", reportOweFeeDo.getAmountOwed());
             paramIn = param;
+        }else if(SendSmsFactory.SMS_COMPANY_YIDONG.equals(smsConfigDto1.getSmsType())){
+            paramIn = "尊敬的业主"+ reportOweFeeDo.getOwnerName()+"，您"+reportOweFeeDo.getPayerObjName()+"的"+itemDtos.get(0).getFeeName()
+                    +"，账单日期"+DateUtil.getFormatTimeString(itemDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_B)
+                    +"至"+DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)
+                    +"，缴费金额："+reportOweFeeDo.getAmountOwed()+"元，请及时缴费";
         } else {
             paramIn = new String[]{
                     reportOweFeeDo.getOwnerName(),
@@ -462,8 +468,8 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         }
         String url = sendTemplate + accessToken;
 
-        String oweRoomUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
-        String oweCarUrl = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
+        String oweRoomUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweCarUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
         Miniprogram miniprogram = null;
         if (oweRoomUrl.contains("@@")) {
             miniprogram = new Miniprogram();

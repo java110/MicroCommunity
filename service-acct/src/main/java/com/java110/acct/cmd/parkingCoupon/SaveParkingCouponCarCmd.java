@@ -32,6 +32,7 @@ import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
 import com.java110.po.parkingCouponShop.ParkingCouponShopPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -110,7 +111,7 @@ public class SaveParkingCouponCarCmd extends Cmd {
 
         String codeKey = reqJson.getString("shopId") + reqJson.getString("code");
 
-        String checkCode = MappingCache.getValue("CHECK_PARKING_COUPON_QRCODE_CODE");
+        String checkCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,"CHECK_PARKING_COUPON_QRCODE_CODE");
 
         if ("OFF".equals(checkCode)) {
             return;

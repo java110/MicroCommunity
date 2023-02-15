@@ -15,6 +15,7 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.OSSUtil;
@@ -127,9 +128,9 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
         List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            payPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "key");
+            payPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
             certData = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "cert");
-            mchPassword = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
+            mchPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId");
         } else {
             payPassword = smallWeChatDtos.get(0).getPayPassword();
             certData = smallWeChatDtos.get(0).getCertPath();
@@ -212,9 +213,9 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         List<FileDto> fileDtos = new ArrayList<>();
 
         byte[] context = null;
-        String ftpPath = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PATH);
+        String ftpPath = "hc/";
 
-        String ossSwitch = MappingCache.getValue(OSSUtil.DOMAIN, OSSUtil.OSS_SWITCH);
+        String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
             int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));

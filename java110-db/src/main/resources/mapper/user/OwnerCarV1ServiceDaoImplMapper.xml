@@ -8,9 +8,9 @@
     <!-- 保存车辆信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarInfo" parameterType="Map">
         insert into owner_car(car_brand, car_num, ps_id, remark, owner_id, car_type_cd, user_id, car_id, car_color,
-                              car_type, start_time, end_time, state, community_id, member_id, b_id,lease_type)
+        car_type, start_time, end_time, state, community_id, member_id, b_id,lease_type)
         values (#{carBrand}, #{carNum}, #{psId}, #{remark}, #{ownerId}, #{carTypeCd}, #{userId}, #{carId}, #{carColor},
-                #{carType}, #{startTime}, #{endTime}, #{state}, #{communityId}, #{memberId}, '-1',#{leaseType})
+        #{carType}, #{startTime}, #{endTime}, #{state}, #{communityId}, #{memberId}, '-1',#{leaseType})
     </insert>
 
 
@@ -20,7 +20,8 @@
         psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.car_type_cd,t.car_type_cd
         carTypeCd,t.user_id,t.user_id userId,t.car_id,t.car_id carId,t.car_color,t.car_color
         carColor,t.car_type,t.car_type carType,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.community_id,t.community_id communityId,t.member_id,t.member_id memberId,t.lease_type leaseType
+        endTime,t.state,t.community_id,t.community_id communityId,t.member_id,t.member_id memberId,t.lease_type
+        leaseType
         from owner_car t
         where 1 =1
         <if test="carBrand !=null and carBrand != ''">
@@ -210,6 +211,19 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+    </select>
+
+
+    <select id="queryOwnerCarCountByOwnerIds" parameterType="Map" resultType="Map">
+        select t.owner_id ownerId,count(1) carCount
+        from
+        owner_car t
+        where t.status_cd = '0'
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.owner_id
     </select>
 
 </mapper>

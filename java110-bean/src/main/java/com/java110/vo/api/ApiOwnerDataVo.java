@@ -50,6 +50,16 @@ public class ApiOwnerDataVo extends Vo {
 
     private String url;
 
+
+    private long roomCount;
+    private long memberCount;
+    private long carCount;
+    private long complaintCount;
+    private long repairCount;
+
+    private double oweFee;
+
+    private String contractCount;
     public String getOwnerId() {
         return ownerId;
     }
@@ -184,5 +194,61 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public long getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(long roomCount) {
+        this.roomCount = roomCount;
+    }
+
+    public long getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(long memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public long getCarCount() {
+        return carCount;
+    }
+
+    public void setCarCount(long carCount) {
+        this.carCount = carCount;
+    }
+
+    public long getComplaintCount() {
+        return complaintCount;
+    }
+
+    public void setComplaintCount(long complaintCount) {
+        this.complaintCount = complaintCount;
+    }
+
+    public long getRepairCount() {
+        return repairCount;
+    }
+
+    public void setRepairCount(long repairCount) {
+        this.repairCount = repairCount;
+    }
+
+    public double getOweFee() {
+        return oweFee;
+    }
+
+    public void setOweFee(double oweFee) {
+        this.oweFee = oweFee;
+    }
+
+    public String getContractCount() {
+        return contractCount;
+    }
+
+    public void setContractCount(String contractCount) {
+        this.contractCount = contractCount;
     }
 }

@@ -273,7 +273,7 @@ public class ImportResourceStoreCmd extends Cmd {
             resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
             resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-            resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(resourceStoreTimesPo);
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
         if (saveFlag < 1) {

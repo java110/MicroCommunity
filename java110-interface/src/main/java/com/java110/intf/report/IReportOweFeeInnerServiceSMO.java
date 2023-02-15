@@ -98,4 +98,9 @@ public interface IReportOweFeeInnerServiceSMO {
     @RequestMapping(value = "/deleteInvalidFee", method = RequestMethod.POST)
     int deleteInvalidFee(@RequestBody Map reportOweFeeDto);
 
+    @RequestMapping(value = "/queryOweFeesByOwnerIds", method = RequestMethod.POST)
+    List<Map> queryOweFeesByOwnerIds(@RequestBody Map info);
+
+    @RequestMapping(value = "/queryOweFeesByRoomIds", method = RequestMethod.POST)
+    List<Map> queryOweFeesByRoomIds(@RequestBody Map info);
 }

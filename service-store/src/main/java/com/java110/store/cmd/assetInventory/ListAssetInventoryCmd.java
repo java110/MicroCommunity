@@ -22,6 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.assetInventory.AssetInventoryDto;
 import com.java110.intf.store.IAssetInventoryV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -52,6 +53,8 @@ public class ListAssetInventoryCmd extends Cmd {
     @Autowired
     private IAssetInventoryV1InnerServiceSMO assetInventoryV1InnerServiceSMOImpl;
 
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -65,6 +68,7 @@ public class ListAssetInventoryCmd extends Cmd {
            int count = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorysCount(assetInventoryDto);
 
            List<AssetInventoryDto> assetInventoryDtos = null;
+
 
            if (count > 0) {
                assetInventoryDtos = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorys(assetInventoryDto);

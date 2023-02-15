@@ -7,10 +7,12 @@ public class ApiVisitDataVo implements Serializable {
     private String vName;
     private String visitGender;
     private String phoneNumber;
-    private String userId;
+    private String createUserId;
     private String communityId;
     private String ownerId;
     private String ownerName;
+
+    private String ownerTel;
     private String visitCase;
     private String visitTime;
     private String freeTime;
@@ -30,6 +32,8 @@ public class ApiVisitDataVo implements Serializable {
     private String fileRelName;
     private String fileSaveName;
     private String url;
+
+    private String flowId;
 
     public String getvId() {
         return vId;
@@ -63,13 +67,6 @@ public class ApiVisitDataVo implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getCommunityId() {
         return communityId;
@@ -245,5 +242,29 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getOwnerTel() {
+        return ownerTel;
+    }
+
+    public void setOwnerTel(String ownerTel) {
+        this.ownerTel = ownerTel;
     }
 }

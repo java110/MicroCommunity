@@ -74,4 +74,10 @@ public interface IOwnerRoomRelV1ServiceDao {
      */
     int queryOwnerRoomRelsCount(Map info);
 
+    /**
+     * 查询业主房屋数
+     * @param info
+     * @return
+     */
+    List<Map> queryRoomCountByOwnerIds(Map info);
 }

@@ -80,6 +80,7 @@ public class OwnerCommunityCmd extends Cmd {
                 }
                 tmpOwnerDto.setCommunityName(tmpCommunityDto.getName());
                 tmpOwnerDto.setsCommunityTel(tmpCommunityDto.getTel());
+                tmpOwnerDto.setCommunityQrCode(tmpCommunityDto.getQrCode());
             }
         }
 

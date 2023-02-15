@@ -12,6 +12,7 @@ import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -64,7 +65,7 @@ public class ListStaffFinishRepairsCmd extends Cmd {
         String userId = reqJson.getString("userId");
         String viewListStaffRepairs = CommunitySettingFactory.getValue(reqJson.getString("communityId"), VIEW_LIST_STAFF_REPAIRS);
         if (StringUtil.isEmpty(viewListStaffRepairs)) {
-            viewListStaffRepairs = MappingCache.getValue(DOMAIN_COMMON,VIEW_LIST_STAFF_REPAIRS);
+            viewListStaffRepairs = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN,VIEW_LIST_STAFF_REPAIRS);
         }
         List<Map> privileges = null;
         //这里加开关 其实让管理员看到所有单子这么做，不太优雅，建议 单独开发页面功能

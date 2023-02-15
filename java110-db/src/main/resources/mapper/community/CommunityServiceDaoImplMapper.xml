@@ -489,7 +489,7 @@
         '审核拒绝'
         END) stateName,ca.area_code areaCode,ca.area_name areaName,
         ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName,
-        t.community_area communityArea,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.fee_price,t.fee_price feePrice
+        t.community_area communityArea,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.fee_price,t.fee_price feePrice,t.qr_code qrCode
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
@@ -643,7 +643,8 @@
         ca.area_name areaName,
         ca.parent_area_name cityName,
         ca1.parent_area_name provName,
-        sc.community_area communityArea
+        sc.community_area communityArea,
+        sc.qr_code qrCode
         FROM
         s_community sc,
         s_community_member scm,

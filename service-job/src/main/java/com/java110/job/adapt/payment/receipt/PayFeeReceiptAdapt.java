@@ -145,6 +145,13 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             //查询业主信息
             OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
 
+            // if received amount lt zero
+
+            if(businessPayFeeDetail.containsKey("receivedAmount")
+                    && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+                return ;
+            }
+
             //添加单元信息
             FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
             FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
@@ -158,6 +165,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
             feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
             feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+            feeReceiptDetailPo.setCreateTime(payFeeDetailPo.getCreateTime());
 
             //处理 小数点后 0
             feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
@@ -172,6 +180,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
             feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
             feeReceiptPo.setPayObjName(ownerDto.getName());
+            feeReceiptPo.setCreateTime(payFeeDetailPo.getCreateTime());
 
             //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
             feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);

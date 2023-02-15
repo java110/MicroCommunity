@@ -24,6 +24,7 @@ import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMaintainanceTaskDetailV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -93,7 +94,7 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
     private void refreshPhotos( List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
 
         for (MaintainanceTaskDetailDto inspectionTaskDetail : maintainanceTaskDetailDtos) {
             if(!"20200407".equals(inspectionTaskDetail.getState())){

@@ -21,6 +21,7 @@ import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.inspection.InspectionTaskDetailPo;
 import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.inspectionPoint.ApiInspectionPointDataVo;
@@ -179,7 +180,7 @@ public class PublishStaffInspectionTaskTemplate extends TaskSystemQuartz {
 
         templateMessage.setData(data);
 
-        String staffWechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+        String staffWechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         staffWechatUrl =  staffWechatUrl
                     + "pages/excuteOneQrCodeInspection/excuteOneQrCodeInspection?inspectionId="
                     + inspectionTaskDetailDto.getInspectionId()

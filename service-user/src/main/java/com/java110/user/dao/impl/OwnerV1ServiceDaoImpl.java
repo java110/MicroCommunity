@@ -116,5 +116,13 @@ public class OwnerV1ServiceDaoImpl extends BaseServiceDao implements IOwnerV1Ser
         return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryOwnerMembersCount(Map info) {
+        logger.debug("查询 queryOwnerMembersCount 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("ownerV1ServiceDaoImpl.queryOwnerMembersCount", info);
+        return result;
+    }
+
 
 }

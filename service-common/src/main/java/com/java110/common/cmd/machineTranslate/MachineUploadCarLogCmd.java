@@ -51,6 +51,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -185,7 +186,22 @@ public class MachineUploadCarLogCmd extends Cmd {
                     tempCarName = tmpOwnerCarDto.getLeaseTypeName();
                 }
             }
+
+            //主副车辆中 有一个车辆在场，这个车场当做临时车处理
+            if (hasInParkingArea(ownerCarDtos.get(0).getCarId(), reqJson.getString("carNum"), reqJson.getString("communityId"), paIds)) {
+                tempCar = CAR_TYPE_NO_DATA;
+                tempCarName = "临时车";
+            }
+
+            int day = DateUtil.differentDaysUp(DateUtil.getCurrentDate(),ownerCarDtos.get(0).getEndTime());
+
+            if(day <= -5){
+                tempCar = CAR_TYPE_NO_DATA;
+                tempCarName = "临时车";
+            }
         }
+
+
 
 
         //进场处理
@@ -194,6 +210,50 @@ public class MachineUploadCarLogCmd extends Cmd {
         } else {
             carOut(reqJson, machineDtos.get(0), tempCar, tempCarName);
         }
+
+    }
+
+    private boolean hasInParkingArea(String carId, String carNum, String communityId, List<String> paIds) {
+        if (StringUtil.isEmpty(carId) || "-1".equals(carId)) {
+            return false;
+        }
+
+        // 判断是否为主副车辆
+        OwnerCarDto carDto = new OwnerCarDto();
+        carDto.setPaIds(paIds.toArray(new String[paIds.size()]));
+        carDto.setCarNum(carNum);
+        carDto.setCarId(carId);
+        List<OwnerCarDto> tmpCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(carDto);
+        if (tmpCarDtos == null || tmpCarDtos.size() < 2) {
+            return false;
+        }
+
+        List<String> otherCarNums = new ArrayList<>();
+
+        for (OwnerCarDto tempCarDto : tmpCarDtos) {
+            if (tempCarDto.getCarNum().equals(carNum)) {
+                continue;
+            }
+            otherCarNums.add(tempCarDto.getCarNum());
+        }
+
+        if (otherCarNums.size() < 1) {
+            return false;
+        }
+
+        for (String otherCarNum : otherCarNums) {
+            //判断车辆是否在 场内
+            CarInoutDto inoutDto = new CarInoutDto();
+            inoutDto.setCarNum(otherCarNum);
+            inoutDto.setPaIds(paIds.toArray(new String[paIds.size()]));
+            inoutDto.setState(CarInoutDto.STATE_IN);
+            List<CarInoutDto> carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(inoutDto);
+            if (carInoutDtos != null && carInoutDtos.size() > 0) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
@@ -316,15 +376,15 @@ public class MachineUploadCarLogCmd extends Cmd {
         updateCarInoutState(reqJson, carInoutDtos.get(0));
 
         //处理停车劵
-        if(!reqJson.containsKey("pccIds") || reqJson.getJSONArray("pccIds").size()<1){
-            return ;
+        if (!reqJson.containsKey("pccIds") || reqJson.getJSONArray("pccIds").size() < 1) {
+            return;
         }
 
         JSONArray pccIds = reqJson.getJSONArray("pccIds");
         String pccId = "";
         ParkingCouponCarPo parkingCouponCarPo = null;
         ParkingCouponCarOrderPo parkingCouponCarOrderPo = null;
-        for(int pccIdIndex = 0 ;pccIdIndex < pccIds.size();pccIdIndex++){
+        for (int pccIdIndex = 0; pccIdIndex < pccIds.size(); pccIdIndex++) {
             pccId = pccIds.getString(pccIdIndex);
 
             parkingCouponCarPo = new ParkingCouponCarPo();
@@ -385,47 +445,6 @@ public class MachineUploadCarLogCmd extends Cmd {
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
-    }
-
-    private boolean hasFeeAndPayFee(CarInoutDto carInoutDto, JSONObject reqJson, CarInoutPo carInoutPo, CarInoutPaymentPo carInoutPaymentPo) {
-
-        FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setCommunityId(carInoutPo.getCommunityId());
-        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_CAR_INOUT_ID);
-        feeAttrDto.setValue(carInoutPo.getInoutId());
-        feeAttrDto.setState(FeeDto.STATE_DOING);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFeeByAttr(feeAttrDto);
-        if (feeDtos == null || feeDtos.size() < 1) {
-            return false;
-        }
-        PayFeePo payFeePo = new PayFeePo();
-        payFeePo.setState(FeeDto.STATE_FINISH);
-        payFeePo.setFeeId(feeDtos.get(0).getFeeId());
-        payFeePo.setEndTime(carInoutPo.getOutTime());
-        payFeePo.setCommunityId(feeDtos.get(0).getCommunityId());
-        int flag = feeInnerServiceSMOImpl.updateFee(payFeePo);
-        if (flag < 1) {
-            throw new CmdException("更新费用失败");
-        }
-
-
-        PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
-        payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        payFeeDetailPo.setPrimeRate("1.00");
-        FeeDto feeDto = feeDtos.get(0);
-        payFeeDetailPo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        payFeeDetailPo.setEndTime(carInoutPo.getOutTime());
-        payFeeDetailPo.setCommunityId(carInoutDto.getCommunityId());
-        payFeeDetailPo.setCycles("1");
-        payFeeDetailPo.setReceivableAmount(carInoutPaymentPo.getPayCharge());
-        payFeeDetailPo.setReceivedAmount(carInoutPaymentPo.getRealCharge());
-        payFeeDetailPo.setFeeId(feeDto.getFeeId());
-
-        flag = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
-        if (flag < 1) {
-            throw new CmdException("更新费用失败");
-        }
-        return true;
     }
 
     /**

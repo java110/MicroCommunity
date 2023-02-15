@@ -33,8 +33,8 @@ public class QueryParkingSpacesByOwnerCmd extends Cmd{
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.hasKeyAndValue(reqJson, "ownerId", "请求中未包含ownerId信息");
     }
 
     @Override

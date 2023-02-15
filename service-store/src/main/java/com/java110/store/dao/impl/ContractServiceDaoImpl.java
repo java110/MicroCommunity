@@ -94,5 +94,13 @@ public class ContractServiceDaoImpl extends BaseServiceDao implements IContractS
         return Integer.parseInt(businessContractInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryContractsByOwnerIds(Map info) {
+        logger.debug("查询合同管理数据 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("contractServiceDaoImpl.queryContractsByOwnerIds", info);
+        return result;
+    }
+
 
 }

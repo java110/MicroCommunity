@@ -31,6 +31,8 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.owner.VisitPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -226,7 +228,7 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
             }
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -281,7 +283,7 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         body.put("vName", visits.get(0).getvName());
         body.put("visitGender", visits.get(0).getVisitGender());
         body.put("phoneNumber", visits.get(0).getPhoneNumber());
-        body.put("userId", visits.get(0).getUserId());
+        body.put("userId", visits.get(0).getCreateUserId());
         body.put("communityId", visits.get(0).getCommunityId());
         body.put("ownerId", visits.get(0).getOwnerId());
         body.put("visitCase", visits.get(0).getVisitCase());

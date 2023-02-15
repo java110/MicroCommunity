@@ -31,6 +31,8 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -256,7 +258,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             data.setRemark(new Content(paramIn.getString("preStaffName") + "转单给您，请及时登录公众号接单确认！"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -325,7 +327,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             data.setRemark(new Content("请及时登录公众号接单确认！"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -383,7 +385,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             return;
         }
 
-        String imgUrl = MappingCache.getValue("IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(paramIn.getString("repairId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
@@ -483,7 +485,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 data.setRemark(new Content("您的报修已受理，请保持电话畅通，以便维修人员及时跟您取得联系！感谢您的使用！"));
                 templateMessage.setData(data);
                 //获取业主公众号地址
-                String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+                String wechatUrl = UrlCache.getOwnerUrl();
                 if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                     wechatUrl += ("&wAppId=" + weChatDto.getAppId());
                 } else {
@@ -543,6 +545,11 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         staffAppAuthDto.setStaffId(paramIn.getString("staffId"));
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+
+        if(staffAppAuthDtos == null || staffAppAuthDtos.size() < 1){
+            logger.error("员工未做员工认证");
+            return;
+        }
         String openId = staffAppAuthDtos.get(0).getOpenId();
         String url = sendMsgUrl + accessToken;
         Data data = new Data();
@@ -557,7 +564,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         data.setRemark(new Content("请及时与客户取得联系！"));
         templateMessage.setData(data);
         //获取员工公众号地址
-        String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+        String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         templateMessage.setUrl(wechatUrl);
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

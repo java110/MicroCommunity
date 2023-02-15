@@ -84,6 +84,7 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
         scheduleClassesStaffDto.setPage(reqJson.getIntValue("page"));
         scheduleClassesStaffDto.setRow(reqJson.getIntValue("row"));
         scheduleClassesStaffDto.setStoreId(storeId);
+        scheduleClassesStaffDto.setOrgId(reqJson.getString("orgId"));
 
         int count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
 

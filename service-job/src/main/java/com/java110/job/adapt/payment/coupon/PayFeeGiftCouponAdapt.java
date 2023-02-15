@@ -146,6 +146,10 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 
             Assert.listOnlyOne(feeDtos, "未查询到费用信息");
 
+            if(businessPayFeeDetail.containsKey("receivedAmount")
+                    && businessPayFeeDetail.getDoubleValue("receivedAmount")<0){
+                return ;
+            }
 
             CouponRuleFeeDto couponRuleFeeDto = new CouponRuleFeeDto();
             couponRuleFeeDto.setFeeConfigId(feeDtos.get(0).getConfigId());

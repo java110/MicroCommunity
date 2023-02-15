@@ -6,9 +6,9 @@
     <!-- 保存业主信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfo" parameterType="Map">
         insert into building_owner(id_card, sex, link, owner_type_cd, remark, owner_id, user_id, name, state,
-                                   community_id, age, member_id, address)
+        community_id, age, member_id, address)
         values (#{idCard}, #{sex}, #{link}, #{ownerTypeCd}, #{remark}, #{ownerId}, #{userId}, #{name}, #{state},
-                #{communityId}, #{age}, #{memberId}, #{address})
+        #{communityId}, #{age}, #{memberId}, #{address})
     </insert>
 
     <!-- 查询业主信息信息 add by wuxw 2018-07-03 -->
@@ -41,6 +41,12 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="ownerIds !=null">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
@@ -141,6 +147,12 @@
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
         </if>
+        <if test="ownerIds !=null">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
@@ -176,5 +188,19 @@
             and t.community_id= #{communityId}
         </if>
     </select>
+
+    <select id="queryOwnerMembersCount" parameterType="Map" resultType="Map">
+        select t.owner_id ownerId,count(1) memberCount
+        from
+        building_owner t
+        where t.status_cd = '0'
+        and t.owner_type_cd != '1001'
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by t.owner_id
+    </select>
+
 
 </mapper>

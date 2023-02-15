@@ -14,13 +14,22 @@ import java.io.Serializable;
  **/
 public class VisitDto extends PageDto implements Serializable {
 
+    //审核状态 0表示未审核；1表示审核通过；2表示审核拒绝
+    public static final String STATE_W = "0"; //待审核
+    public static final String STATE_C = "1"; //表示审核通过
+    public static final String STATE_F = "2"; //表示审核拒绝
+
+    public static final String STATE_D = "3"; // 审核中
+
     private String departureTime;
     private String vName;
     private String visitGender;
     private String ownerId;
     private String ownerName;
-    private String userId;
+    private String createUserId;
     private String vId;
+    private String[] vIds;
+
     private String visitTime;
     private String phoneNumber;
     private String visitCase;
@@ -48,6 +57,8 @@ public class VisitDto extends PageDto implements Serializable {
     private String fileRelName;
     private String fileSaveName;
 
+    private String flowId;
+
     public String getvName() {
         return vName;
     }
@@ -72,12 +83,12 @@ public class VisitDto extends PageDto implements Serializable {
         this.ownerId = ownerId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getCreateUserId() {
+        return createUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 
     public String getvId() {
@@ -310,5 +321,21 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setFileSaveName(String fileSaveName) {
         this.fileSaveName = fileSaveName;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
+
+    public String[] getvIds() {
+        return vIds;
+    }
+
+    public void setvIds(String[] vIds) {
+        this.vIds = vIds;
     }
 }

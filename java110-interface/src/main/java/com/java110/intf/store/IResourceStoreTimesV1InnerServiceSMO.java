@@ -65,4 +65,7 @@ public interface IResourceStoreTimesV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryResourceStoreTimessCount", method = RequestMethod.POST)
     int queryResourceStoreTimessCount(@RequestBody ResourceStoreTimesDto resourceResourceStoreTimesTimesDto);
+
+    @RequestMapping(value = "/saveOrUpdateResourceStoreTimes", method = RequestMethod.POST)
+    int saveOrUpdateResourceStoreTimes(@RequestBody ResourceStoreTimesPo resourceStoreTimesPo);
 }

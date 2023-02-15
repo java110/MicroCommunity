@@ -24,6 +24,8 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -197,7 +199,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
                     data.setRemark(new Content("感谢您的使用。"));
                     templateMessage.setData(data);
                     //获取员工公众号地址
-                    String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+                    String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -295,7 +297,7 @@ public class MachineSaveRoomRenovation extends DatabusAdaptImpl {
             data.setRemark(new Content("物业联系电话：" + tel + "，请到物业管理处或通过手机缴纳装修押金！"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

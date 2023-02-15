@@ -1,7 +1,9 @@
 package com.java110.core.smo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.integralRuleConfig.IntegralRuleConfigDto;
 import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -185,4 +187,6 @@ public interface IComputeFeeSMO {
      * @param custEndTime
      */
     void dealRentRateCustEndTime(FeeDto feeDto, Date custEndTime);
+
+    long computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto, JSONObject reqJson);
 }

@@ -36,6 +36,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String communityName;
     private String sCommunityTel;
 
+    private String communityQrCode;
+
     private String roomId;
     private String[] roomIds;
     private String sex;
@@ -86,6 +88,15 @@ public class OwnerDto extends PageDto implements Serializable {
     private List<String> urls;
 
     private String url;
+
+    private String roomCount;
+    private String memberCount;
+    private String carCount;
+    private String complaintCount;
+    private String repairCount;
+
+    private String oweFee;
+    private String contractCount;
 
     public String getSex() {
         return sex;
@@ -423,5 +434,70 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCommunityQrCode() {
+        return communityQrCode;
+    }
+
+    public void setCommunityQrCode(String communityQrCode) {
+        this.communityQrCode = communityQrCode;
+    }
+
+
+    public String getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(String roomCount) {
+        this.roomCount = roomCount;
+    }
+
+    public String getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(String memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public String getCarCount() {
+        return carCount;
+    }
+
+    public void setCarCount(String carCount) {
+        this.carCount = carCount;
+    }
+
+    public String getComplaintCount() {
+        return complaintCount;
+    }
+
+    public void setComplaintCount(String complaintCount) {
+        this.complaintCount = complaintCount;
+    }
+
+    public String getRepairCount() {
+        return repairCount;
+    }
+
+    public void setRepairCount(String repairCount) {
+        this.repairCount = repairCount;
+    }
+
+    public String getOweFee() {
+        return oweFee;
+    }
+
+    public void setOweFee(String oweFee) {
+        this.oweFee = oweFee;
+    }
+
+    public String getContractCount() {
+        return contractCount;
+    }
+
+    public void setContractCount(String contractCount) {
+        this.contractCount = contractCount;
     }
 }

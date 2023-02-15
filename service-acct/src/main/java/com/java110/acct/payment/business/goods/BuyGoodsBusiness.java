@@ -34,7 +34,7 @@ public class BuyGoodsBusiness implements IPaymentBusiness {
         JSONObject paramIn = new JSONObject();
         paramIn.put("orderId", paymentOrderDto.getOrderId());
         paramIn.put("payOrderId",paymentOrderDto.getTransactionId());
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "/cart/payNotifyOrder", JSONObject.class, "-1");
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "/cart/payNotifyOrder", JSONObject.class, paymentOrderDto.getUserId());
 
     }
 }

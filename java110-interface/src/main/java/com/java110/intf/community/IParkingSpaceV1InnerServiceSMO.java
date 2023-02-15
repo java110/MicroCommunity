@@ -64,4 +64,7 @@ public interface IParkingSpaceV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryParkingSpacesCount", method = RequestMethod.POST)
     int queryParkingSpacesCount(@RequestBody ParkingSpaceDto parkingSpaceDto);
+
+    @RequestMapping(value = "/saveParkingSpaces", method = RequestMethod.POST)
+    int saveParkingSpaces(@RequestBody List<ParkingSpacePo> parkingSpacePos);
 }

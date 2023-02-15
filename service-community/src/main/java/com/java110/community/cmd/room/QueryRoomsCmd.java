@@ -1,6 +1,7 @@
 package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -86,6 +87,9 @@ public class QueryRoomsCmd extends Cmd {
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
+    @Autowired
+    private IQueryRoomStatisticsBMO queryRoomStatisticsBMOImpl;
 
     protected static final int MAX_ROW = 10000;
 
@@ -222,6 +226,9 @@ public class QueryRoomsCmd extends Cmd {
         if (total > 0) {
             roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             refreshRoomOwners(reqJson.getString("loginUserId"), reqJson.getString("communityId"), roomDtoList);
+
+            // 查询房屋统计数据
+            roomDtoList = queryRoomStatisticsBMOImpl.query(roomDtoList);
         } else {
             roomDtoList = new ArrayList<>();
         }
@@ -276,6 +283,7 @@ public class QueryRoomsCmd extends Cmd {
                 }
                 //对业主手机号隐藏处理
                 String link = tmpOwnerDto.getLink();
+                roomDto.setOwnerTel(link); //程序用 主要用以查询 报修等统计信息
                 if (mark.size() == 0 && link != null && !link.equals("") && link.length() > 10) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                 }

@@ -3,11 +3,13 @@ package com.java110.common.cmd.attendanceClasses;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.smo.impl.AttendanceClassesTaskDetailInnerServiceSMOImpl;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.client.FileUploadTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
@@ -94,14 +96,18 @@ public class CheckInCmd extends Cmd {
     @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含员工");
-        Assert.hasKeyAndValue(reqJson, "clockTime", "未包含考勤时间");
+        Assert.hasKeyAndValue(reqJson, "checkTime", "未包含考勤时间");
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         StoreUserDto storeUserDto = new StoreUserDto();
@@ -136,36 +142,17 @@ public class CheckInCmd extends Cmd {
         attendanceClassesDto.setClassesObjIds(orgIds.toArray(new String[orgIds.size()]));
         List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
 
-        Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
-
-
-        AttendanceLogPo attendanceLogPo = new AttendanceLogPo();
-        attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
-        attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
-        attendanceLogPo.setStaffId(reqJson.getString("staffId"));
-        attendanceLogPo.setClockTime(reqJson.getString("clockTime"));
-        attendanceLogPo.setDepartmentId(attendanceClassesDtos.get(0).getClassesObjId());
-        attendanceLogPo.setDepartmentName(attendanceClassesDtos.get(0).getClassesObjName());
-        attendanceLogPo.setStaffName(userDtos.get(0).getName());
-
-        int flag = attendanceLogInnerServiceSMOImpl.saveAttendanceLog(attendanceLogPo);
-
-        if (flag < 1) {
-            throw new CmdException("考勤失败");
+        if(attendanceClassesDtos == null || attendanceClassesDtos.size() < 1){
+            throw new CmdException("班次不存在");
         }
 
-        // 查询是否为上班
-
-        AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
-        attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("clockTime"));
-        attendanceClassesTaskDetailDto.setClassId(attendanceClassesDtos.get(0).getClassesId());
-        attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
-        List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
-
-        if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
-            context.setResponseEntity(ResultVo.error("不是考勤范围内"));
-            return;
+       // Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
+        for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
+            doCheckInAttendanceLog(context, reqJson, storeUserDtos, userDtos, tmpAttendanceClassesDto);
         }
+    }
+
+    private void doCheckInAttendanceLog(ICmdDataFlowContext context, JSONObject reqJson, List<StoreUserDto> storeUserDtos, List<UserDto> userDtos, AttendanceClassesDto attendanceClassesDto) {
 
         String photo = "";
         if (reqJson.containsKey("photo") && !StringUtil.isEmpty(reqJson.getString("photo"))) {
@@ -178,13 +165,44 @@ public class CheckInCmd extends Cmd {
             photo = fileInnerServiceSMOImpl.saveFile(fileDto);
         }
 
+
+        AttendanceLogPo attendanceLogPo = new AttendanceLogPo();
+        attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
+        attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
+        attendanceLogPo.setStaffId(reqJson.getString("staffId"));
+        attendanceLogPo.setClockTime(reqJson.getString("checkTime"));
+        attendanceLogPo.setDepartmentId(attendanceClassesDto.getClassesObjId());
+        attendanceLogPo.setDepartmentName(attendanceClassesDto.getClassesObjName());
+        attendanceLogPo.setStaffName(userDtos.get(0).getName());
+        attendanceLogPo.setFacePath(photo);
+
+        int flag = attendanceLogInnerServiceSMOImpl.saveAttendanceLog(attendanceLogPo);
+
+        if (flag < 1) {
+            throw new CmdException("考勤失败");
+        }
+
+        // 查询是否为上班
+
+        AttendanceClassesTaskDetailDto attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
+        attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("checkTime"));
+        attendanceClassesTaskDetailDto.setClassId(attendanceClassesDto.getClassesId());
+        attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
+        List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
+
+        if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
+            context.setResponseEntity(ResultVo.error("不是考勤范围内"));
+            return;
+        }
+
+
         //当前考勤的 记录
         AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto = attendanceClassesTaskDetailDtos.get(0);
 
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = new AttendanceClassesTaskDetailPo();
         attendanceClassesTaskDetailPo.setDetailId(nowAttendanceClassesTaskDetailDto.getDetailId());
-        attendanceClassesTaskDetailPo.setCheckTime(reqJson.getString("clockTime"));
-        attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("clockTime"))));
+        attendanceClassesTaskDetailPo.setCheckTime(reqJson.getString("checkTime"));
+        attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("checkTime"))));
         attendanceClassesTaskDetailPo.setFacePath(photo);
         flag = attendanceClassesTaskDetailInnerServiceSMOImpl.updateAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
 
@@ -216,23 +234,23 @@ public class CheckInCmd extends Cmd {
      * 考勤状态计算
      *
      * @param nowAttendanceClassesTaskDetailDto
-     * @param clockTime
+     * @param checkTime
      * @return
      */
-    private String getState(AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto, Date clockTime) {
+    private String getState(AttendanceClassesTaskDetailDto nowAttendanceClassesTaskDetailDto, Date checkTime) {
 
         Date value = DateUtil.getDateFromStringA(nowAttendanceClassesTaskDetailDto.getValue());
 
         if (AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(nowAttendanceClassesTaskDetailDto.getSpecCd())) {
 
-            if (clockTime.after(value)) {
+            if (checkTime.after(value)) {
                 return AttendanceClassesTaskDetailDto.STATE_LATE;
             }
             return AttendanceClassesTaskDetailDto.STATE_NORMAL;
         }
 
 
-        if (clockTime.before(value)) {
+        if (checkTime.before(value)) {
             return AttendanceClassesTaskDetailDto.STATE_LEAVE;
         }
         return AttendanceClassesTaskDetailDto.STATE_NORMAL;

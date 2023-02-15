@@ -187,7 +187,7 @@ public class SaveReserveGoodsOrderCmd extends Cmd {
             reserveGoodsOrderTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
             reserveGoodsOrderTimePo.setQuantity(openTimes.getJSONObject(timeIndex).getString("quantity"));
             reserveGoodsOrderTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-            reserveGoodsOrderTimePo.setState(CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM);
+            reserveGoodsOrderTimePo.setState(ReserveGoodsOrderTimeDto.STATE_WAIT_CONFIRM);
             reserveGoodsOrderTimeV1InnerServiceSMOImpl.saveReserveGoodsOrderTime(reserveGoodsOrderTimePo);
         }
 

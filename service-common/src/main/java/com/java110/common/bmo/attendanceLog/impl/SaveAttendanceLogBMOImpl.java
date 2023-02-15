@@ -41,6 +41,7 @@ public class SaveAttendanceLogBMOImpl implements ISaveAttendanceLogBMO {
 
         attendanceLogPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
         attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
+        attendanceLogPo.setStaffName(storeUserDtos.get(0).getStaffName());
         int flag = attendanceLogInnerServiceSMOImpl.saveAttendanceLog(attendanceLogPo);
 
         if (flag > 0) {

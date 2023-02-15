@@ -3,6 +3,7 @@ package com.java110.entity.audit;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 审核用户
@@ -28,6 +29,8 @@ public class AuditUser extends PageDto implements Serializable {
     private String objCode;
 
     private String processDefinitionKey;
+
+    private List<String> processDefinitionKeys;
 
     private String flowId;
 
@@ -101,5 +104,13 @@ public class AuditUser extends PageDto implements Serializable {
 
     public void setFlowId(String flowId) {
         this.flowId = flowId;
+    }
+
+    public List<String> getProcessDefinitionKeys() {
+        return processDefinitionKeys;
+    }
+
+    public void setProcessDefinitionKeys(List<String> processDefinitionKeys) {
+        this.processDefinitionKeys = processDefinitionKeys;
     }
 }

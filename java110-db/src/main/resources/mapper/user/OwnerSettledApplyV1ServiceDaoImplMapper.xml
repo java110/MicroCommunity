@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerSettledApplyV1ServiceDaoImpl">
+
+
+    <!-- 保存业主入驻申请信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerSettledApplyInfo" parameterType="Map">
+        insert into owner_settled_apply(
+        apply_id,create_user_id,remark,state,owner_id,community_id
+        ) values (
+        #{applyId},#{createUserId},#{remark},#{state},#{ownerId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询业主入驻申请信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerSettledApplyInfo" parameterType="Map" resultType="Map">
+        select t.apply_id,t.apply_id applyId,t.create_user_id,t.create_user_id
+        createUserId,t.remark,t.state,t.owner_id,t.owner_id
+        ownerId,t.community_id,t.community_id communityId,t.create_time createTime,td.name stateName,bo.`name` ownerName,bo.link ownerLink,
+        count(osr.room_id) roomCount
+        from owner_settled_apply t
+        left join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'owner_settled_apply' and td.table_columns = 'state'
+        left join owner_settled_rooms osr on t.apply_id = osr.apply_id and osr.status_cd = '0'
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+
+        <if test="applyIds !=null ">
+            and t.apply_id in
+            <foreach collection="applyIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and bo.name like concat('%',#{ownerNameLike},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        group by t.apply_id,t.create_user_id,t.remark,t.state,t.owner_id,t.community_id,t.create_time ,td.name ,bo.`name` ,bo.link
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改业主入驻申请信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerSettledApplyInfo" parameterType="Map">
+        update owner_settled_apply t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+
+    </update>
+
+    <!-- 查询业主入驻申请数量 add by wuxw 2018-07-03 -->
+    <select id="queryOwnerSettledApplysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_settled_apply t
+        left join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="applyIds !=null ">
+            and t.apply_id in
+            <foreach collection="applyIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and bo.name like concat('%',#{ownerNameLike},'%')
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

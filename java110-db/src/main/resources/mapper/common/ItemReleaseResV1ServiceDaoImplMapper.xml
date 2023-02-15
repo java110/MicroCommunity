@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itemReleaseResV1ServiceDaoImpl">
+
+
+    <!-- 保存放行物品信息 add by wuxw 2018-07-03 -->
+    <insert id="saveItemReleaseResInfo" parameterType="Map">
+        insert into item_release_res(
+        res_name,ir_id,community_id,res_id,amount
+        ) values (
+        #{resName},#{irId},#{communityId},#{resId},#{amount}
+        )
+    </insert>
+
+    <insert id="saveItemReleaseResesInfo" parameterType="Map">
+        insert into item_release_res(
+        res_name,ir_id,community_id,res_id,amount
+        ) values
+        <foreach collection="itemReleaseResPos" item="item" separator=",">
+            (#{item.resName},#{item.irId},#{item.communityId},#{item.resId},#{item.amount})
+        </foreach>
+
+    </insert>
+
+
+
+    <!-- 查询放行物品信息 add by wuxw 2018-07-03 -->
+    <select id="getItemReleaseResInfo" parameterType="Map" resultType="Map">
+        select t.res_name,t.res_name resName,t.ir_id,t.ir_id irId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.res_id,t.res_id resId,t.amount
+        from item_release_res t
+        where 1 =1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改放行物品信息 add by wuxw 2018-07-03 -->
+    <update id="updateItemReleaseResInfo" parameterType="Map">
+        update item_release_res t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            , t.res_name= #{resName}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+
+        where 1=1
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询放行物品数量 add by wuxw 2018-07-03 -->
+    <select id="queryItemReleaseRessCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from item_release_res t
+        where 1 =1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="irId !=null and irId != ''">
+            and t.ir_id= #{irId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+
+
+    </select>
+
+</mapper>

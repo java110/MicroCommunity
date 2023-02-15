@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="integralRuleFeeV1ServiceDaoImpl">
+
+
+    <!-- 保存积分规则费用信息 add by wuxw 2018-07-03 -->
+    <insert id="saveIntegralRuleFeeInfo" parameterType="Map">
+        insert into integral_rule_fee(
+        pay_month,irf_id,fee_config_name,pay_start_time,pay_end_time,rule_id,community_id,fee_config_id
+        ) values (
+        #{payMonth},#{irfId},#{feeConfigName},#{payStartTime},#{payEndTime},#{ruleId},#{communityId},#{feeConfigId}
+        )
+    </insert>
+
+
+    <!-- 查询积分规则费用信息 add by wuxw 2018-07-03 -->
+    <select id="getIntegralRuleFeeInfo" parameterType="Map" resultType="Map">
+        select t.pay_month,t.pay_month payMonth,t.irf_id,t.irf_id irfId,t.fee_config_name,t.fee_config_name
+        feeConfigName,t.pay_start_time,t.pay_start_time payStartTime,t.pay_end_time,t.pay_end_time
+        payEndTime,t.status_cd,t.status_cd statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id
+        communityId,t.fee_config_id,t.fee_config_id feeConfigId
+        from integral_rule_fee t
+        where 1 =1
+        <if test="payMonth !=null and payMonth != ''">
+            and t.pay_month= #{payMonth}
+        </if>
+        <if test="cycle !=null and cycle != ''">
+            and t.pay_month &lt;= #{cycle}
+        </if>
+        <if test="irfId !=null and irfId != ''">
+            and t.irf_id= #{irfId}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            and t.fee_config_name= #{feeConfigName}
+        </if>
+        <if test="payStartTime !=null and payStartTime != ''">
+            and t.pay_start_time= #{payStartTime}
+        </if>
+        <if test="payEndTime !=null and payEndTime != ''">
+            and t.pay_end_time= #{payEndTime}
+        </if>
+        <if test="curTime !=null and curTime != ''">
+            and t.pay_start_time &lt; #{curTime}
+            and t.pay_end_time &gt; #{curTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改积分规则费用信息 add by wuxw 2018-07-03 -->
+    <update id="updateIntegralRuleFeeInfo" parameterType="Map">
+        update integral_rule_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="payMonth !=null and payMonth != ''">
+            , t.pay_month= #{payMonth}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            , t.fee_config_name= #{feeConfigName}
+        </if>
+        <if test="payStartTime !=null and payStartTime != ''">
+            , t.pay_start_time= #{payStartTime}
+        </if>
+        <if test="payEndTime !=null and payEndTime != ''">
+            , t.pay_end_time= #{payEndTime}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            , t.fee_config_id= #{feeConfigId}
+        </if>
+        where 1=1
+        <if test="irfId !=null and irfId != ''">
+            and t.irf_id= #{irfId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </update>
+
+    <!-- 查询积分规则费用数量 add by wuxw 2018-07-03 -->
+    <select id="queryIntegralRuleFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from integral_rule_fee t
+        where 1 =1
+        <if test="payMonth !=null and payMonth != ''">
+            and t.pay_month= #{payMonth}
+        </if>
+        <if test="cycle !=null and cycle != ''">
+            and t.pay_month &lt;= #{cycle}
+        </if>
+        <if test="irfId !=null and irfId != ''">
+            and t.irf_id= #{irfId}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            and t.fee_config_name= #{feeConfigName}
+        </if>
+        <if test="payStartTime !=null and payStartTime != ''">
+            and t.pay_start_time= #{payStartTime}
+        </if>
+        <if test="payEndTime !=null and payEndTime != ''">
+            and t.pay_end_time= #{payEndTime}
+        </if>
+        <if test="curTime !=null and curTime != ''">
+            and t.pay_start_time &lt; #{curTime}
+            and t.pay_end_time &gt; #{curTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+
+
+    </select>
+
+</mapper>

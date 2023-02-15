@@ -44,6 +44,8 @@ import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -319,7 +321,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                     data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
                     templateMessage.setData(data);
                     //获取员工公众号地址
-                    String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+                    String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -397,7 +399,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("请与客服管家核实费用"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue("STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -511,7 +513,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
             templateMessage.setData(data);
             //获取业主公众号地址
-            String wechatUrl = MappingCache.getValue("OWNER_WECHAT_URL");
+            String wechatUrl = UrlCache.getOwnerUrl();
             if(wechatUrl.contains("?")){
                 wechatUrl += ( "&wAppId="+smallWeChatDtos.get(0).getAppId());
             }else{
