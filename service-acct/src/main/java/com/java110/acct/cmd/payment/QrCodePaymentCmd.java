@@ -41,6 +41,8 @@ public class QrCodePaymentCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "authCode", "未包含授权码");
+        Assert.hasKeyAndValue(reqJson, "receivedAmount", "未包含支付金额");
+        Assert.hasKeyAndValue(reqJson, "subServiceCode", "未包含支付接口");
     }
 
     @Override
@@ -91,7 +93,8 @@ public class QrCodePaymentCmd extends Cmd {
         }
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
-        JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
+        //JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
+        JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, reqJson.getString("subServiceCode"), JSONObject.class, userId);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
     }
 
