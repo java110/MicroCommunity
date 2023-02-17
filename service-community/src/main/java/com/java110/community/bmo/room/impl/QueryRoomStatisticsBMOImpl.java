@@ -180,6 +180,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : repairCounts) {
+                if(StringUtil.isEmpty(roomDto.getLink())){
+                    continue;
+                }
                 if (roomDto.getLink().equals(count.get("ownerTel"))) {
                     roomDto.setRepairCount(count.get("repairCount").toString());
                 }
