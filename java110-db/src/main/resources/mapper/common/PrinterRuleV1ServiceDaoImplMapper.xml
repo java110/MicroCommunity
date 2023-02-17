@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="printerRuleV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存云打印规则信息 add by wuxw 2018-07-03 -->
+    <insert id="savePrinterRuleInfo" parameterType="Map">
+        insert into printer_rule(
+rule_name,remark,state,rule_id,community_id
+) values (
+#{ruleName},#{remark},#{state},#{ruleId},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询云打印规则信息 add by wuxw 2018-07-03 -->
+    <select id="getPrinterRuleInfo" parameterType="Map" resultType="Map">
+        select  t.rule_name,t.rule_name ruleName,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId 
+from printer_rule t 
+where 1 =1 
+<if test="ruleName !=null and ruleName != ''">
+   and t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改云打印规则信息 add by wuxw 2018-07-03 -->
+    <update id="updatePrinterRuleInfo" parameterType="Map">
+        update  printer_rule t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="ruleName !=null and ruleName != ''">
+, t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="ruleId !=null and ruleId != ''">
+and t.rule_id= #{ruleId}
+</if> 
+
+    </update>
+
+    <!-- 查询云打印规则数量 add by wuxw 2018-07-03 -->
+     <select id="queryPrinterRulesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from printer_rule t 
+where 1 =1 
+<if test="ruleName !=null and ruleName != ''">
+   and t.rule_name= #{ruleName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="ruleId !=null and ruleId != ''">
+   and t.rule_id= #{ruleId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>

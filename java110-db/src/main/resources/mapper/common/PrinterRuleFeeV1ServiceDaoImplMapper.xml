@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="printerRuleFeeV1ServiceDaoImpl">
+
+
+    <!-- 保存云打印规则费用信息 add by wuxw 2018-07-03 -->
+    <insert id="savePrinterRuleFeeInfo" parameterType="Map">
+        insert into printer_rule_fee(
+        prf_id,rule_id,community_id,fee_id,fee_config_name
+        ) values (
+        #{prfId},#{ruleId},#{communityId},#{feeId},#{feeConfigName}
+        )
+    </insert>
+
+
+    <!-- 查询云打印规则费用信息 add by wuxw 2018-07-03 -->
+    <select id="getPrinterRuleFeeInfo" parameterType="Map" resultType="Map">
+        select t.prf_id,t.prf_id prfId,t.status_cd,t.status_cd statusCd,t.rule_id,t.rule_id
+        ruleId,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,t.fee_config_name feeConfigName
+        from printer_rule_fee t
+        where 1 =1
+        <if test="prfId !=null and prfId != ''">
+            and t.prf_id= #{prfId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改云打印规则费用信息 add by wuxw 2018-07-03 -->
+    <update id="updatePrinterRuleFeeInfo" parameterType="Map">
+        update printer_rule_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            , t.fee_config_name= #{feeConfigName}
+        </if>
+        where 1=1
+        <if test="prfId !=null and prfId != ''">
+            and t.prf_id= #{prfId}
+        </if>
+
+    </update>
+
+    <!-- 查询云打印规则费用数量 add by wuxw 2018-07-03 -->
+    <select id="queryPrinterRuleFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from printer_rule_fee t
+        where 1 =1
+        <if test="prfId !=null and prfId != ''">
+            and t.prf_id= #{prfId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+
+
+    </select>
+
+</mapper>
