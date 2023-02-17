@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.common.IPrinterRuleFeeV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.po.printerRuleFee.PrinterRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,12 +56,22 @@ public class SavePrinterRuleFeeCmd extends Cmd {
     @Autowired
     private IPrinterRuleFeeV1InnerServiceSMO printerRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("feeId"));
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+       List<FeeConfigDto> feeConfigDtos =  payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
+
+       Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
+       reqJson.put("feeConfigName",feeConfigDtos.get(0).getFeeName());
     }
 
     @Override

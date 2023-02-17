@@ -1,6 +1,7 @@
 package com.java110.dto.printerRuleFee;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,11 @@ import java.util.Date;
 public class PrinterRuleFeeDto extends PageDto implements Serializable {
 
     private String prfId;
-private String ruleId;
-private String communityId;
-private String feeId;
+    private String ruleId;
+    private String communityId;
+    private String feeId;
+
+    private String feeConfigName;
 
 
     private Date createTime;
@@ -28,25 +31,32 @@ private String feeId;
     public String getPrfId() {
         return prfId;
     }
-public void setPrfId(String prfId) {
+
+    public void setPrfId(String prfId) {
         this.prfId = prfId;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
 
@@ -65,5 +75,13 @@ public void setFeeId(String feeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFeeConfigName() {
+        return feeConfigName;
+    }
+
+    public void setFeeConfigName(String feeConfigName) {
+        this.feeConfigName = feeConfigName;
     }
 }

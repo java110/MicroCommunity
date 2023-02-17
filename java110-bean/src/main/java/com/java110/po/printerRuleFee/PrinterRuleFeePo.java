@@ -17,6 +17,7 @@ package com.java110.po.printerRuleFee;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-02-17 14:51:51 mail: 928255095@qq.com
@@ -28,41 +29,57 @@ import java.util.Date;
 public class PrinterRuleFeePo implements Serializable {
 
     private String prfId;
-private String statusCd = "0";
-private String ruleId;
-private String communityId;
-private String feeId;
-public String getPrfId() {
+    private String statusCd = "0";
+    private String ruleId;
+    private String communityId;
+    private String feeId;
+    private String feeConfigName;
+
+    public String getPrfId() {
         return prfId;
     }
-public void setPrfId(String prfId) {
+
+    public void setPrfId(String prfId) {
         this.prfId = prfId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
 
+    public String getFeeConfigName() {
+        return feeConfigName;
+    }
 
-
+    public void setFeeConfigName(String feeConfigName) {
+        this.feeConfigName = feeConfigName;
+    }
 }
