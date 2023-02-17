@@ -1539,8 +1539,8 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.payer_obj_name objName,t.fee_name feeName,pf.end_time feeCreateTime,t.update_time
-        updateTime,pfa.`value` ownerName,br.built_up_area builtUpArea ,SUM(t.amount_owed) oweAmount,max(t.deadline_time)
+        select t.payer_obj_name objName,t.fee_name feeName,pf.end_time feeCreateTime,t.update_time updateTime,
+        pfa.`value` ownerName,br.built_up_area builtUpArea ,SUM(t.amount_owed) oweAmount,max(t.deadline_time)
         deadlineTime
         from report_owe_fee t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1590,8 +1590,7 @@
             and t.create_time &lt;= #{endTime}
         </if>
         and t.amount_owed > 0 and pf.end_time &lt; now()
-        group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.update_time
-        updateTime,pfa.`value` ,br.built_up_area
+        group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.update_time,pfa.`value` ,br.built_up_area
         HAVING oweAmount > 0
         order by t.payer_obj_name
         <if test="page != -1 and page != null ">
