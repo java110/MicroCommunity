@@ -194,9 +194,8 @@ public class FeieManufactor implements IPrinter {
         HttpPost post = new HttpPost(REQUEST_URL);
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         nvps.add(new BasicNameValuePair("user", user));
-        String STIME = String.valueOf(stime);
-        nvps.add(new BasicNameValuePair("stime", STIME));
-        nvps.add(new BasicNameValuePair("sig", signature(user, ukey, STIME)));
+        nvps.add(new BasicNameValuePair("stime", stime));
+        nvps.add(new BasicNameValuePair("sig", signature(user, ukey, stime)));
         nvps.add(new BasicNameValuePair("apiname", "Open_printMsg"));// 固定值,不需要修改
         nvps.add(new BasicNameValuePair("sn", machinePrinterDto.getMachineCode()));
         nvps.add(new BasicNameValuePair("content", printStr));
@@ -212,6 +211,7 @@ public class FeieManufactor implements IPrinter {
                 if (httpentity != null) {
                     // 服务器返回的JSON字符串，建议要当做日志记录起来
                     result = EntityUtils.toString(httpentity);
+                    System.out.println(result);
                 }
             }
         } catch (Exception e) {
