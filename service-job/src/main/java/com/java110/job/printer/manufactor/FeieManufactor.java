@@ -16,9 +16,18 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -158,24 +168,79 @@ public class FeieManufactor implements IPrinter {
         String user = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "user");
         String ukey = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "ukey");
 
-        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-        postParameters.add("user", user);
-        postParameters.add("stime", stime);
-        postParameters.add("sig", signature(user, ukey, stime));
-        postParameters.add("apiname", "Open_printMsg");
-        postParameters.add("sn", machinePrinterDto.getMachineCode());
-        postParameters.add("content", printStr);
-        postParameters.add("times", quantity+"");
+//        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+//        postParameters.add("user", user);
+//        postParameters.add("stime", stime);
+//        postParameters.add("sig", signature(user, ukey, stime));
+//        postParameters.add("apiname", "Open_printMsg");
+//        postParameters.add("sn", machinePrinterDto.getMachineCode());
+//        postParameters.add("content", printStr);
+//        postParameters.add("times", quantity+"");
 
         //添加人脸
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-        ResponseEntity<String> responseEntity = formRestTemplate.exchange(REQUEST_URL, HttpMethod.POST, httpEntity, String.class);
-        logger.debug("请求信息 ： " + httpEntity + "，返回信息:" + responseEntity);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
+//        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
+//        ResponseEntity<String> responseEntity = formRestTemplate.exchange(REQUEST_URL, HttpMethod.POST, httpEntity, String.class);
+//        logger.debug("请求信息 ： " + httpEntity + "，返回信息:" + responseEntity);
 
+        // 通过POST请求，发送打印信息到服务器
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setSocketTimeout(30000)// 读取超时
+                .setConnectTimeout(30000)// 连接超时
+                .build();
+
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
+        HttpPost post = new HttpPost(REQUEST_URL);
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair("user", user));
+        String STIME = String.valueOf(stime);
+        nvps.add(new BasicNameValuePair("stime", STIME));
+        nvps.add(new BasicNameValuePair("sig", signature(user, ukey, STIME)));
+        nvps.add(new BasicNameValuePair("apiname", "Open_printMsg"));// 固定值,不需要修改
+        nvps.add(new BasicNameValuePair("sn", machinePrinterDto.getMachineCode()));
+        nvps.add(new BasicNameValuePair("content", printStr));
+        nvps.add(new BasicNameValuePair("times", quantity+""));// 打印联数
+        CloseableHttpResponse response = null;
+        String result = null;
+        try {
+            post.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+            response = httpClient.execute(post);
+            int statecode = response.getStatusLine().getStatusCode();
+            if (statecode == 200) {
+                HttpEntity httpentity = response.getEntity();
+                if (httpentity != null) {
+                    // 服务器返回的JSON字符串，建议要当做日志记录起来
+                    result = EntityUtils.toString(httpentity);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(response, post, httpClient);
+        }
 
         return new ResultVo(ResultVo.CODE_OK, "成功");
+    }
+
+    public static void close(CloseableHttpResponse response, HttpPost post, CloseableHttpClient httpClient) {
+        try {
+            if (response != null) {
+                response.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            post.abort();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            httpClient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getPrintPayFeeDetailHeaderContent(List<FeieLine> order) {
