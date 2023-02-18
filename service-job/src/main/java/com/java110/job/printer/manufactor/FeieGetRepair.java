@@ -11,7 +11,7 @@ public class FeieGetRepair {
 
     public static String getPrintRepairHeaderContent(List<FeieLine> order) {
         String orderInfo = "<CB>维修工单</CB><BR>";
-        orderInfo += "您有新的维修任务如下：";
+        orderInfo += "您有新的维修任务如下：<BR>";
         orderInfo += "********************************<BR>";
         for (int i = 0; i < order.size(); i++) {
             String title = order.get(i).getTitle();
