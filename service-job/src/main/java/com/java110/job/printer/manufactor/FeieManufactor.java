@@ -165,7 +165,7 @@ public class FeieManufactor implements IPrinter {
         postParameters.add("apiname", "Open_printMsg");
         postParameters.add("sn", machinePrinterDto.getMachineCode());
         postParameters.add("content", printStr);
-        postParameters.add("times", quantity);
+        postParameters.add("times", quantity+"");
 
         //添加人脸
         HttpHeaders httpHeaders = new HttpHeaders();
