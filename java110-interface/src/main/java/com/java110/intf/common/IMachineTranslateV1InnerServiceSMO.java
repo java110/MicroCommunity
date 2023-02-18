@@ -66,6 +66,6 @@ public interface IMachineTranslateV1InnerServiceSMO {
     @RequestMapping(value = "/queryMachineTranslatesCount", method = RequestMethod.POST)
     int queryMachineTranslatesCount(@RequestBody MachineTranslateDto machineTranslateDto);
 
-    @RequestMapping(value = "/queryMachineTranslates", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryObjStateInMachineTranslates", method = RequestMethod.POST)
     List<MachineTranslateDto> queryObjStateInMachineTranslates(@RequestBody MachineTranslateDto machineTranslateDto);
 }
