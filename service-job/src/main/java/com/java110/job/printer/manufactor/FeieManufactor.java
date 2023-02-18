@@ -60,8 +60,9 @@ public class FeieManufactor implements IPrinter {
 
     /**
      * 请求地址
+     * http://api.feieyun.cn/Api/Open/
      */
-    public static final String REQUEST_URL = "http://api.de.feieyun.com/Api/Open/";
+    public static final String REQUEST_URL = "http://api.feieyun.cn/Api/Open/";
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -200,6 +201,7 @@ public class FeieManufactor implements IPrinter {
         nvps.add(new BasicNameValuePair("sn", machinePrinterDto.getMachineCode()));
         nvps.add(new BasicNameValuePair("content", printStr));
         nvps.add(new BasicNameValuePair("times", quantity+""));// 打印联数
+
         CloseableHttpResponse response = null;
         String result = null;
         try {
