@@ -204,7 +204,7 @@ public class FeieManufactor implements IPrinter {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         String staffName = "-";
         if(userDtos != null && userDtos.size() >0){
-            staffName = userDtos.get(0).getStaffName();
+            staffName = userDtos.get(0).getName();
         }
 
         String printStr = "";
