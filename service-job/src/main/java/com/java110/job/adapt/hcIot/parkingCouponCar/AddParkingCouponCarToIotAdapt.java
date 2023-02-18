@@ -31,6 +31,7 @@ import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
 import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,7 +56,6 @@ public class AddParkingCouponCarToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
-
 
 
     /**
@@ -98,8 +98,18 @@ public class AddParkingCouponCarToIotAdapt extends DatabusAdaptImpl {
 
         JSONObject postParameters = new JSONObject();
 
-        postParameters.put("couponName", parkingCouponCarDtos.get(0).getCouponName());
-        postParameters.put("shopName", parkingCouponCarDtos.get(0).getShopName());
+        String couponName = parkingCouponCarDtos.get(0).getCouponName();
+        String shopName = parkingCouponCarDtos.get(0).getShopName();
+
+        if (StringUtil.isEmpty(couponName)) {
+            couponName = parkingCouponCarDtos.get(0).getTypeCdName();
+        }
+        if (StringUtil.isEmpty(shopName)) {
+            shopName = "物业公司";
+        }
+
+        postParameters.put("couponName", couponName);
+        postParameters.put("shopName",shopName);
         postParameters.put("extCommunityId", parkingCouponCarDtos.get(0).getCommunityId());
         postParameters.put("extPaId", parkingCouponCarDtos.get(0).getPaId());
         postParameters.put("carNum", parkingCouponCarDtos.get(0).getCarNum());
