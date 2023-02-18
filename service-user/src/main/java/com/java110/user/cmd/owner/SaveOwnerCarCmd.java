@@ -59,17 +59,11 @@ public class SaveOwnerCarCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "未包含小区ID");
-        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求报文中未包含ownerId");
-        Assert.jsonObjectHaveKey(reqJson, "carNum", "请求报文中未包含carNum");
-        Assert.jsonObjectHaveKey(reqJson, "carBrand", "请求报文中未包含carBrand");
-        Assert.jsonObjectHaveKey(reqJson, "carType", "请求报文中未包含carType");
-        Assert.jsonObjectHaveKey(reqJson, "carColor", "未包含carColor");
-        Assert.jsonObjectHaveKey(reqJson, "psId", "未包含psId");
-        Assert.jsonObjectHaveKey(reqJson, "storeId", "未包含storeId");
-        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
-        Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
+        Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
+        Assert.hasKeyAndValue(reqJson, "carType", "请求报文中未包含carType");
+        Assert.hasKeyAndValue(reqJson, "psId", "未包含psId");
 
         //检查车位是否是空闲状态
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
@@ -127,7 +121,7 @@ public class SaveOwnerCarCmd extends Cmd {
 
         if (!OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
             reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
-            reqJson.put("endTime", "2037-01-01");
+            reqJson.put("endTime", "2050-01-01");
         }
         JSONObject businessOwnerCar = new JSONObject();
         businessOwnerCar.putAll(reqJson);

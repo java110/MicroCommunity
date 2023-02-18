@@ -165,4 +165,25 @@
 
     </select>
 
+    <select id="queryObjStateInMachineTranslates" parameterType="Map" resultType="Map">
+        select a.obj_id objId,a.state,a.remark,td1.name stateName
+        from machine_translate a
+        left join t_dict td1 on a.state=td1.status_cd and td1.table_name='machine_translate' and td1.table_columns='state'
+        where a.machine_translate_id in
+        (
+            select max(t.machine_translate_id) machineTranslateId
+            from machine_translate t
+            where t.status_cd = '0'
+            and t.obj_id in
+            <foreach collection="objIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            <if test="communityId !=null and communityId != ''">
+                and t.community_id= #{communityId}
+            </if>
+            group by t.obj_id
+        )
+    </select>
+
+
 </mapper>

@@ -70,6 +70,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private Date endTime;
     private String state;
     private String stateName;
+    private String iotStateName;
+    private String iotRemark;
 
     private String areaNum;
 
@@ -499,5 +501,21 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setMemberCarNumLike(String memberCarNumLike) {
         this.memberCarNumLike = memberCarNumLike;
+    }
+
+    public String getIotStateName() {
+        return iotStateName;
+    }
+
+    public void setIotStateName(String iotStateName) {
+        this.iotStateName = iotStateName;
+    }
+
+    public String getIotRemark() {
+        return iotRemark;
+    }
+
+    public void setIotRemark(String iotRemark) {
+        this.iotRemark = iotRemark;
     }
 }
