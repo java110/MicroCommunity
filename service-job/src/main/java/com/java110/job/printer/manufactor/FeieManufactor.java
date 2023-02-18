@@ -155,11 +155,11 @@ public class FeieManufactor implements IPrinter {
         printStr += getPrintPayFeeDetailFloorContent(totalDecimal.doubleValue());
 
         String stime = String.valueOf(System.currentTimeMillis() / 1000);
-        String user =  MappingCache.getValue(MappingConstant.URL_DOMAIN,"user");
-        String ukey =  MappingCache.getValue(MappingConstant.URL_DOMAIN,"ukey");
+        String user =  MappingCache.getValue(MappingConstant.FEIE_DOMAIN,"user");
+        String ukey =  MappingCache.getValue(MappingConstant.FEIE_DOMAIN,"ukey");
 
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-        postParameters.add("user", MappingCache.getValue(MappingConstant.URL_DOMAIN,"user"));
+        postParameters.add("user", user);
         postParameters.add("stime", stime);
         postParameters.add("sig", signature(user,ukey,stime));
         postParameters.add("apiname", "Open_printMsg");

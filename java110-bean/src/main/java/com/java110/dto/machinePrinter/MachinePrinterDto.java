@@ -1,6 +1,7 @@
 package com.java110.dto.machinePrinter;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class MachinePrinterDto extends PageDto implements Serializable {
 
     private String implBean;
-private String machineId;
-private String machineCode;
-private String communityId;
-private String machineName;
+    private String implBeanName;
+    private String machineId;
+    private String machineCode;
+    private String communityId;
+    private String machineName;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String machineName;
     public String getImplBean() {
         return implBean;
     }
-public void setImplBean(String implBean) {
+
+    public void setImplBean(String implBean) {
         this.implBean = implBean;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getMachineCode() {
+
+    public String getMachineCode() {
         return machineCode;
     }
-public void setMachineCode(String machineCode) {
+
+    public void setMachineCode(String machineCode) {
         this.machineCode = machineCode;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
 
@@ -72,5 +83,13 @@ public void setMachineName(String machineName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getImplBeanName() {
+        return implBeanName;
+    }
+
+    public void setImplBeanName(String implBeanName) {
+        this.implBeanName = implBeanName;
     }
 }

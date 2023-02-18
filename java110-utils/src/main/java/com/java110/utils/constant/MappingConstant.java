@@ -37,6 +37,9 @@ public final class MappingConstant {
     public static final String ENV_DOMAIN = "ENV_DOMAIN";
 
 
+    //飞蛾小票机配置
+    public static final String FEIE_DOMAIN = "FEIE_DOMAIN";
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
