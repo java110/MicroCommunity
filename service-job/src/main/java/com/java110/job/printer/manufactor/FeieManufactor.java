@@ -7,9 +7,12 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
 import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.fee.*;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.job.printer.IPrinter;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -28,17 +31,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,6 +70,9 @@ public class FeieManufactor implements IPrinter {
     private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
     @Autowired
     private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
     /**
      * **************************
@@ -163,7 +162,7 @@ public class FeieManufactor implements IPrinter {
             totalDecimal = totalDecimal.add(new BigDecimal(Double.parseDouble(tmpFeeReceiptDetailDto.getAmount())));
 
         }
-        printStr += getPrintPayFeeDetailFloorContent(totalDecimal.doubleValue());
+        printStr += getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue());
 
         String stime = String.valueOf(System.currentTimeMillis() / 1000);
         String user = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "user");
@@ -200,7 +199,7 @@ public class FeieManufactor implements IPrinter {
         nvps.add(new BasicNameValuePair("apiname", "Open_printMsg"));// 固定值,不需要修改
         nvps.add(new BasicNameValuePair("sn", machinePrinterDto.getMachineCode()));
         nvps.add(new BasicNameValuePair("content", printStr));
-        nvps.add(new BasicNameValuePair("times", quantity+""));// 打印联数
+        nvps.add(new BasicNameValuePair("times", quantity + ""));// 打印联数
 
         CloseableHttpResponse response = null;
         String result = null;
@@ -269,11 +268,23 @@ public class FeieManufactor implements IPrinter {
         return orderInfo;
     }
 
-    public static String getPrintPayFeeDetailFloorContent(double totals) {
+    public String getPrintPayFeeDetailFloorContent(String communityId, double totals) {
         String orderInfo = "";
-        orderInfo += "********************************<BR>";
+        //orderInfo += "********************************<BR>";
         orderInfo += "合计：" + totals + "元<BR>";
-        orderInfo += "<QR>http://www.feieyun.com</QR>";
+
+        //查询公众号配置
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setWeChatType("1100");
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityId);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+
+
+        if (smallWeChatDto != null && smallWeChatDtos.size() > 0) {
+            orderInfo += "<QR>" + UrlCache.getOwnerUrl() + "/#/?wAppId=" + smallWeChatDtos.get(0).getAppId() + "</QR>";
+        }
+
         return orderInfo;
     }
 

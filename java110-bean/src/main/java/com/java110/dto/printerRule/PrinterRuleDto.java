@@ -14,6 +14,8 @@ import java.util.Date;
  **/
 public class PrinterRuleDto extends PageDto implements Serializable {
 
+    public static final String STATE_NORMAL = "1001";//有效
+
     private String ruleName;
 private String remark;
 private String state;
