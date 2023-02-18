@@ -1,5 +1,6 @@
 package com.java110.job.printer.manufactor;
 
+import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
@@ -24,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -107,7 +107,7 @@ public class FeieManufactor implements IPrinter {
         feeReceiptDetailDto.setDetailIds(detailIds);
         feeReceiptDetailDto.setCommunityId(communityId);
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
-        if(feeReceiptDetailDtos == null || feeReceiptDetailDtos.size() < 1){
+        if (feeReceiptDetailDtos == null || feeReceiptDetailDtos.size() < 1) {
             throw new CmdException("未生成收据");
         }
 
@@ -115,14 +115,14 @@ public class FeieManufactor implements IPrinter {
         feeReceiptDto.setReceiptId(feeReceiptDetailDtos.get(0).getReceiptId());
         feeReceiptDto.setCommunityId(communityId);
         List<FeeReceiptDto> feeReceiptDtos = feeReceiptInnerServiceSMOImpl.queryFeeReceipts(feeReceiptDto);
-        Assert.listOnlyOne(feeReceiptDtos,"未生成收据");
+        Assert.listOnlyOne(feeReceiptDtos, "未生成收据");
 
         /*************************************头部******************************************/
         List<FeieLine> feieLines = new ArrayList<>();
-        feieLines.add(new FeieLine("单号",feeReceiptDetailDtos.get(0).getReceiptId()));
-        feieLines.add(new FeieLine("房号",feeReceiptDtos.get(0).getObjName()));
-        feieLines.add(new FeieLine("业主",feeReceiptDtos.get(0).getPayObjName()));
-        feieLines.add(new FeieLine("时间", DateUtil.getFormatTimeString(DateUtil.getCurrentDate(),DateUtil.DATE_FORMATE_STRING_A)));
+        feieLines.add(new FeieLine("单号", feeReceiptDetailDtos.get(0).getReceiptId()));
+        feieLines.add(new FeieLine("房号", feeReceiptDtos.get(0).getObjName()));
+        feieLines.add(new FeieLine("业主", feeReceiptDtos.get(0).getPayObjName()));
+        feieLines.add(new FeieLine("时间", DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A)));
         printStr = getPrintPayFeeDetailHeaderContent(feieLines);
         /*************************************头部******************************************/
 
@@ -131,22 +131,22 @@ public class FeieManufactor implements IPrinter {
         Date endTime = null;
         Calendar endTimeCal = null;
         BigDecimal totalDecimal = new BigDecimal(0);
-        for(FeeReceiptDetailDto tmpFeeReceiptDetailDto: feeReceiptDetailDtos){
-            feieLines.add(new FeieLine("收费项目",tmpFeeReceiptDetailDto.getFeeName()));
+        for (FeeReceiptDetailDto tmpFeeReceiptDetailDto : feeReceiptDetailDtos) {
+            feieLines.add(new FeieLine("收费项目", tmpFeeReceiptDetailDto.getFeeName()));
             startTime = DateUtil.getDateFromStringB(tmpFeeReceiptDetailDto.getStartTime());
             endTime = DateUtil.getDateFromStringB(tmpFeeReceiptDetailDto.getEndTime());
             //周期性和间接性
-            if(!FeeDto.FEE_FLAG_ONCE.equals(tmpFeeReceiptDetailDto.getFeeFlag())){
+            if (!FeeDto.FEE_FLAG_ONCE.equals(tmpFeeReceiptDetailDto.getFeeFlag())) {
                 endTimeCal = Calendar.getInstance();
                 endTimeCal.setTime(endTime);
-                endTimeCal.add(Calendar.MONTH,-1);
+                endTimeCal.add(Calendar.MONTH, -1);
                 endTime.getTime();
             }
-            feieLines.add(new FeieLine("收费范围",DateUtil.getFormatTimeString(startTime,DateUtil.DATE_FORMATE_STRING_B)+"至"+DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_B)));
-            feieLines.add(new FeieLine("单价/固定费",tmpFeeReceiptDetailDto.getSquarePrice()));
-            feieLines.add(new FeieLine("面积/用量",tmpFeeReceiptDetailDto.getArea()));
-            feieLines.add(new FeieLine("金额",tmpFeeReceiptDetailDto.getAmount()));
-            feieLines.add(new FeieLine("备注",tmpFeeReceiptDetailDto.getRemark()));
+            feieLines.add(new FeieLine("收费范围", DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_B) + "至" + DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)));
+            feieLines.add(new FeieLine("单价/固定费", tmpFeeReceiptDetailDto.getSquarePrice()));
+            feieLines.add(new FeieLine("面积/用量", tmpFeeReceiptDetailDto.getArea()));
+            feieLines.add(new FeieLine("金额", tmpFeeReceiptDetailDto.getAmount()));
+            feieLines.add(new FeieLine("备注", tmpFeeReceiptDetailDto.getRemark()));
             printStr += getPrintPayFeeDetailBodyContent(feieLines);
 
             totalDecimal = totalDecimal.add(new BigDecimal(Double.parseDouble(tmpFeeReceiptDetailDto.getAmount())));
@@ -155,13 +155,13 @@ public class FeieManufactor implements IPrinter {
         printStr += getPrintPayFeeDetailFloorContent(totalDecimal.doubleValue());
 
         String stime = String.valueOf(System.currentTimeMillis() / 1000);
-        String user =  MappingCache.getValue(MappingConstant.FEIE_DOMAIN,"user");
-        String ukey =  MappingCache.getValue(MappingConstant.FEIE_DOMAIN,"ukey");
+        String user = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "user");
+        String ukey = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "ukey");
 
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
         postParameters.add("user", user);
         postParameters.add("stime", stime);
-        postParameters.add("sig", signature(user,ukey,stime));
+        postParameters.add("sig", signature(user, ukey, stime));
         postParameters.add("apiname", "Open_printMsg");
         postParameters.add("sn", machinePrinterDto.getMachineCode());
         postParameters.add("content", printStr);
