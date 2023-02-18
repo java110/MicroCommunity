@@ -22,12 +22,15 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.common.IPrinterRuleV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.printerRule.PrinterRuleDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -47,34 +50,35 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "printer.listPrinterRule")
 public class ListPrinterRuleCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListPrinterRuleCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListPrinterRuleCmd.class);
     @Autowired
     private IPrinterRuleV1InnerServiceSMO printerRuleV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           PrinterRuleDto printerRuleDto = BeanConvertUtil.covertBean(reqJson, PrinterRuleDto.class);
+        PrinterRuleDto printerRuleDto = BeanConvertUtil.covertBean(reqJson, PrinterRuleDto.class);
 
-           int count = printerRuleV1InnerServiceSMOImpl.queryPrinterRulesCount(printerRuleDto);
+        int count = printerRuleV1InnerServiceSMOImpl.queryPrinterRulesCount(printerRuleDto);
 
-           List<PrinterRuleDto> printerRuleDtos = null;
+        List<PrinterRuleDto> printerRuleDtos = null;
 
-           if (count > 0) {
-               printerRuleDtos = printerRuleV1InnerServiceSMOImpl.queryPrinterRules(printerRuleDto);
-           } else {
-               printerRuleDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            printerRuleDtos = printerRuleV1InnerServiceSMOImpl.queryPrinterRules(printerRuleDto);
+        } else {
+            printerRuleDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, printerRuleDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, printerRuleDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

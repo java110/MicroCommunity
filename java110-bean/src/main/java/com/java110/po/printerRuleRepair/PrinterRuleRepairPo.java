@@ -17,6 +17,7 @@ package com.java110.po.printerRuleRepair;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-02-17 14:54:10 mail: 928255095@qq.com
@@ -28,41 +29,59 @@ import java.util.Date;
 public class PrinterRuleRepairPo implements Serializable {
 
     private String prrId;
-private String repairType;
-private String statusCd = "0";
-private String ruleId;
-private String communityId;
-public String getPrrId() {
+    private String repairType;
+
+    private String repairTypeName;
+
+    private String statusCd = "0";
+    private String ruleId;
+    private String communityId;
+
+    public String getPrrId() {
         return prrId;
     }
-public void setPrrId(String prrId) {
+
+    public void setPrrId(String prrId) {
         this.prrId = prrId;
     }
-public String getRepairType() {
+
+    public String getRepairType() {
         return repairType;
     }
-public void setRepairType(String repairType) {
+
+    public void setRepairType(String repairType) {
         this.repairType = repairType;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getRepairTypeName() {
+        return repairTypeName;
+    }
 
-
+    public void setRepairTypeName(String repairTypeName) {
+        this.repairTypeName = repairTypeName;
+    }
 }

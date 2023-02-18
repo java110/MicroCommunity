@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.repair.RepairSettingDto;
 import com.java110.intf.common.IPrinterRuleRepairV1InnerServiceSMO;
+import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
 import com.java110.po.printerRuleRepair.PrinterRuleRepairPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,11 +56,22 @@ public class SavePrinterRuleRepairCmd extends Cmd {
     @Autowired
     private IPrinterRuleRepairV1InnerServiceSMO printerRuleRepairV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairSettingV1InnerServiceSMO repairSettingV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "repairType", "请求报文中未包含repairType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+        RepairSettingDto repairSettingDto = new RepairSettingDto();
+        repairSettingDto.setCommunityId(reqJson.getString("communityId"));
+        repairSettingDto.setRepairType(reqJson.getString("repairType"));
+        List<RepairSettingDto> repairSettingDtos = repairSettingV1InnerServiceSMOImpl.queryRepairSettings(repairSettingDto);
+
+        Assert.listOnlyOne(repairSettingDtos,"未包含报修类型");
+        reqJson.put("repairTypeName",repairSettingDtos.get(0).getRepairTypeName());
 
     }
 
