@@ -7,9 +7,16 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
 import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.printer.IPrinter;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
@@ -74,6 +81,15 @@ public class FeieManufactor implements IPrinter {
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
+
+    @Autowired
+    private IRepairInnerServiceSMO repairInnerServiceSMO;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     /**
      * **************************
      * 单号：832023020800440026
@@ -106,13 +122,6 @@ public class FeieManufactor implements IPrinter {
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
         Assert.listOnlyOne(feeDetailDtos, "交费明细不存在");
 
-//        FeeDto feeDto = new FeeDto();
-//        feeDto.setFeeId(feeDetailDtos.get(0).getFeeId());
-//        feeDto.setCommunityId(communityId);
-//        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-//
-//        Assert.listOnlyOne(feeDtos, "费用不存在");
-
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
         feeReceiptDetailDto.setDetailIds(detailIds);
         feeReceiptDetailDto.setCommunityId(communityId);
@@ -133,7 +142,7 @@ public class FeieManufactor implements IPrinter {
         feieLines.add(new FeieLine("房号", feeReceiptDtos.get(0).getObjName()));
         feieLines.add(new FeieLine("业主", feeReceiptDtos.get(0).getPayObjName()));
         feieLines.add(new FeieLine("时间", DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A)));
-        printStr = getPrintPayFeeDetailHeaderContent(feieLines);
+        printStr = FeieGetPayFeeDetail.getPrintPayFeeDetailHeaderContent(feieLines);
         /*************************************头部******************************************/
 
         feieLines = new ArrayList<>();
@@ -157,33 +166,76 @@ public class FeieManufactor implements IPrinter {
             feieLines.add(new FeieLine("面积/用量", tmpFeeReceiptDetailDto.getArea()));
             feieLines.add(new FeieLine("金额", tmpFeeReceiptDetailDto.getAmount()));
             feieLines.add(new FeieLine("备注", tmpFeeReceiptDetailDto.getRemark()));
-            printStr += getPrintPayFeeDetailBodyContent(feieLines);
-
+            printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailBodyContent(feieLines);
             totalDecimal = totalDecimal.add(new BigDecimal(Double.parseDouble(tmpFeeReceiptDetailDto.getAmount())));
-
         }
-        printStr += getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue());
+        printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue(), smallWeChatInnerServiceSMOImpl);
 
+        doPrint(quantity, machinePrinterDto, printStr);
+
+        return new ResultVo(ResultVo.CODE_OK, "成功");
+    }
+
+
+    @Override
+    public ResultVo printRepair(String ruId, String communityId, int quantity, MachinePrinterDto machinePrinterDto) {
+
+        RepairUserDto repairUserDto = new RepairUserDto();
+        repairUserDto.setRuId(ruId);
+        repairUserDto.setCommunityId(communityId);
+        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
+
+        Assert.listOnlyOne(repairUserDtos, "报修单不存在");
+
+        if(RepairUserDto.STATE_SUBMIT.equals(repairUserDtos.get(0).getState())){
+            return new ResultVo(ResultVo.CODE_OK, "成功");
+        }
+
+        String repairId = repairUserDtos.get(0).getRepairId();
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(repairId);
+        repairDto.setCommunityId(repairId);
+        List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
+        Assert.listOnlyOne(repairDtos, "报修单不存在");
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(repairUserDtos.get(0).getStaffId());
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        String staffName = "-";
+        if(userDtos != null && userDtos.size() < 1){
+            staffName = userDtos.get(0).getStaffName();
+        }
+
+        String printStr = "";
+        /*************************************内容******************************************/
+        List<FeieLine> feieLines = new ArrayList<>();
+        feieLines.add(new FeieLine("标题", repairDtos.get(0).getRepairName()));
+        feieLines.add(new FeieLine("联系人", repairDtos.get(0).getRepairName()));
+        feieLines.add(new FeieLine("电话", repairDtos.get(0).getTel()));
+        feieLines.add(new FeieLine("时间",  repairDtos.get(0).getAppointmentTime()));
+        feieLines.add(new FeieLine("位置", repairDtos.get(0).getRepairObjName()));
+        feieLines.add(new FeieLine("维修师傅", staffName));
+        feieLines.add(new FeieLine("单号", repairDtos.get(0).getRepairId()));
+        feieLines.add(new FeieLine("内容", repairDtos.get(0).getContext()));
+        printStr = FeieGetRepair.getPrintRepairHeaderContent(feieLines);
+        /*************************************内容******************************************/
+
+        doPrint(quantity, machinePrinterDto, printStr);
+
+        return new ResultVo(ResultVo.CODE_OK, "成功");
+    }
+
+
+    private static String signature(String USER, String UKEY, String STIME) {
+        return DigestUtils.sha1Hex(USER + UKEY + STIME);
+    }
+
+
+    private static void doPrint(int quantity, MachinePrinterDto machinePrinterDto, String printStr) {
         String stime = String.valueOf(System.currentTimeMillis() / 1000);
         String user = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "user");
         String ukey = MappingCache.getValue(MappingConstant.FEIE_DOMAIN, "ukey");
-
-//        MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
-//        postParameters.add("user", user);
-//        postParameters.add("stime", stime);
-//        postParameters.add("sig", signature(user, ukey, stime));
-//        postParameters.add("apiname", "Open_printMsg");
-//        postParameters.add("sn", machinePrinterDto.getMachineCode());
-//        postParameters.add("content", printStr);
-//        postParameters.add("times", quantity+"");
-
-        //添加人脸
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-//        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters, httpHeaders);
-//        ResponseEntity<String> responseEntity = formRestTemplate.exchange(REQUEST_URL, HttpMethod.POST, httpEntity, String.class);
-//        logger.debug("请求信息 ： " + httpEntity + "，返回信息:" + responseEntity);
-
         // 通过POST请求，发送打印信息到服务器
         RequestConfig requestConfig = RequestConfig.custom()
                 .setSocketTimeout(30000)// 读取超时
@@ -220,8 +272,6 @@ public class FeieManufactor implements IPrinter {
         } finally {
             close(response, post, httpClient);
         }
-
-        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     public static void close(CloseableHttpResponse response, HttpPost post, CloseableHttpClient httpClient) {
@@ -242,60 +292,5 @@ public class FeieManufactor implements IPrinter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String getPrintPayFeeDetailHeaderContent(List<FeieLine> order) {
-        String orderInfo = "<CB>缴费通知单</CB><BR>";
-        orderInfo += "********************************<BR>";
-        for (int i = 0; i < order.size(); i++) {
-            String title = order.get(i).getTitle();
-            String value = order.get(i).getValue();
-            orderInfo += (title + ":" + value + "<BR>");
-        }
-        orderInfo += "********************************<BR>";
-        return orderInfo;
-    }
-
-    public static String getPrintPayFeeDetailBodyContent(List<FeieLine> business) {
-
-        String orderInfo = "";
-        for (int i = 0; i < business.size(); i++) {
-            String title = business.get(i).getTitle();
-            String value = business.get(i).getValue();
-            orderInfo += (title + ":" + value + "<BR>");
-        }
-        orderInfo += "********************************<BR>";
-        return orderInfo;
-    }
-
-    public String getPrintPayFeeDetailFloorContent(String communityId, double totals) {
-        String orderInfo = "";
-        //orderInfo += "********************************<BR>";
-        orderInfo += "合计：" + totals + "元<BR>";
-
-        //查询公众号配置
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setWeChatType("1100");
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityId);
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-
-
-        if (smallWeChatDto != null && smallWeChatDtos.size() > 0) {
-            orderInfo += "<QR>" + UrlCache.getOwnerUrl() + "/#/?wAppId=" + smallWeChatDtos.get(0).getAppId() + "</QR>";
-        }
-
-        return orderInfo;
-    }
-
-
-    @Override
-    public ResultVo printRepair(String repairUserId, String communityId, int quantity, MachinePrinterDto machinePrinterDto) {
-
-        return new ResultVo(ResultVo.CODE_OK, "成功");
-    }
-
-    private static String signature(String USER, String UKEY, String STIME) {
-        return DigestUtils.sha1Hex(USER + UKEY + STIME);
     }
 }
