@@ -194,7 +194,7 @@ public class FeieManufactor implements IPrinter {
         String repairId = repairUserDtos.get(0).getRepairId();
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(repairId);
-        repairDto.setCommunityId(repairId);
+        repairDto.setCommunityId(communityId);
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "报修单不存在");
 
