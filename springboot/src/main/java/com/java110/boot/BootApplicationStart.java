@@ -165,6 +165,15 @@ public class BootApplicationStart {
         restTemplate.setRequestFactory(httpRequestFactory);
         return restTemplate;
     }
+
+    @Bean
+    //@LoadBalanced
+    public RestTemplate formRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        return restTemplate;
+    }
+
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
