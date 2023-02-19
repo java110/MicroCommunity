@@ -198,7 +198,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 publishMsg(paramIn, communityDtos.get(0));
 
                 // 自动打印小票
-                autoPrintRepair(repairUserDto.getRuId(),repairDtos.get(0).getRepairType(),communityDtos.get(0));
+                autoPrintRepair(repairUserDtos.get(0).getRuId(),repairDtos.get(0).getRepairType(),communityDtos.get(0));
                 
                 //为企业微信群发消息
                 sendMsgToWechatGroup(paramIn, communityDtos.get(0));

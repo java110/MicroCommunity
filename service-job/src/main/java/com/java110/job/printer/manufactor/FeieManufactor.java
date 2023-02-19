@@ -199,13 +199,7 @@ public class FeieManufactor implements IPrinter {
         Assert.listOnlyOne(repairDtos, "报修单不存在");
 
 
-        UserDto userDto = new UserDto();
-        userDto.setUserId(repairUserDtos.get(0).getStaffId());
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        String staffName = "-";
-        if(userDtos != null && userDtos.size() >0){
-            staffName = userDtos.get(0).getName();
-        }
+        String staffName = repairUserDtos.get(0).getStaffName();
 
         String printStr = "";
         /*************************************内容******************************************/
