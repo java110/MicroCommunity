@@ -10,14 +10,18 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -58,7 +62,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"roomNum\": \"88488\",\n" +
                 "\t\"layer\": \"1\",\n" +
                 "\t\"unitId\":\"123123123\",\n" +
@@ -73,7 +77,7 @@ import java.util.List;
                 "\t\"roomRent\": \"0\",\n" +
                 "\t\"communityId\": \"2022121921870161\",\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 
 @Java110Cmd(serviceCode = "room.saveRoom")
@@ -84,6 +88,9 @@ public class SaveRoomCmd extends Cmd {
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -113,6 +120,10 @@ public class SaveRoomCmd extends Cmd {
             reqJson.put("roomRent", reqJson.getString("builtUpArea"));
         }
 
+        if (!RoomDto.STATE_FREE.equals(reqJson.getString("state"))) {
+            Assert.hasKeyAndValue(reqJson, "ownerId", "未包含业主信息");
+        }
+
         /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
         }*/
@@ -120,7 +131,9 @@ public class SaveRoomCmd extends Cmd {
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))
                 && !"2003".equals(reqJson.getString("state"))
-                && !"2004".equals(reqJson.getString("state"))) {
+                && !"2004".equals(reqJson.getString("state"))
+                && !"2005".equals(reqJson.getString("state"))
+                && !"2009".equals(reqJson.getString("state"))) {
             throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
         }
 
@@ -151,5 +164,34 @@ public class SaveRoomCmd extends Cmd {
         reqJson.put("userId", context.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
         RoomPo roomPo = BeanConvertUtil.covertBean(reqJson, RoomPo.class);
         roomV1InnerServiceSMOImpl.saveRoom(roomPo);
+
+        if (RoomDto.STATE_FREE.equals(roomPo.getState())) {
+            return;
+        }
+
+
+        if (!reqJson.containsKey("startTime")) {
+            reqJson.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        }
+        if (!reqJson.containsKey("endTime")) {
+            reqJson.put("endTime", "2037-01-01 00:00:00");
+        }
+        OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+        ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+        ownerRoomRelPo.setRoomId(roomPo.getRoomId());
+        ownerRoomRelPo.setOwnerId(reqJson.getString("ownerId"));
+        ownerRoomRelPo.setStartTime(reqJson.getString("startTime"));
+        ownerRoomRelPo.setEndTime(reqJson.getString("endTime"));
+        ownerRoomRelPo.setState("2001");
+        ownerRoomRelPo.setRemark("添加房屋直接绑定");
+        ownerRoomRelPo.setOperate("ADD");
+        ownerRoomRelPo.setUserId("-1");
+        int flag = ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
+
+        if (flag < 1) {
+            throw new CmdException("添加业主房屋关系");
+        }
+
+
     }
 }
