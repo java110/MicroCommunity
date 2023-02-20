@@ -27,6 +27,8 @@ import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ImageUtils;
@@ -95,16 +97,25 @@ public class EditAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(accessControlWhiteDtos, "门禁白名单不存在");
 
         AccessControlWhiteDto tmpAccessControlWhiteDto = accessControlWhiteDtos.get(0);
-
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(accessControlWhitePo.getAcwId());
-        fileRelDto.setRelTypeCd("10000");
+        //fileRelDto.setRelTypeCd("10000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
             return;
         }
+        String fileName = fileRelDtos.get(0).getFileSaveName();
 
-        String faceBase64 = ImageUtils.getBase64ByImgUrl(fileRelDtos.get(0).getFileSaveName());
+
+        if(StringUtil.isEmpty(fileName)){
+            return ;
+        }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        if(!fileName.startsWith("http")){
+            fileName = imgUrl +fileName;
+        }
+
+        String faceBase64 = ImageUtils.getBase64ByImgUrl(fileName);
         if (StringUtil.isEmpty(faceBase64)) {
             return;
         }

@@ -141,7 +141,7 @@ public class QueryOwnersCmd extends Cmd {
             for (OwnerDto ownerDto : ownerDtoList) {
                 //查询照片
                 FileRelDto fileRelDto = new FileRelDto();
-                fileRelDto.setObjId(ownerDto.getOwnerId());
+                fileRelDto.setObjId(ownerDto.getMemberId());
                 fileRelDto.setRelTypeCd("10000"); //业主照片
                 List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
                 if (fileRelDtos != null && fileRelDtos.size() > 0) {
