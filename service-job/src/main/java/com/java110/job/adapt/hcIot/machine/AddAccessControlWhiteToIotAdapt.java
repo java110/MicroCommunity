@@ -35,6 +35,8 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -88,6 +90,8 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
     private void doSendMachine(Business business, JSONObject data) {
 
+        System.out.printf("进入门禁白名单页面");
+
         AccessControlWhitePo accessControlWhitePo = BeanConvertUtil.covertBean(data, AccessControlWhitePo.class);
 
         AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
@@ -103,13 +107,23 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(accessControlWhitePo.getAcwId());
-        fileRelDto.setRelTypeCd("10000");
+        //fileRelDto.setRelTypeCd("10000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
             return;
         }
+        String fileName = fileRelDtos.get(0).getFileSaveName();
 
-        String faceBase64 = ImageUtils.getBase64ByImgUrl(fileRelDtos.get(0).getFileSaveName());
+
+        if(StringUtil.isEmpty(fileName)){
+            return ;
+        }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        if(!fileName.startsWith("http")){
+            fileName = imgUrl +fileName;
+        }
+
+        String faceBase64 = ImageUtils.getBase64ByImgUrl(fileName);
         if (StringUtil.isEmpty(faceBase64)) {
             return;
         }
