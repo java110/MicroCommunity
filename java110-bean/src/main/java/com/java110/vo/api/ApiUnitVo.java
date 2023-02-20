@@ -20,7 +20,7 @@ public class ApiUnitVo implements Serializable {
 
 
     private String floorNum;
-
+    private String floorName;
     //单元编号
     private String unitNum;
 
@@ -130,5 +130,13 @@ public class ApiUnitVo implements Serializable {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+
+    public String getFloorName() {
+        return floorName;
+    }
+
+    public void setFloorName(String floorName) {
+        this.floorName = floorName;
     }
 }
