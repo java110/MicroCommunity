@@ -104,15 +104,15 @@ public class AddAttendanceToIotAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(attendanceDtos, "未找到考勤班组");
 
         //查询考勤组下的员工
-        String classObjType = attendanceDtos.get(0).getClassesObjType();
-        List<JSONObject> staffs = null;
-        switch (classObjType) {
-            case AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT:
-                staffs = getPartmentStaff(attendanceDtos.get(0));
-                break;
-            default:
-                staffs = new ArrayList<>();
-        }
+//        String classObjType = attendanceDtos.get(0).getClassesObjType();
+//        List<JSONObject> staffs = null;
+//        switch (classObjType) {
+//            case AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT:
+//                staffs = getPartmentStaff(attendanceDtos.get(0));
+//                break;
+//            default:
+//                staffs = new ArrayList<>();
+//        }
 
 
         JSONObject postParameters = new JSONObject();
@@ -126,7 +126,7 @@ public class AddAttendanceToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("extClassesId", attendanceDtos.get(0).getClassesId());
         postParameters.put("extCommunityId", "-1");
         postParameters.put("attrs", JSONArray.parseArray(JSONArray.toJSONString(attendanceDtos.get(0).getAttrs())));
-        hcOwnerAttendanceAsynImpl.addAttendance(postParameters, staffs);
+        hcOwnerAttendanceAsynImpl.addAttendance(postParameters, null);
     }
 
     private List<JSONObject> getPartmentStaff(AttendanceClassesDto attendanceClassesDto) {
