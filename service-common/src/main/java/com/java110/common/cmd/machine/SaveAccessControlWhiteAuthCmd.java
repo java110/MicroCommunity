@@ -54,7 +54,6 @@ public class SaveAccessControlWhiteAuthCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "acwaId", "请求报文中未包含acwaId");
         Assert.hasKeyAndValue(reqJson, "acwId", "请求报文中未包含acwId");
         Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
