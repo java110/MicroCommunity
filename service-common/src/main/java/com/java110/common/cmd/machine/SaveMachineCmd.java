@@ -94,14 +94,19 @@ public class SaveMachineCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
 
-        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
+        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))
+            && !MachineDto.MACHINE_TYPE_ATTENDANCE.equals(reqJson.getString("machineTypeCd"))
+        ) {
             CommunityLocationDto communityLocationDto = new CommunityLocationDto();
             communityLocationDto.setCommunityId(reqJson.getString("communityId"));
             communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));
             List<CommunityLocationDto> locationDtos = communityLocationV1InnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
             Assert.listOnlyOne(locationDtos, "位置不存在");
             machinePo.setLocationObjId(locationDtos.get(0).getLocationObjId());
-        } else {
+        } else if(MachineDto.MACHINE_TYPE_ATTENDANCE.equals(reqJson.getString("machineTypeCd"))){
+            machinePo.setLocationObjId(reqJson.getString("locationTypeCd"));
+            machinePo.setLocationTypeCd(reqJson.getString("locationTypeCd"));
+        }else {
             machinePo.setLocationObjId("-1");
             machinePo.setLocationTypeCd("-1");
         }

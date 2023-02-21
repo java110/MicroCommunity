@@ -18,7 +18,8 @@
     <!-- 查询考勤员工信息 add by wuxw 2018-07-03 -->
     <select id="getAttendanceClassesStaffInfo" parameterType="Map" resultType="Map">
         select t.classes_id,t.classes_id classesId,t.cs_id,t.cs_id csId,t.staff_name,t.staff_name
-        staffName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId
+        staffName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,
+        t.create_time createTime
         from attendance_classes_staff t
         where 1 =1
         <if test="classesId !=null and classesId != ''">
@@ -29,6 +30,9 @@
         </if>
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -85,6 +89,9 @@
         </if>
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

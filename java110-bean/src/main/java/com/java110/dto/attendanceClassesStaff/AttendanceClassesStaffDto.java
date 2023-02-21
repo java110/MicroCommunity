@@ -18,6 +18,9 @@ public class AttendanceClassesStaffDto extends PageDto implements Serializable {
     private String classesId;
     private String csId;
     private String staffName;
+    private String staffNameLike;
+
+
     private String storeId;
     private String staffId;
 
@@ -92,5 +95,13 @@ public class AttendanceClassesStaffDto extends PageDto implements Serializable {
 
     public void setPersonFace(String personFace) {
         this.personFace = personFace;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }
