@@ -1,6 +1,7 @@
 package com.java110.dto.attendanceClassesStaff;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,45 +16,56 @@ import java.util.Date;
 public class AttendanceClassesStaffDto extends PageDto implements Serializable {
 
     private String classesId;
-private String csId;
-private String staffName;
-private String storeId;
-private String staffId;
+    private String csId;
+    private String staffName;
+    private String storeId;
+    private String staffId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private String personFace;
+
 
     public String getClassesId() {
         return classesId;
     }
-public void setClassesId(String classesId) {
+
+    public void setClassesId(String classesId) {
         this.classesId = classesId;
     }
-public String getCsId() {
+
+    public String getCsId() {
         return csId;
     }
-public void setCsId(String csId) {
+
+    public void setCsId(String csId) {
         this.csId = csId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -72,5 +84,13 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPersonFace() {
+        return personFace;
+    }
+
+    public void setPersonFace(String personFace) {
+        this.personFace = personFace;
     }
 }

@@ -22,7 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.attendanceClassesStaff.AttendanceClassesStaffPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,11 +57,17 @@ public class SaveAttendanceClassesStaffCmd extends Cmd {
     @Autowired
     private IAttendanceClassesStaffV1InnerServiceSMO attendanceClassesStaffV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesId", "请求报文中未包含classesId");
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+        Assert.hasKeyAndValue(reqJson, "photo", "请求报文中未包含人脸");
 
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         Assert.hasLength(storeId, "未包含商户信息");
@@ -68,14 +79,23 @@ public class SaveAttendanceClassesStaffCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("staffId"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"员工不存在");
+
         AttendanceClassesStaffPo attendanceClassesStaffPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesStaffPo.class);
         attendanceClassesStaffPo.setStoreId(storeId);
+        attendanceClassesStaffPo.setStaffName(userDtos.get(0).getName());
         attendanceClassesStaffPo.setCsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = attendanceClassesStaffV1InnerServiceSMOImpl.saveAttendanceClassesStaff(attendanceClassesStaffPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        photoSMOImpl.savePhoto(reqJson, attendanceClassesStaffPo.getCsId(), reqJson.getString("communityId"));
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

@@ -20,7 +20,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -54,6 +59,10 @@ public class ListAttendanceClassesStaffCmd extends Cmd {
     @Autowired
     private IAttendanceClassesStaffV1InnerServiceSMO attendanceClassesStaffV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -74,6 +83,7 @@ public class ListAttendanceClassesStaffCmd extends Cmd {
 
         if (count > 0) {
             attendanceClassesStaffDtos = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
+            refreshPhoto(attendanceClassesStaffDtos);
         } else {
             attendanceClassesStaffDtos = new ArrayList<>();
         }
@@ -83,5 +93,37 @@ public class ListAttendanceClassesStaffCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void refreshPhoto(List<AttendanceClassesStaffDto> attendanceClassesStaffDtos) {
+        if (attendanceClassesStaffDtos == null || attendanceClassesStaffDtos.size() < 1) {
+            return;
+        }
+
+        List<String> csId = new ArrayList<>();
+        for (AttendanceClassesStaffDto attendanceClassesStaffDto : attendanceClassesStaffDtos) {
+            csId.add(attendanceClassesStaffDto.getCsId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjIds(csId.toArray(new String[csId.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if (fileRelDtos == null || fileRelDtos.size() < 1) {
+            return;
+        }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        for (AttendanceClassesStaffDto attendanceClassesStaffDto : attendanceClassesStaffDtos) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (!attendanceClassesStaffDto.getCsId().equals(tmpFileRelDto.getObjId())) {
+                    continue;
+                }
+                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
+                    attendanceClassesStaffDto.setPersonFace(tmpFileRelDto.getFileSaveName());
+                } else {
+                    attendanceClassesStaffDto.setPersonFace(imgUrl + tmpFileRelDto.getFileSaveName());
+                }
+            }
+        }
     }
 }
