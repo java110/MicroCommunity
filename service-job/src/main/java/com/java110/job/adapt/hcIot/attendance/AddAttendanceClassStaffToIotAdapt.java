@@ -34,7 +34,11 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.attendanceClassesStaff.AttendanceClassesStaffPo;
 import com.java110.po.store.StoreUserPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ImageUtils;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -175,14 +179,19 @@ public class AddAttendanceClassStaffToIotAdapt extends DatabusAdaptImpl {
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
             return "";
         }
-        FileDto fileDto = new FileDto();
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
-        if (fileDtos == null || fileDtos.size() != 1) {
-            return "";
+        String fileName = fileRelDtos.get(0).getFileSaveName();
+
+
+        if(StringUtil.isEmpty(fileName)){
+            return fileName;
+        }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        if(!fileName.startsWith("http")){
+            fileName = imgUrl +fileName;
         }
 
-        return fileDtos.get(0).getContext();
+        String faceBase64 = ImageUtils.getBase64ByImgUrl(fileName);
+
+        return faceBase64;
     }
 }
