@@ -16,6 +16,7 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.user.dao.IAttendanceClassesStaffV1ServiceDao;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
@@ -45,6 +46,7 @@ public class AttendanceClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO 
 
 
     @Override
+    @Java110Transactional
     public int saveAttendanceClassesStaff(@RequestBody  AttendanceClassesStaffPo attendanceClassesStaffPo) {
         int saveFlag = attendanceClassesStaffV1ServiceDaoImpl.saveAttendanceClassesStaffInfo(BeanConvertUtil.beanCovertMap(attendanceClassesStaffPo));
         return saveFlag;
@@ -57,6 +59,7 @@ public class AttendanceClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO 
     }
 
      @Override
+     @Java110Transactional
     public int deleteAttendanceClassesStaff(@RequestBody  AttendanceClassesStaffPo attendanceClassesStaffPo) {
        attendanceClassesStaffPo.setStatusCd("1");
        int saveFlag = attendanceClassesStaffV1ServiceDaoImpl.updateAttendanceClassesStaffInfo(BeanConvertUtil.beanCovertMap(attendanceClassesStaffPo));
