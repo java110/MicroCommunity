@@ -14,6 +14,7 @@ import com.java110.doc.annotation.*;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreUserDto;
@@ -21,6 +22,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.common.*;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
+import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.attendanceClasses.AttendanceClassesPo;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
@@ -94,7 +96,7 @@ public class CheckInCmd extends Cmd {
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
-    private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
+    private IAttendanceClassesStaffV1InnerServiceSMO attendanceClassesStaffV1InnerServiceSMOImpl;
 
     @Autowired
     private IPhotoSMO photoSMOImpl;
@@ -122,33 +124,25 @@ public class CheckInCmd extends Cmd {
 
         Assert.listOnlyOne(storeUserDtos, "员工不存在");
 
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStoreId(storeUserDtos.get(0).getStoreId());
-        orgStaffRelDto.setStaffId(reqJson.getString("staffId"));
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+        AttendanceClassesStaffDto attendanceClassesStaffDto = new AttendanceClassesStaffDto();
+        attendanceClassesStaffDto.setStaffId(reqJson.getString("staffId"));
+        attendanceClassesStaffDto.setStoreId(storeUserDtos.get(0).getStoreId());
+        List<AttendanceClassesStaffDto> attendanceClassesStaffs = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
 
-        if(orgStaffRelDtos == null || orgStaffRelDtos.size() < 1){
+        if (attendanceClassesStaffs == null || attendanceClassesStaffs.size() < 1) {
             throw new CmdException("员工没有考勤任务");
         }
 
-        List<String> orgIds = new ArrayList<>();
-        for(OrgStaffRelDto orgStaffRelDto1: orgStaffRelDtos){
-            orgIds.add(orgStaffRelDto1.getOrgId());
-        }
-
-        // 考勤班次是否存在
-        AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
-        attendanceClassesDto.setStoreId(storeUserDtos.get(0).getStoreId());
-        attendanceClassesDto.setClassesObjIds(orgIds.toArray(new String[orgIds.size()]));
-        List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
-
-        if(attendanceClassesDtos == null || attendanceClassesDtos.size() < 1){
-            throw new CmdException("班次不存在");
-        }
-
-       // Assert.listOnlyOne(attendanceClassesDtos, "班次不存在");
-        for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos) {
-            doCheckInAttendanceLog(context, reqJson, storeUserDtos, userDtos, tmpAttendanceClassesDto);
+        for (AttendanceClassesStaffDto tmpAttendanceClassesStaffDto : attendanceClassesStaffs) {
+            // 考勤班次是否存在
+            AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
+            attendanceClassesDto.setStoreId(storeUserDtos.get(0).getStoreId());
+            attendanceClassesDto.setClassesId(tmpAttendanceClassesStaffDto.getClassesId());
+            List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
+            if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
+                throw new CmdException("班次不存在");
+            }
+            doCheckInAttendanceLog(context, reqJson, storeUserDtos, userDtos, attendanceClassesDtos.get(0));
         }
     }
 

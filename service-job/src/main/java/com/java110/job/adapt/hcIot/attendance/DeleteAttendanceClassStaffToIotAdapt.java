@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.job.adapt.hcIot.staff;
+package com.java110.job.adapt.hcIot.attendance;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.entity.order.Business;
@@ -25,10 +26,11 @@ import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
+import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.po.attendanceClassesStaff.AttendanceClassesStaffPo;
 import com.java110.po.store.StoreUserPo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -36,7 +38,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +47,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "deleteStaffToIotAdapt")
-public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "deleteAttendanceClassStaffToIotAdapt")
+public class DeleteAttendanceClassStaffToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcStoreUserAsynImpl;
@@ -57,7 +58,8 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
     private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
 
     @Autowired
-    private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
+    private IAttendanceClassesStaffV1InnerServiceSMO attendanceClassesStaffV1InnerServiceSMOImpl;
+
 
     @Autowired
     private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
@@ -86,8 +88,8 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
         JSONArray businessOwnerAttendances = new JSONArray();
-        if (data.containsKey(StoreUserPo.class.getSimpleName())) {
-            Object bObj = data.get(StoreUserPo.class.getSimpleName());
+        if (data.containsKey(AttendanceClassesStaffPo.class.getSimpleName())) {
+            Object bObj = data.get(AttendanceClassesStaffPo.class.getSimpleName());
             if (bObj instanceof JSONObject) {
                 businessOwnerAttendances.add(bObj);
             } else if (bObj instanceof List) {
@@ -95,7 +97,7 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessOwnerAttendances = (JSONArray) bObj;
             }
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessOwnerAttendances.add(data);
             }
@@ -110,21 +112,21 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
 
     private void doSendOwnerAttendance(Business business, JSONObject businessStoreUser) {
 
-        StoreUserPo storeUserPo = BeanConvertUtil.covertBean(businessStoreUser, StoreUserPo.class);
+        AttendanceClassesStaffPo attendanceClassesStaffPo = BeanConvertUtil.covertBean(businessStoreUser, AttendanceClassesStaffPo.class);
 
-        //查询员工部门
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStaffId(storeUserPo.getUserId());
-        orgStaffRelDto.setStoreId(storeUserPo.getStoreId());
-        orgStaffRelDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
 
-        Assert.listOnlyOne(orgStaffRelDtos, "未包含员工信息");
+        AttendanceClassesStaffDto attendanceClassesStaffDto = new AttendanceClassesStaffDto();
+        attendanceClassesStaffDto.setCsId(attendanceClassesStaffPo.getCsId());
+        attendanceClassesStaffDto.setStoreId(attendanceClassesStaffPo.getStoreId());
+        attendanceClassesStaffDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+        List<AttendanceClassesStaffDto> attendanceClassesStaffs = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
+        Assert.listOnlyOne(attendanceClassesStaffs, "未包含员工信息");
+
 
         //查询员工部门是否参与考勤
         AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
-        attendanceClassesDto.setClassesObjType(AttendanceClassesDto.CLASSES_OBJ_TYPE_PARTMENT);
-        attendanceClassesDto.setClassesObjId(orgStaffRelDtos.get(0).getDepartmentId());
+        attendanceClassesDto.setClassesId(attendanceClassesStaffs.get(0).getClassesId());
+        attendanceClassesDto.setStoreId(attendanceClassesStaffs.get(0).getStoreId());
         List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesInnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
 
         //员工部门没有考勤，不用处理
@@ -133,22 +135,25 @@ public class DeleteStaffToIotAdapt extends DatabusAdaptImpl {
         }
 
         MachineDto machineDto = new MachineDto();
-        machineDto.setLocationObjId(orgStaffRelDtos.get(0).getDepartmentId());
+        machineDto.setLocationObjId(attendanceClassesDtos.get(0).getClassesId());
         machineDto.setMachineTypeCd(MachineDto.MACHINE_TYPE_ATTENDANCE);
         List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
+        //员工部门没有考勤，不用处理
+        if (machineDtos == null || machineDtos.size() < 1) {
+            return;
+        }
 
-        for(AttendanceClassesDto tmpAttendanceClassesDto : attendanceClassesDtos ){
+        for (MachineDto tmpMachineDto : machineDtos) {
             JSONObject postParameters = new JSONObject();
-            postParameters.put("classesName", tmpAttendanceClassesDto.getClassesName());
-            postParameters.put("extClassesId", tmpAttendanceClassesDto.getClassesId());
-            postParameters.put("extStaffId", orgStaffRelDtos.get(0).getStaffId());
+            postParameters.put("classesName", attendanceClassesDtos.get(0).getClassesName());
+            postParameters.put("extClassesId", attendanceClassesDtos.get(0).getClassesId());
+            postParameters.put("extStaffId", attendanceClassesStaffs.get(0).getStaffId());
             postParameters.put("deleteStaff", "1");
             postParameters.put("extCommunityId", "-1");
-            if (machineDtos != null && machineDtos.size() < 1) {
-                postParameters.put("machineCode", machineDtos.get(0).getMachineCode());
-                postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
-                postParameters.put("extCommunityId", machineDtos.get(0).getCommunityId());
-            }
+            postParameters.put("machineCode", tmpMachineDto.getMachineCode());
+            postParameters.put("extMachineId", tmpMachineDto.getMachineId());
+            postParameters.put("extCommunityId", tmpMachineDto.getCommunityId());
+
             hcStoreUserAsynImpl.deleteAttendanceStaff(postParameters);
         }
 
