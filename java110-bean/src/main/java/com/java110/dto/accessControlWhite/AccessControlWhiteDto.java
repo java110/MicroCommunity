@@ -38,6 +38,8 @@ public class AccessControlWhiteDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String personFace;
 
+    private String machineCount;
+
 
     public String getThirdId() {
         return thirdId;
@@ -136,7 +138,6 @@ public class AccessControlWhiteDto extends PageDto implements Serializable {
     }
 
 
-
     public String getStatusCd() {
         return statusCd;
     }
@@ -175,5 +176,13 @@ public class AccessControlWhiteDto extends PageDto implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getMachineCount() {
+        return machineCount;
+    }
+
+    public void setMachineCount(String machineCount) {
+        this.machineCount = machineCount;
     }
 }
