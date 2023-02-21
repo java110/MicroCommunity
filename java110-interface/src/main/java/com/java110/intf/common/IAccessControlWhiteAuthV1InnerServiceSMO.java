@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.accessControlWhiteAuth.AccessControlWhiteAuthDto;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
 import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

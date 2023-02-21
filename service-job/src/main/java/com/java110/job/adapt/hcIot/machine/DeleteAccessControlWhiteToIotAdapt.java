@@ -87,7 +87,7 @@ public class DeleteAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
         AccessControlWhiteDto tmpAccessControlWhiteDto = accessControlWhiteDtos.get(0);
         JSONObject postParameters = new JSONObject();
-        postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
+        //postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
         postParameters.put("userId", tmpAccessControlWhiteDto.getPersonId());
         postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
         postParameters.put("extMachineId", tmpAccessControlWhiteDto.getMachineId());

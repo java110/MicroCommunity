@@ -129,7 +129,7 @@ public class EditAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
         postParameters.put("idNumber", tmpAccessControlWhiteDto.getIdCard());
         postParameters.put("link", tmpAccessControlWhiteDto.getTel());
-        postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
+       // postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
         postParameters.put("extMachineId", tmpAccessControlWhiteDto.getMachineId());
         postParameters.put("extCommunityId", tmpAccessControlWhiteDto.getCommunityId());
         List<OwnerAttrDto> ownerAttrDtos = new ArrayList<>();

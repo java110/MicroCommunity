@@ -1,6 +1,8 @@
-package com.java110.dto.accessControlWhiteAuth;
+package com.java110.dto.accessControlWhite;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.machine.MachineDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,15 +14,15 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class AccessControlWhiteAuthDto extends PageDto implements Serializable {
+public class AccessControlWhiteAuthDto extends MachineDto implements Serializable {
 
     private String machineId;
-private String acwId;
-private String acwaId;
-private String communityId;
+    private String acwId;
+    private String acwaId;
+    private String communityId;
 
 
-    private Date createTime;
+
 
     private String statusCd = "0";
 
@@ -28,36 +30,35 @@ private String communityId;
     public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getAcwId() {
+
+    public String getAcwId() {
         return acwId;
     }
-public void setAcwId(String acwId) {
+
+    public void setAcwId(String acwId) {
         this.acwId = acwId;
     }
-public String getAcwaId() {
+
+    public String getAcwaId() {
         return acwaId;
     }
-public void setAcwaId(String acwaId) {
+
+    public void setAcwaId(String acwaId) {
         this.acwaId = acwaId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getStatusCd() {
         return statusCd;

@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.accessControlWhiteAuth.AccessControlWhiteAuthDto;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
 import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
