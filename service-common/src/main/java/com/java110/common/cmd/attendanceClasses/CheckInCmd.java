@@ -165,8 +165,8 @@ public class CheckInCmd extends Cmd {
         attendanceLogPo.setStoreId(storeUserDtos.get(0).getStoreId());
         attendanceLogPo.setStaffId(reqJson.getString("staffId"));
         attendanceLogPo.setClockTime(reqJson.getString("checkTime"));
-        attendanceLogPo.setDepartmentId(attendanceClassesDto.getClassesObjId());
-        attendanceLogPo.setDepartmentName(attendanceClassesDto.getClassesObjName());
+        attendanceLogPo.setDepartmentId(attendanceClassesDto.getClassesId());
+        attendanceLogPo.setDepartmentName(attendanceClassesDto.getClassesName());
         attendanceLogPo.setStaffName(userDtos.get(0).getName());
         attendanceLogPo.setFacePath(photo);
 
