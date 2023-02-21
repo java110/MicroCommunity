@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.machine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -25,8 +26,10 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -34,7 +37,6 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 
 @Java110CmdDoc(title = "门禁授权白名单",
@@ -71,8 +73,8 @@ import org.slf4j.LoggerFactory;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"machineId\":\"102023012407190005\",\"personName\":\"张快递\",\"tel\":\"18909714562\",\"idCard\":\"\",\"personType\":\"3003\",\"startTime\":\"2023-01-05 02:10:00\",\"endTime\":\"2023-02-08 02:10:00\",\"accessControlKey\":\"\",\"photo\":\"https://java110.oss-cn-beijing.aliyuncs.com/hc/img/20230124/ec4cfb4f-4953-44f2-89ab-383dc955b005.jpg\",\"communityId\":\"2022121921870161\"}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        reqBody = "{\"machineId\":\"102023012407190005\",\"personName\":\"张快递\",\"tel\":\"18909714562\",\"idCard\":\"\",\"personType\":\"3003\",\"startTime\":\"2023-01-05 02:10:00\",\"endTime\":\"2023-02-08 02:10:00\",\"accessControlKey\":\"\",\"photo\":\"https://java110.oss-cn-beijing.aliyuncs.com/hc/img/20230124/ec4cfb4f-4953-44f2-89ab-383dc955b005.jpg\",\"communityId\":\"2022121921870161\"}",
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 
 /**
@@ -96,11 +98,14 @@ public class SaveAccessControlWhiteCmd extends Cmd {
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
     @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
+
+    @Autowired
     private IPhotoSMO photoSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
+        Assert.hasKey(reqJson, "machineIds", "请求报文中未包含machineId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
@@ -117,6 +122,12 @@ public class SaveAccessControlWhiteCmd extends Cmd {
             throw new CmdException(reqJson.getString("personName") + "-" + reqJson.getString("tel") + ",人员已存在，您可以删除重新添加，或者修改");
         }
 
+        JSONArray machineIds = reqJson.getJSONArray("machineIds");
+        if (machineIds == null || machineIds.size() < 1) {
+            throw new CmdException("未包含授权设备");
+        }
+
+
     }
 
     @Override
@@ -125,11 +136,30 @@ public class SaveAccessControlWhiteCmd extends Cmd {
 
         AccessControlWhitePo accessControlWhitePo = BeanConvertUtil.covertBean(reqJson, AccessControlWhitePo.class);
         accessControlWhitePo.setAcwId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        accessControlWhitePo.setMachineId("-1");
         int flag = accessControlWhiteV1InnerServiceSMOImpl.saveAccessControlWhite(accessControlWhitePo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        JSONArray machineIds = reqJson.getJSONArray("machineIds");
+
+        AccessControlWhiteAuthPo accessControlWhiteAuthPo = null;
+        for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
+            accessControlWhiteAuthPo = new AccessControlWhiteAuthPo();
+            accessControlWhiteAuthPo.setAcwaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            accessControlWhiteAuthPo.setAcwId(accessControlWhitePo.getAcwId());
+            accessControlWhiteAuthPo.setCommunityId(accessControlWhitePo.getCommunityId());
+            accessControlWhiteAuthPo.setMachineId(machineIds.getString(machineIndex));
+
+            flag = accessControlWhiteAuthV1InnerServiceSMOImpl.saveAccessControlWhiteAuth(accessControlWhiteAuthPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+        }
+
 
         photoSMOImpl.savePhoto(reqJson, accessControlWhitePo.getAcwId(), reqJson.getString("communityId"));
 
