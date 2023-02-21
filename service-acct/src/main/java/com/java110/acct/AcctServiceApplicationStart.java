@@ -67,6 +67,8 @@ public class AcctServiceApplicationStart {
 
             //加载业务侦听
             // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+            //服务启动完成
+            ServiceStartInit.printStartSuccessInfo();
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
         }

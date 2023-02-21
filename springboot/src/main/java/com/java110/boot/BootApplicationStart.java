@@ -210,13 +210,19 @@ public class BootApplicationStart {
 
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
 
-
             //刷新缓存
             flushMainCache(args);
+
+            //服务启动完成
+            ServiceStartInit.printStartSuccessInfo();
+
+
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
         }
     }
+
+
 
     /**
      * 刷新主要的缓存

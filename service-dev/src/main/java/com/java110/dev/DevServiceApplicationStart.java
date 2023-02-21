@@ -99,6 +99,9 @@ public class DevServiceApplicationStart {
 //            logger.info("{},beanName:{}", ++i, str);
 //        }
 
+        //服务启动完成
+        ServiceStartInit.printStartSuccessInfo();
+
     }
 
     /**

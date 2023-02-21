@@ -123,6 +123,9 @@ public class OrderServiceApplicationStart {
 
             //加载workId
             loadWorkId();
+
+            //服务启动完成
+            ServiceStartInit.printStartSuccessInfo();
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
         }

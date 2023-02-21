@@ -86,5 +86,8 @@ public class ReportServiceApplicationStart {
 
         //初始化 activity 流程
         //DeploymentActivity.deploymentProcess();
+
+        //服务启动完成
+        ServiceStartInit.printStartSuccessInfo();
     }
 }
