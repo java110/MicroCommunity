@@ -155,8 +155,8 @@ public class AddAttendanceClassStaffToIotAdapt extends DatabusAdaptImpl {
             storeUserObj.put("extClassesId", attendanceClassesDtos.get(0).getClassesId());
             storeUserObj.put("extStaffId", attendanceClassesStaffs.get(0).getStaffId());
             storeUserObj.put("staffName", attendanceClassesStaffs.get(0).getStaffName());
-            storeUserObj.put("departmentId", "-1");
-            storeUserObj.put("departmentName", "未知");
+            storeUserObj.put("departmentId", attendanceClassesDtos.get(0).getClassesId());
+            storeUserObj.put("departmentName", attendanceClassesDtos.get(0).getClassesName());
             storeUserObj.put("machineCode", tmpMachineDto.getMachineCode());
             storeUserObj.put("extMachineId", tmpMachineDto.getMachineId());
             storeUserObj.put("extCommunityId", tmpMachineDto.getCommunityId());
