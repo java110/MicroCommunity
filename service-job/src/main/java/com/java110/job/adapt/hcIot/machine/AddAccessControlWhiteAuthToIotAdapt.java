@@ -15,26 +15,17 @@
  */
 package com.java110.job.adapt.hcIot.machine;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.RoomDto;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
-import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerAttrDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
-import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.common.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
-import com.java110.po.owner.OwnerPo;
+import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.*;
@@ -51,8 +42,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "addAccessControlWhiteToIotAdapt")
-public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "addAccessControlWhiteAuthToIotAdapt")
+public class AddAccessControlWhiteAuthToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
@@ -62,6 +53,8 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -92,10 +85,18 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
         System.out.printf("进入门禁白名单页面");
 
-        AccessControlWhitePo accessControlWhitePo = BeanConvertUtil.covertBean(data, AccessControlWhitePo.class);
+        AccessControlWhiteAuthPo accessControlWhiteAuthPo = BeanConvertUtil.covertBean(data, AccessControlWhiteAuthPo.class);
+
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setAcwaId(accessControlWhiteAuthPo.getAcwaId());
+        List<AccessControlWhiteAuthDto> accessControlWhiteAuthDtos
+                = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuths(accessControlWhiteAuthDto);
+        if(accessControlWhiteAuthDtos == null || accessControlWhiteAuthDtos.size()<1){
+            return ;
+        }
 
         AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
-        accessControlWhiteDto.setAcwId(accessControlWhitePo.getAcwId());
+        accessControlWhiteDto.setAcwId(accessControlWhiteAuthDtos.get(0).getAcwId());
         accessControlWhiteDto.setCommunityId(accessControlWhiteDto.getCommunityId());
         accessControlWhiteDto.setPage(1);
         accessControlWhiteDto.setRow(1);
@@ -106,7 +107,7 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         AccessControlWhiteDto tmpAccessControlWhiteDto = accessControlWhiteDtos.get(0);
 
         FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(accessControlWhitePo.getAcwId());
+        fileRelDto.setObjId(accessControlWhiteAuthDtos.get(0).getAcwId());
         //fileRelDto.setRelTypeCd("10000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
@@ -137,8 +138,8 @@ public class AddAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
         postParameters.put("idNumber", tmpAccessControlWhiteDto.getIdCard());
         postParameters.put("link", tmpAccessControlWhiteDto.getTel());
-        //postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
-        postParameters.put("extMachineId", tmpAccessControlWhiteDto.getMachineId());
+        postParameters.put("machineCode", accessControlWhiteAuthDtos.get(0).getMachineCode());
+        postParameters.put("extMachineId", accessControlWhiteAuthDtos.get(0).getMachineId());
         postParameters.put("extCommunityId", tmpAccessControlWhiteDto.getCommunityId());
         List<OwnerAttrDto> ownerAttrDtos = new ArrayList<>();
         OwnerAttrDto ownerAttrDto = new OwnerAttrDto();

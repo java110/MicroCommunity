@@ -16,14 +16,12 @@
 package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.entity.order.Business;
-import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
-import com.java110.intf.common.IFileInnerServiceSMO;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
-import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.common.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
@@ -57,6 +55,9 @@ public class EditAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -107,12 +108,12 @@ public class EditAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         String fileName = fileRelDtos.get(0).getFileSaveName();
 
 
-        if(StringUtil.isEmpty(fileName)){
-            return ;
+        if (StringUtil.isEmpty(fileName)) {
+            return;
         }
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
-        if(!fileName.startsWith("http")){
-            fileName = imgUrl +fileName;
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        if (!fileName.startsWith("http")) {
+            fileName = imgUrl + fileName;
         }
 
         String faceBase64 = ImageUtils.getBase64ByImgUrl(fileName);
@@ -120,25 +121,35 @@ public class EditAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
             return;
         }
 
-        JSONObject postParameters = new JSONObject();
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setAcwId(accessControlWhiteDtos.get(0).getAcwId());
+        List<AccessControlWhiteAuthDto> accessControlWhiteAuthDtos
+                = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuths(accessControlWhiteAuthDto);
+        if (accessControlWhiteAuthDtos == null || accessControlWhiteAuthDtos.size() < 1) {
+            return;
+        }
 
-        postParameters.put("userId", tmpAccessControlWhiteDto.getPersonId());
-        postParameters.put("faceBase64", faceBase64);
-        postParameters.put("startTime", tmpAccessControlWhiteDto.getStartTime());
-        postParameters.put("endTime", tmpAccessControlWhiteDto.getEndTime());
-        postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
-        postParameters.put("idNumber", tmpAccessControlWhiteDto.getIdCard());
-        postParameters.put("link", tmpAccessControlWhiteDto.getTel());
-       // postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
-        postParameters.put("extMachineId", tmpAccessControlWhiteDto.getMachineId());
-        postParameters.put("extCommunityId", tmpAccessControlWhiteDto.getCommunityId());
-        List<OwnerAttrDto> ownerAttrDtos = new ArrayList<>();
-        OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
-        ownerAttrDto.setSpecCd(OwnerAttrDto.SPEC_CD_ACCESS_CONTROL_KEY);
-        ownerAttrDto.setValue(tmpAccessControlWhiteDto.getAccessControlKey());
-        ownerAttrDto.setCommunityId(tmpAccessControlWhiteDto.getCommunityId());
-        ownerAttrDtos.add(ownerAttrDto);
-        postParameters.put("attrs", ownerAttrDtos);
-        hcMachineAsynImpl.sendUpdateOwner(postParameters);
+        for (AccessControlWhiteAuthDto tmpAccessControlWhiteAuthDto : accessControlWhiteAuthDtos) {
+            JSONObject postParameters = new JSONObject();
+
+            postParameters.put("userId", tmpAccessControlWhiteDto.getPersonId());
+            postParameters.put("faceBase64", faceBase64);
+            postParameters.put("startTime", tmpAccessControlWhiteDto.getStartTime());
+            postParameters.put("endTime", tmpAccessControlWhiteDto.getEndTime());
+            postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
+            postParameters.put("idNumber", tmpAccessControlWhiteDto.getIdCard());
+            postParameters.put("link", tmpAccessControlWhiteDto.getTel());
+            postParameters.put("machineCode", tmpAccessControlWhiteAuthDto.getMachineCode());
+            postParameters.put("extMachineId", tmpAccessControlWhiteAuthDto.getMachineId());
+            postParameters.put("extCommunityId", tmpAccessControlWhiteDto.getCommunityId());
+            List<OwnerAttrDto> ownerAttrDtos = new ArrayList<>();
+            OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
+            ownerAttrDto.setSpecCd(OwnerAttrDto.SPEC_CD_ACCESS_CONTROL_KEY);
+            ownerAttrDto.setValue(tmpAccessControlWhiteDto.getAccessControlKey());
+            ownerAttrDto.setCommunityId(tmpAccessControlWhiteDto.getCommunityId());
+            ownerAttrDtos.add(ownerAttrDto);
+            postParameters.put("attrs", ownerAttrDtos);
+            hcMachineAsynImpl.sendUpdateOwner(postParameters);
+        }
     }
 }

@@ -15,26 +15,22 @@
  */
 package com.java110.job.adapt.hcIot.machine;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
-import com.java110.dto.machine.MachineDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
+import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
-import com.java110.po.owner.OwnerPo;
-import com.java110.utils.constant.StatusConstant;
+import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +40,8 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "deleteAccessControlWhiteToIotAdapt")
-public class DeleteAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
+@Component(value = "deleteAccessControlWhiteAuthToIotAdapt")
+public class DeleteAccessControlWhiteAuthToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
@@ -55,6 +51,9 @@ public class DeleteAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
 
 
     /**
@@ -74,14 +73,23 @@ public class DeleteAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
 
     private void doSendMachine(Business business, JSONObject data) {
 
-        AccessControlWhitePo accessControlWhitePo = BeanConvertUtil.covertBean(data, AccessControlWhitePo.class);
+        AccessControlWhiteAuthPo accessControlWhiteAuthPo = BeanConvertUtil.covertBean(data, AccessControlWhiteAuthPo.class);
+
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setAcwaId(accessControlWhiteAuthPo.getAcwaId());
+        accessControlWhiteAuthDto.setStatusCd("1");
+        List<AccessControlWhiteAuthDto> accessControlWhiteAuthDtos
+                = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuths(accessControlWhiteAuthDto);
+        if(accessControlWhiteAuthDtos == null || accessControlWhiteAuthDtos.size()<1){
+            return ;
+        }
 
         AccessControlWhiteDto accessControlWhiteDto = new AccessControlWhiteDto();
-        accessControlWhiteDto.setAcwId(accessControlWhitePo.getAcwId());
+        accessControlWhiteDto.setAcwId(accessControlWhiteAuthDtos.get(0).getAcwId());
         accessControlWhiteDto.setCommunityId(accessControlWhiteDto.getCommunityId());
         accessControlWhiteDto.setPage(1);
         accessControlWhiteDto.setRow(1);
-        accessControlWhiteDto.setStatusCd("1"); //这个时候已经删除了 所以查询删除记录
+        accessControlWhiteDto.setStatusCd(""); //这个时候已经删除了 所以查询删除记录
         List<AccessControlWhiteDto> accessControlWhiteDtos = accessControlWhiteV1InnerServiceSMOImpl.queryAccessControlWhites(accessControlWhiteDto);
         Assert.listOnlyOne(accessControlWhiteDtos, "门禁白名单不存在");
 
@@ -90,7 +98,7 @@ public class DeleteAccessControlWhiteToIotAdapt extends DatabusAdaptImpl {
         //postParameters.put("machineCode", tmpAccessControlWhiteDto.getMachineCode());
         postParameters.put("userId", tmpAccessControlWhiteDto.getPersonId());
         postParameters.put("name", tmpAccessControlWhiteDto.getPersonName());
-        postParameters.put("extMachineId", tmpAccessControlWhiteDto.getMachineId());
+        postParameters.put("extMachineId", accessControlWhiteAuthDtos.get(0).getMachineId());
         postParameters.put("extCommunityId", tmpAccessControlWhiteDto.getCommunityId());
         hcMachineAsynImpl.sendDeleteOwner(postParameters);
 

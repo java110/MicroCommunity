@@ -290,7 +290,9 @@ public class GenerateCodeFactory {
             count = lastCount++;
         } finally {
             LOCK.unlock();
-            return getRandom() + String.format(idLength, count);
+            String id = getRandom() + String.format(idLength, count);
+            id = id.replace("-","");
+            return id;
         }
     }
 
