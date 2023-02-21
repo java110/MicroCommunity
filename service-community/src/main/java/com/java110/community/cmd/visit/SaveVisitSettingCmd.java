@@ -77,7 +77,7 @@ public class SaveVisitSettingCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
         Assert.hasKeyAndValue(reqJson, "faceWay", "请求报文中未包含faceWay");
         Assert.hasKeyAndValue(reqJson, "carNumWay", "请求报文中未包含carNumWay");
-        Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
+
         Assert.hasKeyAndValue(reqJson, "auditWay", "请求报文中未包含auditWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 

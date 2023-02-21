@@ -1,6 +1,5 @@
 package com.java110.api.controller.app.file;
 
-import com.java110.api.controller.app.payment.NotifyPaymentController;
 import com.java110.core.client.FileUploadTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.userDownloadFile.UserDownloadFileDto;

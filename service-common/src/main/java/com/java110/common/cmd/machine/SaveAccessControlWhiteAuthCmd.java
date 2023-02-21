@@ -22,6 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
+import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.utils.exception.CmdException;
@@ -58,6 +60,14 @@ public class SaveAccessControlWhiteAuthCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setAcwId(reqJson.getString("acwId"));
+        accessControlWhiteAuthDto.setMachineId(reqJson.getString("machineId"));
+        int count = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuthsCount(accessControlWhiteAuthDto);
+
+        if (count > 0) {
+            throw new CmdException("请勿重复授权");
+        }
     }
 
     @Override

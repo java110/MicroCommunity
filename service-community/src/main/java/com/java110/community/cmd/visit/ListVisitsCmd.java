@@ -176,6 +176,9 @@ public class ListVisitsCmd extends Cmd {
 
         for(ApiVisitDataVo apiVisitDataVo: visits){
             for(OwnerDto tmpOwnerDto : ownerDtos){
+                if(StringUtil.isEmpty(apiVisitDataVo.getOwnerId())){
+                    continue;
+                }
                 if(!apiVisitDataVo.getOwnerId().equals(tmpOwnerDto.getOwnerId())){
                     continue;
                 }
