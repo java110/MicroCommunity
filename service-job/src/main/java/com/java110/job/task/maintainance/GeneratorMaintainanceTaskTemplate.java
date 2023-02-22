@@ -129,7 +129,7 @@ public class GeneratorMaintainanceTaskTemplate extends TaskSystemQuartz {
             case MaintainancePlanDto.INSPECTION_PLAN_PERIOD_DAY:
                 hasCondition = hasGeneratorTaskConditionByDay(tmpMaintainancePlanDto, taskDto, communityDto, tmpMaintainancePlanStaffDto, maintainanceTaskPos, maintainanceTaskDetailPos);
                 break;
-            case MaintainancePlanDto.INSPECTION_PLAN_PERIOD_WEEK:
+            case MaintainancePlanDto.INSPECTION_PLAN_PERIOD_NEXT_DAY:
                 hasCondition = hasGeneratorTaskConditionByWeek(tmpMaintainancePlanDto, taskDto, communityDto, tmpMaintainancePlanStaffDto, maintainanceTaskPos, maintainanceTaskDetailPos);
                 break;
         }
