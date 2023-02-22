@@ -19,17 +19,21 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     private String heartbeatTime;
     private String implBean;
+    private String implBeanName;
     private String address;
     private String prestoreDegrees;
     private String machineName;
+    private String machineNameLike;
     private String roomId;
     private String roomName;
+    private String roomNameLike;
     private String curReadingTime;
     private String machineModel;
     private String curDegrees;
     private String machineId;
     private String meterType;
     private String feeConfigName;
+    private String feeConfigNameLike;
     private String communityId;
     private String feeConfigId;
 
@@ -184,5 +188,37 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     public void setSpecs(List<MeterMachineSpecDto> specs) {
         this.specs = specs;
+    }
+
+    public String getImplBeanName() {
+        return implBeanName;
+    }
+
+    public void setImplBeanName(String implBeanName) {
+        this.implBeanName = implBeanName;
+    }
+
+    public String getMachineNameLike() {
+        return machineNameLike;
+    }
+
+    public void setMachineNameLike(String machineNameLike) {
+        this.machineNameLike = machineNameLike;
+    }
+
+    public String getRoomNameLike() {
+        return roomNameLike;
+    }
+
+    public void setRoomNameLike(String roomNameLike) {
+        this.roomNameLike = roomNameLike;
+    }
+
+    public String getFeeConfigNameLike() {
+        return feeConfigNameLike;
+    }
+
+    public void setFeeConfigNameLike(String feeConfigNameLike) {
+        this.feeConfigNameLike = feeConfigNameLike;
     }
 }
