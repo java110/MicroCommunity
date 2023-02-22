@@ -20,6 +20,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.meterMachineFactorySpec.MeterMachineFactorySpecDto;
+import com.java110.intf.common.IMeterMachineFactorySpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -53,6 +55,9 @@ public class ListMeterMachineFactoryCmd extends Cmd {
     @Autowired
     private IMeterMachineFactoryV1InnerServiceSMO meterMachineFactoryV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMeterMachineFactorySpecV1InnerServiceSMO machineFactorySpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -69,6 +74,7 @@ public class ListMeterMachineFactoryCmd extends Cmd {
 
         if (count > 0) {
             meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
+            freshSpecs(meterMachineFactoryDtos);
         } else {
             meterMachineFactoryDtos = new ArrayList<>();
         }
@@ -78,5 +84,41 @@ public class ListMeterMachineFactoryCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入配置
+     *
+     * @param meterMachineFactoryDtos
+     */
+    private void freshSpecs(List<MeterMachineFactoryDto> meterMachineFactoryDtos) {
+
+        if (meterMachineFactoryDtos == null || meterMachineFactoryDtos.size() < 1) {
+            return;
+        }
+
+        List<String> factoryIds = new ArrayList<>();
+        for (MeterMachineFactoryDto meterMachineFactoryDto : meterMachineFactoryDtos) {
+            factoryIds.add(meterMachineFactoryDto.getFactoryId());
+        }
+
+        MeterMachineFactorySpecDto machineFactorySpecDto = new MeterMachineFactorySpecDto();
+        machineFactorySpecDto.setFactoryIds(factoryIds.toArray(new String[factoryIds.size()]));
+
+        List<MeterMachineFactorySpecDto> machineFactorySpecDtos = machineFactorySpecV1InnerServiceSMOImpl.queryMeterMachineFactorySpecs(machineFactorySpecDto);
+
+        if (machineFactorySpecDtos == null || machineFactorySpecDtos.size() < 1) {
+            return;
+        }
+        List<MeterMachineFactorySpecDto> specs = null;
+        for (MeterMachineFactoryDto meterMachineFactoryDto : meterMachineFactoryDtos) {
+            specs = new ArrayList<>();
+            for (MeterMachineFactorySpecDto tmpMeterMachineFactorySpecDto : machineFactorySpecDtos) {
+                if (meterMachineFactoryDto.getFactoryId().equals(tmpMeterMachineFactorySpecDto.getFactoryId())) {
+                    specs.add(tmpMeterMachineFactorySpecDto);
+                }
+            }
+            meterMachineFactoryDto.setSpecs(specs);
+        }
     }
 }

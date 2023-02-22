@@ -1,6 +1,7 @@
 package com.java110.dto.meterMachineFactorySpec;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,10 @@ import java.util.Date;
 public class MeterMachineFactorySpecDto extends PageDto implements Serializable {
 
     private String specId;
-private String specName;
-private String factoryId;
-private String remark;
+    private String specName;
+    private String factoryId;
+    private String[] factoryIds;
+    private String remark;
 
 
     private Date createTime;
@@ -28,25 +30,32 @@ private String remark;
     public String getSpecId() {
         return specId;
     }
-public void setSpecId(String specId) {
+
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
-public String getSpecName() {
+
+    public String getSpecName() {
         return specName;
     }
-public void setSpecName(String specName) {
+
+    public void setSpecName(String specName) {
         this.specName = specName;
     }
-public String getFactoryId() {
+
+    public String getFactoryId() {
         return factoryId;
     }
-public void setFactoryId(String factoryId) {
+
+    public void setFactoryId(String factoryId) {
         this.factoryId = factoryId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -65,5 +74,13 @@ public void setRemark(String remark) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getFactoryIds() {
+        return factoryIds;
+    }
+
+    public void setFactoryIds(String[] factoryIds) {
+        this.factoryIds = factoryIds;
     }
 }
