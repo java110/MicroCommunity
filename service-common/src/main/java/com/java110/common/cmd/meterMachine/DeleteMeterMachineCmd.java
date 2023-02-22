@@ -22,8 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.meterMachineSpec.MeterMachineSpecDto;
+import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.po.meterMachine.MeterMachinePo;
+import com.java110.po.meterMachineSpec.MeterMachineSpecPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +34,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：meterMachine.deleteMeterMachine
@@ -43,15 +47,18 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "meterMachine.deleteMeterMachine")
 public class DeleteMeterMachineCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteMeterMachineCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteMeterMachineCmd.class);
 
     @Autowired
     private IMeterMachineV1InnerServiceSMO meterMachineV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMeterMachineSpecV1InnerServiceSMO machineSpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "machineId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,12 +66,18 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(reqJson, MeterMachinePo.class);
+        MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(reqJson, MeterMachinePo.class);
         int flag = meterMachineV1InnerServiceSMOImpl.deleteMeterMachine(meterMachinePo);
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        MeterMachineSpecPo meterMachineSpecPo = new MeterMachineSpecPo();
+        meterMachineSpecPo.setCommunityId(meterMachinePo.getCommunityId());
+        meterMachineSpecPo.setMachineId(meterMachinePo.getMachineId());
+        machineSpecV1InnerServiceSMOImpl.deleteMeterMachineSpec(meterMachineSpecPo);
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

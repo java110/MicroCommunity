@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.meterMachine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.po.meterMachine.MeterMachinePo;
+import com.java110.po.meterMachineSpec.MeterMachineSpecPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -46,28 +49,80 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "meterMachine.updateMeterMachine")
 public class UpdateMeterMachineCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateMeterMachineCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateMeterMachineCmd.class);
 
 
     @Autowired
     private IMeterMachineV1InnerServiceSMO meterMachineV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "machineId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
+        if (!reqJson.containsKey("specs")) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONArray specs = reqJson.getJSONArray("specs");
+        if (specs == null || specs.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONObject specObj = null;
+        for (int specIndex = 0; specIndex < specs.size(); specIndex++) {
+            specObj = specs.getJSONObject(specIndex);
+
+            Assert.hasKeyAndValue(specObj, "specValue", "未包含" + specObj.getString("specName"));
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(reqJson, MeterMachinePo.class);
+        MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(reqJson, MeterMachinePo.class);
         int flag = meterMachineV1InnerServiceSMOImpl.updateMeterMachine(meterMachinePo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+
+        if (!reqJson.containsKey("specs")) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONArray specs = reqJson.getJSONArray("specs");
+        if (specs == null || specs.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONObject specObj = null;
+        MeterMachineSpecPo meterMachineSpecPo = null;
+        for (int specIndex = 0; specIndex < specs.size(); specIndex++) {
+            specObj = specs.getJSONObject(specIndex);
+            meterMachineSpecPo = new MeterMachineSpecPo();
+            meterMachineSpecPo.setMachineId(meterMachinePo.getMachineId());
+            meterMachineSpecPo.setSpecId(specObj.getString("specId"));
+            meterMachineSpecPo.setSpecName(specObj.getString("specName"));
+            meterMachineSpecPo.setSpecValue(specObj.getString("specValue"));
+            meterMachineSpecPo.setCommunityId(meterMachinePo.getCommunityId());
+            flag = meterMachineSpecV1InnerServiceSMOImpl.updateMeterMachineSpec(meterMachineSpecPo);
+
+            if (flag < 1) {
+                throw new CmdException("修改数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

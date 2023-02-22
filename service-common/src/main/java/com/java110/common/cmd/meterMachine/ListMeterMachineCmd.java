@@ -22,6 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
+import com.java110.dto.meterMachineFactorySpec.MeterMachineFactorySpecDto;
+import com.java110.dto.meterMachineSpec.MeterMachineSpecDto;
+import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.po.meterMachine.MeterMachinePo;
 import com.java110.utils.exception.CmdException;
@@ -30,8 +34,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.meterMachine.MeterMachineDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,34 +57,75 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "meterMachine.listMeterMachine")
 public class ListMeterMachineCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMeterMachineCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMeterMachineCmd.class);
     @Autowired
     private IMeterMachineV1InnerServiceSMO meterMachineV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           MeterMachineDto meterMachineDto = BeanConvertUtil.covertBean(reqJson, MeterMachineDto.class);
+        MeterMachineDto meterMachineDto = BeanConvertUtil.covertBean(reqJson, MeterMachineDto.class);
 
-           int count = meterMachineV1InnerServiceSMOImpl.queryMeterMachinesCount(meterMachineDto);
+        int count = meterMachineV1InnerServiceSMOImpl.queryMeterMachinesCount(meterMachineDto);
 
-           List<MeterMachineDto> meterMachineDtos = null;
+        List<MeterMachineDto> meterMachineDtos = null;
 
-           if (count > 0) {
-               meterMachineDtos = meterMachineV1InnerServiceSMOImpl.queryMeterMachines(meterMachineDto);
-           } else {
-               meterMachineDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            meterMachineDtos = meterMachineV1InnerServiceSMOImpl.queryMeterMachines(meterMachineDto);
+            freshSpecs(meterMachineDtos);
+        } else {
+            meterMachineDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, meterMachineDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, meterMachineDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入配置
+     *
+     * @param meterMachineDtos
+     */
+    private void freshSpecs(List<MeterMachineDto> meterMachineDtos) {
+
+        if (meterMachineDtos == null || meterMachineDtos.size() < 1) {
+            return;
+        }
+
+        List<String> machineIds = new ArrayList<>();
+        for (MeterMachineDto meterMachineDto : meterMachineDtos) {
+            machineIds.add(meterMachineDto.getMachineId());
+        }
+
+        MeterMachineSpecDto meterMachineSpecDto = new MeterMachineSpecDto();
+        meterMachineSpecDto.setMachineIds(machineIds.toArray(new String[machineIds.size()]));
+
+        List<MeterMachineSpecDto> meterMachineSpecDtos = meterMachineSpecV1InnerServiceSMOImpl.queryMeterMachineSpecs(meterMachineSpecDto);
+
+        if (meterMachineSpecDtos == null || meterMachineSpecDtos.size() < 1) {
+            return;
+        }
+        List<MeterMachineSpecDto> specs = null;
+        for (MeterMachineDto meterMachineDto : meterMachineDtos) {
+            specs = new ArrayList<>();
+            for (MeterMachineSpecDto tmpMeterMachineFactorySpecDto : meterMachineSpecDtos) {
+                if (meterMachineDto.getMachineId().equals(tmpMeterMachineFactorySpecDto.getMachineId())) {
+                    specs.add(tmpMeterMachineFactorySpecDto);
+                }
+            }
+            meterMachineDto.setSpecs(specs);
+        }
     }
 }
