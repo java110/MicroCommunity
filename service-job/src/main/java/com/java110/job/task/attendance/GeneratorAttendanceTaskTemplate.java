@@ -4,6 +4,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
+import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
@@ -16,6 +17,7 @@ import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
@@ -40,6 +42,9 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IAttendanceClassesInnerServiceSMO attendanceClassesInnerServiceSMOImpl;
+
+    @Autowired
+    private IAttendanceClassesStaffV1InnerServiceSMO attendanceClassesStaffV1InnerServiceSMOImpl;
 
     @Autowired
     private IAttendanceClassesTaskInnerServiceSMO attendanceClassesTaskInnerServiceSMOImpl;
@@ -111,19 +116,19 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
 
         //查询组织 关联的员工
 
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setOrgId(tmpAttendanceClassesDto.getClassesObjId());
-        orgStaffRelDto.setStoreId(tmpStoreDto.getStoreId());
-        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-        if (orgStaffRelDtos == null || orgStaffRelDtos.size() < 1) {
+        AttendanceClassesStaffDto attendanceClassesStaffDto = new AttendanceClassesStaffDto();
+        attendanceClassesStaffDto.setClassesId(tmpAttendanceClassesDto.getClassesId());
+        attendanceClassesStaffDto.setStoreId(tmpStoreDto.getStoreId());
+        List<AttendanceClassesStaffDto> attendanceClassesStaffs = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
+        if (attendanceClassesStaffs == null || attendanceClassesStaffs.size() < 1) {
             return;
         }
 
-        for (OrgStaffRelDto tmpOrgStaffRelDto : orgStaffRelDtos) {
+        for (AttendanceClassesStaffDto tmpAttendanceClassesStaffDto : attendanceClassesStaffs) {
             try {
-                doGeneratorStaffAttendance(tmpStoreDto, tmpAttendanceClassesDto, tmpOrgStaffRelDto);
+                doGeneratorStaffAttendance(tmpStoreDto, tmpAttendanceClassesDto, tmpAttendanceClassesStaffDto);
             } catch (Exception e) {
-                logger.error("员工生成考勤任务失败" + tmpOrgStaffRelDto.getStaffId(), e);
+                logger.error("员工生成考勤任务失败" + tmpAttendanceClassesStaffDto.getStaffId(), e);
             }
         }
     }
@@ -133,12 +138,12 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
      *
      * @param tmpStoreDto
      * @param tmpAttendanceClassesDto
-     * @param tmpOrgStaffRelDto
+     * @param tmpAttendanceClassesStaffDto
      */
-    private void doGeneratorStaffAttendance(StoreDto tmpStoreDto, AttendanceClassesDto tmpAttendanceClassesDto, OrgStaffRelDto tmpOrgStaffRelDto) {
+    private void doGeneratorStaffAttendance(StoreDto tmpStoreDto, AttendanceClassesDto tmpAttendanceClassesDto, AttendanceClassesStaffDto tmpAttendanceClassesStaffDto) {
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
-        scheduleClassesStaffDto.setStaffId(tmpOrgStaffRelDto.getStaffId());
+        scheduleClassesStaffDto.setStaffId(tmpAttendanceClassesStaffDto.getStaffId());
         scheduleClassesStaffDto.setToday(new Date());
         scheduleClassesStaffDto = scheduleClassesStaffV1InnerServiceSMOImpl.staffIsWork(scheduleClassesStaffDto);
 
@@ -155,7 +160,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         AttendanceClassesTaskDto attendanceClassesTaskDto = new AttendanceClassesTaskDto();
-        attendanceClassesTaskDto.setStaffId(tmpOrgStaffRelDto.getStaffId());
+        attendanceClassesTaskDto.setStaffId(tmpAttendanceClassesStaffDto.getStaffId());
         attendanceClassesTaskDto.setClassId(tmpAttendanceClassesDto.getClassesId());
         attendanceClassesTaskDto.setTaskYear(year + "");
         attendanceClassesTaskDto.setTaskMonth(month + "");
@@ -168,13 +173,13 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         }
 
         UserDto userDto = new UserDto();
-        userDto.setUserId(tmpOrgStaffRelDto.getStaffId());
+        userDto.setUserId(tmpAttendanceClassesStaffDto.getStaffId());
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos,"员工不存在");
 
 
         AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
-        attendanceClassesTaskPo.setStaffId(tmpOrgStaffRelDto.getStaffId());
+        attendanceClassesTaskPo.setStaffId(tmpAttendanceClassesStaffDto.getStaffId());
         attendanceClassesTaskPo.setClassId(tmpAttendanceClassesDto.getClassesId());
         attendanceClassesTaskPo.setTaskYear(year + "");
         attendanceClassesTaskPo.setTaskMonth(month + "");
@@ -191,7 +196,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         }
 
         for (ScheduleClassesTimeDto tmpScheduleClassesTimeDto : times) {
-            doGeneratorStaffAttendanceTime(tmpStoreDto, tmpAttendanceClassesDto, tmpOrgStaffRelDto, tmpScheduleClassesTimeDto, attendanceClassesTaskPo);
+            doGeneratorStaffAttendanceTime(tmpStoreDto, tmpAttendanceClassesDto, tmpAttendanceClassesStaffDto, tmpScheduleClassesTimeDto, attendanceClassesTaskPo);
         }
 
     }
@@ -201,10 +206,10 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
      *
      * @param tmpStoreDto
      * @param tmpAttendanceClassesDto
-     * @param tmpOrgStaffRelDto
+     * @param tmpAttendanceClassesStaffDto
      * @param tmpScheduleClassesTimeDto
      */
-    private void doGeneratorStaffAttendanceTime(StoreDto tmpStoreDto, AttendanceClassesDto tmpAttendanceClassesDto, OrgStaffRelDto tmpOrgStaffRelDto,
+    private void doGeneratorStaffAttendanceTime(StoreDto tmpStoreDto, AttendanceClassesDto tmpAttendanceClassesDto, AttendanceClassesStaffDto tmpAttendanceClassesStaffDto,
                                                 ScheduleClassesTimeDto tmpScheduleClassesTimeDto, AttendanceClassesTaskPo attendanceClassesTaskPo) {
 
         String curDate = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B);

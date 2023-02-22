@@ -95,7 +95,9 @@ public class UpdateMachineCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
 
-        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))) {
+        if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))
+                && !MachineDto.MACHINE_TYPE_ATTENDANCE.equals(reqJson.getString("machineTypeCd"))
+        ) {
             CommunityLocationDto communityLocationDto = new CommunityLocationDto();
             communityLocationDto.setCommunityId(reqJson.getString("communityId"));
             communityLocationDto.setLocationId(reqJson.getString("locationTypeCd"));

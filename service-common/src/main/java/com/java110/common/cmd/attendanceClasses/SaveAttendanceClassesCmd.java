@@ -99,8 +99,6 @@ public class SaveAttendanceClassesCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "timeOffset", "请求报文中未包含timeOffset");
         Assert.hasKeyAndValue(reqJson, "lateOffset", "请求报文中未包含lateOffset");
         Assert.hasKeyAndValue(reqJson, "leaveOffset", "请求报文中未包含leaveOffset");
-        Assert.hasKeyAndValue(reqJson, "classesObjId", "请求报文中未包含classesObjId");
-        Assert.hasKeyAndValue(reqJson, "classesObjName", "请求报文中未包含classesObjName");
 
 
     }

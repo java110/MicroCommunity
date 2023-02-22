@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attendanceClassesStaffV1ServiceDaoImpl">
+
+
+    <!-- 保存考勤员工信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAttendanceClassesStaffInfo" parameterType="Map">
+        insert into attendance_classes_staff(
+        classes_id,cs_id,staff_name,store_id,staff_id
+        ) values (
+        #{classesId},#{csId},#{staffName},#{storeId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询考勤员工信息 add by wuxw 2018-07-03 -->
+    <select id="getAttendanceClassesStaffInfo" parameterType="Map" resultType="Map">
+        select t.classes_id,t.classes_id classesId,t.cs_id,t.cs_id csId,t.staff_name,t.staff_name
+        staffName,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,
+        t.create_time createTime
+        from attendance_classes_staff t
+        where 1 =1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考勤员工信息 add by wuxw 2018-07-03 -->
+    <update id="updateAttendanceClassesStaffInfo" parameterType="Map">
+        update attendance_classes_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="classesId !=null and classesId != ''">
+            , t.classes_id= #{classesId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询考勤员工数量 add by wuxw 2018-07-03 -->
+    <select id="queryAttendanceClassesStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes_staff t
+        where 1 =1
+        <if test="classesId !=null and classesId != ''">
+            and t.classes_id= #{classesId}
+        </if>
+        <if test="csId !=null and csId != ''">
+            and t.cs_id= #{csId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>
