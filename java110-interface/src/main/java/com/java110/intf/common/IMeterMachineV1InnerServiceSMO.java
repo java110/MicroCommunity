@@ -18,6 +18,7 @@ package com.java110.intf.common;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.po.meterMachine.MeterMachinePo;
+import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,4 +66,13 @@ public interface IMeterMachineV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMeterMachinesCount", method = RequestMethod.POST)
     int queryMeterMachinesCount(@RequestBody MeterMachineDto meterMachineDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param meterMachineDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/reChargeMeterMachines", method = RequestMethod.POST)
+    ResultVo reChargeMeterMachines(@RequestBody MeterMachineDto meterMachineDto);
 }

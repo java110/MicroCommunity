@@ -37,6 +37,8 @@ public class MeterMachineDto extends PageDto implements Serializable {
     private String communityId;
     private String feeConfigId;
 
+    private double rechargeDegree;
+
     private List<MeterMachineSpecDto> specs;
 
 
@@ -220,5 +222,13 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     public void setFeeConfigNameLike(String feeConfigNameLike) {
         this.feeConfigNameLike = feeConfigNameLike;
+    }
+
+    public double getRechargeDegree() {
+        return rechargeDegree;
+    }
+
+    public void setRechargeDegree(double rechargeDegree) {
+        this.rechargeDegree = rechargeDegree;
     }
 }

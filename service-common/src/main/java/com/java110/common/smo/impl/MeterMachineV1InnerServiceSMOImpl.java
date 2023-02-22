@@ -16,14 +16,21 @@
 package com.java110.common.smo.impl;
 
 
+import com.java110.common.SmartMeter.ISmartMeterFactoryAdapt;
 import com.java110.common.dao.IMeterMachineV1ServiceDao;
+import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
+import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.po.meterMachine.MeterMachinePo;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +51,9 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Autowired
     private IMeterMachineV1ServiceDao meterMachineV1ServiceDaoImpl;
+
+    @Autowired
+    private IMeterMachineFactoryV1InnerServiceSMO meterMachineFactoryV1InnerServiceSMOImpl;
 
 
     @Override
@@ -85,5 +95,22 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryMeterMachinesCount(@RequestBody MeterMachineDto meterMachineDto) {
         return meterMachineV1ServiceDaoImpl.queryMeterMachinesCount(BeanConvertUtil.beanCovertMap(meterMachineDto));    }
+
+    @Override
+    public ResultVo reChargeMeterMachines(@RequestBody MeterMachineDto meterMachineDto) {
+
+        MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
+        meterMachineFactoryDto.setFactoryId(meterMachineDto.getImplBean());
+        List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
+        Assert.listOnlyOne(meterMachineFactoryDtos,"智能水电表厂家不存在");
+        ISmartMeterFactoryAdapt smartMeterFactoryAdapt = ApplicationContextFactory.getBean(meterMachineFactoryDtos.get(0).getBeanImpl(), ISmartMeterFactoryAdapt.class);
+        if(smartMeterFactoryAdapt == null){
+            throw new CmdException("厂家接口未实现");
+        }
+
+        // 通知 厂家适配器数据
+        ResultVo resultVo = smartMeterFactoryAdapt.requestRecharge(meterMachineDto,meterMachineDto.getRechargeDegree());
+        return resultVo;
+    }
 
 }
