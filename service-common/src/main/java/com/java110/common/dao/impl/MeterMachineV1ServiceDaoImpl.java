@@ -109,5 +109,14 @@ public class MeterMachineV1ServiceDaoImpl extends BaseServiceDao implements IMet
         return Integer.parseInt(businessMeterMachineInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int settingMeterMachineRead(Map info) {
+        logger.debug("修改 settingMeterMachineRead 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("meterMachineV1ServiceDaoImpl.settingMeterMachineRead", info);
+
+        return saveFlag;
+    }
+
 
 }

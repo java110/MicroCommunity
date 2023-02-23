@@ -144,10 +144,10 @@
         <if test="feeConfigId !=null and feeConfigId != ''">
             , t.fee_config_id= #{feeConfigId}
         </if>
-        <if test="readDay !=null and readDay != ''">
+        <if test="readDay !=null">
             , t.read_day= #{readDay}
         </if>
-        <if test="readHours !=null and readHours != ''">
+        <if test="readHours !=null ">
             , t.read_hours = #{readHours}
         </if>
         where 1=1
@@ -228,5 +228,15 @@
 
 
     </select>
+    <update id="settingMeterMachineRead" parameterType="Map">
+        update meter_machine t set
+             t.read_day= #{readDay},
+            t.read_hours = #{readHours}
+        where 1=1
+            and t.community_id= #{communityId}
+            and t.machine_model= #{machineModel}
+
+    </update>
+
 
 </mapper>
