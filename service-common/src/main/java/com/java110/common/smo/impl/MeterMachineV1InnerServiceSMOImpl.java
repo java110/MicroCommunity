@@ -55,7 +55,7 @@ import java.util.Map;
 @RestController
 public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements IMeterMachineV1InnerServiceSMO {
 
-   private Logger logger = LoggerFactory.getLogger(MeterMachineV1InnerServiceSMOImpl.class);
+    private Logger logger = LoggerFactory.getLogger(MeterMachineV1InnerServiceSMOImpl.class);
 
     @Autowired
     private IMeterMachineV1ServiceDao meterMachineV1ServiceDaoImpl;
@@ -144,7 +144,6 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         for (String implBean : maps.keySet()) {
-
             MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
             meterMachineFactoryDto.setFactoryId(implBean);
             List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
@@ -154,10 +153,10 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
                 continue;
             }
             ResultVo resultVo = smartMeterFactoryAdapt.requestReads(maps.get(implBean));
-            logger.debug("抄表返回，{}",resultVo.toString());
+            logger.debug("抄表返回，{}", resultVo.toString());
         }
 
-        return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
     @Override
