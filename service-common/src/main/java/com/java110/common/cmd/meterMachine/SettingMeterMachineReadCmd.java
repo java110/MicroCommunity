@@ -72,7 +72,7 @@ public class SettingMeterMachineReadCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         MeterMachinePo meterMachinePo = new MeterMachinePo();
-        meterMachinePo.setReadHours(reqJson.getIntValue("readDay"));
+        meterMachinePo.setReadDay(reqJson.getIntValue("readDay"));
         meterMachinePo.setReadHours(reqJson.getIntValue("readHours"));
         meterMachinePo.setCommunityId(reqJson.getString("communityId"));
         meterMachinePo.setMachineModel(MeterMachineDto.MACHINE_MODEL_READ);
