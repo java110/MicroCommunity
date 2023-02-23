@@ -8,9 +8,11 @@
     <!-- 保存智能水电表信息 add by wuxw 2018-07-03 -->
     <insert id="saveMeterMachineInfo" parameterType="Map">
         insert into meter_machine(
-        heartbeat_time,impl_bean,address,prestore_degrees,machine_name,room_id,room_name,cur_reading_time,machine_model,cur_degrees,machine_id,meter_type,fee_config_name,community_id,fee_config_id
+        heartbeat_time,impl_bean,address,prestore_degrees,machine_name,room_id,room_name,cur_reading_time,machine_model,
+        cur_degrees,machine_id,meter_type,fee_config_name,community_id,fee_config_id,read_day,read_hours
         ) values (
-        #{heartbeatTime},#{implBean},#{address},#{prestoreDegrees},#{machineName},#{roomId},#{roomName},#{curReadingTime},#{machineModel},#{curDegrees},#{machineId},#{meterType},#{feeConfigName},#{communityId},#{feeConfigId}
+        #{heartbeatTime},#{implBean},#{address},#{prestoreDegrees},#{machineName},#{roomId},#{roomName},#{curReadingTime},
+        #{machineModel},#{curDegrees},#{machineId},#{meterType},#{feeConfigName},#{communityId},#{feeConfigId},#{readDay},#{readHours}
         )
     </insert>
 
@@ -24,7 +26,7 @@
         machineModel,t.cur_degrees,t.cur_degrees curDegrees,t.machine_id,t.machine_id
         machineId,t.meter_type,t.meter_type meterType,t.fee_config_name,t.fee_config_name
         feeConfigName,t.community_id,t.community_id communityId,t.fee_config_id,t.fee_config_id feeConfigId,
-        mmf.factory_name implBeanName,t.create_time createTime
+        mmf.factory_name implBeanName,t.create_time createTime,t.read_day readDay,t.read_hours readHours
         from meter_machine t
         left join meter_machine_factory mmf on t.impl_bean = mmf.factory_id and mmf.status_cd='0'
         where 1 =1
@@ -138,15 +140,22 @@
         <if test="feeConfigName !=null and feeConfigName != ''">
             , t.fee_config_name= #{feeConfigName}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="feeConfigId !=null and feeConfigId != ''">
             , t.fee_config_id= #{feeConfigId}
+        </if>
+        <if test="readDay !=null and readDay != ''">
+            , t.read_day= #{readDay}
+        </if>
+        <if test="readHours !=null and readHours != ''">
+            , t.read_hours = #{readHours}
         </if>
         where 1=1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
