@@ -17,6 +17,7 @@ package com.java110.po.meterMachineDetail;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-02-23 01:56:11 mail: 928255095@qq.com
@@ -28,69 +29,94 @@ import java.util.Date;
 public class MeterMachineDetailPo implements Serializable {
 
     private String detailType;
-private String curDegrees;
-private String machineId;
-private String prestoreDegrees;
-private String detailId;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String curReadingTime;
-public String getDetailType() {
+    private String curDegrees;
+    private String machineId;
+    private String prestoreDegrees;
+    private String detailId;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String curReadingTime;
+
+    private String state;
+
+    public String getDetailType() {
         return detailType;
     }
-public void setDetailType(String detailType) {
+
+    public void setDetailType(String detailType) {
         this.detailType = detailType;
     }
-public String getCurDegrees() {
+
+    public String getCurDegrees() {
         return curDegrees;
     }
-public void setCurDegrees(String curDegrees) {
+
+    public void setCurDegrees(String curDegrees) {
         this.curDegrees = curDegrees;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getPrestoreDegrees() {
+
+    public String getPrestoreDegrees() {
         return prestoreDegrees;
     }
-public void setPrestoreDegrees(String prestoreDegrees) {
+
+    public void setPrestoreDegrees(String prestoreDegrees) {
         this.prestoreDegrees = prestoreDegrees;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
 
+    public String getState() {
+        return state;
+    }
 
-
+    public void setState(String state) {
+        this.state = state;
+    }
 }

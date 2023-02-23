@@ -123,6 +123,7 @@ public class SmartMeterAdapt extends DatabusAdaptImpl {
             String degree = FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION);
 
             meterMachineDtos.get(0).setRechargeDegree(Double.parseDouble(degree));
+            meterMachineDtos.get(0).setRechargeMoney(Double.parseDouble(payFeeDetailPo.getReceivableAmount()));
 
             //智能电表充值
             meterMachineV1InnerServiceSMOImpl.reChargeMeterMachines(meterMachineDtos.get(0));

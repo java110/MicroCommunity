@@ -1,41 +1,16 @@
 package com.java110.job.task.smartWeter;
 
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
-import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.meterMachine.MeterMachineDto;
-import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
-import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
-import com.java110.dto.store.StoreDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.dto.user.UserDto;
-import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
-import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
-import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
-import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
-import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
-import com.java110.intf.store.IStoreV1InnerServiceSMO;
-import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
-import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import io.micrometer.core.instrument.Meter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 /**
  * 智能电表远程抄表
@@ -43,7 +18,7 @@ import java.util.concurrent.TimeoutException;
  * 执行最小单位不能小于一个小时
  */
 @Component
-public class SmartWeterReadDegreeTaskTemplate extends TaskSystemQuartz {
+public class SmartMeterReadDegreeTaskTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IMeterMachineV1InnerServiceSMO meterMachineV1InnerServiceSMOImpl;

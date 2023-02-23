@@ -15,7 +15,7 @@ import java.util.List;
 @Service("commonFactoryAdaptImpl")
 public class CommonFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
     @Override
-    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree) {
+    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree, double money) {
         return null;
     }
 

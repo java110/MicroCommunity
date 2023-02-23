@@ -41,6 +41,7 @@ public class MeterMachineDto extends PageDto implements Serializable {
     private String feeConfigId;
 
     private double rechargeDegree;
+    private double rechargeMoney;
 
     private List<MeterMachineSpecDto> specs;
 
@@ -253,5 +254,13 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     public void setReadHours(int readHours) {
         this.readHours = readHours;
+    }
+
+    public double getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(double rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 }

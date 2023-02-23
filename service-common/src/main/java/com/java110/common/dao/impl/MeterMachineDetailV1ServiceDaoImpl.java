@@ -62,6 +62,21 @@ public class MeterMachineDetailV1ServiceDaoImpl extends BaseServiceDao implement
 
 
     /**
+     * 保存智能水电表明细信息 到 instance
+     * @param info   bId 信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int saveMeterMachineDetails(Map info) throws DAOException {
+        logger.debug("保存 saveMeterMachineDetails 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("meterMachineDetailV1ServiceDaoImpl.saveMeterMachineDetails",info);
+
+        return saveFlag;
+    }
+
+
+    /**
      * 查询智能水电表明细信息（instance）
      * @param info bId 信息
      * @return List<Map>

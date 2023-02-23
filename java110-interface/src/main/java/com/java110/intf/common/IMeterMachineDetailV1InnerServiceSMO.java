@@ -65,4 +65,7 @@ public interface IMeterMachineDetailV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMeterMachineDetailsCount", method = RequestMethod.POST)
     int queryMeterMachineDetailsCount(@RequestBody MeterMachineDetailDto meterMachineDetailDto);
+
+    @RequestMapping(value = "/saveMeterMachineDetails", method = RequestMethod.POST)
+    int saveMeterMachineDetails(List<MeterMachineDetailPo> meterMachineDetailPos);
 }

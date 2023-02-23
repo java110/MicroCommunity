@@ -118,7 +118,7 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
         }
 
         // 通知 厂家适配器数据
-        ResultVo resultVo = smartMeterFactoryAdapt.requestRecharge(meterMachineDto, meterMachineDto.getRechargeDegree());
+        ResultVo resultVo = smartMeterFactoryAdapt.requestRecharge(meterMachineDto, meterMachineDto.getRechargeDegree(),meterMachineDto.getRechargeMoney());
         return resultVo;
     }
 

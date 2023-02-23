@@ -29,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -49,6 +51,14 @@ public class MeterMachineDetailV1InnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int saveMeterMachineDetail(@RequestBody  MeterMachineDetailPo meterMachineDetailPo) {
         int saveFlag = meterMachineDetailV1ServiceDaoImpl.saveMeterMachineDetailInfo(BeanConvertUtil.beanCovertMap(meterMachineDetailPo));
+        return saveFlag;
+    }
+
+    @Override
+    public int saveMeterMachineDetails(List<MeterMachineDetailPo> meterMachineDetailPos) {
+        Map info = new HashMap();
+        info.put("meterMachineDetailPos",meterMachineDetailPos);
+        int saveFlag = meterMachineDetailV1ServiceDaoImpl.saveMeterMachineDetails(info);
         return saveFlag;
     }
 
@@ -85,5 +95,7 @@ public class MeterMachineDetailV1InnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int queryMeterMachineDetailsCount(@RequestBody MeterMachineDetailDto meterMachineDetailDto) {
         return meterMachineDetailV1ServiceDaoImpl.queryMeterMachineDetailsCount(BeanConvertUtil.beanCovertMap(meterMachineDetailDto));    }
+
+
 
 }

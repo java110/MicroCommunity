@@ -16,7 +16,7 @@ public interface ISmartMeterFactoryAdapt {
      * @param meterMachineDto
      * @param degree
      */
-    ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree);
+    ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree,double money);
 
     /**
      * 电表读数
