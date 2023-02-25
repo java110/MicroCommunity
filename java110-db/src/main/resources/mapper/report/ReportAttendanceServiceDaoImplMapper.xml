@@ -169,9 +169,10 @@
     </select>
 
     <select id="getMonthAttendanceDetail" parameterType="Map" resultType="Map">
-        select t.detail_id detailId,t.spec_cd specCd,t.`value`,t.check_time checkTime,t.state,t.face_path facePath,t.create_time createTime,act.task_day  taskDay
+        select t.detail_id detailId,t.spec_cd specCd,t.`value`,t.check_time checkTime,t.state,t.face_path facePath,t.create_time createTime,act.task_day  taskDay,td.`name` stateName
         from attendance_classes_task_detail t
         left join attendance_classes_task act on t.task_id = act.task_id and act.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'attendance_classes_task_detail' and td.table_columns = 'state'
         where
         t.status_cd = '0'
         and act.class_id = #{classId}
