@@ -119,7 +119,7 @@
         clockCount,t.store_id,t.store_id
         storeId,t.clock_type,t.clock_type clockType,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
         classesId,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset lateOffset,t.b_id,t.b_id
-        bId,t.clock_type_value,t.clock_type_value clockTypeValue,t.max_last_offset maxLastOffset
+        bId,t.clock_type_value,t.clock_type_value clockTypeValue,t.max_last_offset maxLastOffset,
         td.name clockTypeName
         from attendance_classes t
         left join t_dict td on t.clock_type = td.status_cd and td.table_name = 'attendance_classes'
