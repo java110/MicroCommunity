@@ -57,6 +57,7 @@
         AND act.status_cd = '0'
         AND act.task_id = b.task_id
         AND b.state = '10000'
+        and b.value &lt; now()
         <if test="taskYear !=null and taskYear != ''">
             and act.task_year= #{taskYear}
         </if>
