@@ -182,6 +182,7 @@ public class CheckInCmd extends Cmd {
         attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("checkTime"));
         attendanceClassesTaskDetailDto.setClassId(attendanceClassesDto.getClassesId());
         attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
+        attendanceClassesTaskDetailDto.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
         if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
@@ -205,6 +206,7 @@ public class CheckInCmd extends Cmd {
         }
 
 
+
         attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
         attendanceClassesTaskDetailDto.setTaskId(nowAttendanceClassesTaskDetailDto.getTaskId());
         attendanceClassesTaskDetailDto.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
@@ -222,6 +224,18 @@ public class CheckInCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("考勤失败");
         }
+
+        String msg = "打卡成功";
+        if(AttendanceClassesTaskDetailDto.STATE_LATE.equals(attendanceClassesTaskDetailPo.getState())){
+            msg = "打开迟到";
+        }
+
+        if(AttendanceClassesTaskDetailDto.STATE_LEAVE.equals(attendanceClassesTaskDetailPo.getState())){
+            msg = "打开早退";
+        }
+
+        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK,msg));
+
     }
 
     /**
