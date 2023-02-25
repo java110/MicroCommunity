@@ -24,6 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -116,6 +117,10 @@ public class SaveMeterMachineCmd extends Cmd {
         meterMachinePo.setCurReadingTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         meterMachinePo.setPrestoreDegrees("0");
         meterMachinePo.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        if(MeterMachineDto.MACHINE_MODEL_RECHARGE.equals(meterMachinePo.getMachineModel())){
+            meterMachinePo.setReadDay(1);
+            meterMachinePo.setReadHours(1);
+        }
         int flag = meterMachineV1InnerServiceSMOImpl.saveMeterMachine(meterMachinePo);
 
         if (flag < 1) {

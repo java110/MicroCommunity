@@ -18,7 +18,9 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.SmartMeter.ISmartMeterFactoryAdapt;
 import com.java110.common.dao.IMeterMachineV1ServiceDao;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
+import com.java110.dto.storeOrderCart.StoreOrderCartDto;
 import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.dto.meterMachine.MeterMachineDto;
@@ -30,13 +32,17 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -49,6 +55,8 @@ import java.util.List;
 @RestController
 public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements IMeterMachineV1InnerServiceSMO {
 
+    private Logger logger = LoggerFactory.getLogger(MeterMachineV1InnerServiceSMOImpl.class);
+
     @Autowired
     private IMeterMachineV1ServiceDao meterMachineV1ServiceDaoImpl;
 
@@ -57,26 +65,26 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
 
     @Override
-    public int saveMeterMachine(@RequestBody  MeterMachinePo meterMachinePo) {
+    public int saveMeterMachine(@RequestBody MeterMachinePo meterMachinePo) {
         int saveFlag = meterMachineV1ServiceDaoImpl.saveMeterMachineInfo(BeanConvertUtil.beanCovertMap(meterMachinePo));
         return saveFlag;
     }
 
-     @Override
-    public int updateMeterMachine(@RequestBody  MeterMachinePo meterMachinePo) {
+    @Override
+    public int updateMeterMachine(@RequestBody MeterMachinePo meterMachinePo) {
         int saveFlag = meterMachineV1ServiceDaoImpl.updateMeterMachineInfo(BeanConvertUtil.beanCovertMap(meterMachinePo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteMeterMachine(@RequestBody  MeterMachinePo meterMachinePo) {
-       meterMachinePo.setStatusCd("1");
-       int saveFlag = meterMachineV1ServiceDaoImpl.updateMeterMachineInfo(BeanConvertUtil.beanCovertMap(meterMachinePo));
-       return saveFlag;
+    @Override
+    public int deleteMeterMachine(@RequestBody MeterMachinePo meterMachinePo) {
+        meterMachinePo.setStatusCd("1");
+        int saveFlag = meterMachineV1ServiceDaoImpl.updateMeterMachineInfo(BeanConvertUtil.beanCovertMap(meterMachinePo));
+        return saveFlag;
     }
 
     @Override
-    public List<MeterMachineDto> queryMeterMachines(@RequestBody  MeterMachineDto meterMachineDto) {
+    public List<MeterMachineDto> queryMeterMachines(@RequestBody MeterMachineDto meterMachineDto) {
 
         //校验是否传了 分页信息
 
@@ -94,7 +102,8 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Override
     public int queryMeterMachinesCount(@RequestBody MeterMachineDto meterMachineDto) {
-        return meterMachineV1ServiceDaoImpl.queryMeterMachinesCount(BeanConvertUtil.beanCovertMap(meterMachineDto));    }
+        return meterMachineV1ServiceDaoImpl.queryMeterMachinesCount(BeanConvertUtil.beanCovertMap(meterMachineDto));
+    }
 
     @Override
     public ResultVo reChargeMeterMachines(@RequestBody MeterMachineDto meterMachineDto) {
@@ -102,15 +111,59 @@ public class MeterMachineV1InnerServiceSMOImpl extends BaseServiceSMO implements
         MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
         meterMachineFactoryDto.setFactoryId(meterMachineDto.getImplBean());
         List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
-        Assert.listOnlyOne(meterMachineFactoryDtos,"智能水电表厂家不存在");
+        Assert.listOnlyOne(meterMachineFactoryDtos, "智能水电表厂家不存在");
         ISmartMeterFactoryAdapt smartMeterFactoryAdapt = ApplicationContextFactory.getBean(meterMachineFactoryDtos.get(0).getBeanImpl(), ISmartMeterFactoryAdapt.class);
-        if(smartMeterFactoryAdapt == null){
+        if (smartMeterFactoryAdapt == null) {
             throw new CmdException("厂家接口未实现");
         }
 
         // 通知 厂家适配器数据
-        ResultVo resultVo = smartMeterFactoryAdapt.requestRecharge(meterMachineDto,meterMachineDto.getRechargeDegree());
+        ResultVo resultVo = smartMeterFactoryAdapt.requestRecharge(meterMachineDto, meterMachineDto.getRechargeDegree(),meterMachineDto.getRechargeMoney());
         return resultVo;
     }
+
+    @Override
+    public ResultVo requestReads(@RequestBody List<MeterMachineDto> meterMachineDtos) {
+
+        Map<String, List<MeterMachineDto>> maps = new HashMap<>();
+
+        List<MeterMachineDto> tmpMeterMachineDtos = null;
+
+        for (MeterMachineDto meterMachineDto : meterMachineDtos) {
+            if (StringUtil.isEmpty(meterMachineDto.getImplBean())) {
+                continue;
+            }
+            if (maps.containsKey(meterMachineDto.getImplBean())) {
+                tmpMeterMachineDtos = maps.get(meterMachineDto.getImplBean());
+                tmpMeterMachineDtos.add(meterMachineDto);
+                continue;
+            }
+            tmpMeterMachineDtos = new ArrayList<>();
+            tmpMeterMachineDtos.add(meterMachineDto);
+            maps.put(meterMachineDto.getImplBean(), tmpMeterMachineDtos);
+        }
+
+        for (String implBean : maps.keySet()) {
+            MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
+            meterMachineFactoryDto.setFactoryId(implBean);
+            List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
+            Assert.listOnlyOne(meterMachineFactoryDtos, "智能水电表厂家不存在");
+            ISmartMeterFactoryAdapt smartMeterFactoryAdapt = ApplicationContextFactory.getBean(meterMachineFactoryDtos.get(0).getBeanImpl(), ISmartMeterFactoryAdapt.class);
+            if (smartMeterFactoryAdapt == null) {
+                continue;
+            }
+            ResultVo resultVo = smartMeterFactoryAdapt.requestReads(maps.get(implBean));
+            logger.debug("抄表返回，{}", resultVo.toString());
+        }
+
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+    @Override
+    public int settingMeterMachineRead(@RequestBody MeterMachinePo meterMachinePo) {
+        int saveFlag = meterMachineV1ServiceDaoImpl.settingMeterMachineRead(BeanConvertUtil.beanCovertMap(meterMachinePo));
+        return saveFlag;
+    }
+
 
 }

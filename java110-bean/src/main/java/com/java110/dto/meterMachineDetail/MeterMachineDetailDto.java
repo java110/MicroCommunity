@@ -1,6 +1,7 @@
 package com.java110.dto.meterMachineDetail;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,16 +15,20 @@ import java.util.Date;
  **/
 public class MeterMachineDetailDto extends PageDto implements Serializable {
 
+    public static final String STATE_W ="W"; // 等待抄表
+    public static final String STATE_F ="F"; // 抄表失败
+    public static final String STATE_C ="C"; // 抄表完成
+
     private String detailType;
-private String curDegrees;
-private String machineId;
-private String prestoreDegrees;
-private String detailId;
-private String remark;
-private String communityId;
-private String curReadingTime;
+    private String curDegrees;
+    private String machineId;
+    private String prestoreDegrees;
+    private String detailId;
+    private String remark;
+    private String communityId;
+    private String curReadingTime;
 
-
+    private String state;
     private Date createTime;
 
     private String statusCd = "0";
@@ -32,49 +37,64 @@ private String curReadingTime;
     public String getDetailType() {
         return detailType;
     }
-public void setDetailType(String detailType) {
+
+    public void setDetailType(String detailType) {
         this.detailType = detailType;
     }
-public String getCurDegrees() {
+
+    public String getCurDegrees() {
         return curDegrees;
     }
-public void setCurDegrees(String curDegrees) {
+
+    public void setCurDegrees(String curDegrees) {
         this.curDegrees = curDegrees;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getPrestoreDegrees() {
+
+    public String getPrestoreDegrees() {
         return prestoreDegrees;
     }
-public void setPrestoreDegrees(String prestoreDegrees) {
+
+    public void setPrestoreDegrees(String prestoreDegrees) {
         this.prestoreDegrees = prestoreDegrees;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
 
@@ -93,5 +113,13 @@ public void setCurReadingTime(String curReadingTime) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

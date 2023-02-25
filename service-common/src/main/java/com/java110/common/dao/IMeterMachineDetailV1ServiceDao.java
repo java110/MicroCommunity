@@ -44,7 +44,7 @@ public interface IMeterMachineDetailV1ServiceDao {
      */
     int saveMeterMachineDetailInfo(Map info) throws DAOException;
 
-
+    int saveMeterMachineDetails(Map info);
 
 
     /**
@@ -73,5 +73,6 @@ public interface IMeterMachineDetailV1ServiceDao {
      * @return 智能水电表明细数量
      */
     int queryMeterMachineDetailsCount(Map info);
+
 
 }

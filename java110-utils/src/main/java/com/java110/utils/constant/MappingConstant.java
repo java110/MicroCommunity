@@ -40,6 +40,9 @@ public final class MappingConstant {
     //飞蛾小票机配置
     public static final String FEIE_DOMAIN = "FEIE_DOMAIN";
 
+    //拓强智能电表 域
+    public static final String TDDIANBIAO_DOMAIN = "TDDIANBIAO_DOMAIN";
+
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
     public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";

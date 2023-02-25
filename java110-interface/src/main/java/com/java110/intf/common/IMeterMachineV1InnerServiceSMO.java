@@ -75,4 +75,10 @@ public interface IMeterMachineV1InnerServiceSMO {
      */
     @RequestMapping(value = "/reChargeMeterMachines", method = RequestMethod.POST)
     ResultVo reChargeMeterMachines(@RequestBody MeterMachineDto meterMachineDto);
+
+    @RequestMapping(value = "/requestReads", method = RequestMethod.POST)
+    ResultVo requestReads(@RequestBody List<MeterMachineDto> meterMachineDtos);
+
+    @RequestMapping(value = "/settingMeterMachineRead", method = RequestMethod.POST)
+    int settingMeterMachineRead(@RequestBody MeterMachinePo meterMachinePo);
 }

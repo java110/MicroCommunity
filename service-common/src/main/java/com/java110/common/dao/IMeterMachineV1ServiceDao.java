@@ -74,4 +74,5 @@ public interface IMeterMachineV1ServiceDao {
      */
     int queryMeterMachinesCount(Map info);
 
+    int settingMeterMachineRead(Map info);
 }

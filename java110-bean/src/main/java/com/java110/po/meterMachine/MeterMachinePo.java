@@ -17,6 +17,7 @@ package com.java110.po.meterMachine;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-02-22 22:32:13 mail: 928255095@qq.com
@@ -28,118 +29,167 @@ import java.util.Date;
 public class MeterMachinePo implements Serializable {
 
     private String heartbeatTime;
-private String implBean;
-private String address;
-private String prestoreDegrees;
-private String statusCd = "0";
-private String machineName;
-private String roomId;
-private String roomName;
-private String curReadingTime;
-private String machineModel;
-private String curDegrees;
-private String machineId;
-private String meterType;
-private String feeConfigName;
-private String communityId;
-private String feeConfigId;
-public String getHeartbeatTime() {
+    private String implBean;
+    private String address;
+    private String prestoreDegrees;
+    private String statusCd = "0";
+    private String machineName;
+    private String roomId;
+    private String roomName;
+    private String curReadingTime;
+    private String machineModel;
+    private String curDegrees;
+    private String machineId;
+    private String meterType;
+    private String feeConfigName;
+    private String communityId;
+    private String feeConfigId;
+
+    private int readDay ;
+
+    private int readHours;
+
+    public String getHeartbeatTime() {
         return heartbeatTime;
     }
-public void setHeartbeatTime(String heartbeatTime) {
+
+    public void setHeartbeatTime(String heartbeatTime) {
         this.heartbeatTime = heartbeatTime;
     }
-public String getImplBean() {
+
+    public String getImplBean() {
         return implBean;
     }
-public void setImplBean(String implBean) {
+
+    public void setImplBean(String implBean) {
         this.implBean = implBean;
     }
-public String getAddress() {
+
+    public String getAddress() {
         return address;
     }
-public void setAddress(String address) {
+
+    public void setAddress(String address) {
         this.address = address;
     }
-public String getPrestoreDegrees() {
+
+    public String getPrestoreDegrees() {
         return prestoreDegrees;
     }
-public void setPrestoreDegrees(String prestoreDegrees) {
+
+    public void setPrestoreDegrees(String prestoreDegrees) {
         this.prestoreDegrees = prestoreDegrees;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getRoomName() {
+
+    public String getRoomName() {
         return roomName;
     }
-public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
-public String getMachineModel() {
+
+    public String getMachineModel() {
         return machineModel;
     }
-public void setMachineModel(String machineModel) {
+
+    public void setMachineModel(String machineModel) {
         this.machineModel = machineModel;
     }
-public String getCurDegrees() {
+
+    public String getCurDegrees() {
         return curDegrees;
     }
-public void setCurDegrees(String curDegrees) {
+
+    public void setCurDegrees(String curDegrees) {
         this.curDegrees = curDegrees;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getMeterType() {
+
+    public String getMeterType() {
         return meterType;
     }
-public void setMeterType(String meterType) {
+
+    public void setMeterType(String meterType) {
         this.meterType = meterType;
     }
-public String getFeeConfigName() {
+
+    public String getFeeConfigName() {
         return feeConfigName;
     }
-public void setFeeConfigName(String feeConfigName) {
+
+    public void setFeeConfigName(String feeConfigName) {
         this.feeConfigName = feeConfigName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeConfigId() {
+
+    public String getFeeConfigId() {
         return feeConfigId;
     }
-public void setFeeConfigId(String feeConfigId) {
+
+    public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
     }
 
+    public int getReadDay() {
+        return readDay;
+    }
 
+    public void setReadDay(int readDay) {
+        this.readDay = readDay;
+    }
 
+    public int getReadHours() {
+        return readHours;
+    }
+
+    public void setReadHours(int readHours) {
+        this.readHours = readHours;
+    }
 }

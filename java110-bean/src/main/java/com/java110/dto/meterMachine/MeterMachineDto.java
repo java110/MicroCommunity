@@ -17,6 +17,9 @@ import java.util.List;
  **/
 public class MeterMachineDto extends PageDto implements Serializable {
 
+    public static final String MACHINE_MODEL_RECHARGE  ="1001";//重置模式
+    public static final String MACHINE_MODEL_READ  ="2002";//读表模式
+
     private String heartbeatTime;
     private String implBean;
     private String implBeanName;
@@ -38,6 +41,7 @@ public class MeterMachineDto extends PageDto implements Serializable {
     private String feeConfigId;
 
     private double rechargeDegree;
+    private double rechargeMoney;
 
     private List<MeterMachineSpecDto> specs;
 
@@ -45,6 +49,10 @@ public class MeterMachineDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private int readDay ;
+
+    private int readHours;
 
 
     public String getHeartbeatTime() {
@@ -230,5 +238,29 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     public void setRechargeDegree(double rechargeDegree) {
         this.rechargeDegree = rechargeDegree;
+    }
+
+    public int getReadDay() {
+        return readDay;
+    }
+
+    public void setReadDay(int readDay) {
+        this.readDay = readDay;
+    }
+
+    public int getReadHours() {
+        return readHours;
+    }
+
+    public void setReadHours(int readHours) {
+        this.readHours = readHours;
+    }
+
+    public double getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(double rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 }
