@@ -75,7 +75,7 @@
         ac.classes_id = act.class_id
         AND act.status_cd = '0'
         AND act.task_id = b.task_id
-        AND b.state = '30000'
+        AND b.state in ('30000','70000')
         <if test="taskYear !=null and taskYear != ''">
             and act.task_year= #{taskYear}
         </if>
