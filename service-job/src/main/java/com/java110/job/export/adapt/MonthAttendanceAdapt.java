@@ -81,17 +81,22 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
             List<AttendanceClassesTaskDto> attendanceClassesTaskDtos = reportAttendanceInnerServiceSMOImpl.getMonthAttendance(attendanceClassesTaskDto);
             //输入考勤明细
             refreshDetail(attendanceClassesTaskDtos, reqJson);
-            appendData(attendanceClassesTaskDtos, sheet, (page - 1) * MAX_ROW, maxDayOfMonth);
+            appendData(attendanceClassesTaskDtos, sheet, (page - 1) * MAX_ROW, maxDayOfMonth, reqJson);
         }
     }
 
-    private void appendData(List<AttendanceClassesTaskDto> attendanceClassesTaskDtos, Sheet sheet, int step, int maxDayOfMonth) {
+    private void appendData(List<AttendanceClassesTaskDto> attendanceClassesTaskDtos, Sheet sheet, int step, int maxDayOfMonth, JSONObject reqJson) {
 
         Row row = null;
         JSONObject dayObj = null;
         AttendanceClassesTaskDto attendanceClassesTaskDto = null;
         List<AttendanceClassesTaskDetailDto> detailDtos = null;
         String value = "";
+
+        Calendar calendar = Calendar.getInstance();
+        int today = calendar.get(Calendar.DAY_OF_MONTH);
+        int taskYear = reqJson.getIntValue("taskYear");
+        int taskMonth = reqJson.getIntValue("taskMonth");
         for (int roomIndex = 0; roomIndex < attendanceClassesTaskDtos.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + step + 1);
             attendanceClassesTaskDto = attendanceClassesTaskDtos.get(roomIndex);
@@ -99,17 +104,23 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
             row.createCell(1).setCellValue(attendanceClassesTaskDto.getStaffName());
             dayObj = attendanceClassesTaskDto.getDays();
             for (int day = 1; day <= maxDayOfMonth; day++) {
+
+                if(taskYear == calendar.get(Calendar.YEAR) && taskMonth == (calendar.get(Calendar.MONTH)+1) && day > today){
+                    row.createCell(day + 1).setCellValue("未到时间");
+                    continue;
+                }
+
                 if (!dayObj.containsKey(day)) {
-                    row.createCell(day + 1).setCellValue("休息");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
                 if (dayObj.get(day) == null) {
-                    row.createCell(day + 1).setCellValue("休息");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
                 detailDtos = (List<AttendanceClassesTaskDetailDto>) dayObj.get(day);
                 if (detailDtos == null || detailDtos.size() < 1) {
-                    row.createCell(day + 1).setCellValue("休息");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
 
