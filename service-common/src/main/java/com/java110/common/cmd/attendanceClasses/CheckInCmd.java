@@ -186,6 +186,16 @@ public class CheckInCmd extends Cmd {
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
         if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
+            attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
+            attendanceClassesTaskDetailDto.setNowCheckTime(reqJson.getString("checkTime"));
+            attendanceClassesTaskDetailDto.setClassId(attendanceClassesDto.getClassesId());
+            attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
+            attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
+
+            if (attendanceClassesTaskDetailDtos != null || attendanceClassesTaskDetailDtos.size() > 0) {
+                context.setResponseEntity(ResultVo.error("重复打卡"));
+                return;
+            }
             context.setResponseEntity(ResultVo.error("未到时间"));
             return;
         }
@@ -204,7 +214,6 @@ public class CheckInCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("考勤失败");
         }
-
 
 
         attendanceClassesTaskDetailDto = new AttendanceClassesTaskDetailDto();
@@ -226,15 +235,15 @@ public class CheckInCmd extends Cmd {
         }
 
         String msg = "打卡成功";
-        if(AttendanceClassesTaskDetailDto.STATE_LATE.equals(attendanceClassesTaskDetailPo.getState())){
+        if (AttendanceClassesTaskDetailDto.STATE_LATE.equals(attendanceClassesTaskDetailPo.getState())) {
             msg = "打开迟到";
         }
 
-        if(AttendanceClassesTaskDetailDto.STATE_LEAVE.equals(attendanceClassesTaskDetailPo.getState())){
+        if (AttendanceClassesTaskDetailDto.STATE_LEAVE.equals(attendanceClassesTaskDetailPo.getState())) {
             msg = "打开早退";
         }
 
-        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK,msg));
+        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, msg));
 
     }
 
