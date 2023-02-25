@@ -64,6 +64,8 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     private String endTime;
 
+    private String taskDay;
+
 
     public String getCheckTime() {
         return checkTime;
@@ -249,5 +251,13 @@ public class AttendanceClassesTaskDetailDto extends PageDto implements Serializa
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public String getTaskDay() {
+        return taskDay;
+    }
+
+    public void setTaskDay(String taskDay) {
+        this.taskDay = taskDay;
     }
 }
