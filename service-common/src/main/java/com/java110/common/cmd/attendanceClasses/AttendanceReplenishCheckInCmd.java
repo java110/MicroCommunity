@@ -30,6 +30,7 @@ import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
 import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,7 @@ public class AttendanceReplenishCheckInCmd extends Cmd {
         attendanceClassesTaskDetailPo.setDetailId(attendanceClassesTaskDetailDtos.get(0).getDetailId());
         attendanceClassesTaskDetailPo.setState(AttendanceClassesTaskDetailDto.STATE_REPLENISH);
         attendanceClassesTaskDetailPo.setRemark(reqJson.getString("remark"));
+        attendanceClassesTaskDetailPo.setCheckTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = attendanceClassesTaskDetailInnerServiceSMOImpl.updateAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
 
         if (flag < 1) {
@@ -100,9 +102,9 @@ public class AttendanceReplenishCheckInCmd extends Cmd {
         int count = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetailsCount(attendanceClassesTaskDetailDto);
         AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
         attendanceClassesTaskPo.setTaskId(attendanceClassesTaskDetailDtos.get(0).getTaskId());
-        if(count >0){
+        if (count > 0) {
             attendanceClassesTaskPo.setState(AttendanceClassesTaskDto.STATE_DOING);
-        }else{
+        } else {
             attendanceClassesTaskPo.setState(AttendanceClassesTaskDto.STATE_FINISH);
         }
 

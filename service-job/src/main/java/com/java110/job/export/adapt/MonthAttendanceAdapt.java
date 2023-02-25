@@ -37,7 +37,7 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
         workbook = new SXSSFWorkbook();
         workbook.setCompressTempFiles(false);
 
-        Sheet sheet = workbook.createSheet("月考勤表");
+        Sheet sheet = workbook.createSheet(reqJson.getIntValue("taskYear") + "年" + reqJson.getIntValue("taskMonth") + "月考勤表");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("部门");
         row.createCell(1).setCellValue("员工");
@@ -100,16 +100,16 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
             dayObj = attendanceClassesTaskDto.getDays();
             for (int day = 1; day <= maxDayOfMonth; day++) {
                 if (!dayObj.containsKey(day)) {
-                    row.createCell(day + 1).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("休息");
                     continue;
                 }
                 if (dayObj.get(day) == null) {
-                    row.createCell(day + 1).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("休息");
                     continue;
                 }
                 detailDtos = (List<AttendanceClassesTaskDetailDto>) dayObj.get(day);
                 if (detailDtos == null || detailDtos.size() < 1) {
-                    row.createCell(day + 1).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("休息");
                     continue;
                 }
 
