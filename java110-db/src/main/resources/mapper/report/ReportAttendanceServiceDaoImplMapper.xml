@@ -185,5 +185,6 @@
         <if test="taskMonth !=null and taskMonth != ''">
             and act.task_month= #{taskMonth}
         </if>
+        order by t.`value`
     </select>
 </mapper>
