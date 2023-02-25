@@ -47,14 +47,14 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
         calendar.set(Calendar.MONTH, reqJson.getIntValue("taskMonth") - 1);
         int maxDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int day = 1; day <= maxDayOfMonth; day++) {
-            row.createCell(day + 2).setCellValue(day + "日");
+            row.createCell(day + 1).setCellValue(day + "日");
         }
 
-        row.createCell(2 + maxDayOfMonth + 1).setCellValue("正常考勤");
-        row.createCell(2 + maxDayOfMonth + 2).setCellValue("迟到");
-        row.createCell(2 + maxDayOfMonth + 3).setCellValue("早退");
-        row.createCell(2 + maxDayOfMonth + 4).setCellValue("旷工");
-        row.createCell(2 + maxDayOfMonth + 5).setCellValue("免考勤");
+        row.createCell(1 + maxDayOfMonth + 1).setCellValue("正常考勤");
+        row.createCell(1 + maxDayOfMonth + 2).setCellValue("迟到");
+        row.createCell(1 + maxDayOfMonth + 3).setCellValue("早退");
+        row.createCell(1 + maxDayOfMonth + 4).setCellValue("旷工");
+        row.createCell(1 + maxDayOfMonth + 5).setCellValue("免考勤");
 
 
         AttendanceClassesTaskDto attendanceClassesTaskDto = BeanConvertUtil.covertBean(reqJson, AttendanceClassesTaskDto.class);
@@ -100,16 +100,16 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
             dayObj = attendanceClassesTaskDto.getDays();
             for (int day = 1; day <= maxDayOfMonth; day++) {
                 if (!dayObj.containsKey(day)) {
-                    row.createCell(day + 2).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
                 if (dayObj.get(day) == null) {
-                    row.createCell(day + 2).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
                 detailDtos = (List<AttendanceClassesTaskDetailDto>) dayObj.get(day);
                 if (detailDtos == null || detailDtos.size() < 1) {
-                    row.createCell(day + 2).setCellValue("无需考勤");
+                    row.createCell(day + 1).setCellValue("无需考勤");
                     continue;
                 }
 
@@ -122,19 +122,19 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
                     }
 
                     if (!AttendanceClassesTaskDetailDto.STATE_WAIT.equals(detailDto.getState())) {
-                        value += (detailDto.getCheckTime()+"("+detailDto.getStateName()+");");
+                        value += (detailDto.getCheckTime() + "(" + detailDto.getStateName() + ");" + String.valueOf((char) 10));
                     } else {
-                        value += (" - ("+detailDto.getStateName()+");");
+                        value += (" - (" + detailDto.getStateName() + ");" + String.valueOf((char) 10));
                     }
                 }
-                row.createCell(day + 2).setCellValue(value);
+                row.createCell(day + 1).setCellValue(value);
             }
 
-            row.createCell(2 + maxDayOfMonth + 1).setCellValue(attendanceClassesTaskDto.getClockIn());
-            row.createCell(2 + maxDayOfMonth + 2).setCellValue(attendanceClassesTaskDto.getLate());
-            row.createCell(2 + maxDayOfMonth + 3).setCellValue(attendanceClassesTaskDto.getEarly());
-            row.createCell(2 + maxDayOfMonth + 4).setCellValue(attendanceClassesTaskDto.getNoClockIn());
-            row.createCell(2 + maxDayOfMonth + 5).setCellValue(attendanceClassesTaskDto.getFree());
+            row.createCell(1 + maxDayOfMonth + 1).setCellValue(attendanceClassesTaskDto.getClockIn());
+            row.createCell(1 + maxDayOfMonth + 2).setCellValue(attendanceClassesTaskDto.getLate());
+            row.createCell(1 + maxDayOfMonth + 3).setCellValue(attendanceClassesTaskDto.getEarly());
+            row.createCell(1 + maxDayOfMonth + 4).setCellValue(attendanceClassesTaskDto.getNoClockIn());
+            row.createCell(1 + maxDayOfMonth + 5).setCellValue(attendanceClassesTaskDto.getFree());
         }
     }
 
