@@ -185,7 +185,7 @@ public class CheckInCmd extends Cmd {
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
         if (attendanceClassesTaskDetailDtos == null || attendanceClassesTaskDetailDtos.size() < 1) {
-            context.setResponseEntity(ResultVo.error("不是考勤范围内"));
+            context.setResponseEntity(ResultVo.error("未到时间"));
             return;
         }
 

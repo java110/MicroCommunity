@@ -17,6 +17,8 @@ public class AttendanceClassesPo implements Serializable {
     private String clockTypeValue;
     private String classesObjName;
 
+    private String maxLastOffset;
+
     private String statusCd = "0";
 
     public String getTimeOffset() {
@@ -121,5 +123,13 @@ public class AttendanceClassesPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getMaxLastOffset() {
+        return maxLastOffset;
+    }
+
+    public void setMaxLastOffset(String maxLastOffset) {
+        this.maxLastOffset = maxLastOffset;
     }
 }

@@ -7,10 +7,10 @@
     <insert id="saveBusinessAttendanceClassesInfo" parameterType="Map">
         insert into business_attendance_classes(time_offset, clock_count, classes_obj_type, store_id, clock_type,
                                                 classes_obj_id, classes_name, classes_id, operate,
-                                                leave_offset, late_offset, b_id, clock_type_value)
+                                                leave_offset, late_offset, b_id, clock_type_value,max_last_offset)
         values (#{timeOffset}, #{clockCount}, #{classesObjType}, #{storeId}, #{clockType}},
                 #{classesName}, #{classesId}, #{operate},
-                #{leaveOffset}, #{lateOffset}, #{bId}, #{clockTypeValue})
+                #{leaveOffset}, #{lateOffset}, #{bId}, #{clockTypeValue},#{maxLastOffset})
     </insert>
 
     <!-- 查询考勤班次信息（Business） add by wuxw 2018-07-03 -->
@@ -119,7 +119,7 @@
         clockCount,t.store_id,t.store_id
         storeId,t.clock_type,t.clock_type clockType,t.classes_name,t.classes_name classesName,t.classes_id,t.classes_id
         classesId,t.leave_offset,t.leave_offset leaveOffset,t.late_offset,t.late_offset lateOffset,t.b_id,t.b_id
-        bId,t.clock_type_value,t.clock_type_value clockTypeValue,
+        bId,t.clock_type_value,t.clock_type_value clockTypeValue,t.max_last_offset maxLastOffset
         td.name clockTypeName
         from attendance_classes t
         left join t_dict td on t.clock_type = td.status_cd and td.table_name = 'attendance_classes'
@@ -153,6 +153,9 @@
         </if>
         <if test="lateOffset !=null and lateOffset != ''">
             and t.late_offset= #{lateOffset}
+        </if>
+        <if test="maxLastOffset !=null and maxLastOffset != ''">
+            and t.max_last_offset= #{maxLastOffset}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -194,6 +197,9 @@
         </if>
         <if test="lateOffset !=null and lateOffset != ''">
             , t.late_offset= #{lateOffset}
+        </if>
+        <if test="maxLastOffset !=null and maxLastOffset != ''">
+            , t.max_last_offset= #{maxLastOffset}
         </if>
         <if test="clockTypeValue !=null and clockTypeValue != ''">
             , t.clock_type_value= #{clockTypeValue}
@@ -240,6 +246,9 @@
         </if>
         <if test="lateOffset !=null and lateOffset != ''">
             and t.late_offset= #{lateOffset}
+        </if>
+        <if test="maxLastOffset !=null and maxLastOffset != ''">
+            and t.max_last_offset= #{maxLastOffset}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

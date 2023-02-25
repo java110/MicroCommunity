@@ -30,6 +30,9 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
     private String classesId;
     private String leaveOffset;
     private String lateOffset;
+
+    private String maxLastOffset;
+
     private String clockTypeValue;
     private String classesObjName;
     private List<AttendanceClassesAttrDto> attrs;
@@ -172,5 +175,13 @@ public class AttendanceClassesDto extends PageDto implements Serializable {
 
     public void setClassesObjIds(String[] classesObjIds) {
         this.classesObjIds = classesObjIds;
+    }
+
+    public String getMaxLastOffset() {
+        return maxLastOffset;
+    }
+
+    public void setMaxLastOffset(String maxLastOffset) {
+        this.maxLastOffset = maxLastOffset;
     }
 }
