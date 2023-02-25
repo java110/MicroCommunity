@@ -269,43 +269,7 @@ public class AttendanceClassApi {
         return getAttendanceClassesTaskDetailBMOImpl.get(attendanceClassesTaskDetailDto);
     }
 
-    /**
-     * 添加设备接口类
-     *
-     * @return 成功或者失败
-     * @throws Exception
-     * @serviceCode /attendanceClass/getMonthAttendance
-     * @path /app/attendanceClass/getMonthAttendance
-     */
-    @RequestMapping(path = "/getMonthAttendance", method = RequestMethod.GET)
-    public ResponseEntity<String> getMonthAttendance(
-            @RequestHeader(value = "store-id") String storeId,
-            @RequestParam int page,
-            @RequestParam int row,
-            @RequestParam(name = "classesId", required = false) String classesId,
-            @RequestParam(name = "staffName", required = false) String staffName,
-            @RequestParam(name = "staffId", required = false) String staffId,
-            @RequestParam(name = "date", required = false) String date,
-            @RequestParam(name = "departmentId", required = false) String departmentId
-    ) throws Exception {
 
-        AttendanceClassesTaskDto attendanceClassesTaskDto = new AttendanceClassesTaskDto();
-        attendanceClassesTaskDto.setPage(page);
-        attendanceClassesTaskDto.setRow(row);
-        attendanceClassesTaskDto.setClassId(classesId);
-        attendanceClassesTaskDto.setStaffName(staffName);
-        attendanceClassesTaskDto.setStaffId(staffId);
-        attendanceClassesTaskDto.setStoreId(storeId);
-
-        if (!StringUtil.isEmpty(date)) {
-            Date reqDate = DateUtil.getDateFromString(date, DateUtil.DATE_FORMATE_STRING_B);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(reqDate);
-            attendanceClassesTaskDto.setTaskYear(calendar.get(Calendar.YEAR) + "");
-            attendanceClassesTaskDto.setTaskMonth((calendar.get(Calendar.MONTH) + 1) + "");
-        }
-        return getAttendanceClassesTaskDetailBMOImpl.getMonthAttendance(attendanceClassesTaskDto);
-    }
 
 
     /**
