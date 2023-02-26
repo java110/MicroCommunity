@@ -96,6 +96,12 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="leaseTypes !=null ">
+            and t.lease_type in
+            <foreach collection="leaseTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -115,6 +121,12 @@
         where t.status_cd = '0'
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="leaseTypes !=null ">
+            and t.lease_type in
+            <foreach collection="leaseTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

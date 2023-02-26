@@ -167,6 +167,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         ReportCarDto reportCarDto = new ReportCarDto();
         reportCarDto.setCommunityId(reportFeeMonthStatisticsPo.getCommunityId());
+        reportCarDto.setLeaseTypes(new String[]{OwnerCarDto.LEASE_TYPE_MONTH,OwnerCarDto.LEASE_TYPE_INNER,OwnerCarDto.LEASE_TYPE_SALE,OwnerCarDto.LEASE_TYPE_NO_MONEY});
         int count = reportCommunityServiceDaoImpl.getCarCount(reportCarDto);
 
 
