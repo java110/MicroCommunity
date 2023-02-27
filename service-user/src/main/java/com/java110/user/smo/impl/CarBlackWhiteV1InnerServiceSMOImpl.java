@@ -16,6 +16,7 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.user.dao.ICarBlackWhiteV1ServiceDao;
@@ -47,6 +48,7 @@ public class CarBlackWhiteV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
 
     @Override
+    @Java110Transactional
     public int saveCarBlackWhite(@RequestBody CarBlackWhitePo carBlackWhitePo) {
         int saveFlag = carBlackWhiteV1ServiceDaoImpl.saveCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhitePo));
         return saveFlag;
