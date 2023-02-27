@@ -16,6 +16,8 @@ public class ApiMachineRecordDataVo implements Serializable {
     private String recordTypeCd;
     private String createTime;
 
+    private String faceUrl;
+
 
     public String getMachineRecordId() {
         return machineRecordId;
@@ -95,5 +97,13 @@ public class ApiMachineRecordDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
     }
 }
