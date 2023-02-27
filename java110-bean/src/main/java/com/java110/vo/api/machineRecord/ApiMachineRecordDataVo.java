@@ -18,6 +18,12 @@ public class ApiMachineRecordDataVo implements Serializable {
 
     private String faceUrl;
 
+    private String machineName;
+    private String locationTypeCd;
+
+    private String locationObjName;
+    private String communityId;
+
 
     public String getMachineRecordId() {
         return machineRecordId;
@@ -105,5 +111,37 @@ public class ApiMachineRecordDataVo implements Serializable {
 
     public void setFaceUrl(String faceUrl) {
         this.faceUrl = faceUrl;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
+    }
+
+    public String getLocationTypeCd() {
+        return locationTypeCd;
+    }
+
+    public void setLocationTypeCd(String locationTypeCd) {
+        this.locationTypeCd = locationTypeCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getLocationObjName() {
+        return locationObjName;
+    }
+
+    public void setLocationObjName(String locationObjName) {
+        this.locationObjName = locationObjName;
     }
 }

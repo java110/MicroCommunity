@@ -5,11 +5,14 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineRecordInnerServiceSMO;
+import com.java110.intf.community.ICommunityLocationInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
@@ -33,6 +36,9 @@ public class ListMachineRecordsCmd extends Cmd {
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -50,6 +56,7 @@ public class ListMachineRecordsCmd extends Cmd {
         if (count > 0) {
             machineRecords = BeanConvertUtil.covertBeanList(machineRecordInnerServiceSMOImpl.queryMachineRecords(machineRecordDto), ApiMachineRecordDataVo.class);
             freshFaceUrl(machineRecords);
+            refreshMachineLocation(machineRecords);
         } else {
             machineRecords = new ArrayList<>();
         }
@@ -63,6 +70,25 @@ public class ListMachineRecordsCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiMachineRecordVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    private void refreshMachineLocation(List<ApiMachineRecordDataVo> machineRecords) {
+        for (ApiMachineRecordDataVo machineDto : machineRecords) {
+            getMachineLocation(machineDto);
+        }
+    }
+
+    private void getMachineLocation(ApiMachineRecordDataVo machineDto) {
+        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+        communityLocationDto.setCommunityId(machineDto.getCommunityId());
+        communityLocationDto.setLocationId(machineDto.getLocationTypeCd());
+        List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+
+        if (communityLocationDtos == null || communityLocationDtos.size() < 1) {
+            return;
+        }
+
+        machineDto.setLocationObjName(communityLocationDtos.get(0).getLocationName());
     }
 
     private void freshFaceUrl(List<ApiMachineRecordDataVo> machineRecords) {

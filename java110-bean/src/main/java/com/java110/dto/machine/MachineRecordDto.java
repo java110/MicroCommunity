@@ -30,6 +30,9 @@ public class MachineRecordDto extends PageDto implements Serializable {
     private String userId;
     private String similar;
     private String photo;
+    private String machineName;
+    private String locationTypeCd;
+
 
 
     private Date createTime;
@@ -172,5 +175,21 @@ public class MachineRecordDto extends PageDto implements Serializable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
+    }
+
+    public String getLocationTypeCd() {
+        return locationTypeCd;
+    }
+
+    public void setLocationTypeCd(String locationTypeCd) {
+        this.locationTypeCd = locationTypeCd;
     }
 }
