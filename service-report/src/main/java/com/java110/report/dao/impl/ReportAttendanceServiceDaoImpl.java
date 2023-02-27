@@ -47,4 +47,13 @@ public class ReportAttendanceServiceDaoImpl extends BaseServiceDao implements IR
         return roomDtos;
     }
 
+    @Override
+    public List<Map> getMonthAttendanceDetail(Map info) {
+        logger.debug("查询费用信息 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> roomDtos = sqlSessionTemplate.selectList("reportAttendanceServiceDaoImpl.getMonthAttendanceDetail", info);
+
+        return roomDtos;
+    }
+
 }

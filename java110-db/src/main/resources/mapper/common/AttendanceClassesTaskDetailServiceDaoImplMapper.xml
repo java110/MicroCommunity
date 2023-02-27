@@ -71,7 +71,7 @@
                 #{item}
             </foreach>
         </if>
-        order by t.create_time desc
+        order by t.value
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

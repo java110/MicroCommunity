@@ -175,7 +175,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         UserDto userDto = new UserDto();
         userDto.setUserId(tmpAttendanceClassesStaffDto.getStaffId());
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        Assert.listOnlyOne(userDtos,"员工不存在");
+        Assert.listOnlyOne(userDtos, "员工不存在");
 
 
         AttendanceClassesTaskPo attendanceClassesTaskPo = new AttendanceClassesTaskPo();
@@ -194,9 +194,14 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         if (flag < 1) {
             throw new IllegalArgumentException("保存考勤任务失败");
         }
-
-        for (ScheduleClassesTimeDto tmpScheduleClassesTimeDto : times) {
-            doGeneratorStaffAttendanceTime(tmpStoreDto, tmpAttendanceClassesDto, tmpAttendanceClassesStaffDto, tmpScheduleClassesTimeDto, attendanceClassesTaskPo);
+        ScheduleClassesTimeDto tmpScheduleClassesTimeDto = null;
+        boolean isLast = false;
+        for (int timeIndex = 0; timeIndex < times.size(); timeIndex++) {
+            tmpScheduleClassesTimeDto = times.get(timeIndex);
+            if (timeIndex == (times.size() - 1)) {
+                isLast = true;
+            }
+            doGeneratorStaffAttendanceTime(tmpStoreDto, tmpAttendanceClassesDto, tmpAttendanceClassesStaffDto, tmpScheduleClassesTimeDto, attendanceClassesTaskPo, isLast);
         }
 
     }
@@ -210,7 +215,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
      * @param tmpScheduleClassesTimeDto
      */
     private void doGeneratorStaffAttendanceTime(StoreDto tmpStoreDto, AttendanceClassesDto tmpAttendanceClassesDto, AttendanceClassesStaffDto tmpAttendanceClassesStaffDto,
-                                                ScheduleClassesTimeDto tmpScheduleClassesTimeDto, AttendanceClassesTaskPo attendanceClassesTaskPo) {
+                                                ScheduleClassesTimeDto tmpScheduleClassesTimeDto, AttendanceClassesTaskPo attendanceClassesTaskPo, boolean islast) {
 
         String curDate = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B);
 
@@ -227,6 +232,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         Date valueDate = DateUtil.getDateFromStringA(value);
 
         int timeOffset = Integer.parseInt(tmpAttendanceClassesDto.getTimeOffset());
+        int maxLastOffset = Integer.parseInt(tmpAttendanceClassesDto.getMaxLastOffset());
 
         AttendanceClassesTaskDetailPo attendanceClassesTaskDetailPo = new AttendanceClassesTaskDetailPo();
         attendanceClassesTaskDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("12"));
@@ -269,7 +275,11 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         calendar = Calendar.getInstance();
         calendar.setTime(valueDate);
-        calendar.add(Calendar.MINUTE, timeOffset);
+        if (!islast) {
+            calendar.add(Calendar.MINUTE, timeOffset);
+        } else {
+            calendar.add(Calendar.MINUTE, maxLastOffset);
+        }
         attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         attendanceClassesTaskDetailPo.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
         attendanceClassesTaskDetailPo.setStoreId(tmpStoreDto.getStoreId());
