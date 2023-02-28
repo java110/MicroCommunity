@@ -300,7 +300,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                     ownerId = ownerRoomRelDtos.get(0).getOwnerId();
                 } else if (!StringUtil.isEmpty(reqJson.getString("payerObjType")) && reqJson.getString("payerObjType").equals("6666")) { //车辆
                     OwnerCarDto ownerCarDto = new OwnerCarDto();
-                    ownerCarDto.setCarId(reqJson.getString("payerObjId"));
+                    ownerCarDto.setMemberId(reqJson.getString("payerObjId"));
                     List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
                     Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");
                     ownerId = ownerCarDtos.get(0).getOwnerId();
