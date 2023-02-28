@@ -43,7 +43,6 @@
         SELECT
         t.staff_name staffName,
         t.staff_id staffId,
-        uo.org_name departmentName,
         t.classes_id classesId,
         ac.classes_name classesName,
         (
@@ -143,10 +142,12 @@
         AND ac.status_cd = '0'
         LEFT JOIN u_user s ON t.staff_id = s.user_id
         AND s.status_cd = '0'
-        LEFT JOIN u_org_staff_rel uosr ON uosr.staff_id = s.user_id
-        AND uosr.status_cd = '0'
-        LEFT JOIN u_org uo ON uosr.org_id = uo.org_id
-        AND uo.status_cd = '0'
+        <if test="departmentId !=null and departmentId != ''">
+            LEFT JOIN u_org_staff_rel uosr ON uosr.staff_id = s.user_id
+            AND uosr.status_cd = '0'
+            LEFT JOIN u_org uo ON uosr.org_id = uo.org_id
+            AND uo.status_cd = '0'
+        </if>
         WHERE
         t.status_cd = '0'
         <if test="staffName !=null and staffName != ''">
