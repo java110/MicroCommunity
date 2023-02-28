@@ -455,6 +455,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     /**
      * 发起退款
+     * 这里发起退款后 通过databus 触发 ReturnPayFeeMoneyAdapt 这个类 退款
      *
      * @param feeDetailDto
      */
