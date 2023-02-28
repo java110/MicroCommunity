@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
+import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -63,6 +64,7 @@ public class SaveAttendanceClassesStaffCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "classesId", "请求报文中未包含classesId");
@@ -72,6 +74,14 @@ public class SaveAttendanceClassesStaffCmd extends Cmd {
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         Assert.hasLength(storeId, "未包含商户信息");
 
+        AttendanceClassesStaffDto attendanceClassesStaffDto = new AttendanceClassesStaffDto();
+        attendanceClassesStaffDto.setClassesId(reqJson.getString("classesId"));
+        attendanceClassesStaffDto.setStaffId(reqJson.getString("staffId"));
+        int count = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffsCount(attendanceClassesStaffDto);
+
+        if (count > 0) {
+            throw new CmdException("考勤员工已经存在");
+        }
     }
 
     @Override
@@ -83,7 +93,7 @@ public class SaveAttendanceClassesStaffCmd extends Cmd {
         userDto.setUserId(reqJson.getString("staffId"));
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
-        Assert.listOnlyOne(userDtos,"员工不存在");
+        Assert.listOnlyOne(userDtos, "员工不存在");
 
         AttendanceClassesStaffPo attendanceClassesStaffPo = BeanConvertUtil.covertBean(reqJson, AttendanceClassesStaffPo.class);
         attendanceClassesStaffPo.setStoreId(storeId);
