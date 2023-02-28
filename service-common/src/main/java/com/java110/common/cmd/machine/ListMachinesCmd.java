@@ -158,7 +158,7 @@ public class ListMachinesCmd extends Cmd {
 
         if (MachineDto.MACHINE_TYPE_ATTENDANCE.equals(machineDto.getMachineTypeCd())) {
             AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
-            attendanceClassesDto.setClassesId(machineDto.getLocationType());
+            attendanceClassesDto.setClassesId(machineDto.getLocationObjId());
             List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
             if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
                 machineDto.setLocationType(machineDto.getLocationTypeCd());
