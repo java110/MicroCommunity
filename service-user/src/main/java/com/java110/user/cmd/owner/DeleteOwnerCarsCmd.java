@@ -51,7 +51,7 @@ public class DeleteOwnerCarsCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
         FeeDto feeDto = new FeeDto();
-        feeDto.setPayerObjId(reqJson.getString("carId"));
+        feeDto.setPayerObjId(reqJson.getString("memberId"));
         feeDto.setCommunityId(reqJson.getString("communityId"));
         feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
         List<FeeDto> feeDtoList = feeInnerServiceSMOImpl.queryFees(feeDto);
