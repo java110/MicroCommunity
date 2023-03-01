@@ -27,6 +27,7 @@ import com.java110.po.chargeMachine.ChargeMachinePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -69,6 +70,7 @@ public class SaveChargeMachineCmd extends Cmd {
 
         ChargeMachinePo chargeMachinePo = BeanConvertUtil.covertBean(reqJson, ChargeMachinePo.class);
         chargeMachinePo.setMachineId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        chargeMachinePo.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = chargeMachineV1InnerServiceSMOImpl.saveChargeMachine(chargeMachinePo);
 
         if (flag < 1) {
