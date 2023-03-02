@@ -163,7 +163,7 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
         AttendanceClassesTaskDto tmpAttendanceClassesTaskDto = new AttendanceClassesTaskDto();
         tmpAttendanceClassesTaskDto.setClassId(reqJson.getString("classesId"));
         tmpAttendanceClassesTaskDto.setTaskYear(reqJson.getString("taskYear"));
-        tmpAttendanceClassesTaskDto.setTaskDay(reqJson.getString("taskDay"));
+        tmpAttendanceClassesTaskDto.setTaskMonth(reqJson.getString("taskMonth"));
         tmpAttendanceClassesTaskDto.setStaffIds(staffIds.toArray(new String[staffIds.size()]));
         List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetailDtos = reportAttendanceInnerServiceSMOImpl.getMonthAttendanceDetail(tmpAttendanceClassesTaskDto);
 
@@ -176,7 +176,11 @@ public class MonthAttendanceAdapt implements IExportDataAdapt {
                 attendanceClassesTaskDto.setDays(days);
             }
             for (AttendanceClassesTaskDetailDto tmpAttendanceClassesTaskDetailDto : attendanceClassesTaskDetailDtos) {
-                if (days.containsKey(tmpAttendanceClassesTaskDetailDto.getTaskDay())) {
+                if(!attendanceClassesTaskDto.getStaffId().equals(tmpAttendanceClassesTaskDetailDto.getStaffId())){
+                    continue;
+                }
+                if (days.containsKey(tmpAttendanceClassesTaskDetailDto.getTaskDay())
+                ) {
                     tAttendanceClassesTaskDetailDto = (List<AttendanceClassesTaskDetailDto>) days.get(tmpAttendanceClassesTaskDetailDto.getTaskDay());
                     tAttendanceClassesTaskDetailDto.add(tmpAttendanceClassesTaskDetailDto);
                 } else {
