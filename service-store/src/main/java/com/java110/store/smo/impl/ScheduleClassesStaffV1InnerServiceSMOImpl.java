@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -325,14 +326,23 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
 
         scheduleClassesStaffDto.setTimes(times);
 
-        String startTime = null;
-        String endTime = null;
+        Date startTime = null;
+        Date endTime = null;
+
         for (ScheduleClassesTimeDto time : times) {
 
-            startTime = today + " " + time.getStartTime() + ":00";
-            endTime = today + " " + time.getEndTime() + ":00";
+            startTime = DateUtil.getDateFromStringA(today + " " + time.getStartTime() + ":00");
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
 
-            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), DateUtil.getDateFromStringA(startTime), DateUtil.getDateFromStringA(endTime))) {
+            if (endTime.getTime() < startTime.getTime()) {
+                Calendar endTimeCal = Calendar.getInstance();
+                endTimeCal.setTime(endTime);
+                endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+                endTime = endTimeCal.getTime();
+            }
+
+
+            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime, endTime)) {
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
@@ -443,7 +453,6 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             curDay = today.get(Calendar.DAY_OF_WEEK);
 
 
-
             //一周第一天是否为星期天
             boolean isFirstSunday = (today.getFirstDayOfWeek() == Calendar.SUNDAY);
             //获取周几
@@ -459,11 +468,11 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
             //计算 排班
             for (ScheduleClassesDayDto scheduleClassesDayDto1 : scheduleClassesDayDtos) {
                 week = today.get(Calendar.WEEK_OF_MONTH);
-                if("1".equals(scheduleClassesDayDto1.getWeekFlag())){ // 如果是 1 则 周默认为 1
+                if ("1".equals(scheduleClassesDayDto1.getWeekFlag())) { // 如果是 1 则 周默认为 1
                     week = 1;
                 }
 
-                if(week > Integer.parseInt(scheduleClassesDayDto1.getWeekFlag())){
+                if (week > Integer.parseInt(scheduleClassesDayDto1.getWeekFlag())) {
                     week = week % Integer.parseInt(scheduleClassesDayDto1.getWeekFlag());
                 }
 
