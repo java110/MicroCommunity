@@ -203,14 +203,24 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
         scheduleClassesStaffDto.setTimes(times);
-        String startTime = null;
-        String endTime = null;
+        Date startTime = null;
+        Date endTime = null;
         for (ScheduleClassesTimeDto time : times) {
 
-            startTime = today + " " + time.getStartTime() + ":00";
-            endTime = today + " " + time.getEndTime() + ":00";
+//            startTime = today + " " + time.getStartTime() + ":00";
+//            endTime = today + " " + time.getEndTime() + ":00";
+            startTime = DateUtil.getDateFromStringA(today + " " + time.getStartTime() + ":00");
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
 
-            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), DateUtil.getDateFromStringA(startTime), DateUtil.getDateFromStringA(endTime))) {
+            if (endTime.getTime() < startTime.getTime()) {
+                Calendar endTimeCal = Calendar.getInstance();
+                endTimeCal.setTime(endTime);
+                endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+                endTime = endTimeCal.getTime();
+            }
+
+
+            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime,endTime)) {
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
@@ -269,14 +279,24 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
         List<ScheduleClassesTimeDto> times = scheduleClassesDayDtos.get(0).getTimes();
 
         scheduleClassesStaffDto.setTimes(times);
-        String startTime = null;
-        String endTime = null;
+        Date startTime = null;
+        Date endTime = null;
         for (ScheduleClassesTimeDto time : times) {
 
-            startTime = today + " " + time.getStartTime() + ":00";
-            endTime = today + " " + time.getEndTime() + ":00";
+//            startTime = today + " " + time.getStartTime() + ":00";
+//            endTime = today + " " + time.getEndTime() + ":00";
 
-            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), DateUtil.getDateFromStringA(startTime), DateUtil.getDateFromStringA(endTime))) {
+            startTime = DateUtil.getDateFromStringA(today + " " + time.getStartTime() + ":00");
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
+
+            if (endTime.getTime() < startTime.getTime()) {
+                Calendar endTimeCal = Calendar.getInstance();
+                endTimeCal.setTime(endTime);
+                endTimeCal.add(Calendar.DAY_OF_MONTH, 1);
+                endTime = endTimeCal.getTime();
+            }
+
+            if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime, endTime)) {
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
