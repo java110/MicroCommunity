@@ -229,7 +229,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         //alter table attendance_classes_task_detail add COLUMN late_value varchar(12) not null comment '正常或者早退时间，spec_cd 1001 是迟到 2002 是正常时间';
 
         String value = curDate + " " + startTimeStr + ":00";
-        Date valueDate = DateUtil.getDateFromStringA(value);
+        Date startValueDate = DateUtil.getDateFromStringA(value);
 
         int timeOffset = Integer.parseInt(tmpAttendanceClassesDto.getTimeOffset());
         int maxLastOffset = Integer.parseInt(tmpAttendanceClassesDto.getMaxLastOffset());
@@ -238,15 +238,15 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesTaskDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("12"));
         attendanceClassesTaskDetailPo.setTaskId(attendanceClassesTaskPo.getTaskId());
         attendanceClassesTaskDetailPo.setSpecCd(AttendanceClassesTaskDetailDto.SPEC_CD_START);
-        attendanceClassesTaskDetailPo.setValue(curDate + " " + startTimeStr + ":00");
+        attendanceClassesTaskDetailPo.setValue(value);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(valueDate);
+        calendar.setTime(startValueDate);
         calendar.add(Calendar.MINUTE, timeOffset * -1);
         attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         int lateOffset = Integer.parseInt(tmpAttendanceClassesDto.getLateOffset());
         calendar = Calendar.getInstance();
-        calendar.setTime(valueDate);
+        calendar.setTime(startValueDate);
         calendar.add(Calendar.MINUTE, lateOffset);
         attendanceClassesTaskDetailPo.setLateValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         attendanceClassesTaskDetailPo.setState(AttendanceClassesTaskDetailDto.STATE_WAIT);
@@ -259,7 +259,15 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         }
 
         value = curDate + " " + endTimeStr + ":00";
-        valueDate = DateUtil.getDateFromStringA(value);
+        Date endValueDate = DateUtil.getDateFromStringA(value);
+
+        if (endValueDate.getTime() < startValueDate.getTime()) {
+            Calendar endDateCal = Calendar.getInstance();
+            endDateCal.setTime(endValueDate);
+            endDateCal.add(Calendar.DAY_OF_MONTH, 1);
+            endValueDate = endDateCal.getTime();
+            value = DateUtil.getFormatTimeString(endValueDate, DateUtil.DATE_FORMATE_STRING_A);
+        }
 
         int leaveOffset = Integer.parseInt(tmpAttendanceClassesDto.getLeaveOffset());
 
@@ -267,14 +275,14 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesTaskDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("12"));
         attendanceClassesTaskDetailPo.setTaskId(attendanceClassesTaskPo.getTaskId());
         attendanceClassesTaskDetailPo.setSpecCd(AttendanceClassesTaskDetailDto.SPEC_CD_END);
-        attendanceClassesTaskDetailPo.setValue(curDate + " " + endTimeStr + ":00");
+        attendanceClassesTaskDetailPo.setValue(value);
 
         calendar = Calendar.getInstance();
-        calendar.setTime(valueDate);
+        calendar.setTime(endValueDate);
         calendar.add(Calendar.MINUTE, leaveOffset * -1);
         attendanceClassesTaskDetailPo.setLeaveValue(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         calendar = Calendar.getInstance();
-        calendar.setTime(valueDate);
+        calendar.setTime(endValueDate);
         if (!islast) {
             calendar.add(Calendar.MINUTE, timeOffset);
         } else {
