@@ -20,7 +20,7 @@
         select t.department_name,t.department_name departmentName,t.department_id,t.department_id
         departmentId,t.staff_name,t.staff_name staffName,t.log_id,t.log_id logId,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.staff_id,t.staff_id staffId,t.clock_time,t.clock_time clockTime,
-        t.face_path facePath
+        t.face_path facePath,t.remark
         from attendance_log t
         where 1 =1
         <if test="departmentName !=null and departmentName != ''">
@@ -63,6 +63,9 @@
         </if>
         <if test="departmentName !=null and departmentName != ''">
             , t.department_name= #{departmentName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
         </if>
         <if test="departmentId !=null and departmentId != ''">
             , t.department_id= #{departmentId}

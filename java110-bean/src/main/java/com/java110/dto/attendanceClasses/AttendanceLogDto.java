@@ -30,6 +30,8 @@ public class AttendanceLogDto extends PageDto implements Serializable {
 
     private String facePath;
 
+    private String remark;
+
 
     public String getDepartmentName() {
         return departmentName;
@@ -110,5 +112,13 @@ public class AttendanceLogDto extends PageDto implements Serializable {
 
     public void setFacePath(String facePath) {
         this.facePath = facePath;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
