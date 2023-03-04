@@ -248,11 +248,11 @@ public class CheckInCmd extends Cmd {
 
         String msg = "打卡成功";
         if (AttendanceClassesTaskDetailDto.STATE_LATE.equals(attendanceClassesTaskDetailPo.getState())) {
-            msg = "打开迟到";
+            msg = "打卡迟到";
         }
 
         if (AttendanceClassesTaskDetailDto.STATE_LEAVE.equals(attendanceClassesTaskDetailPo.getState())) {
-            msg = "打开早退";
+            msg = "打卡早退";
         }
         updateAttendanceLogRemark(attendanceLogPo.getLogId(), specName + msg);
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, msg));
