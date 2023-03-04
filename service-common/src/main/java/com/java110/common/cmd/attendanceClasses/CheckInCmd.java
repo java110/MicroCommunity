@@ -193,11 +193,15 @@ public class CheckInCmd extends Cmd {
             attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
             if (attendanceClassesTaskDetailDtos != null || attendanceClassesTaskDetailDtos.size() > 0) {
-                updateAttendanceLogRemark(attendanceLogPo.getLogId(),"重复打卡");
+                String specName = "上班:";
+                if (!AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(attendanceClassesTaskDetailDtos.get(0).getSpecCd())) {
+                    specName = "下班:";
+                }
+                updateAttendanceLogRemark(attendanceLogPo.getLogId(), specName + "重复打卡");
                 context.setResponseEntity(ResultVo.error("重复打卡"));
                 return;
             }
-            updateAttendanceLogRemark(attendanceLogPo.getLogId(),"未到时间");
+            updateAttendanceLogRemark(attendanceLogPo.getLogId(), "未到时间");
             context.setResponseEntity(ResultVo.error("未到时间"));
             return;
         }
@@ -212,9 +216,13 @@ public class CheckInCmd extends Cmd {
         attendanceClassesTaskDetailPo.setState(getState(nowAttendanceClassesTaskDetailDto, DateUtil.getDateFromStringA(reqJson.getString("checkTime"))));
         attendanceClassesTaskDetailPo.setFacePath(photo);
         flag = attendanceClassesTaskDetailInnerServiceSMOImpl.updateAttendanceClassesTaskDetail(attendanceClassesTaskDetailPo);
+        String specName = "上班:";
+        if (!AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(nowAttendanceClassesTaskDetailDto.getSpecCd())) {
+            specName = "下班:";
+        }
 
         if (flag < 1) {
-            updateAttendanceLogRemark(attendanceLogPo.getLogId(),"考勤失败");
+            updateAttendanceLogRemark(attendanceLogPo.getLogId(), specName + "考勤失败");
             throw new CmdException("考勤失败");
         }
 
@@ -233,10 +241,10 @@ public class CheckInCmd extends Cmd {
 
         flag = attendanceClassesTaskInnerServiceSMOImpl.updateAttendanceClassesTask(attendanceClassesTaskPo);
 
-        if (flag < 1) {
-            updateAttendanceLogRemark(attendanceLogPo.getLogId(),"考勤失败");
-            throw new CmdException("考勤失败");
-        }
+//        if (flag < 1) {
+//            updateAttendanceLogRemark(attendanceLogPo.getLogId(), specName + "考勤失败");
+//            throw new CmdException("考勤失败");
+//        }
 
         String msg = "打卡成功";
         if (AttendanceClassesTaskDetailDto.STATE_LATE.equals(attendanceClassesTaskDetailPo.getState())) {
@@ -246,7 +254,7 @@ public class CheckInCmd extends Cmd {
         if (AttendanceClassesTaskDetailDto.STATE_LEAVE.equals(attendanceClassesTaskDetailPo.getState())) {
             msg = "打开早退";
         }
-        updateAttendanceLogRemark(attendanceLogPo.getLogId(),msg);
+        updateAttendanceLogRemark(attendanceLogPo.getLogId(), specName + msg);
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, msg));
 
     }
@@ -255,7 +263,7 @@ public class CheckInCmd extends Cmd {
 
         AttendanceLogPo attendanceLogPo = new AttendanceLogPo();
         attendanceLogPo.setLogId(logId);
-        attendanceLogPo.setRemark(remark.length() > 1000?remark.substring(0,1000):remark);
+        attendanceLogPo.setRemark(remark.length() > 1000 ? remark.substring(0, 1000) : remark);
         attendanceLogInnerServiceSMOImpl.updateAttendanceLog(attendanceLogPo);
     }
 
