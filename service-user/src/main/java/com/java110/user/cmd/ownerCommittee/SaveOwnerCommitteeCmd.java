@@ -101,6 +101,7 @@ public class SaveOwnerCommitteeCmd extends Cmd {
             ownerCommitteeContractPo = BeanConvertUtil.covertBean(contracts.getJSONObject(contractIndex), OwnerCommitteeContractPo.class);
             ownerCommitteeContractPo.setContractId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             ownerCommitteeContractPo.setOcId(ownerCommitteePo.getOcId());
+            ownerCommitteeContractPo.setCommunityId(ownerCommitteePo.getCommunityId());
             ownerCommitteeContractV1InnerServiceSMOImpl.saveOwnerCommitteeContract(ownerCommitteeContractPo);
         }
 

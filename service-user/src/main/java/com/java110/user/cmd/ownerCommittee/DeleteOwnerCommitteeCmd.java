@@ -22,8 +22,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.user.IOwnerCommitteeContractV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCommitteeV1InnerServiceSMO;
 import com.java110.po.ownerCommittee.OwnerCommitteePo;
+import com.java110.po.ownerCommitteeContract.OwnerCommitteeContractPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -49,6 +51,9 @@ public class DeleteOwnerCommitteeCmd extends Cmd {
     @Autowired
     private IOwnerCommitteeV1InnerServiceSMO ownerCommitteeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCommitteeContractV1InnerServiceSMO ownerCommitteeContractV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ocId", "ocId不能为空");
@@ -66,6 +71,12 @@ public class DeleteOwnerCommitteeCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        OwnerCommitteeContractPo ownerCommitteeContractPo = null;
+
+        ownerCommitteeContractPo = new OwnerCommitteeContractPo();
+        ownerCommitteeContractPo.setOcId(ownerCommitteePo.getOcId());
+        ownerCommitteeContractV1InnerServiceSMOImpl.deleteOwnerCommitteeContract(ownerCommitteeContractPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
