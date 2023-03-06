@@ -22,12 +22,15 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.user.IOwnerCommitteeContractV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.ownerCommitteeContract.OwnerCommitteeContractDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -47,34 +50,36 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "ownerCommittee.listOwnerCommitteeContract")
 public class ListOwnerCommitteeContractCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListOwnerCommitteeContractCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListOwnerCommitteeContractCmd.class);
     @Autowired
     private IOwnerCommitteeContractV1InnerServiceSMO ownerCommitteeContractV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           OwnerCommitteeContractDto ownerCommitteeContractDto = BeanConvertUtil.covertBean(reqJson, OwnerCommitteeContractDto.class);
+        OwnerCommitteeContractDto ownerCommitteeContractDto = BeanConvertUtil.covertBean(reqJson, OwnerCommitteeContractDto.class);
 
-           int count = ownerCommitteeContractV1InnerServiceSMOImpl.queryOwnerCommitteeContractsCount(ownerCommitteeContractDto);
+        int count = ownerCommitteeContractV1InnerServiceSMOImpl.queryOwnerCommitteeContractsCount(ownerCommitteeContractDto);
 
-           List<OwnerCommitteeContractDto> ownerCommitteeContractDtos = null;
+        List<OwnerCommitteeContractDto> ownerCommitteeContractDtos = null;
 
-           if (count > 0) {
-               ownerCommitteeContractDtos = ownerCommitteeContractV1InnerServiceSMOImpl.queryOwnerCommitteeContracts(ownerCommitteeContractDto);
-           } else {
-               ownerCommitteeContractDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            ownerCommitteeContractDtos = ownerCommitteeContractV1InnerServiceSMOImpl.queryOwnerCommitteeContracts(ownerCommitteeContractDto);
+        } else {
+            ownerCommitteeContractDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerCommitteeContractDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerCommitteeContractDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

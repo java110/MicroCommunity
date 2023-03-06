@@ -58,6 +58,7 @@ public class SaveOwnerCommitteeContractCmd extends Cmd {
 Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
 Assert.hasKeyAndValue(reqJson, "relName", "请求报文中未包含relName");
 Assert.hasKeyAndValue(reqJson, "link", "请求报文中未包含link");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
 
     }
 
