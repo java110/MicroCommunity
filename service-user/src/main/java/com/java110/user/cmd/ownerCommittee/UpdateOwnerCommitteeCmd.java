@@ -15,6 +15,7 @@
  */
 package com.java110.user.cmd.ownerCommittee;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.user.IOwnerCommitteeContractV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCommitteeV1InnerServiceSMO;
 import com.java110.po.ownerCommittee.OwnerCommitteePo;
+import com.java110.po.ownerCommitteeContract.OwnerCommitteeContractPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -46,16 +49,19 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "ownerCommittee.updateOwnerCommittee")
 public class UpdateOwnerCommitteeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateOwnerCommitteeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateOwnerCommitteeCmd.class);
 
 
     @Autowired
     private IOwnerCommitteeV1InnerServiceSMO ownerCommitteeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCommitteeContractV1InnerServiceSMO ownerCommitteeContractV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ocId", "ocId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,11 +69,29 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       OwnerCommitteePo ownerCommitteePo = BeanConvertUtil.covertBean(reqJson, OwnerCommitteePo.class);
+        OwnerCommitteePo ownerCommitteePo = BeanConvertUtil.covertBean(reqJson, OwnerCommitteePo.class);
         int flag = ownerCommitteeV1InnerServiceSMOImpl.updateOwnerCommittee(ownerCommitteePo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+
+        JSONArray contracts = reqJson.getJSONArray("contracts");
+
+        if (contracts == null || contracts.size() < 1) {
+            return;
+        }
+        OwnerCommitteeContractPo ownerCommitteeContractPo = null;
+
+        ownerCommitteeContractPo = new OwnerCommitteeContractPo();
+        ownerCommitteeContractPo.setOcId(ownerCommitteePo.getOcId());
+        ownerCommitteeContractV1InnerServiceSMOImpl.deleteOwnerCommitteeContract(ownerCommitteeContractPo);
+
+        for (int contractIndex = 0; contractIndex < contracts.size(); contractIndex++) {
+            ownerCommitteeContractPo = BeanConvertUtil.covertBean(contracts.getJSONObject(contractIndex), OwnerCommitteeContractPo.class);
+            ownerCommitteeContractPo.setContractId(GenerateCodeFactory.getGeneratorId("11"));
+            ownerCommitteeContractPo.setOcId(ownerCommitteePo.getOcId());
+            ownerCommitteeContractV1InnerServiceSMOImpl.saveOwnerCommitteeContract(ownerCommitteeContractPo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
