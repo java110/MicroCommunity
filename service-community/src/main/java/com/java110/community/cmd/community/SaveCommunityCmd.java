@@ -157,7 +157,7 @@ public class SaveCommunityCmd extends Cmd {
         if (flag < 1) {
             throw new IllegalArgumentException("添加流程失败");
         }
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+        cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(reqJson.getString("communityId")));
     }
 
 
