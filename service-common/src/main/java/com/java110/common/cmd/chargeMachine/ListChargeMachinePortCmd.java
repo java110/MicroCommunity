@@ -27,8 +27,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "chargeMachine.listChargeMachinePort")
 public class ListChargeMachinePortCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListChargeMachinePortCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListChargeMachinePortCmd.class);
     @Autowired
     private IChargeMachinePortV1InnerServiceSMO chargeMachinePortV1InnerServiceSMOImpl;
 
@@ -62,22 +64,36 @@ public class ListChargeMachinePortCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ChargeMachinePortDto chargeMachinePortDto = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortDto.class);
+        ChargeMachinePortDto chargeMachinePortDto = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortDto.class);
 
-           int count = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
+        int count = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
 
-           List<ChargeMachinePortDto> chargeMachinePortDtos = null;
+        List<ChargeMachinePortDto> chargeMachinePortDtos = null;
 
-           if (count > 0) {
-               chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-           } else {
-               chargeMachinePortDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachinePortDtos);
+            //调用 第三方查询 插槽状态
+            queryPortState(chargeMachinePortDtos);
+        } else {
+            chargeMachinePortDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachinePortDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryPortState(List<ChargeMachinePortDto> chargeMachinePortDtos) {
+        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
+            return;
+
+        }
+
+        for (ChargeMachinePortDto chargeMachinePortDto : chargeMachinePortDtos) {
+            chargeMachinePortDto.setStateName("空闲");
+        }
     }
 }

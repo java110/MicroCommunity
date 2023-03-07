@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.utils.exception.CmdException;
@@ -60,6 +61,15 @@ public class SaveChargeMachinePortCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
+
+        ChargeMachinePortDto chargeMachinePortDto = new ChargeMachinePortDto();
+        chargeMachinePortDto.setMachineId(reqJson.getString("machineId"));
+        chargeMachinePortDto.setPortCode(reqJson.getString("portCode"));
+        chargeMachinePortDto.setCommunityId(reqJson.getString("communityId"));
+        int flag = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
+        if (flag > 0) {
+            throw new CmdException("插座已经存在");
+        }
     }
 
     @Override

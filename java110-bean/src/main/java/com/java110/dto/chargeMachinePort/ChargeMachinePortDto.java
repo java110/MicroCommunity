@@ -22,6 +22,7 @@ public class ChargeMachinePortDto extends PageDto implements Serializable {
     private String machineId;
     private String portName;
     private String state;
+    private String stateName;
     private String portId;
     private String portCode;
     private String communityId;
@@ -95,5 +96,13 @@ public class ChargeMachinePortDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
