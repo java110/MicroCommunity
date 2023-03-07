@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineSpecV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存充电桩参数信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineSpecInfo" parameterType="Map">
+        insert into charge_machine_spec(
+spec_id,cms_id,machine_id,spec_name,spec_value,community_id
+) values (
+#{specId},#{cmsId},#{machineId},#{specName},#{specValue},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询充电桩参数信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineSpecInfo" parameterType="Map" resultType="Map">
+        select  t.spec_id,t.spec_id specId,t.cms_id,t.cms_id cmsId,t.machine_id,t.machine_id machineId,t.spec_name,t.spec_name specName,t.spec_value,t.spec_value specValue,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId 
+from charge_machine_spec t 
+where 1 =1 
+<if test="specId !=null and specId != ''">
+   and t.spec_id= #{specId}
+</if> 
+<if test="cmsId !=null and cmsId != ''">
+   and t.cms_id= #{cmsId}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="specValue !=null and specValue != ''">
+   and t.spec_value= #{specValue}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改充电桩参数信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineSpecInfo" parameterType="Map">
+        update  charge_machine_spec t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="specId !=null and specId != ''">
+, t.spec_id= #{specId}
+</if> 
+<if test="machineId !=null and machineId != ''">
+, t.machine_id= #{machineId}
+</if> 
+<if test="specName !=null and specName != ''">
+, t.spec_name= #{specName}
+</if> 
+<if test="specValue !=null and specValue != ''">
+, t.spec_value= #{specValue}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="cmsId !=null and cmsId != ''">
+and t.cms_id= #{cmsId}
+</if> 
+
+    </update>
+
+    <!-- 查询充电桩参数数量 add by wuxw 2018-07-03 -->
+     <select id="queryChargeMachineSpecsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from charge_machine_spec t 
+where 1 =1 
+<if test="specId !=null and specId != ''">
+   and t.spec_id= #{specId}
+</if> 
+<if test="cmsId !=null and cmsId != ''">
+   and t.cms_id= #{cmsId}
+</if> 
+<if test="machineId !=null and machineId != ''">
+   and t.machine_id= #{machineId}
+</if> 
+<if test="specName !=null and specName != ''">
+   and t.spec_name= #{specName}
+</if> 
+<if test="specValue !=null and specValue != ''">
+   and t.spec_value= #{specValue}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>

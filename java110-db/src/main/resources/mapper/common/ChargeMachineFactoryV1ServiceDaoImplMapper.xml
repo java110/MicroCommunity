@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineFactoryV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存充电桩厂家信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineFactoryInfo" parameterType="Map">
+        insert into charge_machine_factory(
+factory_id,factory_name,remark,bean_impl
+) values (
+#{factoryId},#{factoryName},#{remark},#{beanImpl}
+)
+    </insert>
+
+
+
+    <!-- 查询充电桩厂家信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineFactoryInfo" parameterType="Map" resultType="Map">
+        select  t.factory_id,t.factory_id factoryId,t.factory_name,t.factory_name factoryName,t.remark,t.status_cd,t.status_cd statusCd,t.bean_impl,t.bean_impl beanImpl 
+from charge_machine_factory t 
+where 1 =1 
+<if test="factoryId !=null and factoryId != ''">
+   and t.factory_id= #{factoryId}
+</if> 
+<if test="factoryName !=null and factoryName != ''">
+   and t.factory_name= #{factoryName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+   and t.bean_impl= #{beanImpl}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改充电桩厂家信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineFactoryInfo" parameterType="Map">
+        update  charge_machine_factory t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="factoryName !=null and factoryName != ''">
+, t.factory_name= #{factoryName}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+, t.bean_impl= #{beanImpl}
+</if> 
+ where 1=1 <if test="factoryId !=null and factoryId != ''">
+and t.factory_id= #{factoryId}
+</if> 
+
+    </update>
+
+    <!-- 查询充电桩厂家数量 add by wuxw 2018-07-03 -->
+     <select id="queryChargeMachineFactorysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from charge_machine_factory t 
+where 1 =1 
+<if test="factoryId !=null and factoryId != ''">
+   and t.factory_id= #{factoryId}
+</if> 
+<if test="factoryName !=null and factoryName != ''">
+   and t.factory_name= #{factoryName}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="beanImpl !=null and beanImpl != ''">
+   and t.bean_impl= #{beanImpl}
+</if> 
+
+
+     </select>
+
+</mapper>
