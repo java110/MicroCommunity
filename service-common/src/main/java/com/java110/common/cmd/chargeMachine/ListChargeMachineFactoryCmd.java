@@ -20,7 +20,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.chargeMachineFactorySpec.ChargeMachineFactorySpecDto;
+import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
+import com.java110.dto.meterMachineFactorySpec.MeterMachineFactorySpecDto;
+import com.java110.intf.common.IChargeMachineFactorySpecV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineFactoryV1InnerServiceSMO;
+import com.java110.intf.common.IChargeMachineSpecV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,10 +57,12 @@ public class ListChargeMachineFactoryCmd extends Cmd {
     @Autowired
     private IChargeMachineFactoryV1InnerServiceSMO chargeMachineFactoryV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IChargeMachineFactorySpecV1InnerServiceSMO chargeMachineFactorySpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "查询小区ID");
     }
 
     @Override
@@ -69,6 +76,7 @@ public class ListChargeMachineFactoryCmd extends Cmd {
 
            if (count > 0) {
                chargeMachineFactoryDtos = chargeMachineFactoryV1InnerServiceSMOImpl.queryChargeMachineFactorys(chargeMachineFactoryDto);
+               freshSpecs(chargeMachineFactoryDtos);
            } else {
                chargeMachineFactoryDtos = new ArrayList<>();
            }
@@ -78,5 +86,41 @@ public class ListChargeMachineFactoryCmd extends Cmd {
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入配置
+     *
+     * @param chargeMachineFactoryDtos
+     */
+    private void freshSpecs(List<ChargeMachineFactoryDto> chargeMachineFactoryDtos) {
+
+        if (chargeMachineFactoryDtos == null || chargeMachineFactoryDtos.size() < 1) {
+            return;
+        }
+
+        List<String> factoryIds = new ArrayList<>();
+        for (ChargeMachineFactoryDto chargeMachineFactoryDto : chargeMachineFactoryDtos) {
+            factoryIds.add(chargeMachineFactoryDto.getFactoryId());
+        }
+
+        ChargeMachineFactorySpecDto chargeMachineFactorySpecDto = new ChargeMachineFactorySpecDto();
+        chargeMachineFactorySpecDto.setFactoryIds(factoryIds.toArray(new String[factoryIds.size()]));
+
+        List<ChargeMachineFactorySpecDto> machineFactorySpecDtos = chargeMachineFactorySpecV1InnerServiceSMOImpl.queryChargeMachineFactorySpecs(chargeMachineFactorySpecDto);
+
+        if (machineFactorySpecDtos == null || machineFactorySpecDtos.size() < 1) {
+            return;
+        }
+        List<ChargeMachineFactorySpecDto> specs = null;
+        for (ChargeMachineFactoryDto chargeMachineFactoryDto : chargeMachineFactoryDtos) {
+            specs = new ArrayList<>();
+            for (ChargeMachineFactorySpecDto tmpMeterMachineFactorySpecDto : machineFactorySpecDtos) {
+                if (chargeMachineFactoryDto.getFactoryId().equals(tmpMeterMachineFactorySpecDto.getFactoryId())) {
+                    specs.add(tmpMeterMachineFactorySpecDto);
+                }
+            }
+            chargeMachineFactoryDto.setSpecs(specs);
+        }
     }
 }
