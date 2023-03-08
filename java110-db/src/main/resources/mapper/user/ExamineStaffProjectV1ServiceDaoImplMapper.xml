@@ -18,8 +18,10 @@
     <!-- 查询员工考核项目信息 add by wuxw 2018-07-03 -->
     <select id="getExamineStaffProjectInfo" parameterType="Map" resultType="Map">
         select t.es_id,t.es_id esId,t.esp_id,t.esp_id espId,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.project_id,t.project_id projectId
+        statusCd,t.community_id,t.community_id communityId,t.project_id,t.project_id projectId,
+        ep.`name` projectName,ep.weight
         from examine_staff_project t
+        left join examine_project ep on t.project_id = ep.project_id and ep.status_cd = '0'
         where 1 =1
         <if test="esId !=null and esId != ''">
             and t.es_id= #{esId}

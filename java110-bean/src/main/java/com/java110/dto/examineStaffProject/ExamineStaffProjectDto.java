@@ -22,6 +22,9 @@ public class ExamineStaffProjectDto extends PageDto implements Serializable {
     private String projectId;
     private String[] projectIds;
 
+    private String projectName;
+
+    private String weight;
 
     private Date createTime;
 
@@ -91,5 +94,21 @@ public class ExamineStaffProjectDto extends PageDto implements Serializable {
 
     public void setEsIds(String[] esIds) {
         this.esIds = esIds;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }
