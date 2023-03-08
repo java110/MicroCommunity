@@ -17,6 +17,7 @@ package com.java110.po.examineStaff;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-03-07 15:57:29 mail: 928255095@qq.com
@@ -28,41 +29,50 @@ import java.util.Date;
 public class ExamineStaffPo implements Serializable {
 
     private String esId;
-private String staffName;
-private String statusCd = "0";
-private String communityId;
-private String staffId;
-public String getEsId() {
+    private String staffName;
+    private String statusCd = "0";
+    private String communityId;
+    private String staffId;
+
+    public String getEsId() {
         return esId;
     }
-public void setEsId(String esId) {
+
+    public void setEsId(String esId) {
         this.esId = esId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-
 
 
 }

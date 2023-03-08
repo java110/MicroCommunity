@@ -15,6 +15,7 @@
  */
 package com.java110.user.cmd.examine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.examineStaff.ExamineStaffPo;
+import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +36,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,23 +59,58 @@ public class SaveExamineStaffCmd extends Cmd {
     @Autowired
     private IExamineStaffV1InnerServiceSMO examineStaffV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
+        if (!reqJson.containsKey("projectIds")) {
+            throw new CmdException("没包含考核项目");
+        }
+
+        JSONArray projectIds = reqJson.getJSONArray("projectIds");
+
+        if (projectIds == null || projectIds.size() < 1) {
+            throw new CmdException("没包含考核项目");
+        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("staffId"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "员工不存在");
+
+
         ExamineStaffPo examineStaffPo = BeanConvertUtil.covertBean(reqJson, ExamineStaffPo.class);
         examineStaffPo.setEsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        examineStaffPo.setStaffName(userDtos.get(0).getStaffName());
         int flag = examineStaffV1InnerServiceSMOImpl.saveExamineStaff(examineStaffPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        JSONArray projectIds = reqJson.getJSONArray("projectIds");
+
+        ExamineStaffProjectPo tmpExamineStaffProjectPo = null;
+        for(int projectIndex = 0;projectIndex < projectIds.size();projectIndex ++){
+            tmpExamineStaffProjectPo = new ExamineStaffProjectPo();
+            tmpExamineStaffProjectPo.setEsId(examineStaffPo.getEsId());
+            tmpExamineStaffProjectPo.setCommunityId(examineStaffPo.getCommunityId());
+            tmpExamineStaffProjectPo.setProjectId(projectIds.getString(projectIndex));
+            tmpExamineStaffProjectPo.setEspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            examineStaffProjectV1InnerServiceSMOImpl.saveExamineStaffProject(tmpExamineStaffProjectPo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
