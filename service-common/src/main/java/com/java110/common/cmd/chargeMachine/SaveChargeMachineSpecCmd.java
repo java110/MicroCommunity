@@ -22,9 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
-import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
-import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
+import com.java110.intf.common.IChargeMachineSpecV1InnerServiceSMO;
+import com.java110.po.chargeMachineSpec.ChargeMachineSpecPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -35,50 +34,41 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：保存
- * 服务编码：chargeMachinePort.saveChargeMachinePort
- * 请求路劲：/app/chargeMachinePort.SaveChargeMachinePort
- * add by 吴学文 at 2023-03-02 01:17:43 mail: 928255095@qq.com
+ * 服务编码：chargeMachineSpec.saveChargeMachineSpec
+ * 请求路劲：/app/chargeMachineSpec.SaveChargeMachineSpec
+ * add by 吴学文 at 2023-03-08 00:03:34 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "chargeMachine.saveChargeMachinePort")
-public class SaveChargeMachinePortCmd extends Cmd {
+@Java110Cmd(serviceCode = "chargeMachine.saveChargeMachineSpec")
+public class SaveChargeMachineSpecCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(SaveChargeMachinePortCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(SaveChargeMachineSpecCmd.class);
 
     public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
-    private IChargeMachinePortV1InnerServiceSMO chargeMachinePortV1InnerServiceSMOImpl;
+    private IChargeMachineSpecV1InnerServiceSMO chargeMachineSpecV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "请求报文中未包含machineId");
-        Assert.hasKeyAndValue(reqJson, "portName", "请求报文中未包含portName");
-        Assert.hasKeyAndValue(reqJson, "portCode", "请求报文中未包含portCode");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "specId", "请求报文中未包含specId");
+        Assert.hasKeyAndValue(reqJson, "specName", "请求报文中未包含specName");
+        Assert.hasKeyAndValue(reqJson, "specValue", "请求报文中未包含specValue");
 
-
-        ChargeMachinePortDto chargeMachinePortDto = new ChargeMachinePortDto();
-        chargeMachinePortDto.setMachineId(reqJson.getString("machineId"));
-        chargeMachinePortDto.setPortCode(reqJson.getString("portCode"));
-        chargeMachinePortDto.setCommunityId(reqJson.getString("communityId"));
-        int flag = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
-        if (flag > 0) {
-            throw new CmdException("插座已经存在");
-        }
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ChargeMachinePortPo chargeMachinePortPo = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortPo.class);
-        chargeMachinePortPo.setPortId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = chargeMachinePortV1InnerServiceSMOImpl.saveChargeMachinePort(chargeMachinePortPo);
+        ChargeMachineSpecPo chargeMachineSpecPo = BeanConvertUtil.covertBean(reqJson, ChargeMachineSpecPo.class);
+        chargeMachineSpecPo.setCmsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = chargeMachineSpecV1InnerServiceSMOImpl.saveChargeMachineSpec(chargeMachineSpecPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

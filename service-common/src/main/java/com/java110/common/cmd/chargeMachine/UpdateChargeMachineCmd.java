@@ -15,6 +15,7 @@
  */
 package com.java110.common.cmd.chargeMachine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.common.IChargeMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineV1InnerServiceSMO;
 import com.java110.po.chargeMachine.ChargeMachinePo;
+import com.java110.po.chargeMachineSpec.ChargeMachineSpecPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,11 +55,28 @@ public class UpdateChargeMachineCmd extends Cmd {
     @Autowired
     private IChargeMachineV1InnerServiceSMO chargeMachineV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IChargeMachineSpecV1InnerServiceSMO chargeMachineSpecV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "machineId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
+        JSONArray specs = reqJson.getJSONArray("specs");
+        if (specs == null || specs.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONObject specObj = null;
+        for (int specIndex = 0; specIndex < specs.size(); specIndex++) {
+            specObj = specs.getJSONObject(specIndex);
+
+            Assert.hasKeyAndValue(specObj, "specValue", "未包含" + specObj.getString("specName"));
+        }
     }
 
     @Override
@@ -68,6 +88,37 @@ public class UpdateChargeMachineCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+
+        if (!reqJson.containsKey("specs")) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONArray specs = reqJson.getJSONArray("specs");
+        if (specs == null || specs.size() < 1) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+            return;
+        }
+
+        JSONObject specObj = null;
+        ChargeMachineSpecPo chargeMachineSpecPo = null;
+        for (int specIndex = 0; specIndex < specs.size(); specIndex++) {
+            specObj = specs.getJSONObject(specIndex);
+            chargeMachineSpecPo = new ChargeMachineSpecPo();
+            chargeMachineSpecPo.setMachineId(chargeMachinePo.getMachineId());
+            chargeMachineSpecPo.setSpecId(specObj.getString("specId"));
+            chargeMachineSpecPo.setSpecName(specObj.getString("specName"));
+            chargeMachineSpecPo.setSpecValue(specObj.getString("specValue"));
+            chargeMachineSpecPo.setCmsId(specObj.getString("cmsId"));
+            chargeMachineSpecPo.setCommunityId(chargeMachinePo.getCommunityId());
+            flag = chargeMachineSpecV1InnerServiceSMOImpl.updateChargeMachineSpec(chargeMachineSpecPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

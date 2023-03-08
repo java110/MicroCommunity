@@ -1,6 +1,7 @@
 package com.java110.dto.chargeMachine;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,66 +16,85 @@ import java.util.Date;
 public class ChargeMachineDto extends PageDto implements Serializable {
 
     private String heartbeatTime;
-private String implBean;
-private String machineId;
-private String machineCode;
-private String energyPrice;
-private String durationPrice;
-private String communityId;
-private String machineName;
+    private String implBean;
+    private String machineId;
+    private String machineCode;
+    private String energyPrice;
+    private String durationPrice;
+    private String communityId;
+    private String machineName;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private String portCount;
+
+    private String factoryName;
+
 
     public String getHeartbeatTime() {
         return heartbeatTime;
     }
-public void setHeartbeatTime(String heartbeatTime) {
+
+    public void setHeartbeatTime(String heartbeatTime) {
         this.heartbeatTime = heartbeatTime;
     }
-public String getImplBean() {
+
+    public String getImplBean() {
         return implBean;
     }
-public void setImplBean(String implBean) {
+
+    public void setImplBean(String implBean) {
         this.implBean = implBean;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getMachineCode() {
+
+    public String getMachineCode() {
         return machineCode;
     }
-public void setMachineCode(String machineCode) {
+
+    public void setMachineCode(String machineCode) {
         this.machineCode = machineCode;
     }
-public String getEnergyPrice() {
+
+    public String getEnergyPrice() {
         return energyPrice;
     }
-public void setEnergyPrice(String energyPrice) {
+
+    public void setEnergyPrice(String energyPrice) {
         this.energyPrice = energyPrice;
     }
-public String getDurationPrice() {
+
+    public String getDurationPrice() {
         return durationPrice;
     }
-public void setDurationPrice(String durationPrice) {
+
+    public void setDurationPrice(String durationPrice) {
         this.durationPrice = durationPrice;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
 
@@ -93,5 +113,21 @@ public void setMachineName(String machineName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPortCount() {
+        return portCount;
+    }
+
+    public void setPortCount(String portCount) {
+        this.portCount = portCount;
+    }
+
+    public String getFactoryName() {
+        return factoryName;
+    }
+
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName;
     }
 }

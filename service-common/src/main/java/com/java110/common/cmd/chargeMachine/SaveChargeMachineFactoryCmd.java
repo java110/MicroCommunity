@@ -21,8 +21,9 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
-import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.intf.common.IChargeMachineFactoryV1InnerServiceSMO;
+import com.java110.po.chargeMachineFactory.ChargeMachineFactoryPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,30 +32,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * 类表述：更新
- * 服务编码：chargeMachinePort.updateChargeMachinePort
- * 请求路劲：/app/chargeMachinePort.UpdateChargeMachinePort
- * add by 吴学文 at 2023-03-02 01:17:43 mail: 928255095@qq.com
+ * 类表述：保存
+ * 服务编码：chargeMachineFactory.saveChargeMachineFactory
+ * 请求路劲：/app/chargeMachineFactory.SaveChargeMachineFactory
+ * add by 吴学文 at 2023-03-07 23:53:12 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "chargeMachine.updateChargeMachinePort")
-public class UpdateChargeMachinePortCmd extends Cmd {
+@Java110Cmd(serviceCode = "chargeMachine.saveChargeMachineFactory")
+public class SaveChargeMachineFactoryCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateChargeMachinePortCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(SaveChargeMachineFactoryCmd.class);
 
+    public static final String CODE_PREFIX_ID = "10";
 
     @Autowired
-    private IChargeMachinePortV1InnerServiceSMO chargeMachinePortV1InnerServiceSMOImpl;
+    private IChargeMachineFactoryV1InnerServiceSMO chargeMachineFactoryV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "portId", "portId不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "factoryName", "请求报文中未包含factoryName");
+Assert.hasKeyAndValue(reqJson, "beanImpl", "请求报文中未包含beanImpl");
 
     }
 
@@ -62,11 +63,12 @@ public class UpdateChargeMachinePortCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ChargeMachinePortPo chargeMachinePortPo = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortPo.class);
-        int flag = chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
+       ChargeMachineFactoryPo chargeMachineFactoryPo = BeanConvertUtil.covertBean(reqJson, ChargeMachineFactoryPo.class);
+        chargeMachineFactoryPo.setFactoryId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        int flag = chargeMachineFactoryV1InnerServiceSMOImpl.saveChargeMachineFactory(chargeMachineFactoryPo);
 
         if (flag < 1) {
-            throw new CmdException("更新数据失败");
+            throw new CmdException("保存数据失败");
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

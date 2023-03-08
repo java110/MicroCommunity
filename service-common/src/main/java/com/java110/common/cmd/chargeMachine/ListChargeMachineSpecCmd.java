@@ -20,13 +20,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
+import com.java110.intf.common.IChargeMachineSpecV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeMachineSpec.ChargeMachineSpecDto;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -39,61 +39,46 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：chargeMachinePort.listChargeMachinePort
- * 请求路劲：/app/chargeMachinePort.ListChargeMachinePort
- * add by 吴学文 at 2023-03-02 01:17:43 mail: 928255095@qq.com
+ * 服务编码：chargeMachineSpec.listChargeMachineSpec
+ * 请求路劲：/app/chargeMachineSpec.ListChargeMachineSpec
+ * add by 吴学文 at 2023-03-08 00:03:34 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "chargeMachine.listChargeMachinePort")
-public class ListChargeMachinePortCmd extends Cmd {
+@Java110Cmd(serviceCode = "chargeMachine.listChargeMachineSpec")
+public class ListChargeMachineSpecCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListChargeMachinePortCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListChargeMachineSpecCmd.class);
     @Autowired
-    private IChargeMachinePortV1InnerServiceSMO chargeMachinePortV1InnerServiceSMOImpl;
+    private IChargeMachineSpecV1InnerServiceSMO chargeMachineSpecV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
+        Assert.hasKeyAndValue(reqJson, "communityId", "查询小区ID");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ChargeMachinePortDto chargeMachinePortDto = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortDto.class);
+        ChargeMachineSpecDto chargeMachineSpecDto = BeanConvertUtil.covertBean(reqJson, ChargeMachineSpecDto.class);
 
-        int count = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
+        int count = chargeMachineSpecV1InnerServiceSMOImpl.queryChargeMachineSpecsCount(chargeMachineSpecDto);
 
-        List<ChargeMachinePortDto> chargeMachinePortDtos = null;
+        List<ChargeMachineSpecDto> chargeMachineSpecDtos = null;
 
         if (count > 0) {
-            chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-
-            //调用 第三方查询 插槽状态
-            queryPortState(chargeMachinePortDtos);
+            chargeMachineSpecDtos = chargeMachineSpecV1InnerServiceSMOImpl.queryChargeMachineSpecs(chargeMachineSpecDto);
         } else {
-            chargeMachinePortDtos = new ArrayList<>();
+            chargeMachineSpecDtos = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachinePortDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachineSpecDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    private void queryPortState(List<ChargeMachinePortDto> chargeMachinePortDtos) {
-        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
-            return;
-
-        }
-
-        for (ChargeMachinePortDto chargeMachinePortDto : chargeMachinePortDtos) {
-            chargeMachinePortDto.setStateName("空闲");
-        }
     }
 }
