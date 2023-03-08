@@ -54,7 +54,7 @@ public class SaveExamineProjectCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "projectId", "请求报文中未包含projectId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "postCd", "请求报文中未包含postCd");
         Assert.hasKeyAndValue(reqJson, "post", "请求报文中未包含post");
