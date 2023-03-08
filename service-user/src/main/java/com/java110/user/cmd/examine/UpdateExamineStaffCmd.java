@@ -93,6 +93,7 @@ public class UpdateExamineStaffCmd extends Cmd {
         Assert.listOnlyOne(userDtos, "员工不存在");
 
         ExamineStaffPo examineStaffPo = BeanConvertUtil.covertBean(reqJson, ExamineStaffPo.class);
+        examineStaffPo.setStaffName(userDtos.get(0).getName());
         int flag = examineStaffV1InnerServiceSMOImpl.updateExamineStaff(examineStaffPo);
 
         if (flag < 1) {
@@ -108,7 +109,7 @@ public class UpdateExamineStaffCmd extends Cmd {
 
         JSONArray projectIds = reqJson.getJSONArray("projectIds");
 
-        for(int projectIndex = 0;projectIndex < projectIds.size();projectIndex ++){
+        for (int projectIndex = 0; projectIndex < projectIds.size(); projectIndex++) {
             tmpExamineStaffProjectPo = new ExamineStaffProjectPo();
             tmpExamineStaffProjectPo.setEsId(examineStaffPo.getEsId());
             tmpExamineStaffProjectPo.setCommunityId(examineStaffPo.getCommunityId());

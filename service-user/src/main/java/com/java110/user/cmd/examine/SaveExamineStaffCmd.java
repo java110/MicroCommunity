@@ -94,7 +94,7 @@ public class SaveExamineStaffCmd extends Cmd {
 
         ExamineStaffPo examineStaffPo = BeanConvertUtil.covertBean(reqJson, ExamineStaffPo.class);
         examineStaffPo.setEsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        examineStaffPo.setStaffName(userDtos.get(0).getStaffName());
+        examineStaffPo.setStaffName(userDtos.get(0).getName());
         int flag = examineStaffV1InnerServiceSMOImpl.saveExamineStaff(examineStaffPo);
 
         if (flag < 1) {
