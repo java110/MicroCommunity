@@ -1,6 +1,7 @@
 package com.java110.dto.examineStaffProject;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,11 @@ import java.util.Date;
 public class ExamineStaffProjectDto extends PageDto implements Serializable {
 
     private String esId;
-private String espId;
-private String communityId;
-private String projectId;
+    private String[] esIds;
+    private String espId;
+    private String communityId;
+    private String projectId;
+    private String[] projectIds;
 
 
     private Date createTime;
@@ -28,25 +31,32 @@ private String projectId;
     public String getEsId() {
         return esId;
     }
-public void setEsId(String esId) {
+
+    public void setEsId(String esId) {
         this.esId = esId;
     }
-public String getEspId() {
+
+    public String getEspId() {
         return espId;
     }
-public void setEspId(String espId) {
+
+    public void setEspId(String espId) {
         this.espId = espId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getProjectId() {
+
+    public String getProjectId() {
         return projectId;
     }
-public void setProjectId(String projectId) {
+
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
 
@@ -65,5 +75,21 @@ public void setProjectId(String projectId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String[] projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    public String[] getEsIds() {
+        return esIds;
+    }
+
+    public void setEsIds(String[] esIds) {
+        this.esIds = esIds;
     }
 }

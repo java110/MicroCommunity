@@ -20,7 +20,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.examineStaffProject.ExamineStaffProjectDto;
+import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
+import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -54,6 +57,9 @@ public class ListExamineStaffCmd extends Cmd {
     @Autowired
     private IExamineStaffV1InnerServiceSMO examineStaffV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -71,6 +77,8 @@ public class ListExamineStaffCmd extends Cmd {
 
         if (count > 0) {
             examineStaffDtos = examineStaffV1InnerServiceSMOImpl.queryExamineStaffs(examineStaffDto);
+
+            freshStaffProjects(examineStaffDtos);
         } else {
             examineStaffDtos = new ArrayList<>();
         }
@@ -80,5 +88,40 @@ public class ListExamineStaffCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     *
+     * @param examineStaffDtos
+     */
+    private void freshStaffProjects(List<ExamineStaffDto> examineStaffDtos) {
+
+        if(examineStaffDtos == null || examineStaffDtos.size() < 1){
+            return ;
+        }
+
+        List<String> esIds = new ArrayList<>();
+        for(ExamineStaffDto tmpExamineStaffDto : examineStaffDtos){
+            esIds.add(tmpExamineStaffDto.getEsId());
+        }
+
+
+        ExamineStaffProjectDto examineStaffProjectDto = new ExamineStaffProjectDto();
+
+        examineStaffProjectDto.setEsIds(esIds.toArray(new String[esIds.size()]));
+
+       List<ExamineStaffProjectDto> examineStaffProjectDtos =  examineStaffProjectV1InnerServiceSMOImpl.queryExamineStaffProjects(examineStaffProjectDto);
+
+       List<ExamineStaffProjectDto> staffProjectDtos = null;
+        for(ExamineStaffDto tmpExamineStaffDto : examineStaffDtos){
+            staffProjectDtos = new ArrayList<>();
+            for(ExamineStaffProjectDto tmpExamineStaffProjectDto: examineStaffProjectDtos){
+                if(tmpExamineStaffProjectDto.getEsId().equals(tmpExamineStaffDto.getEsId())){
+                    staffProjectDtos.add(tmpExamineStaffProjectDto);
+                }
+            }
+
+            tmpExamineStaffDto.setProjects(staffProjectDtos);
+        }
     }
 }

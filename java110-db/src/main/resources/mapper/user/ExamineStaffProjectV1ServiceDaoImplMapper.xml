@@ -24,6 +24,12 @@
         <if test="esId !=null and esId != ''">
             and t.es_id= #{esId}
         </if>
+        <if test="esIds !=null ">
+            and t.es_id in
+            <foreach collection="esIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="espId !=null and espId != ''">
             and t.esp_id= #{espId}
         </if>
@@ -73,6 +79,12 @@
         where 1 =1
         <if test="esId !=null and esId != ''">
             and t.es_id= #{esId}
+        </if>
+        <if test="esIds !=null ">
+            and t.es_id in
+            <foreach collection="esIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="espId !=null and espId != ''">
             and t.esp_id= #{espId}

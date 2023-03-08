@@ -1,8 +1,11 @@
 package com.java110.dto.examineStaff;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.examineStaffProject.ExamineStaffProjectDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,38 +18,47 @@ import java.util.Date;
 public class ExamineStaffDto extends PageDto implements Serializable {
 
     private String esId;
-private String staffName;
-private String communityId;
-private String staffId;
+    private String staffName;
+    private String communityId;
+    private String staffId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private List<ExamineStaffProjectDto> projects;
+
 
     public String getEsId() {
         return esId;
     }
-public void setEsId(String esId) {
+
+    public void setEsId(String esId) {
         this.esId = esId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -65,5 +77,13 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ExamineStaffProjectDto> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<ExamineStaffProjectDto> projects) {
+        this.projects = projects;
     }
 }
