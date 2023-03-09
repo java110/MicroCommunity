@@ -164,7 +164,7 @@ public class ChargeCoreImpl implements IChargeCore {
         List<NotifyChargePortDto> portDtos = chargeFactoryAdapt.getChargeHeartBeatParam(notifyChargeOrderDto);
 
         for (NotifyChargePortDto notifyChargePortDto : portDtos) {
-            doDealChargePort(notifyChargePortDto, notifyChargeOrderDto);
+            doDealChargePort(notifyChargePortDto, notifyChargeOrderDto, chargeMachineDtos.get(0));
         }
 
         return new ResponseEntity<>("{\n" +
@@ -179,6 +179,14 @@ public class ChargeCoreImpl implements IChargeCore {
      * @param notifyChargePortDto
      * @param notifyChargeOrderDto
      */
-    private void doDealChargePort(NotifyChargePortDto notifyChargePortDto, NotifyChargeOrderDto notifyChargeOrderDto) {
+    private void doDealChargePort(NotifyChargePortDto notifyChargePortDto, NotifyChargeOrderDto notifyChargeOrderDto, ChargeMachineDto chargeMachineDto) {
+
+        // todo 1.0 查询上报时间是否已经 扣款，如果扣款过，那么更新 充电电量 后返回
+
+        // todo 2.0 检查账户是否余额充足，如果余额不足，则 调用停止充电 将充电订单 修改成充电完成，并且修改备注
+
+        // todo 3.0 账户扣款
+
+
     }
 }
