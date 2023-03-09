@@ -1,4 +1,4 @@
-package com.java110.common.SmartMeter.factory.tqdianbiao;
+package com.java110.common.smartMeter.factory.tqdianbiao;
 
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;

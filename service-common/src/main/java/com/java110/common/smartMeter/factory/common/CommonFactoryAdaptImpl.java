@@ -1,6 +1,6 @@
-package com.java110.common.SmartMeter.factory.common;
+package com.java110.common.smartMeter.factory.common;
 
-import com.java110.common.SmartMeter.ISmartMeterFactoryAdapt;
+import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.vo.ResultVo;
 import org.springframework.stereotype.Service;

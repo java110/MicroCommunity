@@ -16,14 +16,15 @@
 package com.java110.common.smo.impl;
 
 
+import com.java110.common.charge.IChargeCore;
 import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.chargeMachine.ChargeMachineDto;
+import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
 import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
-import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
-import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
-import com.java110.intf.common.INotifySmartMeterV1InnerServiceSMO;
+import com.java110.intf.common.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -45,47 +46,30 @@ import java.util.List;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @RestController
-public class NotifySmartMeterV1InnerServiceSMOImpl extends BaseServiceSMO implements INotifySmartMeterV1InnerServiceSMO {
+public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements INotifyChargeV1InnerServiceSMO {
 
-    private static final Logger logger = LoggerFactory.getLogger(NotifySmartMeterV1InnerServiceSMOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(NotifyChargeV1InnerServiceSMOImpl.class);
 
 
-    private ISmartMeterFactoryAdapt smartMeterFactoryAdapt;
-
-    @Autowired
-    private IMeterMachineV1InnerServiceSMO meterMachineV1InnerServiceSMOImpl;
 
     @Autowired
-    private IMeterMachineFactoryV1InnerServiceSMO meterMachineFactoryV1InnerServiceSMOImpl;
+    private IChargeCore chargeCoreImpl;
 
 
-    /**
-     * 通知类
-     *
-     * @param notifyMeterWaterOrderDto 数据对象分享
-     * @return
-     */
     @Override
-    public ResponseEntity<String> notifySmartMater(@RequestBody NotifyMeterWaterOrderDto notifyMeterWaterOrderDto) {
+    public ResponseEntity<String> finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
 
-        try {
-            MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
-            meterMachineFactoryDto.setFactoryId(notifyMeterWaterOrderDto.getImplBean());
-            List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
-            Assert.listOnlyOne(meterMachineFactoryDtos, "智能水电表厂家不存在");
+       return chargeCoreImpl.finishCharge(notifyChargeOrderDto);
 
-            smartMeterFactoryAdapt = ApplicationContextFactory.getBean(meterMachineFactoryDtos.get(0).getBeanImpl(), ISmartMeterFactoryAdapt.class);
-            if (smartMeterFactoryAdapt == null) {
-                throw new CmdException("厂家接口未实现");
-            }
-
-            // 通知 厂家适配器数据
-            ResultVo resultVo = smartMeterFactoryAdapt.notifyReadData(notifyMeterWaterOrderDto.getParam());
-            return ResultVo.createResponseEntity(resultVo);
-        } catch (Exception e) {
-            logger.error("通知是配置异常", e);
-            throw e;
-        }
     }
 
+    @Override
+    public ResponseEntity<String> heartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
+        return chargeCoreImpl.heartbeat(notifyChargeOrderDto);
+    }
+
+    @Override
+    public ResponseEntity<String> chargeHeartBeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
+        return chargeCoreImpl.chargeHeartBeat(notifyChargeOrderDto);
+    }
 }

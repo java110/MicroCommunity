@@ -1,60 +1,40 @@
-package com.java110.common.SmartMeter.factory.tqdianbiao;
+package com.java110.common.smartMeter.factory.tqdianbiao;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.SmartMeter.ISmartMeterCoreRead;
-import com.java110.common.SmartMeter.ISmartMeterFactoryAdapt;
+import com.java110.common.smartMeter.ISmartMeterCoreRead;
+import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.CommunityMemberDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.dto.meterMachineDetail.MeterMachineDetailDto;
-import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
-import com.java110.dto.meterMachineFactorySpec.MeterMachineFactorySpecDto;
 import com.java110.dto.meterMachineSpec.MeterMachineSpecDto;
-import com.java110.dto.meterWater.MeterWaterDto;
-import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.payFeeBatch.PayFeeBatchDto;
-import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMeterMachineDetailV1InnerServiceSMO;
-import com.java110.intf.common.IMeterMachineFactorySpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
-import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
-import com.java110.intf.community.ICommunityV1InnerServiceSMO;
-import com.java110.intf.fee.*;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.fee.FeeAttrPo;
-import com.java110.po.fee.PayFeePo;
-import com.java110.po.meterMachine.MeterMachinePo;
 import com.java110.po.meterMachineDetail.MeterMachineDetailPo;
-import com.java110.po.meterWater.MeterWaterPo;
-import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.cache.UrlCache;
-import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/*
-   拓强智能电表 处理类 -- 5.1 单项单费率抄表
-   http://doc-api.tqdianbiao.com/#/api2/6/2/1
+/**
+ * 拓强智能电表 处理类 -- 5.3 单项远程单费率预付费表
  */
-@Service("tqDianBiaoFactoryAdaptImpl")
-public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
+@Service("tqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl")
+public class TqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
+
     private static final String READ_URL = "http://api2.tqdianbiao.com/Api_v2/ele_read";
 
-    private static final String NOTIFY_URL = "/app/smartMeter/notify/tqDianBiaoFactoryAdaptImpl/992020051967020024";
+    private static final String RECHARGE_URL = "http://api2.tqdianbiao.com/Api_v2/ele_security/recharge";
 
+    private static final String NOTIFY_URL = "/app/smartMeter/notify/tqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl/992020051967020024";
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
 
@@ -72,9 +52,72 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
     @Autowired
     private ISmartMeterCoreRead smartMeterCoreReadImpl;
 
+
     @Override
-    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree,double money) {
-        return new ResultVo(ResultVo.CODE_ERROR, "单项单费率 不支持充值");
+    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree, double money) {
+
+
+        // 请求内容，调用接口所需要的数据（电表充值，同步模式）
+        List<Map<String, Object>> req = new ArrayList<>();
+
+        MeterMachineSpecDto meterMachineSpecDto = new MeterMachineSpecDto();
+        meterMachineSpecDto.setMachineId(meterMachineDto.getMachineId());
+        meterMachineSpecDto.setCommunityId(meterMachineDto.getCommunityId());
+        meterMachineSpecDto.setSpecId("120102");
+        List<MeterMachineSpecDto> meterMachineSpecDtos = meterMachineSpecV1InnerServiceSMOImpl.queryMeterMachineSpecs(meterMachineSpecDto);
+        if (meterMachineSpecDtos == null || meterMachineSpecDtos.size() < 1) {
+            return new ResultVo(ResultVo.CODE_ERROR, "未配置采集器ID");
+        }
+        String detailId = GenerateCodeFactory.getGeneratorId("11");
+        Map<String, Object> item = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("money", money + "");
+
+        item.put("opr_id", detailId);
+        item.put("time_out", 0);
+        item.put("must_online", true);
+        item.put("retry_times", 1);
+        item.put("cid", meterMachineSpecDtos.get(0).getSpecValue());
+        item.put("address", meterMachineDto.getAddress());
+        item.put("params", params);
+        req.add(item);
+
+
+        String request_content = JSON.toJSONString(req);
+
+        String resStr = TdDianBiaoUtil.requestAsync(RECHARGE_URL, request_content, UrlCache.getOwnerUrl() + NOTIFY_URL);
+
+        JSONObject paramOut = JSONObject.parseObject(resStr);
+
+        if (!"SUCCESS".equals(paramOut.getString("status"))) {
+            return new ResultVo(ResultVo.CODE_ERROR, paramOut.getString("error_msg"));
+        }
+
+        JSONArray responseContent = paramOut.getJSONArray("response_content");
+
+        for (int resIndex = 0; resIndex < responseContent.size(); resIndex++) {
+            String status = responseContent.getJSONObject(resIndex).getString("status");
+            if (!"SUCCESS".equals(status)) {
+                return new ResultVo(ResultVo.CODE_ERROR, responseContent.getJSONObject(resIndex).getString("error_msg"));
+            }
+        }
+
+        List<MeterMachineDetailPo> meterMachineDetailPos = new ArrayList<>();
+        MeterMachineDetailPo meterMachineDetailPo = new MeterMachineDetailPo();
+        meterMachineDetailPo.setCommunityId(meterMachineDto.getCommunityId());
+        meterMachineDetailPo.setDetailId(detailId);
+        meterMachineDetailPo.setMachineId(meterMachineDto.getMachineId());
+        meterMachineDetailPo.setDetailType(meterMachineDto.getMachineModel()); // 抄表
+        meterMachineDetailPo.setCurDegrees((Double.parseDouble(meterMachineDto.getCurDegrees()) + degree) + "");
+        meterMachineDetailPo.setCurReadingTime(meterMachineDto.getCurReadingTime());
+        meterMachineDetailPo.setPrestoreDegrees((Double.parseDouble(meterMachineDto.getCurDegrees()) + degree) + "");
+        meterMachineDetailPo.setState(MeterMachineDetailDto.STATE_C);
+        meterMachineDetailPos.add(meterMachineDetailPo);
+
+        if (meterMachineDetailPos.size() > 0) {
+            meterMachineDetailV1InnerServiceSMOImpl.saveMeterMachineDetails(meterMachineDetailPos);
+        }
+        return new ResultVo(ResultVo.CODE_OK, "请求已发送，等待电表反馈数据");
     }
 
     @Override
@@ -133,7 +176,7 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
         if (meterMachineDetailPos.size() > 0) {
             meterMachineDetailV1InnerServiceSMOImpl.saveMeterMachineDetails(meterMachineDetailPos);
         }
-        return new ResultVo(ResultVo.CODE_OK, "请求已发送，等待电表反馈数据");
+        return new ResultVo(ResultVo.CODE_OK, "提交重置");
     }
 
     @Override
@@ -146,7 +189,7 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
             MeterMachineSpecDto meterMachineSpecDto = new MeterMachineSpecDto();
             meterMachineSpecDto.setMachineId(meterMachineDto.getMachineId());
             meterMachineSpecDto.setCommunityId(meterMachineDto.getCommunityId());
-            meterMachineSpecDto.setSpecId("120101");
+            meterMachineSpecDto.setSpecId("120102");
             List<MeterMachineSpecDto> meterMachineSpecDtos = meterMachineSpecV1InnerServiceSMOImpl.queryMeterMachineSpecs(meterMachineSpecDto);
             if (meterMachineSpecDtos == null || meterMachineSpecDtos.size() < 1) {
                 continue;
@@ -201,15 +244,8 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
         return new ResultVo(ResultVo.CODE_OK, "请求已发送，等待电表反馈数据");
     }
 
-    /**
-     * 抄表异步通知
-     *
-     * @param readData
-     * @return
-     */
     @Override
     public ResultVo notifyReadData(String readData) {
-
         JSONObject data = JSONObject.parseObject(readData);
 
         String response_content = data.getString("response_content");
@@ -271,5 +307,5 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
         smartMeterCoreReadImpl.saveMeterAndCreateFee(meterMachineDetailDtos.get(0), degree + "", batchId);
     }
 
-
 }
+

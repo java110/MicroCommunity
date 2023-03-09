@@ -23,6 +23,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.chargeMachine.ChargeMachineDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineSpecV1InnerServiceSMO;
@@ -75,6 +76,14 @@ public class SaveChargeMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "energyPrice", "请求报文中未包含energyPrice");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "portCount", "请求报文中未包含portCount");
+
+        ChargeMachineDto chargeMachineDto = new ChargeMachineDto();
+        chargeMachineDto.setMachineCode(reqJson.getString("machineCode"));
+        int count = chargeMachineV1InnerServiceSMOImpl.queryChargeMachinesCount(chargeMachineDto);
+
+        if (count > 0) {
+            throw new CmdException("充电桩编号已存在");
+        }
 
 
         JSONArray specs = reqJson.getJSONArray("specs");
