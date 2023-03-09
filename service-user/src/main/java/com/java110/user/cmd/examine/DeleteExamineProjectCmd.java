@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.user.IExamineProjectV1InnerServiceSMO;
+import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.po.examineProject.ExamineProjectPo;
+import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,8 @@ public class DeleteExamineProjectCmd extends Cmd {
     @Autowired
     private IExamineProjectV1InnerServiceSMO examineProjectV1InnerServiceSMOImpl;
 
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "projectId", "projectId不能为空");
@@ -65,6 +69,7 @@ public class DeleteExamineProjectCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

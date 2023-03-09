@@ -21,8 +21,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
 import com.java110.po.examineStaff.ExamineStaffPo;
+import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,9 @@ public class DeleteExamineStaffCmd extends Cmd {
     @Autowired
     private IExamineStaffV1InnerServiceSMO examineStaffV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "esId", "esId不能为空");
@@ -65,6 +70,12 @@ public class DeleteExamineStaffCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+
+        ExamineStaffProjectPo examineStaffProjectPo = new ExamineStaffProjectPo();
+        examineStaffProjectPo.setEsId(examineStaffPo.getEsId());
+        examineStaffProjectPo.setCommunityId(examineStaffPo.getCommunityId());
+        examineStaffProjectV1InnerServiceSMOImpl.deleteExamineStaffProject(examineStaffProjectPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
