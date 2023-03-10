@@ -3,6 +3,7 @@ package com.java110.common.cmd.chargeMachine;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.charge.IChargeCore;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -14,11 +15,14 @@ import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.common.IChargeMachineOrderAcctV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineOrderV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
+import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -55,6 +59,9 @@ public class StartChargeCmd extends Cmd {
 
     @Autowired
     private IChargeMachineOrderV1InnerServiceSMO chargeMachineOrderV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IChargeMachineOrderAcctV1InnerServiceSMO chargeMachineOrderAcctV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -120,6 +127,7 @@ public class StartChargeCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = context.getReqHeaders().get("user-id");
         UserDto userDto = new UserDto();
@@ -183,6 +191,36 @@ public class StartChargeCmd extends Cmd {
             chargeCoreImpl.stopCharge(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0));
             throw new CmdException("充电失败");
         }
+
+        //扣款
+        // todo 3.0 账户扣款
+
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctId(reqJson.getString("acctId"));
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+        accountDetailPo.setObjId(accountDtos.get(0).getObjId());
+        accountDetailPo.setObjType(accountDtos.get(0).getObjType());
+        accountDetailPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
+        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+
+        ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
+        chargeMachineOrderAcctPo.setAcctDetailId(accountDetailPo.getDetailId());
+        chargeMachineOrderAcctPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
+        chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
+        chargeMachineOrderAcctPo.setOrderId(orderId);
+        chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
+        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), 1));
+        chargeMachineOrderAcctPo.setRemark("一小时定时扣款");
+        chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+        chargeMachineOrderAcctPo.setEnergy("0");
+
+        chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
+
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
 }

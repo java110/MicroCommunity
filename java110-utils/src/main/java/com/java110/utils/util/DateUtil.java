@@ -477,6 +477,15 @@ public class DateUtil {
     }
 
 
+    public static String getAddHoursStringA(Date date, int hours) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR_OF_DAY, hours);
+        return sf.format(c.getTime());
+    }
+
+
     public static String getAddMonthStringA(Date date, int month) {
         SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
         Calendar c = Calendar.getInstance();

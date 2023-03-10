@@ -1,6 +1,7 @@
 package com.java110.dto.chargeMachineOrderAcct;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,15 +16,17 @@ import java.util.Date;
 public class ChargeMachineOrderAcctDto extends PageDto implements Serializable {
 
     private String amount;
-private String cmoaId;
-private String orderId;
-private String acctDetailId;
-private String acctId;
-private String startTime;
-private String remark;
-private String endTime;
-private String communityId;
-private String energy;
+    private String cmoaId;
+    private String orderId;
+    private String acctDetailId;
+    private String acctId;
+    private String startTime;
+    private String remark;
+    private String endTime;
+    private String communityId;
+    private String energy;
+
+    private String powerTime;
 
 
     private Date createTime;
@@ -34,61 +37,80 @@ private String energy;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getCmoaId() {
+
+    public String getCmoaId() {
         return cmoaId;
     }
-public void setCmoaId(String cmoaId) {
+
+    public void setCmoaId(String cmoaId) {
         this.cmoaId = cmoaId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getAcctDetailId() {
+
+    public String getAcctDetailId() {
         return acctDetailId;
     }
-public void setAcctDetailId(String acctDetailId) {
+
+    public void setAcctDetailId(String acctDetailId) {
         this.acctDetailId = acctDetailId;
     }
-public String getAcctId() {
+
+    public String getAcctId() {
         return acctId;
     }
-public void setAcctId(String acctId) {
+
+    public void setAcctId(String acctId) {
         this.acctId = acctId;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getEnergy() {
+
+    public String getEnergy() {
         return energy;
     }
-public void setEnergy(String energy) {
+
+    public void setEnergy(String energy) {
         this.energy = energy;
     }
 
@@ -107,5 +129,13 @@ public void setEnergy(String energy) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPowerTime() {
+        return powerTime;
+    }
+
+    public void setPowerTime(String powerTime) {
+        this.powerTime = powerTime;
     }
 }

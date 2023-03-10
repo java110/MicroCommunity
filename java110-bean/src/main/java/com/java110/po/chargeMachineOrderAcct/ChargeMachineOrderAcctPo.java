@@ -17,6 +17,7 @@ package com.java110.po.chargeMachineOrderAcct;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-03-10 02:04:45 mail: 928255095@qq.com
@@ -28,83 +29,104 @@ import java.util.Date;
 public class ChargeMachineOrderAcctPo implements Serializable {
 
     private String amount;
-private String cmoaId;
-private String orderId;
-private String acctDetailId;
-private String acctId;
-private String startTime;
-private String remark;
-private String statusCd = "0";
-private String endTime;
-private String communityId;
-private String energy;
-public String getAmount() {
+    private String cmoaId;
+    private String orderId;
+    private String acctDetailId;
+    private String acctId;
+    private String startTime;
+    private String remark;
+    private String statusCd = "0";
+    private String endTime;
+    private String communityId;
+    private String energy;
+
+    public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getCmoaId() {
+
+    public String getCmoaId() {
         return cmoaId;
     }
-public void setCmoaId(String cmoaId) {
+
+    public void setCmoaId(String cmoaId) {
         this.cmoaId = cmoaId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getAcctDetailId() {
+
+    public String getAcctDetailId() {
         return acctDetailId;
     }
-public void setAcctDetailId(String acctDetailId) {
+
+    public void setAcctDetailId(String acctDetailId) {
         this.acctDetailId = acctDetailId;
     }
-public String getAcctId() {
+
+    public String getAcctId() {
         return acctId;
     }
-public void setAcctId(String acctId) {
+
+    public void setAcctId(String acctId) {
         this.acctId = acctId;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getEnergy() {
+
+    public String getEnergy() {
         return energy;
     }
-public void setEnergy(String energy) {
+
+    public void setEnergy(String energy) {
         this.energy = energy;
     }
-
 
 
 }
