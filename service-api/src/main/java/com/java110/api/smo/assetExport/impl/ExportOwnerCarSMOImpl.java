@@ -70,7 +70,7 @@ public class ExportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         Row row = sheet.createRow(0);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("房屋号: 格式为xx-xx-xx(楼栋-单元-房屋)；\n车辆类型：9901表示家用小汽车，9902表示客车，9903表示货车；" +
-                "\n车位：xx-xx(停车场-车位)" + "\n起租时间: 格式为YYYY-MM-DD HH:mm:ss；\n截止时间: 格式为YYYY-MM-DD HH:mm:ss；" +
+                "\n停车场：停车场编号，系统中不存在自动创建" + "\n车位：停车位编号，系统中不存在自动创建" + "\n起租时间: 格式为YYYY-MM-DD；\n截止时间: 格式为YYYY-MM-DD；" +
                 "\n停车场类型：1001表示地上停车场，2001表示地下停车场；\n车位状态：S表示出售，H表示出租；" +
                 "\n注意：所有单元格式为文本");
         CellStyle cs = workbook.createCellStyle();
@@ -83,7 +83,7 @@ public class ExportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         row.createCell(2).setCellValue("车辆品牌");
         row.createCell(3).setCellValue("车辆类型");
         row.createCell(4).setCellValue("颜色");
-        row.createCell(5).setCellValue("业主");
+        row.createCell(5).setCellValue("停车场");
         row.createCell(6).setCellValue("车位");
         row.createCell(7).setCellValue("起租时间");
         row.createCell(8).setCellValue("截止时间");

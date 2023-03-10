@@ -1,6 +1,7 @@
 package com.java110.dto.resourceStoreTimes;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.resourceStore.ResourceStoreDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ResourceStoreTimesDto extends PageDto implements Serializable {
+public class ResourceStoreTimesDto extends ResourceStoreDto implements Serializable {
 
     private String price;
     private String totalPrice;
