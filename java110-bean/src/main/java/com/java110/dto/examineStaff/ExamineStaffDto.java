@@ -23,6 +23,9 @@ public class ExamineStaffDto extends PageDto implements Serializable {
     private String staffId;
 
     private String post;
+
+    private String headerImg;
+
     private Date createTime;
 
     private String statusCd = "0";
@@ -93,5 +96,13 @@ public class ExamineStaffDto extends PageDto implements Serializable {
 
     public void setPost(String post) {
         this.post = post;
+    }
+
+    public String getHeaderImg() {
+        return headerImg;
+    }
+
+    public void setHeaderImg(String headerImg) {
+        this.headerImg = headerImg;
     }
 }

@@ -21,9 +21,14 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.examineStaffProject.ExamineStaffProjectDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
 import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -60,6 +65,9 @@ public class ListExamineStaffCmd extends Cmd {
     @Autowired
     private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -79,6 +87,7 @@ public class ListExamineStaffCmd extends Cmd {
             examineStaffDtos = examineStaffV1InnerServiceSMOImpl.queryExamineStaffs(examineStaffDto);
 
             freshStaffProjects(examineStaffDtos);
+            updatePhone(examineStaffDtos);
         } else {
             examineStaffDtos = new ArrayList<>();
         }
@@ -88,6 +97,45 @@ public class ListExamineStaffCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private boolean updatePhone(List<ExamineStaffDto> examineStaffDtos) {
+        if (examineStaffDtos.size() > 100) {
+            return true;
+        }
+
+        List<String> esIds = new ArrayList<>();
+
+        for (ExamineStaffDto tmpExamineStaffDto : examineStaffDtos) {
+            esIds.add(tmpExamineStaffDto.getEsId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        //fileRelDto.setObjId(owners.get(0).getMemberId());
+        fileRelDto.setObjIds(esIds.toArray(new String[esIds.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if (fileRelDtos == null || fileRelDtos.size() < 1) {
+            return true;
+        }
+
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+
+        for (ExamineStaffDto tmpExamineStaffDto : examineStaffDtos) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (!tmpExamineStaffDto.getEsId().equals(tmpFileRelDto.getObjId())) {
+                    continue;
+                }
+
+                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
+                    tmpExamineStaffDto.setHeaderImg(tmpFileRelDto.getFileSaveName());
+                } else {
+                    tmpExamineStaffDto.setHeaderImg(imgUrl + tmpFileRelDto.getFileSaveName());
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

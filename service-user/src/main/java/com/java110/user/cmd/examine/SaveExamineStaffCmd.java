@@ -23,6 +23,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IExamineStaffIntroductionV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
@@ -71,6 +72,9 @@ public class SaveExamineStaffCmd extends Cmd {
     @Autowired
     private IExamineStaffIntroductionV1InnerServiceSMO examineStaffIntroductionV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
@@ -111,7 +115,7 @@ public class SaveExamineStaffCmd extends Cmd {
         JSONArray projectIds = reqJson.getJSONArray("projectIds");
 
         ExamineStaffProjectPo tmpExamineStaffProjectPo = null;
-        for(int projectIndex = 0;projectIndex < projectIds.size();projectIndex ++){
+        for (int projectIndex = 0; projectIndex < projectIds.size(); projectIndex++) {
             tmpExamineStaffProjectPo = new ExamineStaffProjectPo();
             tmpExamineStaffProjectPo.setEsId(examineStaffPo.getEsId());
             tmpExamineStaffProjectPo.setCommunityId(examineStaffPo.getCommunityId());
@@ -121,7 +125,7 @@ public class SaveExamineStaffCmd extends Cmd {
         }
 
         // todo save examine staff introduction
-        if(reqJson.containsKey("introduction") && !StringUtil.isEmpty(reqJson.getString("introduction"))){
+        if (reqJson.containsKey("introduction") && !StringUtil.isEmpty(reqJson.getString("introduction"))) {
             ExamineStaffIntroductionPo examineStaffIntroductionPo = new ExamineStaffIntroductionPo();
             examineStaffIntroductionPo.setEsiId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             examineStaffIntroductionPo.setStaffId(reqJson.getString("staffId"));
@@ -130,6 +134,10 @@ public class SaveExamineStaffCmd extends Cmd {
             examineStaffIntroductionV1InnerServiceSMOImpl.saveExamineStaffIntroduction(examineStaffIntroductionPo);
         }
 
+        // todo save examine staff face image
+        photoSMOImpl.savePhoto(reqJson.getString("headerImg"),
+                examineStaffPo.getEsId(),
+                reqJson.getString("communityId"));
 
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
