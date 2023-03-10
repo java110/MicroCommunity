@@ -101,6 +101,8 @@ public class ServiceConfiguration {
         exclusions.append("/app/chargeMachine.listChargeMachinePort,");//查询充电桩
 
         exclusions.append("/app/smartMeter/notify/*,");// 智能水电表通知放开
+        exclusions.append("/equipments/*,");// 叮叮充电桩通知放开
+
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

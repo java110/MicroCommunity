@@ -1,4 +1,4 @@
-package com.java110.common.SmartMeter;
+package com.java110.common.smartMeter;
 
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.vo.ResultVo;

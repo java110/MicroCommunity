@@ -17,6 +17,7 @@ package com.java110.po.chargeMachineOrder;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-03-08 02:24:15 mail: 928255095@qq.com
@@ -28,118 +29,149 @@ import java.util.Date;
 public class ChargeMachineOrderPo implements Serializable {
 
     private String amount;
-private String orderId;
-private String remark;
-private String statusCd = "0";
-private String portId;
-private String personName;
-private String machineId;
-private String acctDetailId;
-private String personId;
-private String chargeHours;
-private String startTime;
-private String endTime;
-private String state;
-private String personTel;
-private String communityId;
-private String energy;
-public String getAmount() {
+    private String orderId;
+    private String remark;
+    private String statusCd = "0";
+    private String portId;
+    private String personName;
+    private String machineId;
+    private String acctDetailId;
+    private String personId;
+    private String chargeHours;
+    private String startTime;
+    private String endTime;
+    private String state;
+    private String personTel;
+    private String communityId;
+    private String energy;
+
+    public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getPortId() {
+
+    public String getPortId() {
         return portId;
     }
-public void setPortId(String portId) {
+
+    public void setPortId(String portId) {
         this.portId = portId;
     }
-public String getPersonName() {
+
+    public String getPersonName() {
         return personName;
     }
-public void setPersonName(String personName) {
+
+    public void setPersonName(String personName) {
         this.personName = personName;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getAcctDetailId() {
+
+    public String getAcctDetailId() {
         return acctDetailId;
     }
-public void setAcctDetailId(String acctDetailId) {
+
+    public void setAcctDetailId(String acctDetailId) {
         this.acctDetailId = acctDetailId;
     }
-public String getPersonId() {
+
+    public String getPersonId() {
         return personId;
     }
-public void setPersonId(String personId) {
+
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
-public String getChargeHours() {
+
+    public String getChargeHours() {
         return chargeHours;
     }
-public void setChargeHours(String chargeHours) {
+
+    public void setChargeHours(String chargeHours) {
         this.chargeHours = chargeHours;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getPersonTel() {
+
+    public String getPersonTel() {
         return personTel;
     }
-public void setPersonTel(String personTel) {
+
+    public void setPersonTel(String personTel) {
         this.personTel = personTel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getEnergy() {
+
+    public String getEnergy() {
         return energy;
     }
-public void setEnergy(String energy) {
+
+    public void setEnergy(String energy) {
         this.energy = energy;
     }
-
 
 
 }

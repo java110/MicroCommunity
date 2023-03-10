@@ -1,4 +1,4 @@
-package com.java110.common.SmartMeter;
+package com.java110.common.smartMeter;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
