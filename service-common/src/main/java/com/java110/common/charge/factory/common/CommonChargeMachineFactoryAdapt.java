@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 通用 充电接口类
  *
- * 叮叮 充电桩 通知处理类名为 NotifyDingDingChargeController.java
+ * 叮叮 充电桩 通知处理类名为 NotifyCommonChargeController.java
  */
 @Service("commonChargeMachineFactory")
 public class CommonChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
