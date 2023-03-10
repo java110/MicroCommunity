@@ -35,6 +35,15 @@ public class ChargeMachineOrderDto extends PageDto implements Serializable {
     private String communityId;
     private String energy;
 
+    private String machineCode;
+    private String machineName;
+    private String portCode;
+    private String portName;
+
+    private String durationPrice;
+
+    private String stateName;
+
 
     private Date createTime;
 
@@ -176,5 +185,53 @@ public class ChargeMachineOrderDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getMachineCode() {
+        return machineCode;
+    }
+
+    public void setMachineCode(String machineCode) {
+        this.machineCode = machineCode;
+    }
+
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
+    }
+
+    public String getPortCode() {
+        return portCode;
+    }
+
+    public void setPortCode(String portCode) {
+        this.portCode = portCode;
+    }
+
+    public String getPortName() {
+        return portName;
+    }
+
+    public void setPortName(String portName) {
+        this.portName = portName;
+    }
+
+    public String getDurationPrice() {
+        return durationPrice;
+    }
+
+    public void setDurationPrice(String durationPrice) {
+        this.durationPrice = durationPrice;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

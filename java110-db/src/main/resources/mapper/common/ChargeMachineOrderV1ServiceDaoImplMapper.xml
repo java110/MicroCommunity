@@ -21,8 +21,13 @@
         portId,t.person_name,t.person_name personName,t.machine_id,t.machine_id
         machineId,t.acct_detail_id,t.acct_detail_id acctDetailId,t.person_id,t.person_id
         personId,t.charge_hours,t.charge_hours chargeHours,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy
+        endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy,
+        cm.machine_name machineName,cm.machine_code machineCode,cm.duration_price durationPrice,
+        cmp.port_code portCode,cmp.port_name portName,td.`name` stateName
         from charge_machine_order t
+        left join charge_machine cm on t.machine_id = cm.machine_id and cm.status_cd = '0'
+        left join charge_machine_port cmp on t.port_id = cmp.port_id and cmp.status_cd = '0'
+        left join t_dict td on td.status_cd = t.state and td.table_name = 'charge_machine_order' and td.table_columns = 'state'
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
