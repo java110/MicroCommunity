@@ -23,6 +23,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
 import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
+import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -162,6 +163,13 @@ public class StartChargeCmd extends Cmd {
             context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
             return;
         }
+
+        // todo 修改端口状态
+        ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
+        chargeMachinePortPo.setPortId(chargeMachinePortDtos.get(0).getPortId());
+        chargeMachinePortPo.setCommunityId(chargeMachinePortDtos.get(0).getCommunityId());
+        chargeMachinePortPo.setState(ChargeMachinePortDto.STATE_WORKING);
+        chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
 
         // todo 生成 充电订单
         ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
