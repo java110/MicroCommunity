@@ -1,4 +1,4 @@
-package com.java110.common.charge.factory;
+package com.java110.common.charge.factory.dingding;
 
 
 import com.alibaba.fastjson.JSONArray;

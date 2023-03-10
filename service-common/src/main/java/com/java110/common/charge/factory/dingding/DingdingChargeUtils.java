@@ -1,11 +1,10 @@
-package com.java110.common.charge.factory;
+package com.java110.common.charge.factory.dingding;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
