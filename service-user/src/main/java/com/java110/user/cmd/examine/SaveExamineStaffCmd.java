@@ -24,14 +24,17 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IExamineStaffIntroductionV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.examineStaff.ExamineStaffPo;
+import com.java110.po.examineStaffIntroduction.ExamineStaffIntroductionPo;
 import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -65,10 +68,14 @@ public class SaveExamineStaffCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IExamineStaffIntroductionV1InnerServiceSMO examineStaffIntroductionV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "introduction", "请求报文中未包含communityId");
 
         if (!reqJson.containsKey("projectIds")) {
             throw new CmdException("没包含考核项目");
@@ -112,6 +119,18 @@ public class SaveExamineStaffCmd extends Cmd {
             tmpExamineStaffProjectPo.setEspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             examineStaffProjectV1InnerServiceSMOImpl.saveExamineStaffProject(tmpExamineStaffProjectPo);
         }
+
+        // todo save examine staff introduction
+        if(reqJson.containsKey("introduction") && !StringUtil.isEmpty(reqJson.getString("introduction"))){
+            ExamineStaffIntroductionPo examineStaffIntroductionPo = new ExamineStaffIntroductionPo();
+            examineStaffIntroductionPo.setEsiId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            examineStaffIntroductionPo.setStaffId(reqJson.getString("staffId"));
+            examineStaffIntroductionPo.setIntroduction(reqJson.getString("introduction"));
+            examineStaffIntroductionPo.setCommunityId(reqJson.getString("communityId"));
+            examineStaffIntroductionV1InnerServiceSMOImpl.saveExamineStaffIntroduction(examineStaffIntroductionPo);
+        }
+
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

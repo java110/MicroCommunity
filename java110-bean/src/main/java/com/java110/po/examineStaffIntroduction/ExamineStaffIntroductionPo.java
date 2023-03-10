@@ -13,74 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.po.examineStaff;
+package com.java110.po.examineStaffIntroduction;
 
 import java.io.Serializable;
 import java.util.Date;
-
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
- * add by 吴学文 at 2023-03-07 15:57:29 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-03-10 17:23:07 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public class ExamineStaffPo implements Serializable {
+public class ExamineStaffIntroductionPo implements Serializable {
 
-    private String esId;
-    private String staffName;
-    private String statusCd = "0";
-    private String communityId;
-    private String staffId;
-
-    private String post;
-
-    public String getEsId() {
-        return esId;
+    private String esiId;
+private String statusCd = "0";
+private String communityId;
+private String staffId;
+private String introduction;
+public String getEsiId() {
+        return esiId;
     }
-
-    public void setEsId(String esId) {
-        this.esId = esId;
+public void setEsiId(String esiId) {
+        this.esiId = esiId;
     }
-
-    public String getStaffName() {
-        return staffName;
-    }
-
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
-    }
-
-    public String getStatusCd() {
+public String getStatusCd() {
         return statusCd;
     }
-
-    public void setStatusCd(String statusCd) {
+public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-
-    public String getCommunityId() {
+public String getCommunityId() {
         return communityId;
     }
-
-    public void setCommunityId(String communityId) {
+public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
-    public String getStaffId() {
+public String getStaffId() {
         return staffId;
     }
-
-    public void setStaffId(String staffId) {
+public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-
-    public String getPost() {
-        return post;
+public String getIntroduction() {
+        return introduction;
+    }
+public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
-    public void setPost(String post) {
-        this.post = post;
-    }
+
+
 }

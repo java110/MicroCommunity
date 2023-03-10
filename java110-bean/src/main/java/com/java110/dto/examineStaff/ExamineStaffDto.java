@@ -22,7 +22,7 @@ public class ExamineStaffDto extends PageDto implements Serializable {
     private String communityId;
     private String staffId;
 
-
+    private String post;
     private Date createTime;
 
     private String statusCd = "0";
@@ -85,5 +85,13 @@ public class ExamineStaffDto extends PageDto implements Serializable {
 
     public void setProjects(List<ExamineStaffProjectDto> projects) {
         this.projects = projects;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 }
