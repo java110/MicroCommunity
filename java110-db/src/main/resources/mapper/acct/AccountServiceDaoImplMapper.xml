@@ -7,17 +7,17 @@
     <!-- 保存账户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAccountInfo" parameterType="Map">
         insert into business_account(
-        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id
+        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id,link
         ) values (
-        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType},#{partId}
+        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType},#{partId},#{link}
         )
     </insert>
 
     <insert id="saveAccount" parameterType="Map">
         insert into account(
-        amount,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id
+        amount,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id,link
         ) values (
-        #{amount},#{acctType},#{objId},#{acctId},#{acctName},'-1',#{objType},#{partId}
+        #{amount},#{acctType},#{objId},#{acctId},#{acctName},'-1',#{objType},#{partId},#{link}
         )
     </insert>
 
@@ -25,7 +25,7 @@
     <!-- 查询账户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.operate,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
-        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,t.part_id,t.part_id partId
+        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,t.part_id,t.part_id partId,t.link
         from business_account t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -55,6 +55,9 @@
         <if test="partId !=null and partId != ''">
             and t.obj_type= #{partId}
         </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
 
     </select>
 
@@ -62,8 +65,8 @@
     <!-- 保存账户信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAccountInfoInstance" parameterType="Map">
         insert into account(
-        amount,acct_type,obj_id,acct_id,status_cd,acct_name,b_id,obj_type,part_id
-        ) select t.amount,t.acct_type,t.obj_id,t.acct_id,'0',t.acct_name,t.b_id,t.obj_type,t.part_id
+        amount,acct_type,obj_id,acct_id,status_cd,acct_name,b_id,obj_type,part_id,link
+        ) select t.amount,t.acct_type,t.obj_id,t.acct_id,'0',t.acct_name,t.b_id,t.obj_type,t.part_id,t.link
         from business_account t where
         1=1
         <if test="amount !=null and amount != ''">
@@ -96,7 +99,7 @@
     <select id="getAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
         acctId,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type
-        objType,t.create_time createTime,td.`name` acctTypeName,t.part_id,t.part_id partId
+        objType,t.create_time createTime,td.`name` acctTypeName,t.part_id,t.part_id partId,t.link
         from account t
         LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
         'acct_type'
@@ -143,6 +146,9 @@
         <if test="partId !=null and partId != ''">
             and t.part_id= #{partId}
         </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -178,6 +184,9 @@
         where 1=1
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -226,6 +235,9 @@
         <if test="partId !=null and partId != ''">
             and t.part_id= #{partId}
         </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
     </select>
 
 
@@ -249,6 +261,9 @@
         </if>
         <if test="objId !=null and objId != ''">
            and t.obj_id = #{objId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
         </if>
     </update>
 

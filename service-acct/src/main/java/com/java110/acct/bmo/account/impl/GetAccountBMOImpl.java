@@ -169,6 +169,7 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
             Assert.listOnlyOne(ownerDtos, "业主不存在");
             accountPo.setAcctName(ownerDtos.get(0).getName());
             accountPo.setPartId(ownerDto.getCommunityId());
+            accountPo.setLink(ownerDtos.get(0).getLink());
             accountInnerServiceSMOImpl.saveAccount(accountPo);
             List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
             return accountDtos;

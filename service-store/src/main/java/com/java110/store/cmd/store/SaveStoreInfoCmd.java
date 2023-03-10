@@ -128,6 +128,7 @@ public class SaveStoreInfoCmd extends Cmd {
         accountPo.setAmount("0");
         accountPo.setObjId(paramInJson.getString("storeId"));
         accountPo.setObjType(AccountDto.OBJ_TYPE_STORE);
+        accountPo.setLink(paramInJson.getString("link"));
         int flag = accountInnerServiceSMOImpl.saveAccount(accountPo);
         if (flag < 1) {
             throw new CmdException("注册失败");

@@ -87,6 +87,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
             Assert.listOnlyOne(ownerDtos, "业主不存在");
             accountPo.setAcctName(ownerDtos.get(0).getName());
             accountPo.setPartId(communityId);
+            accountPo.setLink(ownerDtos.get(0).getLink());
             accountInnerServiceSMOImpl.saveAccount(accountPo);
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);

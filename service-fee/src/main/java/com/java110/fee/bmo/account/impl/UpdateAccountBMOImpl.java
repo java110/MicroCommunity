@@ -71,6 +71,8 @@ public class UpdateAccountBMOImpl extends ApiBaseBMO implements IUpdateAccountBM
             //获取业主id
             String ownerId = ownerRoomRelDtos.get(0).getOwnerId();
             paramObj.put("ownerId", ownerId);
+
+
             //根据业主id去查这个业主的账户余额
             AccountDto accountDto = new AccountDto();
             accountDto.setObjId(ownerId);
@@ -116,6 +118,8 @@ public class UpdateAccountBMOImpl extends ApiBaseBMO implements IUpdateAccountBM
     }
 
     private AccountDto addAccountDto(JSONObject reqJson) {
+
+
         AccountPo accountPo = new AccountPo();
         accountPo.setAmount(reqJson.getString("cashBackAmount"));
         accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
@@ -128,6 +132,7 @@ public class UpdateAccountBMOImpl extends ApiBaseBMO implements IUpdateAccountBM
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         accountPo.setAcctName(ownerDtos.get(0).getName());
         accountPo.setPartId(reqJson.getString("communityId"));
+        accountPo.setLink(ownerDtos.get(0).getLink());
         accountInnerServiceSMOImpl.saveAccount(accountPo);
         return BeanConvertUtil.covertBean(accountPo, AccountDto.class);
     }
