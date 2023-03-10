@@ -221,6 +221,8 @@ public class StartChargeCmd extends Cmd {
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
 
+        resultVo.setData(orderId);
+
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
 }
