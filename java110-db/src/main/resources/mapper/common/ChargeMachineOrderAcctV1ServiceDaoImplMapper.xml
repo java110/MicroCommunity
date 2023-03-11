@@ -19,7 +19,7 @@
     <select id="getChargeMachineOrderAcctInfo" parameterType="Map" resultType="Map">
         select t.amount,t.cmoa_id,t.cmoa_id cmoaId,t.order_id,t.order_id orderId,t.acct_detail_id,t.acct_detail_id
         acctDetailId,t.acct_id,t.acct_id acctId,t.start_time,t.start_time startTime,t.remark,t.status_cd,t.status_cd
-        statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.energy
+        statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.energy,t.create_time createTime
         from charge_machine_order_acct t
         where 1 =1
         <if test="amount !=null and amount != ''">
