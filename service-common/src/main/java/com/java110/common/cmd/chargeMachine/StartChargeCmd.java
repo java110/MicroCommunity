@@ -32,6 +32,7 @@ import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -263,34 +264,42 @@ public class StartChargeCmd extends Cmd {
         double hours = 0;
         String couponNames = "";
         for (String couponId : reqJson.getString("couponIds").split(",")) {
+            String requestId = DistributedLock.getLockUUID();
+            String key = this.getClass().getSimpleName() + reqJson.getString("couponId");
+            try {
+                CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
+                couponPropertyUserDto.setCouponId(couponId);
+                couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_CHARGE);
+                couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
 
-            CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
-            couponPropertyUserDto.setCouponId(couponId);
-            couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_CHARGE);
-            couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
+                List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
+                int stock = Integer.parseInt(couponPropertyUserDtos.get(0).getStock());
+                CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
+                couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
+                couponPropertyUserPo.setCommunityId(couponPropertyUserDtos.get(0).getCommunityId());
+                couponPropertyUserPo.setStock((stock - 1) + "");
+                if (stock == 1) {
+                    couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_FINISH);
+                }
+                flag = couponPropertyUserV1InnerServiceSMOImpl.updateCouponPropertyUser(couponPropertyUserPo);
+                if (flag < 1) {
+                    throw new CmdException("核销失败");
+                }
 
-            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
+                couponNames += ("优惠券名称：" + couponPropertyUserDtos.get(0).getCouponName() + ",优惠券编号：" + couponId + ";");
 
-            CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
-            couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
-            couponPropertyUserPo.setCommunityId(couponPropertyUserDtos.get(0).getCommunityId());
-            couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_FINISH);
-            flag = couponPropertyUserV1InnerServiceSMOImpl.updateCouponPropertyUser(couponPropertyUserPo);
-            if (flag < 1) {
-                throw new CmdException("核销失败");
+                CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
+                couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
+                couponPropertyPoolConfigDto.setColumnKey("hours");
+                List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
+
+                Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
+
+                double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue());
+                hours += value;
+            } finally {
+                DistributedLock.releaseDistributedLock(requestId, key);
             }
-
-            couponNames += ("优惠券名称：" + couponPropertyUserDtos.get(0).getCouponName() + ",优惠券编号：" + couponId + ";");
-
-            CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
-            couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
-            couponPropertyPoolConfigDto.setColumnKey("hours");
-            List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
-
-            Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
-
-            double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue());
-            hours += value;
         }
 
         hours = Math.ceil(hours);
