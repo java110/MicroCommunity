@@ -6,19 +6,24 @@ import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.communitySpace.CommunitySpaceDto;
 import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
+import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
 import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,29 +31,23 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-@Java110CmdDoc(title = "场地预约",
-        description = "场地预约手机端发起支付",
+@Java110CmdDoc(title = "账户预存",
+        description = "手机端账户预存",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/payment.unifiedPayment",
         resource = "acctDoc",
         author = "吴学文",
-        serviceCode = "payment.unifiedPayment.venueReservation"
+        serviceCode = "payment.unifiedPayment.preStoreOnline"
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "business", length = 64, remark = "支付场景，比如场地预约 为 venueReservation"),
+        @Java110ParamDoc(name = "business", length = 64, remark = "支付场景， preStoreOnline"),
         @Java110ParamDoc(name = "payAdapt", length = 64, remark = "支付适配器，非必填"),
         @Java110ParamDoc(name = "tradeType", length = 64, remark = "支付类型 NATIVE JSAPI APP"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
         @Java110ParamDoc(name = "tradeType", length = 30, remark = "支付类型 NATIVE JSAPI APP"),
-        @Java110ParamDoc(name = "personName", length = 30, remark = "预约人"),
-        @Java110ParamDoc(name = "personTel", length = 30, remark = "预约电话"),
-        @Java110ParamDoc(name = "appointmentTime", length = 30, remark = "预约时间 YYYY-MM-DD"),
-        @Java110ParamDoc(name = "payWay", length = 30, remark = "支付方式"),
-        @Java110ParamDoc(name = "spaces", type = "Array", length = 0, remark = "场地"),
-        @Java110ParamDoc(parentNodeName = "spaces", name = "spaceId", length = 30, remark = "场地"),
-        @Java110ParamDoc(parentNodeName = "spaces", name = "openTimes", type = "Array", length = 0, remark = "预约时间"),
-        @Java110ParamDoc(parentNodeName = "openTimes", name = "hours", length = 10, remark = "预约小时"),
+        @Java110ParamDoc(name = "acctId", length = 30, remark = "账户ID"),
+        @Java110ParamDoc(name = "receivedAmount", length = 30, remark = "充值金额")
 
 })
 
@@ -60,12 +59,11 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody = "{       \"business\":\"venueReservation\",\"communityId\":\"123123\",\n" +
+        reqBody = "{       \"business\":\"preStoreOnline\",\"communityId\":\"123123\",\n" +
                 "         personName:\"张三\",\n" +
-                "         personTel:\"18909711111\",\n" +
-                "         appointmentTime:\"2022-12-12\",\n" +
-                "         payWay:\"2\",\n" +
-                "         communityId:\"123123\",          spaces:[{spaceId:'123',openTimes:[{hours:1},{hours:2}]}]\n" +
+                "         acctId:\"18909711111\",\n" +
+                "         receivedAmount:\"100\",\n" +
+                "         communityId:\"123123\"" +
                 " }",
         resBody = "{'code':0,'msg':'成功'}"
 )
@@ -73,8 +71,8 @@ import java.util.List;
 /**
  * 场地预约
  */
-@Service("venueReservation")
-public class AccountPaymentBusiness implements IPaymentBusiness {
+@Service("preStoreOnline")
+public class PreStoreOnlinePaymentBusiness implements IPaymentBusiness {
 
     @Autowired
     private ICommunitySpaceV1InnerServiceSMO communitySpaceV1InnerServiceSMOImpl;
@@ -87,6 +85,9 @@ public class AccountPaymentBusiness implements IPaymentBusiness {
 
     @Autowired
     private ICommunitySpacePersonTimeV1InnerServiceSMO communitySpacePersonTimeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     /**
      * @param context
@@ -103,101 +104,45 @@ public class AccountPaymentBusiness implements IPaymentBusiness {
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
 
         //Assert.hasKeyAndValue(reqJson, "spaceId", "请求报文中未包含spaceId");
-        Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
-        Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
-        Assert.hasKeyAndValue(reqJson, "appointmentTime", "请求报文中未包含appointmentTime");
-        Assert.hasKeyAndValue(reqJson, "payWay", "请求报文中未包含payWay");
+        Assert.hasKeyAndValue(reqJson, "acctId", "请求报文中未包含acctId");
+        Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
-        if (!reqJson.containsKey("spaces")) {
-            throw new IllegalArgumentException("未包含 场地");
-        }
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctId(reqJson.getString("acctId"));
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
-        JSONArray spaces = reqJson.getJSONArray("spaces");
-
-        JSONArray openTimes = null;
-        BigDecimal money = new BigDecimal(0);
-        CommunitySpacePersonTimeDto communitySpaceOpenTimeDto = null;
-        List<CommunitySpacePersonTimeDto> communitySpacePersonTimeDtos = null;
-        for (int spaceIndex = 0; spaceIndex < spaces.size(); spaceIndex++) {
-            openTimes = spaces.getJSONObject(spaceIndex).getJSONArray("openTimes");
-
-            if (openTimes == null || openTimes.size() < 1) {
-                throw new IllegalArgumentException("未包含 预约时间");
-            }
-
-            CommunitySpaceDto communitySpaceDto = new CommunitySpaceDto();
-            communitySpaceDto.setSpaceId(spaces.getJSONObject(spaceIndex).getString("spaceId"));
-            List<CommunitySpaceDto> communitySpaceDtos = communitySpaceV1InnerServiceSMOImpl.queryCommunitySpaces(communitySpaceDto);
-
-            Assert.listOnlyOne(communitySpaceDtos, "场地不存在" + communitySpaceDto.getSpaceId());
-
-            int openTime = 0;
-
-            for (int timeIndex = 0; timeIndex < openTimes.size(); timeIndex++) {
-                communitySpaceOpenTimeDto = new CommunitySpacePersonTimeDto();
-                communitySpaceOpenTimeDto.setSpaceId(spaces.getJSONObject(spaceIndex).getString("spaceId"));
-                communitySpaceOpenTimeDto.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
-                communitySpaceOpenTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
-                communitySpacePersonTimeDtos = communitySpacePersonTimeV1InnerServiceSMOImpl.queryCommunitySpacePersonTimes(communitySpaceOpenTimeDto);
-                if (communitySpacePersonTimeDtos != null && communitySpacePersonTimeDtos.size() > 0) {
-                    throw new IllegalArgumentException(openTimes.getJSONObject(timeIndex).getString("hours") + "已经被预约，不能重复预约");
-                }
-                openTime += 1;
-            }
-            money = money.add(new BigDecimal(openTime).multiply(new BigDecimal(communitySpaceDtos.get(0).getFeeMoney())).setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
+        Assert.listOnlyOne(accountDtos, "账户不存在");
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
-        paymentOrderDto.setMoney(money.doubleValue());
-        paymentOrderDto.setName("预约费用");
+        paymentOrderDto.setMoney(reqJson.getDoubleValue("receivedAmount"));
+        paymentOrderDto.setName("账户充值");
 
-        reqJson.put("receivableAmount", money.doubleValue());
-        reqJson.put("receivedAmount", money.doubleValue());
+        reqJson.put("receivableAmount", reqJson.getDoubleValue("receivedAmount"));
+        reqJson.put("receivedAmount", reqJson.getDoubleValue("receivedAmount"));
         return paymentOrderDto;
     }
 
     @Override
     public void notifyPayment(PaymentOrderDto paymentOrderDto, JSONObject reqJson) {
-        JSONArray spaces = reqJson.getJSONArray("spaces");
-        JSONObject spaceObj = null;
-        for (int spaceIndex = 0; spaceIndex < spaces.size(); spaceIndex++) {
-            spaceObj = spaces.getJSONObject(spaceIndex);
-            CommunitySpacePersonPo communitySpacePersonPo = BeanConvertUtil.covertBean(reqJson, CommunitySpacePersonPo.class);
-            communitySpacePersonPo.setSpaceId(spaceObj.getString("spaceId"));
-            communitySpacePersonPo.setOrderId(paymentOrderDto.getOrderId());
-            communitySpacePersonPo.setCspId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-            if (StringUtil.isEmpty(communitySpacePersonPo.getState())) {
-                communitySpacePersonPo.setState(CommunitySpacePersonDto.STATE_W);
-            }
-            int flag = communitySpacePersonV1InnerServiceSMOImpl.saveCommunitySpacePerson(communitySpacePersonPo);
 
-            if (flag < 1) {
-                throw new CmdException("保存数据失败");
-            }
+        String acctId = reqJson.getString("acctId");
+        String receivedAmount = reqJson.getString("receivedAmount");
+        //查询 业主是否有账户
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctId(acctId);
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
-            if (!spaceObj.containsKey("openTimes")) {
-                return;
-            }
+        Assert.listOnlyOne(accountDtos, "账户不存在");
 
-            JSONArray openTimes = spaceObj.getJSONArray("openTimes");
-
-            if (openTimes == null || openTimes.size() < 1) {
-                return;
-            }
-            CommunitySpacePersonTimePo communitySpacePersonTimePo = null;
-            for (int timeIndex = 0; timeIndex < openTimes.size(); timeIndex++) {
-                communitySpacePersonTimePo = new CommunitySpacePersonTimePo();
-                communitySpacePersonTimePo.setCommunityId(communitySpacePersonPo.getCommunityId());
-                communitySpacePersonTimePo.setCspId(communitySpacePersonPo.getCspId());
-                communitySpacePersonTimePo.setHours(openTimes.getJSONObject(timeIndex).getString("hours"));
-                communitySpacePersonTimePo.setSpaceId(communitySpacePersonPo.getSpaceId());
-                communitySpacePersonTimePo.setTimeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-                communitySpacePersonTimePo.setState(CommunitySpacePersonTimeDto.STATE_WAIT_CONFIRM);
-                communitySpacePersonTimeV1InnerServiceSMOImpl.saveCommunitySpacePersonTime(communitySpacePersonTimePo);
-            }
-        }
-
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setRemark("线上充值");
+        accountDetailPo.setAmount(receivedAmount);
+        accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        accountDetailPo.setAcctId(accountDto.getAcctId());
+        accountDetailPo.setObjId(accountDtos.get(0).getObjId());
+        accountDetailPo.setObjType(accountDtos.get(0).getObjType());
+        accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
     }
 }
