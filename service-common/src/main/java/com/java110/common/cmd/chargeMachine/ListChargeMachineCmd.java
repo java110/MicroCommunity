@@ -22,8 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.common.IChargeMachineV1InnerServiceSMO;
+import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.po.chargeMachine.ChargeMachinePo;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -57,6 +60,9 @@ public class ListChargeMachineCmd extends Cmd {
     @Autowired
     private IChargeMachineV1InnerServiceSMO chargeMachineV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -74,6 +80,7 @@ public class ListChargeMachineCmd extends Cmd {
 
         if (count > 0) {
             chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
+            freshQrCodeUrl(chargeMachineDtos);
         } else {
             chargeMachineDtos = new ArrayList<>();
         }
@@ -83,5 +90,35 @@ public class ListChargeMachineCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 充电桩二维码
+     *
+     * @param chargeMachineDtos
+     */
+    private void freshQrCodeUrl(List<ChargeMachineDto> chargeMachineDtos) {
+
+        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1) {
+            return;
+        }
+
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setObjId(chargeMachineDtos.get(0).getCommunityId());
+        smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        String appId = "";
+        if (smallWeChatDtos != null || smallWeChatDtos.size() > 0) {
+            appId = smallWeChatDtos.get(0).getAppId();
+        }
+        String ownerUrl = UrlCache.getOwnerUrl();
+
+        for (ChargeMachineDto chargeMachineDto : chargeMachineDtos) {
+            chargeMachineDto.setQrCode(ownerUrl + "/#/pages/machine/machineToCharge?machineId="
+                    + chargeMachineDto.getMachineId()
+                    + "&communityId=" + chargeMachineDto.getCommunityId()
+                    + "&wAppId=" + appId
+            );
+        }
     }
 }
