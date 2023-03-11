@@ -88,6 +88,9 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
 
         String userId = context.getReqHeaders().get("user-id");
 
+        //前端车牌号输入问题处理 去除空格和小写
+        reqJson.put("carNum",reqJson.getString("carNum").trim().toUpperCase());
+
         //校验优惠券是否存在
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
@@ -141,6 +144,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         String key = this.getClass().getSimpleName() + reqJson.getString("couponId");
         int flag = 0;
         List<CouponPropertyUserDto> couponPropertyUserDtos = null;
+        int giftCount = Integer.parseInt(reqJson.getString("giftCount"));
         try {
             CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
             couponPropertyUserDto.setCouponId(reqJson.getString("couponId"));
@@ -159,7 +163,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
             }
 
             int stock = Integer.parseInt(couponPropertyUserDtos.get(0).getStock());
-            int giftCount = Integer.parseInt(reqJson.getString("giftCount"));
+
             if (stock < giftCount) {
                 throw new CmdException("优惠券不够赠送，当前数量为：" + stock);
             }
@@ -179,54 +183,55 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
 
-        //保存核销记录
-        String pccId = GenerateCodeFactory.getGeneratorId("11");
+        for(int giftIndex = 0; giftIndex < giftCount;giftIndex ++) {
+            //保存核销记录
+            String pccId = GenerateCodeFactory.getGeneratorId("11");
 
-        CouponPropertyUserDetailPo couponPropertyUserDetailPo = new CouponPropertyUserDetailPo();
-        couponPropertyUserDetailPo.setBusinessKey(pccId);
-        couponPropertyUserDetailPo.setCommunityId(reqJson.getString("communityId"));
-        couponPropertyUserDetailPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
-        couponPropertyUserDetailPo.setCouponName(couponPropertyUserDtos.get(0).getCouponName());
-        couponPropertyUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId("11"));
-        couponPropertyUserDetailPo.setDetailType(couponPropertyUserDtos.get(0).getToType());
-        couponPropertyUserDetailPo.setRemark("赠送"+reqJson.getString("carNum")+"停车券");
-        flag = couponPropertyUserDetailV1InnerServiceSMOImpl.saveCouponPropertyUserDetail(couponPropertyUserDetailPo);
-        if (flag < 1) {
-            throw new CmdException("赠送失败");
+            CouponPropertyUserDetailPo couponPropertyUserDetailPo = new CouponPropertyUserDetailPo();
+            couponPropertyUserDetailPo.setBusinessKey(pccId);
+            couponPropertyUserDetailPo.setCommunityId(reqJson.getString("communityId"));
+            couponPropertyUserDetailPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
+            couponPropertyUserDetailPo.setCouponName(couponPropertyUserDtos.get(0).getCouponName());
+            couponPropertyUserDetailPo.setUoId(GenerateCodeFactory.getGeneratorId("11"));
+            couponPropertyUserDetailPo.setDetailType(couponPropertyUserDtos.get(0).getToType());
+            couponPropertyUserDetailPo.setRemark("赠送" + reqJson.getString("carNum") + "停车券");
+            flag = couponPropertyUserDetailV1InnerServiceSMOImpl.saveCouponPropertyUserDetail(couponPropertyUserDetailPo);
+            if (flag < 1) {
+                throw new CmdException("赠送失败");
+            }
+
+            CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
+            couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
+            couponPropertyPoolConfigDto.setColumnKey("hours");
+            List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
+
+            Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
+
+            double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue()) * 60;
+            value = Math.ceil(value);
+
+            ParkingCouponCarPo parkingCouponCarPo = new ParkingCouponCarPo();
+            parkingCouponCarPo.setPccId(pccId);
+            parkingCouponCarPo.setCouponId(reqJson.getString("couponId"));
+            parkingCouponCarPo.setCouponShopId(reqJson.getString("couponId"));
+            parkingCouponCarPo.setCommunityId(reqJson.getString("communityId"));
+            parkingCouponCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A, 1));
+            parkingCouponCarPo.setPaId(reqJson.getString("paId"));
+            parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_WAIT);
+            parkingCouponCarPo.setTypeCd("1001"); // 时长赠送
+            parkingCouponCarPo.setGiveWay("4004"); //物业缴费赠送
+            parkingCouponCarPo.setValue(value + "");
+            parkingCouponCarPo.setCarNum(reqJson.getString("carNum"));
+            parkingCouponCarPo.setRemark(userDtos.get(0).getName() + "-" + userDtos.get(0).getTel() + "赠送");
+            parkingCouponCarPo.setShopId(userDtos.get(0).getUserId());
+
+            flag = parkingCouponCarV1InnerServiceSMOImpl.saveParkingCouponCar(parkingCouponCarPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
-
-        CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
-        couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
-        couponPropertyPoolConfigDto.setColumnKey("hours");
-        List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
-
-        Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
-
-        double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue()) * 60;
-        value = Math.ceil(value);
-
-        ParkingCouponCarPo parkingCouponCarPo = new ParkingCouponCarPo();
-        parkingCouponCarPo.setPccId(pccId);
-        parkingCouponCarPo.setCouponId(reqJson.getString("couponId"));
-        parkingCouponCarPo.setCouponShopId(reqJson.getString("couponId"));
-        parkingCouponCarPo.setCommunityId(reqJson.getString("communityId"));
-        parkingCouponCarPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        parkingCouponCarPo.setEndTime(DateUtil.getAddDayString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A, 1));
-        parkingCouponCarPo.setPaId(reqJson.getString("paId"));
-        parkingCouponCarPo.setState(ParkingCouponCarDto.STATE_WAIT);
-        parkingCouponCarPo.setTypeCd("1001"); // 时长赠送
-        parkingCouponCarPo.setGiveWay("4004"); //物业缴费赠送
-        parkingCouponCarPo.setValue(value + "");
-        parkingCouponCarPo.setCarNum(reqJson.getString("carNum"));
-        parkingCouponCarPo.setRemark(userDtos.get(0).getName()+"-"+userDtos.get(0).getTel()+"赠送");
-        parkingCouponCarPo.setShopId(userDtos.get(0).getUserId());
-
-        flag = parkingCouponCarV1InnerServiceSMOImpl.saveParkingCouponCar(parkingCouponCarPo);
-
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
-        }
-
         context.setResponseEntity(ResultVo.success());
 
 
