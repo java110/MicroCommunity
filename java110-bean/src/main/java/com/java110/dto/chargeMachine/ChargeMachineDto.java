@@ -33,6 +33,8 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     private String factoryName;
 
+    private String qrCode;
+
 
     public String getHeartbeatTime() {
         return heartbeatTime;
@@ -129,5 +131,13 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     public void setFactoryName(String factoryName) {
         this.factoryName = factoryName;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }
