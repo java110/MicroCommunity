@@ -18,6 +18,8 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "1001";
     public static final String STATE_FINISH = "2002";
     public static final String TO_TYPE_PARKING = "4004"; //停车券
+
+    public static final String TO_TYPE_CHARGE = "5005"; //充电劵
     public static final String TO_TYPE_BUY = "1001"; //购物券
     public static final String TO_TYPE_BUY_INNER = "1011"; //购物券
     public static final String TO_TYPE_BUY_REPAIR = "3003"; //维修券

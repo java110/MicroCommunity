@@ -1,5 +1,6 @@
 package com.java110.common.cmd.chargeMachine;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.charge.IChargeCore;
 import com.java110.core.annotation.Java110Cmd;
@@ -13,8 +14,13 @@ import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.chargeMachine.ChargeMachineDto;
 import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.couponPropertyPoolConfig.CouponPropertyPoolConfigDto;
+import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
+import com.java110.intf.acct.ICouponPropertyUserDetailV1InnerServiceSMO;
+import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineOrderAcctV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachineOrderV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
@@ -24,9 +30,11 @@ import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
 import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
+import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -63,6 +71,14 @@ public class StartChargeCmd extends Cmd {
 
     @Autowired
     private IChargeMachineOrderAcctV1InnerServiceSMO chargeMachineOrderAcctV1InnerServiceSMOImpl;
+    @Autowired
+    private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICouponPropertyUserDetailV1InnerServiceSMO couponPropertyUserDetailV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICouponPropertyPoolConfigV1InnerServiceSMO couponPropertyPoolConfigV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -125,6 +141,25 @@ public class StartChargeCmd extends Cmd {
 
         reqJson.put("acctId", accountDtos.get(0).getAcctId());
 
+        if (!reqJson.containsKey("couponIds") || StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            return;
+        }
+
+        for (String couponId : reqJson.getString("couponIds").split(",")) {
+            CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
+            couponPropertyUserDto.setCouponId(couponId);
+            couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_CHARGE);
+            couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
+
+            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
+
+            if (couponPropertyUserDtos == null || couponPropertyUserDtos.size() < 1) {
+                throw new CmdException("优惠券不存在");
+            }
+            if (!"Y".equals(couponPropertyUserDtos.get(0).getIsExpire())) {
+                throw new CmdException("优惠券已过期");
+            }
+        }
 
     }
 
@@ -200,10 +235,89 @@ public class StartChargeCmd extends Cmd {
             chargeCoreImpl.stopCharge(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0));
             throw new CmdException("充电失败");
         }
+        resultVo.setData(orderId);
 
         //扣款
-        // todo 3.0 账户扣款
+        if (!reqJson.containsKey("couponIds") || StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            // todo 3.0 账户扣款
+            withholdAccount(reqJson, chargeMachineDtos, orderId);
+            context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
+            return;
+        }
 
+        //todo 优惠券抵扣
+        withholdCoupon(reqJson, chargeMachineDtos, orderId);
+
+        context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
+    }
+
+    /**
+     * 优惠券抵扣
+     *
+     * @param reqJson
+     * @param chargeMachineDtos
+     * @param orderId
+     */
+    private void withholdCoupon(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
+        int flag;
+        double hours = 0;
+        String couponNames = "";
+        for (String couponId : reqJson.getString("couponIds").split(",")) {
+
+            CouponPropertyUserDto couponPropertyUserDto = new CouponPropertyUserDto();
+            couponPropertyUserDto.setCouponId(couponId);
+            couponPropertyUserDto.setToType(CouponPropertyUserDto.TO_TYPE_CHARGE);
+            couponPropertyUserDto.setState(CouponPropertyUserDto.STATE_WAIT);
+
+            List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
+
+            CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
+            couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
+            couponPropertyUserPo.setCommunityId(couponPropertyUserDtos.get(0).getCommunityId());
+            couponPropertyUserPo.setState(CouponPropertyUserDto.STATE_FINISH);
+            flag = couponPropertyUserV1InnerServiceSMOImpl.updateCouponPropertyUser(couponPropertyUserPo);
+            if (flag < 1) {
+                throw new CmdException("核销失败");
+            }
+
+            couponNames += ("优惠券名称：" + couponPropertyUserDtos.get(0).getCouponName() + ",优惠券编号：" + couponId + ";");
+
+            CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
+            couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
+            couponPropertyPoolConfigDto.setColumnKey("hours");
+            List<CouponPropertyPoolConfigDto> couponPropertyPoolConfigDtos = couponPropertyPoolConfigV1InnerServiceSMOImpl.queryCouponPropertyPoolConfigs(couponPropertyPoolConfigDto);
+
+            Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
+
+            double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue());
+            hours += value;
+        }
+
+        hours = Math.ceil(hours);
+
+        ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
+        chargeMachineOrderAcctPo.setAcctDetailId("-1");
+        chargeMachineOrderAcctPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
+        chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
+        chargeMachineOrderAcctPo.setOrderId(orderId);
+        chargeMachineOrderAcctPo.setAcctId(reqJson.getString("acctId"));
+        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(hours).intValue()));
+        chargeMachineOrderAcctPo.setRemark("优惠券抵扣," + couponNames);
+        chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+        chargeMachineOrderAcctPo.setEnergy("0");
+
+        chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
+    }
+
+    /**
+     * 账户抵扣
+     *
+     * @param reqJson
+     * @param chargeMachineDtos
+     * @param orderId
+     */
+    private void withholdAccount(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
         AccountDto accountDto = new AccountDto();
         accountDto.setAcctId(reqJson.getString("acctId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
@@ -229,9 +343,5 @@ public class StartChargeCmd extends Cmd {
         chargeMachineOrderAcctPo.setEnergy("0");
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
-
-        resultVo.setData(orderId);
-
-        context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
 }
