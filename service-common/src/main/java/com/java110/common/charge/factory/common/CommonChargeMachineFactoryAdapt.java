@@ -80,5 +80,6 @@ public class CommonChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
     @Override
     public void queryChargeMachineState(ChargeMachineDto chargeMachineDto) {
         chargeMachineDto.setState(ChargeMachineDto.STATE_ONLINE);
+        chargeMachineDto.setStateName("在线");
     }
 }
