@@ -20,10 +20,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.examineStaffIntroduction.ExamineStaffIntroductionDto;
 import com.java110.dto.examineStaffProject.ExamineStaffProjectDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.user.IExamineStaffIntroductionV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
 import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
@@ -66,6 +68,9 @@ public class ListExamineStaffCmd extends Cmd {
     private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
 
     @Autowired
+    private IExamineStaffIntroductionV1InnerServiceSMO examineStaffIntroductionV1InnerServiceSMOImpl;
+
+    @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
@@ -88,6 +93,8 @@ public class ListExamineStaffCmd extends Cmd {
 
             freshStaffProjects(examineStaffDtos);
             updatePhone(examineStaffDtos);
+            //刷入简介
+            updateIntroduction(examineStaffDtos);
         } else {
             examineStaffDtos = new ArrayList<>();
         }
@@ -97,6 +104,29 @@ public class ListExamineStaffCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入简介
+     * @param examineStaffDtos
+     */
+    private void updateIntroduction(List<ExamineStaffDto> examineStaffDtos) {
+
+        if(examineStaffDtos == null || examineStaffDtos.size() != 1){
+            return ;
+        }
+
+        ExamineStaffIntroductionDto examineStaffIntroductionDto = new ExamineStaffIntroductionDto();
+        examineStaffIntroductionDto.setStaffId(examineStaffDtos.get(0).getStaffId());
+        examineStaffIntroductionDto.setCommunityId(examineStaffDtos.get(0).getCommunityId());
+        List<ExamineStaffIntroductionDto> introductionDtos = examineStaffIntroductionV1InnerServiceSMOImpl.queryExamineStaffIntroductions(examineStaffIntroductionDto);
+
+        if(introductionDtos == null || introductionDtos.size() < 1){
+            return ;
+        }
+
+        examineStaffDtos.get(0).setIntroduction(introductionDtos.get(0).getIntroduction());
+
     }
 
     private boolean updatePhone(List<ExamineStaffDto> examineStaffDtos) {

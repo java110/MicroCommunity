@@ -23,15 +23,19 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IExamineStaffIntroductionV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffProjectV1InnerServiceSMO;
 import com.java110.intf.user.IExamineStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.examineStaff.ExamineStaffPo;
+import com.java110.po.examineStaffIntroduction.ExamineStaffIntroductionPo;
 import com.java110.po.examineStaffProject.ExamineStaffProjectPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -61,6 +65,13 @@ public class UpdateExamineStaffCmd extends Cmd {
 
     @Autowired
     private IExamineStaffProjectV1InnerServiceSMO examineStaffProjectV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IExamineStaffIntroductionV1InnerServiceSMO examineStaffIntroductionV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPhotoSMO photoSMOImpl;
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
@@ -118,6 +129,24 @@ public class UpdateExamineStaffCmd extends Cmd {
             examineStaffProjectV1InnerServiceSMOImpl.saveExamineStaffProject(tmpExamineStaffProjectPo);
         }
 
+        // todo save examine staff introduction
+        if (reqJson.containsKey("introduction") && !StringUtil.isEmpty(reqJson.getString("introduction"))) {
+            ExamineStaffIntroductionPo examineStaffIntroductionPo = new ExamineStaffIntroductionPo();
+            examineStaffIntroductionPo.setStaffId(reqJson.getString("staffId"));
+            examineStaffIntroductionPo.setIntroduction(reqJson.getString("introduction"));
+            examineStaffIntroductionPo.setCommunityId(reqJson.getString("communityId"));
+            examineStaffIntroductionV1InnerServiceSMOImpl.updateExamineStaffIntroduction(examineStaffIntroductionPo);
+        }
+        // todo save examine staff face image
+        if(reqJson.containsKey("headerImg")) {
+
+            photoSMOImpl.savePhoto(reqJson.getString("headerImg"),
+                    examineStaffPo.getEsId(),
+                    reqJson.getString("communityId"));
+        }
+
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+
     }
 }

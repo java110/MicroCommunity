@@ -1,6 +1,7 @@
 package com.java110.dto.examineStaffIntroduction;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,9 @@ import java.util.Date;
 public class ExamineStaffIntroductionDto extends PageDto implements Serializable {
 
     private String esiId;
-private String communityId;
-private String staffId;
-private String introduction;
+    private String communityId;
+    private String staffId;
+    private String introduction;
 
 
     private Date createTime;
@@ -28,25 +29,32 @@ private String introduction;
     public String getEsiId() {
         return esiId;
     }
-public void setEsiId(String esiId) {
+
+    public void setEsiId(String esiId) {
         this.esiId = esiId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getIntroduction() {
+
+    public String getIntroduction() {
         return introduction;
     }
-public void setIntroduction(String introduction) {
+
+    public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
 

@@ -32,6 +32,8 @@ public class ExamineStaffDto extends PageDto implements Serializable {
 
     private List<ExamineStaffProjectDto> projects;
 
+    private String introduction;
+
 
     public String getEsId() {
         return esId;
@@ -104,5 +106,13 @@ public class ExamineStaffDto extends PageDto implements Serializable {
 
     public void setHeaderImg(String headerImg) {
         this.headerImg = headerImg;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }
