@@ -334,16 +334,27 @@ public class StartChargeCmd extends Cmd {
         accountDto.setAcctId(reqJson.getString("acctId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
+        double amount = 0.0;
+        BigDecimal durationPrice = new BigDecimal(Double.parseDouble(chargeMachineDtos.get(0).getDurationPrice()));
+        if(couponDurationHours >0) {
+            durationPrice = durationPrice.multiply(new BigDecimal(durationHours - couponDurationHours)).setScale(2,BigDecimal.ROUND_HALF_UP);
+            amount = durationPrice.doubleValue();
+        }else{
+            durationPrice = durationPrice.multiply(new BigDecimal(durationHours)).setScale(2,BigDecimal.ROUND_HALF_UP);
+            amount = durationPrice.doubleValue();
+        }
+
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
         accountDetailPo.setObjId(accountDtos.get(0).getObjId());
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
-        accountDetailPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
+        accountDetailPo.setAmount(amount+"");
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
         ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
         chargeMachineOrderAcctPo.setAcctDetailId(accountDetailPo.getDetailId());
-        chargeMachineOrderAcctPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
+        chargeMachineOrderAcctPo.setAmount(amount+"");
+
         chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
         chargeMachineOrderAcctPo.setOrderId(orderId);
         chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
