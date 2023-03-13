@@ -18,6 +18,7 @@ package com.java110.intf.common;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
+import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +45,7 @@ public interface INotifyChargeV1InnerServiceSMO {
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/finishCharge", method = RequestMethod.POST)
-    ResponseEntity<String> finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
+    ResultVo finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
 
     /**
      * 设备心跳
@@ -55,12 +56,5 @@ public interface INotifyChargeV1InnerServiceSMO {
     @RequestMapping(value = "/heartbeat", method = RequestMethod.POST)
     ResponseEntity<String> heartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
 
-    /**
-     * 充电心跳
-     *
-     * @param notifyChargeOrderDto 数据对象分享
-     * @return 小区下的小区楼记录数
-     */
-    @RequestMapping(value = "/chargeHeartBeat", method = RequestMethod.POST)
-    ResponseEntity<String> chargeHeartBeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
+
 }

@@ -57,7 +57,7 @@ public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
 
     @Override
-    public ResponseEntity<String> finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
+    public ResultVo finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
 
        return chargeCoreImpl.finishCharge(notifyChargeOrderDto);
 
@@ -68,8 +68,5 @@ public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements
         return chargeCoreImpl.heartbeat(notifyChargeOrderDto);
     }
 
-    @Override
-    public ResponseEntity<String> chargeHeartBeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
-        return chargeCoreImpl.chargeHeartBeat(notifyChargeOrderDto);
-    }
+
 }

@@ -238,16 +238,17 @@ public class StartChargeCmd extends Cmd {
         }
         resultVo.setData(orderId);
 
+        double couponDurationHours = 0.0;
         //扣款
-        if (!reqJson.containsKey("couponIds") || StringUtil.isEmpty(reqJson.getString("couponIds"))) {
-            // todo 3.0 账户扣款
-            withholdAccount(reqJson, chargeMachineDtos, orderId);
-            context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
-            return;
+        if (reqJson.containsKey("couponIds") && !StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            //todo 优惠券抵扣
+            couponDurationHours = withholdCoupon(reqJson, chargeMachineDtos, orderId);
         }
 
-        //todo 优惠券抵扣
-        withholdCoupon(reqJson, chargeMachineDtos, orderId);
+        if(durationHours - couponDurationHours >0) {
+            // todo 3.0 账户扣款
+            withholdAccount(reqJson, chargeMachineDtos, orderId,durationHours,couponDurationHours);
+        }
 
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
@@ -259,7 +260,7 @@ public class StartChargeCmd extends Cmd {
      * @param chargeMachineDtos
      * @param orderId
      */
-    private void withholdCoupon(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
+    private double withholdCoupon(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
         int flag;
         double hours = 0;
         String couponNames = "";
@@ -317,6 +318,8 @@ public class StartChargeCmd extends Cmd {
         chargeMachineOrderAcctPo.setEnergy("0");
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
+
+        return hours;
     }
 
     /**
@@ -326,7 +329,7 @@ public class StartChargeCmd extends Cmd {
      * @param chargeMachineDtos
      * @param orderId
      */
-    private void withholdAccount(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
+    private void withholdAccount(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId ,double durationHours,double couponDurationHours) {
         AccountDto accountDto = new AccountDto();
         accountDto.setAcctId(reqJson.getString("acctId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
@@ -338,16 +341,19 @@ public class StartChargeCmd extends Cmd {
         accountDetailPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
-
         ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
         chargeMachineOrderAcctPo.setAcctDetailId(accountDetailPo.getDetailId());
         chargeMachineOrderAcctPo.setAmount(chargeMachineDtos.get(0).getDurationPrice());
         chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
         chargeMachineOrderAcctPo.setOrderId(orderId);
         chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
-        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), 1));
-        chargeMachineOrderAcctPo.setRemark("一小时定时扣款");
+        if(couponDurationHours >0) {
+            chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        }else{
+            chargeMachineOrderAcctPo.setStartTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(Math.ceil(couponDurationHours)).intValue()));
+        }
+        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(Math.ceil(durationHours)).intValue()));
+        chargeMachineOrderAcctPo.setRemark("账户扣款");
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
         chargeMachineOrderAcctPo.setEnergy("0");
 

@@ -6,6 +6,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.intf.common.INotifyChargeV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,8 +53,8 @@ public class NotifyCommonChargeController extends BaseController {
         notifyChargeOrderDto.setPortCode(port);
         notifyChargeOrderDto.setBodyParam(postInfo);
 
-        return notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
-
+        ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
+        return ResultVo.createResponseEntity(resultVo);
     }
 
     /**
@@ -74,28 +75,5 @@ public class NotifyCommonChargeController extends BaseController {
         return notifyChargeV1InnerServiceSMOImpl.heartbeat(notifyChargeOrderDto);
 
     }
-
-    /**
-     * <p>支付回调Api</p>
-     *
-     * @param request
-     * @throws Exception
-     */
-    @RequestMapping(path = "/{id}/{port}/event", method = RequestMethod.POST)
-    public ResponseEntity<String> chargeHeartbeat(
-            @PathVariable String id,
-            @PathVariable String port,
-            @RequestBody String postInfo,
-            HttpServletRequest request) {
-
-        NotifyChargeOrderDto notifyChargeOrderDto = new NotifyChargeOrderDto();
-        notifyChargeOrderDto.setMachineCode(id);
-        notifyChargeOrderDto.setPortCode(port);
-        notifyChargeOrderDto.setBodyParam(postInfo);
-
-        return notifyChargeV1InnerServiceSMOImpl.chargeHeartBeat(notifyChargeOrderDto);
-
-    }
-
 
 }

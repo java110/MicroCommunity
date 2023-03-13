@@ -7,6 +7,7 @@ import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
 import com.java110.intf.common.INotifyChargeV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,8 +61,14 @@ public class NotifyDingDingChargeController extends BaseController {
         notifyChargeOrderDto.setPortCode(port);
         notifyChargeOrderDto.setBodyParam(postInfo);
 
-        return notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
+        ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
 
+        if (resultVo.getCode() == ResultVo.CODE_OK) {
+            resultVo.setCode(200);
+            resultVo.setMsg("success");
+        }
+
+        return ResultVo.createResponseEntity(resultVo);
     }
 
     /**
@@ -88,34 +95,6 @@ public class NotifyDingDingChargeController extends BaseController {
         notifyChargeOrderDto.setBodyParam(postInfo);
 
         return notifyChargeV1InnerServiceSMOImpl.heartbeat(notifyChargeOrderDto);
-
-    }
-
-    /**
-     * <p>支付回调Api</p>
-     *
-     * @param request
-     * @throws Exception
-     */
-    @RequestMapping(path = "/{id}/{port}/event", method = RequestMethod.POST)
-    public ResponseEntity<String> chargeHeartbeat(
-            @PathVariable String id,
-            @PathVariable String port,
-            @RequestBody String postInfo,
-            HttpServletRequest request) {
-        if (!validateSign(request)) {
-            return new ResponseEntity<>("{\n" +
-                    "\"code\" : -1,\n" +
-                    "\"msg\" : \"鉴权失败\"\n" +
-                    "}", HttpStatus.OK);
-        }
-
-        NotifyChargeOrderDto notifyChargeOrderDto = new NotifyChargeOrderDto();
-        notifyChargeOrderDto.setMachineCode(id);
-        notifyChargeOrderDto.setPortCode(port);
-        notifyChargeOrderDto.setBodyParam(postInfo);
-
-        return notifyChargeV1InnerServiceSMOImpl.chargeHeartBeat(notifyChargeOrderDto);
 
     }
 

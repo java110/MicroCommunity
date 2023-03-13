@@ -39,9 +39,9 @@ public interface IChargeCore {
      */
     ChargeMachinePortDto getChargePortState(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto);
 
-    ResponseEntity<String> finishCharge(NotifyChargeOrderDto notifyChargeOrderDto);
+    ResultVo finishCharge(NotifyChargeOrderDto notifyChargeOrderDto);
 
     ResponseEntity<String> heartbeat(NotifyChargeOrderDto notifyChargeOrderDto);
 
-    ResponseEntity<String> chargeHeartBeat(NotifyChargeOrderDto notifyChargeOrderDto);
+
 }

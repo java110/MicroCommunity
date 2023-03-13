@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +54,7 @@ public class ChargeCoreImpl implements IChargeCore {
 
     @Autowired
     private IChargeMachineOrderAcctV1InnerServiceSMO chargeMachineOrderAcctV1InnerServiceSMOImpl;
+
 
     @Override
     public ResultVo startCharge(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String chargeType, double duration, String orderId) {
@@ -90,7 +92,71 @@ public class ChargeCoreImpl implements IChargeCore {
             throw new CmdException("厂家接口未实现");
         }
 
-        return chargeFactoryAdapt.stopCharge(chargeMachineDto, chargeMachinePortDto);
+        ResultVo resultVo = chargeFactoryAdapt.stopCharge(chargeMachineDto, chargeMachinePortDto);
+        if (resultVo.getCode() != ResultVo.CODE_OK) {
+            return resultVo;
+        }
+
+        //订单退款
+        returnOrderMoney(chargeMachineDto, chargeMachinePortDto, "用户手工结束");
+
+
+        return resultVo;
+    }
+
+    /**
+     * 订单退款
+     *
+     * @param chargeMachineDto
+     * @param chargeMachinePortDto
+     */
+    private void returnOrderMoney(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String remark) {
+        // 退款
+        ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
+        chargeMachineOrderDto.setMachineId(chargeMachineDto.getMachineId());
+        chargeMachineOrderDto.setPortId(chargeMachinePortDto.getPortId());
+        chargeMachineOrderDto.setState(ChargeMachineOrderDto.STATE_DOING);
+        List<ChargeMachineOrderDto> chargeMachineOrderDtos = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrders(chargeMachineOrderDto);
+
+        if (chargeMachineOrderDtos == null || chargeMachineOrderDtos.size() < 1) {
+            return;
+        }
+
+        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
+        chargeMachineOrderPo.setOrderId(chargeMachineOrderDtos.get(0).getOrderId());
+        chargeMachineOrderPo.setRemark(remark);
+        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
+        chargeMachineOrderPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
+        int flag = chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("修改订单失败");
+        }
+        String chargeHours = chargeMachineOrderDtos.get(0).getChargeHours();
+        if ("999".equals(chargeHours)) {
+            chargeHours = "10";
+        }
+
+        double cHours = Double.parseDouble(chargeHours);
+
+        Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
+
+        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - startTime.getTime()) / (60 * 60 * 1000));
+
+        BigDecimal freeHours = new BigDecimal(cHours).subtract(new BigDecimal(usedHours));
+
+        double returnMoney = freeHours.multiply(new BigDecimal(Double.parseDouble(chargeMachineDto.getDurationPrice()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctId(chargeMachineOrderDtos.get(0).getAcctDetailId());
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+        accountDetailPo.setObjId(accountDtos.get(0).getObjId());
+        accountDetailPo.setObjType(accountDtos.get(0).getObjType());
+        accountDetailPo.setAmount(returnMoney + "");
+        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
     }
 
     @Override
@@ -109,8 +175,14 @@ public class ChargeCoreImpl implements IChargeCore {
         return chargeFactoryAdapt.getChargePortState(chargeMachineDto, chargeMachinePortDto);
     }
 
+    /**
+     * 完成充电
+     *
+     * @param notifyChargeOrderDto
+     * @return
+     */
     @Override
-    public ResponseEntity<String> finishCharge(NotifyChargeOrderDto notifyChargeOrderDto) {
+    public ResultVo finishCharge(NotifyChargeOrderDto notifyChargeOrderDto) {
 
         // todo 生成 充电订单
         ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
@@ -130,7 +202,7 @@ public class ChargeCoreImpl implements IChargeCore {
         ChargeMachinePortDto chargeMachinePortDto = new ChargeMachinePortDto();
         chargeMachinePortDto.setMachineId(chargeMachineDtos.get(0).getMachineId());
         chargeMachinePortDto.setPortCode(notifyChargeOrderDto.getPortCode());
-        chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_FREE);
+        chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
         Assert.listOnlyOne(chargeMachinePortDtos, "插槽忙线");
 
@@ -139,10 +211,9 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachinePortPo.setState(ChargeMachinePortDto.STATE_FREE);
         chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
 
-        return new ResponseEntity<>("{\n" +
-                "\"code\" : 200,\n" +
-                "\"msg\" : \"success\"\n" +
-                "}", HttpStatus.OK);
+        returnOrderMoney(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0), notifyChargeOrderDto.getReason());
+
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override
@@ -151,142 +222,5 @@ public class ChargeCoreImpl implements IChargeCore {
                 "\"code\" : 200,\n" +
                 "\"msg\" : \"success\"\n" +
                 "}", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<String> chargeHeartBeat(NotifyChargeOrderDto notifyChargeOrderDto) {
-        ChargeMachineDto chargeMachineDto = new ChargeMachineDto();
-        chargeMachineDto.setMachineCode(notifyChargeOrderDto.getMachineCode());
-        List<ChargeMachineDto> chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
-
-        Assert.listOnlyOne(chargeMachineDtos, "充电桩 不存在");
-
-        ChargeMachineFactoryDto chargeMachineFactoryDto = new ChargeMachineFactoryDto();
-        chargeMachineFactoryDto.setFactoryId(chargeMachineDtos.get(0).getImplBean());
-        List<ChargeMachineFactoryDto> chargeMachineFactoryDtos = chargeMachineFactoryV1InnerServiceSMOImpl.queryChargeMachineFactorys(chargeMachineFactoryDto);
-
-        Assert.listOnlyOne(chargeMachineFactoryDtos, "充电桩厂家不存在");
-
-        IChargeFactoryAdapt chargeFactoryAdapt = ApplicationContextFactory.getBean(chargeMachineFactoryDtos.get(0).getBeanImpl(), IChargeFactoryAdapt.class);
-        if (chargeFactoryAdapt == null) {
-            throw new CmdException("厂家接口未实现");
-        }
-
-        List<NotifyChargePortDto> portDtos = chargeFactoryAdapt.getChargeHeartBeatParam(notifyChargeOrderDto);
-
-        for (NotifyChargePortDto notifyChargePortDto : portDtos) {
-            doDealChargePort(notifyChargePortDto, notifyChargeOrderDto, chargeMachineDtos.get(0), chargeFactoryAdapt);
-        }
-
-        return new ResponseEntity<>("{\n" +
-                "\"code\" : 200,\n" +
-                "\"msg\" : \"success\"\n" +
-                "}", HttpStatus.OK);
-    }
-
-    /**
-     * 处理充电 扣款问题
-     *
-     * @param notifyChargePortDto
-     * @param notifyChargeOrderDto
-     */
-    private void doDealChargePort(NotifyChargePortDto notifyChargePortDto,
-                                  NotifyChargeOrderDto notifyChargeOrderDto,
-                                  ChargeMachineDto chargeMachineDto,
-                                  IChargeFactoryAdapt chargeFactoryAdapt) {
-
-        String preEnergy = "0";
-        ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
-        chargeMachineOrderDto.setOrderId(notifyChargePortDto.getOrderId());
-        List<ChargeMachineOrderDto> orderDtos = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrders(chargeMachineOrderDto);
-
-        Assert.listOnlyOne(orderDtos, "订单不存在");
-        String state = ChargeMachineOrderDto.STATE_DOING;
-        if (preEnergy.equals(notifyChargePortDto.getEnergy())) {
-            state = ChargeMachineOrderDto.STATE_FINISH;
-        }
-        updateOrderState(notifyChargePortDto, state);
-
-        //todo 主动调用关闭
-        if (preEnergy.equals(notifyChargePortDto.getEnergy())) {
-            customStopCharge(notifyChargePortDto, chargeMachineDto, chargeFactoryAdapt, orderDtos);
-        }
-
-        // todo 1.0 查询上报时间是否已经 扣款，如果扣款过，那么更新 充电电量 后返回
-
-        String powerTime = DateUtil.getFormatTimeString(notifyChargePortDto.getPowerTime(), DateUtil.DATE_FORMATE_STRING_A);
-
-        ChargeMachineOrderAcctDto chargeMachineOrderAcctDto = new ChargeMachineOrderAcctDto();
-        chargeMachineOrderAcctDto.setOrderId(notifyChargeOrderDto.getOrderId());
-        chargeMachineOrderAcctDto.setPowerTime(powerTime);
-        List<ChargeMachineOrderAcctDto> chargeMachineOrderAcctDtos = chargeMachineOrderAcctV1InnerServiceSMOImpl.queryChargeMachineOrderAccts(chargeMachineOrderAcctDto);
-
-        if (chargeMachineOrderAcctDtos != null && chargeMachineOrderAcctDtos.size() > 0) {
-            return;
-        }
-
-        // todo 2.0 检查账户是否余额充足，如果余额不足，则 调用停止充电 将充电订单 修改成充电完成，并且修改备注
-
-        double price = Double.parseDouble(chargeMachineDto.getDurationPrice());
-
-        AccountDto accountDto = new AccountDto();
-        accountDto.setAcctId(orderDtos.get(0).getAcctDetailId());
-        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
-        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-
-        if (accountDtos == null || accountDtos.size() < 1) {
-            throw new CmdException("请先充值，账户金额不足");
-        }
-
-        //todo 账户金额不足，无法支付小时费用,停止充电
-        if (Double.parseDouble(accountDtos.get(0).getAmount()) < price) {
-            customStopCharge(notifyChargePortDto, chargeMachineDto, chargeFactoryAdapt, orderDtos);
-            updateOrderState(notifyChargePortDto, ChargeMachineOrderDto.STATE_FINISH);
-            return;
-        }
-
-
-        // todo 3.0 账户扣款
-        AccountDetailPo accountDetailPo = new AccountDetailPo();
-        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-        accountDetailPo.setObjId(accountDtos.get(0).getObjId());
-        accountDetailPo.setObjType(accountDtos.get(0).getObjType());
-        accountDetailPo.setAmount(price + "");
-        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
-
-        ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
-        chargeMachineOrderAcctPo.setAcctDetailId(accountDetailPo.getDetailId());
-        chargeMachineOrderAcctPo.setAmount(price + "");
-        chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
-        chargeMachineOrderAcctPo.setOrderId(notifyChargePortDto.getOrderId());
-        chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
-        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), 1));
-        chargeMachineOrderAcctPo.setRemark("一小时定时扣款");
-        chargeMachineOrderAcctPo.setCommunityId(orderDtos.get(0).getCommunityId());
-        chargeMachineOrderAcctPo.setEnergy(notifyChargePortDto.getEnergy());
-
-        chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
-
-    }
-
-    private void updateOrderState(NotifyChargePortDto notifyChargePortDto, String state) {
-        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
-        chargeMachineOrderPo.setOrderId(notifyChargePortDto.getOrderId());
-        chargeMachineOrderPo.setEnergy(notifyChargePortDto.getEnergy());
-        chargeMachineOrderPo.setState(state);
-
-        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
-    }
-
-    private void customStopCharge(NotifyChargePortDto notifyChargePortDto, ChargeMachineDto chargeMachineDto, IChargeFactoryAdapt chargeFactoryAdapt, List<ChargeMachineOrderDto> orderDtos) {
-        ChargeMachinePortDto chargeMachinePortDto = new ChargeMachinePortDto();
-        chargeMachinePortDto.setMachineId(orderDtos.get(0).getMachineId());
-        chargeMachinePortDto.setPortCode(notifyChargePortDto.getPortCode());
-        List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-        if (chargeMachinePortDtos != null && chargeMachinePortDtos.size() > 0) {
-            chargeFactoryAdapt.stopCharge(chargeMachineDto, chargeMachinePortDtos.get(0));
-        }
     }
 }

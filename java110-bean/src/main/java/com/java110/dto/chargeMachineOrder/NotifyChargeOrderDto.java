@@ -15,6 +15,8 @@ public class NotifyChargeOrderDto implements Serializable {
 
     private String bodyParam;
 
+    private String reason;
+
 
     public String getOrderId() {
         return orderId;
@@ -56,5 +58,11 @@ public class NotifyChargeOrderDto implements Serializable {
         this.bodyParam = bodyParam;
     }
 
+    public String getReason() {
+        return reason;
+    }
 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 }
