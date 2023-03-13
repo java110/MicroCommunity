@@ -19,6 +19,10 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
+/**
+ * 科航充电桩 充电完成回调
+ *
+ */
 @RestController
 @RequestMapping(path = "/app/charge/kehang")
 public class NotifyKeHangChargeController extends BaseController {

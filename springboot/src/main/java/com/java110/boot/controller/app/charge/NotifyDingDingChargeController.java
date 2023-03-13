@@ -19,6 +19,9 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
+/**
+ * 叮叮充电桩 结束充电回调处理类
+ */
 @RestController
 @RequestMapping(path = "/equipments")
 public class NotifyDingDingChargeController extends BaseController {

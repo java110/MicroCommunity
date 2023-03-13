@@ -19,17 +19,17 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
+/**
+ * 通用充电桩 充电完成回调
+ *
+ * 主要用于测试 使用
+ */
 @RestController
 @RequestMapping(path = "/app/charge")
 public class NotifyCommonChargeController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(NotifyCommonChargeController.class);
 
-    public static final String DING_DING_DOMAIN = "DING_DING_CHARGE";
-
-
-    public static final String DING_DING_APP_ID = "APP_ID";
-    public static final String DING_DING_APP_SECURE = "APP_SECURE";
     @Autowired
     private INotifyChargeV1InnerServiceSMO notifyChargeV1InnerServiceSMOImpl;
 
@@ -39,42 +39,20 @@ public class NotifyCommonChargeController extends BaseController {
      * @param request
      * @throws Exception
      */
-    @RequestMapping(path = "/{id}/{port}/finish", method = RequestMethod.POST)
+    @RequestMapping(path = "/finish", method = RequestMethod.POST)
     public ResponseEntity<String> finishCharge(
-            @PathVariable String id,
-            @PathVariable String port,
             @RequestBody String postInfo,
             HttpServletRequest request) {
 
         JSONObject param = JSONObject.parseObject(postInfo);
         NotifyChargeOrderDto notifyChargeOrderDto = new NotifyChargeOrderDto();
-        notifyChargeOrderDto.setOrderId(param.getString("chargeId"));
-        notifyChargeOrderDto.setMachineCode(id);
-        notifyChargeOrderDto.setPortCode(port);
+        notifyChargeOrderDto.setMachineCode(param.getString("machineCode"));
+        notifyChargeOrderDto.setPortCode(param.getString("portCode"));
         notifyChargeOrderDto.setBodyParam(postInfo);
         notifyChargeOrderDto.setReason(param.getString("reason"));
 
         ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
         return ResultVo.createResponseEntity(resultVo);
-    }
-
-    /**
-     * <p>支付回调Api</p>
-     *
-     * @param request
-     * @throws Exception
-     */
-    @RequestMapping(path = "/{id}/event", method = RequestMethod.POST)
-    public ResponseEntity<String> heartbeat(
-            @PathVariable String id,
-            @RequestBody String postInfo,
-            HttpServletRequest request) {
-        NotifyChargeOrderDto notifyChargeOrderDto = new NotifyChargeOrderDto();
-        notifyChargeOrderDto.setMachineCode(id);
-        notifyChargeOrderDto.setBodyParam(postInfo);
-
-        return notifyChargeV1InnerServiceSMOImpl.heartbeat(notifyChargeOrderDto);
-
     }
 
 }
