@@ -24,8 +24,7 @@ public class AppTest
     public void should()
     {
 
-       String carNum = "青agk916 ";
-
-        System.out.printf(carNum.trim().toUpperCase());
+        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - DateUtil.getDateFromStringA("2023-03-13 23:32:18").getTime()) / (60 * 60 * 1000.00));
+        System.out.printf(usedHours+"");
     }
 }

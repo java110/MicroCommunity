@@ -132,15 +132,14 @@ public class ChargeCoreImpl implements IChargeCore {
             throw new IllegalArgumentException("修改订单失败");
         }
         String chargeHours = chargeMachineOrderDtos.get(0).getChargeHours();
-        if ("999".equals(chargeHours)) {
-            chargeHours = "10";
-        }
-
         double cHours = Double.parseDouble(chargeHours);
+        if (999 == cHours) {
+            cHours = 10;
+        }
 
         Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
 
-        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - startTime.getTime()) / (60 * 60 * 1000));
+        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
 
         BigDecimal freeHours = new BigDecimal(cHours).subtract(new BigDecimal(usedHours));
 
