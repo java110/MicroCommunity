@@ -107,13 +107,13 @@ public class StopChargeCmd extends Cmd {
             return;
         }
 
-        // todo 生成 充电订单
-        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
-        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
-        chargeMachineOrderPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
-        chargeMachineOrderPo.setOrderId(orderId);
-        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
+//        // todo 生成 充电订单
+//        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
+//        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
+//        chargeMachineOrderPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+//        chargeMachineOrderPo.setOrderId(orderId);
+//        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
 
         ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
         chargeMachinePortPo.setPortId(reqJson.getString("portId"));

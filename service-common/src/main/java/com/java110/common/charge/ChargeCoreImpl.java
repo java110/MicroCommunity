@@ -97,6 +97,7 @@ public class ChargeCoreImpl implements IChargeCore {
             return resultVo;
         }
 
+
         //订单退款
         returnOrderMoney(chargeMachineDto, chargeMachinePortDto, "用户手工结束");
 
@@ -143,6 +144,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
         BigDecimal amount = new BigDecimal(Double.parseDouble(chargeMachineOrderDtos.get(0).getAmount())).subtract(new BigDecimal(returnMoney)).setScale(2, BigDecimal.ROUND_HALF_UP);
         chargeMachineOrderPo.setAmount(amount.doubleValue() + "");
+        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         chargeMachineOrderPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
         int flag = chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
         if (flag < 1) {
@@ -206,12 +208,12 @@ public class ChargeCoreImpl implements IChargeCore {
     @Override
     public ResultVo finishCharge(NotifyChargeOrderDto notifyChargeOrderDto) {
 
-        // todo 生成 充电订单
-        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
-        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
-        chargeMachineOrderPo.setOrderId(notifyChargeOrderDto.getOrderId());
-        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
+//        // todo 生成 充电订单
+//        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
+//        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
+//        chargeMachineOrderPo.setOrderId(notifyChargeOrderDto.getOrderId());
+//        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
 
         ChargeMachineDto chargeMachineDto = new ChargeMachineDto();
         chargeMachineDto.setMachineCode(notifyChargeOrderDto.getMachineCode());
@@ -226,7 +228,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachinePortDto.setPortCode(notifyChargeOrderDto.getPortCode());
         chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-        Assert.listOnlyOne(chargeMachinePortDtos, "插槽忙线");
+        Assert.listOnlyOne(chargeMachinePortDtos, "插槽空闲");
 
         ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
         chargeMachinePortPo.setPortId(chargeMachinePortDtos.get(0).getPortId());

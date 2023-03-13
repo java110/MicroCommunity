@@ -52,6 +52,7 @@ public class NotifyCommonChargeController extends BaseController {
         notifyChargeOrderDto.setMachineCode(id);
         notifyChargeOrderDto.setPortCode(port);
         notifyChargeOrderDto.setBodyParam(postInfo);
+        notifyChargeOrderDto.setReason(param.getString("reason"));
 
         ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
         return ResultVo.createResponseEntity(resultVo);
