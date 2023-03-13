@@ -21,14 +21,11 @@ public class AppTest
      * Rigorous Test :-)
      */
     @Test
-    public void shouldAnswerWithTrue()
+    public void should()
     {
 
-        double amount = Double.parseDouble("0.6600");
-        System.out.println(amount);
+       String carNum = "青agk916 ";
 
-        BigDecimal amountBig = new BigDecimal(amount);
-        amount = amountBig.subtract(new BigDecimal(Double.parseDouble("0.6"))).doubleValue();
-        System.out.println(amount);
+        System.out.printf(carNum.trim().toUpperCase());
     }
 }
