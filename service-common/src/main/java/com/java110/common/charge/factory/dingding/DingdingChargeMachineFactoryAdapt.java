@@ -18,13 +18,16 @@ import java.util.List;
 
 /**
  * 叮叮充电桩 充电接口类
- *
+ * <p>
  * 叮叮 充电桩 通知处理类名为 NotifyDingDingChargeController.java
  */
 @Service("dingdingChargeMachineFactory")
 public class DingdingChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
 
     private static final String QUERY_PORT_URL = DingdingChargeUtils.URL + "/equipments/ID/PORT";
+
+    private static final String QUERY_CHARGE_STATE_URL = DingdingChargeUtils.URL + "/equipments/code/ID";
+
 
     //开始充电
     private static final String START_CHARGE_URL = DingdingChargeUtils.URL + "/equipments/ID/PORT/open";
@@ -120,5 +123,32 @@ public class DingdingChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
         }
 
         return ports;
+    }
+
+    @Override
+    public void queryChargeMachineState(ChargeMachineDto chargeMachineDto) {
+        String url = QUERY_CHARGE_STATE_URL.replace("ID", chargeMachineDto.getMachineCode());
+
+        String paramOut = null;
+        try {
+            paramOut = DingdingChargeUtils.execute(url, "", HttpMethod.GET);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        JSONObject paramObj = JSONObject.parseObject(paramOut);
+        if (paramObj.getIntValue("code") != 200) {
+            throw new IllegalArgumentException(paramObj.getString("msg"));
+        }
+
+        Boolean online = paramObj.getJSONObject("data").getBoolean("online");
+        if (online) {
+            chargeMachineDto.setState(ChargeMachineDto.STATE_ONLINE);
+            chargeMachineDto.setStateName("在线");
+            return;
+        }
+
+        chargeMachineDto.setState(ChargeMachineDto.STATE_OFFLINE);
+        chargeMachineDto.setStateName("离线");
     }
 }

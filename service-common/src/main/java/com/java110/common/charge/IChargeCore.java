@@ -6,6 +6,8 @@ import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.vo.ResultVo;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 /**
  * 充电适配器
  */
@@ -44,4 +46,9 @@ public interface IChargeCore {
     ResponseEntity<String> heartbeat(NotifyChargeOrderDto notifyChargeOrderDto);
 
 
+    /**
+     * 查询设备状态
+     * @param chargeMachineDtos
+     */
+    void queryChargeMachineState(List<ChargeMachineDto> chargeMachineDtos);
 }

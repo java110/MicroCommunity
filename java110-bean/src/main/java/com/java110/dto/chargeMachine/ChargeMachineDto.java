@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class ChargeMachineDto extends PageDto implements Serializable {
 
+    public static final String STATE_ONLINE = "ONLINE";
+    public static final String STATE_OFFLINE = "OFFLINE";
+
     private String heartbeatTime;
     private String implBean;
     private String machineId;
@@ -35,6 +38,9 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     private String qrCode;
 
+    private String state;
+
+    private String stateName;
 
     public String getHeartbeatTime() {
         return heartbeatTime;
@@ -139,5 +145,21 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

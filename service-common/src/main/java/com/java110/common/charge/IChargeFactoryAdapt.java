@@ -47,4 +47,10 @@ public interface IChargeFactoryAdapt {
      * @return
      */
     List<NotifyChargePortDto> getChargeHeartBeatParam(NotifyChargeOrderDto notifyChargeOrderDto);
+
+    /**
+     * 查询设备状态
+     * @param chargeMachineDto
+     */
+    void queryChargeMachineState(ChargeMachineDto chargeMachineDto);
 }

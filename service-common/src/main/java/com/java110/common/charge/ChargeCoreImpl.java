@@ -247,4 +247,28 @@ public class ChargeCoreImpl implements IChargeCore {
                 "\"msg\" : \"success\"\n" +
                 "}", HttpStatus.OK);
     }
+
+    @Override
+    public void queryChargeMachineState(List<ChargeMachineDto> chargeMachineDtos) {
+
+        for(ChargeMachineDto chargeMachineDto : chargeMachineDtos) {
+            try {
+                ChargeMachineFactoryDto chargeMachineFactoryDto = new ChargeMachineFactoryDto();
+                chargeMachineFactoryDto.setFactoryId(chargeMachineDto.getImplBean());
+                List<ChargeMachineFactoryDto> chargeMachineFactoryDtos = chargeMachineFactoryV1InnerServiceSMOImpl.queryChargeMachineFactorys(chargeMachineFactoryDto);
+
+                Assert.listOnlyOne(chargeMachineFactoryDtos, "充电桩厂家不存在");
+
+                IChargeFactoryAdapt chargeFactoryAdapt = ApplicationContextFactory.getBean(chargeMachineFactoryDtos.get(0).getBeanImpl(), IChargeFactoryAdapt.class);
+                if (chargeFactoryAdapt == null) {
+                    throw new CmdException("厂家接口未实现");
+                }
+                chargeFactoryAdapt.queryChargeMachineState(chargeMachineDto);
+            }catch (Exception e){
+                e.printStackTrace();
+                chargeMachineDto.setState(ChargeMachineDto.STATE_OFFLINE);
+                chargeMachineDto.setStateName("离线");
+            }
+        }
+    }
 }

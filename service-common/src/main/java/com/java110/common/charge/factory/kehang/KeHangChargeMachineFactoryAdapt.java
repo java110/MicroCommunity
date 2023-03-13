@@ -100,6 +100,34 @@ public class KeHangChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
     }
 
     @Override
+    public void queryChargeMachineState(ChargeMachineDto chargeMachineDto) {
+        JSONObject body = new JSONObject();
+        body.put("equipCd", chargeMachineDto.getMachineCode());
+        String paramOut = null;
+        try {
+            paramOut = DingdingChargeUtils.execute("net.equip.online.que", body.toJSONString(), HttpMethod.GET);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        JSONObject paramObj = JSONObject.parseObject(paramOut);
+        if (paramObj.getIntValue("code") != 1) {
+            throw new IllegalArgumentException(paramObj.getString("msg"));
+        }
+
+        JSONObject data = paramObj.getJSONObject("data");
+
+        if(data.getBoolean("online")){
+            chargeMachineDto.setState(ChargeMachineDto.STATE_ONLINE);
+            chargeMachineDto.setStateName("在线");
+            return ;
+        }
+
+        chargeMachineDto.setState(ChargeMachineDto.STATE_OFFLINE);
+        chargeMachineDto.setStateName("离线");
+    }
+
+    @Override
     public List<NotifyChargePortDto> getChargeHeartBeatParam(NotifyChargeOrderDto notifyChargeOrderDto) {
         return null;
     }

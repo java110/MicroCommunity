@@ -76,4 +76,9 @@ public class CommonChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
 
         return ports;
     }
+
+    @Override
+    public void queryChargeMachineState(ChargeMachineDto chargeMachineDto) {
+        chargeMachineDto.setState(ChargeMachineDto.STATE_ONLINE);
+    }
 }

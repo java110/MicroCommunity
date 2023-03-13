@@ -16,6 +16,7 @@
 package com.java110.common.cmd.chargeMachine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.charge.IChargeCore;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -63,6 +64,9 @@ public class ListChargeMachineCmd extends Cmd {
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
+    @Autowired
+    private IChargeCore chargeCoreImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -81,6 +85,9 @@ public class ListChargeMachineCmd extends Cmd {
         if (count > 0) {
             chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
             freshQrCodeUrl(chargeMachineDtos);
+
+            // todo  查询设备是否在线
+            queryMachineState(chargeMachineDtos);
         } else {
             chargeMachineDtos = new ArrayList<>();
         }
@@ -90,6 +97,15 @@ public class ListChargeMachineCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryMachineState(List<ChargeMachineDto> chargeMachineDtos) {
+
+        if(chargeMachineDtos == null || chargeMachineDtos.size() < 1 || chargeMachineDtos.size() > 10){
+            return ;
+        }
+
+        chargeCoreImpl.queryChargeMachineState(chargeMachineDtos);
     }
 
     /**
