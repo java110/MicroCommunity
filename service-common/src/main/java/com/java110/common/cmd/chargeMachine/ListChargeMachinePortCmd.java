@@ -74,7 +74,7 @@ public class ListChargeMachinePortCmd extends Cmd {
             chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
 
             //调用 第三方查询 插槽状态
-            queryPortState(chargeMachinePortDtos);
+           // queryPortState(chargeMachinePortDtos);
         } else {
             chargeMachinePortDtos = new ArrayList<>();
         }
@@ -86,14 +86,14 @@ public class ListChargeMachinePortCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void queryPortState(List<ChargeMachinePortDto> chargeMachinePortDtos) {
-        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
-            return;
-
-        }
-
-        for (ChargeMachinePortDto chargeMachinePortDto : chargeMachinePortDtos) {
-            chargeMachinePortDto.setStateName("空闲");
-        }
-    }
+//    private void queryPortState(List<ChargeMachinePortDto> chargeMachinePortDtos) {
+//        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
+//            return;
+//
+//        }
+//
+//        for (ChargeMachinePortDto chargeMachinePortDto : chargeMachinePortDtos) {
+//            chargeMachinePortDto.setStateName("空闲");
+//        }
+//    }
 }
