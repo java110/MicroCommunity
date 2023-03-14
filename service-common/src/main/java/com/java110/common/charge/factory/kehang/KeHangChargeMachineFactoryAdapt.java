@@ -30,7 +30,7 @@ public class KeHangChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
         body.put("chargeId", orderId);
         String paramOut = null;
         try {
-            paramOut = DingdingChargeUtils.execute("net.equip.charge.slow.ru", body.toJSONString(), HttpMethod.GET);
+            paramOut = DingdingChargeUtils.execute("net.equip.charge.slow.run", body.toJSONString(), HttpMethod.GET);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -105,7 +105,7 @@ public class KeHangChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
         body.put("equipCd", chargeMachineDto.getMachineCode());
         String paramOut = null;
         try {
-            paramOut = DingdingChargeUtils.execute("net.equip.online.que", body.toJSONString(), HttpMethod.GET);
+            paramOut = DingdingChargeUtils.execute("net.equip.online.query", body.toJSONString(), HttpMethod.GET);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
