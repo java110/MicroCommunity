@@ -8,9 +8,9 @@
     <!-- 保存考核评分信息 add by wuxw 2018-07-03 -->
     <insert id="saveExamineStaffValueInfo" parameterType="Map">
         insert into examine_staff_value(
-        owner_name,esv_id,es_id,staff_name,owner_id,community_id,project_id,examine_value,staff_id,room_id,room_name
+        owner_name,esv_id,es_id,staff_name,owner_id,community_id,project_id,examine_value,staff_id,room_id,room_name,es_year
         ) values (
-        #{ownerName},#{esvId},#{esId},#{staffName},#{ownerId},#{communityId},#{projectId},#{examineValue},#{staffId},#{roomId},#{roomName}
+        #{ownerName},#{esvId},#{esId},#{staffName},#{ownerId},#{communityId},#{projectId},#{examineValue},#{staffId},#{roomId},#{roomName},#{esYear}
         )
     </insert>
 
