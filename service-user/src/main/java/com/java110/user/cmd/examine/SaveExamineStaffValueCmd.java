@@ -173,7 +173,7 @@ public class SaveExamineStaffValueCmd extends Cmd {
             examineStaffValueDto.setStaffId(examineStaffDtos.get(0).getStaffId());
             examineStaffValueDto.setProjectId(projects.getJSONObject(proIndex).getString("projectId"));
             List<ExamineStaffValueDto> examineStaffValueDtos = examineStaffValueV1InnerServiceSMOImpl.queryExamineStaffValues(examineStaffValueDto);
-            if(examineStaffValueDtos == null || examineStaffValueDtos.size() < 1) {
+            if (examineStaffValueDtos == null || examineStaffValueDtos.size() < 1) {
                 examineStaffValuePo = new ExamineStaffValuePo();
                 examineStaffValuePo.setExamineValue(projects.getJSONObject(proIndex).getString("value"));
                 examineStaffValuePo.setStaffId(examineStaffDtos.get(0).getStaffId());
@@ -192,16 +192,13 @@ public class SaveExamineStaffValueCmd extends Cmd {
                 if (flag < 1) {
                     throw new CmdException("保存数据失败");
                 }
-            }else {
+            } else {
                 examineStaffValuePo = new ExamineStaffValuePo();
                 examineStaffValuePo.setExamineValue(projects.getJSONObject(proIndex).getString("value"));
-                examineStaffValuePo.setEsvId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+                examineStaffValuePo.setEsvId(examineStaffValueDtos.get(0).getEsvId());
                 examineStaffValuePo.setCommunityId(examineStaffDtos.get(0).getCommunityId());
-                int flag = examineStaffValueV1InnerServiceSMOImpl.updateExamineStaffValue(examineStaffValuePo);
+                examineStaffValueV1InnerServiceSMOImpl.updateExamineStaffValue(examineStaffValuePo);
 
-                if (flag < 1) {
-                    throw new CmdException("修改数据失败");
-                }
             }
         }
 
