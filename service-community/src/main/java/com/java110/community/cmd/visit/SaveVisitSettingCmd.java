@@ -30,11 +30,14 @@ import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.po.visitSetting.VisitSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.BpmnXml;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +73,9 @@ public class SaveVisitSettingCmd extends Cmd {
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
+    @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
     @Override
@@ -91,7 +97,7 @@ public class SaveVisitSettingCmd extends Cmd {
         OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
         oaWorkflowPo.setStoreId(storeId);
         oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
-        oaWorkflowPo.setFlowName(reqJson.getString("typeName")+"审批流程");
+        oaWorkflowPo.setFlowName(reqJson.getString("typeName") + "审批流程");
         oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_VISIT);
 
         //创建model
@@ -108,14 +114,25 @@ public class SaveVisitSettingCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
 
+        //默认 流程图以防画错
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(storeId);
+        oaWorkflowXmlPo.setFlowId(oaWorkflowPo.getFlowId());
+        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId("79"));
+        oaWorkflowXmlPo.setSvgXml("");
+        oaWorkflowXmlPo.setBpmnXml(BpmnXml.getDefaultVisitBpmnXml(oaWorkflowPo.getFlowId()));
 
+        flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        if (flag < 1) {
+            throw new CmdException("保存模型数据失败");
+        }
 
         VisitSettingPo visitSettingPo = BeanConvertUtil.covertBean(reqJson, VisitSettingPo.class);
         visitSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         visitSettingPo.setFlowId(oaWorkflowPo.getFlowId());
         visitSettingPo.setFlowName(oaWorkflowPo.getFlowName());
 
-        if(!StringUtil.isEmpty(visitSettingPo.getPaId())) {
+        if (!StringUtil.isEmpty(visitSettingPo.getPaId())) {
             ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
             parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
             parkingAreaDto.setPaId(reqJson.getString("paId"));

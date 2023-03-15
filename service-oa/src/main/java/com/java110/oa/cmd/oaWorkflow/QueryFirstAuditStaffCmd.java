@@ -31,7 +31,7 @@ public class QueryFirstAuditStaffCmd extends Cmd {
     private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
 
     @Autowired
-    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
 
 
     @Override
@@ -54,7 +54,7 @@ public class QueryFirstAuditStaffCmd extends Cmd {
         List<OaWorkflowXmlDto> oaWorkflowXmlDtos = oaWorkflowXmlInnerServiceSMOImpl.queryOaWorkflowXmls(oaWorkflowXmlDto);
         Assert.listOnlyOne(oaWorkflowXmlDtos, "流程不存在");
 
-        List<JSONObject> tasks = oaWorkflowUserInnerServiceSMOImpl.queryFirstAuditStaff(oaWorkflowXmlDtos.get(0));
+        List<JSONObject> tasks = oaWorkflowActivitiInnerServiceSMOImpl.queryFirstAuditStaff(oaWorkflowXmlDtos.get(0));
 
         context.setResponseEntity(ResultVo.createResponseEntity(tasks));
 
