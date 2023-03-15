@@ -79,7 +79,7 @@
         </if>
 <!--        group by t.inout_id,t.machine_id,t.machine_code,t.car_inout,t.pa_id,t.detail_id,t.car_num,t.status_cd,t.community_id,-->
 <!--        ci.in_time ,ci.out_time ,ci.pa_id ,td.name,t.remark,pa.num ,tcfc.fee_name ,tcfc.config_id,t.create_time,t.car_type_name,td.name,t.state,t.car_type-->
-        order by t.create_time desc
+        order by t.detail_id desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
