@@ -16,6 +16,7 @@ import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -154,12 +155,12 @@ public class SyncThirdEnterpriseCmd extends Cmd {
         ownerPo.setAge("1");
         ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
         ownerPo.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
-        ownerPo.setAddress("无");
-        ownerPo.setCommunityId(DEFAULT_COMMUNITY_ID);
-        ownerPo.setIdCard(data.getString("idNo"));
-        ownerPo.setLink(data.getString("phoneNumber"));
-        ownerPo.setName(data.getString("realName"));
-        ownerPo.setRemark("通过接口新增");
+        ownerPo.setAddress(reqJson.getString("enterpriseAddress"));
+        ownerPo.setCommunityId(reqJson.getString("communityId"));
+        ownerPo.setIdCard(data.getString("creditCode"));
+        ownerPo.setLink(data.getString("contactInfo"));
+        ownerPo.setName(data.getString("enterpriseName"));
+        ownerPo.setRemark(data.getString("introduction"));
         ownerPo.setSex(data.getString("sex") == null ? "1" : "0");
         ownerPo.setState(OwnerDto.STATE_FINISH);
         ownerPo.setUserId("-1");
@@ -168,17 +169,45 @@ public class SyncThirdEnterpriseCmd extends Cmd {
             throw new CmdException("保存业主失败");
         }
 
+        saveAttr(reqJson, ownerPo, OwnerAttrDto.SPEC_CD_EXT_OWNER_ID, reqJson.getString("createBy"));
+
+        saveAttr(reqJson, ownerPo, "enterpriseArea", reqJson.getString("enterpriseArea")); // 办公面积
+        saveAttr(reqJson, ownerPo, "enterpriseAssets", reqJson.getString("enterpriseAssets")); // 企业资产
+        saveAttr(reqJson, ownerPo, "enterpriseIncome", reqJson.getString("enterpriseIncome")); // 企业收入
+        saveAttr(reqJson, ownerPo, "enterpriseMember", reqJson.getString("enterpriseMember")); // 办公人数
+        saveAttr(reqJson, ownerPo, "enterpriseOutput", reqJson.getString("enterpriseOutput")); // 企业产值
+        saveAttr(reqJson, ownerPo, "enterpriseSize", reqJson.getString("enterpriseSize")); // 企业规模
+        saveAttr(reqJson, ownerPo, "enterpriseTax", reqJson.getString("enterpriseTax")); // 企业税收
+        saveAttr(reqJson, ownerPo, "enterpriseType", reqJson.getString("enterpriseType")); // 企业类型
+        saveAttr(reqJson, ownerPo, "financingInfo", reqJson.getString("financingInfo")); // 融资信息
+        saveAttr(reqJson, ownerPo, "inTime", reqJson.getString("inTime")); // 入驻时间
+        saveAttr(reqJson, ownerPo, "industry", reqJson.getString("industry")); // 所属行业
+        saveAttr(reqJson, ownerPo, "label", reqJson.getString("label")); // 企业标签
+        saveAttr(reqJson, ownerPo, "legalPerson", reqJson.getString("legalPerson")); // 法人
+        saveAttr(reqJson, ownerPo, "scienceEnterprise", reqJson.getString("scienceEnterprise")); // 科技型企业
+        saveAttr(reqJson, ownerPo, "shopName", reqJson.getString("shopName")); // 店铺名称
+        saveAttr(reqJson, ownerPo, "superAdmin", reqJson.getString("superAdmin")); // 超级管理员号码
+        saveAttr(reqJson, ownerPo, "website", reqJson.getString("website")); // 官网地址
+        saveAttr(reqJson, ownerPo, "years", reqJson.getString("years")); // 成立年限：如1-3年
+
+        return ownerPo.getOwnerId();
+    }
+
+    private void saveAttr(JSONObject reqJson, OwnerPo ownerPo, String specCd, String value) {
+
+        if (StringUtil.isEmpty(value)) {
+            return;
+        }
         OwnerAttrPo ownerAttrPo = new OwnerAttrPo();
         ownerAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId("11"));
-        ownerAttrPo.setCommunityId(DEFAULT_COMMUNITY_ID);
-        ownerAttrPo.setValue(reqJson.getString("userId"));
+        ownerAttrPo.setCommunityId(reqJson.getString("communityId"));
+        ownerAttrPo.setValue(value);
         ownerAttrPo.setMemberId(ownerPo.getMemberId());
-        ownerAttrPo.setSpecCd(OwnerAttrDto.SPEC_CD_EXT_OWNER_ID);
-
-        flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);
+        ownerAttrPo.setSpecCd(specCd);
+        int flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);
         if (flag < 1) {
             throw new CmdException("保存业主失败");
         }
-        return ownerPo.getOwnerId();
     }
+
 }
