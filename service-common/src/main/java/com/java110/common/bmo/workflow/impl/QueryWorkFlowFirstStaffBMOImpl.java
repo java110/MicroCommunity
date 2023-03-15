@@ -417,17 +417,21 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
     //业务校验
     private void businessCheck(OaWorkflowDto oaWorkflowDto, WorkflowModelDto workflowModelDto) {
         if (OaWorkflowDto.FLOW_TYPE_VISIT.equals(oaWorkflowDto.getFlowType())) {
-            businessVisitCheck(oaWorkflowDto, workflowModelDto);
+            businessFirstAuditCheck(oaWorkflowDto, workflowModelDto);
+        }
+
+        if(OaWorkflowDto.FLOW_TYPE_OWNER_SETTLED.equals(oaWorkflowDto.getFlowType())){
+            businessFirstAuditCheck(oaWorkflowDto, workflowModelDto);
         }
     }
 
     /**
-     * 访客校验
+     * 第一审批人必须要固定
      *
      * @param oaWorkflowDto
      * @param workflowModelDto
      */
-    private void businessVisitCheck(OaWorkflowDto oaWorkflowDto, WorkflowModelDto workflowModelDto) {
+    private void businessFirstAuditCheck(OaWorkflowDto oaWorkflowDto, WorkflowModelDto workflowModelDto) {
         OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
         oaWorkflowXmlDto.setBpmnXml(workflowModelDto.getJson_xml());
         List<JSONObject> outs = oaWorkflowActivitiInnerServiceSMOImpl.queryFirstAuditStaff(oaWorkflowXmlDto);

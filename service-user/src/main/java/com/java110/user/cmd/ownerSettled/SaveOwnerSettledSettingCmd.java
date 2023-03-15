@@ -26,12 +26,15 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
 import com.java110.po.ownerSettledSetting.OwnerSettledSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.BpmnXml;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -63,6 +66,9 @@ public class SaveOwnerSettledSettingCmd extends Cmd {
     @Autowired
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "settingName", "请求报文中未包含settingName");
@@ -93,6 +99,19 @@ public class SaveOwnerSettledSettingCmd extends Cmd {
         int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        //默认 流程图以防画错
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(storeId);
+        oaWorkflowXmlPo.setFlowId(oaWorkflowPo.getFlowId());
+        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId("79"));
+        oaWorkflowXmlPo.setSvgXml("");
+        oaWorkflowXmlPo.setBpmnXml(BpmnXml.getDefaultOwnerSettledBpmnXml(oaWorkflowPo.getFlowId()));
+
+        flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        if (flag < 1) {
+            throw new CmdException("保存模型数据失败");
         }
 
         OwnerSettledSettingPo ownerSettledSettingPo = BeanConvertUtil.covertBean(reqJson, OwnerSettledSettingPo.class);
