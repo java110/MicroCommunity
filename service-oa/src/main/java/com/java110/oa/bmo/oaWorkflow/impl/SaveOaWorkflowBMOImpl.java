@@ -50,8 +50,8 @@ public class SaveOaWorkflowBMOImpl implements ISaveOaWorkflowBMO {
         oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
         int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
 
-        if (flag > 0) {
-            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag <1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
         //默认 流程图以防画错
@@ -67,7 +67,7 @@ public class SaveOaWorkflowBMOImpl implements ISaveOaWorkflowBMO {
             throw new CmdException("保存模型数据失败");
         }
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
     }
 
 }
