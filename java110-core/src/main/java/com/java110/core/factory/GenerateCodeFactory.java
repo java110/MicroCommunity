@@ -280,8 +280,12 @@ public class GenerateCodeFactory {
 
     private static String PLATFORM_CODE = "0001";
 
-    @SuppressWarnings("finally")
     public static String nextId(String idLength) {
+        return nextId(idLength,true);
+    }
+
+    @SuppressWarnings("finally")
+    public static String nextId(String idLength,boolean hasRandom) {
         LOCK.lock();
         try {
             if (lastCount == ONE_STEP) {
@@ -290,7 +294,7 @@ public class GenerateCodeFactory {
             count = lastCount++;
         } finally {
             LOCK.unlock();
-            String id = getRandom() + String.format(idLength, count);
+            String id = (hasRandom?getRandom():"") + String.format(idLength, count);
             id = id.replace("-","");
             return id;
         }
@@ -344,6 +348,19 @@ public class GenerateCodeFactory {
     public static String getGeneratorId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
+    }
+    /**
+     * pgId生成
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getDetailId(String prefix) throws GenerateCodeException {
+        if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_O) + nextId("%04d",false);
         }
         //调用服务
         return getCode(prefix);
