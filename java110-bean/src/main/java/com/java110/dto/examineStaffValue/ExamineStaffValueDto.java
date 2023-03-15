@@ -1,6 +1,7 @@
 package com.java110.dto.examineStaffValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,19 +16,26 @@ import java.util.Date;
 public class ExamineStaffValueDto extends PageDto implements Serializable {
 
     private String ownerName;
-private String esvId;
-private String esId;
-private String staffName;
-private String ownerId;
-private String communityId;
-private String projectId;
-private String examineValue;
-private String staffId;
-private String roomId;
-private String roomName;
+    private String esvId;
+    private String esId;
+    private String staffName;
+    private String ownerId;
+    private String communityId;
+    private String projectId;
+    private String examineValue;
+    private String staffId;
+    private String roomId;
+    private String roomName;
+    private String projectName;
+    private String post;
+    private String weight;
+
+    private int esYear;
 
 
     private Date createTime;
+
+
 
     private String statusCd = "0";
 
@@ -35,67 +43,88 @@ private String roomName;
     public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getEsvId() {
+
+    public String getEsvId() {
         return esvId;
     }
-public void setEsvId(String esvId) {
+
+    public void setEsvId(String esvId) {
         this.esvId = esvId;
     }
-public String getEsId() {
+
+    public String getEsId() {
         return esId;
     }
-public void setEsId(String esId) {
+
+    public void setEsId(String esId) {
         this.esId = esId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getProjectId() {
+
+    public String getProjectId() {
         return projectId;
     }
-public void setProjectId(String projectId) {
+
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
-public String getExamineValue() {
+
+    public String getExamineValue() {
         return examineValue;
     }
-public void setExamineValue(String examineValue) {
+
+    public void setExamineValue(String examineValue) {
         this.examineValue = examineValue;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getRoomName() {
+
+    public String getRoomName() {
         return roomName;
     }
-public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
 
@@ -114,5 +143,38 @@ public void setRoomName(String roomName) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public int getEsYear() {
+        return esYear;
+    }
+
+    public void setEsYear(int esYear) {
+        this.esYear = esYear;
+    }
+
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }
