@@ -306,7 +306,7 @@ public class MachineUploadCarLogCmd extends Cmd {
             carInoutDetailPo.setCarInout(CarInoutDetailDto.CAR_INOUT_OUT);
             carInoutDetailPo.setCarNum(reqJson.getString("carNum"));
             carInoutDetailPo.setCommunityId(reqJson.getString("communityId"));
-            carInoutDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            carInoutDetailPo.setDetailId(GenerateCodeFactory.getDetailId(CODE_PREFIX_ID));
             carInoutDetailPo.setInoutId("-1");
             carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
             carInoutDetailPo.setMachineId(machineDto.getMachineId());
@@ -330,7 +330,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setCarInout(CarInoutDetailDto.CAR_INOUT_OUT);
         carInoutDetailPo.setCarNum(reqJson.getString("carNum"));
         carInoutDetailPo.setCommunityId(reqJson.getString("communityId"));
-        carInoutDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        carInoutDetailPo.setDetailId(GenerateCodeFactory.getDetailId(CODE_PREFIX_ID));
         carInoutDetailPo.setInoutId(carInoutDtos.get(0).getInoutId());
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
@@ -494,7 +494,7 @@ public class MachineUploadCarLogCmd extends Cmd {
         carInoutDetailPo.setCarInout(CarInoutDetailDto.CAR_INOUT_IN);
         carInoutDetailPo.setCarNum(reqJson.getString("carNum"));
         carInoutDetailPo.setCommunityId(reqJson.getString("communityId"));
-        carInoutDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        carInoutDetailPo.setDetailId(GenerateCodeFactory.getDetailId(CODE_PREFIX_ID));
         carInoutDetailPo.setInoutId(carInoutPo.getInoutId());
         carInoutDetailPo.setMachineCode(machineDto.getMachineCode());
         carInoutDetailPo.setMachineId(machineDto.getMachineId());
