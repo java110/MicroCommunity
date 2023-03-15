@@ -21,8 +21,9 @@
         esId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id
         ownerId,t.community_id,t.community_id communityId,t.project_id,t.project_id
         projectId,t.examine_value,t.examine_value examineValue,t.staff_id,t.staff_id staffId,t.room_id,t.room_id
-        roomId,t.room_name,t.room_name roomName,t.es_year esYear
+        roomId,t.room_name,t.room_name roomName,t.es_year esYear,t.create_time createTime,ep.`name` projectName,ep.post,ep.weight
         from examine_staff_value t
+        left join examine_project ep on t.project_id = ep.project_id and ep.status_cd = '0'
         where 1 =1
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}

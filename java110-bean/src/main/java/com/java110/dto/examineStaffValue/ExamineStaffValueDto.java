@@ -26,11 +26,16 @@ public class ExamineStaffValueDto extends PageDto implements Serializable {
     private String staffId;
     private String roomId;
     private String roomName;
+    private String projectName;
+    private String post;
+    private String weight;
 
     private int esYear;
 
 
     private Date createTime;
+
+
 
     private String statusCd = "0";
 
@@ -146,5 +151,30 @@ public class ExamineStaffValueDto extends PageDto implements Serializable {
 
     public void setEsYear(int esYear) {
         this.esYear = esYear;
+    }
+
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }
