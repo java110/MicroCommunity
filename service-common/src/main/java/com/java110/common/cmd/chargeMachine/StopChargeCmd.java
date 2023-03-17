@@ -61,7 +61,6 @@ public class StopChargeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "machineId", "未包含充电桩");
         Assert.hasKeyAndValue(reqJson, "portId", "未包含插槽");
-        Assert.hasKeyAndValue(reqJson, "orderId", "未包含订单号");
 
         String userId = context.getReqHeaders().get("user-id");
         Assert.hasLength(userId, "用户不存在");
@@ -98,7 +97,6 @@ public class StopChargeCmd extends Cmd {
         chargeMachinePortDto.setPortId(reqJson.getString("portId"));
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
 
-        String orderId = reqJson.getString("orderId");
         //调用充电桩充电
         ResultVo resultVo = chargeCoreImpl.stopCharge(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0));
 
