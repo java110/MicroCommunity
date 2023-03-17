@@ -51,13 +51,14 @@ public class DingdingChargeUtils {
         httpHeaders.add("Authorization", "Bearer "
                 + getAccessToken(MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_ID),
                 MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE)));
+        httpHeaders.add("Content-Type","application/json");
         HttpEntity httpEntity = new HttpEntity(body, httpHeaders);
         ResponseEntity<String> response = null;
         try {
             response = outRestTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) {
             logger.error("请求异常", e.getResponseBodyAsString());
-            throw new IllegalArgumentException(e.getResponseBodyAsString());
+            return e.getResponseBodyAsString();
         }
 
         return response.getBody();

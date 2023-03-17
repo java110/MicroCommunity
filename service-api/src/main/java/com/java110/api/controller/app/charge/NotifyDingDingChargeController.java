@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @RestController
-@RequestMapping(path = "/equipments")
+@RequestMapping(path = "/app/equipments")
 public class NotifyDingDingChargeController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(NotifyDingDingChargeController.class);
@@ -47,7 +47,7 @@ public class NotifyDingDingChargeController extends BaseController {
             @PathVariable String port,
             @RequestBody String postInfo,
             HttpServletRequest request) {
-        if (!validateSign(request)) {
+        if (!validateSign(request, "/equipments/" + id + "/" + port + "/finish", postInfo)) {
             return new ResponseEntity<>("{\n" +
                     "\"code\" : -1,\n" +
                     "\"msg\" : \"鉴权失败\"\n" +
@@ -60,8 +60,10 @@ public class NotifyDingDingChargeController extends BaseController {
         notifyChargeOrderDto.setMachineCode(id);
         notifyChargeOrderDto.setPortCode(port);
         notifyChargeOrderDto.setBodyParam(postInfo);
+        notifyChargeOrderDto.setReason(param.getString("typeName"));
 
-        ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
+        ResultVo resultVo = null;
+        resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
 
         if (resultVo.getCode() == ResultVo.CODE_OK) {
             resultVo.setCode(200);
@@ -82,7 +84,7 @@ public class NotifyDingDingChargeController extends BaseController {
             @PathVariable String id,
             @RequestBody String postInfo,
             HttpServletRequest request) {
-        if (!validateSign(request)) {
+        if (!validateSign(request, "/equipments/" + id + "/event", postInfo)) {
             return new ResponseEntity<>("{\n" +
                     "\"code\" : -1,\n" +
                     "\"msg\" : \"鉴权失败\"\n" +
@@ -98,12 +100,12 @@ public class NotifyDingDingChargeController extends BaseController {
 
     }
 
-    private boolean validateSign(HttpServletRequest request) {
-        String appId = request.getParameter("appid");
-        String timestamp = request.getParameter("timestamp");
-        String sign = request.getParameter("sign");
+    private boolean validateSign(HttpServletRequest request, String url, String postInfo) {
+        String appId = request.getHeader("appid");
+        String timestamp = request.getHeader("timestamp");
+        String sign = request.getHeader("sign");
         String secret = MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE);
-        String data = "appid=" + appId + "&timestamp=" + timestamp;
+        String data = "appid=" + appId + "&content=" + postInfo + "&timestamp=" + timestamp + "&uri=" + url;
         SecretKey secretKey = new SecretKeySpec(secret.getBytes(), "HmacMD5");
         Mac mac = null;
         try {

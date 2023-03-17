@@ -26,7 +26,7 @@ public class DingdingChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
 
     private static final String QUERY_PORT_URL = DingdingChargeUtils.URL + "/equipments/ID/PORT";
 
-    private static final String QUERY_CHARGE_STATE_URL = DingdingChargeUtils.URL + "/equipments/code/ID";
+    private static final String QUERY_CHARGE_STATE_URL = DingdingChargeUtils.URL + "/equipments/ID";
 
 
     //开始充电
