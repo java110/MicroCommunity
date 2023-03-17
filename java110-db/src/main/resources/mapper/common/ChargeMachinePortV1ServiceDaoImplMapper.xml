@@ -44,7 +44,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        order by t.machine_id
+        order by t.port_code
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
