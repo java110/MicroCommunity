@@ -99,29 +99,22 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
         List<OwnerDto> ownerDtos = null;
         List<AccountDto> accountDtos = null;
         int count = 0;
-        if (!StringUtil.isEmpty(ownerDto.getLink()) || !StringUtil.isEmpty(ownerDto.getIdCard())) {
+        if (!StringUtil.isEmpty(ownerDto.getIdCard())) {
             //先查询业主
             ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             if (ownerDtos != null && ownerDtos.size() > 0) {
                 accountDto.setAcctName("");
                 accountDto.setObjId(ownerDtos.get(0).getMemberId());
-                count = accountInnerServiceSMOImpl.queryAccountsCount(accountDto);
-                if (count > 0) {
-                    accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-                } else {
-                    accountDtos = new ArrayList<>();
-                }
-            } else {
-                accountDtos = new ArrayList<>();
-            }
-        } else {
-            count = accountInnerServiceSMOImpl.queryAccountsCount(accountDto);
-            if (count > 0) {
-                accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-            } else {
-                accountDtos = new ArrayList<>();
             }
         }
+
+        count = accountInnerServiceSMOImpl.queryAccountsCount(accountDto);
+        if (count > 0) {
+            accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        } else {
+            accountDtos = new ArrayList<>();
+        }
+
 
         if (accountDtos == null || accountDtos.size() < 1) {
             //添加 账户
