@@ -208,7 +208,7 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
         tmpOwnerDto.setCommunityId(ownerDto.getCommunityId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
         if (ownerDtos != null && ownerDtos.size() > 0) {
-            ownerDto.setOwnerId("-1");
+            ownerDto.setOwnerId(ownerDtos.get(0).getMemberId());
             return ownerDtos.get(0).getName();
         }
 

@@ -122,6 +122,7 @@ public class AccountApi {
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
         accountDto.setAcctType(acctType);
+        accountDto.setLink(link);
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerId);
         ownerDto.setCommunityId(communityId);
