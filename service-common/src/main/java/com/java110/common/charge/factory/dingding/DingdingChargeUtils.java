@@ -51,6 +51,7 @@ public class DingdingChargeUtils {
         httpHeaders.add("Authorization", "Bearer "
                 + getAccessToken(MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_ID),
                 MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE)));
+        httpHeaders.add("Content-Type","application/json");
         HttpEntity httpEntity = new HttpEntity(body, httpHeaders);
         ResponseEntity<String> response = null;
         try {
