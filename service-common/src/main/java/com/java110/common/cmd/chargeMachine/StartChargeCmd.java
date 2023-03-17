@@ -130,6 +130,7 @@ public class StartChargeCmd extends Cmd {
         accountDto.setLink(userDtos.get(0).getTel());
         accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
         accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
+        accountDto.setPartId(reqJson.getString("communityId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
         if (accountDtos == null || accountDtos.size() < 1) {
