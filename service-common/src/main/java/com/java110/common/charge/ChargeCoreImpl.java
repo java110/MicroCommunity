@@ -162,6 +162,7 @@ public class ChargeCoreImpl implements IChargeCore {
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
         accountDetailPo.setAmount(returnMoney + "");
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        accountDetailPo.setRemark("充电退回金额-"+chargeMachineOrderDtos.get(0).getOrderId());
         accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
 
         //充电表中加入退款金额
