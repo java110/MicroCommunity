@@ -20,10 +20,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
 /**
+ * http://demo.homecommunity.cn/app/equipments/{id}/{port}/finish
+ * <p>
+ * 需要给叮叮厂家提供
+ * http://demo.homecommunity.cn/app
+ * 注意demo.homecommunity.cn 改成自己的域名
  * 叮叮充电桩 结束充电回调处理类
  */
 @RestController
-@RequestMapping(path = "/equipments")
+@RequestMapping(path = "/app/equipments")
 public class NotifyDingDingChargeController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(NotifyDingDingChargeController.class);

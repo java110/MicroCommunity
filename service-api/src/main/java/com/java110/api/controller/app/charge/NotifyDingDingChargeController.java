@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @RestController
-@RequestMapping(path = "/equipments")
+@RequestMapping(path = "/app/equipments")
 public class NotifyDingDingChargeController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(NotifyDingDingChargeController.class);
