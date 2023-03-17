@@ -107,9 +107,9 @@ public class NotifyDingDingChargeController extends BaseController {
     }
 
     private boolean validateSign(HttpServletRequest request) {
-        String appId = request.getParameter("appid");
-        String timestamp = request.getParameter("timestamp");
-        String sign = request.getParameter("sign");
+        String appId = request.getHeader("appid");
+        String timestamp = request.getHeader("timestamp");
+        String sign = request.getHeader("sign");
         String secret = MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE);
         String data = "appid=" + appId + "&timestamp=" + timestamp;
         SecretKey secretKey = new SecretKeySpec(secret.getBytes(), "HmacMD5");
