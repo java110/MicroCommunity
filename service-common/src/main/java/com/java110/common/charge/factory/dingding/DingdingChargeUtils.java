@@ -57,7 +57,7 @@ public class DingdingChargeUtils {
             response = outRestTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) {
             logger.error("请求异常", e.getResponseBodyAsString());
-            throw new IllegalArgumentException(e.getResponseBodyAsString());
+            return e.getResponseBodyAsString();
         }
 
         return response.getBody();
