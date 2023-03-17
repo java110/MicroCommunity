@@ -68,8 +68,8 @@ public class NotifyDingDingChargeController extends BaseController {
         notifyChargeOrderDto.setBodyParam(postInfo);
         notifyChargeOrderDto.setReason(param.getString("typeName"));
 
-
-        ResultVo resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
+        ResultVo resultVo = null;
+        resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);
 
         if (resultVo.getCode() == ResultVo.CODE_OK) {
             resultVo.setCode(200);

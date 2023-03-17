@@ -219,7 +219,11 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineDto.setMachineCode(notifyChargeOrderDto.getMachineCode());
         List<ChargeMachineDto> chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
 
-        Assert.listOnlyOne(chargeMachineDtos, "充电桩 不存在");
+        //Assert.listOnlyOne(chargeMachineDtos, "充电桩 不存在");
+
+        if(chargeMachineDtos == null || chargeMachineDtos.size() < 1){
+            return new ResultVo(ResultVo.CODE_OK, "成功");
+        }
 
         // todo 插槽是否空闲
 
@@ -228,7 +232,10 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachinePortDto.setPortCode(notifyChargeOrderDto.getPortCode());
         chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-        Assert.listOnlyOne(chargeMachinePortDtos, "插槽空闲");
+        //Assert.listOnlyOne(chargeMachinePortDtos, "插槽空闲");
+        if(chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1){
+            return new ResultVo(ResultVo.CODE_OK, "成功");
+        }
 
         ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
         chargeMachinePortPo.setPortId(chargeMachinePortDtos.get(0).getPortId());
