@@ -53,7 +53,7 @@ public class NotifyDingDingChargeController extends BaseController {
             @PathVariable String port,
             @RequestBody String postInfo,
             HttpServletRequest request) {
-        if (!validateSign(request)) {
+        if (!validateSign(request, "/equipments/" + id + "/" + port + "/finish", postInfo)) {
             return new ResponseEntity<>("{\n" +
                     "\"code\" : -1,\n" +
                     "\"msg\" : \"鉴权失败\"\n" +
@@ -90,7 +90,7 @@ public class NotifyDingDingChargeController extends BaseController {
             @PathVariable String id,
             @RequestBody String postInfo,
             HttpServletRequest request) {
-        if (!validateSign(request)) {
+        if (!validateSign(request, "/equipments/" + id + "/event", postInfo)) {
             return new ResponseEntity<>("{\n" +
                     "\"code\" : -1,\n" +
                     "\"msg\" : \"鉴权失败\"\n" +
@@ -106,12 +106,12 @@ public class NotifyDingDingChargeController extends BaseController {
 
     }
 
-    private boolean validateSign(HttpServletRequest request) {
+    private boolean validateSign(HttpServletRequest request, String url, String postInfo) {
         String appId = request.getHeader("appid");
         String timestamp = request.getHeader("timestamp");
         String sign = request.getHeader("sign");
         String secret = MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE);
-        String data = "appid=" + appId + "&timestamp=" + timestamp;
+        String data = "appid=" + appId + "&content=" + postInfo + "&timestamp=" + timestamp + "&uri=" + url;
         SecretKey secretKey = new SecretKeySpec(secret.getBytes(), "HmacMD5");
         Mac mac = null;
         try {
