@@ -82,7 +82,7 @@
         </if>
         GROUP BY t.order_id,t.remark,t.port_id,t.person_name,t.machine_id,t.acct_detail_id,t.person_id,
         t.charge_hours,t.start_time,t.end_time,t.state,t.person_tel,t.community_id,t.energy,t.duration_price,
-        cm.machine_name ,cm.machine_code ,cm.duration_price ,
+        cm.machine_name ,cm.machine_code  ,
         cmp.port_code ,cmp.port_name ,td.`name`
         order by t.create_time desc
         <if test="page != -1 and page != null ">
