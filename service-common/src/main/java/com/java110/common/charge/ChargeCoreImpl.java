@@ -177,6 +177,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         chargeMachineOrderPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
         chargeMachineOrderPo.setDurationPrice(durationPrice);
+        chargeMachineOrderPo.setEnergy(energy);
 
         int flag = chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
         if (flag < 1) {
@@ -214,7 +215,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderAcctPo.setOrderId(chargeMachineOrderDtos.get(0).getOrderId());
         chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
         chargeMachineOrderAcctPo.setStartTime(chargeMachineOrderDtos.get(0).getStartTime());
-
+        chargeMachineOrderAcctPo.setEnergy(energy);
         chargeMachineOrderAcctPo.setEndTime(chargeMachineOrderDtos.get(0).getEndTime());
         if (returnMoney < 0) {
             chargeMachineOrderAcctPo.setRemark("账户扣款-" + remark);
@@ -222,7 +223,7 @@ public class ChargeCoreImpl implements IChargeCore {
             chargeMachineOrderAcctPo.setRemark("账户退款-" + remark);
         }
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
-        chargeMachineOrderAcctPo.setEnergy("0");
+        //chargeMachineOrderAcctPo.setEnergy("0");
         chargeMachineOrderAcctPo.setDurationPrice(durationPrice);
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
