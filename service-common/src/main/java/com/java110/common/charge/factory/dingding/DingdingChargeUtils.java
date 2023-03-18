@@ -110,7 +110,7 @@ public class DingdingChargeUtils {
             String accessToken = responseObj.getString("token");
             long expiresIn = responseObj.getLongValue("expireTime");
             timestamp = DateUtil.getCurrentDate().getTime();
-            JWTCache.setValue(DING_DING_CHARGE_MACHINE + appId, accessToken, (int) (expiresIn - timestamp - 200));
+            JWTCache.setValue(DING_DING_CHARGE_MACHINE + appId, accessToken, (int) ((expiresIn - timestamp)/1000 - 200));
             return accessToken;
         }
         return "";
