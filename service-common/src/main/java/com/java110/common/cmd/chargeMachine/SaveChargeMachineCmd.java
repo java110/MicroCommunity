@@ -72,8 +72,7 @@ public class SaveChargeMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "machineName", "请求报文中未包含machineName");
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含machineCode");
         Assert.hasKeyAndValue(reqJson, "implBean", "请求报文中未包含implBean");
-        Assert.hasKeyAndValue(reqJson, "durationPrice", "请求报文中未包含durationPrice");
-        Assert.hasKeyAndValue(reqJson, "energyPrice", "请求报文中未包含energyPrice");
+        Assert.hasKeyAndValue(reqJson, "ruleId", "请求报文中未包含ruleId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "portCount", "请求报文中未包含portCount");
 

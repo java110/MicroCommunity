@@ -33,7 +33,7 @@ public class ChargeMachinePo implements Serializable {
     private String machineId;
     private String machineCode;
     private String energyPrice;
-    private String durationPrice;
+    private String ruleId;
     private String statusCd = "0";
     private String communityId;
     private String machineName;
@@ -78,13 +78,6 @@ public class ChargeMachinePo implements Serializable {
         this.energyPrice = energyPrice;
     }
 
-    public String getDurationPrice() {
-        return durationPrice;
-    }
-
-    public void setDurationPrice(String durationPrice) {
-        this.durationPrice = durationPrice;
-    }
 
     public String getStatusCd() {
         return statusCd;
@@ -110,5 +103,11 @@ public class ChargeMachinePo implements Serializable {
         this.machineName = machineName;
     }
 
+    public String getRuleId() {
+        return ruleId;
+    }
 
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
 }

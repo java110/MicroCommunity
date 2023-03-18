@@ -23,7 +23,9 @@ public class ChargeMachineDto extends PageDto implements Serializable {
     private String machineId;
     private String machineCode;
     private String energyPrice;
-    private String durationPrice;
+    private String ruleId;
+
+    private String ruleName;
     private String communityId;
     private String machineName;
 
@@ -82,13 +84,6 @@ public class ChargeMachineDto extends PageDto implements Serializable {
         this.energyPrice = energyPrice;
     }
 
-    public String getDurationPrice() {
-        return durationPrice;
-    }
-
-    public void setDurationPrice(String durationPrice) {
-        this.durationPrice = durationPrice;
-    }
 
     public String getCommunityId() {
         return communityId;
@@ -161,5 +156,21 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }
