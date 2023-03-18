@@ -164,10 +164,17 @@ public class ChargeCoreImpl implements IChargeCore {
         accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
         accountDetailPo.setObjId(accountDtos.get(0).getObjId());
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
-        accountDetailPo.setAmount(returnMoney + "");
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        accountDetailPo.setRemark("充电退回金额-" + chargeMachineOrderDtos.get(0).getOrderId());
-        accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
+        if(returnMoney < 0) {
+            accountDetailPo.setAmount((-1 * returnMoney) + "");
+            accountDetailPo.setRemark("充电扣款金额-" + chargeMachineOrderDtos.get(0).getOrderId());
+            accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+        }else{
+            accountDetailPo.setAmount(returnMoney + "");
+            accountDetailPo.setRemark("充电退回金额-" + chargeMachineOrderDtos.get(0).getOrderId());
+            accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
+        }
+
 
         //充电表中加入退款金额
 
@@ -181,7 +188,11 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderAcctPo.setStartTime(chargeMachineOrderDtos.get(0).getStartTime());
 
         chargeMachineOrderAcctPo.setEndTime(chargeMachineOrderDtos.get(0).getEndTime());
-        chargeMachineOrderAcctPo.setRemark("账户退款-" + remark);
+        if(returnMoney < 0) {
+            chargeMachineOrderAcctPo.setRemark("账户扣款-" + remark);
+        }else{
+            chargeMachineOrderAcctPo.setRemark("账户退款-" + remark);
+        }
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
         chargeMachineOrderAcctPo.setEnergy("0");
 
