@@ -8,9 +8,11 @@
     <!-- 保存充电桩订单信息 add by wuxw 2018-07-03 -->
     <insert id="saveChargeMachineOrderInfo" parameterType="Map">
         insert into charge_machine_order(
-        amount,order_id,remark,port_id,person_name,machine_id,acct_detail_id,person_id,charge_hours,start_time,end_time,state,person_tel,community_id,energy
+        amount,order_id,remark,port_id,person_name,machine_id,acct_detail_id,person_id,charge_hours,
+        start_time,end_time,state,person_tel,community_id,energy,duration_price
         ) values (
-        #{amount},#{orderId},#{remark},#{portId},#{personName},#{machineId},#{acctDetailId},#{personId},#{chargeHours},#{startTime},#{endTime},#{state},#{personTel},#{communityId},#{energy}
+        #{amount},#{orderId},#{remark},#{portId},#{personName},#{machineId},#{acctDetailId},#{personId},#{chargeHours},
+        #{startTime},#{endTime},#{state},#{personTel},#{communityId},#{energy},#{durationPrice}
         )
     </insert>
 
@@ -21,7 +23,7 @@
         portId,t.person_name,t.person_name personName,t.machine_id,t.machine_id
         machineId,t.acct_detail_id,t.acct_detail_id acctDetailId,t.person_id,t.person_id
         personId,t.charge_hours,t.charge_hours chargeHours,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy,
+        endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy,t.duration_price durationPrice,
         cm.machine_name machineName,cm.machine_code machineCode,cm.duration_price durationPrice,
         cmp.port_code portCode,cmp.port_name portName,td.`name` stateName,SUM(cmoa.amount) amount
         from charge_machine_order t
@@ -79,7 +81,7 @@
             and t.energy= #{energy}
         </if>
         GROUP BY t.order_id,t.remark,t.port_id,t.person_name,t.machine_id,t.acct_detail_id,t.person_id,
-        t.charge_hours,t.start_time,t.end_time,t.state,t.person_tel,t.community_id,t.energy,
+        t.charge_hours,t.start_time,t.end_time,t.state,t.person_tel,t.community_id,t.energy,t.duration_price,
         cm.machine_name ,cm.machine_code ,cm.duration_price ,
         cmp.port_code ,cmp.port_name ,td.`name`
         order by t.create_time desc
@@ -131,6 +133,9 @@
 
         <if test="energy !=null and energy != ''">
             , t.energy= #{energy}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            , t.duration_price= #{durationPrice}
         </if>
         where 1=1
         <if test="orderId !=null and orderId != ''">

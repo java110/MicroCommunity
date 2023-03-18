@@ -61,6 +61,7 @@ public class NotifyDingDingChargeController extends BaseController {
         notifyChargeOrderDto.setPortCode(port);
         notifyChargeOrderDto.setBodyParam(postInfo);
         notifyChargeOrderDto.setReason(param.getString("typeName"));
+        notifyChargeOrderDto.setEnergy(param.getString("energy"));
 
         ResultVo resultVo = null;
         resultVo = notifyChargeV1InnerServiceSMOImpl.finishCharge(notifyChargeOrderDto);

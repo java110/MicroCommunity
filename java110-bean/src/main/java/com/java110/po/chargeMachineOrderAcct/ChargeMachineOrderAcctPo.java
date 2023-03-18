@@ -40,6 +40,8 @@ public class ChargeMachineOrderAcctPo implements Serializable {
     private String communityId;
     private String energy;
 
+    private String durationPrice;
+
     public String getAmount() {
         return amount;
     }
@@ -128,5 +130,11 @@ public class ChargeMachineOrderAcctPo implements Serializable {
         this.energy = energy;
     }
 
+    public String getDurationPrice() {
+        return durationPrice;
+    }
 
+    public void setDurationPrice(String durationPrice) {
+        this.durationPrice = durationPrice;
+    }
 }

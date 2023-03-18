@@ -43,6 +43,10 @@
         <if test="minEnergyPrice !=null and minEnergyPrice != ''">
             and t.min_energy_price= #{minEnergyPrice}
         </if>
+        <if test="energy !=null and energy != ''">
+            and t.min_energy_price &lt;= #{energy}
+            and t.max_energy_price &gt; #{energy}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>

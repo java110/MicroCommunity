@@ -7,6 +7,7 @@ import com.java110.dto.chargeMachineFactory.ChargeMachineFactoryDto;
 import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeRuleFee.ChargeRuleFeeDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.*;
 import com.java110.po.accountDetail.AccountDetailPo;
@@ -53,6 +54,9 @@ public class ChargeCoreImpl implements IChargeCore {
     @Autowired
     private IChargeMachineOrderAcctV1InnerServiceSMO chargeMachineOrderAcctV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IChargeRuleFeeV1InnerServiceSMO chargeRuleFeeV1InnerServiceSMOImpl;
+
 
     @Override
     public ResultVo startCharge(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String chargeType, double duration, String orderId) {
@@ -96,8 +100,8 @@ public class ChargeCoreImpl implements IChargeCore {
         }
 
 
-        //订单退款
-        returnOrderMoney(chargeMachineDto, chargeMachinePortDto, "用户手工结束");
+        //订单退款 这里不操作，以设备 通知为主
+        // returnOrderMoney(chargeMachineDto, chargeMachinePortDto, "用户手工结束");
 
 
         return resultVo;
@@ -109,7 +113,7 @@ public class ChargeCoreImpl implements IChargeCore {
      * @param chargeMachineDto
      * @param chargeMachinePortDto
      */
-    private void returnOrderMoney(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String remark) {
+    private void returnOrderMoney(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String remark, String energy) {
         // 退款
         ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
         chargeMachineOrderDto.setMachineId(chargeMachineDto.getMachineId());
@@ -137,9 +141,31 @@ public class ChargeCoreImpl implements IChargeCore {
             usedHours = 0;
         }
 
-        BigDecimal freeHours = new BigDecimal(cHours).subtract(new BigDecimal(usedHours));
+        ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
+        chargeRuleFeeDto.setRuleId(chargeMachineDto.getRuleId());
+        chargeRuleFeeDto.setCommunityId(chargeMachineDto.getCommunityId());
+        chargeRuleFeeDto.setEnergy(energy);
+        List<ChargeRuleFeeDto> chargeRuleFeeDtos = chargeRuleFeeV1InnerServiceSMOImpl.queryChargeRuleFees(chargeRuleFeeDto);
 
-        double returnMoney = freeHours.multiply(new BigDecimal(Double.parseDouble(chargeMachineDto.getDurationPrice()))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        if (chargeRuleFeeDtos == null || chargeRuleFeeDtos.size() < 1) {
+            chargeRuleFeeDto = new ChargeRuleFeeDto();
+            chargeRuleFeeDto.setRuleId(chargeMachineDto.getRuleId());
+            chargeRuleFeeDto.setCommunityId(chargeMachineDto.getCommunityId());
+            chargeRuleFeeDtos = chargeRuleFeeV1InnerServiceSMOImpl.queryChargeRuleFees(chargeRuleFeeDto);
+
+        }
+
+        if (chargeRuleFeeDtos == null || chargeRuleFeeDtos.size() < 1) {
+            return;
+        }
+
+        String durationPrice = chargeRuleFeeDtos.get(chargeRuleFeeDtos.size() - 1).getDurationPrice();
+
+        BigDecimal usedHoursDec =  new BigDecimal(usedHours).multiply(new BigDecimal(Double.parseDouble(durationPrice))).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        BigDecimal returnMoneyDec = new BigDecimal(Double.parseDouble(chargeMachineOrderDtos.get(0).getAmount())).subtract(usedHoursDec);
+
+        double returnMoney = returnMoneyDec.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
 
         ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
@@ -150,6 +176,8 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderPo.setAmount(amount.doubleValue() + "");
         chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         chargeMachineOrderPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
+        chargeMachineOrderPo.setDurationPrice(durationPrice);
+
         int flag = chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
         if (flag < 1) {
             throw new IllegalArgumentException("修改订单失败");
@@ -165,11 +193,11 @@ public class ChargeCoreImpl implements IChargeCore {
         accountDetailPo.setObjId(accountDtos.get(0).getObjId());
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        if(returnMoney < 0) {
+        if (returnMoney < 0) {
             accountDetailPo.setAmount((-1 * returnMoney) + "");
             accountDetailPo.setRemark("充电扣款金额-" + chargeMachineOrderDtos.get(0).getOrderId());
             accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
-        }else{
+        } else {
             accountDetailPo.setAmount(returnMoney + "");
             accountDetailPo.setRemark("充电退回金额-" + chargeMachineOrderDtos.get(0).getOrderId());
             accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
@@ -188,13 +216,14 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderAcctPo.setStartTime(chargeMachineOrderDtos.get(0).getStartTime());
 
         chargeMachineOrderAcctPo.setEndTime(chargeMachineOrderDtos.get(0).getEndTime());
-        if(returnMoney < 0) {
+        if (returnMoney < 0) {
             chargeMachineOrderAcctPo.setRemark("账户扣款-" + remark);
-        }else{
+        } else {
             chargeMachineOrderAcctPo.setRemark("账户退款-" + remark);
         }
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
         chargeMachineOrderAcctPo.setEnergy("0");
+        chargeMachineOrderAcctPo.setDurationPrice(durationPrice);
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
     }
@@ -258,7 +287,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachinePortPo.setState(ChargeMachinePortDto.STATE_FREE);
         chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
 
-        returnOrderMoney(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0), notifyChargeOrderDto.getReason());
+        returnOrderMoney(chargeMachineDtos.get(0), chargeMachinePortDtos.get(0), notifyChargeOrderDto.getReason(), notifyChargeOrderDto.getEnergy());
 
         return new ResultVo(ResultVo.CODE_OK, "成功");
     }

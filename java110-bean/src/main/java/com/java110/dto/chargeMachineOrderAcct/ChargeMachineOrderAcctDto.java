@@ -33,6 +33,8 @@ public class ChargeMachineOrderAcctDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String durationPrice;
+
 
     public String getAmount() {
         return amount;
@@ -137,5 +139,13 @@ public class ChargeMachineOrderAcctDto extends PageDto implements Serializable {
 
     public void setPowerTime(String powerTime) {
         this.powerTime = powerTime;
+    }
+
+    public String getDurationPrice() {
+        return durationPrice;
+    }
+
+    public void setDurationPrice(String durationPrice) {
+        this.durationPrice = durationPrice;
     }
 }

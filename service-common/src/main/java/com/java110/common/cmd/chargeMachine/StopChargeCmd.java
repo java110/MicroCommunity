@@ -113,10 +113,11 @@ public class StopChargeCmd extends Cmd {
 //        chargeMachineOrderPo.setOrderId(orderId);
 //        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
 
-        ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
-        chargeMachinePortPo.setPortId(reqJson.getString("portId"));
-        chargeMachinePortPo.setState(ChargeMachinePortDto.STATE_FREE);
-        chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
+        //todo  这里不操作 以设备通知为主
+//        ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
+//        chargeMachinePortPo.setPortId(reqJson.getString("portId"));
+//        chargeMachinePortPo.setState(ChargeMachinePortDto.STATE_FREE);
+//        chargeMachinePortV1InnerServiceSMOImpl.updateChargeMachinePort(chargeMachinePortPo);
 
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
