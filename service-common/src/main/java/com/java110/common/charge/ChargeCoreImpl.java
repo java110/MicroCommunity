@@ -1,14 +1,11 @@
 package com.java110.common.charge;
 
-import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.chargeMachine.ChargeMachineDto;
 import com.java110.dto.chargeMachineFactory.ChargeMachineFactoryDto;
 import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargePortDto;
-import com.java110.dto.chargeMachineOrderAcct.ChargeMachineOrderAcctDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.*;
@@ -27,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -131,7 +129,13 @@ public class ChargeCoreImpl implements IChargeCore {
 
         Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
 
-        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -2); // 这里减掉两分钟，设备反应通知平台的时间
+
+        double usedHours = Math.ceil((calendar.getTime().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
+        if (usedHours < 0) {
+            usedHours = 0;
+        }
 
         BigDecimal freeHours = new BigDecimal(cHours).subtract(new BigDecimal(usedHours));
 
@@ -162,7 +166,7 @@ public class ChargeCoreImpl implements IChargeCore {
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
         accountDetailPo.setAmount(returnMoney + "");
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-        accountDetailPo.setRemark("充电退回金额-"+chargeMachineOrderDtos.get(0).getOrderId());
+        accountDetailPo.setRemark("充电退回金额-" + chargeMachineOrderDtos.get(0).getOrderId());
         accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
 
         //充电表中加入退款金额
@@ -222,7 +226,7 @@ public class ChargeCoreImpl implements IChargeCore {
 
         //Assert.listOnlyOne(chargeMachineDtos, "充电桩 不存在");
 
-        if(chargeMachineDtos == null || chargeMachineDtos.size() < 1){
+        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         }
 
@@ -234,7 +238,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
         //Assert.listOnlyOne(chargeMachinePortDtos, "插槽空闲");
-        if(chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1){
+        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         }
 
@@ -259,7 +263,7 @@ public class ChargeCoreImpl implements IChargeCore {
     @Override
     public void queryChargeMachineState(List<ChargeMachineDto> chargeMachineDtos) {
 
-        for(ChargeMachineDto chargeMachineDto : chargeMachineDtos) {
+        for (ChargeMachineDto chargeMachineDto : chargeMachineDtos) {
             try {
                 ChargeMachineFactoryDto chargeMachineFactoryDto = new ChargeMachineFactoryDto();
                 chargeMachineFactoryDto.setFactoryId(chargeMachineDto.getImplBean());
@@ -272,7 +276,7 @@ public class ChargeCoreImpl implements IChargeCore {
                     throw new CmdException("厂家接口未实现");
                 }
                 chargeFactoryAdapt.queryChargeMachineState(chargeMachineDto);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 chargeMachineDto.setState(ChargeMachineDto.STATE_OFFLINE);
                 chargeMachineDto.setStateName("离线");
