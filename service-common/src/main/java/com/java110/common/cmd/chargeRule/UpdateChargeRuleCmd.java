@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "chargeRule.updateChargeRule")
 public class UpdateChargeRuleCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateChargeRuleCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateChargeRuleCmd.class);
 
 
     @Autowired
@@ -55,7 +55,7 @@ public class UpdateChargeRuleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleId", "ruleId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ChargeRulePo chargeRulePo = BeanConvertUtil.covertBean(reqJson, ChargeRulePo.class);
+        ChargeRulePo chargeRulePo = BeanConvertUtil.covertBean(reqJson, ChargeRulePo.class);
         int flag = chargeRuleV1InnerServiceSMOImpl.updateChargeRule(chargeRulePo);
 
         if (flag < 1) {

@@ -55,7 +55,7 @@ public class SaveChargeRuleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ruleName", "请求报文中未包含ruleName");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -63,7 +63,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ChargeRulePo chargeRulePo = BeanConvertUtil.covertBean(reqJson, ChargeRulePo.class);
+        ChargeRulePo chargeRulePo = BeanConvertUtil.covertBean(reqJson, ChargeRulePo.class);
         chargeRulePo.setRuleId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = chargeRuleV1InnerServiceSMOImpl.saveChargeRule(chargeRulePo);
 
