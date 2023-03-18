@@ -1,9 +1,11 @@
 package com.java110.dto.chargeMachine;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.chargeRuleFee.ChargeRuleFeeDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -43,6 +45,8 @@ public class ChargeMachineDto extends PageDto implements Serializable {
     private String state;
 
     private String stateName;
+
+    private List<ChargeRuleFeeDto> fees;
 
     public String getHeartbeatTime() {
         return heartbeatTime;
@@ -172,5 +176,13 @@ public class ChargeMachineDto extends PageDto implements Serializable {
 
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
+    }
+
+    public List<ChargeRuleFeeDto> getFees() {
+        return fees;
+    }
+
+    public void setFees(List<ChargeRuleFeeDto> fees) {
+        this.fees = fees;
     }
 }

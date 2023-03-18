@@ -23,8 +23,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.chargeRuleFee.ChargeRuleFeeDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.common.IChargeMachineV1InnerServiceSMO;
+import com.java110.intf.common.IChargeRuleFeeV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.po.chargeMachine.ChargeMachinePo;
 import com.java110.utils.cache.UrlCache;
@@ -65,6 +67,9 @@ public class ListChargeMachineCmd extends Cmd {
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
     @Autowired
+    private IChargeRuleFeeV1InnerServiceSMO chargeRuleFeeV1InnerServiceSMOImpl;
+
+    @Autowired
     private IChargeCore chargeCoreImpl;
 
     @Override
@@ -88,6 +93,9 @@ public class ListChargeMachineCmd extends Cmd {
 
             // todo  查询设备是否在线
             queryMachineState(chargeMachineDtos);
+
+            // todo 刷入算费规则
+            queryChargeRuleFee(chargeMachineDtos);
         } else {
             chargeMachineDtos = new ArrayList<>();
         }
@@ -99,10 +107,24 @@ public class ListChargeMachineCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
+    private void queryChargeRuleFee(List<ChargeMachineDto> chargeMachineDtos) {
+        if (chargeMachineDtos == null || chargeMachineDtos.size() != 1) {
+            return;
+        }
+
+        ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
+        chargeRuleFeeDto.setRuleId(chargeMachineDtos.get(0).getRuleId());
+        chargeRuleFeeDto.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+        List<ChargeRuleFeeDto> fees = chargeRuleFeeV1InnerServiceSMOImpl.queryChargeRuleFees(chargeRuleFeeDto);
+
+        chargeMachineDtos.get(0).setFees(fees);
+
+    }
+
     private void queryMachineState(List<ChargeMachineDto> chargeMachineDtos) {
 
-        if(chargeMachineDtos == null || chargeMachineDtos.size() < 1 || chargeMachineDtos.size() > 10){
-            return ;
+        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1 || chargeMachineDtos.size() > 10) {
+            return;
         }
 
         chargeCoreImpl.queryChargeMachineState(chargeMachineDtos);
