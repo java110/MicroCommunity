@@ -24,7 +24,7 @@
         machineId,t.acct_detail_id,t.acct_detail_id acctDetailId,t.person_id,t.person_id
         personId,t.charge_hours,t.charge_hours chargeHours,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy,t.duration_price durationPrice,
-        cm.machine_name machineName,cm.machine_code machineCode,cm.duration_price durationPrice,
+        cm.machine_name machineName,cm.machine_code machineCode,
         cmp.port_code portCode,cmp.port_name portName,td.`name` stateName,SUM(cmoa.amount) amount
         from charge_machine_order t
         left join charge_machine cm on t.machine_id = cm.machine_id and cm.status_cd = '0'
