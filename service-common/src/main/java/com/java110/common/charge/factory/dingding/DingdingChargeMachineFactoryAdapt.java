@@ -5,13 +5,19 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.charge.IChargeFactoryAdapt;
 import com.java110.dto.chargeMachine.ChargeMachineDto;
+import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
 import com.java110.dto.chargeMachineOrder.NotifyChargePortDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.intf.common.IChargeMachineOrderV1InnerServiceSMO;
+import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +40,9 @@ public class DingdingChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
 
     //关闭充电
     private static final String STOP_CHARGE_URL = DingdingChargeUtils.URL + "/equipments/ID/PORT/close";
+
+    @Autowired
+    private IChargeMachineOrderV1InnerServiceSMO chargeMachineOrderV1InnerServiceSMOImpl;
 
     @Override
     public ResultVo startCharge(ChargeMachineDto chargeMachineDto, ChargeMachinePortDto chargeMachinePortDto, String chargeType, double duration, String orderId) {
@@ -150,5 +159,38 @@ public class DingdingChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
 
         chargeMachineDto.setState(ChargeMachineDto.STATE_OFFLINE);
         chargeMachineDto.setStateName("离线");
+    }
+
+    @Override
+    public void workHeartbeat(ChargeMachineDto chargeMachineDto, String bodyParam) {
+
+        JSONArray params = JSONArray.parseArray(bodyParam);
+
+        if (params == null || params.size() < 1) {
+            return;
+        }
+
+        JSONObject param = null;
+        for(int paramIndex = 0 ;paramIndex < params.size() ; paramIndex ++){
+            doWorkHeartbeat(chargeMachineDto,params.getJSONObject(paramIndex));
+        }
+
+    }
+
+
+    /**
+     * 工作心跳
+     * @param chargeMachineDto
+     * @param param
+     */
+    private void doWorkHeartbeat(ChargeMachineDto chargeMachineDto, JSONObject param) {
+
+        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
+        chargeMachineOrderPo.setOrderId(param.getString("chargeId"));
+
+        chargeMachineOrderPo.setCommunityId(chargeMachineDto.getCommunityId());
+        chargeMachineOrderPo.setEnergy(param.getString("energy"));
+
+        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
     }
 }

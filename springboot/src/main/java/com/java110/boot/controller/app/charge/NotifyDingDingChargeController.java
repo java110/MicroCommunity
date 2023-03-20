@@ -19,14 +19,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
-/**
- * http://demo.homecommunity.cn/app/equipments/{id}/{port}/finish
- * <p>
- * 需要给叮叮厂家提供
- * http://demo.homecommunity.cn/app
- * 注意demo.homecommunity.cn 改成自己的域名
- * 叮叮充电桩 结束充电回调处理类
- */
 @RestController
 @RequestMapping(path = "/app/equipments")
 public class NotifyDingDingChargeController extends BaseController {
@@ -42,7 +34,7 @@ public class NotifyDingDingChargeController extends BaseController {
     private INotifyChargeV1InnerServiceSMO notifyChargeV1InnerServiceSMOImpl;
 
     /**
-     * <p>支付回调Api</p>
+     * <p>充电结束通知</p>
      *
      * @param request
      * @throws Exception
@@ -86,25 +78,29 @@ public class NotifyDingDingChargeController extends BaseController {
      * @param request
      * @throws Exception
      */
-    @RequestMapping(path = "/{id}/event", method = RequestMethod.POST)
-    public ResponseEntity<String> heartbeat(
+    @RequestMapping(path = "/{id}/power", method = RequestMethod.POST)
+    public ResponseEntity<String> workHeartbeat(
             @PathVariable String id,
             @RequestBody String postInfo,
             HttpServletRequest request) {
-        if (!validateSign(request, "/equipments/" + id + "/event", postInfo)) {
+        if (!validateSign(request, "/equipments/" + id + "/power", postInfo)) {
             return new ResponseEntity<>("{\n" +
                     "\"code\" : -1,\n" +
                     "\"msg\" : \"鉴权失败\"\n" +
                     "}", HttpStatus.OK);
         }
 
-        JSONObject param = JSONObject.parseObject(postInfo);
         NotifyChargeOrderDto notifyChargeOrderDto = new NotifyChargeOrderDto();
         notifyChargeOrderDto.setMachineCode(id);
         notifyChargeOrderDto.setBodyParam(postInfo);
+        ResultVo resultVo = null;
+        resultVo = notifyChargeV1InnerServiceSMOImpl.workHeartbeat(notifyChargeOrderDto);
+        if (resultVo.getCode() == ResultVo.CODE_OK) {
+            resultVo.setCode(200);
+            resultVo.setMsg("success");
+        }
 
-        return notifyChargeV1InnerServiceSMOImpl.heartbeat(notifyChargeOrderDto);
-
+        return ResultVo.createResponseEntity(resultVo);
     }
 
     private boolean validateSign(HttpServletRequest request, String url, String postInfo) {

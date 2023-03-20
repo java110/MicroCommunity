@@ -53,4 +53,11 @@ public interface IChargeFactoryAdapt {
      * @param chargeMachineDto
      */
     void queryChargeMachineState(ChargeMachineDto chargeMachineDto);
+
+    /**
+     * 工作心跳
+     * @param chargeMachineDto
+     * @param bodyParam
+     */
+    void workHeartbeat(ChargeMachineDto chargeMachineDto, String bodyParam);
 }

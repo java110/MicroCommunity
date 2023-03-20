@@ -53,8 +53,8 @@ public interface INotifyChargeV1InnerServiceSMO {
      * @param notifyChargeOrderDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/heartbeat", method = RequestMethod.POST)
-    ResponseEntity<String> heartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
+    @RequestMapping(value = "/workHeartbeat", method = RequestMethod.POST)
+    ResultVo workHeartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto);
 
 
 }

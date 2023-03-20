@@ -294,11 +294,32 @@ public class ChargeCoreImpl implements IChargeCore {
     }
 
     @Override
-    public ResponseEntity<String> heartbeat(NotifyChargeOrderDto notifyChargeOrderDto) {
-        return new ResponseEntity<>("{\n" +
-                "\"code\" : 200,\n" +
-                "\"msg\" : \"success\"\n" +
-                "}", HttpStatus.OK);
+    public ResultVo workHeartbeat(NotifyChargeOrderDto notifyChargeOrderDto) {
+
+        ChargeMachineDto chargeMachineDto = new ChargeMachineDto();
+        chargeMachineDto.setMachineCode(notifyChargeOrderDto.getMachineCode());
+        List<ChargeMachineDto> chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
+
+        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1) {
+            return new ResultVo(ResultVo.CODE_OK, "成功");
+        }
+
+
+        ChargeMachineFactoryDto chargeMachineFactoryDto = new ChargeMachineFactoryDto();
+        chargeMachineFactoryDto.setFactoryId(chargeMachineDtos.get(0).getImplBean());
+        List<ChargeMachineFactoryDto> chargeMachineFactoryDtos = chargeMachineFactoryV1InnerServiceSMOImpl.queryChargeMachineFactorys(chargeMachineFactoryDto);
+
+        Assert.listOnlyOne(chargeMachineFactoryDtos, "充电桩厂家不存在");
+
+        IChargeFactoryAdapt chargeFactoryAdapt = ApplicationContextFactory.getBean(chargeMachineFactoryDtos.get(0).getBeanImpl(), IChargeFactoryAdapt.class);
+        if (chargeFactoryAdapt == null) {
+            throw new CmdException("厂家接口未实现");
+        }
+
+        chargeFactoryAdapt.workHeartbeat(chargeMachineDtos.get(0),notifyChargeOrderDto.getBodyParam());
+
+        return new ResultVo(ResultVo.CODE_OK, "成功");
+
     }
 
     @Override

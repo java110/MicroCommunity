@@ -82,4 +82,9 @@ public class CommonChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
         chargeMachineDto.setState(ChargeMachineDto.STATE_ONLINE);
         chargeMachineDto.setStateName("在线");
     }
+
+    @Override
+    public void workHeartbeat(ChargeMachineDto chargeMachineDto, String bodyParam) {
+
+    }
 }
