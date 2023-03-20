@@ -123,6 +123,10 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //赠送金额
     private String giftAmount;
 
+
+    //账户抵扣金额
+    private String withholdAmount;
+
     //收费率
     private String chargeRate;
 
@@ -759,5 +763,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setUnitIds(String[] unitIds) {
         this.unitIds = unitIds;
+    }
+
+    public String getWithholdAmount() {
+        return withholdAmount;
+    }
+
+    public void setWithholdAmount(String withholdAmount) {
+        this.withholdAmount = withholdAmount;
     }
 }

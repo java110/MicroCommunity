@@ -1730,7 +1730,8 @@
         importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
         ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,cb.o_id oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
-        t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName
+        t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName,
+        fad.amount withholdAmount
         from pay_fee_detail t
         left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1755,7 +1756,9 @@
         "state"
         LEFT JOIN contract co on pf.payer_obj_id = co.contract_id and co.status_cd = '0' and pf.payer_obj_type='7777'
         LEFT JOIN c_business cb on t.b_id = cb.b_id
-        where t.status_cd = '0'  and pf.status_cd = '0'
+        left join fee_account_detail fad on t.detail_id = fad.detail_id and t.community_id = fad.community_id and fad.status_cd = '0' and fad.state = '1002'
+        where t.status_cd = '0'
+        and pf.status_cd = '0'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>

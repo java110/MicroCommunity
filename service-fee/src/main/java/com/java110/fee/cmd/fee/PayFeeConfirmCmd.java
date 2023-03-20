@@ -32,6 +32,7 @@ import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.couponUser.CouponUserPo;
 import com.java110.po.couponUserDetail.CouponUserDetailPo;
+import com.java110.po.feeAccountDetail.FeeAccountDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
@@ -103,6 +104,9 @@ public class PayFeeConfirmCmd extends Cmd {
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
+
     //默认序列
     protected static final int DEFAULT_SEQ = 1;
 
@@ -129,11 +133,11 @@ public class PayFeeConfirmCmd extends Cmd {
             paramObj.put("primeRate", "6");
             paramObj.put("remark", "线上小程序支付");
         }
+        paramObj.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
 
         //处理现金账户
         dealAccount(paramObj);
 
-        paramObj.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
 
         //处理 优惠折扣
         addDiscount(paramObj);
@@ -287,6 +291,18 @@ public class PayFeeConfirmCmd extends Cmd {
             throw new CmdException("账户金额不足");
         }
 
+        // 现金账户扣款记录，生成抵扣明细记录
+        FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+        feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+        feeAccountDetailPo.setDetailId(paramObj.getString("detailId"));
+        feeAccountDetailPo.setCommunityId(paramObj.getString("communityId"));
+        feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+        feeAccountDetailPo.setAmount(paramObj.getDouble("deductionAmount") + ""); //现金抵扣金额
+        feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+//        BigDecimal receivedAmountDec = new BigDecimal(payFeeDetailPo.getReceivedAmount());
+//        receivedAmountDec = receivedAmountDec.subtract(cashSum);
+//        payFeeDetailPo.setReceivedAmount(receivedAmountDec.doubleValue() + "");
+
         paramObj.put("remark", paramObj.getString("remark") + "-现金账户抵扣" + paramObj.getDouble("deductionAmount") + "元");
 
     }
@@ -391,8 +407,8 @@ public class PayFeeConfirmCmd extends Cmd {
         }
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
             //后付费 或者信用期车辆 加一个月
-            if(FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
-                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())){
+            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
+                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())) {
                 endTimeCalendar = Calendar.getInstance();
                 endTimeCalendar.setTime(feeEndTime);
                 endTimeCalendar.add(Calendar.MONTH, 1);
