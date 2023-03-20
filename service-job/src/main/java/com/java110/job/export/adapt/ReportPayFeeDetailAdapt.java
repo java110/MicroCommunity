@@ -62,7 +62,7 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt{
         row.createCell(17).setCellValue("空置房减免金额");
         row.createCell(18).setCellValue("面积");
         row.createCell(19).setCellValue("车位");
-
+        row.createCell(20).setCellValue("账户抵扣");
 
         JSONObject reqJson = exportDataDto.getReqJson();
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson,ReportFeeMonthStatisticsDto.class);
@@ -130,6 +130,8 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt{
             row.createCell(17).setCellValue(dataObj.getDouble("vacantHousingReduction"));
             row.createCell(18).setCellValue(dataObj.getString("builtUpArea"));
             row.createCell(19).setCellValue(dataObj.getString("psName"));
+            row.createCell(20).setCellValue(dataObj.getString("withholdAmount"));
+
         }
     }
 }
