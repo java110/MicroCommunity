@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeAttrDto;
@@ -170,7 +171,9 @@ public class PayBatchFeeCmd extends Cmd {
 
     private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext) throws Exception {
         paramObj.put("communityId", communityId);
-        //添加单元信息
+        //获取订单ID
+        String oId = Java110TransactionalFactory.getOId();
+
         //开始锁代码
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
@@ -179,7 +182,10 @@ public class PayBatchFeeCmd extends Cmd {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
-            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+            if(StringUtil.isEmpty(oId)){
+                oId = payFeeDetailPo.getDetailId();
+            }
+            payFeeDetailPo.setPayOrderId(oId);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

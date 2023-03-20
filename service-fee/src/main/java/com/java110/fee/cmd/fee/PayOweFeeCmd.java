@@ -9,6 +9,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.app.AppDto;
@@ -355,7 +356,11 @@ public class PayOweFeeCmd extends Cmd {
         if (paramInJson.containsKey("oId")) {
             payFeeDetailPo.setPayOrderId(paramInJson.getString("oId"));
         } else {
-            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+            String oId = Java110TransactionalFactory.getOId();
+            if(StringUtil.isEmpty(oId)){
+                oId = payFeeDetailPo.getDetailId();
+            }
+            payFeeDetailPo.setPayOrderId(oId);
 
         }
 

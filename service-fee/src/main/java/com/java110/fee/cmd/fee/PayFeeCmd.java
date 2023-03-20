@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
@@ -208,7 +209,12 @@ public class PayFeeCmd extends Cmd {
             // todo 处理用户账户
             dealUserAccount(paramObj, payFeeDetailPo);
 
-            payFeeDetailPo.setPayOrderId(payFeeDetailPo.getDetailId());
+            String oId = Java110TransactionalFactory.getOId();
+            if(StringUtil.isEmpty(oId)){
+                oId = payFeeDetailPo.getDetailId();
+            }
+
+            payFeeDetailPo.setPayOrderId(oId);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
