@@ -128,6 +128,11 @@ public class KeHangChargeMachineFactoryAdapt implements IChargeFactoryAdapt {
     }
 
     @Override
+    public void workHeartbeat(ChargeMachineDto chargeMachineDto, String bodyParam) {
+
+    }
+
+    @Override
     public List<NotifyChargePortDto> getChargeHeartBeatParam(NotifyChargeOrderDto notifyChargeOrderDto) {
         return null;
     }

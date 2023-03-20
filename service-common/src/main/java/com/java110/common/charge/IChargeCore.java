@@ -43,7 +43,7 @@ public interface IChargeCore {
 
     ResultVo finishCharge(NotifyChargeOrderDto notifyChargeOrderDto);
 
-    ResponseEntity<String> heartbeat(NotifyChargeOrderDto notifyChargeOrderDto);
+    ResultVo workHeartbeat(NotifyChargeOrderDto notifyChargeOrderDto);
 
 
     /**

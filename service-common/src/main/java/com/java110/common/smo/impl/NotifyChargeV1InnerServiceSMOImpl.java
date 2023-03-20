@@ -64,8 +64,8 @@ public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements
     }
 
     @Override
-    public ResponseEntity<String> heartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
-        return chargeCoreImpl.heartbeat(notifyChargeOrderDto);
+    public ResultVo workHeartbeat(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
+        return chargeCoreImpl.workHeartbeat(notifyChargeOrderDto);
     }
 
 
