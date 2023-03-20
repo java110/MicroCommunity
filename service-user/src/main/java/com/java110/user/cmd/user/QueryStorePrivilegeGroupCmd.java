@@ -9,7 +9,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
-import com.java110.intf.user.IPrivilegeGroupV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;

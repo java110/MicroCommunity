@@ -21,8 +21,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.scheduleClasses.ScheduleClassesDto;
+import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
 import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
+import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
@@ -37,6 +39,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -64,48 +68,52 @@ public class DeleteScheduleClassesCmd extends Cmd {
     @Autowired
     private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scheduleId", "scheduleId不能为空");
-
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
         scheduleClassesStaffDto.setScheduleId(reqJson.getString("scheduleId"));
         int count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);
-        if(count> 0){
+        if (count > 0) {
             throw new CmdException("请先解除人员再删除");
         }
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
+        ScheduleClassesDto scheduleClassesDto = new ScheduleClassesDto();
+        scheduleClassesDto.setScheduleId(reqJson.getString("scheduleId"));
+        List<ScheduleClassesDto> scheduleClassesDtos = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassess(scheduleClassesDto);
+        Assert.listOnlyOne(scheduleClassesDtos, "查询排班信息错误！");
         ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
         int flag = scheduleClassesV1InnerServiceSMOImpl.deleteScheduleClasses(scheduleClassesPo);
-
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
-
-        ScheduleClassesDayPo scheduleClassesDayPo = new ScheduleClassesDayPo();
-        scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
-        flag = scheduleClassesDayV1InnerServiceSMOImpl.deleteScheduleClassesDay(scheduleClassesDayPo);
-
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+        ScheduleClassesDayDto scheduleClassesDayDto = new ScheduleClassesDayDto();
+        scheduleClassesDayDto.setScheduleId(scheduleClassesDtos.get(0).getScheduleId());
+        List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
+        if (scheduleClassesDayDtos != null && scheduleClassesDayDtos.size() == 1) {
+            ScheduleClassesDayPo scheduleClassesDayPo = new ScheduleClassesDayPo();
+            scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
+            flag = scheduleClassesDayV1InnerServiceSMOImpl.deleteScheduleClassesDay(scheduleClassesDayPo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
-
-        ScheduleClassesTimePo scheduleClassesTimePo = new ScheduleClassesTimePo();
-        scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
-        flag = scheduleClassesTimeV1InnerServiceSMOImpl.deleteScheduleClassesTime(scheduleClassesTimePo);
-
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+        ScheduleClassesTimeDto scheduleClassesTimeDto = new ScheduleClassesTimeDto();
+        scheduleClassesTimeDto.setScheduleId(scheduleClassesDtos.get(0).getScheduleId());
+        scheduleClassesTimeDto.setDayId(scheduleClassesDayDtos.get(0).getDayId());
+        List<ScheduleClassesTimeDto> scheduleClassesTimeDtos = scheduleClassesTimeV1InnerServiceSMOImpl.queryScheduleClassesTimes(scheduleClassesTimeDto);
+        if (scheduleClassesTimeDtos != null && scheduleClassesTimeDtos.size() == 1) {
+            ScheduleClassesTimePo scheduleClassesTimePo = new ScheduleClassesTimePo();
+            scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
+            flag = scheduleClassesTimeV1InnerServiceSMOImpl.deleteScheduleClassesTime(scheduleClassesTimePo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
-
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }
