@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineOrderV1ServiceDaoImpl">
+
+
+    <!-- 保存充电桩订单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineOrderInfo" parameterType="Map">
+        insert into charge_machine_order(
+        amount,order_id,remark,port_id,person_name,machine_id,acct_detail_id,person_id,charge_hours,
+        start_time,end_time,state,person_tel,community_id,energy,duration_price
+        ) values (
+        #{amount},#{orderId},#{remark},#{portId},#{personName},#{machineId},#{acctDetailId},#{personId},#{chargeHours},
+        #{startTime},#{endTime},#{state},#{personTel},#{communityId},#{energy},#{durationPrice}
+        )
+    </insert>
+
+
+    <!-- 查询充电桩订单信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineOrderInfo" parameterType="Map" resultType="Map">
+        select t.order_id,t.order_id orderId,t.remark,t.port_id,t.port_id
+        portId,t.person_name,t.person_name personName,t.machine_id,t.machine_id
+        machineId,t.acct_detail_id,t.acct_detail_id acctDetailId,t.person_id,t.person_id
+        personId,t.charge_hours,t.charge_hours chargeHours,t.start_time,t.start_time startTime,t.end_time,t.end_time
+        endTime,t.state,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,t.energy,t.duration_price durationPrice,
+        cm.machine_name machineName,cm.machine_code machineCode,
+        cmp.port_code portCode,cmp.port_name portName,td.`name` stateName,SUM(cmoa.amount) amount
+        from charge_machine_order t
+        left join charge_machine cm on t.machine_id = cm.machine_id and cm.status_cd = '0'
+        left join charge_machine_port cmp on t.port_id = cmp.port_id and cmp.status_cd = '0'
+        left join t_dict td on td.status_cd = t.state and td.table_name = 'charge_machine_order' and td.table_columns = 'state'
+        left join charge_machine_order_acct cmoa on t.order_id = cmoa.order_id and cmoa.status_cd = '0'
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="chargeHours !=null and chargeHours != ''">
+            and t.charge_hours= #{chargeHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="energy !=null and energy != ''">
+            and t.energy= #{energy}
+        </if>
+        GROUP BY t.order_id,t.remark,t.port_id,t.person_name,t.machine_id,t.acct_detail_id,t.person_id,
+        t.charge_hours,t.start_time,t.end_time,t.state,t.person_tel,t.community_id,t.energy,t.duration_price,
+        cm.machine_name ,cm.machine_code  ,
+        cmp.port_code ,cmp.port_name ,td.`name`
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电桩订单信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineOrderInfo" parameterType="Map">
+        update charge_machine_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            , t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            , t.person_id= #{personId}
+        </if>
+        <if test="chargeHours !=null and chargeHours != ''">
+            , t.charge_hours= #{chargeHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
+
+        <if test="energy !=null and energy != ''">
+            , t.energy= #{energy}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            , t.duration_price= #{durationPrice}
+        </if>
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电桩订单数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeMachineOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_machine_order t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="personId !=null and personId != ''">
+            and t.person_id= #{personId}
+        </if>
+        <if test="chargeHours !=null and chargeHours != ''">
+            and t.charge_hours= #{chargeHours}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="energy !=null and energy != ''">
+            and t.energy= #{energy}
+        </if>
+
+
+    </select>
+
+</mapper>

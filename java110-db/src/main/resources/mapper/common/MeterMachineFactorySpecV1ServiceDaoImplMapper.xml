@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meterMachineFactorySpecV1ServiceDaoImpl">
+
+
+    <!-- 保存电表厂家参数信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMeterMachineFactorySpecInfo" parameterType="Map">
+        insert into meter_machine_factory_spec(
+        spec_id,spec_name,factory_id,remark
+        ) values (
+        #{specId},#{specName},#{factoryId},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询电表厂家参数信息 add by wuxw 2018-07-03 -->
+    <select id="getMeterMachineFactorySpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.spec_name,t.spec_name specName,t.factory_id,t.factory_id
+        factoryId,t.status_cd,t.status_cd statusCd,t.remark
+        from meter_machine_factory_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="factoryId !=null and factoryId != ''">
+            and t.factory_id= #{factoryId}
+        </if>
+        <if test="factoryIds !=null">
+            and t.factory_id in
+            <foreach collection="factoryIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改电表厂家参数信息 add by wuxw 2018-07-03 -->
+    <update id="updateMeterMachineFactorySpecInfo" parameterType="Map">
+        update meter_machine_factory_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="factoryId !=null and factoryId != ''">
+            , t.factory_id= #{factoryId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+
+    </update>
+
+    <!-- 查询电表厂家参数数量 add by wuxw 2018-07-03 -->
+    <select id="queryMeterMachineFactorySpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from meter_machine_factory_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="factoryId !=null and factoryId != ''">
+            and t.factory_id= #{factoryId}
+        </if>
+        <if test="factoryIds !=null">
+            and t.factory_id in
+            <foreach collection="factoryIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+
+
+    </select>
+
+</mapper>

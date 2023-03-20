@@ -243,7 +243,7 @@
 
     <!-- 查询小区单元信息 add by wuxw 2018-07-03 -->
     <select id="queryFloorAndUnits" parameterType="Map" resultType="Map">
-        select t.floor_id,t.floor_id floorId,bu.layer_count,bu.layer_count layerCount,bu.unit_id,bu.unit_id
+        select t.floor_id,t.floor_id floorId,t.`name` floorName,bu.layer_count,bu.layer_count layerCount,bu.unit_id,bu.unit_id
         unitId,bu.unit_num,bu.unit_num unitNum,bu.lift,bu.remark,bu.unit_area,bu.unit_area unitArea,t.floor_num floorNum,t.seq
         from f_floor t
         left join building_unit bu on t.`floor_id` = bu.`floor_id` and bu.status_cd = '0'

@@ -119,7 +119,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             Assert.hasValue(os[2], (osIndex + 1) + "车辆品牌不能为空");
             Assert.hasValue(os[3], (osIndex + 1) + "车辆类型不能为空");
             Assert.hasValue(os[4], (osIndex + 1) + "颜色不能为空");
-            Assert.hasValue(os[5], (osIndex + 1) + "业主不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "停车场不能为空");
             Assert.hasValue(os[6], (osIndex + 1) + "车位不能为空");
             Assert.hasValue(os[7], (osIndex + 1) + "起租时间不能为空");
             Assert.hasValue(os[8], (osIndex + 1) + "截止时间不能为空");
@@ -127,27 +127,19 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             Assert.hasValue(os[10], (osIndex + 1) + "车位类型不能为空");
             String startTime = excelDoubleToDate(os[7].toString());
             String endTime = excelDoubleToDate(os[8].toString());
-            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_A, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD HH:mm:ss文本格式");
-            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_A, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD HH:mm:ss文本格式");
+            Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD文本格式");
+            Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD文本格式");
             importOwnerCar = new OwnerCarDto();
             importOwnerCar.setCarNum(os[0].toString());
             importOwnerCar.setRoomName(os[1].toString());
             importOwnerCar.setCarBrand(os[2].toString());
             importOwnerCar.setCarType(os[3].toString());
             importOwnerCar.setCarColor(os[4].toString());
-            importOwnerCar.setOwnerName(os[5].toString());
+            importOwnerCar.setAreaNum(os[5].toString());
             //获取车位
             String parkingLot = os[6].toString();
-            if(!parkingLot.contains("-")){
-                throw new IllegalArgumentException((osIndex + 1) +"行车位格式错误 格式应为：停车场-车位编号，车位编号可以从1自行编写");
-            }
-            String[] split = parkingLot.split("-",2);
-            if(split.length != 2){
-                throw new IllegalArgumentException((osIndex + 1) +"行车位格式错误 格式应为：停车场-车位编号，车位编号可以从1自行编写");
-            }
-            importOwnerCar.setAreaNum(split[0]);
-            importOwnerCar.setNum(split[1]);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            importOwnerCar.setNum(parkingLot);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             importOwnerCar.setStartTime(simpleDateFormat.parse(startTime));
             importOwnerCar.setEndTime(simpleDateFormat.parse(endTime));
             importOwnerCar.setTypeCd(os[9].toString());
@@ -295,7 +287,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             Assert.listOnlyOne(ownerRoomRelDtos, ownerCarDto.getCarNum() + "查询业主房屋信息错误！");
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
-            ownerDto.setName(ownerCarDto.getOwnerName());
+            //ownerDto.setName(ownerCarDto.getOwnerName());
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum() + "查询业主信息错误！");

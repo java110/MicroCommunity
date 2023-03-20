@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accessControlWhiteAuthV1ServiceDaoImpl">
+
+
+    <!-- 保存门禁授权信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccessControlWhiteAuthInfo" parameterType="Map">
+        insert into access_control_white_auth(
+        machine_id,acw_id,acwa_id,community_id
+        ) values (
+        #{machineId},#{acwId},#{acwaId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询门禁授权信息 add by wuxw 2018-07-03 -->
+    <select id="getAccessControlWhiteAuthInfo" parameterType="Map" resultType="Map">
+        select t.machine_id,t.machine_id machineId,t.acw_id,t.acw_id acwId,t.acwa_id,t.acwa_id
+        acwaId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,
+        t.create_time createTime,m.machine_code machineCode,m.machine_name machineName
+        from access_control_white_auth t
+        left join machine m on t.machine_id = m.machine_id and m.status_cd = '0'
+        where 1 =1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acwId !=null and acwId != ''">
+            and t.acw_id= #{acwId}
+        </if>
+        <if test="acwaId !=null and acwaId != ''">
+            and t.acwa_id= #{acwaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改门禁授权信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccessControlWhiteAuthInfo" parameterType="Map">
+        update access_control_white_auth t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="acwId !=null and acwId != ''">
+            , t.acw_id= #{acwId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="acwaId !=null and acwaId != ''">
+            and t.acwa_id= #{acwaId}
+        </if>
+
+    </update>
+
+    <!-- 查询门禁授权数量 add by wuxw 2018-07-03 -->
+    <select id="queryAccessControlWhiteAuthsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from access_control_white_auth t
+        where 1 =1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="acwId !=null and acwId != ''">
+            and t.acw_id= #{acwId}
+        </if>
+        <if test="acwaId !=null and acwaId != ''">
+            and t.acwa_id= #{acwaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerCommitteeContractV1ServiceDaoImpl">
+
+
+    <!-- 保存紧急联系人信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerCommitteeContractInfo" parameterType="Map">
+        insert into owner_committee_contract(
+        rel_name,address,contract_id,name,link,remark,oc_id,community_id
+        ) values (
+        #{relName},#{address},#{contractId},#{name},#{link},#{remark},#{ocId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询紧急联系人信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerCommitteeContractInfo" parameterType="Map" resultType="Map">
+        select t.rel_name,t.rel_name relName,t.address,t.contract_id,t.contract_id
+        contractId,t.name,t.link,t.remark,t.status_cd,t.status_cd statusCd,t.oc_id,t.oc_id
+        ocId,t.community_id,t.community_id communityId
+        from owner_committee_contract t
+        where 1 =1
+        <if test="relName !=null and relName != ''">
+            and t.rel_name= #{relName}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ocId !=null and ocId != ''">
+            and t.oc_id= #{ocId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改紧急联系人信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerCommitteeContractInfo" parameterType="Map">
+        update owner_committee_contract t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="relName !=null and relName != ''">
+            , t.rel_name= #{relName}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="ocId !=null and ocId != ''">
+            and t.oc_id= #{ocId}
+        </if>
+
+    </update>
+
+    <!-- 查询紧急联系人数量 add by wuxw 2018-07-03 -->
+    <select id="queryOwnerCommitteeContractsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_committee_contract t
+        where 1 =1
+        <if test="relName !=null and relName != ''">
+            and t.rel_name= #{relName}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="contractId !=null and contractId != ''">
+            and t.contract_id= #{contractId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ocId !=null and ocId != ''">
+            and t.oc_id= #{ocId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

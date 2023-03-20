@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="examineStaffValueV1ServiceDaoImpl">
+
+
+    <!-- 保存考核评分信息 add by wuxw 2018-07-03 -->
+    <insert id="saveExamineStaffValueInfo" parameterType="Map">
+        insert into examine_staff_value(
+        owner_name,esv_id,es_id,staff_name,owner_id,community_id,project_id,examine_value,staff_id,room_id,room_name,es_year
+        ) values (
+        #{ownerName},#{esvId},#{esId},#{staffName},#{ownerId},#{communityId},#{projectId},#{examineValue},#{staffId},#{roomId},#{roomName},#{esYear}
+        )
+    </insert>
+
+
+    <!-- 查询考核评分信息 add by wuxw 2018-07-03 -->
+    <select id="getExamineStaffValueInfo" parameterType="Map" resultType="Map">
+        select t.owner_name,t.owner_name ownerName,t.esv_id,t.esv_id esvId,t.es_id,t.es_id
+        esId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id
+        ownerId,t.community_id,t.community_id communityId,t.project_id,t.project_id
+        projectId,t.examine_value,t.examine_value examineValue,t.staff_id,t.staff_id staffId,t.room_id,t.room_id
+        roomId,t.room_name,t.room_name roomName,t.es_year esYear,t.create_time createTime,ep.`name` projectName,ep.post,ep.weight
+        from examine_staff_value t
+        left join examine_project ep on t.project_id = ep.project_id and ep.status_cd = '0'
+        where 1 =1
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="esvId !=null and esvId != ''">
+            and t.esv_id= #{esvId}
+        </if>
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            and t.project_id= #{projectId}
+        </if>
+        <if test="examineValue !=null and examineValue != ''">
+            and t.examine_value= #{examineValue}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="esYear !=null and esYear != ''">
+            and t.es_year= #{esYear}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考核评分信息 add by wuxw 2018-07-03 -->
+    <update id="updateExamineStaffValueInfo" parameterType="Map">
+        update examine_staff_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="esId !=null and esId != ''">
+            , t.es_id= #{esId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="examineValue !=null and examineValue != ''">
+            , t.examine_value= #{examineValue}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        where 1=1
+        <if test="esvId !=null and esvId != ''">
+            and t.esv_id= #{esvId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            and t.project_id= #{projectId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="esYear !=null and esYear != ''">
+            and t.es_year= #{esYear}
+        </if>
+
+    </update>
+
+    <!-- 查询考核评分数量 add by wuxw 2018-07-03 -->
+    <select id="queryExamineStaffValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from examine_staff_value t
+        where 1 =1
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="esvId !=null and esvId != ''">
+            and t.esv_id= #{esvId}
+        </if>
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            and t.project_id= #{projectId}
+        </if>
+        <if test="examineValue !=null and examineValue != ''">
+            and t.examine_value= #{examineValue}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="esYear !=null and esYear != ''">
+            and t.es_year= #{esYear}
+        </if>
+
+
+    </select>
+
+</mapper>

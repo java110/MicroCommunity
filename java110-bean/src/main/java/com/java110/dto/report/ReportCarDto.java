@@ -37,6 +37,10 @@ public class ReportCarDto extends PageDto implements Serializable {
 
     private Date endTime;
 
+    private String leaseType;
+
+    private String[] leaseTypes;
+
 
     public String getCarId() {
         return carId;
@@ -188,5 +192,21 @@ public class ReportCarDto extends PageDto implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getLeaseType() {
+        return leaseType;
+    }
+
+    public void setLeaseType(String leaseType) {
+        this.leaseType = leaseType;
+    }
+
+    public String[] getLeaseTypes() {
+        return leaseTypes;
+    }
+
+    public void setLeaseTypes(String[] leaseTypes) {
+        this.leaseTypes = leaseTypes;
     }
 }

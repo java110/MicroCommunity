@@ -199,12 +199,18 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             feeDiscountDto.setDiscountId(tmpPayFeeConfigDiscountDto.getDiscountId());
             //查询打折表
             List<FeeDiscountDto> feeDiscountInfo = BeanConvertUtil.covertBeanList(feeDiscountServiceDaoImpl.getFeeDiscountInfo(BeanConvertUtil.beanCovertMap(feeDiscountDto)), FeeDiscountDto.class);
-            Assert.listOnlyOne(feeDiscountInfo, "查询打折表错误！");
+            //Assert.listOnlyOne(feeDiscountInfo, "查询打折表错误！");
+            if(feeDiscountInfo == null || feeDiscountInfo.size() < 1){
+                continue;
+            }
             FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
             feeDiscountRuleDto.setRuleId(feeDiscountInfo.get(0).getRuleId());
             //查询打折规则表
             List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
-            Assert.listOnlyOne(feeDiscountRuleDtos, "查询打折规则表错误！");
+            //Assert.listOnlyOne(feeDiscountRuleDtos, "查询打折规则表错误！");
+            if(feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1){
+                continue;
+            }
             if (!StringUtil.isEmpty(feeDiscountRuleDtos.get(0).getBeanImpl()) && feeDiscountRuleDtos.get(0).getBeanImpl().equals("reductionMonthFeeRule")) { //赠送规则
                 FeeDiscountSpecDto feeDiscountSpecDto = new FeeDiscountSpecDto();
                 feeDiscountSpecDto.setDiscountId(tmpPayFeeConfigDiscountDto.getDiscountId());

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meterMachineV1ServiceDaoImpl">
+
+
+    <!-- 保存智能水电表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMeterMachineInfo" parameterType="Map">
+        insert into meter_machine(
+        heartbeat_time,impl_bean,address,prestore_degrees,machine_name,room_id,room_name,cur_reading_time,machine_model,
+        cur_degrees,machine_id,meter_type,fee_config_name,community_id,fee_config_id,read_day,read_hours
+        ) values (
+        #{heartbeatTime},#{implBean},#{address},#{prestoreDegrees},#{machineName},#{roomId},#{roomName},#{curReadingTime},
+        #{machineModel},#{curDegrees},#{machineId},#{meterType},#{feeConfigName},#{communityId},#{feeConfigId},#{readDay},#{readHours}
+        )
+    </insert>
+
+
+    <!-- 查询智能水电表信息 add by wuxw 2018-07-03 -->
+    <select id="getMeterMachineInfo" parameterType="Map" resultType="Map">
+        select t.heartbeat_time,t.heartbeat_time heartbeatTime,t.impl_bean,t.impl_bean
+        implBean,t.address,t.prestore_degrees,t.prestore_degrees prestoreDegrees,t.status_cd,t.status_cd
+        statusCd,t.machine_name,t.machine_name machineName,t.room_id,t.room_id roomId,t.room_name,t.room_name
+        roomName,t.cur_reading_time,t.cur_reading_time curReadingTime,t.machine_model,t.machine_model
+        machineModel,t.cur_degrees,t.cur_degrees curDegrees,t.machine_id,t.machine_id
+        machineId,t.meter_type,t.meter_type meterType,t.fee_config_name,t.fee_config_name
+        feeConfigName,t.community_id,t.community_id communityId,t.fee_config_id,t.fee_config_id feeConfigId,
+        mmf.factory_name implBeanName,t.create_time createTime,t.read_day readDay,t.read_hours readHours
+        from meter_machine t
+        left join meter_machine_factory mmf on t.impl_bean = mmf.factory_id and mmf.status_cd='0'
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            and t.impl_bean= #{implBean}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="addressLike !=null and addressLike != ''">
+            and t.address concat('%', #{addressLike},'%')
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            and t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineNameLike !=null and machineNameLike != ''">
+            and t.machine_name concat('%', #{machineNameLike},'%')
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="roomNameLike !=null and roomNameLike != ''">
+            and t.room_name concat('%', #{roomNameLike},'%')
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="machineModel !=null and machineModel != ''">
+            and t.machine_model= #{machineModel}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            and t.fee_config_name= #{feeConfigName}
+        </if>
+        <if test="feeConfigNameLike !=null and feeConfigNameLike != ''">
+            and t.fee_config_name concat('%', #{feeConfigNameLike},'%')
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改智能水电表信息 add by wuxw 2018-07-03 -->
+    <update id="updateMeterMachineInfo" parameterType="Map">
+        update meter_machine t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            , t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            , t.impl_bean= #{implBean}
+        </if>
+        <if test="address !=null and address != ''">
+            , t.address= #{address}
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            , t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            , t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="machineModel !=null and machineModel != ''">
+            , t.machine_model= #{machineModel}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            , t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            , t.meter_type= #{meterType}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            , t.fee_config_name= #{feeConfigName}
+        </if>
+
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            , t.fee_config_id= #{feeConfigId}
+        </if>
+        <if test="readDay !=null">
+            , t.read_day= #{readDay}
+        </if>
+        <if test="readHours !=null ">
+            , t.read_hours = #{readHours}
+        </if>
+        where 1=1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询智能水电表数量 add by wuxw 2018-07-03 -->
+    <select id="queryMeterMachinesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from meter_machine t
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            and t.impl_bean= #{implBean}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="addressLike !=null and addressLike != ''">
+            and t.address concat('%', #{addressLike},'%')
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            and t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineNameLike !=null and machineNameLike != ''">
+            and t.machine_name concat('%', #{machineNameLike},'%')
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="roomNameLike !=null and roomNameLike != ''">
+            and t.room_name concat('%', #{roomNameLike},'%')
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="machineModel !=null and machineModel != ''">
+            and t.machine_model= #{machineModel}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="feeConfigName !=null and feeConfigName != ''">
+            and t.fee_config_name= #{feeConfigName}
+        </if>
+        <if test="feeConfigNameLike !=null and feeConfigNameLike != ''">
+            and t.fee_config_name concat('%', #{feeConfigNameLike},'%')
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeConfigId !=null and feeConfigId != ''">
+            and t.fee_config_id= #{feeConfigId}
+        </if>
+
+
+    </select>
+    <update id="settingMeterMachineRead" parameterType="Map">
+        update meter_machine t set
+             t.read_day= #{readDay},
+            t.read_hours = #{readHours}
+        where 1=1
+            and t.community_id= #{communityId}
+            and t.machine_model= #{machineModel}
+
+    </update>
+
+
+</mapper>

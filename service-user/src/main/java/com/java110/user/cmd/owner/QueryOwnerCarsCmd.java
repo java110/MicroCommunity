@@ -8,9 +8,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateV1InnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -45,6 +48,9 @@ public class QueryOwnerCarsCmd extends Cmd {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineTranslateV1InnerServiceSMO machineTranslateV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -86,6 +92,8 @@ public class QueryOwnerCarsCmd extends Cmd {
             if (row < 20) {
                 freshPs(ownerCarDtoList);
                 freshRoomInfo(ownerCarDtoList);
+                //刷入同步物联网状态
+                freshTransactionIotState(ownerCarDtoList);
             }
         } else {
             ownerCarDtoList = new ArrayList<>();
@@ -107,6 +115,39 @@ public class QueryOwnerCarsCmd extends Cmd {
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerCarDtoList);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void freshTransactionIotState(List<OwnerCarDto> ownerCarDtoList) {
+        if (ownerCarDtoList == null || ownerCarDtoList.size() < 1) {
+            return;
+        }
+        List<String> memberIds = new ArrayList<>();
+        for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
+            if (StringUtil.isEmpty(ownerCarDto.getPsId())) {
+                continue;
+            }
+            memberIds.add(ownerCarDto.getMemberId());
+        }
+
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setObjIds(memberIds.toArray(new String[memberIds.size()]));
+        List<MachineTranslateDto> machineTranslateDtos = machineTranslateV1InnerServiceSMOImpl.queryObjStateInMachineTranslates(machineTranslateDto);
+
+        if (machineTranslateDtos == null || machineTranslateDtos.size() < 1) {
+            return;
+        }
+
+        for (OwnerCarDto ownerCarDto : ownerCarDtoList) {
+            for (MachineTranslateDto tmpMachineTranslateDto : machineTranslateDtos) {
+                if (!ownerCarDto.getMemberId().equals(tmpMachineTranslateDto.getObjId())) {
+                    continue;
+                }
+                ownerCarDto.setIotStateName(tmpMachineTranslateDto.getStateName());
+                ownerCarDto.setIotRemark(tmpMachineTranslateDto.getRemark());
+            }
+        }
+
+
     }
 
     private void freshPs(List<OwnerCarDto> ownerCarDtoList) {

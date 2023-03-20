@@ -168,10 +168,14 @@ public class ListVisitsCmd extends Cmd {
         ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-        for (ApiVisitDataVo apiVisitDataVo : visits) {
-            for (OwnerDto tmpOwnerDto : ownerDtos) {
-                if (!apiVisitDataVo.getOwnerId().equals(tmpOwnerDto.getOwnerId())) {
+       List<OwnerDto> ownerDtos =  ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        for(ApiVisitDataVo apiVisitDataVo: visits){
+            for(OwnerDto tmpOwnerDto : ownerDtos){
+                if(StringUtil.isEmpty(apiVisitDataVo.getOwnerId())){
+                    continue;
+                }
+                if(!apiVisitDataVo.getOwnerId().equals(tmpOwnerDto.getOwnerId())){
                     continue;
                 }
                 apiVisitDataVo.setOwnerName(tmpOwnerDto.getName());

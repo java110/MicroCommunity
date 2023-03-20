@@ -121,10 +121,10 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
                     continue;
                 }
 
-                if (fileRelDtos.get(0).getFileSaveName().startsWith("http")) {
-                    tmpOwnerDto.setUrl(fileRelDtos.get(0).getFileSaveName());
+                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
+                    tmpOwnerDto.setUrl(tmpFileRelDto.getFileSaveName());
                 } else {
-                    tmpOwnerDto.setUrl(imgUrl + fileRelDtos.get(0).getFileSaveName());
+                    tmpOwnerDto.setUrl(imgUrl + tmpFileRelDto.getFileSaveName());
                 }
             }
         }

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineOrderAcctV1ServiceDaoImpl">
+
+
+    <!-- 保存充电扣款信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineOrderAcctInfo" parameterType="Map">
+        insert into charge_machine_order_acct(
+        amount,cmoa_id,order_id,acct_detail_id,acct_id,start_time,remark,end_time,community_id,energy,duration_price
+        ) values (
+        #{amount},#{cmoaId},#{orderId},#{acctDetailId},#{acctId},#{startTime},#{remark},#{endTime},#{communityId},#{energy},#{durationPrice}
+        )
+    </insert>
+
+
+    <!-- 查询充电扣款信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineOrderAcctInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.cmoa_id,t.cmoa_id cmoaId,t.order_id,t.order_id orderId,t.acct_detail_id,t.acct_detail_id
+        acctDetailId,t.acct_id,t.acct_id acctId,t.start_time,t.start_time startTime,t.remark,t.status_cd,t.status_cd
+        statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.energy,t.duration_price durationPrice,
+        t.create_time createTime
+        from charge_machine_order_acct t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="cmoaId !=null and cmoaId != ''">
+            and t.cmoa_id= #{cmoaId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="energy !=null and energy != ''">
+            and t.energy= #{energy}
+        </if>
+
+        <if test="powerTime !=null and powerTime != ''">
+            and t.start_time &lt; #{powerTime}
+            and t.end_time &gt; #{powerTime}
+        </if>
+
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电扣款信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineOrderAcctInfo" parameterType="Map">
+        update charge_machine_order_acct t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            , t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            , t.acct_id= #{acctId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+
+        <if test="energy !=null and energy != ''">
+            , t.energy= #{energy}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            , t.duration_price= #{durationPrice}
+        </if>
+        where 1=1
+        <if test="cmoaId !=null and cmoaId != ''">
+            and t.cmoa_id= #{cmoaId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电扣款数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeMachineOrderAcctsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_machine_order_acct t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="cmoaId !=null and cmoaId != ''">
+            and t.cmoa_id= #{cmoaId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="acctDetailId !=null and acctDetailId != ''">
+            and t.acct_detail_id= #{acctDetailId}
+        </if>
+        <if test="acctId !=null and acctId != ''">
+            and t.acct_id= #{acctId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="energy !=null and energy != ''">
+            and t.energy= #{energy}
+        </if>
+        <if test="powerTime !=null and powerTime != ''">
+            and t.start_time &lt; #{powerTime}
+            and t.end_time &gt; #{powerTime}
+        </if>
+
+
+    </select>
+
+</mapper>

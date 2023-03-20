@@ -74,6 +74,18 @@ public interface IMenuInnerServiceSMO {
 
 
 
+
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param routeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/checkUserHasResource", method = RequestMethod.POST)
+    List<Map> checkUserHasResource(@RequestBody BasePrivilegeDto routeDto);
+
+
     /**
      * <p>查询小区楼信息</p>
      *
@@ -91,17 +103,6 @@ public interface IMenuInnerServiceSMO {
      */
     @RequestMapping(value = "/queryBasePrivilegesCount", method = RequestMethod.POST)
     int queryBasePrivilegesCount(@RequestBody BasePrivilegeDto routeDto);
-
-
-    /**
-     * 查询<p>小区楼</p>总记录数
-     *
-     * @param routeDto 数据对象分享
-     * @return 小区下的小区楼记录数
-     */
-    @RequestMapping(value = "/checkUserHasResource", method = RequestMethod.POST)
-    List<Map> checkUserHasResource(@RequestBody BasePrivilegeDto routeDto);
-
 
     /**
      * <p>修改APP信息</p>

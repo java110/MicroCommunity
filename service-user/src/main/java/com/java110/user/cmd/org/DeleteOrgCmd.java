@@ -73,29 +73,26 @@ public class DeleteOrgCmd extends Cmd {
 
         Assert.listOnlyOne(orgDtos, "不存在");
 
-        if (OrgDto.ORG_LEVEL_COMPANY.equals(orgDtos.get(0).getOrgLevel())) {
-            //查询是否存在部门
-            orgDto = new OrgDto();
-            orgDto.setParentOrgId(reqJson.getString("orgId"));
-            List<OrgDto> subOrgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
-            if (subOrgDtos != null && subOrgDtos.size() > 0) {
-                throw new CmdException("公司下存在部门 请先删除部门后再删除");
-            }
-        }else if (OrgDto.ORG_LEVEL_DEPARTMENT.equals(orgDtos.get(0).getOrgLevel())) {
-            //查询是否存在部门
-            OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-            orgStaffRelDto.setOrgId(reqJson.getString("orgId"));
-            List<OrgStaffRelDto> subOrgDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-            if (subOrgDtos == null || subOrgDtos.size() < 1) {
-                return;
-            }
-            UserDto userDto = new UserDto();
-            userDto.setUserId(subOrgDtos.get(0).getStaffId());
-            List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-            if (userDtos != null && userDtos.size() > 0) {
-                throw new CmdException("部门下存在员工 请先删除员工后再删除");
-            }
+        orgDto = new OrgDto();
+        orgDto.setParentOrgId(reqJson.getString("orgId"));
+        List<OrgDto> subOrgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
+        if (subOrgDtos != null && subOrgDtos.size() > 0) {
+            throw new CmdException("存在子组织");
         }
+
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setOrgId(reqJson.getString("orgId"));
+        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
+        if (orgStaffRelDtos == null || orgStaffRelDtos.size() < 1) {
+            return;
+        }
+        UserDto userDto = new UserDto();
+        userDto.setUserId(orgStaffRelDtos.get(0).getStaffId());
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos != null && userDtos.size() > 0) {
+            throw new CmdException("存在员工 请先删除员工后再删除");
+        }
+
     }
 
     @Override

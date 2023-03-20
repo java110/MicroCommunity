@@ -97,5 +97,8 @@ public class OaServiceApplicationStart {
         ApplicationContext context = SpringApplication.run(OaServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
 
+        //服务启动完成
+        ServiceStartInit.printStartSuccessInfo();
+
     }
 }

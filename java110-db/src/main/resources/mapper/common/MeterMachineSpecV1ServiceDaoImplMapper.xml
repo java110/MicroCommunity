@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meterMachineSpecV1ServiceDaoImpl">
+
+
+    <!-- 保存智能水电表参数信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMeterMachineSpecInfo" parameterType="Map">
+        insert into meter_machine_spec(
+        spec_id,machine_id,spec_name,spec_value,community_id,mms_id
+        ) values (
+        #{specId},#{machineId},#{specName},#{specValue},#{communityId},#{mmsId}
+        )
+    </insert>
+
+
+    <!-- 查询智能水电表参数信息 add by wuxw 2018-07-03 -->
+    <select id="getMeterMachineSpecInfo" parameterType="Map" resultType="Map">
+        select t.spec_id,t.spec_id specId,t.machine_id,t.machine_id machineId,t.spec_name,t.spec_name
+        specName,t.spec_value,t.spec_value specValue,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.mms_id,t.mms_id mmsId
+        from meter_machine_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineIds !=null">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            and t.spec_value= #{specValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="mmsId !=null and mmsId != ''">
+            and t.mms_id= #{mmsId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改智能水电表参数信息 add by wuxw 2018-07-03 -->
+    <update id="updateMeterMachineSpecInfo" parameterType="Map">
+        update meter_machine_spec t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="specName !=null and specName != ''">
+            , t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            , t.spec_value= #{specValue}
+        </if>
+
+        where 1=1
+        <if test="mmsId !=null and mmsId != ''">
+            and t.mms_id= #{mmsId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+
+    </update>
+
+    <!-- 查询智能水电表参数数量 add by wuxw 2018-07-03 -->
+    <select id="queryMeterMachineSpecsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from meter_machine_spec t
+        where 1 =1
+        <if test="specId !=null and specId != ''">
+            and t.spec_id= #{specId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineIds !=null">
+            and t.machine_id in
+            <foreach collection="machineIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="specName !=null and specName != ''">
+            and t.spec_name= #{specName}
+        </if>
+        <if test="specValue !=null and specValue != ''">
+            and t.spec_value= #{specValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="mmsId !=null and mmsId != ''">
+            and t.mms_id= #{mmsId}
+        </if>
+
+
+    </select>
+
+</mapper>

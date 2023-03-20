@@ -85,6 +85,7 @@ public class AccountApi {
             @RequestParam(value = "link", required = false) String link,
             @RequestParam(value = "idCard", required = false) String idCard,
             @RequestParam(value = "acctType", required = false) String acctType,
+            @RequestParam(value = "acctId", required = false) String acctId,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row) {
         AccountDto accountDto = new AccountDto();
@@ -122,6 +123,8 @@ public class AccountApi {
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
         accountDto.setAcctType(acctType);
+        accountDto.setLink(link);
+        accountDto.setAcctId(acctId);
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerId);
         ownerDto.setCommunityId(communityId);

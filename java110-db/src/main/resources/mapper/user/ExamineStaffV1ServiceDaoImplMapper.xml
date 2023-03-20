@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="examineStaffV1ServiceDaoImpl">
+
+
+    <!-- 保存考核员工信息 add by wuxw 2018-07-03 -->
+    <insert id="saveExamineStaffInfo" parameterType="Map">
+        insert into examine_staff(
+        es_id,staff_name,community_id,staff_id,post
+        ) values (
+        #{esId},#{staffName},#{communityId},#{staffId},#{post}
+        )
+    </insert>
+
+
+    <!-- 查询考核员工信息 add by wuxw 2018-07-03 -->
+    <select id="getExamineStaffInfo" parameterType="Map" resultType="Map">
+        select t.es_id,t.es_id esId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,t.post
+        from examine_staff t
+        where 1 =1
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改考核员工信息 add by wuxw 2018-07-03 -->
+    <update id="updateExamineStaffInfo" parameterType="Map">
+        update examine_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="post !=null and post != ''">
+            , t.post= #{post}
+        </if>
+
+        where 1=1
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </update>
+
+    <!-- 查询考核员工数量 add by wuxw 2018-07-03 -->
+    <select id="queryExamineStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from examine_staff t
+        where 1 =1
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

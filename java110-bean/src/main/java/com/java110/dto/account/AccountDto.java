@@ -44,6 +44,7 @@ public class AccountDto extends PageDto implements Serializable {
     private String link;
     private String idCard;
 
+
     private Date createTime;
 
     private String statusCd = "0";

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="examineStaffProjectV1ServiceDaoImpl">
+
+
+    <!-- 保存员工考核项目信息 add by wuxw 2018-07-03 -->
+    <insert id="saveExamineStaffProjectInfo" parameterType="Map">
+        insert into examine_staff_project(
+        es_id,esp_id,community_id,project_id
+        ) values (
+        #{esId},#{espId},#{communityId},#{projectId}
+        )
+    </insert>
+
+
+    <!-- 查询员工考核项目信息 add by wuxw 2018-07-03 -->
+    <select id="getExamineStaffProjectInfo" parameterType="Map" resultType="Map">
+        select t.es_id,t.es_id esId,t.esp_id,t.esp_id espId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.project_id,t.project_id projectId,
+        ep.`name` projectName,ep.weight
+        from examine_staff_project t
+        left join examine_project ep on t.project_id = ep.project_id and ep.status_cd = '0'
+        where 1 =1
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="esIds !=null ">
+            and t.es_id in
+            <foreach collection="esIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="espId !=null and espId != ''">
+            and t.esp_id= #{espId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            and t.project_id= #{projectId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改员工考核项目信息 add by wuxw 2018-07-03 -->
+    <update id="updateExamineStaffProjectInfo" parameterType="Map">
+        update examine_staff_project t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            , t.project_id= #{projectId}
+        </if>
+        where 1=1
+        <if test="espId !=null and espId != ''">
+            and t.esp_id= #{espId}
+        </if>
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询员工考核项目数量 add by wuxw 2018-07-03 -->
+    <select id="queryExamineStaffProjectsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from examine_staff_project t
+        where 1 =1
+        <if test="esId !=null and esId != ''">
+            and t.es_id= #{esId}
+        </if>
+        <if test="esIds !=null ">
+            and t.es_id in
+            <foreach collection="esIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="espId !=null and espId != ''">
+            and t.esp_id= #{espId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="projectId !=null and projectId != ''">
+            and t.project_id= #{projectId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meterMachineDetailV1ServiceDaoImpl">
+
+
+    <!-- 保存智能水电表明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMeterMachineDetailInfo" parameterType="Map">
+        insert into meter_machine_detail(
+        detail_type,cur_degrees,machine_id,prestore_degrees,detail_id,remark,community_id,cur_reading_time,state
+        ) values (
+        #{detailType},#{curDegrees},#{machineId},#{prestoreDegrees},#{detailId},#{remark},#{communityId},#{curReadingTime},#{state}
+        )
+    </insert>
+
+
+    <insert id="saveMeterMachineDetails" parameterType="Map">
+        insert into meter_machine_detail(
+        detail_type,cur_degrees,machine_id,prestore_degrees,detail_id,remark,community_id,cur_reading_time,state
+        ) values
+        <foreach collection="meterMachineDetailPos" item="item" separator=",">
+            (#{item.detailType},#{item.curDegrees},#{item.machineId},#{item.prestoreDegrees},#{item.detailId},#{item.remark},
+            #{item.communityId},#{item.curReadingTime},#{item.state})
+        </foreach>
+    </insert>
+
+    <!-- 查询智能水电表明细信息 add by wuxw 2018-07-03 -->
+    <select id="getMeterMachineDetailInfo" parameterType="Map" resultType="Map">
+        select t.detail_type,t.detail_type detailType,t.cur_degrees,t.cur_degrees curDegrees,t.machine_id,t.machine_id
+        machineId,t.prestore_degrees,t.prestore_degrees prestoreDegrees,t.detail_id,t.detail_id
+        detailId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.cur_reading_time,t.cur_reading_time curReadingTime,t.state
+        from meter_machine_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            and t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改智能水电表明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateMeterMachineDetailInfo" parameterType="Map">
+        update meter_machine_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="detailType !=null and detailType != ''">
+            , t.detail_type= #{detailType}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            , t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            , t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            , t.cur_reading_time= #{curReadingTime}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+    </update>
+
+    <!-- 查询智能水电表明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryMeterMachineDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from meter_machine_detail t
+        where 1 =1
+        <if test="detailType !=null and detailType != ''">
+            and t.detail_type= #{detailType}
+        </if>
+        <if test="curDegrees !=null and curDegrees != ''">
+            and t.cur_degrees= #{curDegrees}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="prestoreDegrees !=null and prestoreDegrees != ''">
+            and t.prestore_degrees= #{prestoreDegrees}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+</mapper>

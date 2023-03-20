@@ -60,8 +60,13 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         List<String> ownerIds = new ArrayList<>();
         List<String> ownerTels = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
-            ownerIds.add(roomDto.getOwnerId());
-            ownerTels.add(roomDto.getOwnerTel());
+            if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
+                ownerIds.add(roomDto.getOwnerId());
+            }
+            if (!StringUtil.isEmpty(roomDto.getOwnerTel())) {
+                ownerTels.add(roomDto.getOwnerTel());
+            }
+
             roomIds.add(roomDto.getRoomId());
         }
 
@@ -113,6 +118,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryRoomContract(List<String> roomIds, List<RoomDto> roomDtos) {
+        if (roomDtos == null || roomDtos.size() < 1) {
+            return;
+        }
         Map info = new HashMap();
         info.put("communityId", roomDtos.get(0).getCommunityId());
         info.put("roomIds", roomIds.toArray(new String[roomIds.size()]));
@@ -132,6 +140,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
     }
 
     private void queryRoomOweFee(List<String> roomIds, List<RoomDto> roomDtos) {
+        if (roomIds == null || roomIds.size() < 1) {
+            return;
+        }
         Map info = new HashMap();
         info.put("communityId", roomDtos.get(0).getCommunityId());
         info.put("roomIds", roomIds.toArray(new String[roomIds.size()]));
@@ -157,12 +168,18 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryOwnerOweFee(List<String> ownerIds, List<RoomDto> roomDtos) {
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
         Map info = new HashMap();
         info.put("communityId", roomDtos.get(0).getCommunityId());
         info.put("ownerIds", ownerIds.toArray(new String[ownerIds.size()]));
         List<Map> repairCounts = reportOweFeeInnerServiceSMOImpl.queryOweFeesByOwnerIds(info);
 
         for (RoomDto roomDto : roomDtos) {
+            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+                continue;
+            }
             for (Map count : repairCounts) {
                 if (!StringUtil.isEmpty(roomDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString())) {
                     if (roomDto.getOwnerId().equals(count.get("ownerId").toString())) {
@@ -184,7 +201,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      */
     private void queryRepairCount(List<String> ownerTels, List<RoomDto> roomDtos) {
 
-
+        if (ownerTels == null || ownerTels.size() < 1) {
+            return;
+        }
         Map info = new HashMap();
         info.put("communityId", roomDtos.get(0).getCommunityId());
         info.put("ownerTels", ownerTels.toArray(new String[ownerTels.size()]));
@@ -210,7 +229,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryComplaintCount(List<String> ownerTels, List<RoomDto> roomDtos) {
-
+        if (ownerTels == null || ownerTels.size() < 1) {
+            return;
+        }
 
         Map info = new HashMap();
         info.put("communityId", roomDtos.get(0).getCommunityId());
@@ -237,10 +258,16 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryCarCount(List<String> ownerIds, List<RoomDto> roomDtos) {
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
 
         List<Map> memberCounts = ownerCarV1InnerServiceSMOImpl.queryOwnerCarCountByOwnerIds(ownerIds);
 
         for (RoomDto roomDto : roomDtos) {
+            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+                continue;
+            }
             for (Map count : memberCounts) {
                 if (!StringUtil.isEmpty(roomDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString())) {
                     if (roomDto.getOwnerId().equals(count.get("ownerId").toString())) {
@@ -260,10 +287,16 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryOwnerMemberCount(List<String> ownerIds, List<RoomDto> roomDtos) {
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
 
         List<Map> memberCounts = ownerV1InnerServiceSMOImpl.queryOwnerMembersCount(ownerIds);
 
         for (RoomDto roomDto : roomDtos) {
+            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+                continue;
+            }
             for (Map count : memberCounts) {
                 if (roomDto.getOwnerId().equals(count.get("ownerId"))) {
                     roomDto.setMemberCount(count.get("memberCount").toString());
@@ -279,6 +312,10 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryRoomCount(List<String> ownerIds, List<RoomDto> roomDtos) {
+
+        if (ownerIds == null || ownerIds.size() < 1) {
+            return;
+        }
 
         //查询业主房屋数
         List<Map> ownerRoomCounts = ownerRoomRelV1InnerServiceSMOImpl.queryRoomCountByOwnerIds(ownerIds);

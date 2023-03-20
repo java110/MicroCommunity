@@ -30,6 +30,20 @@
       <artifactId>alipay-sdk-java</artifactId>
     </dependency>
 
+    <!-- 浦发银行专用 -->
+    <!--    <dependency>-->
+    <!--      <groupId>cn.hutool</groupId>-->
+    <!--      <artifactId>hutool-all</artifactId>-->
+    <!--      <version>5.6.5</version>-->
+    <!--    </dependency>-->
+
+
+    <!--    <dependency>-->
+    <!--      <groupId>org.bouncycastle</groupId>-->
+    <!--      <artifactId>bcprov-jdk15to18</artifactId>-->
+    <!--      <version>1.68</version>-->
+    <!--    </dependency>-->
+
   </dependencies>
 
 </project>

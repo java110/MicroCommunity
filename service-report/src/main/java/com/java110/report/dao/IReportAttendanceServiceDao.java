@@ -19,4 +19,11 @@ public interface IReportAttendanceServiceDao {
 
 
      List<Map> getMonthAttendance(Map info);
+
+     /**
+      * 考勤明细
+      * @param info
+      * @return
+      */
+     List<Map> getMonthAttendanceDetail(Map info);
 }

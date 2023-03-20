@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="examineProjectV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存考核项目信息 add by wuxw 2018-07-03 -->
+    <insert id="saveExamineProjectInfo" parameterType="Map">
+        insert into examine_project(
+post_cd,post,name,weight,state,community_id,project_id
+) values (
+#{postCd},#{post},#{name},#{weight},#{state},#{communityId},#{projectId}
+)
+    </insert>
+
+
+
+    <!-- 查询考核项目信息 add by wuxw 2018-07-03 -->
+    <select id="getExamineProjectInfo" parameterType="Map" resultType="Map">
+        select  t.post_cd,t.post_cd postCd,t.post,t.name,t.weight,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.project_id,t.project_id projectId 
+from examine_project t 
+where 1 =1 
+<if test="postCd !=null and postCd != ''">
+   and t.post_cd= #{postCd}
+</if> 
+<if test="post !=null and post != ''">
+   and t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="weight !=null and weight != ''">
+   and t.weight= #{weight}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="projectId !=null and projectId != ''">
+   and t.project_id= #{projectId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改考核项目信息 add by wuxw 2018-07-03 -->
+    <update id="updateExamineProjectInfo" parameterType="Map">
+        update  examine_project t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="postCd !=null and postCd != ''">
+, t.post_cd= #{postCd}
+</if> 
+<if test="post !=null and post != ''">
+, t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="weight !=null and weight != ''">
+, t.weight= #{weight}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="projectId !=null and projectId != ''">
+and t.project_id= #{projectId}
+</if> 
+
+    </update>
+
+    <!-- 查询考核项目数量 add by wuxw 2018-07-03 -->
+     <select id="queryExamineProjectsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from examine_project t 
+where 1 =1 
+<if test="postCd !=null and postCd != ''">
+   and t.post_cd= #{postCd}
+</if> 
+<if test="post !=null and post != ''">
+   and t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="weight !=null and weight != ''">
+   and t.weight= #{weight}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="projectId !=null and projectId != ''">
+   and t.project_id= #{projectId}
+</if> 
+
+
+     </select>
+
+</mapper>

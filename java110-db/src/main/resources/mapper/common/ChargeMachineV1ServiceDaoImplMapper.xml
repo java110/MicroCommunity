@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineV1ServiceDaoImpl">
+
+
+    <!-- 保存充电桩信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineInfo" parameterType="Map">
+        insert into charge_machine(
+        heartbeat_time,impl_bean,machine_id,machine_code,energy_price,rule_id,community_id,machine_name
+        ) values (
+        #{heartbeatTime},#{implBean},#{machineId},#{machineCode},#{energyPrice},#{ruleId},#{communityId},#{machineName}
+        )
+    </insert>
+
+
+    <!-- 查询充电桩信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineInfo" parameterType="Map" resultType="Map">
+        select t.heartbeat_time,t.heartbeat_time heartbeatTime,t.impl_bean,t.impl_bean
+        implBean,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
+        machineCode,t.energy_price,t.energy_price energyPrice,t.rule_id,t.rule_id
+        ruleId,t.community_id,t.community_id
+        communityId,t.machine_name,t.machine_name machineName,cmf.factory_name factoryName,t.create_time createTime,
+        cr.rule_name ruleName,
+        count(1) portCount
+        from charge_machine t
+        left join charge_rule cr on t.rule_id = cr.rule_id and cr.status_cd = '0'
+        left join charge_machine_factory cmf on t.impl_bean = cmf.factory_id and cmf.status_cd = '0'
+        left join charge_machine_port cmp on t.machine_id = cmp.machine_id  and cmp.status_cd = '0'
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            and t.impl_bean= #{implBean}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="energyPrice !=null and energyPrice != ''">
+            and t.energy_price= #{energyPrice}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        group by t.heartbeat_time,t.impl_bean,t.machine_id,t.machine_code,t.energy_price,t.rule_id,t.community_id,t.machine_name,
+        cmf.factory_name ,t.create_time,cr.rule_name
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电桩信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineInfo" parameterType="Map">
+        update charge_machine t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            , t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            , t.impl_bean= #{implBean}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="energyPrice !=null and energyPrice != ''">
+            , t.energy_price= #{energyPrice}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        where 1=1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电桩数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeMachinesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_machine t
+        where 1 =1
+        <if test="heartbeatTime !=null and heartbeatTime != ''">
+            and t.heartbeat_time= #{heartbeatTime}
+        </if>
+        <if test="implBean !=null and implBean != ''">
+            and t.impl_bean= #{implBean}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="energyPrice !=null and energyPrice != ''">
+            and t.energy_price= #{energyPrice}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="examineStaffIntroductionV1ServiceDaoImpl">
+
+
+    <!-- 保存员工简介信息 add by wuxw 2018-07-03 -->
+    <insert id="saveExamineStaffIntroductionInfo" parameterType="Map">
+        insert into examine_staff_introduction(
+        esi_id,community_id,staff_id,introduction
+        ) values (
+        #{esiId},#{communityId},#{staffId},#{introduction}
+        )
+    </insert>
+
+
+    <!-- 查询员工简介信息 add by wuxw 2018-07-03 -->
+    <select id="getExamineStaffIntroductionInfo" parameterType="Map" resultType="Map">
+        select t.esi_id,t.esi_id esiId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.staff_id,t.staff_id staffId,t.introduction
+        from examine_staff_introduction t
+        where 1 =1
+        <if test="esiId !=null and esiId != ''">
+            and t.esi_id= #{esiId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="introduction !=null and introduction != ''">
+            and t.introduction= #{introduction}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改员工简介信息 add by wuxw 2018-07-03 -->
+    <update id="updateExamineStaffIntroductionInfo" parameterType="Map">
+        update examine_staff_introduction t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="introduction !=null and introduction != ''">
+            , t.introduction= #{introduction}
+        </if>
+        where 1=1
+        <if test="esiId !=null and esiId != ''">
+            and t.esi_id= #{esiId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </update>
+
+    <!-- 查询员工简介数量 add by wuxw 2018-07-03 -->
+    <select id="queryExamineStaffIntroductionsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from examine_staff_introduction t
+        where 1 =1
+        <if test="esiId !=null and esiId != ''">
+            and t.esi_id= #{esiId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="introduction !=null and introduction != ''">
+            and t.introduction= #{introduction}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -167,6 +167,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         ReportCarDto reportCarDto = new ReportCarDto();
         reportCarDto.setCommunityId(reportFeeMonthStatisticsPo.getCommunityId());
+        reportCarDto.setLeaseTypes(new String[]{OwnerCarDto.LEASE_TYPE_MONTH,OwnerCarDto.LEASE_TYPE_INNER,OwnerCarDto.LEASE_TYPE_SALE,OwnerCarDto.LEASE_TYPE_NO_MONEY});
         int count = reportCommunityServiceDaoImpl.getCarCount(reportCarDto);
 
 
@@ -806,14 +807,18 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             return computeOnceFee(tmpReportFeeDto);
         }
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCommunityId(tmpReportFeeDto.getCommunityId());
-        ownerCarDto.setCarId(tmpReportFeeDto.getCarId());
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+//        OwnerCarDto ownerCarDto = new OwnerCarDto();
+//        ownerCarDto.setCommunityId(tmpReportFeeDto.getCommunityId());
+//        ownerCarDto.setCarId(tmpReportFeeDto.getCarId());
+//        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+//        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+//            return 0.0;
+//        }
+        Date endTime = reportCarDto.getEndTime();
+
+        if(endTime == null){
             return 0.0;
         }
-        Date endTime = ownerCarDtos.get(0).getEndTime();
 
         Date maxEndDate = tmpReportFeeDto.getDeadlineTime();
         if (FeeDto.FEE_FLAG_CYCLE.equals(tmpReportFeeDto.getFeeFlag())) {

@@ -22,8 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
+import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 @Java110CmdDoc(title = "删除门禁授权白名单",
@@ -56,8 +61,8 @@ import org.slf4j.LoggerFactory;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"acwId\":\"xxx\",\"communityId\":\"2022121921870161\"}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        reqBody = "{\"acwId\":\"xxx\",\"communityId\":\"2022121921870161\"}",
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 /**
  * 类表述：删除
@@ -76,6 +81,9 @@ public class DeleteAccessControlWhiteCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "acwId", "acwId不能为空");
@@ -92,6 +100,21 @@ public class DeleteAccessControlWhiteCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setAcwId(accessControlWhitePo.getAcwId());
+        accessControlWhiteAuthDto.setCommunityId(accessControlWhiteAuthDto.getCommunityId());
+        List<AccessControlWhiteAuthDto> accessControlWhiteAuthDtos = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuths(accessControlWhiteAuthDto);
+        AccessControlWhiteAuthPo accessControlWhiteAuthPo = null;
+        for (AccessControlWhiteAuthDto tmpAccessControlWhiteAuthDto : accessControlWhiteAuthDtos) {
+            accessControlWhiteAuthPo = new AccessControlWhiteAuthPo();
+            accessControlWhiteAuthPo.setAcwaId(tmpAccessControlWhiteAuthDto.getAcwaId());
+            accessControlWhiteAuthPo.setCommunityId(tmpAccessControlWhiteAuthDto.getCommunityId());
+            flag = accessControlWhiteAuthV1InnerServiceSMOImpl.deleteAccessControlWhiteAuth(accessControlWhiteAuthPo);
+            if (flag < 1) {
+                throw new CmdException("删除数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

@@ -123,6 +123,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairSettingType;
     private String repairSettingTypeName;
 
+
     public String getRepairName() {
         return repairName;
     }

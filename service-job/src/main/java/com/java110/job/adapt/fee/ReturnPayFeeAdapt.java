@@ -118,7 +118,7 @@ public class ReturnPayFeeAdapt extends DatabusAdaptImpl {
             ownerId = ownerRoomRelDtos.get(0).getOwnerId();
         } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
-            ownerCarDto.setCarId(payerObjId);
+            ownerCarDto.setMemberId(payerObjId);
             ownerCarDto.setCarTypeCd("1001"); //业主车辆
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
             Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");

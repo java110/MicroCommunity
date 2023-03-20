@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resourceAuditFlowV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存物品流程信息 add by wuxw 2018-07-03 -->
+    <insert id="saveResourceAuditFlowInfo" parameterType="Map">
+        insert into resource_audit_flow(
+raf_id,remark,store_id,flow_id,flow_name,flow_type
+) values (
+#{rafId},#{remark},#{storeId},#{flowId},#{flowName},#{flowType}
+)
+    </insert>
+
+
+
+    <!-- 查询物品流程信息 add by wuxw 2018-07-03 -->
+    <select id="getResourceAuditFlowInfo" parameterType="Map" resultType="Map">
+        select  t.raf_id,t.raf_id rafId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType 
+from resource_audit_flow t 
+where 1 =1 
+<if test="rafId !=null and rafId != ''">
+   and t.raf_id= #{rafId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="flowId !=null and flowId != ''">
+   and t.flow_id= #{flowId}
+</if> 
+<if test="flowName !=null and flowName != ''">
+   and t.flow_name= #{flowName}
+</if> 
+<if test="flowType !=null and flowType != ''">
+   and t.flow_type= #{flowType}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改物品流程信息 add by wuxw 2018-07-03 -->
+    <update id="updateResourceAuditFlowInfo" parameterType="Map">
+        update  resource_audit_flow t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="flowId !=null and flowId != ''">
+, t.flow_id= #{flowId}
+</if> 
+<if test="flowName !=null and flowName != ''">
+, t.flow_name= #{flowName}
+</if> 
+<if test="flowType !=null and flowType != ''">
+, t.flow_type= #{flowType}
+</if> 
+ where 1=1 <if test="rafId !=null and rafId != ''">
+and t.raf_id= #{rafId}
+</if> 
+
+    </update>
+
+    <!-- 查询物品流程数量 add by wuxw 2018-07-03 -->
+     <select id="queryResourceAuditFlowsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from resource_audit_flow t 
+where 1 =1 
+<if test="rafId !=null and rafId != ''">
+   and t.raf_id= #{rafId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="flowId !=null and flowId != ''">
+   and t.flow_id= #{flowId}
+</if> 
+<if test="flowName !=null and flowName != ''">
+   and t.flow_name= #{flowName}
+</if> 
+<if test="flowType !=null and flowType != ''">
+   and t.flow_type= #{flowType}
+</if> 
+
+
+     </select>
+
+</mapper>

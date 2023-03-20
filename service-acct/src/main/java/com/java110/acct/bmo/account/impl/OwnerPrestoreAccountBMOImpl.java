@@ -93,6 +93,7 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
         Assert.listOnlyOne(ownerDtos, "业主不存在");
         accountPo.setAcctName(ownerDtos.get(0).getName());
         accountPo.setPartId(reqJson.getString("communityId"));
+        accountPo.setLink(ownerDtos.get(0).getLink());
         accountInnerServiceSMOImpl.saveAccount(accountPo);
         return BeanConvertUtil.covertBean(accountPo, AccountDto.class);
     }

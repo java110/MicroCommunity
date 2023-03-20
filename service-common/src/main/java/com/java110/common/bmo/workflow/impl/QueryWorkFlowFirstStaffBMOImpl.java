@@ -18,6 +18,7 @@ import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
@@ -83,6 +84,10 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
 
     @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
+
 
     @Autowired
     private RepositoryService repositoryService;
@@ -165,7 +170,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         Assert.listOnlyOne(oaWorkflowDtos, "未包含流程");
 
         //普通流程需要部署 表单 其他类型不需要部署
-        if(OaWorkflowDto.FLOW_TYPE_PUBLIC.equals(oaWorkflowDtos.get(0).getFlowType())) {
+        if (OaWorkflowDto.FLOW_TYPE_PUBLIC.equals(oaWorkflowDtos.get(0).getFlowType())) {
             //表单 部署
             deployForm(oaWorkflowDtos.get(0));
         }
@@ -175,7 +180,7 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
             Model modelData = repositoryService.getModel(workflowModelDto.getModelId());
             byte[] bpmnBytes = null;
             bpmnBytes = repositoryService.getModelEditorSource(workflowModelDto.getModelId());
-            if(bpmnBytes == null || bpmnBytes.length< 1){
+            if (bpmnBytes == null || bpmnBytes.length < 1) {
                 throw new CmdException("未设置流程");
             }
             String processName = modelData.getName() + ".bpmn20.xml";
@@ -338,6 +343,9 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         //这里决定对bpmn xml 文件做过滤处理
         dealBpmnXml(workflowModelDto);
 
+        //业务校验
+        businessCheck(oaWorkflowDtos.get(0), workflowModelDto);
+
         OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
         oaWorkflowXmlPo.setStoreId(oaWorkflowDtos.get(0).getStoreId());
         oaWorkflowXmlPo.setBpmnXml(workflowModelDto.getJson_xml());
@@ -403,6 +411,45 @@ public class QueryWorkFlowFirstStaffBMOImpl implements IQueryWorkFlowFirstStaffB
         }
 
         return ResultVo.success();
+    }
+
+
+    //业务校验
+    private void businessCheck(OaWorkflowDto oaWorkflowDto, WorkflowModelDto workflowModelDto) {
+        if (OaWorkflowDto.FLOW_TYPE_VISIT.equals(oaWorkflowDto.getFlowType())) {
+            businessFirstAuditCheck(oaWorkflowDto, workflowModelDto);
+        }
+
+        if(OaWorkflowDto.FLOW_TYPE_OWNER_SETTLED.equals(oaWorkflowDto.getFlowType())){
+            businessFirstAuditCheck(oaWorkflowDto, workflowModelDto);
+        }
+    }
+
+    /**
+     * 第一审批人必须要固定
+     *
+     * @param oaWorkflowDto
+     * @param workflowModelDto
+     */
+    private void businessFirstAuditCheck(OaWorkflowDto oaWorkflowDto, WorkflowModelDto workflowModelDto) {
+        OaWorkflowXmlDto oaWorkflowXmlDto = new OaWorkflowXmlDto();
+        oaWorkflowXmlDto.setBpmnXml(workflowModelDto.getJson_xml());
+        List<JSONObject> outs = oaWorkflowActivitiInnerServiceSMOImpl.queryFirstAuditStaff(oaWorkflowXmlDto);
+
+        if (outs == null || outs.size() < 1) {
+            throw new IllegalArgumentException("提交者之后，第一审批人必须要指定具体审批人");
+        }
+
+        String assignee = outs.get(0).getString("assignee");
+
+        if (StringUtil.isEmpty(assignee)) {
+            throw new IllegalArgumentException("提交者之后，第一审批人必须要指定具体审批人");
+        }
+
+        if (assignee.startsWith("-")) {
+            throw new IllegalArgumentException("提交者之后，第一审批人必须要指定具体审批人");
+        }
+
     }
 
     /**

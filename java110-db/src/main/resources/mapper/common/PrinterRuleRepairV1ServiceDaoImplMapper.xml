@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="printerRuleRepairV1ServiceDaoImpl">
+
+
+    <!-- 保存云打印规则报修信息 add by wuxw 2018-07-03 -->
+    <insert id="savePrinterRuleRepairInfo" parameterType="Map">
+        insert into printer_rule_repair(
+        prr_id,repair_type,rule_id,community_id,repair_type_name
+        ) values (
+        #{prrId},#{repairType},#{ruleId},#{communityId},#{repairTypeName}
+        )
+    </insert>
+
+
+    <!-- 查询云打印规则报修信息 add by wuxw 2018-07-03 -->
+    <select id="getPrinterRuleRepairInfo" parameterType="Map" resultType="Map">
+        select t.prr_id,t.prr_id prrId,t.repair_type,t.repair_type repairType,t.status_cd,t.status_cd
+        statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,t.repair_type_name repairTypeName
+        from printer_rule_repair t
+        where 1 =1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改云打印规则报修信息 add by wuxw 2018-07-03 -->
+    <update id="updatePrinterRuleRepairInfo" parameterType="Map">
+        update printer_rule_repair t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            , t.repair_type= #{repairType}
+        </if>
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            , t.repair_type_name= #{repairTypeName}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+
+        where 1=1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询云打印规则报修数量 add by wuxw 2018-07-03 -->
+    <select id="queryPrinterRuleRepairsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from printer_rule_repair t
+        where 1 =1
+        <if test="prrId !=null and prrId != ''">
+            and t.prr_id= #{prrId}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

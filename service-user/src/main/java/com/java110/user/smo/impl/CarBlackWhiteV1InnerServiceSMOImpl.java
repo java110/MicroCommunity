@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package com.java110.user.smo.impl;
-
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.po.car.CarBlackWhitePo;

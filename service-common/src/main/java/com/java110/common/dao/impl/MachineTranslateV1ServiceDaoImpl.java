@@ -108,5 +108,14 @@ public class MachineTranslateV1ServiceDaoImpl extends BaseServiceDao implements 
         return Integer.parseInt(businessMachineTranslateInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryObjStateInMachineTranslates(Map info) {
+        logger.debug("查询 queryObjStateInMachineTranslates 入参 info : {}",info);
+
+        List<Map> businessMachineTranslateInfos = sqlSessionTemplate.selectList("machineTranslateV1ServiceDaoImpl.queryObjStateInMachineTranslates",info);
+
+        return businessMachineTranslateInfos;
+    }
+
 
 }

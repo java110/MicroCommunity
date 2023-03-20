@@ -298,6 +298,7 @@ public class PayFeeGiftIntegralAdapt extends DatabusAdaptImpl {
             Assert.listOnlyOne(ownerDtos, "业主不存在");
             accountPo.setAcctName(ownerDtos.get(0).getName());
             accountPo.setPartId(ownerDtos.get(0).getCommunityId());
+            accountPo.setLink(ownerDtos.get(0).getLink());
             accountInnerServiceSMOImpl.saveAccount(accountPo);
             List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
             return accountDtos;

@@ -21,14 +21,10 @@ public class AppTest
      * Rigorous Test :-)
      */
     @Test
-    public void shouldAnswerWithTrue()
+    public void should()
     {
 
-        double amount = Double.parseDouble("0.6600");
-        System.out.println(amount);
-
-        BigDecimal amountBig = new BigDecimal(amount);
-        amount = amountBig.subtract(new BigDecimal(Double.parseDouble("0.6"))).doubleValue();
-        System.out.println(amount);
+        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - DateUtil.getDateFromStringA("2023-03-13 23:32:18").getTime()) / (60 * 60 * 1000.00));
+        System.out.printf(usedHours+"");
     }
 }

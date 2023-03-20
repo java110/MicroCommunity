@@ -14,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class AccessControlWhiteDto extends MachineDto implements Serializable {
+public class AccessControlWhiteDto extends PageDto implements Serializable {
 
     public static final String PERSON_TYPE_VISIT = "4004";
 
@@ -34,9 +34,11 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
     private String personType;
     private String personTypeName;
 
-
+    private Date createTime;
     private String statusCd = "0";
     private String personFace;
+
+    private String machineCount;
 
 
     public String getThirdId() {
@@ -136,7 +138,6 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
     }
 
 
-
     public String getStatusCd() {
         return statusCd;
     }
@@ -167,5 +168,21 @@ public class AccessControlWhiteDto extends MachineDto implements Serializable {
 
     public void setPersonNameLike(String personNameLike) {
         this.personNameLike = personNameLike;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getMachineCount() {
+        return machineCount;
+    }
+
+    public void setMachineCount(String machineCount) {
+        this.machineCount = machineCount;
     }
 }

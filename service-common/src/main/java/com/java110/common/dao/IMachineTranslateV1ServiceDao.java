@@ -74,4 +74,5 @@ public interface IMachineTranslateV1ServiceDao {
      */
     int queryMachineTranslatesCount(Map info);
 
+    List<Map> queryObjStateInMachineTranslates(Map info);
 }

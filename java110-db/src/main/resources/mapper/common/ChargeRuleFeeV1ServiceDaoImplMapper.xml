@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeRuleFeeV1ServiceDaoImpl">
+
+
+    <!-- 保存充电价格信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeRuleFeeInfo" parameterType="Map">
+        insert into charge_rule_fee(
+        max_energy_price,duration_price,crf_id,remark,rule_id,min_energy_price,community_id
+        ) values (
+        #{maxEnergyPrice},#{durationPrice},#{crfId},#{remark},#{ruleId},#{minEnergyPrice},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询充电价格信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeRuleFeeInfo" parameterType="Map" resultType="Map">
+        select t.max_energy_price,t.max_energy_price maxEnergyPrice,t.duration_price,t.duration_price
+        durationPrice,t.crf_id,t.crf_id crfId,t.remark,t.status_cd,t.status_cd statusCd,t.rule_id,t.rule_id
+        ruleId,t.min_energy_price,t.min_energy_price minEnergyPrice,t.community_id,t.community_id communityId
+        from charge_rule_fee t
+        where 1 =1
+        <if test="maxEnergyPrice !=null and maxEnergyPrice != ''">
+            and t.max_energy_price= #{maxEnergyPrice}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            and t.duration_price= #{durationPrice}
+        </if>
+        <if test="crfId !=null and crfId != ''">
+            and t.crf_id= #{crfId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="minEnergyPrice !=null and minEnergyPrice != ''">
+            and t.min_energy_price= #{minEnergyPrice}
+        </if>
+        <if test="energy !=null and energy != ''">
+            and t.min_energy_price &lt;= #{energy}
+            and t.max_energy_price &gt; #{energy}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.duration_price
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电价格信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeRuleFeeInfo" parameterType="Map">
+        update charge_rule_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="maxEnergyPrice !=null and maxEnergyPrice != ''">
+            , t.max_energy_price= #{maxEnergyPrice}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            , t.duration_price= #{durationPrice}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            , t.rule_id= #{ruleId}
+        </if>
+        <if test="minEnergyPrice !=null and minEnergyPrice != ''">
+            , t.min_energy_price= #{minEnergyPrice}
+        </if>
+        <if test='minEnergyPrice !=null and minEnergyPrice == "0"'>
+            , t.min_energy_price= #{minEnergyPrice}
+        </if>
+
+        where 1=1
+        <if test="crfId !=null and crfId != ''">
+            and t.crf_id= #{crfId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电价格数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeRuleFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_rule_fee t
+        where 1 =1
+        <if test="maxEnergyPrice !=null and maxEnergyPrice != ''">
+            and t.max_energy_price= #{maxEnergyPrice}
+        </if>
+        <if test="durationPrice !=null and durationPrice != ''">
+            and t.duration_price= #{durationPrice}
+        </if>
+        <if test="crfId !=null and crfId != ''">
+            and t.crf_id= #{crfId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="minEnergyPrice !=null and minEnergyPrice != ''">
+            and t.min_energy_price= #{minEnergyPrice}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

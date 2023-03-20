@@ -8,7 +8,12 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.machinePrinter.MachinePrinterDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.printerRule.PrinterRuleDto;
+import com.java110.dto.printerRuleFee.PrinterRuleFeeDto;
+import com.java110.dto.printerRuleMachine.PrinterRuleMachineDto;
+import com.java110.dto.printerRuleRepair.PrinterRuleRepairDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
@@ -19,7 +24,7 @@ import com.java110.entity.order.Business;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
-import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.*;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
@@ -29,10 +34,14 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.printer.IPrinter;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.exception.CmdException;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -85,6 +94,19 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IPrinterRuleRepairV1InnerServiceSMO printerRuleRepairV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPrinterRuleV1InnerServiceSMO printerRuleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPrinterRuleMachineV1InnerServiceSMO printerRuleMachineV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IMachinePrinterV1InnerServiceSMO machinePrinterV1InnerServiceSMOImpl;
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -174,8 +196,14 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 sendMsg(paramIn, communityDtos.get(0));
                 //派单成功给业主推送信息
                 publishMsg(paramIn, communityDtos.get(0));
+
+                // 自动打印小票
+                autoPrintRepair(repairUserDtos.get(0).getRuId(),repairDtos.get(0).getRepairType(),communityDtos.get(0));
+                
                 //为企业微信群发消息
                 sendMsgToWechatGroup(paramIn, communityDtos.get(0));
+
+                
             } else if (repairState.equals("1100") && !businessRepairUser.getString("state").equals("10006")) {
                 JSONObject paramIn = new JSONObject();
                 paramIn.put("staffId", businessRepairUser.getString("staffId"));
@@ -203,6 +231,71 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
                 sendMessage(paramIn, communityDtos.get(0));
             }
         }
+    }
+
+    /**
+     * // 自动打印小票
+     * @param ruId
+     * @param repairType
+     * @param communityDto
+     */
+    private void autoPrintRepair(String ruId,String repairType, CommunityDto communityDto) {
+
+        PrinterRuleRepairDto printerRuleRepairDto = new PrinterRuleRepairDto();
+        printerRuleRepairDto.setCommunityId(communityDto.getCommunityId());
+        printerRuleRepairDto.setRepairType(repairType);
+        List<PrinterRuleRepairDto> printerRuleRepairDtos = printerRuleRepairV1InnerServiceSMOImpl.queryPrinterRuleRepairs(printerRuleRepairDto);
+
+        if (printerRuleRepairDtos == null || printerRuleRepairDtos.size() < 1) {
+            return;
+        }
+
+        PrinterRuleDto printerRuleDto = new PrinterRuleDto();
+        printerRuleDto.setRuleId(printerRuleRepairDtos.get(0).getRuleId());
+        printerRuleDto.setCommunityId(communityDto.getCommunityId());
+        printerRuleDto.setState(PrinterRuleDto.STATE_NORMAL);
+        int count = printerRuleV1InnerServiceSMOImpl.queryPrinterRulesCount(printerRuleDto);
+
+        if (count < 1) {
+            return;
+        }
+
+        PrinterRuleMachineDto printerRuleMachineDto = new PrinterRuleMachineDto();
+        printerRuleMachineDto.setCommunityId(communityDto.getCommunityId());
+        printerRuleMachineDto.setRuleId(printerRuleRepairDtos.get(0).getRuleId());
+        List<PrinterRuleMachineDto> printerRuleMachineDtos = printerRuleMachineV1InnerServiceSMOImpl.queryPrinterRuleMachines(printerRuleMachineDto);
+        if (printerRuleMachineDtos == null || printerRuleMachineDtos.size() < 1) {
+            return;
+        }
+
+        for (PrinterRuleMachineDto tmpPrinterRuleMachineDto : printerRuleMachineDtos) {
+            try {
+                doPrint(tmpPrinterRuleMachineDto, ruId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    private void doPrint(PrinterRuleMachineDto tmpPrinterRuleMachineDto, String ruId) {
+        MachinePrinterDto machinePrinterDto = new MachinePrinterDto();
+        machinePrinterDto.setCommunityId(tmpPrinterRuleMachineDto.getCommunityId());
+        machinePrinterDto.setMachineId(tmpPrinterRuleMachineDto.getMachineId());
+        List<MachinePrinterDto> machinePrinterDtos = machinePrinterV1InnerServiceSMOImpl.queryMachinePrinters(machinePrinterDto);
+
+        Assert.listOnlyOne(machinePrinterDtos, "云打印机不存在");
+
+        IPrinter printer = ApplicationContextFactory.getBean(machinePrinterDtos.get(0).getImplBean(), IPrinter.class);
+
+        if (printer == null) {
+            throw new CmdException("打印机异常，未包含适配器");
+        }
+
+        printer.printRepair(ruId, tmpPrinterRuleMachineDto.getCommunityId(), Integer.parseInt(tmpPrinterRuleMachineDto.getQuantity()), machinePrinterDtos.get(0));
+
+
     }
 
     /**

@@ -45,5 +45,17 @@ public class ServiceStartInit {
         }
     }
 
+    /**
+     * 打印启动成功的标识
+     */
+    public static void printStartSuccessInfo(){
+        System.out.println("=================================================================================================");
+        System.out.println("=                                                                                               =");
+        System.out.println("=                                              服务启动成功!!                                     =");
+        System.out.println("=                                          service start success !!                             =");
+        System.out.println("=                                                                                               =");
+        System.out.println("=================================================================================================");
+    }
+
 
 }

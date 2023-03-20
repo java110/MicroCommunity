@@ -165,6 +165,15 @@ public class BootApplicationStart {
         restTemplate.setRequestFactory(httpRequestFactory);
         return restTemplate;
     }
+
+    @Bean
+    //@LoadBalanced
+    public RestTemplate formRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        return restTemplate;
+    }
+
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
@@ -201,13 +210,19 @@ public class BootApplicationStart {
 
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
 
-
             //刷新缓存
             flushMainCache(args);
+
+            //服务启动完成
+            ServiceStartInit.printStartSuccessInfo();
+
+
         } catch (Throwable e) {
             logger.error("系统启动失败", e);
         }
     }
+
+
 
     /**
      * 刷新主要的缓存

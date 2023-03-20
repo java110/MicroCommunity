@@ -84,6 +84,8 @@ public class PcUserLoginCmd extends Cmd {
         Assert.isJsonObject(paramIn, "用户注册请求参数有误，不是有效的json格式 " + paramIn);
         Assert.jsonObjectHaveKey(paramIn, "username", "用户登录，未包含username节点，请检查" + paramIn);
         Assert.jsonObjectHaveKey(paramIn, "passwd", "用户登录，未包含passwd节点，请检查" + paramIn);
+
+
     }
 
     @Override

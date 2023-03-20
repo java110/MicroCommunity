@@ -28,12 +28,14 @@ import com.java110.dto.machine.MachineDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.po.owner.VisitPo;
 import com.java110.po.parking.ParkingSpacePo;
@@ -78,6 +80,9 @@ public class VisitV1InnerServiceSMOImpl extends BaseServiceSMO implements IVisit
 
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -179,13 +184,22 @@ public class VisitV1InnerServiceSMOImpl extends BaseServiceSMO implements IVisit
                 accessControlWhitePo.setCommunityId(visitDto.getCommunityId());
                 accessControlWhitePo.setEndTime(visitDto.getDepartureTime());
                 accessControlWhitePo.setIdCard("");
-                accessControlWhitePo.setMachineId(tmpMachineDto.getMachineId());
+                accessControlWhitePo.setMachineId("-1");
                 accessControlWhitePo.setPersonName(visitDto.getvName());
                 accessControlWhitePo.setPersonType(AccessControlWhiteDto.PERSON_TYPE_VISIT);
                 accessControlWhitePo.setStartTime(visitDto.getVisitTime());
                 accessControlWhitePo.setTel(visitDto.getPhoneNumber());
                 accessControlWhitePo.setThirdId(visitDto.getvId());
                 int flag = accessControlWhiteV1InnerServiceSMOImpl.saveAccessControlWhite(accessControlWhitePo);
+                if (flag < 1) {
+                    throw new CmdException("同步门禁白名单失败");
+                }
+                AccessControlWhiteAuthPo accessControlWhiteAuthPo = new AccessControlWhiteAuthPo();
+                accessControlWhiteAuthPo.setAcwaId(GenerateCodeFactory.getGeneratorId("10"));
+                accessControlWhiteAuthPo.setAcwId(accessControlWhitePo.getAcwId());
+                accessControlWhiteAuthPo.setCommunityId(accessControlWhitePo.getCommunityId());
+                accessControlWhiteAuthPo.setMachineId(tmpMachineDto.getMachineId());
+                flag = accessControlWhiteAuthV1InnerServiceSMOImpl.saveAccessControlWhiteAuth(accessControlWhiteAuthPo);
                 if (flag < 1) {
                     throw new CmdException("同步门禁白名单失败");
                 }

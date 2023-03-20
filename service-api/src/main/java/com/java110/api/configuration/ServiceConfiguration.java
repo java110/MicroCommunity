@@ -99,7 +99,11 @@ public class ServiceConfiguration {
 
         exclusions.append("/app/productSeckill.listProductSeckill,");//秒杀商品
         exclusions.append("/app/system.listRegisterProtocol,");//查询注册信息
-
+        exclusions.append("/app/chargeMachine.listChargeMachine,");//查询注册信息
+        exclusions.append("/app/chargeMachine.listChargeMachinePort,");//查询充电桩
+        exclusions.append("/app/smartMeter/notify/*,");// 智能水电表通知放开
+        exclusions.append("/app/equipments/*,");// 叮叮充电桩通知放开
+        exclusions.append("/app/charge/*,");// 通用充电桩通知放开
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 

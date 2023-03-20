@@ -253,9 +253,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
         machinePo.setState("1700");
         machineInnerServiceSMOImpl.updateMachineState(machinePo);
 
-        for (JSONObject owner : ownerDtos) {
-            addOwner(owner);
-        }
+//        for (JSONObject owner : ownerDtos) {
+//            addOwner(owner);
+//        }
     }
 
     @Override

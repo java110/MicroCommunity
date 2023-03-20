@@ -1,5 +1,6 @@
 package com.java110.dto.attendanceClasses;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
@@ -30,6 +31,7 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
     private String taskYear;
     private String taskId;
     private String staffId;
+    private String[] staffIds;
     private String staffName;
     private String classesName;
     private String classObjName;
@@ -47,6 +49,8 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
     private String free;
 
     List<AttendanceClassesTaskDetailDto> attendanceClassesTaskDetails;
+
+    JSONObject days;
 
 
     public String getClassId() {
@@ -216,5 +220,21 @@ public class AttendanceClassesTaskDto extends PageDto implements Serializable {
 
     public void setFree(String free) {
         this.free = free;
+    }
+
+    public JSONObject getDays() {
+        return days;
+    }
+
+    public void setDays(JSONObject days) {
+        this.days = days;
+    }
+
+    public String[] getStaffIds() {
+        return staffIds;
+    }
+
+    public void setStaffIds(String[] staffIds) {
+        this.staffIds = staffIds;
     }
 }

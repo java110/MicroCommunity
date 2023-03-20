@@ -2,6 +2,8 @@ package com.java110.report.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
 import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
 import com.java110.intf.report.IReportAttendanceInnerServiceSMO;
 import com.java110.report.dao.IReportAttendanceServiceDao;
@@ -34,6 +36,17 @@ public class ReportAttendanceInnerServiceSMOImpl extends BaseServiceSMO implemen
 
     @Override
     public List<AttendanceClassesTaskDto> getMonthAttendance(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto) {
+        int page = attendanceClassesTaskDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            attendanceClassesTaskDto.setPage((page - 1) * attendanceClassesTaskDto.getRow());
+        }
+
         return BeanConvertUtil.covertBeanList(reportAttendanceServiceDaoImpl.getMonthAttendance(BeanConvertUtil.beanCovertMap(attendanceClassesTaskDto)),AttendanceClassesTaskDto.class);
+    }
+
+    @Override
+    public List<AttendanceClassesTaskDetailDto> getMonthAttendanceDetail(@RequestBody AttendanceClassesTaskDto attendanceClassesTaskDto) {
+        return BeanConvertUtil.covertBeanList(reportAttendanceServiceDaoImpl.getMonthAttendanceDetail(BeanConvertUtil.beanCovertMap(attendanceClassesTaskDto)),AttendanceClassesTaskDetailDto.class);
     }
 }

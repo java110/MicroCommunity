@@ -105,6 +105,9 @@ public class JobServiceApplication {
         //加载业务侦听
         // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
 
+        //服务启动完成
+        ServiceStartInit.printStartSuccessInfo();
+
 
     }
 }

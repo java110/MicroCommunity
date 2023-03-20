@@ -89,7 +89,10 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     private String typeCdName;
     private String machineTranslateId;
     private String objId;
+
+    private String[] objIds;
     private String objName;
+
     private String state;
     private String stateName;
     private String communityId;
@@ -274,5 +277,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setIsNow(String isNow) {
         this.isNow = isNow;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }

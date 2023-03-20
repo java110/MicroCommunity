@@ -121,7 +121,7 @@
         t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value`
         importFeeName,pfc.fee_name feeName,t.payable_amount,t.payable_amount payableAmount,
         mw.cur_degrees curDegrees,mw.pre_degrees preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time
-        curReadingTime,t.pay_order_id payOrderId
+        curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'

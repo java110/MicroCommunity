@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerCommitteeV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存业主委员会信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerCommitteeInfo" parameterType="Map">
+        insert into owner_committee(
+address,appoint_time,id_card,post_desc,sex,link,remark,cur_time,post,name,position,state,oc_id,community_id
+) values (
+#{address},#{appointTime},#{idCard},#{postDesc},#{sex},#{link},#{remark},#{curTime},#{post},#{name},#{position},#{state},#{ocId},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询业主委员会信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerCommitteeInfo" parameterType="Map" resultType="Map">
+        select  t.address,t.appoint_time,t.appoint_time appointTime,t.id_card,t.id_card idCard,t.post_desc,t.post_desc postDesc,t.sex,t.link,t.remark,t.status_cd,t.status_cd statusCd,t.cur_time,t.cur_time curTime,t.post,t.name,t.position,t.state,t.oc_id,t.oc_id ocId,t.community_id,t.community_id communityId 
+from owner_committee t 
+where 1 =1 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="appointTime !=null and appointTime != ''">
+   and t.appoint_time= #{appointTime}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="postDesc !=null and postDesc != ''">
+   and t.post_desc= #{postDesc}
+</if> 
+<if test="sex !=null and sex != ''">
+   and t.sex= #{sex}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="curTime !=null and curTime != ''">
+   and t.cur_time= #{curTime}
+</if> 
+<if test="post !=null and post != ''">
+   and t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="position !=null and position != ''">
+   and t.position= #{position}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="ocId !=null and ocId != ''">
+   and t.oc_id= #{ocId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改业主委员会信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerCommitteeInfo" parameterType="Map">
+        update  owner_committee t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="address !=null and address != ''">
+, t.address= #{address}
+</if> 
+<if test="appointTime !=null and appointTime != ''">
+, t.appoint_time= #{appointTime}
+</if> 
+<if test="idCard !=null and idCard != ''">
+, t.id_card= #{idCard}
+</if> 
+<if test="postDesc !=null and postDesc != ''">
+, t.post_desc= #{postDesc}
+</if> 
+<if test="sex !=null and sex != ''">
+, t.sex= #{sex}
+</if> 
+<if test="link !=null and link != ''">
+, t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="curTime !=null and curTime != ''">
+, t.cur_time= #{curTime}
+</if> 
+<if test="post !=null and post != ''">
+, t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="position !=null and position != ''">
+, t.position= #{position}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="ocId !=null and ocId != ''">
+and t.oc_id= #{ocId}
+</if> 
+
+    </update>
+
+    <!-- 查询业主委员会数量 add by wuxw 2018-07-03 -->
+     <select id="queryOwnerCommitteesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from owner_committee t 
+where 1 =1 
+<if test="address !=null and address != ''">
+   and t.address= #{address}
+</if> 
+<if test="appointTime !=null and appointTime != ''">
+   and t.appoint_time= #{appointTime}
+</if> 
+<if test="idCard !=null and idCard != ''">
+   and t.id_card= #{idCard}
+</if> 
+<if test="postDesc !=null and postDesc != ''">
+   and t.post_desc= #{postDesc}
+</if> 
+<if test="sex !=null and sex != ''">
+   and t.sex= #{sex}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="curTime !=null and curTime != ''">
+   and t.cur_time= #{curTime}
+</if> 
+<if test="post !=null and post != ''">
+   and t.post= #{post}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="position !=null and position != ''">
+   and t.position= #{position}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="ocId !=null and ocId != ''">
+   and t.oc_id= #{ocId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>

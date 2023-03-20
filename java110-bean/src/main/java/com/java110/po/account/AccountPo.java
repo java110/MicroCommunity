@@ -12,6 +12,8 @@ public class AccountPo implements Serializable {
     private String objType;
     private String partId;
 
+    private String link;
+
 
     public String getAmount() {
         return amount;
@@ -67,5 +69,13 @@ public class AccountPo implements Serializable {
 
     public void setPartId(String partId) {
         this.partId = partId;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

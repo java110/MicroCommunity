@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachinePortV1ServiceDaoImpl">
+
+
+    <!-- 保存充电插口信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachinePortInfo" parameterType="Map">
+        insert into charge_machine_port(
+        machine_id,port_name,state,port_id,port_code,community_id
+        ) values (
+        #{machineId},#{portName},#{state},#{portId},#{portCode},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询充电插口信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachinePortInfo" parameterType="Map" resultType="Map">
+        select t.machine_id,t.machine_id machineId,t.status_cd,t.status_cd statusCd,t.port_name,t.port_name
+        portName,t.state,t.port_id,t.port_id portId,t.port_code,t.port_code portCode,t.community_id,t.community_id
+        communityId,td.`name` stateName
+        from charge_machine_port t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'charge_machine_port' and td.table_columns = 'state'
+        where 1 =1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="portName !=null and portName != ''">
+            and t.port_name= #{portName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+        <if test="portCode !=null and portCode != ''">
+            and t.port_code= #{portCode}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.port_code
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电插口信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachinePortInfo" parameterType="Map">
+        update charge_machine_port t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="portName !=null and portName != ''">
+            , t.port_name= #{portName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="portCode !=null and portCode != ''">
+            , t.port_code= #{portCode}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电插口数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeMachinePortsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_machine_port t
+        where 1 =1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="portName !=null and portName != ''">
+            and t.port_name= #{portName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="portId !=null and portId != ''">
+            and t.port_id= #{portId}
+        </if>
+        <if test="portCode !=null and portCode != ''">
+            and t.port_code= #{portCode}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

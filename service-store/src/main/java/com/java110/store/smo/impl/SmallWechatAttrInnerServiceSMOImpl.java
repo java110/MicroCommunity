@@ -50,13 +50,13 @@ public class SmallWechatAttrInnerServiceSMOImpl extends BaseServiceSMO implement
             return smallWechatAttrs;
         }
 
-        String[] userIds = getUserIds(smallWechatAttrs);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (SmallWechatAttrDto smallWechatAttr : smallWechatAttrs) {
-            refreshSmallWechatAttr(smallWechatAttr, users);
-        }
+//        String[] userIds = getUserIds(smallWechatAttrs);
+//        //根据 userId 查询用户信息
+//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+//
+//        for (SmallWechatAttrDto smallWechatAttr : smallWechatAttrs) {
+//            refreshSmallWechatAttr(smallWechatAttr, users);
+//        }
         return smallWechatAttrs;
     }
 

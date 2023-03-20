@@ -35,6 +35,8 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_L = "MMdd";
     public static final String DATE_FORMATE_STRING_M = "yyyyMM";
     public static final String DATE_FORMATE_STRING_N = "HHmmss";
+    public static final String DATE_FORMATE_STRING_O = "yyyyMMddHHmm";
+
 
     static {
         formats.put("yyyyMMddHHmmss", new SimpleDateFormat("yyyyMMddHHmmss"));
@@ -52,6 +54,7 @@ public class DateUtil {
         formats.put("MMdd", new SimpleDateFormat("MMdd"));
         formats.put("yyyyMM", new SimpleDateFormat("yyyyMM"));
         formats.put("HHmmss", new SimpleDateFormat("HHmmss"));
+        formats.put("yyyyMMddHHmm", new SimpleDateFormat("yyyyMMddHHmm"));
     }
 
 
@@ -473,6 +476,15 @@ public class DateUtil {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.DAY_OF_MONTH, days);
+        return sf.format(c.getTime());
+    }
+
+
+    public static String getAddHoursStringA(Date date, int hours) {
+        SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMATE_STRING_A);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR_OF_DAY, hours);
         return sf.format(c.getTime());
     }
 

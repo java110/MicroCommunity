@@ -201,7 +201,7 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
 
         int beforeTime = Integer.parseInt(tmpInspectionPlanDto.getBeforeTime());
 
-        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)+" "+tmpInspectionPlanDto.getStartTime()+":00";
+        String planTime = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B) + " "+tmpInspectionPlanDto.getStartTime()+":00";
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(DateUtil.getDateFromStringA(planTime));

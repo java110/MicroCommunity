@@ -101,13 +101,21 @@ public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 
         Assert.listOnlyOne(machineDtos, "未找到设备");
+        String locationType = "";
 
-        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
-        communityLocationDto.setLocationId(machineDtos.get(0).getLocationTypeCd());
-        communityLocationDto.setCommunityId(machineDtos.get(0).getCommunityId());
-        List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+        if(MachineDto.MACHINE_TYPE_ATTENDANCE.equals(machineDtos.get(0).getMachineTypeCd())){
+            locationType = "5000";
+        }else {
+            CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+            communityLocationDto.setLocationId(machineDtos.get(0).getLocationTypeCd());
+            communityLocationDto.setCommunityId(machineDtos.get(0).getCommunityId());
+            List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
 
-        Assert.listOnlyOne(communityLocationDtos, "设备位置不存在");
+            Assert.listOnlyOne(communityLocationDtos, "设备位置不存在");
+
+            locationType = communityLocationDtos.get(0).getLocationType();
+        }
+
 
         String hmId = getHmId(machineDtos.get(0));
         JSONObject postParameters = new JSONObject();
@@ -116,7 +124,7 @@ public class ModifyMachineToIotAdapt extends DatabusAdaptImpl {
         postParameters.put("machineName", machinePo.getMachineName());
         postParameters.put("machineVersion", machinePo.getMachineVersion());
         postParameters.put("machineTypeCd", machinePo.getMachineTypeCd());
-        postParameters.put("locationType", communityLocationDtos.get(0).getLocationType());
+        postParameters.put("locationType", locationType);
         postParameters.put("locationObjId", machineDtos.get(0).getLocationObjId());
         postParameters.put("extMachineId", machineDtos.get(0).getMachineId());
         postParameters.put("extCommunityId", machinePo.getCommunityId());

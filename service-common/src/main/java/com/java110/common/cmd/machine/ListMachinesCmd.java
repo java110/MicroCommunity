@@ -22,10 +22,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.RoomDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
+import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.utils.exception.CmdException;
@@ -77,6 +79,9 @@ public class ListMachinesCmd extends Cmd {
 
     @Autowired
     private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
+
+    @Autowired
+    private IAttendanceClassesV1InnerServiceSMO attendanceClassesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -148,23 +153,22 @@ public class ListMachinesCmd extends Cmd {
         }
     }
 
-    private void refreshMachines(List<MachineDto> machines) {
-
-        //批量处理 小区
-        refreshCommunitys(machines);
-
-        //批量处理单元信息
-        refreshUnits(machines);
-
-        //批量处理 房屋信息
-        refreshRooms(machines);
-
-        //位置未分配时
-        refreshOther(machines);
-
-    }
 
     private void getMachineLocation(MachineDto machineDto) {
+
+        if (MachineDto.MACHINE_TYPE_ATTENDANCE.equals(machineDto.getMachineTypeCd())) {
+            AttendanceClassesDto attendanceClassesDto = new AttendanceClassesDto();
+            attendanceClassesDto.setClassesId(machineDto.getLocationObjId());
+            List<AttendanceClassesDto> attendanceClassesDtos = attendanceClassesV1InnerServiceSMOImpl.queryAttendanceClassess(attendanceClassesDto);
+            if (attendanceClassesDtos == null || attendanceClassesDtos.size() < 1) {
+                machineDto.setLocationType(machineDto.getLocationTypeCd());
+                return;
+            }
+
+            machineDto.setLocationType(attendanceClassesDtos.get(0).getClassesId());
+            machineDto.setLocationObjName(attendanceClassesDtos.get(0).getClassesName());
+            return;
+        }
 
         CommunityLocationDto communityLocationDto = new CommunityLocationDto();
         communityLocationDto.setCommunityId(machineDto.getCommunityId());
@@ -180,133 +184,4 @@ public class ListMachinesCmd extends Cmd {
         machineDto.setLocationObjName(communityLocationDtos.get(0).getLocationName());
     }
 
-    /**
-     * 获取批量小区
-     *
-     * @param machines 设备信息
-     * @return 批量userIds 信息
-     */
-    private void refreshCommunitys(List<MachineDto> machines) {
-        List<String> communityIds = new ArrayList<String>();
-        List<MachineDto> tmpMachineDtos = new ArrayList<>();
-        for (MachineDto machineDto : machines) {
-            getMachineLocation(machineDto);
-            if (!"2000".equals(machineDto.getLocationType())
-                    && !"3000".equals(machineDto.getLocationType())
-                    && !"4000".equals(machineDto.getLocationType())
-            ) {
-                communityIds.add(machineDto.getLocationObjId());
-                tmpMachineDtos.add(machineDto);
-            }
-        }
-
-        if (communityIds.size() < 1) {
-            return;
-        }
-        String[] tmpCommunityIds = communityIds.toArray(new String[communityIds.size()]);
-
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityIds(tmpCommunityIds);
-        //根据 userId 查询用户信息
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-
-        for (MachineDto machineDto : tmpMachineDtos) {
-            for (CommunityDto tmpCommunityDto : communityDtos) {
-                if (machineDto.getLocationObjId().equals(tmpCommunityDto.getCommunityId())) {
-                    machineDto.setLocationObjName(tmpCommunityDto.getName() + " " + machineDto.getLocationTypeName());
-                }
-            }
-        }
-    }
-
-
-    /**
-     * 获取批量单元
-     *
-     * @param machines 设备信息
-     * @return 批量userIds 信息
-     */
-    private void refreshUnits(List<MachineDto> machines) {
-        List<String> unitIds = new ArrayList<String>();
-        List<MachineDto> tmpMachineDtos = new ArrayList<>();
-        for (MachineDto machineDto : machines) {
-            getMachineLocation(machineDto);
-            if ("2000".equals(machineDto.getLocationType())) {
-                unitIds.add(machineDto.getLocationObjId());
-                tmpMachineDtos.add(machineDto);
-            }
-        }
-
-        if (unitIds.size() < 1) {
-            return;
-        }
-        String[] tmpUnitIds = unitIds.toArray(new String[unitIds.size()]);
-
-        FloorAndUnitDto floorAndUnitDto = new FloorAndUnitDto();
-        floorAndUnitDto.setUnitIds(tmpUnitIds);
-        //根据 userId 查询用户信息
-        List<FloorAndUnitDto> unitDtos = unitInnerServiceSMOImpl.getFloorAndUnitInfo(floorAndUnitDto);
-
-        for (MachineDto machineDto : tmpMachineDtos) {
-            for (FloorAndUnitDto tmpUnitDto : unitDtos) {
-                if (machineDto.getLocationObjId().equals(tmpUnitDto.getUnitId())) {
-                    machineDto.setLocationObjName(tmpUnitDto.getFloorNum() + "栋" + tmpUnitDto.getUnitNum() + "单元");
-                    BeanConvertUtil.covertBean(tmpUnitDto, machineDto);
-                }
-            }
-        }
-    }
-
-    /**
-     * 获取批量单元
-     *
-     * @param machines 设备信息
-     * @return 批量userIds 信息
-     */
-    private void refreshRooms(List<MachineDto> machines) {
-        List<String> roomIds = new ArrayList<String>();
-        List<MachineDto> tmpMachineDtos = new ArrayList<>();
-        for (MachineDto machineDto : machines) {
-            getMachineLocation(machineDto);
-            if ("3000".equals(machineDto.getLocationType())) {
-                roomIds.add(machineDto.getLocationObjId());
-                tmpMachineDtos.add(machineDto);
-            }
-        }
-        if (roomIds.size() < 1) {
-            return;
-        }
-        String[] tmpRoomIds = roomIds.toArray(new String[roomIds.size()]);
-
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomIds(tmpRoomIds);
-        roomDto.setCommunityId(machines.get(0).getCommunityId());
-        //根据 userId 查询用户信息
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        for (MachineDto machineDto : tmpMachineDtos) {
-            for (RoomDto tmpRoomDto : roomDtos) {
-                if (machineDto.getLocationObjId().equals(tmpRoomDto.getRoomId())) {
-                    machineDto.setLocationObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
-                    BeanConvertUtil.covertBean(tmpRoomDto, machineDto);
-                }
-            }
-        }
-    }
-
-    /**
-     * 获取批量单元
-     *
-     * @param machines 设备信息
-     * @return 批量userIds 信息
-     */
-    private void refreshOther(List<MachineDto> machines) {
-        for (MachineDto machineDto : machines) {
-
-            if ("4000".equals(machineDto.getLocationTypeCd())) {
-                machineDto.setLocationObjName("未分配");
-            }
-        }
-
-    }
 }

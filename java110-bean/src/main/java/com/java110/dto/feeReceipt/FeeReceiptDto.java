@@ -40,6 +40,12 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String startTime;
+
+    private String endTime;
+
+    private String feeFlag;
+
     public String getAmount() {
         return amount;
     }
@@ -198,5 +204,29 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setDetailIds(String[] detailIds) {
         this.detailIds = detailIds;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFeeFlag() {
+        return feeFlag;
+    }
+
+    public void setFeeFlag(String feeFlag) {
+        this.feeFlag = feeFlag;
     }
 }

@@ -139,7 +139,7 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
         t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score
         appraiseScore, a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore,
-        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,d1.name repairSettingTypeName
+        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,d1.name repairSettingTypeName,t.create_time createTime
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
