@@ -134,7 +134,7 @@ public class ChargeCoreImpl implements IChargeCore {
         Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -2); // 这里减掉两分钟，设备反应通知平台的时间
+        calendar.add(Calendar.MINUTE, -2); // 这里减掉两分钟，设备反应通知平台的时间
 
         double usedHours = Math.ceil((calendar.getTime().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
         if (usedHours < 0) {
