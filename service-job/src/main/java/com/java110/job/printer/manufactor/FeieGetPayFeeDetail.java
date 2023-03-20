@@ -3,6 +3,7 @@ package com.java110.job.printer.manufactor;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.UrlCache;
+import com.java110.utils.util.StringUtil;
 
 import java.util.List;
 
@@ -33,11 +34,13 @@ public class FeieGetPayFeeDetail {
         return orderInfo;
     }
 
-    public static String getPrintPayFeeDetailFloorContent(String communityId, double totals, ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl) {
+    public static String getPrintPayFeeDetailFloorContent(String communityId, double totals,String staffName, ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl) {
         String orderInfo = "";
         //orderInfo += "********************************<BR>";
         orderInfo += "合计：" + totals + "元<BR>";
-
+        if(!StringUtil.isEmpty(staffName)) {
+            orderInfo += "开票人：" + staffName + "<BR>";
+        }
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");

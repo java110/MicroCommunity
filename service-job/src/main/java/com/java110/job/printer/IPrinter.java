@@ -16,7 +16,7 @@ public interface IPrinter {
      *
      * @param detailIds
      */
-    ResultVo printPayFeeDetail(String[] detailIds, String communityId, int quantity,MachinePrinterDto machinePrinterDto);
+    ResultVo printPayFeeDetail(String[] detailIds, String communityId, int quantity,MachinePrinterDto machinePrinterDto,String staffName);
 
     /**
      * 打印报修

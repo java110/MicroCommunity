@@ -40,6 +40,8 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String payOrderId;
+
 
     public String getArea() {
         return area;
@@ -208,5 +210,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setUnits(String units) {
         this.units = units;
+    }
+
+    public String getPayOrderId() {
+        return payOrderId;
+    }
+
+    public void setPayOrderId(String payOrderId) {
+        this.payOrderId = payOrderId;
     }
 }

@@ -7,7 +7,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMachinePrinterV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.printer.IPrinter;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -27,6 +29,9 @@ public class PrintPayFeeDetailCmd extends Cmd {
     @Autowired
     private IMachinePrinterV1InnerServiceSMO machinePrinterV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
@@ -40,6 +45,11 @@ public class PrintPayFeeDetailCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String userId = context.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos,"用户不存在");
         MachinePrinterDto machinePrinterDto = new MachinePrinterDto();
         machinePrinterDto.setCommunityId(reqJson.getString("communityId"));
         machinePrinterDto.setMachineId(reqJson.getString("machineId"));
@@ -53,7 +63,10 @@ public class PrintPayFeeDetailCmd extends Cmd {
             throw new CmdException("打印机异常，未包含适配器");
         }
 
-        ResultVo resultVo = printer.printPayFeeDetail(reqJson.getString("detailId").split(","), reqJson.getString("communityId"), reqJson.getIntValue("quantity"), machinePrinterDtos.get(0));
+        ResultVo resultVo = printer.printPayFeeDetail(reqJson.getString("detailId").split(","),
+                reqJson.getString("communityId"),
+                reqJson.getIntValue("quantity"),
+                machinePrinterDtos.get(0),userDtos.get(0).getName());
 
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }

@@ -24,6 +24,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpEntity;
@@ -113,7 +114,7 @@ public class FeieManufactor implements IPrinter {
      * @return
      */
     @Override
-    public ResultVo printPayFeeDetail(String[] detailIds, String communityId, int quantity, MachinePrinterDto machinePrinterDto) {
+    public ResultVo printPayFeeDetail(String[] detailIds, String communityId, int quantity, MachinePrinterDto machinePrinterDto, String staffName) {
 
         String printStr = "";
         FeeDetailDto feeDetailDto = new FeeDetailDto();
@@ -138,7 +139,7 @@ public class FeieManufactor implements IPrinter {
 
         /*************************************头部******************************************/
         List<FeieLine> feieLines = new ArrayList<>();
-        feieLines.add(new FeieLine("单号", feeReceiptDetailDtos.get(0).getReceiptId()));
+        feieLines.add(new FeieLine("单号", feeReceiptDetailDtos.get(0).getPayOrderId()));
         feieLines.add(new FeieLine("房号", feeReceiptDtos.get(0).getObjName()));
         feieLines.add(new FeieLine("业主", feeReceiptDtos.get(0).getPayObjName()));
         feieLines.add(new FeieLine("时间", DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A)));
@@ -164,12 +165,16 @@ public class FeieManufactor implements IPrinter {
             feieLines.add(new FeieLine("收费范围", DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_B) + "至" + DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)));
             feieLines.add(new FeieLine("单价/固定费", tmpFeeReceiptDetailDto.getSquarePrice()));
             feieLines.add(new FeieLine("面积/用量", tmpFeeReceiptDetailDto.getArea()));
+            feieLines.add(new FeieLine("支付方式", tmpFeeReceiptDetailDto.getPrimeRate()));
+            if (!StringUtil.isEmpty(tmpFeeReceiptDetailDto.getPreDegrees())) {
+                feieLines.add(new FeieLine("表读数", tmpFeeReceiptDetailDto.getPreDegrees() + "至" + tmpFeeReceiptDetailDto.getCurDegrees()));
+            }
             feieLines.add(new FeieLine("金额", tmpFeeReceiptDetailDto.getAmount()));
             feieLines.add(new FeieLine("备注", tmpFeeReceiptDetailDto.getRemark()));
             printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailBodyContent(feieLines);
             totalDecimal = totalDecimal.add(new BigDecimal(Double.parseDouble(tmpFeeReceiptDetailDto.getAmount())));
         }
-        printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue(), smallWeChatInnerServiceSMOImpl);
+        printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue(), staffName, smallWeChatInnerServiceSMOImpl);
 
         doPrint(quantity, machinePrinterDto, printStr);
 
@@ -187,7 +192,7 @@ public class FeieManufactor implements IPrinter {
 
         Assert.listOnlyOne(repairUserDtos, "报修单不存在");
 
-        if(RepairUserDto.STATE_SUBMIT.equals(repairUserDtos.get(0).getState())){
+        if (RepairUserDto.STATE_SUBMIT.equals(repairUserDtos.get(0).getState())) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         }
 
@@ -207,7 +212,7 @@ public class FeieManufactor implements IPrinter {
         feieLines.add(new FeieLine("标题", repairDtos.get(0).getRepairName()));
         feieLines.add(new FeieLine("联系人", repairDtos.get(0).getRepairName()));
         feieLines.add(new FeieLine("电话", repairDtos.get(0).getTel()));
-        feieLines.add(new FeieLine("时间",  repairDtos.get(0).getAppointmentTime()));
+        feieLines.add(new FeieLine("时间", repairDtos.get(0).getAppointmentTime()));
         feieLines.add(new FeieLine("位置", repairDtos.get(0).getRepairObjName()));
         feieLines.add(new FeieLine("维修师傅", staffName));
         feieLines.add(new FeieLine("单号", repairDtos.get(0).getRepairId()));

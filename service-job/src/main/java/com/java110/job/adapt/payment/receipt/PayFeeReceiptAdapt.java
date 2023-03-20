@@ -286,7 +286,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             throw new CmdException("打印机异常，未包含适配器");
         }
 
-        printer.printPayFeeDetail(new String[]{detailId}, tmpPrinterRuleMachineDto.getCommunityId(), Integer.parseInt(tmpPrinterRuleMachineDto.getQuantity()), machinePrinterDtos.get(0));
+        printer.printPayFeeDetail(new String[]{detailId}, tmpPrinterRuleMachineDto.getCommunityId(), Integer.parseInt(tmpPrinterRuleMachineDto.getQuantity()), machinePrinterDtos.get(0),"");
 
     }
 
