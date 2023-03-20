@@ -80,6 +80,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String fadStateName;
     private String amount;
 
+    private String primeRateName;
+
     public String getPrimeRate() {
         return primeRate;
     }
@@ -358,5 +360,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPayOrderId(String payOrderId) {
         this.payOrderId = payOrderId;
+    }
+
+    public String getPrimeRateName() {
+        return primeRateName;
+    }
+
+    public void setPrimeRateName(String primeRateName) {
+        this.primeRateName = primeRateName;
     }
 }

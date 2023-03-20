@@ -44,6 +44,9 @@ public class ApiFeeDetailDataVo extends Vo {
     private String fadStateName;
     private String amount;
 
+    private String primeRateName;
+
+
     public String getPrimeRate() {
         return primeRate;
     }
@@ -226,5 +229,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setPayFeeDetailDiscountDtoList(List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList) {
         this.payFeeDetailDiscountDtoList = payFeeDetailDiscountDtoList;
+    }
+
+    public String getPrimeRateName() {
+        return primeRateName;
+    }
+
+    public void setPrimeRateName(String primeRateName) {
+        this.primeRateName = primeRateName;
     }
 }

@@ -121,7 +121,7 @@
         t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value`
         importFeeName,pfc.fee_name feeName,t.payable_amount,t.payable_amount payableAmount,
         mw.cur_degrees curDegrees,mw.pre_degrees preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time
-        curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId
+        curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -131,6 +131,7 @@
             left join pay_fee_attrs pfao on pfao.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
+        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'prime_rate'
         where 1 =1
         <if test="configId != null and configId != ''">
             and pf.config_id = #{configId}
