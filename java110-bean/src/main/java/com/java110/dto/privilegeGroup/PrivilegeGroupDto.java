@@ -23,12 +23,11 @@ public class PrivilegeGroupDto extends PageDto implements Serializable {
     private String description;
     private String storeId;
     private String roleType;
-
+    private String seq;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getPgId() {
         return pgId;
@@ -78,7 +77,6 @@ public class PrivilegeGroupDto extends PageDto implements Serializable {
         this.roleType = roleType;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -93,5 +91,13 @@ public class PrivilegeGroupDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSeq() {
+        return seq;
+    }
+
+    public void setSeq(String seq) {
+        this.seq = seq;
     }
 }

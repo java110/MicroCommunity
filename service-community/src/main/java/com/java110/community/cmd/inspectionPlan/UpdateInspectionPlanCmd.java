@@ -52,7 +52,7 @@ public class UpdateInspectionPlanCmd extends Cmd {
         inspectionPlanStaffV1InnerServiceSMOImpl.deleteInspectionPlanStaff(inspectionPlanStaffPo);
 
         JSONArray staffs = reqJson.getJSONArray("staffs");
-        for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
+        for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             inspectionPlanStaffPo = new InspectionPlanStaffPo();
             inspectionPlanStaffPo.setCommunityId(reqJson.getString("communityId"));
             inspectionPlanStaffPo.setEndTime(reqJson.getString("endTime"));

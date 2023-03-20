@@ -25,6 +25,7 @@ public class ResourceStoreTimesDto extends PageDto implements Serializable {
     private String resCode;
     private String[] resCodes;
     private String timesId;
+    private String shId;
 
 
     private Date createTime;
@@ -119,5 +120,13 @@ public class ResourceStoreTimesDto extends PageDto implements Serializable {
 
     public void setResCodes(String[] resCodes) {
         this.resCodes = resCodes;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

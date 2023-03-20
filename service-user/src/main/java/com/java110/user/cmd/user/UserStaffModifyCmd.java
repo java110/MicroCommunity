@@ -27,6 +27,7 @@ import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -162,6 +163,9 @@ public class UserStaffModifyCmd extends Cmd {
                     throw new IllegalArgumentException("员工手机号不能重复，请重新输入");
                 }
             }
+        }
+        if (paramObj.containsKey("email") && !StringUtil.isEmpty(paramObj.getString("email"))) {
+            Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
         int flag = userV1InnerServiceSMOImpl.updateUser(userPo);
 

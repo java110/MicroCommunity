@@ -28,13 +28,13 @@ import com.java110.po.visitSetting.VisitSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-
 
 /**
  * 类表述：更新
@@ -51,42 +51,37 @@ public class UpdateVisitSettingCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateVisitSettingCmd.class);
 
-
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
 
     @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "settingId", "settingId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         VisitSettingPo visitSettingPo = BeanConvertUtil.covertBean(reqJson, VisitSettingPo.class);
-
-        if(reqJson.containsKey("paId")){
+        if (StringUtil.isEmpty(reqJson.getString("visitNumber"))) {
+            visitSettingPo.setVisitNumber("0");
+        }
+        if (reqJson.containsKey("paId")) {
             ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
             parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
             parkingAreaDto.setPaId(reqJson.getString("paId"));
             List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
-            Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
+            Assert.listOnlyOne(parkingAreaDtos, "停车场不存在");
             visitSettingPo.setPaNum(parkingAreaDtos.get(0).getNum());
         }
-
         int flag = visitSettingV1InnerServiceSMOImpl.updateVisitSetting(visitSettingPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

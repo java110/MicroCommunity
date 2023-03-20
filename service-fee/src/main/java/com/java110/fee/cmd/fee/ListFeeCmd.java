@@ -22,7 +22,6 @@ import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
@@ -49,9 +48,6 @@ import java.util.Map;
 public class ListFeeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListFeeCmd.class);
-
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
@@ -128,14 +124,13 @@ public class ListFeeCmd extends Cmd {
                             roomDto.setRoomNum(roomNum);
                             roomDto.setCommunityId(reqJson.getString("communityId"));
                             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                            Assert.listOnlyOne(roomDtos, "查询房屋错误！");
+                            Assert.listOnlyOne(roomDtos, "查询不到房屋！");
                             reqJson.put("payerObjId", roomDtos.get(0).getRoomId());
                         }
                     }
                 }
             }
         }
-
         FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
         List<ApiFeeDataVo> fees = new ArrayList<>();
         if (reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))) {
@@ -185,12 +180,15 @@ public class ListFeeCmd extends Cmd {
                     OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                     ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
                     List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                    Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
-                    OwnerDto ownerDto = new OwnerDto();
-                    ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
-                    List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                    Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-                    link = ownerDtos.get(0).getLink();
+                    if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() == 1) {
+                        OwnerDto ownerDto = new OwnerDto();
+                        ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
+                        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+                        Assert.listOnlyOne(ownerDtos, "查询业主错误！");
+                        link = ownerDtos.get(0).getLink();
+                    } else {
+                        continue;
+                    }
                 } else if (!StringUtil.isEmpty(feeDto.getPayerObjType()) && feeDto.getPayerObjType().equals("6666")) {
                     OwnerCarDto ownerCarDto = new OwnerCarDto();
                     ownerCarDto.setCarId(feeDto.getPayerObjId());
@@ -228,7 +226,6 @@ public class ListFeeCmd extends Cmd {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
-
         if (feeDtos == null || feeDtos.size() < 1) {
             return;
         }
@@ -236,19 +233,16 @@ public class ListFeeCmd extends Cmd {
         if (StringUtil.isEmpty(val)) {
             val = MappingCache.getValue(DOMAIN_COMMON, TOTAL_FEE_PRICE);
         }
-
         //先取单小区的如果没有配置 取 全局的
         String received_amount_switch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), RECEIVED_AMOUNT_SWITCH);
         if (StringUtil.isEmpty(received_amount_switch)) {
             received_amount_switch = MappingCache.getValue(DOMAIN_COMMON, RECEIVED_AMOUNT_SWITCH);
         }
-
         //先取单小区的如果没有配置 取 全局的
         String offlinePayFeeSwitch = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), OFFLINE_PAY_FEE_SWITCH);
         if (StringUtil.isEmpty(offlinePayFeeSwitch)) {
             offlinePayFeeSwitch = MappingCache.getValue(DOMAIN_COMMON, OFFLINE_PAY_FEE_SWITCH);
         }
-
         for (FeeDto feeDto : feeDtos) {
             try {
                 // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
@@ -264,7 +258,6 @@ public class ListFeeCmd extends Cmd {
                 } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
                     computeFeePriceByContract(feeDto, oweMonth);
                 }
-
                 feeDto.setVal(val);
                 //关闭 线下收银功能
                 if (StringUtil.isEmpty(received_amount_switch)) {
@@ -273,14 +266,12 @@ public class ListFeeCmd extends Cmd {
                     feeDto.setReceivedAmountSwitch(received_amount_switch);
                 }
                 feeDto.setOfflinePayFeeSwitch(offlinePayFeeSwitch);
-
             } catch (Exception e) {
                 logger.error("查询费用信息 ，费用信息错误", e);
             }
-
             //去掉多余0
             feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
-            feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount())+"");
+            feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount()) + "");
         }
     }
 
@@ -305,7 +296,6 @@ public class ListFeeCmd extends Cmd {
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
-
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
         curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
         feeDto.setAmountOwed(df.format(curFeePrice));
@@ -316,7 +306,6 @@ public class ListFeeCmd extends Cmd {
             feeDto.setAmountOwed(df.format(curFeePrice));
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
-
         //考虑租金递增
         computeFeeSMOImpl.dealRentRate(feeDto);
     }
@@ -344,12 +333,10 @@ public class ListFeeCmd extends Cmd {
                 && feeDto.getDeadlineTime() == null) {
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }
-
         //考虑租金递增
         computeFeeSMOImpl.dealRentRate(feeDto);
 
     }
-
 
     /**
      * 根据合同来算单价

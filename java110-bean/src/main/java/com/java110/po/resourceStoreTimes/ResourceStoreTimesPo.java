@@ -35,6 +35,7 @@ public class ResourceStoreTimesPo implements Serializable {
     private String stock;
     private String resCode;
     private String timesId;
+    private String shId;
 
     public String getPrice() {
         return price;
@@ -93,4 +94,11 @@ public class ResourceStoreTimesPo implements Serializable {
     }
 
 
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
 }

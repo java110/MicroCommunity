@@ -9,6 +9,7 @@ import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.user.bmo.owner.IQueryOwnerStatisticsBMO;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -214,7 +215,8 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
 
         for(OwnerDto ownerDto : ownerDtos) {
             for (Map count : ownerRoomCounts) {
-                if(ownerDto.getOwnerId().equals(count.get("ownerId"))){
+                if(!StringUtil.isEmpty(ownerDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString()))
+                if(ownerDto.getOwnerId().equals(count.get("ownerId").toString())){
                     ownerDto.setRoomCount(count.get("roomCount").toString());
                 }
             }

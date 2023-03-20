@@ -133,10 +133,8 @@ public class QueryOwnersCmd extends Cmd {
         List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
-
             // 查询统计数据
             ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
-
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", reqJson.getString("userId"));
             for (OwnerDto ownerDto : ownerDtoList) {
                 //查询照片

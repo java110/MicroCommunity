@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repairServiceDaoImpl">
 
@@ -372,6 +371,9 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
+        </if>
         <if test="repairChannels !=null">
             and t.repair_channel in
             <foreach collection="repairChannels" item="item" open="(" close=")" separator=",">
@@ -381,8 +383,7 @@
     </select>
 
     <!-- 查询报修信息信息 add by wuxw 2018-07-03
-     将状态先调整  and ru.state in ('10001','10002')
-     -->
+     将状态先调整  and ru.state in ('10001','10002')-->
     <select id="getStaffRepairInfo" parameterType="Map" resultType="Map">
         select distinct t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
@@ -580,6 +581,9 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
+        </if>
         <if test="payType !=null and payType != ''">
             and t.pay_type= #{payType}
         </if>
@@ -644,6 +648,9 @@
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="maintenanceType !=null and maintenanceType != ''">
+            and t.maintenance_type= #{maintenanceType}
         </if>
         <if test="payType !=null and payType != ''">
             and t.pay_type= #{payType}

@@ -20,6 +20,7 @@ public class UserStorehousePo implements Serializable {
     //最小计量总数
     private String miniStock;
     private String lagerStockZero = "0";
+    private String timesId;
 
     public String getResName() {
         return resName;
@@ -147,5 +148,13 @@ public class UserStorehousePo implements Serializable {
 
     public void setLagerStockZero(String lagerStockZero) {
         this.lagerStockZero = lagerStockZero;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

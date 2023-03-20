@@ -76,6 +76,13 @@ public class UrgentPurchaseApplyCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
     }
 
+    /**
+     * 紧急采购-仓库物品入库
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -162,14 +169,24 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             resourceStorePo.setResOrderType(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
             resourceStorePo.setOperationType(PurchaseApplyDto.WEIGHTED_MEAN_TRUE);
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+            // 保存至 物品 times表  (调整原仓库 批次)
+            ResourceStoreTimesPo resourceStoreTimesPo1 = new ResourceStoreTimesPo();
+            resourceStoreTimesPo1.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
+            resourceStoreTimesPo1.setPrice(purchaseApplyDetailPo.getPrice());//采购价
+            resourceStoreTimesPo1.setResCode(resourceStore.getString("resCode"));
+            resourceStoreTimesPo1.setStock("0");
+            resourceStoreTimesPo1.setStoreId(storeId);
+            resourceStoreTimesPo1.setShId(resourceStore.getString("shId"));
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo1);
 
-            if (resourceStoreDtos != null && resourceStoreDtos.size() == 1) {
-                //生成调拨记录
-                AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+            AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+
+            if (resourceStoreDtos != null && resourceStoreDtos.size() == 1) {//目标仓库有此物品
+                //生成调拨详情记录
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
                 allocationStorehouseDto.setbId("-1");
-                allocationStorehouseDto.setShIda(resourceStore.getString("shId"));
-                allocationStorehouseDto.setShIdz(resourceStore.getString("shzId"));//小区仓库
+                allocationStorehouseDto.setShIda(resourceStore.getString("shId"));//原仓库
+                allocationStorehouseDto.setShIdz(resourceStore.getString("shzId"));//目标仓库
                 allocationStorehouseDto.setResId(resourceStoreDtos.get(0).getResId());
                 allocationStorehouseDto.setResName(resourceStoreDtos.get(0).getResName());
                 allocationStorehouseDto.setStoreId(storeId);
@@ -230,20 +247,11 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 resourceStorePo1.setMiniStock(String.valueOf(newMiniStock));
                 resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo1);
 
-                // 保存至 物品 times表
-                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
-                resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
-                resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
-                resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
-                resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
-                resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
-                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                 throw new IllegalArgumentException("查询商品错误！");
             } else {
                 //生成调拨记录
-                AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
                 allocationStorehouseDto.setbId("-1");
                 allocationStorehouseDto.setShIda(resourceStore.getString("shId"));
@@ -297,17 +305,16 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 BigDecimal miniStock = purchaseQuantity.multiply(miniUnitStock);
                 resourceStoreDto1.setMiniStock(String.valueOf(miniStock));
                 resourceStoreInnerServiceSMOImpl.saveResourceStore(resourceStoreDto1);
-
-                // 保存至 物品 times表
-                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
-                resourceStoreTimesPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
-                resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
-                resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
-                resourceStoreTimesPo.setResCode(resourceStoreDtoList.get(0).getResCode());
-                resourceStoreTimesPo.setStoreId(resourceStoreDtoList.get(0).getStoreId());
-                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
-                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             }
+            // 保存至 物品 times表  (调整目标仓库 批次)
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(allocationStorehouseDto.getApplyId());
+            resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
+            resourceStoreTimesPo.setResCode(resourceStore.getString("resCode"));
+            resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getQuantity());
+            resourceStoreTimesPo.setStoreId(storeId);
+            resourceStoreTimesPo.setShId(resourceStore.getString("shzId"));
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         ResponseEntity responseEntity = purchaseApplyBMOImpl.apply(purchaseApplyPo, reqJson);

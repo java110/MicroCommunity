@@ -65,6 +65,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     private String isFixed;
     private String isFixedName;
+    private String timesId;
 
     public String getAsId() {
         return asId;
@@ -402,5 +403,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

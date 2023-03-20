@@ -53,10 +53,13 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         businessVisitInfo.put("reasonType", businessVisitInfo.get("reason_type"));
         businessVisitInfo.put("state", businessVisitInfo.get("state"));
         businessVisitInfo.put("stateRemark", businessVisitInfo.get("state_remark"));
+        businessVisitInfo.put("carState", businessVisitInfo.get("car_state"));
+        businessVisitInfo.put("carStateRemark", businessVisitInfo.get("car_remark"));
         businessVisitInfo.put("psId", businessVisitInfo.get("ps_id"));
         businessVisitInfo.put("freeTime", businessVisitInfo.get("free_time"));
         businessVisitInfo.put("reasonType", businessVisitInfo.get("reason_type"));
         businessVisitInfo.put("recordState", businessVisitInfo.get("record_state"));
+        businessVisitInfo.put("roomId", businessVisitInfo.get("room_id"));
         businessVisitInfo.remove("bId");
         businessVisitInfo.put("statusCd", statusCd);
     }
@@ -97,10 +100,13 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         currentVisitInfo.put("reasonType", currentVisitInfo.get("reason_type"));
         currentVisitInfo.put("state", currentVisitInfo.get("state"));
         currentVisitInfo.put("stateRemark", currentVisitInfo.get("state_remark"));
+        currentVisitInfo.put("carState", currentVisitInfo.get("car_state"));
+        currentVisitInfo.put("carStateRemark", currentVisitInfo.get("car_remark"));
         currentVisitInfo.put("psId", currentVisitInfo.get("ps_id"));
         currentVisitInfo.put("freeTime", currentVisitInfo.get("free_time"));
         currentVisitInfo.put("reasonType", currentVisitInfo.get("reason_type"));
         currentVisitInfo.put("recordState", currentVisitInfo.get("record_state"));
+        currentVisitInfo.put("roomId", currentVisitInfo.get("room_id"));
         currentVisitInfo.put("operate", StatusConstant.OPERATE_DEL);
         getVisitServiceDaoImpl().saveBusinessVisitInfo(currentVisitInfo);
 

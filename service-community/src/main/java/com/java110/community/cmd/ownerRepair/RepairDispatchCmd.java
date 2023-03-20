@@ -209,7 +209,7 @@ public class RepairDispatchCmd extends Cmd {
                 }
                 return;
             } else {
-                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "非常抱歉当前不能退单！");
+                ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "非常抱歉当前不能退单，报修设置为指派模式不可进行退单！");
                 context.setResponseEntity(responseEntity);
                 return;
             }

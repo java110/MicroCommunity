@@ -26,13 +26,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.machineType.MachineTypeDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -47,7 +48,8 @@ import com.java110.core.log.LoggerFactory;
 @Java110Cmd(serviceCode = "machineType.listMachineType")
 public class ListMachineTypeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMachineTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMachineTypeCmd.class);
+
     @Autowired
     private IMachineTypeV1InnerServiceSMO machineTypeV1InnerServiceSMOImpl;
 
@@ -59,22 +61,22 @@ public class ListMachineTypeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           MachineTypeDto machineTypeDto = BeanConvertUtil.covertBean(reqJson, MachineTypeDto.class);
+        MachineTypeDto machineTypeDto = BeanConvertUtil.covertBean(reqJson, MachineTypeDto.class);
 
-           int count = machineTypeV1InnerServiceSMOImpl.queryMachineTypesCount(machineTypeDto);
+        int count = machineTypeV1InnerServiceSMOImpl.queryMachineTypesCount(machineTypeDto);
 
-           List<MachineTypeDto> machineTypeDtos = null;
+        List<MachineTypeDto> machineTypeDtos = null;
 
-           if (count > 0) {
-               machineTypeDtos = machineTypeV1InnerServiceSMOImpl.queryMachineTypes(machineTypeDto);
-           } else {
-               machineTypeDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            machineTypeDtos = machineTypeV1InnerServiceSMOImpl.queryMachineTypes(machineTypeDto);
+        } else {
+            machineTypeDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, machineTypeDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, machineTypeDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

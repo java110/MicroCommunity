@@ -1,15 +1,18 @@
-package com.java110.job.adapt.payment.receipt;
+package com.java110.job.adapt.payment.returnPayFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
@@ -20,12 +23,12 @@ import com.java110.po.feeReceipt.FeeReceiptPo;
 import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
 import com.java110.po.logSystemError.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,15 +36,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 缴费收据处理
+ * 退费审核同步收据
  *
  * @author fqz
- * @date 2020-12-11  18:54
+ * @date 2023-03-09 16:28
  */
-@Component(value = "payFeeReceiptAdapt")
-public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
-
-    private static Logger logger = LoggerFactory.getLogger(PayFeeReceiptAdapt.class);
+@Component(value = "updateReturnPayFeeAdapt")
+public class UpdateReturnPayFeeAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
@@ -61,10 +62,10 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
-    //模板信息推送地址
-    private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
-    public final static String ALI_SMS_DOMAIN = "ALI_SMS";
+    private static Logger logger = LoggerFactory.getLogger(UpdateReturnPayFeeAdapt.class);
 
     @Override
     public void execute(Business business, List<Business> businesses) {
@@ -103,14 +104,16 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         }
         for (int bPayFeeDetailIndex = 0; bPayFeeDetailIndex < businessPayFeeDetails.size(); bPayFeeDetailIndex++) {
             JSONObject businessPayFeeDetail = businessPayFeeDetails.getJSONObject(bPayFeeDetailIndex);
-            doPayFeeDetail(business, businessPayFeeDetail);
+            //新增收据和收据明细
+            doFeeReceipt(business, businessPayFeeDetail);
         }
     }
 
-    private void doPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
+    //新增收据和收据明细
+    private void doFeeReceipt(Business business, JSONObject paramInJson) {
         try {
             //查询缴费明细
-            PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(businessPayFeeDetail, PayFeeDetailPo.class);
+            PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(paramInJson, PayFeeDetailPo.class);
             FeeDto feeDto = new FeeDto();
             feeDto.setFeeId(payFeeDetailPo.getFeeId());
             feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
@@ -119,40 +122,46 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeDto = feeDtos.get(0);
             //查询业主信息
             OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
-            // if received amount lt zero
-            if (businessPayFeeDetail.containsKey("receivedAmount")
-                    && businessPayFeeDetail.getDoubleValue("receivedAmount") < 0) {
-                return;
-            }
-            //添加收据和收据详情
+            //添加收据
             FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
+            feeReceiptPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
+            feeReceiptPo.setCommunityId(paramInJson.getString("communityId"));
+            feeReceiptPo.setObjType(paramInJson.getString("payerObjType")); //收据对象 3333 房屋 6666 车位车辆
+            feeReceiptPo.setObjId(paramInJson.getString("payerObjId")); //对象ID
+            feeReceiptPo.setObjName(paramInJson.getString("payerObjName")); //对象名称
+            feeReceiptPo.setAmount(paramInJson.getString("receivedAmount")); //退费总金额
+            feeReceiptPo.setRemark("退费收据");
+            feeReceiptPo.setPayObjId(ownerDto.getOwnerId()); //付费人id
+            feeReceiptPo.setPayObjName(ownerDto.getName()); //付费人姓名
+            int i = feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+            if (i < 1) {
+                throw new CmdException("添加收据失败");
+            }
+            //添加收据详情
             FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
-            feeReceiptDetailPo.setAmount(businessPayFeeDetail.getString("receivedAmount"));
-            feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
-            feeReceiptDetailPo.setCycle(businessPayFeeDetail.getString("cycles"));
-            feeReceiptDetailPo.setDetailId(businessPayFeeDetail.getString("detailId"));
-            feeReceiptDetailPo.setEndTime(businessPayFeeDetail.getString("endTime"));
-            feeReceiptDetailPo.setFeeId(feeDto.getFeeId());
-            feeReceiptDetailPo.setFeeName(StringUtil.isEmpty(feeDto.getImportFeeName()) ? feeDto.getFeeName() : feeDto.getImportFeeName());
-            feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
-            feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
-            feeReceiptDetailPo.setCreateTime(payFeeDetailPo.getCreateTime());
-            //处理 小数点后 0
-            feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
-            feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount()) + "");
-            computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
-            feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
-            feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
-            feeReceiptPo.setReceiptId(feeReceiptDetailPo.getReceiptId());
-            feeReceiptPo.setObjType(feeDto.getPayerObjType());
-            feeReceiptPo.setObjId(feeDto.getPayerObjId());
-            feeReceiptPo.setObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
-            feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
-            feeReceiptPo.setPayObjName(ownerDto.getName());
-            feeReceiptPo.setCreateTime(payFeeDetailPo.getCreateTime());
-            //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
-            feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
-            feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
+            feeReceiptDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+            feeReceiptDetailPo.setReceiptId(feeReceiptPo.getReceiptId()); //收据id
+            feeReceiptDetailPo.setFeeId(paramInJson.getString("feeId")); //费用id
+            feeReceiptDetailPo.setFeeName(feeDtos.get(0).getFeeName());
+            String roomArea = "";
+            if (!StringUtil.isEmpty(feeDtos.get(0).getPayerObjType()) && feeDtos.get(0).getPayerObjType().equals("3333")) { //房屋
+                RoomDto roomDto = new RoomDto();
+                roomDto.setRoomId(feeDtos.get(0).getPayerObjId());
+                //查询房屋
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                Assert.listOnlyOne(roomDtos, "查询房屋错误！");
+                roomArea = roomDtos.get(0).getRoomArea();
+            }
+            feeReceiptDetailPo.setArea(roomArea); //面积/用量
+            feeReceiptDetailPo.setStartTime(paramInJson.getString("startTime"));
+            feeReceiptDetailPo.setEndTime(paramInJson.getString("endTime"));
+            feeReceiptDetailPo.setAmount(feeReceiptPo.getAmount());
+            feeReceiptDetailPo.setCycle(paramInJson.getString("cycles"));
+            feeReceiptDetailPo.setCommunityId(paramInJson.getString("communityId"));
+            int flag = feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
+            if (flag < 1) {
+                throw new CmdException("添加收据详情失败");
+            }
         } catch (Exception e) {
             LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
             logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));

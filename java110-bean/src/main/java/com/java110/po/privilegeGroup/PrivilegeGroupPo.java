@@ -35,6 +35,7 @@ public class PrivilegeGroupPo implements Serializable {
     private String statusCd = "0";
     private String storeId;
     private String roleType;
+    private String seq;
 
     public String getPgId() {
         return pgId;
@@ -92,5 +93,11 @@ public class PrivilegeGroupPo implements Serializable {
         this.roleType = roleType;
     }
 
+    public String getSeq() {
+        return seq;
+    }
 
+    public void setSeq(String seq) {
+        this.seq = seq;
+    }
 }

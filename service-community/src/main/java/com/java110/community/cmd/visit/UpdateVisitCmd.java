@@ -6,60 +6,33 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.dto.machine.MachineDto;
-import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
 import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.accessControlWhite.AccessControlWhitePo;
 import com.java110.po.car.CarBlackWhitePo;
-import com.java110.po.car.OwnerCarPo;
 import com.java110.po.owner.VisitPo;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
-import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Java110Cmd(serviceCode = "visit.updateVisit")
 public class UpdateVisitCmd extends Cmd {
-
-    @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerCarV1InnerServiceSMO ownerCarV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerCarAttrInnerServiceSMO ownerCarAttrInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
     private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
@@ -76,7 +49,6 @@ public class UpdateVisitCmd extends Cmd {
     @Autowired
     private IAccessControlWhiteV1InnerServiceSMO accessControlWhiteV1InnerServiceSMOImpl;
 
-
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
@@ -91,7 +63,6 @@ public class UpdateVisitCmd extends Cmd {
     //键
     public static final String ASCRIPTION_CAR_AREA_ID = "ASCRIPTION_CAR_AREA_ID";
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "vId", "访客记录ID不能为空");
@@ -102,14 +73,11 @@ public class UpdateVisitCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        String userId = context.getReqHeaders().get("user-id");
-        String storeId = context.getReqHeaders().get("store-id");
         VisitDto visitDto = new VisitDto();
         visitDto.setvId(reqJson.getString("vId"));
         visitDto.setCommunityId(reqJson.getString("communityId"));
         List<VisitDto> visitDtos = visitV1InnerServiceSMOImpl.queryVisits(visitDto);
         Assert.listOnlyOne(visitDtos, "访客不存在");
-
         VisitPo visitPo = BeanConvertUtil.covertBean(reqJson, VisitPo.class);
         visitPo.setState(visitDtos.get(0).getState());
         int flag = visitV1InnerServiceSMOImpl.updateVisit(visitPo);
@@ -117,45 +85,37 @@ public class UpdateVisitCmd extends Cmd {
             throw new CmdException("保存访客失败");
         }
         photoSMOImpl.savePhoto(reqJson, reqJson.getString("vId"), reqJson.getString("communityId"));
-
-        if(!VisitDto.STATE_C.equals(visitDtos.get(0).getState())){
-            return ;
+        if (!VisitDto.STATE_C.equals(visitDtos.get(0).getState())) {
+            return;
         }
         String faceWay = "Y";
         String carNumWay = "N";
-
         // 查询访客设置
         VisitSettingDto visitSettingDto = new VisitSettingDto();
         visitSettingDto.setCommunityId(reqJson.getString("communityId"));
         List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
-
         if (visitSettingDtos != null && visitSettingDtos.size() > 0) {
             faceWay = visitSettingDtos.get(0).getFaceWay();
             carNumWay = visitSettingDtos.get(0).getCarNumWay();
             // 同步车牌 这里需要停车场，所以没有配置访客设置，不同步
             synchronizedVisitCarNum(visitPo, carNumWay, visitSettingDtos.get(0));
         }
-
         // 同步访客人脸
         synchronousVisitFace(visitPo, faceWay, reqJson.getString("photo"));
-
     }
 
     private void synchronousVisitFace(VisitPo visitPo, String faceWay, String photo) {
         if (VisitSettingDto.FACE_WAY_NO.equals(faceWay) || StringUtil.isEmpty(photo)) {
             return;
         }
-
-        if(StringUtil.isEmpty(visitPo.getOwnerId())){
+        if (StringUtil.isEmpty(visitPo.getOwnerId())) {
             return;
         }
-
         // 查询 访问业主可以访问的门禁设备
         RoomDto roomDto = new RoomDto();
         roomDto.setOwnerId(visitPo.getOwnerId());
         //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
         List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
-
         //拿到小区ID
         String communityId = visitPo.getCommunityId();
         //根据小区ID查询现有设备
@@ -169,13 +129,11 @@ public class UpdateVisitCmd extends Cmd {
             locationObjIds.add(tRoomDto.getRoomId());
             locationObjIds.add(tRoomDto.getFloorId());
         }
-
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         if (machineDtos == null || machineDtos.size() < 1) {
             return;
         }
-
         // 同步到 门禁白名单中
         for (MachineDto tmpMachineDto : machineDtos) {
             if (!"9999".equals(tmpMachineDto.getMachineTypeCd())) {
@@ -211,7 +169,6 @@ public class UpdateVisitCmd extends Cmd {
                     throw new CmdException("保存数据失败");
                 }
             }
-
             photoSMOImpl.savePhoto(photo, accessControlWhitePo.getAcwId(), accessControlWhitePo.getCommunityId());
 
         }
@@ -229,11 +186,9 @@ public class UpdateVisitCmd extends Cmd {
         if (VisitSettingDto.CAR_NUM_WAY_NO.equals(carNumWay)) {
             return;
         }
-
-        if(StringUtil.isEmpty(visitPo.getCarNum())){
+        if (StringUtil.isEmpty(visitPo.getCarNum())) {
             return;
         }
-
         CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
         carBlackWhiteDto.setBlackWhite(CarBlackWhiteDto.BLACK_WHITE_WHITE);
         carBlackWhiteDto.setCarNum(visitPo.getCarNum());
@@ -247,10 +202,10 @@ public class UpdateVisitCmd extends Cmd {
         carBlackWhitePo.setStartTime(visitPo.getVisitTime());
         carBlackWhitePo.setEndTime(visitPo.getDepartureTime());
         int flag = 0;
-        if(carBlackWhiteDtos == null || carBlackWhiteDtos.size() < 1){
+        if (carBlackWhiteDtos == null || carBlackWhiteDtos.size() < 1) {
             carBlackWhitePo.setBwId(GenerateCodeFactory.getGeneratorId("11"));
             flag = carBlackWhiteV1InnerServiceSMOImpl.saveCarBlackWhite(carBlackWhitePo);
-        }else {
+        } else {
             carBlackWhitePo.setBwId(carBlackWhiteDtos.get(0).getBwId());
             flag = carBlackWhiteV1InnerServiceSMOImpl.updateCarBlackWhite(carBlackWhitePo);
         }
@@ -258,8 +213,6 @@ public class UpdateVisitCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("预约车辆添加白名单失败");
         }
-
-
     }
 
     /**
@@ -269,46 +222,16 @@ public class UpdateVisitCmd extends Cmd {
      * @param reqJson
      */
     private boolean hasAuditVisit(VisitPo visitPo, JSONObject reqJson, String storeId, String userId) {
-
-
         VisitSettingDto visitSettingDto = new VisitSettingDto();
         visitSettingDto.setCommunityId(reqJson.getString("communityId"));
         List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
-
         if (visitSettingDtos == null || visitSettingDtos.size() < 1) {
             return false;
         }
-
         // 需要审核
         if (!VisitSettingDto.AUDIT_WAY_YES.equals(visitSettingDtos.get(0).getAuditWay())) {
             return false;
         }
-
         return true;
-
-    }
-
-    /**
-     * 添加白名单
-     *
-     * @param paramInJson
-     */
-    public void addBlackWhite(JSONObject paramInJson) {
-        CarBlackWhitePo carBlackWhitePo = new CarBlackWhitePo();
-        carBlackWhitePo.setBwId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        carBlackWhitePo.setbId("-1");
-        carBlackWhitePo.setCommunityId(paramInJson.getString("communityId"));
-        carBlackWhitePo.setBlackWhite("2222"); //1111 黑名单 2222 白名单
-        carBlackWhitePo.setCarNum(paramInJson.getString("carNum"));
-        carBlackWhitePo.setStartTime(paramInJson.getString("visitTime"));
-        carBlackWhitePo.setEndTime(paramInJson.getString("freeTime"));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        carBlackWhitePo.setCreateTime(simpleDateFormat.format(new Date()));
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto); //查询车位
-        Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
-        carBlackWhitePo.setPaId(parkingSpaceDtos.get(0).getPaId());
-        carBlackWhiteV1InnerServiceSMOImpl.saveCarBlackWhite(carBlackWhitePo);
     }
 }

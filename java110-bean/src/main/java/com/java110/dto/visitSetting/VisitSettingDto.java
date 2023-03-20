@@ -1,6 +1,5 @@
 package com.java110.dto.visitSetting;
 
-import com.java110.dto.PageDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 
 import java.io.Serializable;
@@ -31,17 +30,21 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
     private String flowId;
     private String flowName;
     private String settingId;
-
+    private String visitorCode;
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
     private String paId;
 
     private String paNum;
 
+    private String carFreeTime; //预约车辆免费时长(单位为分钟)
+
+    private String visitNumber; //预约车限制次数
+
+    private String isNeedReview; //预约车是否审核  0表示需要审核  1表示不需要审核
 
     public String getCarNumWay() {
         return carNumWay;
@@ -115,7 +118,6 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
         this.settingId = settingId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -146,5 +148,37 @@ public class VisitSettingDto extends OaWorkflowDto implements Serializable {
 
     public void setPaNum(String paNum) {
         this.paNum = paNum;
+    }
+
+    public String getCarFreeTime() {
+        return carFreeTime;
+    }
+
+    public void setCarFreeTime(String carFreeTime) {
+        this.carFreeTime = carFreeTime;
+    }
+
+    public String getVisitNumber() {
+        return visitNumber;
+    }
+
+    public void setVisitNumber(String visitNumber) {
+        this.visitNumber = visitNumber;
+    }
+
+    public String getIsNeedReview() {
+        return isNeedReview;
+    }
+
+    public void setIsNeedReview(String isNeedReview) {
+        this.isNeedReview = isNeedReview;
+    }
+
+    public String getVisitorCode() {
+        return visitorCode;
+    }
+
+    public void setVisitorCode(String visitorCode) {
+        this.visitorCode = visitorCode;
     }
 }

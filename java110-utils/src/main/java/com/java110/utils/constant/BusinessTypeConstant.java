@@ -741,6 +741,7 @@ public class BusinessTypeConstant {
      *  删除访客信息  11开头  5修改
      */
     public static final String BUSINESS_TYPE_DELETE_VISIT ="120100050001";
+    public static final String BUSINESS_TYPE_EXAMINE_VISIT ="120100060001";
 
 
     /**

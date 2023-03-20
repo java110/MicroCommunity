@@ -44,6 +44,7 @@ public class UserStorehouseDto extends PageDto implements Serializable {
     private String isFixed;
     private String isFixedName;
     private String lagerStockZero = "0";
+    private String timesId;
 
     public String getResName() {
         return resName;
@@ -259,5 +260,13 @@ public class UserStorehouseDto extends PageDto implements Serializable {
 
     public void setLagerStockZero(String lagerStockZero) {
         this.lagerStockZero = lagerStockZero;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

@@ -15,20 +15,18 @@
  */
 package com.java110.user.smo.impl;
 
-
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.user.dao.ICarBlackWhiteV1ServiceDao;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,45 +43,41 @@ public class CarBlackWhiteV1InnerServiceSMOImpl extends BaseServiceSMO implement
     @Autowired
     private ICarBlackWhiteV1ServiceDao carBlackWhiteV1ServiceDaoImpl;
 
-
     @Override
+    @Java110Transactional
     public int saveCarBlackWhite(@RequestBody CarBlackWhitePo carBlackWhitePo) {
         int saveFlag = carBlackWhiteV1ServiceDaoImpl.saveCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhitePo));
         return saveFlag;
     }
 
-     @Override
-    public int updateCarBlackWhite(@RequestBody  CarBlackWhitePo carBlackWhitePo) {
+    @Override
+    @Java110Transactional
+    public int updateCarBlackWhite(@RequestBody CarBlackWhitePo carBlackWhitePo) {
         int saveFlag = carBlackWhiteV1ServiceDaoImpl.updateCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhitePo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteCarBlackWhite(@RequestBody  CarBlackWhitePo carBlackWhitePo) {
-       carBlackWhitePo.setStatusCd("1");
-       int saveFlag = carBlackWhiteV1ServiceDaoImpl.updateCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhitePo));
-       return saveFlag;
+    @Override
+    @Java110Transactional
+    public int deleteCarBlackWhite(@RequestBody CarBlackWhitePo carBlackWhitePo) {
+        carBlackWhitePo.setStatusCd("1");
+        int saveFlag = carBlackWhiteV1ServiceDaoImpl.updateCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhitePo));
+        return saveFlag;
     }
 
     @Override
-    public List<CarBlackWhiteDto> queryCarBlackWhites(@RequestBody  CarBlackWhiteDto carBlackWhiteDto) {
-
+    public List<CarBlackWhiteDto> queryCarBlackWhites(@RequestBody CarBlackWhiteDto carBlackWhiteDto) {
         //校验是否传了 分页信息
-
         int page = carBlackWhiteDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             carBlackWhiteDto.setPage((page - 1) * carBlackWhiteDto.getRow());
         }
-
         List<CarBlackWhiteDto> carBlackWhites = BeanConvertUtil.covertBeanList(carBlackWhiteV1ServiceDaoImpl.getCarBlackWhiteInfo(BeanConvertUtil.beanCovertMap(carBlackWhiteDto)), CarBlackWhiteDto.class);
-
         return carBlackWhites;
     }
 
-
     @Override
     public int queryCarBlackWhitesCount(@RequestBody CarBlackWhiteDto carBlackWhiteDto) {
-        return carBlackWhiteV1ServiceDaoImpl.queryCarBlackWhitesCount(BeanConvertUtil.beanCovertMap(carBlackWhiteDto));    }
-
+        return carBlackWhiteV1ServiceDaoImpl.queryCarBlackWhitesCount(BeanConvertUtil.beanCovertMap(carBlackWhiteDto));
+    }
 }

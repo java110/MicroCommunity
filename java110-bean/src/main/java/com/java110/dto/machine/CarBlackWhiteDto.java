@@ -26,21 +26,11 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     private String communityId;
     private String bwId;
     private String paId;
-
-
-
     private String[] paIds;
     private String paNum;
-
     private String validity;
-
-
     private Date createTime;
-
     private String statusCd = "0";
-
-
-
 
     public String getBlackWhite() {
         return blackWhite;
@@ -89,7 +79,6 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     public void setBwId(String bwId) {
         this.bwId = bwId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -146,6 +135,5 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
     public void setValidity(String validity) {
         this.validity = validity;
     }
-
 
 }

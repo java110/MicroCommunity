@@ -21,6 +21,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,6 +77,14 @@ public class GoodsCollectionCmd extends Cmd {
 
     }
 
+    /**
+     * 物品领用申请-发起
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     * @throws ParseException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -116,6 +125,18 @@ public class GoodsCollectionCmd extends Cmd {
             purchaseApplyDetailPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
             purchaseApplyDetailPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
             purchaseApplyDetailPo.setOriginalStock(resourceStoreTimesDtos.get(0).getStock());
+            //获取批次采购参考价格
+            String consultPrice = null;
+            JSONArray timeList = resourceStore.getJSONArray("times");
+            if(resourceStore.containsKey("timesId") && !StringUtil.isEmpty(resourceStore.getString("timesId"))){
+                for (int timesIndex = 0; timesIndex < timeList.size(); timesIndex++) {
+                    JSONObject times = timeList.getJSONObject(timesIndex);
+                    if(times.getString("timesId").toString().equals(resourceStore.getString("timesId").toString())){
+                        consultPrice=times.getString("price");
+                    }
+                }
+            }
+            purchaseApplyDetailPo.setConsultPrice(consultPrice);
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

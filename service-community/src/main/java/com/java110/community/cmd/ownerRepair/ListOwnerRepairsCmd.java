@@ -49,16 +49,12 @@ public class ListOwnerRepairsCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-
         hasOwnerId(reqJson);
-
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
-
         if (!StringUtil.isEmpty(ownerRepairDto.getRoomId()) && ownerRepairDto.getRoomId().contains(",")) {
             String[] roomIds = ownerRepairDto.getRoomId().split(",");
             ownerRepairDto.setRoomIds(roomIds);
@@ -74,9 +70,7 @@ public class ListOwnerRepairsCmd extends Cmd {
             String[] repair_channel = {RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
             ownerRepairDto.setRepairChannels(Arrays.asList(repair_channel));
         }
-
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
-
         List<RepairDto> ownerRepairs = new ArrayList<>();
         if (count > 0) {
             List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
@@ -121,31 +115,28 @@ public class ListOwnerRepairsCmd extends Cmd {
     }
 
     private void hasOwnerId(JSONObject reqJson) {
-        if(reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))){
+        if (reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))) {
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setMemberId(reqJson.getString("ownerId"));
             ownerDto.setCommunityId(reqJson.getString("communityId"));
             List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-            if(ownerDtos != null && ownerDtos.size() > 0){
-                reqJson.put("tel",ownerDtos.get(0).getLink());
+            if (ownerDtos != null && ownerDtos.size() > 0) {
+                reqJson.put("tel", ownerDtos.get(0).getLink());
             }
         }
     }
 
     private void refreshRepair(List<RepairDto> ownerRepairs) {
-
         List<String> repairIds = new ArrayList<>();
         for (RepairDto apiOwnerRepairDataVo : ownerRepairs) {
             repairIds.add(apiOwnerRepairDataVo.getRepairId());
         }
-
         if (repairIds.size() < 1) {
             return;
         }
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairIds(repairIds.toArray(new String[repairIds.size()]));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-
         for (RepairUserDto tmpRepairUserDto : repairUserDtos) {
             for (RepairDto apiOwnerRepairDataVo : ownerRepairs) {
                 if (tmpRepairUserDto.getRepairId().equals(apiOwnerRepairDataVo.getRepairId())) {
@@ -154,15 +145,13 @@ public class ListOwnerRepairsCmd extends Cmd {
                 }
             }
         }
-
         //刷入图片信息
         List<PhotoVo> photoVos = null;
         List<PhotoVo> repairPhotos = null;  //业主上传维修图片
         List<PhotoVo> beforePhotos = null;  //维修前图片
         List<PhotoVo> afterPhotos = null;  //维修后图片
         PhotoVo photoVo = null;
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
-
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
         for (RepairDto repairDto : ownerRepairs) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(repairDto.getRepairId());
@@ -178,28 +167,30 @@ public class ListOwnerRepairsCmd extends Cmd {
                 photoVos.add(photoVo);
                 if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.REL_TYPE_CD_REPAIR)) {  //维修图片
                     photoVo = new PhotoVo();
-                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
-                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
-                    }else{
+                    if (!tmpFileRelDto.getFileRealName().startsWith("http")) {
+                        photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
+                    } else {
                         photoVo.setUrl(tmpFileRelDto.getFileRealName());
                     }
                     photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     repairPhotos.add(photoVo);  //维修图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.BEFORE_REPAIR_PHOTOS)) {  //维修前图片
                     photoVo = new PhotoVo();
-                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
-                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
-                    }else{
+                    if (!tmpFileRelDto.getFileRealName().startsWith("http")) {
+                        photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
+                    } else {
                         photoVo.setUrl(tmpFileRelDto.getFileRealName());
-                    }                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
+                    }
+                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     beforePhotos.add(photoVo);  //维修前图片
                 } else if (tmpFileRelDto.getRelTypeCd().equals(FileRelDto.AFTER_REPAIR_PHOTOS)) {  //维修后图片
                     photoVo = new PhotoVo();
-                    if(!tmpFileRelDto.getFileRealName().startsWith("http")){
-                        photoVo.setUrl(imgUrl+tmpFileRelDto.getFileRealName());
-                    }else{
+                    if (!tmpFileRelDto.getFileRealName().startsWith("http")) {
+                        photoVo.setUrl(imgUrl + tmpFileRelDto.getFileRealName());
+                    } else {
                         photoVo.setUrl(tmpFileRelDto.getFileRealName());
-                    }                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
+                    }
+                    photoVo.setRelTypeCd(tmpFileRelDto.getRelTypeCd());
                     afterPhotos.add(photoVo);
                 }
             }

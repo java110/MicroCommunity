@@ -49,15 +49,14 @@ import java.util.*;
 @Component(value = "returnPayFeeMoneyAdapt")
 public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
-
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
+
     // 微信服务商支付开关
     public static final String WECHAT_SERVICE_PAY_SWITCH = "WECHAT_SERVICE_PAY_SWITCH";
 
     //开关ON打开
     public static final String WECHAT_SERVICE_PAY_SWITCH_ON = "ON";
-
 
     private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
 
@@ -71,7 +70,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
-
 
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
@@ -89,18 +87,15 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
 
-
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
         OnlinePayPo oaWorkflowDataPo = BeanConvertUtil.covertBean(data, OnlinePayPo.class);
-
         try {
             doPayFeeMoney(oaWorkflowDataPo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -109,17 +104,14 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
      * @param oaWorkflowDataPo
      */
     public void doPayFeeMoney(OnlinePayPo oaWorkflowDataPo) throws Exception {
-
         //查询小区信息
         OnlinePayDto onlinePayDto = new OnlinePayDto();
         onlinePayDto.setPayId(oaWorkflowDataPo.getPayId());
         onlinePayDto.setState(OnlinePayDto.STATE_WT);
         List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
-
         if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
             return;
         }
-
         String payPassword = "";
         String certData = "";
         String mchPassword = "";
@@ -138,7 +130,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         }
         SortedMap<String, String> parameters = new TreeMap<String, String>();
         String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
-
         parameters.put("appid", onlinePayDtos.get(0).getAppId());//appid
         parameters.put("mch_id", onlinePayDtos.get(0).getMchId());//商户号
         if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
@@ -153,8 +144,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         parameters.put("refund_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getRefundFee())));//退款金额 单位为分！！！
         parameters.put("sign", PayUtil.createSign(parameters, payPassword));
         String xmlData = PayUtil.mapToXml(parameters);
-
-
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         ByteArrayInputStream inputStream = new ByteArrayInputStream(getPkcs12(certData));
         try {
@@ -163,7 +152,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         } finally {
             inputStream.close();
         }
-
         SSLContext sslcontext = SSLContexts.custom()
                 //这里也是写密码的
                 .loadKeyMaterial(keyStore, mchPassword.toCharArray())
@@ -190,15 +178,12 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         } finally {
             httpclient.close();
         }
-
         Map<String, String> resMap = PayUtil.xmlStrToMap(jsonStr);
-
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
         } else {
             doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, resMap.get("return_msg"));
         }
-
     }
 
     private void doUpdateOnlinePay(String orderId, String state, String message) {
@@ -211,10 +196,8 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
     private byte[] getPkcs12(String fileName) {
         List<FileDto> fileDtos = new ArrayList<>();
-
         byte[] context = null;
         String ftpPath = "hc/";
-
         String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
             String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
@@ -229,7 +212,6 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
                     0, "",
                     "");
         }
-
         return context;
     }
 }

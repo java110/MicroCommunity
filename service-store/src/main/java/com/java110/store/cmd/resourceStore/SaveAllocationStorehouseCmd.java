@@ -11,6 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
@@ -18,7 +19,9 @@ import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.allocationStorehouse.AllocationStorehousePo;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
@@ -63,6 +66,9 @@ public class SaveAllocationStorehouseCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -134,6 +140,13 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         }
     }
 
+    /**
+     * 调拨申请-调拨申请发起
+     * @param event              事件对象
+     * @param cmdDataFlowContext
+     * @param reqJson            请求报文
+     * @throws CmdException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -289,6 +302,21 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                 if (flag < 1) {
                     throw new CmdException("保存修改物品失败");
                 }
+                // 保存至 物品 times表
+                //查询调拨批次价格
+                ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+                resourceStoreTimesDto.setTimesId(resObj.getString("timesId"));
+                List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+                resourceStoreTimesPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId("10"));
+                resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
+                resourceStoreTimesPo.setStock(resObj.getString("curStock"));
+                resourceStoreTimesPo.setResCode(resObj.getString("resCode"));
+                resourceStoreTimesPo.setStoreId(reqJson.getString("storeId"));
+                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+                resourceStoreTimesPo.setShId(resObj.getString("shzId"));
+                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             }
         } else { //如果目标仓库下没有这个物品信息，就插入一条物品信息
             ResourceStoreDto resourceStore = new ResourceStoreDto();
@@ -339,6 +367,26 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("保存修改物品失败");
             }
+
+
+            // 保存至 物品 times表
+            //查询调拨批次价格
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setTimesId(resObj.getString("timesId"));
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
+            resourceStoreTimesPo.setStock(resObj.getString("curStock"));
+            resourceStoreTimesPo.setResCode(resourceStoreList.get(0).getResCode());
+            resourceStoreTimesPo.setStoreId(reqJson.getString("storeId"));
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesPo.setShId(resObj.getString("shzId"));
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
+
+
         }
     }
 
@@ -385,6 +433,9 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             BigDecimal oldCurStore = new BigDecimal(allocationStorehouseApplyPo.getApplyCount());
             oldCurStore = oldCurStore.add(new BigDecimal(resObj.getString("curStock")));
             allocationStorehouseApplyPo.setApplyCount(oldCurStore.toString());
+            //加入 从库存中扣减
+            subResourceStoreTimesStock(resObj);
+
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
@@ -411,6 +462,7 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         allocationStorehousePo.setRemark(reqJson.getString("remark"));
         allocationStorehousePo.setStartUserId(reqJson.getString("userId"));
         allocationStorehousePo.setStartUserName(reqJson.getString("userName"));
+        allocationStorehousePo.setTimesId(resObj.getString("timesId"));
         int flag = allocationStorehouseV1InnerServiceSMOImpl.saveAllocationStorehouse(allocationStorehousePo);
 
         if (flag < 1) {
@@ -444,5 +496,36 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         allocationStorehouseApplyPo.setCreateTime(format.format(new Date()));
 
         return allocationStorehouseApplyPo;
+    }
+
+    /**
+     * 从times中扣减
+     *
+     * @param resObj
+     */
+    private void subResourceStoreTimesStock(JSONObject resObj) {
+        String applyQuantity = resObj.getString("curStock");
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setResCode(resObj.getString("resCode"));
+        resourceStoreTimesDto.setTimesId(resObj.getString("timesId"));
+        List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
+            return;
+        }
+        int stock = 0;
+        int quantity = Integer.parseInt(applyQuantity);
+        ResourceStoreTimesPo resourceStoreTimesPo = null;
+
+        stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
+        if (stock < quantity) {
+            throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "价格为：" + resourceStoreTimesDtos.get(0).getPrice() + "的库存" + resourceStoreTimesDtos.get(0).getStock() + ",库存不足");
+        }
+
+        stock = stock - quantity;
+        resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+        resourceStoreTimesPo.setStock(stock + "");
+        resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
     }
 }

@@ -1,6 +1,7 @@
 package com.java110.dto.assetInventoryDetail;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,6 +25,11 @@ public class AssetInventoryDetailDto extends PageDto implements Serializable {
     private String id;
     private String state;
     private String resId;
+    private String timesId;
+    private String shId;
+    private String timesPrice;
+
+    private List<ResourceStoreTimesDto> times;
 
     private Date createTime;
 
@@ -43,6 +49,7 @@ public class AssetInventoryDetailDto extends PageDto implements Serializable {
     private String shName;
     private String unitCodeName;
     private String miniUnitCodeName;
+    private String miniUnitStock;
     private String isFixed;
     private String isFixedName;
 
@@ -245,5 +252,45 @@ public class AssetInventoryDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
+
+    public String getTimesPrice() {
+        return timesPrice;
+    }
+
+    public void setTimesPrice(String timesPrice) {
+        this.timesPrice = timesPrice;
+    }
+
+    public List<ResourceStoreTimesDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ResourceStoreTimesDto> times) {
+        this.times = times;
+    }
+
+    public String getMiniUnitStock() {
+        return miniUnitStock;
+    }
+
+    public void setMiniUnitStock(String miniUnitStock) {
+        this.miniUnitStock = miniUnitStock;
     }
 }

@@ -62,7 +62,7 @@ public class ListStaffsNoRoleCmd extends Cmd {
         privilegeUserDto.setpId(reqJson.getString("roleId"));
         privilegeUserDto.setStoreId(storeId);
         privilegeUserDto.setPrivilegeFlag(PrivilegeUserDto.PRIVILEGE_FLAG_GROUP);
-        privilegeUserDto.setUserName(reqJson.getString("userName"));
+        privilegeUserDto.setUserName(reqJson.getString("searchUserName"));
         privilegeUserDto.setPage(Integer.parseInt(reqJson.getString("page")));
         privilegeUserDto.setRow(Integer.parseInt(reqJson.getString("row")));
 

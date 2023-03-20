@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IPrivilegeGroupV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
@@ -33,11 +34,8 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
     }
 
     @Override
@@ -45,8 +43,7 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
         String storeId = context.getReqHeaders().get("store-id");
         String communityId = context.getReqHeaders().get("communityId");
-
-        if(StringUtil.isEmpty(userId)){
+        if (StringUtil.isEmpty(userId)) {
             userId = reqJson.getString("userId");
         }
         // 判断是不是管理员，管理员反馈 物业 的所角色
@@ -57,7 +54,7 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户不存在");
         String storeTypeCd = "";
-        if(!reqJson.containsKey("storeTypeCd") || StringUtil.isEmpty(reqJson.getString("storeTypeCd"))) {
+        if (!reqJson.containsKey("storeTypeCd") || StringUtil.isEmpty(reqJson.getString("storeTypeCd"))) {
             StoreDto storeDto = new StoreDto();
             storeDto.setStoreId(storeId);
             storeDto.setPage(1);
@@ -65,10 +62,9 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
             List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
             Assert.listOnlyOne(storeDtos, "商户不存在");
             storeTypeCd = storeDtos.get(0).getStoreTypeCd();
-        }else{
+        } else {
             storeTypeCd = reqJson.getString("storeTypeCd");
         }
-
         DataQuery dataQuery = new DataQuery();
         dataQuery.setServiceCode("query.store.privilegeGroup");
         JSONObject param = new JSONObject();
@@ -84,15 +80,11 @@ public class QueryStorePrivilegeGroupCmd extends Cmd {
         ResponseEntity<String> privilegeGroup = dataQuery.getResponseEntity();
         if (privilegeGroup.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(privilegeGroup);
-            return ;
+            return;
         }
-
         JSONObject privilegeGroupObj = JSONObject.parseObject(privilegeGroup.getBody().toString());
-
         Assert.jsonObjectHaveKey(privilegeGroupObj, "privilegeGroups", "查询菜单未返回privilegeGroups节点");
-
         JSONArray privilegeGroups = privilegeGroupObj.getJSONArray("privilegeGroups");
-
         context.setResponseEntity(new ResponseEntity<String>(privilegeGroups.toJSONString(), HttpStatus.OK));
     }
 }

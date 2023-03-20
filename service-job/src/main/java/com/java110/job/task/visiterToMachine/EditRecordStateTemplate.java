@@ -1,18 +1,12 @@
 package com.java110.job.task.visiterToMachine;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.visit.VisitDto;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
-import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.owner.VisitPo;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,13 +26,7 @@ import java.util.List;
 public class EditRecordStateTemplate extends TaskSystemQuartz {
 
     @Autowired
-    private IIotSendAsyn hcCarBlackWhiteAsynImpl;
-
-    @Autowired
     private IVisitInnerServiceSMO visitInnerServiceSMOImpl;
-
-    @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     private static Logger logger = LoggerFactory.getLogger(EditRecordStateTemplate.class);
 
@@ -60,10 +48,10 @@ public class EditRecordStateTemplate extends TaskSystemQuartz {
         if (visitDtos == null || visitDtos.size() < 1) {
             return;
         }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (VisitDto visit : visitDtos) {
             //获取访客离开时间
             String departureTime = visit.getDepartureTime();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date finishTime = format.parse(departureTime);
             Date date = new Date();
             if (finishTime.getTime() <= date.getTime()) { //如果访客离开时间小于当前时间，这条访客记录就失效

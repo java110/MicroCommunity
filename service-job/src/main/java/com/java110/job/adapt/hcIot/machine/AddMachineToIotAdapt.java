@@ -56,6 +56,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
+
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -77,7 +78,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
-
     /**
      * accessToken={access_token}
      * &extCommunityUuid=01000
@@ -93,7 +93,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        JSONArray  businessMachines = new JSONArray();
+        JSONArray businessMachines = new JSONArray();
         if (data.containsKey(MachinePo.class.getSimpleName())) {
             Object bObj = data.get(MachinePo.class.getSimpleName());
             if (bObj instanceof JSONObject) {
@@ -103,8 +103,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessMachines = (JSONArray) bObj;
             }
-
-        }else {
+        } else {
             if (data instanceof JSONObject) {
                 businessMachines.add(data);
             }
@@ -117,34 +116,25 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     }
 
     private void doSendMachine(Business business, JSONObject businessMachine) {
-
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
-
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(machinePo.getMachineCode());
         machineDto.setCommunityId(machinePo.getCommunityId());
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-
         Assert.listOnlyOne(machineDtos, "未找到设备");
-
         CommunityLocationDto communityLocationDto = new CommunityLocationDto();
         communityLocationDto.setLocationId(machineDtos.get(0).getLocationTypeCd());
         communityLocationDto.setCommunityId(machineDtos.get(0).getCommunityId());
         List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
-
         Assert.listOnlyOne(communityLocationDtos, "设备位置不存在");
-
         String hmId = getHmId(machineDtos.get(0));
-
         List<JSONObject> ownerDtos = null;
         if (MachineDto.MACHINE_TYPE_ACCESS_CONTROL.equals(machineDtos.get(0).getMachineTypeCd())) {
             ownerDtos = getOwners(machinePo);
         } else {
             ownerDtos = new ArrayList<>();
         }
-
         JSONObject postParameters = new JSONObject();
-
         postParameters.put("machineCode", machinePo.getMachineCode());
         postParameters.put("machineName", machinePo.getMachineName());
         postParameters.put("machineVersion", machinePo.getMachineVersion());
@@ -165,7 +155,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         machineAttrDto.setCommunityId(machineDto.getCommunityId());
         machineAttrDto.setMachineId(machineDto.getMachineId());
         List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
-
         for (MachineAttrDto tmpMachineAttrDto : machineAttrDtos) {
             if (MachineAttrDto.SPEC_HM.equals(tmpMachineAttrDto.getSpecCd())) {
                 return tmpMachineAttrDto.getValue();
@@ -177,9 +166,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     private List<JSONObject> getOwners(MachinePo machinePo) {
         //拿到小区ID
         String communityId = machinePo.getCommunityId();
-
         List<JSONObject> ownerDtos = new ArrayList<>();
-
         List<OwnerDto> owners = null;
         //根据小区ID查询现有设备
         OwnerDto ownerDto = new OwnerDto();
@@ -189,12 +176,10 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         communityLocationDto.setLocationId(locationTypeCd);
         communityLocationDto.setCommunityId(machinePo.getCommunityId());
         List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
-
         if (communityLocationDtos == null || communityLocationDtos.size() < 1) {
             return ownerDtos;
         }
         communityLocationDto = communityLocationDtos.get(0);
-
         if ("1000".contains(communityLocationDto.getLocationType())) {//查询整个小区的业主
             owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         } else if ("2000".equals(communityLocationDto.getLocationType())) {//2000 单元门 ，则这个单元下的业主同步
@@ -211,7 +196,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         } else if ("3000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
             ownerDto.setRoomId(machinePo.getLocationObjId());
             owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        }else if ("6000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
+        } else if ("6000".equals(communityLocationDto.getLocationType())) {// 3000 房屋门
             //先根据单元门ID 查询 房屋
             RoomDto roomDto = new RoomDto();
             roomDto.setFloorId(machinePo.getLocationObjId());
@@ -226,7 +211,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         if (owners == null) {
             return ownerDtos;
         }
-
         for (OwnerDto tOwnerDto : owners) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(tOwnerDto.getMemberId());
@@ -253,10 +237,9 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
             postParameters.put("machineCode", machinePo.getMachineCode());
             postParameters.put("extMachineId", machinePo.getMachineId());
             postParameters.put("extCommunityId", machinePo.getCommunityId());
-            postParameters.put("attrs",tOwnerDto.getOwnerAttrDtos());
+            postParameters.put("attrs", tOwnerDto.getOwnerAttrDtos());
             ownerDtos.add(postParameters);
         }
-
         return ownerDtos;
     }
 

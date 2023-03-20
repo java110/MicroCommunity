@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ownerRoomRelV1ServiceDaoImpl">
 
-
     <!-- 保存业主房屋关系表信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerRoomRelInfo" parameterType="Map">
-        insert into building_owner_room_rel(
-        rel_id,remark,start_time,state,end_time,owner_id,user_id,room_id
-        ) values (
-        #{relId},#{remark},#{startTime},#{state},#{endTime},#{ownerId},#{userId},#{roomId}
-        )
+        insert into building_owner_room_rel(rel_id, remark, start_time, state, end_time, owner_id, user_id, room_id)
+        values (#{relId}, #{remark}, #{startTime}, #{state}, #{endTime}, #{ownerId}, #{userId}, #{roomId})
     </insert>
-
 
     <!-- 查询业主房屋关系表信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerRoomRelInfo" parameterType="Map" resultType="Map">
@@ -57,9 +51,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改业主房屋关系表信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerRoomRelInfo" parameterType="Map">
@@ -92,7 +84,6 @@
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
-
     </update>
 
     <!-- 查询业主房屋关系表数量 add by wuxw 2018-07-03 -->
@@ -131,15 +122,15 @@
 
     <select id="queryRoomCountByOwnerIds" parameterType="Map" resultType="Map">
         select t.owner_id ownerId,count(1) roomCount
-        from
-        building_owner_room_rel t
+        from building_owner_room_rel t
+        left join building_room br on br.room_id = t.room_id
         where t.status_cd = '0'
+        and br.status_cd = '0'
         and t.owner_id in
         <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
+        and br.state != '2008'
         group by t.owner_id
     </select>
-
-
 </mapper>
