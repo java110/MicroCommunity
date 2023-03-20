@@ -49,6 +49,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String feeId;
     private String bId;
     private String payerObjId;
+    private String payerObjName;
     private String payerObjType;
 
     private Date createTime;
@@ -368,5 +369,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPrimeRateName(String primeRateName) {
         this.primeRateName = primeRateName;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }
