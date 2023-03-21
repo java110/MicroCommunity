@@ -103,7 +103,7 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         if (purchaseApplys == null || purchaseApplys.size() == 0) {
             return purchaseApplys;
         }
-
+        //刷入采购详情
         freshPurchaseApplyDetail(purchaseApplys);
 
         String[] userIds = getUserIds(purchaseApplys);

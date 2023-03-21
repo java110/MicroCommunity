@@ -64,6 +64,14 @@ public class PurchaseStorageCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
     }
 
+    /**
+     * 直接采购入库
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     * @throws ParseException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -136,6 +144,7 @@ public class PurchaseStorageCmd extends Cmd {
             resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getPurchaseQuantity());
             resourceStoreTimesPo.setResCode(resourceStore.getString("resCode"));
             resourceStoreTimesPo.setStoreId(storeId);
+            resourceStoreTimesPo.setShId(purchaseApplyDetailPo.getShId());
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
 
         }

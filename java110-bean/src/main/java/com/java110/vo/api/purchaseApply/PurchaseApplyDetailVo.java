@@ -34,6 +34,8 @@ public class PurchaseApplyDetailVo {
     private String miniUnitCodeName;
     private String isFixed;
     private String isFixedName;
+    private String consultPrice;
+    private String timesId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -273,6 +275,22 @@ public class PurchaseApplyDetailVo {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getConsultPrice() {
+        return consultPrice;
+    }
+
+    public void setConsultPrice(String consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }
 

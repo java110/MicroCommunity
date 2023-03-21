@@ -21,16 +21,22 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.community.ICommunityLocationV1InnerServiceSMO;
+import com.java110.dto.FloorDto;
+import com.java110.dto.UnitDto;
+import com.java110.dto.parking.ParkingAreaDto;
+import com.java110.dto.parkingBox.ParkingBoxDto;
+import com.java110.intf.community.*;
 import com.java110.po.community.CommunityLocationPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 
 /**
  * 类表述：更新
@@ -47,15 +53,25 @@ public class UpdateCommunityLocationCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateCommunityLocationCmd.class);
 
-
     @Autowired
     private ICommunityLocationV1InnerServiceSMO communityLocationV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
+
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingBoxV1InnerServiceSMO parkingBoxV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "locationId", "locationId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
@@ -63,6 +79,45 @@ public class UpdateCommunityLocationCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         CommunityLocationPo communityLocationPo = BeanConvertUtil.covertBean(reqJson, CommunityLocationPo.class);
+        if (!StringUtil.isEmpty(communityLocationPo.getLocationType()) && communityLocationPo.getLocationType().equals("2000")) { //1000 小区；2000 单元；3000 房屋；4000 岗亭；5000 部门；6000 楼栋；7000 停车场
+            UnitDto unitDto = new UnitDto();
+            unitDto.setUnitId(reqJson.getString("unitId"));
+            List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+            Assert.listOnlyOne(unitDtos, "查询单元错误！");
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorId(reqJson.getString("floorId"));
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            Assert.listOnlyOne(floorDtos, "查询房屋错误！");
+            communityLocationPo.setLocationObjId(unitDtos.get(0).getUnitId());
+            communityLocationPo.setLocationName(floorDtos.get(0).getFloorNum() + "号楼" + unitDtos.get(0).getUnitNum() + "单元");
+            communityLocationPo.setLocationObjName(communityLocationPo.getLocationName());
+        }
+        if (!StringUtil.isEmpty(communityLocationPo.getLocationType()) && communityLocationPo.getLocationType().equals("6000")) { //6000 楼栋
+            communityLocationPo.setLocationObjId(reqJson.getString("floorId"));
+            FloorDto floorDto = new FloorDto();
+            floorDto.setFloorId(reqJson.getString("floorId"));
+            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+            Assert.listOnlyOne(floorDtos, "查询楼栋错误！");
+            communityLocationPo.setLocationName(floorDtos.get(0).getFloorNum() + "号楼");
+            communityLocationPo.setLocationObjName(communityLocationPo.getLocationName());
+        }
+        if (!StringUtil.isEmpty(communityLocationPo.getLocationType()) && communityLocationPo.getLocationType().equals("7000")) { //7000 停车场
+            ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
+            parkingAreaDto.setPaId(reqJson.getString("paId"));
+            List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
+            Assert.listOnlyOne(parkingAreaDtos, "查询停车场错误！");
+            communityLocationPo.setLocationObjId(reqJson.getString("paId"));
+            communityLocationPo.setLocationName(parkingAreaDtos.get(0).getNum() + "停车场");
+            communityLocationPo.setLocationObjName(communityLocationPo.getLocationName());
+        }
+        if (!StringUtil.isEmpty(communityLocationPo.getLocationType()) && communityLocationPo.getLocationType().equals("4000")) { //4000 岗亭
+            ParkingBoxDto parkingBoxDto = new ParkingBoxDto();
+            parkingBoxDto.setBoxId(reqJson.getString("boxId"));
+            List<ParkingBoxDto> parkingBoxDtos = parkingBoxV1InnerServiceSMOImpl.queryParkingBoxs(parkingBoxDto);
+            communityLocationPo.setLocationObjId(reqJson.getString("boxId"));
+            communityLocationPo.setLocationName(parkingBoxDtos.get(0).getBoxName());
+            communityLocationPo.setLocationObjName(communityLocationPo.getLocationName());
+        }
         int flag = communityLocationV1InnerServiceSMOImpl.updateCommunityLocation(communityLocationPo);
 
         if (flag < 1) {

@@ -25,7 +25,6 @@ public class UpdateInspectionPlanCmd extends Cmd {
     @Autowired
     private IInspectionPlanStaffV1InnerServiceSMO inspectionPlanStaffV1InnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "inspectionPlanId", "inspectionPlanId不能为空");
@@ -40,9 +39,6 @@ public class UpdateInspectionPlanCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
-
-
         InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(reqJson, InspectionPlanPo.class);
         int flag = inspectionPlanV1InnerServiceSMOImpl.updateInspectionPlan(inspectionPlanPo);
         if (flag < 1) {
@@ -55,9 +51,8 @@ public class UpdateInspectionPlanCmd extends Cmd {
 
         inspectionPlanStaffV1InnerServiceSMOImpl.deleteInspectionPlanStaff(inspectionPlanStaffPo);
 
-
         JSONArray staffs = reqJson.getJSONArray("staffs");
-        for(int staffIndex = 0; staffIndex < staffs.size() ; staffIndex++) {
+        for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             inspectionPlanStaffPo = new InspectionPlanStaffPo();
             inspectionPlanStaffPo.setCommunityId(reqJson.getString("communityId"));
             inspectionPlanStaffPo.setEndTime(reqJson.getString("endTime"));

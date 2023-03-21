@@ -74,4 +74,12 @@ public interface IResourceStoreTimesV1ServiceDao {
      */
     int queryResourceStoreTimessCount(Map info);
 
+    /**
+     * 查询物品次数总数
+     *
+     * @param info 物品次数信息
+     * @return 物品次数数量
+     */
+    int queryResourceStoreTimessCountStock(Map info);
+
 }

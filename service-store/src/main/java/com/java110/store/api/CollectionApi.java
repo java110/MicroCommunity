@@ -5,19 +5,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.userStorehouse.UserStorehouseDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.po.userStorehouse.UserStorehousePo;
 import com.java110.store.bmo.collection.IGetCollectionAuditOrderBMO;
 import com.java110.store.bmo.collection.IGoodsCollectionBMO;
 import com.java110.store.bmo.collection.IResourceOutBMO;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -55,6 +59,9 @@ public class CollectionApi {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
 
     /**
@@ -161,7 +168,7 @@ public class CollectionApi {
     }
 
     /**
-     * 物品直接出库
+     * 物品领用-物品直接出库
      */
     @RequestMapping(value = "/goodsDelivery", method = RequestMethod.POST)
     public ResponseEntity<String> goodsDelivery(@RequestBody JSONObject reqJson,
@@ -222,6 +229,10 @@ public class CollectionApi {
             }
             resourceStorePo.setMiniStock(String.valueOf(surplusMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+            //加入 从库存中扣减
+            subResourceStoreTimesStock(resourceStore.getString("resCode"), purchaseApplyDetailPo);
+
             //查询资源
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResId(purchaseApplyDetailPo.getResId());
@@ -242,6 +253,7 @@ public class CollectionApi {
             userStorehousePo.setResName(resourceStoreDtos.get(0).getResName());
             userStorehousePo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             userStorehousePo.setUserId(purchaseApplyPo.getUserId());
+            userStorehousePo.setTimesId(purchaseApplyDetailPo.getTimesId());
 
             //查询个人物品仓库中 是否已经存在商品
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
@@ -293,5 +305,37 @@ public class CollectionApi {
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         return goodsCollectionBMOImpl.collection(purchaseApplyPo,reqJson);
+    }
+
+    /**
+     * 从times中扣减
+     *
+     * @param resCode
+     * @param purchaseApplyDetailPo
+     */
+    private void subResourceStoreTimesStock(String resCode, PurchaseApplyDetailPo purchaseApplyDetailPo) {
+        String applyQuantity = purchaseApplyDetailPo.getPurchaseQuantity();
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setResCode(resCode);
+        resourceStoreTimesDto.setTimesId(purchaseApplyDetailPo.getTimesId());
+        List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
+            return;
+        }
+        int stock = 0;
+        int quantity = Integer.parseInt(applyQuantity);
+        ResourceStoreTimesPo resourceStoreTimesPo = null;
+
+        stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
+        if (stock < quantity) {
+            throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "价格为：" + resourceStoreTimesDtos.get(0).getPrice() + "的库存" + resourceStoreTimesDtos.get(0).getStock() + ",库存不足");
+        }
+
+        stock = stock - quantity;
+        resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+        resourceStoreTimesPo.setStock(stock + "");
+        resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
     }
 }

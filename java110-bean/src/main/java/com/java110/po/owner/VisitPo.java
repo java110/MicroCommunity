@@ -29,9 +29,15 @@ public class VisitPo implements Serializable {
     private String state;
     private String stateName;
     private String stateRemark;
+    private String carState;
+    private String carStateRemark;
+    private String carStateName;
     private String psId;
     private String flag;
     private String recordState;
+    private String sign;
+    private String roomId;
+    private String mark;
 
     public String getvId() {
         return vId;
@@ -199,5 +205,53 @@ public class VisitPo implements Serializable {
 
     public void setRecordState(String recordState) {
         this.recordState = recordState;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getCarState() {
+        return carState;
+    }
+
+    public void setCarState(String carState) {
+        this.carState = carState;
+    }
+
+    public String getCarStateRemark() {
+        return carStateRemark;
+    }
+
+    public void setCarStateRemark(String carStateRemark) {
+        this.carStateRemark = carStateRemark;
+    }
+
+    public String getCarStateName() {
+        return carStateName;
+    }
+
+    public void setCarStateName(String carStateName) {
+        this.carStateName = carStateName;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 }

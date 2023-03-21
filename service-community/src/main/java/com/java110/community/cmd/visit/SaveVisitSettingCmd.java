@@ -26,7 +26,6 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.workflow.WorkflowModelDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
-import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
@@ -83,29 +82,26 @@ public class SaveVisitSettingCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
         Assert.hasKeyAndValue(reqJson, "faceWay", "请求报文中未包含faceWay");
         Assert.hasKeyAndValue(reqJson, "carNumWay", "请求报文中未包含carNumWay");
+//        Assert.hasKeyAndValue(reqJson, "paId", "请求报文中未包含paId");
 
         Assert.hasKeyAndValue(reqJson, "auditWay", "请求报文中未包含auditWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
         oaWorkflowPo.setStoreId(storeId);
         oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
         oaWorkflowPo.setFlowName(reqJson.getString("typeName") + "审批流程");
         oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_VISIT);
-
         //创建model
         WorkflowModelDto workflowModelDto = new WorkflowModelDto();
         workflowModelDto.setName(oaWorkflowPo.getFlowName());
         workflowModelDto.setKey(oaWorkflowPo.getFlowId());
         workflowModelDto = workflowInnerServiceSMOImpl.createModel(workflowModelDto);
-
         oaWorkflowPo.setModelId(workflowModelDto.getModelId());
         oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
         oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
@@ -131,7 +127,9 @@ public class SaveVisitSettingCmd extends Cmd {
         visitSettingPo.setSettingId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         visitSettingPo.setFlowId(oaWorkflowPo.getFlowId());
         visitSettingPo.setFlowName(oaWorkflowPo.getFlowName());
-
+        if (StringUtil.isEmpty(reqJson.getString("visitNumber"))) {
+            visitSettingPo.setVisitNumber("0");
+        }
         if (!StringUtil.isEmpty(visitSettingPo.getPaId())) {
             ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
             parkingAreaDto.setCommunityId(reqJson.getString("communityId"));
@@ -141,11 +139,9 @@ public class SaveVisitSettingCmd extends Cmd {
             visitSettingPo.setPaNum(parkingAreaDtos.get(0).getNum());
         }
         flag = visitSettingV1InnerServiceSMOImpl.saveVisitSetting(visitSettingPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

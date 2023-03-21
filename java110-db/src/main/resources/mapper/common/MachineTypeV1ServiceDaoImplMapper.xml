@@ -1,94 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="machineTypeV1ServiceDaoImpl">
 
-
     <!-- 保存设备类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveMachineTypeInfo" parameterType="Map">
-        insert into machine_type(
-        machine_type_name,type_id,machine_type_cd,community_id,parent_type_id,is_enable,machine_type_code,unit,importance_level,seq,warranty_deadline,remark
-        ) values (
-        #{machineTypeName},#{typeId},#{machineTypeCd},#{communityId},#{parentTypeId},#{isEnable},#{machineTypeCode},#{unit},#{importanceLevel},#{seq},#{warrantyDeadline},#{remark}
-        )
+        insert into machine_type(machine_type_name, type_id, machine_type_cd, community_id, parent_type_id, is_enable,
+                                 machine_type_code, unit, importance_level, seq, warranty_deadline, remark)
+        values (#{machineTypeName}, #{typeId}, #{machineTypeCd}, #{communityId}, #{parentTypeId}, #{isEnable},
+                #{machineTypeCode}, #{unit}, #{importanceLevel}, #{seq}, #{warrantyDeadline}, #{remark})
     </insert>
 
     <insert id="saveMachineTypeInfoSelective" parameterType="Map">
         insert into machine_type
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="typeId != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">
                 type_id,
             </if>
-            <if test="machineTypeName != null" >
+            <if test="machineTypeName != null">
                 machine_type_name,
             </if>
-            <if test="machineTypeCd != null" >
+            <if test="machineTypeCd != null">
                 machine_type_cd,
             </if>
-            <if test="communityId != null" >
+            <if test="communityId != null">
                 community_id,
             </if>
-            <if test="parentTypeId != null" >
+            <if test="parentTypeId != null">
                 parent_type_id,
             </if>
-            <if test="isEnable != null" >
+            <if test="isEnable != null">
                 is_enable,
             </if>
-            <if test="machineTypeCode != null" >
+            <if test="machineTypeCode != null">
                 machine_type_code,
             </if>
-            <if test="unit != null" >
+            <if test="unit != null">
                 unit,
             </if>
-            <if test="importanceLevel != null" >
+            <if test="importanceLevel != null">
                 importance_level,
             </if>
-            <if test="seq != null " >
+            <if test="seq != null ">
                 seq,
             </if>
-            <if test="warrantyDeadline != null and warrantyDeadline!=''" >
+            <if test="warrantyDeadline != null and warrantyDeadline!=''">
                 warranty_deadline,
             </if>
-            <if test="remark != null and remark!=''" >
+            <if test="remark != null and remark!=''">
                 remark,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="typeId != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">
                 #{typeId},
             </if>
-            <if test="machineTypeName != null" >
+            <if test="machineTypeName != null">
                 #{machineTypeName},
             </if>
-            <if test="machineTypeCd != null" >
+            <if test="machineTypeCd != null">
                 #{machineTypeCd},
             </if>
-            <if test="communityId != null" >
+            <if test="communityId != null">
                 #{communityId},
             </if>
-            <if test="parentTypeId != null" >
+            <if test="parentTypeId != null">
                 #{parentTypeId},
             </if>
-            <if test="isEnable != null" >
+            <if test="isEnable != null">
                 #{isEnable},
             </if>
-            <if test="machineTypeCode != null" >
+            <if test="machineTypeCode != null">
                 #{machineTypeCode},
             </if>
-            <if test="unit != null" >
+            <if test="unit != null">
                 #{unit},
             </if>
-            <if test="importanceLevel != null" >
+            <if test="importanceLevel != null">
                 #{importanceLevel},
             </if>
-            <if test="seq != null" >
+            <if test="seq != null">
                 #{seq},
             </if>
-            <if test="warrantyDeadline != null and warrantyDeadline!=''" >
+            <if test="warrantyDeadline != null and warrantyDeadline!=''">
                 #{warrantyDeadline},
             </if>
-            <if test="remark != null and remark!=''" >
+            <if test="remark != null and remark!=''">
                 #{remark},
             </if>
         </trim>
@@ -97,10 +94,12 @@
     <!-- 查询设备类型信息 add by wuxw 2018-07-03 -->
     <select id="getMachineTypeInfo" parameterType="Map" resultType="Map">
         select t.machine_type_name,t.machine_type_name machineTypeName,t.type_id,t.type_id
-        typeId,t.status_cd,t.status_cd statusCd,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.community_id communityId
-        ,t.parent_type_id,t.parent_type_id parentTypeId,t.is_enable isEnable,t.machine_type_code machineTypeCode,t.unit unit,t.importance_level importanceLevel,t.seq seq,t.warranty_deadline warrantyDeadline,t.remark remark
+        typeId,t.status_cd,t.status_cd statusCd,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.community_id
+        communityId
+        ,t.parent_type_id,t.parent_type_id parentTypeId,t.is_enable isEnable,t.machine_type_code machineTypeCode,t.unit
+        unit,t.importance_level importanceLevel,t.seq seq,t.warranty_deadline warrantyDeadline,t.remark remark
         from machine_type t
-        where 1 =1
+        where 1 = 1
         <if test="isEnable !=null and isEnable != ''">
             and t.is_enable= #{isEnable}
         </if>
@@ -137,13 +136,11 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        order by t.seq
+        order by t.create_time desc, t.seq desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改设备类型信息 add by wuxw 2018-07-03 -->
     <update id="updateMachineTypeInfo" parameterType="Map">
@@ -185,7 +182,6 @@
         <if test="typeId !=null and typeId != ''">
             and t.type_id= #{typeId}
         </if>
-
     </update>
 
     <!-- 查询设备类型数量 add by wuxw 2018-07-03 -->
@@ -229,8 +225,5 @@
         <if test="machineTypeCd !=null and machineTypeCd != ''">
             and t.machine_type_cd= #{machineTypeCd}
         </if>
-
-
     </select>
-
 </mapper>

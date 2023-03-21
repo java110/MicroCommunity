@@ -11,9 +11,9 @@
     <!-- 保存用户物品信息 add by wuxw 2018-07-03 -->
     <insert id="saveUserStorehouseInfo" parameterType="Map">
         insert into user_storehouse(
-res_name,res_code,store_id,stock,res_id,user_id,mini_stock,us_id
+res_name,res_code,store_id,stock,res_id,user_id,mini_stock,us_id,times_id
 ) values (
-#{resName},#{resCode},#{storeId},#{stock},#{resId},#{userId},#{miniStock},#{usId}
+#{resName},#{resCode},#{storeId},#{stock},#{resId},#{userId},#{miniStock},#{usId},#{timesId}
 )
     </insert>
 
@@ -50,7 +50,10 @@ where 1 =1
 </if> 
 <if test="usId !=null and usId != ''">
    and t.us_id= #{usId}
-</if> 
+</if>
+<if test="timesId !=null and timesId != ''">
+    and t.times_id= #{timesId}
+</if>
 order by t.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
@@ -87,7 +90,10 @@ order by t.create_time desc
 </if> 
 <if test="miniStock !=null and miniStock != ''">
 , t.mini_stock= #{miniStock}
-</if> 
+</if>
+<if test="timesId !=null and timesId != ''">
+, t.times_id= #{timesId}
+</if>
  where 1=1 <if test="usId !=null and usId != ''">
 and t.us_id= #{usId}
 </if> 
@@ -125,7 +131,10 @@ where 1 =1
 </if> 
 <if test="usId !=null and usId != ''">
    and t.us_id= #{usId}
-</if> 
+</if>
+<if test="timesId !=null and timesId != ''">
+   and t.times_id= #{timesId}
+</if>
 
 
      </select>

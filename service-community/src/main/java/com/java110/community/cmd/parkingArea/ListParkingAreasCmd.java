@@ -52,6 +52,7 @@ import java.util.List;
 )
 @Java110Cmd(serviceCode = "parkingArea.listParkingAreas")
 public class ListParkingAreasCmd extends Cmd {
+
     @Autowired
     private IParkingAreaInnerServiceSMO parkingAreaInnerServiceSMOImpl;
 

@@ -14,12 +14,17 @@ import java.io.Serializable;
  **/
 public class VisitDto extends PageDto implements Serializable {
 
-    //审核状态 0表示未审核；1表示审核通过；2表示审核拒绝
+    //访客记录审核状态 0表示未审核；1表示审核通过；2表示审核拒绝
     public static final String STATE_W = "0"; //待审核
     public static final String STATE_C = "1"; //表示审核通过
     public static final String STATE_F = "2"; //表示审核拒绝
-
     public static final String STATE_D = "3"; // 审核中
+
+    //车辆审核状态 0表示未审核；1表示审核通过；2表示审核拒绝
+    public static final String CAR_STATE_W = "0"; //待审核
+    public static final String CAR_STATE_C = "1"; //表示审核通过
+    public static final String CAR_STATE_F = "2"; //表示审核拒绝
+    public static final String CAR_STATE_D = "3"; // 审核中
 
     private String departureTime;
     private String vName;
@@ -46,6 +51,9 @@ public class VisitDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
     private String stateRemark;
+    private String carState;
+    private String carStateRemark;
+    private String carStateName;
     private String createTime;
     private String sameDay;
     private String carNumNoEmpty;
@@ -53,11 +61,14 @@ public class VisitDto extends PageDto implements Serializable {
     private String recordState;
     private String parkingAreaName;
     private String parkingSpaceNum;
+    private String parkAreaNum;
     private String flag;
+    private String sign;
     private String fileRelName;
     private String fileSaveName;
 
     private String flowId;
+    private String roomId;
 
     public String getvName() {
         return vName;
@@ -337,5 +348,53 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setvIds(String[] vIds) {
         this.vIds = vIds;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getCarState() {
+        return carState;
+    }
+
+    public void setCarState(String carState) {
+        this.carState = carState;
+    }
+
+    public String getCarStateRemark() {
+        return carStateRemark;
+    }
+
+    public void setCarStateRemark(String carStateRemark) {
+        this.carStateRemark = carStateRemark;
+    }
+
+    public String getCarStateName() {
+        return carStateName;
+    }
+
+    public void setCarStateName(String carStateName) {
+        this.carStateName = carStateName;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getParkAreaNum() {
+        return parkAreaNum;
+    }
+
+    public void setParkAreaNum(String parkAreaNum) {
+        this.parkAreaNum = parkAreaNum;
     }
 }

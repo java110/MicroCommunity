@@ -88,6 +88,7 @@ public class ListPurchaseApplysCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
+        purchaseApplyDto.setUserName("");//解除与用户名相关问题
         //获取用户id
         String userId = reqJson.getString("userId");
         //采购申请、物品领用（管理员查看所有，员工查看当前用户相关）
@@ -135,7 +136,9 @@ public class ListPurchaseApplysCmd extends Cmd {
                         purchaseApplyDetailVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
                         //获取仓库名称
                         String shName = resourceStoreDtos.get(0).getShName();
+                        String shId = resourceStoreDtos.get(0).getShId();
                         purchaseApplyDetailVo.setShName(shName);
+                        purchaseApplyDetailVo.setShId(shId);
                         cursor++;
                         if (applyDetailList.size() > 1) {
                             resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "      ");

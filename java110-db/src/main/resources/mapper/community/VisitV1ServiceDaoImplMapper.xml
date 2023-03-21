@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="visitV1ServiceDaoImpl">
 
-
     <!-- 保存访客信息 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfo" parameterType="Map">
-        insert into s_visit_info(
-        departure_time,v_name,ps_id,visit_gender,owner_id,reason_type,user_id,state_remark,v_id,visit_time,phone_number,free_time,visit_case,state,community_id,entourage,record_state,car_num,status_cd
-        ) values (
-        #{departureTime},#{vName},#{psId},#{visitGender},#{ownerId},#{reasonType},#{userId},#{stateRemark},#{vId},#{visitTime},#{phoneNumber},#{freeTime},#{visitCase},#{state},#{communityId},#{entourage},#{recordState},#{carNum},#{statusCd}
-        )
+        insert into s_visit_info(departure_time, v_name, ps_id, visit_gender, owner_id, reason_type, user_id,
+                                 state_remark, v_id, visit_time, phone_number, free_time, visit_case, state,
+                                 community_id, entourage, record_state, car_num, status_cd, car_state, car_remark,
+                                 room_id)
+        values (#{departureTime}, #{vName}, #{psId}, #{visitGender}, #{ownerId}, #{reasonType}, #{userId},
+                #{stateRemark}, #{vId}, #{visitTime}, #{phoneNumber}, #{freeTime}, #{visitCase}, #{state},
+                #{communityId}, #{entourage}, #{recordState}, #{carNum}, #{statusCd}, #{carState}, #{carStateRemark},
+                #{roomId})
     </insert>
-
 
     <!-- 查询访客信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
         select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd
-        statusCd,t.ps_id,t.ps_id psId,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id
+        statusCd,t.ps_id,t.ps_id psId,ps.num parkingSpaceNum,pa.num parkAreaNum,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id
         ownerId,t.reason_type,t.reason_type reasonType,t.user_id,t.user_id createUserId,t.state_remark,t.state_remark
         stateRemark,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
         phoneNumber,t.free_time,t.free_time freeTime,t.visit_case,t.visit_case
         visitCase,t.state,t.community_id,t.community_id communityId,t.entourage,t.record_state,t.record_state
-        recordState,t.create_time createTime,td.name stateName,t.car_num carNum
+        recordState,t.create_time createTime,td.name stateName,t.car_num carNum,t.car_state,t.car_state carState,
+        t.car_remark,t.car_remark carStateRemark,td2.name carStateName,t.room_id,t.room_id roomId
         from s_visit_info t
+        left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
+        left join t_dict td2 on t.car_state = td2.status_cd and td2.table_name = 's_visit_info' and td2.table_columns =
+        'car_state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}
@@ -78,6 +83,15 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -91,9 +105,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改访客信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitInfo" parameterType="Map">
@@ -140,6 +152,18 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
+        <if test="carState !=null and carState != ''">
+            , t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            , t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="carNum != null and carNum != ''">
+            , t.car_num = #{carNum}
+        </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
@@ -153,14 +177,17 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-
     </update>
 
     <!-- 查询访客数量 add by wuxw 2018-07-03 -->
     <select id="queryVisitsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from s_visit_info t
+        left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
+        left join t_dict td2 on t.car_state = td2.status_cd and td2.table_name = 's_visit_info' and td2.table_columns =
+        'car_state'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}
@@ -213,6 +240,15 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -222,8 +258,5 @@
         <if test="recordState !=null and recordState != ''">
             and t.record_state= #{recordState}
         </if>
-
-
     </select>
-
 </mapper>

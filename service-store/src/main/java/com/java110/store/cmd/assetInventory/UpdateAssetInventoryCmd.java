@@ -23,26 +23,26 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.dto.user.UserDto;
-import com.java110.intf.store.IAssetInventoryDetailV1InnerServiceSMO;
-import com.java110.intf.store.IAssetInventoryV1InnerServiceSMO;
-import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
-import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
-import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
+import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.assetInventory.AssetInventoryPo;
 import com.java110.po.assetInventoryDetail.AssetInventoryDetailPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -80,6 +80,9 @@ public class UpdateAssetInventoryCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMO;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -166,12 +169,41 @@ public class UpdateAssetInventoryCmd extends Cmd {
                     assetInventoryDetailPo = BeanConvertUtil.covertBean(resourceStore, AssetInventoryDetailPo.class);
                     assetInventoryDetailPo.setId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
                     assetInventoryDetailPo.setApplyOrderId(assetInventoryPo.getAiId());
+
+                    //更新批次库存
+                    ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+                    resourceStoreTimesDto.setTimesId(assetInventoryDetailPo.getTimesId());
+                    List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+                    if(resourceStoreTimesDtos.size()>0){
+                        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+                        resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
+                        resourceStoreTimesPo.setStock(assetInventoryDetailPo.getQuantity());;
+                        resourceStoreTimesV1InnerServiceSMOImpl.updateResourceStoreTimes(resourceStoreTimesPo);
+                    }
+
+                    //查询批次库存总和
+                    ResourceStoreTimesDto resourceStoreTimesDto1 = new ResourceStoreTimesDto();
+                    resourceStoreTimesDto1.setShId(assetInventoryDetailPo.getShId());
+                    resourceStoreTimesDto1.setResCode(assetInventoryDetailPo.getResCode());
+                    Integer timessCountStock = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimessCountStock(resourceStoreTimesDto1);
+
+
                     //更新某个仓库某个商品
                     ResourceStorePo resourceStorePo = new ResourceStorePo();
                     resourceStorePo.setResId(assetInventoryDetailPo.getResId());
-                    resourceStorePo.setStock(assetInventoryDetailPo.getQuantity());
+                    resourceStorePo.setStock(Integer.toString(timessCountStock));
+
+                    //获取紧急采购数量
+                    BigDecimal quantity = new BigDecimal(timessCountStock);
+                    BigDecimal miniUnitStock = new BigDecimal(resourceStore.getString("miniUnitStock"));
+                    //计算最小计量总数
+                    BigDecimal miniStock = quantity.multiply(miniUnitStock);
+                    resourceStorePo.setMiniStock(String.valueOf(miniStock));
                     resourceStorePo.setStatusCd("0");
                     resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+
+
                 }
             }
         }

@@ -112,8 +112,21 @@ public class PurchaseApi {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             resourceStore.remove("price");//采购价格默认空
             resourceStore.put("originalStock", resourceStore.getString("stock"));
+            JSONArray timeList = resourceStore.getJSONArray("times");
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
+            //获取采购参考价格
+            String consultPrice = null;
+            if(resourceStore.containsKey("timesId") && !StringUtil.isEmpty(resourceStore.getString("timesId"))){
+                for (int timesIndex = 0; timesIndex < timeList.size(); timesIndex++) {
+                    JSONObject times = timeList.getJSONObject(timesIndex);
+                    if(times.getString("timesId").toString().equals(resourceStore.getString("timesId").toString())){
+                        consultPrice=times.getString("price");
+                    }
+                }
+            }
+
+            purchaseApplyDetailPo.setConsultPrice(consultPrice);
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

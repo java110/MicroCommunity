@@ -117,7 +117,8 @@
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,asa.state,t.b_id,t.b_id
         bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName,
         rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,asa.apply_type,
-        asa.apply_type applyType,td1.name applyTypeName,td2.name unitCodeName,td3.name miniUnitCodeName,rs.is_fixed isFixed,td4.name isFixedName
+        asa.apply_type applyType,td1.name applyTypeName,td2.name unitCodeName,td3.name miniUnitCodeName,rs.is_fixed isFixed,td4.name isFixedName,
+        t.times_id,t.times_id timesId
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
         left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'state'

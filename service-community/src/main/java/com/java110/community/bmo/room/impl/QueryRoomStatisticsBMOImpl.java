@@ -128,8 +128,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : repairCounts) {
-                if (roomDto.getRoomId().equals(count.get("roomId"))) {
-                    roomDto.setContractCount(count.get("contractCount").toString());
+                if (!StringUtil.isEmpty(roomDto.getRoomId()) && !StringUtil.isEmpty(count.get("roomId").toString())) {
+                    if (roomDto.getRoomId().equals(count.get("roomId").toString())) {
+                        roomDto.setContractCount(count.get("contractCount").toString());
+                    }
+                } else {
+                    continue;
                 }
             }
         }
@@ -146,8 +150,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : repairCounts) {
-                if (roomDto.getRoomId().equals(count.get("roomId"))) {
-                    roomDto.setRoomOweFee(count.get("oweFee").toString());
+                if (!StringUtil.isEmpty(roomDto.getRoomId()) && !StringUtil.isEmpty(count.get("roomId").toString())) {
+                    if (roomDto.getRoomId().equals(count.get("roomId").toString())) {
+                        roomDto.setRoomOweFee(count.get("oweFee").toString());
+                    }
+                } else {
+                    continue;
                 }
             }
         }
@@ -173,8 +181,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
                 continue;
             }
             for (Map count : repairCounts) {
-                if (roomDto.getOwnerId().equals(count.get("ownerId"))) {
-                    roomDto.setOweFee(count.get("oweFee").toString());
+                if (!StringUtil.isEmpty(roomDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString())) {
+                    if (roomDto.getOwnerId().equals(count.get("ownerId").toString())) {
+                        roomDto.setOweFee(count.get("oweFee").toString());
+                    }
+                } else {
+                    continue;
                 }
             }
         }
@@ -199,11 +211,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : repairCounts) {
-                if (StringUtil.isEmpty(roomDto.getLink())) {
+                if (!StringUtil.isEmpty(roomDto.getLink()) && !StringUtil.isEmpty(count.get("ownerTel").toString())) {
+                    if (roomDto.getLink().equals(count.get("ownerTel").toString())) {
+                        roomDto.setRepairCount(count.get("repairCount").toString());
+                    }
+                } else {
                     continue;
-                }
-                if (roomDto.getLink().equals(count.get("ownerTel"))) {
-                    roomDto.setRepairCount(count.get("repairCount").toString());
                 }
             }
         }
@@ -227,8 +240,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : complaintCounts) {
-                if (roomDto.getLink().equals(count.get("ownerTel"))) {
-                    roomDto.setComplaintCount(count.get("complaintCount").toString());
+                if (!StringUtil.isEmpty(roomDto.getLink()) && !StringUtil.isEmpty(count.get("ownerTel").toString())) {
+                    if (roomDto.getLink().equals(count.get("ownerTel").toString())) {
+                        roomDto.setComplaintCount(count.get("complaintCount").toString());
+                    }
+                } else {
+                    continue;
                 }
             }
         }
@@ -252,8 +269,12 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
                 continue;
             }
             for (Map count : memberCounts) {
-                if (roomDto.getOwnerId().equals(count.get("ownerId"))) {
-                    roomDto.setCarCount(count.get("carCount").toString());
+                if (!StringUtil.isEmpty(roomDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString())) {
+                    if (roomDto.getOwnerId().equals(count.get("ownerId").toString())) {
+                        roomDto.setCarCount(count.get("carCount").toString());
+                    }
+                } else {
+                    continue;
                 }
             }
         }
@@ -301,10 +322,10 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : ownerRoomCounts) {
-                if (StringUtil.isEmpty(roomDto.getOwnerId())) {
+                if (StringUtil.isEmpty(roomDto.getOwnerId()) || StringUtil.isEmpty(count.get("ownerId").toString())) {
                     continue;
                 }
-                if (roomDto.getOwnerId().equals(count.get("ownerId"))) {
+                if (roomDto.getOwnerId().equals(count.get("ownerId").toString())) {
                     roomDto.setRoomCount(count.get("roomCount").toString());
                 }
             }

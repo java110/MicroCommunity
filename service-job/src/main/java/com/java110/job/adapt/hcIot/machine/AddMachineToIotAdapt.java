@@ -56,6 +56,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IIotSendAsyn hcMachineAsynImpl;
+
     @Autowired
     IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
@@ -76,7 +77,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
-
 
     /**
      * accessToken={access_token}
@@ -103,7 +103,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
             } else {
                 businessMachines = (JSONArray) bObj;
             }
-
         } else {
             if (data instanceof JSONObject) {
                 businessMachines.add(data);
@@ -117,14 +116,11 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     }
 
     private void doSendMachine(Business business, JSONObject businessMachine) {
-
         MachinePo machinePo = BeanConvertUtil.covertBean(businessMachine, MachinePo.class);
-
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(machinePo.getMachineCode());
         machineDto.setCommunityId(machinePo.getCommunityId());
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-
         Assert.listOnlyOne(machineDtos, "未找到设备");
 
         String locationType = "";
@@ -142,9 +138,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         }
 
         String hmId = getHmId(machineDtos.get(0));
-
         JSONObject postParameters = new JSONObject();
-
         postParameters.put("machineCode", machinePo.getMachineCode());
         postParameters.put("machineName", machinePo.getMachineName());
         postParameters.put("machineVersion", machinePo.getMachineVersion());
@@ -171,7 +165,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         machineAttrDto.setCommunityId(machineDto.getCommunityId());
         machineAttrDto.setMachineId(machineDto.getMachineId());
         List<MachineAttrDto> machineAttrDtos = machineAttrInnerServiceSMOImpl.queryMachineAttrs(machineAttrDto);
-
         for (MachineAttrDto tmpMachineAttrDto : machineAttrDtos) {
             if (MachineAttrDto.SPEC_HM.equals(tmpMachineAttrDto.getSpecCd())) {
                 return tmpMachineAttrDto.getValue();
@@ -183,6 +176,7 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
     private void sendOwners(MachinePo machinePo) {
         //拿到小区ID
         String communityId = machinePo.getCommunityId();
+        List<JSONObject> ownerDtos = new ArrayList<>();
 
         List<OwnerDto> owners = null;
         //根据小区ID查询现有设备
@@ -193,12 +187,10 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         communityLocationDto.setLocationId(locationTypeCd);
         communityLocationDto.setCommunityId(machinePo.getCommunityId());
         List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
-
         if (communityLocationDtos == null || communityLocationDtos.size() < 1) {
             return;
         }
         communityLocationDto = communityLocationDtos.get(0);
-
         if ("1000".contains(communityLocationDto.getLocationType())) {//查询整个小区的业主
             owners = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         } else if ("2000".equals(communityLocationDto.getLocationType())) {//2000 单元门 ，则这个单元下的业主同步
@@ -230,7 +222,6 @@ public class AddMachineToIotAdapt extends DatabusAdaptImpl {
         if (owners == null) {
             return;
         }
-
         for (OwnerDto tOwnerDto : owners) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(tOwnerDto.getMemberId());

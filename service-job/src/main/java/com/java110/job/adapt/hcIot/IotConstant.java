@@ -82,6 +82,9 @@ public class IotConstant {
     //添加车辆
     public static final String ADD_CAR_BLACK_WHITE_URL = "/extApi/car/addBlackWhite";
 
+    //修改车辆黑白名单
+    public static final String UPDATE_CAR_BLACK_WHITE_URL = "/extApi/car/updateBlackWhite";
+
     //删除车辆
     public static final String DELETE_CAR_BLACK_WHITE_URL = "/extApi/car/deleteBlackWhite";
 

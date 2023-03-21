@@ -8,9 +8,9 @@
     <!-- 保存盘点明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveAssetInventoryDetailInfo" parameterType="Map">
         insert into asset_inventory_detail(
-original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
+original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id,times_id
 ) values (
-#{originalStock},#{quantity},#{rsId},#{applyOrderId},#{remark},#{id},#{state},#{resId}
+#{originalStock},#{quantity},#{rsId},#{applyOrderId},#{remark},#{id},#{state},#{resId},#{timesId}
 )
     </insert>
 
@@ -19,7 +19,7 @@ original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
     <select id="getAssetInventoryDetailInfo" parameterType="Map" resultType="Map">
         select t.original_stock,t.original_stock originalStock,t.quantity,t.create_time,t.create_time
         createTime,t.rs_id,t.rs_id rsId,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd
-        statusCd,t.remark,t.id,t.state,t.res_id,t.res_id resId
+        statusCd,t.remark,t.id,t.state,t.res_id,t.res_id resId,t.times_id,t.times_id timesId
         from asset_inventory_detail t
         where 1 =1
         <if test="resId !=null and resId != ''">
@@ -51,6 +51,9 @@ original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -85,6 +88,9 @@ original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
+        <if test="timesId !=null and timesId != ''">
+            , t.times_id= #{timesId}
+        </if>
         where 1=1
         <if test="id !=null and id != ''">
             and t.id= #{id}
@@ -100,23 +106,29 @@ original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
         p.id,
         p.apply_order_id applyOrderId,
         p.res_id resId,p.quantity,p.remark,
-        p.original_stock originalStock,p.state,
-        r.res_name resName,r.res_code resCode,
-        r.price,r.price standardPrice,r.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
+        p.original_stock originalStock,p.state,p.times_id timesId,
+        r.res_name resName,r.res_code resCode,r.sh_id shId,r.mini_unit_stock,r.mini_unit_stock miniUnitStock,
+        r.price,r.price standardPrice,r.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name
+        specName,rs.supplier_name supplierName,
         td1.name unitCodeName,
         td2.name miniUnitCodeName,
         r.is_fixed isFixed,
-        td6.name isFixedName
+        td6.name isFixedName,st.sh_name shName,rst2.price timesPrice
         from
         asset_inventory_detail p
         inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
-        left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
-        left join t_dict td6 on r.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns = 'is_fixed'
+        left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
+        left join t_dict td6 on r.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns =
+        'is_fixed'
         LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
         LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
         LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
         LEFT JOIN resource_store_specification rss on r.rss_id=rss.rss_id
+        LEFT JOIN storehouse st on r.sh_id=st.sh_id
+        LEFT JOIN resource_store_times rst2 on p.times_id=rst2.times_id
         where 1=1
         and p.status_cd = '0'
         <if test="applyOrderIds !=null">
@@ -164,6 +176,9 @@ original_stock,quantity,rs_id,apply_order_id,remark,id,state,res_id
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
         </if>
 
 

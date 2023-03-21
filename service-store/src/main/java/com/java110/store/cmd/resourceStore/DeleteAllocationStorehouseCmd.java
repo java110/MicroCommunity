@@ -5,14 +5,17 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.allocationStorehouse.AllocationStorehousePo;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +51,9 @@ public class DeleteAllocationStorehouseCmd extends Cmd {
 
     @Autowired
     private IAllocationStorehouseApplyV1InnerServiceSMO allocationStorehouseApplyV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -131,6 +137,21 @@ public class DeleteAllocationStorehouseCmd extends Cmd {
                 purchaseDto1.setAssigneeUser("999999");
                 purchaseApplyInnerServiceSMOImpl.updateActRuTaskById(purchaseDto1);
             }
+            // 保存至 物品 times表
+            //查询调拨批次价格
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setTimesId(tmpAllocationStorehouseDto.getTimesId());
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
+            resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
+            resourceStoreTimesPo.setStock(tmpAllocationStorehouseDto.getStock());
+            resourceStoreTimesPo.setResCode(tmpAllocationStorehouseDto.getResCode());
+            resourceStoreTimesPo.setStoreId(tmpAllocationStorehouseDto.getStoreId());
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIda());
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
 
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();

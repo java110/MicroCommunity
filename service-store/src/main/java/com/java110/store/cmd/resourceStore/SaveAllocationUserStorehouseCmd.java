@@ -196,6 +196,8 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     String acceptUserId = paramInJson.getString("acceptUserId");
                     //获取接受转赠用户名称
                     String acceptUserName = paramInJson.getString("acceptUserName");
+                    //批次
+                    String timesId = paramIn.getString("timesId");
                     //获取商户id
                     String storeId = paramInJson.getString("storeId");
                     JSONObject allocationUserStorehouseJson = new JSONObject();
@@ -295,6 +297,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                             userStorePo.setStock(String.valueOf(stockNumber));
                         }
                         userStorePo.setUsId(userStorehouses.get(0).getUsId());
+                        userStorePo.setTimesId(timesId);
                         //更新当前用户的库存数量
                         flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorePo);
                         if(flag1 <1){
@@ -321,6 +324,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                         }
                         userStorePo.setMiniStock(giveQuantity);
                         userStorePo.setUserId(acceptUserId);
+                        userStorePo.setTimesId(timesId);
                         //保存接受转赠用户个人物品信息
                         flag1 = userStorehouseV1InnerServiceSMOImpl.saveUserStorehouse(userStorePo);
                         if(flag1 <1){

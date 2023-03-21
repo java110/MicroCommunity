@@ -10,6 +10,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
 import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
@@ -49,6 +50,9 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
     @Autowired
     private IAllocationStorehouseApplyV1InnerServiceSMO allocationStorehouseApplyV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "applyId", "订单号不能为空");
@@ -57,6 +61,14 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
     }
 
+    /**
+     * 调拨申请-物品调拨审核
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     * @throws ParseException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -216,6 +228,22 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
                         throw new CmdException("添加失败");
                     }
                 }
+                // 保存至 物品 times表
+                //查询调拨批次价格
+                ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+                resourceStoreTimesDto.setTimesId(allocationStorehouseDto.getTimesId());
+                List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+                ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+                resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
+                resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
+                resourceStoreTimesPo.setStock(allocationStorehouseDto.getStock());
+                resourceStoreTimesPo.setResCode(allocationStorehouseDto.getResCode());
+                resourceStoreTimesPo.setStoreId(allocationStorehouseDto.getStoreId());
+                resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+                resourceStoreTimesPo.setShId(allocationStorehouseDto.getShIdz());
+                resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
             }
         } else if (allocationStorehouseApplyDtos.get(0).getState().equals("1203")) {
             allocationStorehouseApplyPo.setState(AllocationStorehouseDto.STATE_FAIL);
@@ -246,7 +274,8 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
         int flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
         if (flag < 1) {
             throw new CmdException("修改失败");
-        }        //调拨详情数据
+        }
+        //调拨详情数据
         AllocationStorehouseDto tmpAllocationStorehouseDto = new AllocationStorehouseDto();
         tmpAllocationStorehouseDto.setApplyId(paramInJson.getString("applyId"));
         tmpAllocationStorehouseDto.setStoreId(paramInJson.getString("storeId"));
@@ -281,6 +310,23 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
             BigDecimal newMiniStock = miniStock.add(nowMiniStock);
             resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
             flag = resourceStoreV1InnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+            // 保存至 物品 times表
+            //查询调拨批次价格
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setTimesId(allocationStorehouseDto.getTimesId());
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+
+            ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+            resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
+            resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
+            resourceStoreTimesPo.setStock(allocationStorehouseDto.getStock());
+            resourceStoreTimesPo.setResCode(allocationStorehouseDto.getResCode());
+            resourceStoreTimesPo.setStoreId(allocationStorehouseDto.getStoreId());
+            resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesPo.setShId(allocationStorehouseDto.getShIda());
+            resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
             if (flag < 1) {
                 throw new CmdException("修改失败");
             }

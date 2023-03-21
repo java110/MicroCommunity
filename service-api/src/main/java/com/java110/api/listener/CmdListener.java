@@ -67,6 +67,15 @@ public class CmdListener extends AbstractServiceApiListener {
                 && (!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId")))) {
             reqJson.put("storeId", reqHeader.get(CommonConstant.STORE_ID));
         }
+        //解决头部userName以及查询userName兼容问题
+        if ((reqJson.containsKey("userName") || !StringUtil.isEmpty(reqJson.getString("userName")))) {
+            reqJson.put("searchUserName", reqJson.getString("userName"));
+        }
+        if (reqHeader.containsKey(CommonConstant.LOGIN_USER_NAME)
+                && (!reqJson.containsKey("userName") || StringUtil.isEmpty(reqJson.getString("userName")))) {
+            reqJson.put("userName", reqHeader.get(CommonConstant.LOGIN_USER_NAME));
+        }
+
         HttpEntity<String> httpEntity = new HttpEntity<String>(reqJson.toJSONString(), header);
         String orgRequestUrl = context.getRequestHeaders().get("REQUEST_URL");
 

@@ -33,11 +33,13 @@ public class CommunityLocationDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
-    private String unitNum;
+    private String unitId;
 
     private String floorId;
 
-    private String floorNum;
+    private String paId;
+
+    private String boxId;
 
     public String getLocationName() {
         return locationName;
@@ -119,19 +121,27 @@ public class CommunityLocationDto extends PageDto implements Serializable {
         this.floorId = floorId;
     }
 
-    public String getFloorNum() {
-        return floorNum;
+    public String getUnitId() {
+        return unitId;
     }
 
-    public void setFloorNum(String floorNum) {
-        this.floorNum = floorNum;
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
     }
 
-    public String getUnitNum() {
-        return unitNum;
+    public String getPaId() {
+        return paId;
     }
 
-    public void setUnitNum(String unitNum) {
-        this.unitNum = unitNum;
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(String boxId) {
+        this.boxId = boxId;
     }
 }

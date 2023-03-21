@@ -119,9 +119,7 @@ public class AttrSpecApi {
                                                 @RequestParam(value = "specName", required = false) String specName,
                                                 @RequestParam(value = "domain", required = false) String domain,
                                                 @RequestParam(value = "page", required = false) int page,
-                                                @RequestParam(value = "row", required = false) int row
-
-    ) {
+                                                @RequestParam(value = "row", required = false) int row) {
         AttrSpecDto attrSpecDto = new AttrSpecDto();
         attrSpecDto.setTableName(tableName);
         attrSpecDto.setPage(page);

@@ -93,7 +93,7 @@ public class QueryUndoVisitCmd extends Cmd {
             refreshFormData(datas, reqJson);
 
             // 输入flowId
-            refreshSetting(datas,reqJson);
+            refreshSetting(datas, reqJson);
 
             //刷新 业主
             refreshOwners(datas, reqJson);
@@ -111,12 +111,12 @@ public class QueryUndoVisitCmd extends Cmd {
 
     private void refreshOwners(List<JSONObject> datas, JSONObject reqJson) {
 
-        if(datas == null || datas.size() < 1){
-            return ;
+        if (datas == null || datas.size() < 1) {
+            return;
         }
 
         List<String> ownerIds = new ArrayList<>();
-        for(JSONObject apiVisitDataVo: datas){
+        for (JSONObject apiVisitDataVo : datas) {
             ownerIds.add(apiVisitDataVo.getString("ownerId"));
         }
 
@@ -124,19 +124,18 @@ public class QueryUndoVisitCmd extends Cmd {
         ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerDto> ownerDtos =  ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 
-        for(JSONObject apiVisitDataVo: datas){
-            for(OwnerDto tmpOwnerDto : ownerDtos){
-                if(StringUtil.isEmpty(apiVisitDataVo.getString("ownerId"))){
-                    continue;
+        for (JSONObject apiVisitDataVo : datas) {
+            if (apiVisitDataVo.containsKey("ownerId") && StringUtil.isEmpty(apiVisitDataVo.getString("ownerId"))) {
+                for (OwnerDto tmpOwnerDto : ownerDtos) {
+                    if (!StringUtil.isEmpty(apiVisitDataVo.getString("ownerId")) &&
+                            !StringUtil.isEmpty(tmpOwnerDto.getOwnerId()) && !apiVisitDataVo.getString("ownerId").equals(tmpOwnerDto.getOwnerId())) {
+                        continue;
+                    }
+                    apiVisitDataVo.put("ownerName", tmpOwnerDto.getName());
+                    apiVisitDataVo.put("ownerTel", tmpOwnerDto.getLink());
                 }
-                if(!apiVisitDataVo.getString("ownerId").equals(tmpOwnerDto.getOwnerId())){
-                    continue;
-                }
-                apiVisitDataVo.put("ownerName",tmpOwnerDto.getName());
-                apiVisitDataVo.put("ownerTel",tmpOwnerDto.getLink());
-
             }
         }
 
@@ -177,12 +176,12 @@ public class QueryUndoVisitCmd extends Cmd {
             return;
         }
 
-        if(datas == null || datas.size() < 1){
+        if (datas == null || datas.size() < 1) {
             return;
         }
 
-        for(JSONObject data : datas){
-            data.put("flowId",visitSettingDtos.get(0).getFlowId());
+        for (JSONObject data : datas) {
+            data.put("flowId", visitSettingDtos.get(0).getFlowId());
         }
 
     }

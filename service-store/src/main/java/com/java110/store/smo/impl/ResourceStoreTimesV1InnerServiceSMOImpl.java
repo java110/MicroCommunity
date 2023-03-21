@@ -66,6 +66,7 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
         resourceStoreTimesDto.setStoreId(resourceStoreTimesPo.getStoreId());
         resourceStoreTimesDto.setPrice(resourceStoreTimesPo.getPrice());
         resourceStoreTimesDto.setResCode(resourceStoreTimesPo.getResCode());
+        resourceStoreTimesDto.setShId(resourceStoreTimesPo.getShId());
         List<ResourceStoreTimesDto> resourceStoreTimesDtos = queryResourceStoreTimess(resourceStoreTimesDto);
         if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
@@ -105,6 +106,10 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int queryResourceStoreTimessCount(@RequestBody ResourceStoreTimesDto resourceResourceStoreTimesTimesDto) {
         return resourceResourceStoreTimesTimesV1ServiceDaoImpl.queryResourceStoreTimessCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesDto));
+    }
+    @Override
+    public int queryResourceStoreTimessCountStock(@RequestBody ResourceStoreTimesDto resourceResourceStoreTimesTimesDto) {
+        return resourceResourceStoreTimesTimesV1ServiceDaoImpl.queryResourceStoreTimessCountStock(BeanConvertUtil.beanCovertMap(resourceResourceStoreTimesTimesDto));
     }
 
 }

@@ -72,76 +72,63 @@ public class SaveScheduleClassesCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "scheduleType", "请求报文中未包含scheduleType");
         Assert.hasKeyAndValue(reqJson, "scheduleCycle", "请求报文中未包含scheduleCycle");
-
-        if(!reqJson.containsKey("days")){
+        if (!reqJson.containsKey("days")) {
             throw new CmdException("未包含天");
         }
-
         JSONArray days = reqJson.getJSONArray("days");
-
-        if(days.size() <1){
+        if (days.size() < 1) {
             throw new CmdException("未包含天");
         }
-
-
         JSONObject day = null;
         JSONArray times = null;
-        for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
+        for (int dayIndex = 0; dayIndex < days.size(); dayIndex++) {
             day = days.getJSONObject(dayIndex);
-
-            if(ScheduleClassesDayDto.WORKDAY_NO.equals(day.getString("workday"))){
+            if (ScheduleClassesDayDto.WORKDAY_NO.equals(day.getString("workday"))) {
                 continue;
             }
-            if(!day.containsKey("times")){
+            if (!day.containsKey("times")) {
                 throw new CmdException("未包时间");
             }
             times = day.getJSONArray("times");
-            if(times.size() <1){
+            if (times.size() < 1) {
                 throw new CmdException("未包时间");
             }
-
         }
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
-
         ScheduleClassesPo scheduleClassesPo = BeanConvertUtil.covertBean(reqJson, ScheduleClassesPo.class);
         scheduleClassesPo.setScheduleId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         scheduleClassesPo.setStoreId(storeId);
         scheduleClassesPo.setState(ScheduleClassesDto.STATE_START);
         scheduleClassesPo.setComputeTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         int flag = scheduleClassesV1InnerServiceSMOImpl.saveScheduleClasses(scheduleClassesPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         JSONArray days = reqJson.getJSONArray("days");
-
         JSONObject day = null;
         ScheduleClassesDayPo scheduleClassesDayPo = null;
         JSONObject time = null;
         ScheduleClassesTimePo scheduleClassesTimePo = null;
         JSONArray times = null;
-        for(int dayIndex = 0 ; dayIndex < days.size(); dayIndex++){
+        for (int dayIndex = 0; dayIndex < days.size(); dayIndex++) {
             day = days.getJSONObject(dayIndex);
             scheduleClassesDayPo = new ScheduleClassesDayPo();
             scheduleClassesDayPo.setDayId(GenerateCodeFactory.getGeneratorId("11"));
             scheduleClassesDayPo.setDay(day.getString("day"));
             scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
-            scheduleClassesDayPo.setWeekFlag(StringUtil.isEmpty(day.getString("weekFlag"))?"1":day.getString("weekFlag"));
+            scheduleClassesDayPo.setWeekFlag(StringUtil.isEmpty(day.getString("weekFlag")) ? "1" : day.getString("weekFlag"));
             scheduleClassesDayPo.setWorkday(day.getString("workday"));
             flag = scheduleClassesDayV1InnerServiceSMOImpl.saveScheduleClassesDay(scheduleClassesDayPo);
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
             times = day.getJSONArray("times");
-            for(int timeIndex = 0 ;timeIndex < times.size();timeIndex++){
+            for (int timeIndex = 0; timeIndex < times.size(); timeIndex++) {
                 time = times.getJSONObject(timeIndex);
                 scheduleClassesTimePo = new ScheduleClassesTimePo();
                 scheduleClassesTimePo.setDayId(scheduleClassesDayPo.getDayId());
@@ -155,9 +142,6 @@ public class SaveScheduleClassesCmd extends Cmd {
                 }
             }
         }
-
-
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

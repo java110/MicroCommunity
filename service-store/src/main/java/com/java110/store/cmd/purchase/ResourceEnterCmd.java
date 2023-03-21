@@ -103,6 +103,15 @@ public class ResourceEnterCmd extends Cmd{
         }
     }
 
+    /**
+     * 采采购申请-采购审核确认入库
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     * @throws ParseException
+     */
+
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
@@ -156,6 +165,7 @@ public class ResourceEnterCmd extends Cmd{
             resourceStoreTimesPo.setResCode(resourceStoreDtos.get(0).getResCode());
             resourceStoreTimesPo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+            resourceStoreTimesPo.setShId(purchaseApplyDetailPo.getShId());
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         //获取订单号

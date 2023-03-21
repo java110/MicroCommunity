@@ -6,7 +6,7 @@ package com.java110.utils.constant;
  */
 public final class MappingConstant {
 
-    private MappingConstant(){
+    private MappingConstant() {
 
     }
 
@@ -19,19 +19,21 @@ public final class MappingConstant {
 
     // 存储配置
     public static final String FILE_DOMAIN = "FILE_DOMAIN";
+    public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
+    public static final String FILE_OSS = "OSS";
 
     // 平台URL
-    public static final String URL_DOMAIN ="URL_DOMAIN";
+    public static final String URL_DOMAIN = "URL_DOMAIN";
 
     // 微信商户
-    public static final String WECHAT_STORE_DOMAIN ="WECHAT_STORE";
+    public static final String WECHAT_STORE_DOMAIN = "WECHAT_STORE";
 
 
     // 商城公众号
-    public static final String MALL_WECHAT_DOMAIN ="MALL_WECHAT";
+    public static final String MALL_WECHAT_DOMAIN = "MALL_WECHAT";
 
     // 工单配置
-    public static final String REPAIR_DOMAIN ="REPAIR_DOMAIN";
+    public static final String REPAIR_DOMAIN = "REPAIR_DOMAIN";
 
     //环境配置
     public static final String ENV_DOMAIN = "ENV_DOMAIN";
@@ -45,7 +47,7 @@ public final class MappingConstant {
 
     public  static final String KEY_LOG_ON_OFF = "LOG_ON_OFF";
 
-    public  static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
+    public static final String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
 
     //私钥
     public static final String KEY_PRIVATE_STRING = "PRIVATE_STRING";
@@ -61,21 +63,21 @@ public final class MappingConstant {
     //解密 KEY_SIZE
     public static final String KEY_DEFAULT_DECRYPT_KEY_SIZE = "DEFAULT_DECRYPT_KEY_SIZE";
 
-    public  static final String KEY_RULE_ON_OFF = "RULE_ON_OFF";
-    public  static final String VALUE_ON = "ON";
-    public  static final String VALUE_OFF = "OFF";
+    public static final String KEY_RULE_ON_OFF = "RULE_ON_OFF";
+    public static final String VALUE_ON = "ON";
+    public static final String VALUE_OFF = "OFF";
 
     //不用调用规则校验的配置
-    public  static final String KEY_NO_NEED_RULE_VALDATE_ORDER = "NO_NEED_RULE_VALDATE_ORDER";//Q
+    public static final String KEY_NO_NEED_RULE_VALDATE_ORDER = "NO_NEED_RULE_VALDATE_ORDER";//Q
 
     //不用保存订单也订单项信息的配置
-    public  static final String KEY_NO_SAVE_ORDER = "NO_SAVE_ORDER";//Q
+    public static final String KEY_NO_SAVE_ORDER = "NO_SAVE_ORDER";//Q
 
     // 不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
-    public  static final String KEY_NO_INVOKE_BUSINESS_SYSTEM = "NO_INVOKE_BUSINESS_SYSTEM";//
+    public static final String KEY_NO_INVOKE_BUSINESS_SYSTEM = "NO_INVOKE_BUSINESS_SYSTEM";//
 
     // 不用调用 作废下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
-    public  static final String KEY_NO_INVALID_BUSINESS_SYSTEM = "NO_INVALID_BUSINESS_SYSTEM";//
+    public static final String KEY_NO_INVALID_BUSINESS_SYSTEM = "NO_INVALID_BUSINESS_SYSTEM";//
 
     //需要调用服务生成各个ID
     public static final String KEY_NEED_INVOKE_GENERATE_ID = "NEED_INVOKE_SERVICE_GENERATE_ID";
@@ -85,7 +87,6 @@ public final class MappingConstant {
 
     // 生成 编码路径
     public static final String KEY_CODE_PATH = "CODE_PATH";
-
 
 
     /**
@@ -150,10 +151,6 @@ public final class MappingConstant {
      * 小区成员审核
      */
     public static final String DOMAIN_COMMUNITY_MEMBER_AUDIT = "COMMUNITY_MEMBER_AUDIT";
-
-    
-
-
 
 
 }

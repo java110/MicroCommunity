@@ -25,6 +25,8 @@ public class PurchaseApplyDetailDto {
     private String supplierName;
     private String unitCodeName;
     private String miniUnitCodeName;
+    private String consultPrice;
+    private String timesId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -192,6 +194,22 @@ public class PurchaseApplyDetailDto {
 
     public void setParentRstName(String parentRstName) {
         this.parentRstName = parentRstName;
+    }
+
+    public String getConsultPrice() {
+        return consultPrice;
+    }
+
+    public void setConsultPrice(String consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }
 

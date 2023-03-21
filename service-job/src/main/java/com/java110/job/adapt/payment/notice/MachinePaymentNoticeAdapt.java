@@ -321,7 +321,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                     data.setRemark(new Content("感谢您的使用,如有疑问请联系相关物业人员"));
                     templateMessage.setData(data);
                     //获取员工公众号地址
-                    String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
+                    String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -399,7 +399,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             data.setRemark(new Content("请与客服管家核实费用"));
             templateMessage.setData(data);
             //获取员工公众号地址
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
@@ -458,13 +458,18 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
             ownerRoomRelDto.setRoomId(payerObjId);
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMO.queryOwnerRoomRels(ownerRoomRelDto);
+            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
+                return;
+            }
             //取得业主id
             ownerId = ownerRoomRelDtos.get(0).getOwnerId();
         } else if (payerObjType.equals("6666")) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCarId(payerObjId);
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMO.queryOwnerCars(ownerCarDto);
-            Assert.listOnlyOne(ownerCarDtos, "查询车辆所属业主信息错误！");
+            if (ownerCarDtos == null || ownerCarDtos.size() != 1) {
+                return;
+            }
             //取得业主id
             ownerId = ownerCarDtos.get(0).getOwnerId();
         }
@@ -514,10 +519,10 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             templateMessage.setData(data);
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
-            if(wechatUrl.contains("?")){
-                wechatUrl += ( "&wAppId="+smallWeChatDtos.get(0).getAppId());
-            }else{
-                wechatUrl += ( "?wAppId="+smallWeChatDtos.get(0).getAppId());
+            if (wechatUrl.contains("?")) {
+                wechatUrl += ("&wAppId=" + smallWeChatDtos.get(0).getAppId());
+            } else {
+                wechatUrl += ("?wAppId=" + smallWeChatDtos.get(0).getAppId());
             }
             templateMessage.setUrl(wechatUrl);
             logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));

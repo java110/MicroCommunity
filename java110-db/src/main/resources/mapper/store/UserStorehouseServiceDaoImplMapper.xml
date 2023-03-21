@@ -7,17 +7,17 @@
     <!-- 保存个人物品信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessUserStorehouseInfo" parameterType="Map">
         insert into business_user_storehouse(
-        res_name,operate,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock
+        res_name,operate,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock,times_id
         ) values (
-        #{resName},#{operate},#{bId},#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock}
+        #{resName},#{operate},#{bId},#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock},#{timesId}
         )
     </insert>
 
     <insert id="saveUserStorehouses" parameterType="Map">
         insert into user_storehouse(
-        res_name,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock
+        res_name,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock,times_id
         ) values (
-        #{resName},'-1',#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock}
+        #{resName},'-1',#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock},#{timesId}
         )
     </insert>
 
@@ -25,7 +25,7 @@
     <select id="getBusinessUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.res_code,t.res_code resCode,t.user_id,t.user_id userId,t.us_id,t.us_id usId,
-        t.mini_stock,t.mini_stock miniStock
+        t.mini_stock,t.mini_stock miniStock,t.times_id,t.times_id timesId
         from business_user_storehouse t
         where 1 =1
         <if test="resName !=null and resName != ''">
@@ -57,6 +57,9 @@
         </if>
         <if test="miniStock !=null and miniStock != ''">
             and t.mini_stock= #{miniStock}
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
         </if>
     </select>
 
@@ -101,7 +104,7 @@
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
         rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,t.mini_stock miniStock,
-        rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,
+        rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,t.times_id,t.times_id timesId,
         td.name unitCodeName,td1.name miniUnitCodeName,u.name userName,rs.is_fixed isFixed,td2.name isFixedName
         from user_storehouse t
         left join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0' and t.res_id = rs.res_id

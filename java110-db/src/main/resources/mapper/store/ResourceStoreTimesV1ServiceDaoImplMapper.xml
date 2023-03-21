@@ -8,9 +8,9 @@
     <!-- 保存物品次数信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreTimesInfo" parameterType="Map">
         insert into resource_store_times(
-        price,apply_order_id,store_id,stock,res_code,times_id
+        price,apply_order_id,store_id,stock,res_code,times_id,sh_id
         ) values (
-        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId}
+        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId},#{shId}
         )
     </insert>
 
@@ -84,6 +84,9 @@
         </if>
         <if test="timesId !=null and timesId != ''">
             and t.times_id= #{timesId}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -179,6 +182,51 @@
         </if>
         <if test="timesId !=null and timesId != ''">
             and t.times_id= #{timesId}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+
+
+    </select>
+
+    <!-- 查询物品次数数量 add by wuxw 2018-07-03 -->
+    <select id="queryResourceStoreTimessCountStock" parameterType="Map" resultType="Map">
+        select sum(stock) stock
+        from resource_store_times t
+        where 1 =1
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="hasStock !=null and hasStock != ''">
+            and t.stock > 0
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="resCodes != null ">
+            and t.res_code in
+            <foreach collection="resCodes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="timesId !=null and timesId != ''">
+            and t.times_id= #{timesId}
+        </if>
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
         </if>
 
 

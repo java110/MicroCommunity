@@ -7,11 +7,9 @@
 
     <!-- 保存用户信息 add by wuxw 2018-07-03 -->
     <insert id="saveUserInfo" parameterType="Map">
-        insert into u_user(
-        address,sex,user_id,level_cd,location_cd,score,password,name,tel,b_id,email,age
-        ) values (
-        #{address},#{sex},#{userId},#{levelCd},#{locationCd},#{score},#{password},#{name},#{tel},#{bId},#{email},#{age}
-        )
+        insert into u_user(address, sex, user_id, level_cd, location_cd, score, password, name, tel, b_id, email, age)
+        values (#{address}, #{sex}, #{userId}, #{levelCd}, #{locationCd}, #{score}, #{password}, #{name}, #{tel},
+                #{bId}, #{email}, #{age})
     </insert>
 
 
@@ -98,9 +96,7 @@
         <if test="tel !=null and tel != ''">
             , t.tel= #{tel}
         </if>
-        <if test="email !=null and email != ''">
-            , t.email= #{email}
-        </if>
+        , t.email= #{email}
         <if test="age !=null and age != ''">
             , t.age= #{age}
         </if>
@@ -183,8 +179,10 @@
     </select>
 
     <select id="queryStaffsNoInOrg" parameterType="Map" resultType="Map">
-        select DISTINCT t.address,t.sex,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.level_cd,t.level_cd
-        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.b_id,t.b_id bId,t.email,t.age,t.create_time
+        select DISTINCT t.address,t.sex,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id
+        userId,t.level_cd,t.level_cd
+        levelCd,t.location_cd,t.location_cd locationCd,t.score,t.name,t.tel,t.b_id,t.b_id
+        bId,t.email,t.age,t.create_time
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         LEFT JOIN u_org_staff_rel osr on su.user_id = osr.staff_id and osr.status_cd = '0'

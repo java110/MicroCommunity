@@ -67,7 +67,7 @@ import java.util.List;
 )
 
 /**
- * 物品领用
+ * 物品领用申请出库
  */
 @Java110Cmd(serviceCode = "/collection/resourceOut")
 public class ResourceOutCmd extends Cmd {
@@ -100,6 +100,14 @@ public class ResourceOutCmd extends Cmd {
         }
     }
 
+    /**
+     * 物品领用-物品领用物品发放
+     * @param event              事件对象
+     * @param context 数据上文对象
+     * @param reqJson            请求报文
+     * @throws CmdException
+     * @throws ParseException
+     */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -176,6 +184,7 @@ public class ResourceOutCmd extends Cmd {
             userStorehousePo.setResName(resourceStoreDtos.get(0).getResName());
             userStorehousePo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             userStorehousePo.setUserId(purchaseApplyDtos.get(0).getUserId());
+            userStorehousePo.setTimesId(purchaseApplyDetailPo.getTimesId());
             //查询物品 是否已经存在
             UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
             userStorehouseDto.setResCode(resourceStoreDtos.get(0).getResCode());

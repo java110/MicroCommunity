@@ -24,16 +24,22 @@ public class ApiVisitDataVo implements Serializable {
     private String reasonType;
     private String state;
     private String stateName;
+    private String carState;
+    private String carStateRemark;
+    private String carStateName;
     private String psId;
     private String parkingAreaName;
     private String parkingSpaceNum;
+    private String parkAreaNum;
     private String recordState;
     private String stateRemark;
     private String fileRelName;
     private String fileSaveName;
     private String url;
+    private String visitorCode;
 
     private String flowId;
+    private String roomId;
 
     public String getvId() {
         return vId;
@@ -66,7 +72,6 @@ public class ApiVisitDataVo implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getCommunityId() {
         return communityId;
@@ -266,5 +271,53 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
+    }
+
+    public String getCarState() {
+        return carState;
+    }
+
+    public void setCarState(String carState) {
+        this.carState = carState;
+    }
+
+    public String getCarStateRemark() {
+        return carStateRemark;
+    }
+
+    public void setCarStateRemark(String carStateRemark) {
+        this.carStateRemark = carStateRemark;
+    }
+
+    public String getCarStateName() {
+        return carStateName;
+    }
+
+    public void setCarStateName(String carStateName) {
+        this.carStateName = carStateName;
+    }
+
+    public String getVisitorCode() {
+        return visitorCode;
+    }
+
+    public void setVisitorCode(String visitorCode) {
+        this.visitorCode = visitorCode;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getParkAreaNum() {
+        return parkAreaNum;
+    }
+
+    public void setParkAreaNum(String parkAreaNum) {
+        this.parkAreaNum = parkAreaNum;
     }
 }

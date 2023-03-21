@@ -74,6 +74,8 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     //查询当月数据标识
     private String urgentFlag;
+    private String consultPrice;
+    private String timesId;
 
     public String getResOrderType() {
         return resOrderType;
@@ -377,5 +379,21 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setNextStaffId(String nextStaffId) {
         this.nextStaffId = nextStaffId;
+    }
+
+    public String getConsultPrice() {
+        return consultPrice;
+    }
+
+    public void setConsultPrice(String consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

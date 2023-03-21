@@ -48,11 +48,15 @@ public class QueryFeeDetailCmd extends Cmd {
         if (!StringUtil.isEmpty(reqJson.getString("startTime"))) {
             String startTime = reqJson.getString("startTime") + " 00:00:00";
             reqJson.put("startTime", startTime);
+        } else {
+            reqJson.put("startTime", null);
         }
         //获取结束时间
         if (!StringUtil.isEmpty(reqJson.getString("endTime"))) {
             String endTime = reqJson.getString("endTime") + " 23:59:59";
             reqJson.put("endTime", endTime);
+        } else {
+            reqJson.put("endTime", null);
         }
         //查询总记录数
         ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();

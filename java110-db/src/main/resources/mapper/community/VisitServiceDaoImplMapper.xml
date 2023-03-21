@@ -7,10 +7,11 @@
     <insert id="saveBusinessVisitInfo" parameterType="Map">
         insert into business_visit_info(departure_time, v_name, visit_gender, owner_id, user_id, v_id, phone_number,
                                         operate, visit_case, community_id, b_id, visit_time, car_num, entourage,
-                                        reason_type, state, state_remark, ps_id, free_time, record_state)
+                                        reason_type, state, state_remark, ps_id, free_time, record_state, car_state,
+                                        car_remark, room_id)
         values (#{departureTime}, #{vName}, #{visitGender}, #{ownerId}, #{userId}, #{vId}, #{phoneNumber}, #{operate},
                 #{visitCase}, #{communityId}, #{bId}, #{visitTime}, #{carNum}, #{entourage}, #{reasonType}, #{state},
-                #{stateRemark}, #{psId}, #{freeTime}, #{recordState})
+                #{stateRemark}, #{psId}, #{freeTime}, #{recordState}, #{carState}, #{carStateRemark}, #{roomId})
     </insert>
 
     <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
@@ -21,7 +22,9 @@
         visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id ,t.car_num,t.car_num carNum,t.entourage,
         t.reason_type,t.reason_type reasonType,t.state,t.state_remark,t.state_remark
         stateRemark,t.create_time,t.create_time createTime,t.ps_id,t.ps_id psId,t.free_time,t.free_time freeTime,
-        t.record_state,t.record_state recordState
+        t.record_state,t.record_state recordState,t.car_state,t.car_state carState,t.car_remark,t.car_remark,
+        t.room_id,t.room_id roomId
+        carStateRemark
         from business_visit_info t
         where 1 =1
         <if test="departureTime !=null ">
@@ -75,6 +78,15 @@
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
         </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
         </if>
@@ -90,10 +102,10 @@
     <insert id="saveVisitInfoInstance" parameterType="Map">
         insert into s_visit_info(
         departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id,car_num,
-        entourage,reason_type,state,state_remark,ps_id,free_time,record_state
+        entourage,reason_type,state,state_remark,ps_id,free_time,record_state,car_state,car_remark,room_id
         ) select
         t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id,
-        t.car_num,t.entourage,t.reason_type,t.state,t.state_remark,t.ps_id,t.free_time,t.record_state
+        t.car_num,t.entourage,t.reason_type,t.state,t.state_remark,t.ps_id,t.free_time,t.record_state,t.car_state,t.car_remark,t.room_id
         from business_visit_info t where 1=1
         <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
@@ -140,6 +152,15 @@
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
         </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
         </if>
@@ -164,11 +185,15 @@
         t.car_num,t.car_num carNum,t.entourage,t.reason_type,t.reason_type
         reasonType,t.state,t.state_remark,t.state_remark stateRemark,td.name stateName,t.create_time,
         t.create_time createTime,t.ps_id,t.ps_id psId,t.free_time,t.free_time freeTime,
-        t.record_state,t.record_state recordState,ps.num parkingSpaceNum,pa.num parkingAreaName,bo.name ownerName
+        t.record_state,t.record_state recordState,ps.num parkingSpaceNum,pa.num parkingAreaName,bo.name ownerName,
+        t.car_state,t.car_state carState,t.car_remark,t.car_remark carStateRemark,td2.name carStateName,
+        t.room_id,t.room_id roomId
         from s_visit_info t
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
+        left join t_dict td2 on t.car_state = td2.status_cd and td2.table_name = 's_visit_info' and td2.table_columns =
+        'car_state'
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
-        left join parking_area pa on ps.pa_id = pa.pa_id and  pa.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join building_owner bo on t.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
         where 1 = 1
         <if test="departureTime !=null ">
@@ -243,14 +268,26 @@
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
         </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
         <if test="carNumNoEmpty !=null and carNumNoEmpty != ''">
-            and t.car_num!= ""
+            and t.car_num != ""
         </if>
         <if test="sameDay !=null and sameDay != ''">
             and TO_DAYS(t.create_time) = TO_DAYS(NOW())
         </if>
         <if test="flag != null and flag == '1'">
             and t.ps_id != '' and t.ps_id != '-1' and t.ps_id is not null
+        </if>
+        <if test="sign != null and sign != ''">
+            and t.v_id != #{sign}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -312,6 +349,15 @@
         <if test="stateRemark !=null and stateRemark != ''">
             , t.state_remark= #{stateRemark}
         </if>
+        <if test="carState !=null and carState != ''">
+            , t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            , t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
         <if test="psId !=null and psId != ''">
             , t.ps_id= #{psId}
         </if>
@@ -330,7 +376,7 @@
         from s_visit_info t
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
-        left join parking_area pa on ps.pa_id = pa.pa_id and  pa.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join building_owner bo on t.owner_id = bo.owner_id and bo.owner_type_cd = '1001' and bo.status_cd = '0'
         left join file_rel fr on fr.obj_id = t.v_id and fr.status_cd = '0'
         where 1 = 1
@@ -393,6 +439,15 @@
         </if>
         <if test="stateRemark !=null and stateRemark != ''">
             and t.state_remark= #{stateRemark}
+        </if>
+        <if test="carState !=null and carState != ''">
+            and t.car_state= #{carState}
+        </if>
+        <if test="carStateRemark !=null and carStateRemark != ''">
+            and t.car_remark= #{carStateRemark}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}

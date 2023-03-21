@@ -26,13 +26,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.feeComboMember.FeeComboMemberDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -47,7 +48,8 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "feeComboMember.listFeeComboMember")
 public class ListFeeComboMemberCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListFeeComboMemberCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListFeeComboMemberCmd.class);
+
     @Autowired
     private IFeeComboMemberV1InnerServiceSMO feeComboMemberV1InnerServiceSMOImpl;
 
@@ -59,22 +61,22 @@ public class ListFeeComboMemberCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           FeeComboMemberDto feeComboMemberDto = BeanConvertUtil.covertBean(reqJson, FeeComboMemberDto.class);
+        FeeComboMemberDto feeComboMemberDto = BeanConvertUtil.covertBean(reqJson, FeeComboMemberDto.class);
 
-           int count = feeComboMemberV1InnerServiceSMOImpl.queryFeeComboMembersCount(feeComboMemberDto);
+        int count = feeComboMemberV1InnerServiceSMOImpl.queryFeeComboMembersCount(feeComboMemberDto);
 
-           List<FeeComboMemberDto> feeComboMemberDtos = null;
+        List<FeeComboMemberDto> feeComboMemberDtos = null;
 
-           if (count > 0) {
-               feeComboMemberDtos = feeComboMemberV1InnerServiceSMOImpl.queryFeeComboMembers(feeComboMemberDto);
-           } else {
-               feeComboMemberDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            feeComboMemberDtos = feeComboMemberV1InnerServiceSMOImpl.queryFeeComboMembers(feeComboMemberDto);
+        } else {
+            feeComboMemberDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, feeComboMemberDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, feeComboMemberDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

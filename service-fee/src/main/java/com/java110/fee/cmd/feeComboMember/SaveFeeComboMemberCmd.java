@@ -22,6 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.feeComboMember.FeeComboMemberDto;
 import com.java110.intf.fee.IFeeComboMemberV1InnerServiceSMO;
 import com.java110.po.feeComboMember.FeeComboMemberPo;
 import com.java110.utils.exception.CmdException;
@@ -31,6 +32,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -55,16 +58,22 @@ public class SaveFeeComboMemberCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "comboId", "请求报文中未包含comboId");
-Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-
+        Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-       FeeComboMemberPo feeComboMemberPo = BeanConvertUtil.covertBean(reqJson, FeeComboMemberPo.class);
+        FeeComboMemberDto feeComboMemberDto = new FeeComboMemberDto();
+        feeComboMemberDto.setConfigId(reqJson.getString("configId"));
+        feeComboMemberDto.setComboId(reqJson.getString("comboId"));
+        feeComboMemberDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeComboMemberDto> feeComboMemberDtos = feeComboMemberV1InnerServiceSMOImpl.queryFeeComboMembers(feeComboMemberDto);
+        if (feeComboMemberDtos != null && feeComboMemberDtos.size() > 0) {
+            throw new IllegalArgumentException("该费用套餐下已添加过该费用项！");
+        }
+        FeeComboMemberPo feeComboMemberPo = BeanConvertUtil.covertBean(reqJson, FeeComboMemberPo.class);
         feeComboMemberPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = feeComboMemberV1InnerServiceSMOImpl.saveFeeComboMember(feeComboMemberPo);
 

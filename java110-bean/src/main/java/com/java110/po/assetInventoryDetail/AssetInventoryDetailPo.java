@@ -28,14 +28,17 @@ import java.io.Serializable;
 public class AssetInventoryDetailPo implements Serializable {
 
     private String originalStock;
-private String quantity;
-private String rsId;
+    private String quantity;
+    private String rsId;
     private String resId;
-private String applyOrderId;
-private String statusCd = "0";
-private String remark;
-private String id;
-private String state;
+    private String applyOrderId;
+    private String statusCd = "0";
+    private String remark;
+    private String id;
+    private String state;
+    private String timesId;
+    private String resCode;
+    private String shId;
 
     public String getResId() {
         return resId;
@@ -48,52 +51,88 @@ private String state;
     public String getOriginalStock() {
         return originalStock;
     }
-public void setOriginalStock(String originalStock) {
+
+    public void setOriginalStock(String originalStock) {
         this.originalStock = originalStock;
     }
-public String getQuantity() {
+
+    public String getQuantity() {
         return quantity;
     }
-public void setQuantity(String quantity) {
+
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-public String getRsId() {
+
+    public String getRsId() {
         return rsId;
     }
-public void setRsId(String rsId) {
+
+    public void setRsId(String rsId) {
         this.rsId = rsId;
     }
-public String getApplyOrderId() {
+
+    public String getApplyOrderId() {
         return applyOrderId;
     }
-public void setApplyOrderId(String applyOrderId) {
+
+    public void setApplyOrderId(String applyOrderId) {
         this.applyOrderId = applyOrderId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getId() {
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
 
+    public String getTimesId() {
+        return timesId;
+    }
 
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
+    }
 
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
 }

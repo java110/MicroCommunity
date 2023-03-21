@@ -58,7 +58,7 @@ public class ListUserStorehousesCmd extends Cmd {
         //转增只查询自己的物品
         if (!StringUtil.isEmpty(reqJson.getString("giveType")) && "1".equals(reqJson.getString("giveType"))) {
             userStorehouseDto.setUserId(reqJson.getString("userId"));
-            userStorehouseDto.setUserName(reqJson.getString("userName"));
+            userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
         }
         userStorehouseDto.setLagerStockZero("1");
 

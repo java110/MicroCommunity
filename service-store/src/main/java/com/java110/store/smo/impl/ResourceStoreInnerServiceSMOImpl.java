@@ -76,30 +76,14 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 resourceStoreDto.setFileUrls(fileUrls);
             }
             resourceStoreDtos.add(resourceStoreDto);
-        }
 
-        if (resourceResourceStores == null || resourceResourceStores.size() < 1 || resourceResourceStores.size() > 15) {
-            return resourceStoreDtos;
-        }
 
-        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
-        resourceStoreTimesDto.setStoreId(resourceResourceStoreDto.getStoreId());
-        resourceStoreTimesDto.setResCodes(resCodes.toArray(new String[resCodes.size()]));
-        List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
-
-        if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
-            return resourceStoreDtos;
-        }
-
-        List<ResourceStoreTimesDto> times = null;
-        for (ResourceStoreDto resourceStoreDto : resourceStoreDtos) {
-            times = new ArrayList<>();
-            for (ResourceStoreTimesDto tmpResourceStoreTimesDto : resourceStoreTimesDtos) {
-                if (resourceStoreDto.getResCode().equals(tmpResourceStoreTimesDto.getResCode())) {
-                    times.add(tmpResourceStoreTimesDto);
-                }
-            }
-            resourceStoreDto.setTimes(times);
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setStoreId(resourceResourceStoreDto.getStoreId());
+            resourceStoreTimesDto.setResCode(resourceStoreDto.getResCode());
+            resourceStoreTimesDto.setShId(resourceStoreDto.getShId());
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+            resourceStoreDto.setTimes(resourceStoreTimesDtos);
         }
         return resourceStoreDtos;
     }

@@ -1,6 +1,5 @@
 package com.java110.dto.feeComboMember;
 
-import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
 
 import java.io.Serializable;
@@ -17,41 +16,43 @@ import java.util.Date;
 public class FeeComboMemberDto extends FeeConfigDto implements Serializable {
 
     private String configId;
-private String comboId;
-private String communityId;
-private String memberId;
-
-
+    private String comboId;
+    private String communityId;
+    private String memberId;
     private Date createTime;
-
     private String statusCd = "0";
-
 
     public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getComboId() {
+
+    public String getComboId() {
         return comboId;
     }
-public void setComboId(String comboId) {
+
+    public void setComboId(String comboId) {
         this.comboId = comboId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMemberId() {
+
+    public String getMemberId() {
         return memberId;
     }
-public void setMemberId(String memberId) {
+
+    public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
-
 
     public Date getCreateTime() {
         return createTime;

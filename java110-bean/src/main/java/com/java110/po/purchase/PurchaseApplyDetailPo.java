@@ -31,6 +31,8 @@ public class PurchaseApplyDetailPo implements Serializable {
     private String statusCd = "0";
 
     private String timesId;
+    private String consultPrice;
+    private String shId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -134,5 +136,21 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setTimesId(String timesId) {
         this.timesId = timesId;
+    }
+
+    public String getConsultPrice() {
+        return consultPrice;
+    }
+
+    public void setConsultPrice(String consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

@@ -63,7 +63,7 @@
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
         insert into purchase_apply_detail
-        (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark,original_stock,times_id)
+        (id,rs_id,apply_order_id,res_id,quantity,remark,b_id,operate,status_cd,price,purchase_quantity,purchase_remark,original_stock,times_id,consult_price)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -80,7 +80,8 @@
             #{item.purchaseQuantity},
             #{item.purchaseRemark},
             #{item.originalStock},
-            #{item.timesId}
+            #{item.timesId},
+            #{item.consultPrice}
             )
         </foreach>
     </insert>
@@ -325,7 +326,7 @@
         p.id,
         p.apply_order_id applyOrderId,
         p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price
-        purchasePrice,p.original_stock originalStock,
+        purchasePrice,p.original_stock originalStock,p.consult_price consultPrice,p.times_id timesId,
         r.res_name resName,r.res_code resCode,
         r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
         td1.name unitCodeName,

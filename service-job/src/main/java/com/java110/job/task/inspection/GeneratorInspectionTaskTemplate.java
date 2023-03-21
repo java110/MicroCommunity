@@ -138,8 +138,8 @@ public class GeneratorInspectionTaskTemplate extends TaskSystemQuartz {
         inspectionTaskPo.setInspectionPlanId(tmpInspectionPlanDto.getInspectionPlanId());
         inspectionTaskPo.setCommunityId(tmpInspectionPlanDto.getCommunityId());
         inspectionTaskPo.setIpStaffId(tmpInspectionPlanStaffDto.getIpStaffId());
-        inspectionTaskPo.setPlanInsTime(nowTime + tmpInspectionPlanStaffDto.getStartTime() + ":00");
-        inspectionTaskPo.setPlanEndTime(nowTime + tmpInspectionPlanStaffDto.getEndTime() + ":00");
+        inspectionTaskPo.setPlanInsTime(nowTime + tmpInspectionPlanStaffDto.getStartTime());
+        inspectionTaskPo.setPlanEndTime(nowTime + tmpInspectionPlanStaffDto.getEndTime());
         inspectionTaskPo.setPlanUserId(tmpInspectionPlanStaffDto.getStaffId());
         inspectionTaskPo.setPlanUserName(tmpInspectionPlanStaffDto.getStaffName());
         inspectionTaskPo.setSignType(tmpInspectionPlanDto.getSignType());

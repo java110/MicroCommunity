@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="visitSettingV1ServiceDaoImpl">
 
-
     <!-- 保存访客设置信息 add by wuxw 2018-07-03 -->
     <insert id="saveVisitSettingInfo" parameterType="Map">
-        insert into visit_setting(
-        car_num_way,face_way,type_name,audit_way,remark,community_id,flow_id,flow_name,setting_id,pa_id,pa_num
-        ) values (
-        #{carNumWay},#{faceWay},#{typeName},#{auditWay},#{remark},#{communityId},#{flowId},#{flowName},#{settingId},#{paId},#{paNum}
-        )
+        insert into visit_setting(car_num_way, face_way, type_name, audit_way, remark, community_id, flow_id, flow_name,
+                                  setting_id, pa_id, pa_num, car_free_time, visit_number, is_need_review, visitor_code)
+        values (#{carNumWay}, #{faceWay}, #{typeName}, #{auditWay}, #{remark}, #{communityId}, #{flowId}, #{flowName},
+                #{settingId}, #{paId}, #{paNum}, #{carFreeTime}, #{visitNumber}, #{isNeedReview}, #{visitorCode})
     </insert>
-
 
     <!-- 查询访客设置信息 add by wuxw 2018-07-03 -->
     <select id="getVisitSettingInfo" parameterType="Map" resultType="Map">
         select t.car_num_way,t.car_num_way carNumWay,t.face_way,t.face_way faceWay,t.type_name,t.type_name
         typeName,t.audit_way,t.audit_way auditWay,t.remark,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name
-        flowName,t.setting_id,t.setting_id settingId,t.pa_id paId, t.pa_num paNum
+        flowName,t.setting_id,t.setting_id settingId,t.pa_id paId, t.pa_num paNum,t.car_free_time
+        carFreeTime,t.visit_number visitNumber,t.is_need_review isNeedReview,t.visitor_code,t.visitor_code visitorCode
         from visit_setting t
         where 1 =1
         <if test="carNumWay !=null and carNumWay != ''">
@@ -53,13 +50,23 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
+        <if test="carFreeTime !=null and carFreeTime != ''">
+            and t.car_free_time= #{carFreeTime}
+        </if>
+        <if test="visitNumber !=null and visitNumber != ''">
+            and t.visit_number= #{visitNumber}
+        </if>
+        <if test="isNeedReview !=null and isNeedReview != ''">
+            and t.is_need_review= #{isNeedReview}
+        </if>
+        <if test="visitorCode != null and visitorCode != ''">
+            and t.visitor_code= #{visitorCode}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改访客设置信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitSettingInfo" parameterType="Map">
@@ -97,11 +104,22 @@
         <if test="paNum !=null and paNum != ''">
             , t.pa_num= #{paNum}
         </if>
+        <if test="carFreeTime !=null and carFreeTime != ''">
+            , t.car_free_time= #{carFreeTime}
+        </if>
+        <if test="visitNumber !=null and visitNumber != ''">
+            , t.visit_number= #{visitNumber}
+        </if>
+        <if test="isNeedReview !=null and isNeedReview != ''">
+            , t.is_need_review= #{isNeedReview}
+        </if>
+        <if test="visitorCode != null and visitorCode != ''">
+            , t.visitor_code= #{visitorCode}
+        </if>
         where 1=1
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
-
     </update>
 
     <!-- 查询访客设置数量 add by wuxw 2018-07-03 -->
@@ -139,8 +157,17 @@
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
         </if>
-
-
+        <if test="carFreeTime !=null and carFreeTime != ''">
+            and t.car_free_time= #{carFreeTime}
+        </if>
+        <if test="visitNumber !=null and visitNumber != ''">
+            and t.visit_number= #{visitNumber}
+        </if>
+        <if test="isNeedReview !=null and isNeedReview != ''">
+            and t.is_need_review= #{isNeedReview}
+        </if>
+        <if test="visitorCode != null and visitorCode != ''">
+            and t.visitor_code= #{visitorCode}
+        </if>
     </select>
-
 </mapper>

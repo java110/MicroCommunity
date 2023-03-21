@@ -23,10 +23,6 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.printer.IPrinter;
 import com.java110.po.fee.PayFeeDetailPo;
@@ -61,9 +57,6 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     private static Logger logger = LoggerFactory.getLogger(PayFeeReceiptAdapt.class);
 
     @Autowired
-    private ICommunityInnerServiceSMO communityInnerServiceSMO;
-
-    @Autowired
     private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
     @Autowired
@@ -81,17 +74,6 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
-    @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMO;
-
-    @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMO;
-
-    @Autowired
-    private IOwnerInnerServiceSMO ownerInnerServiceSMO;
-
-    @Autowired
-    private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
 
     @Autowired
     private IPrinterRuleFeeV1InnerServiceSMO printerRuleFeeV1InnerServiceSMOImpl;
@@ -143,7 +125,6 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
                 businessPayFeeDetails.add(data);
             }
         }
-
         if (businessPayFeeDetails == null) {
             return;
         }
@@ -161,25 +142,18 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeDto.setFeeId(payFeeDetailPo.getFeeId());
             feeDto.setCommunityId(payFeeDetailPo.getCommunityId());
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
             Assert.listOnlyOne(feeDtos, "未查询到费用信息");
-
             feeDto = feeDtos.get(0);
-
             //查询业主信息
             OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
-
             // if received amount lt zero
-
             if (businessPayFeeDetail.containsKey("receivedAmount")
                     && businessPayFeeDetail.getDoubleValue("receivedAmount") < 0) {
                 return;
             }
-
-            //添加单元信息
+            //添加收据和收据详情
             FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
             FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
-
             feeReceiptDetailPo.setAmount(businessPayFeeDetail.getString("receivedAmount"));
             feeReceiptDetailPo.setCommunityId(feeDto.getCommunityId());
             feeReceiptDetailPo.setCycle(businessPayFeeDetail.getString("cycles"));
@@ -190,11 +164,9 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptDetailPo.setStartTime(businessPayFeeDetail.getString("startTime"));
             feeReceiptDetailPo.setReceiptId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_receiptId));
             feeReceiptDetailPo.setCreateTime(payFeeDetailPo.getCreateTime());
-
             //处理 小数点后 0
             feeDto.setSquarePrice(Double.parseDouble(feeDto.getSquarePrice()) + "");
             feeDto.setAdditionalAmount(Double.parseDouble(feeDto.getAdditionalAmount()) + "");
-
             computeFeeSMOImpl.freshFeeReceiptDetail(feeDto, feeReceiptDetailPo);
             feeReceiptPo.setAmount(feeReceiptDetailPo.getAmount());
             feeReceiptPo.setCommunityId(feeReceiptDetailPo.getCommunityId());
@@ -205,7 +177,6 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
             feeReceiptPo.setPayObjName(ownerDto.getName());
             feeReceiptPo.setCreateTime(payFeeDetailPo.getCreateTime());
-
             //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
             feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
             feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);
@@ -221,6 +192,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             logger.error("通知异常", e);
         }
     }
+
 
 
     private void autoPrintReceipt(String detailId, String communityId) {

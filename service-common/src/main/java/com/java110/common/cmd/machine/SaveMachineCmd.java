@@ -60,6 +60,7 @@ public class SaveMachineCmd extends Cmd {
 
     @Autowired
     private IMachineV1InnerServiceSMO machineV1InnerServiceSMOImpl;
+
     @Autowired
     private ICommunityLocationV1InnerServiceSMO communityLocationV1InnerServiceSMOImpl;
 
@@ -75,25 +76,20 @@ public class SaveMachineCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "direction", "必填，请选择设备方向");
         Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
-
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqJson.getString("machineCode"));
         int count = machineV1InnerServiceSMOImpl.queryMachinesCount(machineDto);
-
         if (count > 0) {
             throw new CmdException("设备已存在");
         }
-
         //属性校验
         Assert.judgeAttrValue(reqJson);
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         MachinePo machinePo = BeanConvertUtil.covertBean(reqJson, MachinePo.class);
-
         if (!MachineDto.MACHINE_TYPE_MONITOR.equals(reqJson.getString("machineTypeCd"))
             && !MachineDto.MACHINE_TYPE_ATTENDANCE.equals(reqJson.getString("machineTypeCd"))
         ) {
@@ -110,32 +106,25 @@ public class SaveMachineCmd extends Cmd {
             machinePo.setLocationObjId("-1");
             machinePo.setLocationTypeCd("-1");
         }
-
         machinePo.setMachineId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         machinePo.setHeartbeatTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         machinePo.setState(MachineDto.MACHINE_STATE_ON);
         int flag = machineV1InnerServiceSMOImpl.saveMachine(machinePo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         dealMachineAttr(reqJson, machinePo);
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
     private void dealMachineAttr(JSONObject paramObj, MachinePo machinePo) {
-
         if (!paramObj.containsKey("attrs")) {
             return;
         }
-
         JSONArray attrs = paramObj.getJSONArray("attrs");
         if (attrs.size() < 1) {
             return;
         }
-
         MachineAttrPo attr = null;
         int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
@@ -148,6 +137,5 @@ public class SaveMachineCmd extends Cmd {
                 throw new CmdException("保存数据失败");
             }
         }
-
     }
 }

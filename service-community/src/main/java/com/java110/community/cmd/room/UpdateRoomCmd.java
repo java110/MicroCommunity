@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
 
-
 @Java110CmdDoc(title = "修改房屋",
         description = "对应后台 修改房屋功能",
         httpMethod = "post",
@@ -62,7 +61,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"roomNum\": \"88488\",\n" +
                 "\t\"layer\": \"1\",\n" +
                 "\t\"unitId\":\"123123123\",\n" +
@@ -77,18 +76,13 @@ import java.util.List;
                 "\t\"roomRent\": \"0\",\n" +
                 "\t\"communityId\": \"2022121921870161\",\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 @Java110Cmd(serviceCode = "room.updateRoom")
 public class UpdateRoomCmd extends Cmd {
 
     @Autowired
-    private IUnitV1InnerServiceSMO unitV1InnerServiceSMOImpl;
-    @Autowired
     private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
-    @Autowired
-    private IFloorV1InnerServiceSMO floorV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
@@ -107,46 +101,39 @@ public class UpdateRoomCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "layer", "请求报文中未包含layer节点");
         /*Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");*/
         Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
-
         if (reqJson.containsKey("builtUpArea")) {
             Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         }
         if (reqJson.containsKey("feeCoefficient")) {
             Assert.isMoney(reqJson.getString("feeCoefficient"), "算费系数数据格式错误");
         }
-
         //获取房屋状态
         String state = reqJson.getString("state");
         if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
             //获取起租时间
             Date startTime = null;
             Date endTime = null;
-
-            try {
-                startTime = DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
-                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
-
-            } catch (Exception e) {
-                throw new CmdException(e.getMessage());
-            }
-            //获取截租时间
-
-
-            if (startTime.getTime() > endTime.getTime()) {
-                throw new IllegalArgumentException("起租时间不能大于截租时间！");
+            if (reqJson.containsKey("startTime") && !StringUtil.isEmpty(reqJson.getString("startTime"))
+                    && reqJson.containsKey("endTime") && !StringUtil.isEmpty(reqJson.getString("endTime"))) {
+                try {
+                    startTime = DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
+                    endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
+                } catch (Exception e) {
+                    throw new CmdException(e.getMessage());
+                }
+                if (startTime.getTime() > endTime.getTime()) {
+                    throw new IllegalArgumentException("起租时间不能大于截租时间！");
+                }
             }
         }
-
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
         unitDto.setUnitId(reqJson.getString("unitId"));
         //校验小区楼ID和小区是否有对应关系
         List<UnitDto> units = unitInnerServiceSMOImpl.queryUnitsByCommunityId(unitDto);
-
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
-
         Assert.judgeAttrValue(reqJson);
     }
 
@@ -164,17 +151,13 @@ public class UpdateRoomCmd extends Cmd {
             ownerRoomRelPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
             ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
         }
-
         if (!reqJson.containsKey("attrs")) {
             return;
         }
-
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs.size() < 1) {
             return;
         }
-
-
         JSONObject attr = null;
         int flag = 0;
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {

@@ -27,13 +27,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.visitSetting.VisitSettingDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -48,7 +49,8 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "visit.listVisitSetting")
 public class ListVisitSettingCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListVisitSettingCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListVisitSettingCmd.class);
+
     @Autowired
     private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
 
@@ -60,23 +62,16 @@ public class ListVisitSettingCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-           VisitSettingDto visitSettingDto = BeanConvertUtil.covertBean(reqJson, VisitSettingDto.class);
-
-           int count = visitSettingV1InnerServiceSMOImpl.queryVisitSettingsCount(visitSettingDto);
-
-           List<VisitSettingDto> visitSettingDtos = null;
-
-           if (count > 0) {
-               visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
-           } else {
-               visitSettingDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, visitSettingDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        VisitSettingDto visitSettingDto = BeanConvertUtil.covertBean(reqJson, VisitSettingDto.class);
+        int count = visitSettingV1InnerServiceSMOImpl.queryVisitSettingsCount(visitSettingDto);
+        List<VisitSettingDto> visitSettingDtos = null;
+        if (count > 0) {
+            visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
+        } else {
+            visitSettingDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, visitSettingDtos);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

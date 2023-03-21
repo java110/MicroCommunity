@@ -25,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.util.StringUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +108,22 @@ public class ResourceStoreTimesV1ServiceDaoImpl extends BaseServiceDao implement
         }
 
         return Integer.parseInt(businessResourceStoreTimesInfos.get(0).get("count").toString());
+    }
+     /**
+     * 查询物品次数数量
+     * @param info 物品次数信息
+     * @return 物品次数数量
+     */
+    @Override
+    public int queryResourceStoreTimessCountStock(Map info) {
+        logger.debug("查询 queryResourceStoreTimessCountStock 入参 info : {}",info);
+
+        List<Map> businessResourceStoreTimesInfos = sqlSessionTemplate.selectList("resourceStoreTimesV1ServiceDaoImpl.queryResourceStoreTimessCountStock", info);
+        if (businessResourceStoreTimesInfos.size() < 1) {
+            return 0;
+        }
+        BigDecimal stock = new BigDecimal(businessResourceStoreTimesInfos.get(0).get("stock").toString());
+        return stock.intValue();
     }
 
 

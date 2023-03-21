@@ -16,6 +16,9 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.store.dao.IAssetInventoryDetailV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
@@ -42,6 +45,9 @@ public class AssetInventoryDetailV1InnerServiceSMOImpl extends BaseServiceSMO im
 
     @Autowired
     private IAssetInventoryDetailV1ServiceDao assetInventoryDetailV1ServiceDaoImpl;
+
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
 
     @Override
@@ -91,6 +97,14 @@ public class AssetInventoryDetailV1InnerServiceSMOImpl extends BaseServiceSMO im
         }
 
         List<AssetInventoryDetailDto> assetInventoryDetails = BeanConvertUtil.covertBeanList(assetInventoryDetailV1ServiceDaoImpl.getAssetInventoryDetailsInfo(BeanConvertUtil.beanCovertMap(assetInventoryDetailDto)), AssetInventoryDetailDto.class);
+
+        for (AssetInventoryDetailDto assetInventoryDetailDto1 : assetInventoryDetails) {
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setResCode(assetInventoryDetailDto1.getResCode());
+            resourceStoreTimesDto.setShId(assetInventoryDetailDto1.getShId());
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+            assetInventoryDetailDto1.setTimes(resourceStoreTimesDtos);
+        }
 
         return assetInventoryDetails;
     }

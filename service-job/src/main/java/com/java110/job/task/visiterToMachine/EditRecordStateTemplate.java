@@ -48,10 +48,10 @@ public class EditRecordStateTemplate extends TaskSystemQuartz {
         if (visitDtos == null || visitDtos.size() < 1) {
             return;
         }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (VisitDto visit : visitDtos) {
             //获取访客离开时间
             String departureTime = visit.getDepartureTime();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date finishTime = format.parse(departureTime);
             Date date = new Date();
             if (finishTime.getTime() <= date.getTime()) { //如果访客离开时间小于当前时间，这条访客记录就失效
