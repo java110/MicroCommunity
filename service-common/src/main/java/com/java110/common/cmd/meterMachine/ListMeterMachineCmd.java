@@ -16,6 +16,7 @@
 package com.java110.common.cmd.meterMachine;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.smartMeter.ISmartMeterCoreRead;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -64,6 +65,9 @@ public class ListMeterMachineCmd extends Cmd {
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISmartMeterCoreRead smartMeterCoreReadImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -82,6 +86,7 @@ public class ListMeterMachineCmd extends Cmd {
         if (count > 0) {
             meterMachineDtos = meterMachineV1InnerServiceSMOImpl.queryMeterMachines(meterMachineDto);
             freshSpecs(meterMachineDtos);
+            queryMeterMachineDegree(meterMachineDtos);
         } else {
             meterMachineDtos = new ArrayList<>();
         }
@@ -91,6 +96,19 @@ public class ListMeterMachineCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryMeterMachineDegree(List<MeterMachineDto> meterMachineDtos) {
+        if (meterMachineDtos == null || meterMachineDtos.size() != 1) {
+            return;
+        }
+
+        if (!MeterMachineDto.MACHINE_MODEL_RECHARGE.equals(meterMachineDtos.get(0).getMachineModel())) {
+            return;
+        }
+
+        double degree = smartMeterCoreReadImpl.getMeterDegree(meterMachineDtos.get(0));
+        meterMachineDtos.get(0).setDegree(degree + "");
     }
 
     /**

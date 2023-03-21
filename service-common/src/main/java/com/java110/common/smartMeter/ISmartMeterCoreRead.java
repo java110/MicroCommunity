@@ -1,5 +1,6 @@
 package com.java110.common.smartMeter;
 
+import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.dto.meterMachineDetail.MeterMachineDetailDto;
 
 /**
@@ -13,4 +14,11 @@ public interface ISmartMeterCoreRead {
     void saveMeterAndCreateFee(MeterMachineDetailDto meterMachineDetailDto, String degree,String batchId);
 
     String generatorBatch(String communityId);
+
+    /**
+     * 查询 表读数
+     * @param meterMachineDto
+     * @return
+     */
+    double getMeterDegree(MeterMachineDto meterMachineDto);
 }

@@ -43,6 +43,8 @@ public class MeterMachineDto extends PageDto implements Serializable {
     private double rechargeDegree;
     private double rechargeMoney;
 
+    private String degree;
+
     private List<MeterMachineSpecDto> specs;
 
 
@@ -262,5 +264,13 @@ public class MeterMachineDto extends PageDto implements Serializable {
 
     public void setRechargeMoney(double rechargeMoney) {
         this.rechargeMoney = rechargeMoney;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 }

@@ -7,10 +7,12 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterMachine.MeterMachineDto;
 import com.java110.dto.meterMachineDetail.MeterMachineDetailDto;
+import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
 import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.intf.common.IMeterMachineDetailV1InnerServiceSMO;
+import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -22,9 +24,11 @@ import com.java110.po.meterMachineDetail.MeterMachineDetailPo;
 import com.java110.po.meterWater.MeterWaterPo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +68,9 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
 
     @Autowired
     private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IMeterMachineFactoryV1InnerServiceSMO meterMachineFactoryV1InnerServiceSMOImpl;
 
     @Override
     public void saveMeterAndCreateFee(MeterMachineDetailDto meterMachineDetailDto, String degree, String batchId) {
@@ -244,6 +251,26 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
         }
 
         return payFeeBatchPo.getBatchId();
+    }
+
+    @Override
+    public double getMeterDegree(MeterMachineDto meterMachineDto) {
+
+        MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
+        meterMachineFactoryDto.setFactoryId(meterMachineDto.getImplBean());
+        List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
+        Assert.listOnlyOne(meterMachineFactoryDtos, "智能水电表厂家不存在");
+        ISmartMeterFactoryAdapt smartMeterFactoryAdapt = ApplicationContextFactory.getBean(meterMachineFactoryDtos.get(0).getBeanImpl(), ISmartMeterFactoryAdapt.class);
+        if (smartMeterFactoryAdapt == null) {
+            throw new CmdException("厂家接口未实现");
+        }
+
+        ResultVo resultVo = smartMeterFactoryAdapt.requestRead(meterMachineDto);
+
+        if(ResultVo.CODE_OK != resultVo.getCode()){
+            return 0.0;
+        }
+        return Double.parseDouble(resultVo.getData().toString());
     }
 
 }
