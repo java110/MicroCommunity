@@ -45,6 +45,7 @@ public class ZhongkongDianBiaoFactoryAdaptImpl implements ISmartMeterFactoryAdap
         if(resJson.getIntValue("code") != 200){
             return new ResultVo(ResultVo.CODE_ERROR,resJson.getString("msg"));
         }
+      
         return new ResultVo(ResultVo.CODE_OK,resJson.getString("msg"),resJson.getString("data"));
     }
 
