@@ -162,7 +162,7 @@ public class YidongSendMessageFactory {
                 "  <mobiles>\n" +
                 "    <string>" + tel + "</string>\n" +
                 "  </mobiles>\n" +
-                "    <content>" + param + "</string>\n" +
+                "    <content>" + param + "</content>\n" +
                 "  <sign>" + sign + "</sign>\n" +
                 "  <addSerial>" + addSerial + "</addSerial>\n" +
                 "  <mac>" + mac + "</mac>\n" +
@@ -218,7 +218,7 @@ public class YidongSendMessageFactory {
                 "  <mobiles>\n" +
                 "    <string>" + tel + "</string>\n" +
                 "  </mobiles>\n" +
-                "    <content>" + param + "</string>\n" +
+                "    <content>" + param + "</content>\n" +
                 "  <sign>" + sign + "</sign>\n" +
                 "  <addSerial>" + addSerial + "</addSerial>\n" +
                 "  <mac>" + mac + "</mac>\n" +
