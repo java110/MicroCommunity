@@ -25,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
         url = "http://{ip}:{port}/app/floor.deleteFloor",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "floor.deleteFloor"
+        serviceCode = "floor.deleteFloor",
+        seq = 7
 )
 
 @Java110ParamsDoc(params = {

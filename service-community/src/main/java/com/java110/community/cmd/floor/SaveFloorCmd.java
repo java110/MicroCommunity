@@ -27,7 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
         url = "http://{ip}:{port}/app/floor.saveFloor",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "floor.saveFloor"
+        serviceCode = "floor.saveFloor",
+        seq = 5
 )
 
 @Java110ParamsDoc(params = {

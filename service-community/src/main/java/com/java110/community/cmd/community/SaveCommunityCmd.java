@@ -43,7 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
         url = "http://{ip}:{port}/app/community.saveCommunity",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "community.saveCommunity"
+        serviceCode = "community.saveCommunity",
+        seq = 1
 )
 
 @Java110ParamsDoc(params = {

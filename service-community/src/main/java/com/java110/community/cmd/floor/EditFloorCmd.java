@@ -29,7 +29,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/floor.editFloor",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "floor.editFloor"
+        serviceCode = "floor.editFloor",
+        seq = 6
 )
 
 @Java110ParamsDoc(params = {

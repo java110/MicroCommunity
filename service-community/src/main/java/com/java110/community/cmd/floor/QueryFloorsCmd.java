@@ -26,7 +26,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/floor.queryFloors",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "floor.queryFloors"
+        serviceCode = "floor.queryFloors",
+        seq = 8
 )
 
 @Java110ParamsDoc(params = {

@@ -48,7 +48,7 @@
                     </a>
                     <ul class="nav nav-second-level collapse" :class="{in: item.active}">
                         <li v-for="(subMenu,subIndex) in pages" v-if="item.active">
-                            <a @click="_gotoPage(subMenu)" style="color: #999;" href="javascript:void(0)">{{index+1}}.{{subIndex+1}}、{{subMenu.title}}</a>
+                            <a @click="_gotoPage(subMenu)" style="color: #999;" href="javascript:void(0)">{{index+1}}.{{subIndex+1}} {{subMenu.title}}</a>
                         </li>
                     </ul>
                 </li>

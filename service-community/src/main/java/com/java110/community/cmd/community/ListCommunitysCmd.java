@@ -26,7 +26,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/community.listCommunitys",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "community.listCommunitys"
+        serviceCode = "community.listCommunitys",
+        seq = 4
 )
 
 @Java110ParamsDoc(params = {

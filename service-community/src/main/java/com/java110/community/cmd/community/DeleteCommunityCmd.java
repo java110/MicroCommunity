@@ -43,7 +43,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/community.deleteCommunity",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "community.deleteCommunity"
+        serviceCode = "community.deleteCommunity",
+        seq = 3
 )
 
 @Java110ParamsDoc(params = {
