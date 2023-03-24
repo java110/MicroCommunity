@@ -111,6 +111,12 @@ public class JwtFilter implements Filter {
             }
         }
 
+        String authorization = request.getHeader("Authorization");
+
+        if(StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)){
+            token = token.substring("Bearer ".length());
+        }
+
         if (StringUtil.isNullOrNone(token)) {
             throw new FilterException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "您还没有登录，请先登录");
         }

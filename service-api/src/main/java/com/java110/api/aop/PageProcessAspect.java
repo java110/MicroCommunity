@@ -200,6 +200,11 @@ public class PageProcessAspect {
                 token = cookie.getValue();
             }
         }
+        String authorization = request.getHeader("Authorization");
+
+        if(StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)){
+            token = token.substring("Bearer ".length());
+        }
         return token;
     }
 
