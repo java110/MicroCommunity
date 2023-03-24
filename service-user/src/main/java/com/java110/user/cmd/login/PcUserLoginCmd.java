@@ -51,7 +51,15 @@ import java.util.Map;
         seq = 1
 )
 
-@Java110ParamsDoc(params = {
+@Java110ParamsDoc(
+        headers = {
+                @Java110HeaderDoc(name="APP-ID",defaultValue = "通过dev账户分配应用",description = "应用APP-ID"),
+                @Java110HeaderDoc(name="TRANSACTION-ID",defaultValue = "uuid",description = "交易流水号"),
+                @Java110HeaderDoc(name="REQ-TIME",defaultValue = "20220917120915",description = "请求时间 YYYYMMDDhhmmss"),
+                @Java110HeaderDoc(name="JAVA110-LANG",defaultValue = "zh-cn",description = "语言中文"),
+                @Java110HeaderDoc(name="USER-ID",defaultValue = "-1",description = "调用用户ID 一般写-1"),
+        },
+        params = {
         @Java110ParamDoc(name = "username", length = 30, remark = "用户名，物业系统分配"),
         @Java110ParamDoc(name = "passwd", length = 30, remark = "密码，物业系统分配"),
 })
