@@ -37,7 +37,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/login.adminLoginProperty",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "login.adminLoginProperty"
+        serviceCode = "login.adminLoginProperty",
+        seq = 2
 )
 
 @Java110ParamsDoc(params = {

@@ -2,7 +2,7 @@ package com.java110.doc.entity;
 
 import java.io.Serializable;
 
-public class RequestMappingsDocDto implements Serializable {
+public class RequestMappingsDocDto implements Serializable, Comparable<RequestMappingsDocDto> {
 
     private String name;
 
@@ -64,5 +64,10 @@ public class RequestMappingsDocDto implements Serializable {
 
     public void setStartWay(String startWay) {
         this.startWay = startWay;
+    }
+
+    @Override
+    public int compareTo(RequestMappingsDocDto o) {
+        return this.getSeq() - o.getSeq();
     }
 }

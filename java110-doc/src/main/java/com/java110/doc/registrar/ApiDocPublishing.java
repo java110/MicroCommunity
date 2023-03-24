@@ -3,6 +3,7 @@ package com.java110.doc.registrar;
 import com.java110.doc.entity.ApiDocDto;
 import com.java110.doc.entity.RequestMappingsDocDto;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class ApiDocPublishing {
      */
     public static void setApiDoc(ApiDocDto apiDocDto, List<RequestMappingsDocDto> mappingsDocDtos) {
         ApiDocPublishing.apiDocDto = apiDocDto;
+        Collections.sort(mappingsDocDtos);
         ApiDocPublishing.mappingsDocDtos = mappingsDocDtos;
     }
 

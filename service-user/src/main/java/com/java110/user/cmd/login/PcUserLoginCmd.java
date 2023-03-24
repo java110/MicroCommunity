@@ -46,7 +46,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/login.pcUserLogin",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "login.pcUserLogin"
+        serviceCode = "login.pcUserLogin",
+        seq = 1
 )
 
 @Java110ParamsDoc(params = {

@@ -3,6 +3,7 @@ package com.java110.doc.registrar;
 import com.java110.doc.entity.CmdDocDto;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +38,10 @@ public class ApiDocCmdPublishing {
                 retCmdDocDto.add(cmdDocDto);
             }
         }
+
+        // 根据字段排序
+
+        Collections.sort(retCmdDocDto);
 
         return retCmdDocDto;
     }

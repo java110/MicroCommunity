@@ -50,5 +50,7 @@ public @interface Java110CmdDoc {
 
     String author() default "";
 
+    int seq() default 999;
+
 
 }

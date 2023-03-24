@@ -112,6 +112,7 @@ public class Java110CmdDocDiscoveryRegistrar implements ImportBeanDefinitionRegi
                     cmdDocDto.setVersion(attributes.get("version").toString());
                     cmdDocDto.setHttpMethod(attributes.get("httpMethod").toString());
                     cmdDocDto.setServiceCode(attributes.get("serviceCode").toString());
+                    cmdDocDto.setSeq(Integer.parseInt(attributes.get("seq").toString()));
 
 
                     /*BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(beanDefinition, beanName);

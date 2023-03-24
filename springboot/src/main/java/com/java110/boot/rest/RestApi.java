@@ -34,7 +34,7 @@ import java.util.Map;
         title = "HC小区管理系统api接口文档",
         description = "HC小区管理系统api接口文档",
         company = "Java110工作室",
-        version = "v1.4"
+        version = "v1.5"
 )
 
 @Java110RequestMappingsDoc(

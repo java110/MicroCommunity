@@ -2,7 +2,7 @@ package com.java110.doc.entity;
 
 import java.io.Serializable;
 
-public class CmdDocDto implements Serializable {
+public class CmdDocDto implements Serializable, Comparable<CmdDocDto> {
 
     /**
      * api title
@@ -32,6 +32,8 @@ public class CmdDocDto implements Serializable {
      * @return
      */
     private String httpMethod;
+
+    private int seq;
 
     /**
      * request url
@@ -118,5 +120,18 @@ public class CmdDocDto implements Serializable {
 
     public void setServiceCode(String serviceCode) {
         this.serviceCode = serviceCode;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    @Override
+    public int compareTo(CmdDocDto o) {
+        return this.getSeq() - o.getSeq();
     }
 }
