@@ -39,7 +39,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/user.staff.add",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "user.staff.add"
+        serviceCode = "user.staff.add",
+        seq = 3
 )
 
 @Java110ParamsDoc(params = {

@@ -38,7 +38,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/query.staff.infos",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "query.staff.infos"
+        serviceCode = "query.staff.infos",
+        seq = 6
 )
 
 @Java110ParamsDoc(params = {

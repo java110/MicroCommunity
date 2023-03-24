@@ -32,7 +32,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/user.staff.delete",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "user.staff.delete"
+        serviceCode = "user.staff.delete",
+        seq = 5
 )
 
 @Java110ParamsDoc(params = {
