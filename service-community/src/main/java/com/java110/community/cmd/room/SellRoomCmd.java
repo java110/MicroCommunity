@@ -27,7 +27,8 @@ import java.text.ParseException;
         url = "http://{ip}:{port}/app/room.sellRoom",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.sellRoom"
+        serviceCode = "room.sellRoom",
+        seq = 18
 )
 
 @Java110ParamsDoc(params = {

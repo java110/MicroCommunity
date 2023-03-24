@@ -38,7 +38,9 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/visit.listVisits",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "visit.listVisits")
+        serviceCode = "visit.listVisits",
+        seq = 22
+)
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "page", type = "int", length = 11, remark = "分页信息"),

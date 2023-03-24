@@ -28,7 +28,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/room.queryRoomsByOwner",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.queryRoomsByOwner"
+        serviceCode = "room.queryRoomsByOwner",
+        seq = 17
 )
 
 @Java110ParamsDoc(params = {

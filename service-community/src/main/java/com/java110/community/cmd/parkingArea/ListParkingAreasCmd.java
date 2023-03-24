@@ -27,7 +27,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/parkingArea.listParkingAreas",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "parkingArea.listParkingAreas"
+        serviceCode = "parkingArea.listParkingAreas",
+        seq = 20
 )
 
 @Java110ParamsDoc(params = {

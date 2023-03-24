@@ -32,7 +32,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/room.exitRoom",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.exitRoom"
+        serviceCode = "room.exitRoom",
+        seq = 19
 )
 
 @Java110ParamsDoc(params = {

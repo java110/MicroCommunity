@@ -54,7 +54,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/ownerRepair.saveOwnerRepair",
         resource = "communityDoc",
         author = "张峰",
-        serviceCode = "ownerRepair.saveOwnerRepair"
+        serviceCode = "ownerRepair.saveOwnerRepair",
+        seq = 23
 )
 //入参要求
 @Java110ParamsDoc(params = {

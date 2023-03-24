@@ -38,7 +38,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/notice.listNotices",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "notice.listNotices"
+        serviceCode = "notice.listNotices",
+        seq = 21
 )
 //入参要求
 @Java110ParamsDoc(params = {
