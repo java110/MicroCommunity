@@ -44,7 +44,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/property.listProperty",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "property.listProperty"
+        serviceCode = "property.listProperty",
+        seq = 4
 )
 
 @Java110ParamsDoc(params = {

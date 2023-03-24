@@ -74,7 +74,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/property.saveProperty",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "property.saveProperty"
+        serviceCode = "property.saveProperty",
+        seq = 1
 )
 
 @Java110ParamsDoc(params = {

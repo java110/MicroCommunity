@@ -46,7 +46,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/store.propertyDeleteStoreAndShop",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "store.propertyDeleteStoreAndShop"
+        serviceCode = "store.propertyDeleteStoreAndShop",
+        seq = 6
 )
 
 @Java110ParamsDoc(params = {

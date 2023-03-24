@@ -32,7 +32,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/store.listCommunityStoreShop",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "store.listCommunityStoreShop"
+        serviceCode = "store.listCommunityStoreShop",
+        seq = 7
 )
 
 @Java110ParamsDoc(params = {

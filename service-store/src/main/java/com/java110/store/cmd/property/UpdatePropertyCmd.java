@@ -45,7 +45,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/property.updateProperty",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "property.updateProperty"
+        serviceCode = "property.updateProperty",
+        seq = 2
 )
 
 @Java110ParamsDoc(params = {
