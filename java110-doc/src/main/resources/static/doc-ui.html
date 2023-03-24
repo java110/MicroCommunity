@@ -44,11 +44,11 @@
                 <li style="width:100%" class="margin-top" :class="{ active: item.active }" v-for="(item,index) in menus"
                     :key="item.name">
                     <a href="javascript:void(0)" @click="switchMenu(item)">
-                        <span class="nav-label" style="color: #777;">{{item.name}}</span>
+                        <span class="nav-label" style="color: #777;">{{index+1}} {{item.name}}</span>
                     </a>
                     <ul class="nav nav-second-level collapse" :class="{in: item.active}">
-                        <li v-for="subMenu in pages" v-if="item.active">
-                            <a @click="_gotoPage(subMenu)" style="color: #999;" href="javascript:void(0)">{{subMenu.title}}</a>
+                        <li v-for="(subMenu,subIndex) in pages" v-if="item.active">
+                            <a @click="_gotoPage(subMenu)" style="color: #999;" href="javascript:void(0)">{{index+1}}.{{subIndex+1}}、{{subMenu.title}}</a>
                         </li>
                     </ul>
                 </li>

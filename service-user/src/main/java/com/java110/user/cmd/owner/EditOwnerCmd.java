@@ -40,7 +40,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/owner.editOwner",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "owner.editOwner"
+        serviceCode = "owner.editOwner",
+        seq = 10
 )
 
 @Java110ParamsDoc(params = {

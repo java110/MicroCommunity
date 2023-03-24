@@ -32,7 +32,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/org.listOrgTree",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "org.listOrgTree"
+        serviceCode = "org.listOrgTree",
+        seq = 8
 )
 
 @Java110ParamsDoc(params = {

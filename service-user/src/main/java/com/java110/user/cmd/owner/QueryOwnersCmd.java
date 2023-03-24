@@ -35,7 +35,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/owner.queryOwners",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "owner.queryOwners"
+        serviceCode = "owner.queryOwners",
+        seq = 12
 )
 
 @Java110ParamsDoc(params = {

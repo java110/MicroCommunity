@@ -38,10 +38,11 @@ import java.util.Map;
  * 请求地址为/app/login.pcUserLogin
  */
 
-@Java110CmdDoc(title = "用户登录",
-        description = "登录功能 主要用于 员工 或者管理员登录使用," +
-                "请求其他接口时 头信息中需要加 Authorization: Bearer token ，" +
-                "token 是这个接口返回的内容",
+@Java110CmdDoc(title = "员工登录",
+        description = "登录功能 主要用于 员工 或者管理员登录使用,<br/>" +
+                "请求其他接口时 头信息中需要加 Authorization: Bearer token ，<br/>" +
+                "token 是这个接口返回的内容<br/> " +
+                "会话保持为2小时，请快要到2小时时，再次登录，保持会话</br>",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/login.pcUserLogin",
         resource = "userDoc",

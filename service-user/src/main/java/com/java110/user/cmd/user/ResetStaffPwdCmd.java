@@ -33,7 +33,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/user.resetStaffPwd",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "user.resetStaffPwd"
+        serviceCode = "user.resetStaffPwd",
+        seq = 14
 )
 
 @Java110ParamsDoc(params = {

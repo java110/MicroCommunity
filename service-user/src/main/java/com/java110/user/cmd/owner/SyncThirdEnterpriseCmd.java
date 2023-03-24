@@ -34,7 +34,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/owner.syncThirdEnterprise",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "owner.syncThirdEnterprise"
+        serviceCode = "owner.syncThirdEnterprise",
+        seq = 16
 )
 
 @Java110ParamsDoc(params = {

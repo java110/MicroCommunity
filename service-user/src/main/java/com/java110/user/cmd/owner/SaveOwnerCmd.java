@@ -54,7 +54,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/owner.saveOwner",
         resource = "userDoc",
         author = "吴学文",
-        serviceCode = "owner.saveOwner"
+        serviceCode = "owner.saveOwner",
+        seq = 9
 )
 
 @Java110ParamsDoc(params = {
