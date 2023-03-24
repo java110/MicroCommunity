@@ -38,7 +38,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/room.queryRooms",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.queryRooms"
+        serviceCode = "room.queryRooms",
+        seq = 16
 )
 
 @Java110ParamsDoc(params = {

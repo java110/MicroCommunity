@@ -28,7 +28,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/unit.queryUnits",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "unit.queryUnits"
+        serviceCode = "unit.queryUnits",
+        seq = 12
 )
 
 @Java110ParamsDoc(params = {

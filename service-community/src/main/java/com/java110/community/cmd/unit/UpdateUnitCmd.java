@@ -26,7 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
         url = "http://{ip}:{port}/app/unit.updateUnit",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "unit.updateUnit"
+        serviceCode = "unit.updateUnit",
+        seq = 10
 )
 
 @Java110ParamsDoc(params = {

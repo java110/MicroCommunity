@@ -33,7 +33,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/room.saveRoom",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.saveRoom"
+        serviceCode = "room.saveRoom",
+        seq = 13
 )
 
 @Java110ParamsDoc(params = {

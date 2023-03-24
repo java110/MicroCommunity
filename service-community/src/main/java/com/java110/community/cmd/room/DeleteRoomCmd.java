@@ -24,7 +24,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/room.deleteRoom",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.deleteRoom"
+        serviceCode = "room.deleteRoom",
+        seq = 15
 )
 
 @Java110ParamsDoc(params = {

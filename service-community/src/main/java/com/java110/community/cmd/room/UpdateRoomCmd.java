@@ -32,7 +32,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/room.updateRoom",
         resource = "communityDoc",
         author = "吴学文",
-        serviceCode = "room.updateRoom"
+        serviceCode = "room.updateRoom",
+        seq = 14
 )
 
 @Java110ParamsDoc(params = {
