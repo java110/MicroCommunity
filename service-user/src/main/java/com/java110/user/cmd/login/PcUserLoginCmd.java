@@ -39,7 +39,9 @@ import java.util.Map;
  */
 
 @Java110CmdDoc(title = "用户登录",
-        description = "登录功能 主要用于 员工 或者管理员登录使用",
+        description = "登录功能 主要用于 员工 或者管理员登录使用," +
+                "请求其他接口时 头信息中需要加 Authorization: Bearer token ，" +
+                "token 是这个接口返回的内容",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/login.pcUserLogin",
         resource = "userDoc",
