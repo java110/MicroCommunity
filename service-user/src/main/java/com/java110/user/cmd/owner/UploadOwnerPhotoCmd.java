@@ -8,6 +8,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
@@ -31,6 +32,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
 import java.util.List;
 
+
+@Java110CmdDoc(title = "修改业主或者家庭成员人脸",
+        description = "主要用于第三方系统 调用此接口修改人脸信息，同步门禁，进出小区或者楼栋",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/owner.uploadOwnerPhoto",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "owner.uploadOwnerPhoto",
+        seq = 13
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "memberId", length = 30, remark = "人员编号，可以通过 查询业主 接口获取到"),
+        @Java110ParamDoc(name = "photo", length = -1, remark = "业主人脸 用于同步门禁 人脸开门 base64"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="{\n" +
+                "\t\"memberId\": 123123123,\n" +
+                "\t\"ownerPhoto\": \"\",\n" +
+                "\t\"communityId\": \"2022121921870161\"\n" +
+                "}",
+        resBody="{\"code\":0,\"msg\":\"成功\"}"
+)
 @Java110Cmd(serviceCode = "owner.uploadOwnerPhoto")
 public class UploadOwnerPhotoCmd extends Cmd {
 

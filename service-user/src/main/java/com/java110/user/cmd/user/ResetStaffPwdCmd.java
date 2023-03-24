@@ -34,7 +34,7 @@ import java.util.List;
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "user.resetStaffPwd",
-        seq = 14
+        seq = 15
 )
 
 @Java110ParamsDoc(params = {
