@@ -1766,11 +1766,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         BigDecimal valueObj = null;
+        logger.debug("计算公式为：{}",value);
         try {
             value = engine.eval(value).toString();
             valueObj = new BigDecimal(Double.parseDouble(value));
         } catch (Exception e) {
             //throw new IllegalArgumentException("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常");
+            logger.error("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常",e);
             valueObj = new BigDecimal(0);
         }
 
