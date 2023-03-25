@@ -122,7 +122,7 @@ public class ToPayOweFeeSMOImpl extends AppAbstractComponentSMO implements IToPa
         BigDecimal tmpMoney = new BigDecimal(money);
         BigDecimal feePrice = null;
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
-            feePrice = new BigDecimal(fees.getJSONObject(feeIndex).getDouble("feePrice"));
+            feePrice = new BigDecimal(fees.getJSONObject(feeIndex).getDouble("feeTotalPrice"));
             tmpMoney = tmpMoney.add(feePrice);
         }
 

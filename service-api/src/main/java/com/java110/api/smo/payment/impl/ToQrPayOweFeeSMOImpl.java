@@ -94,7 +94,7 @@ public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements ITo
         BigDecimal tmpMoney = new BigDecimal(money);
         BigDecimal feePrice = null;
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
-            feePrice = new BigDecimal(fees.getJSONObject(feeIndex).getDouble("feePrice"));
+            feePrice = new BigDecimal(fees.getJSONObject(feeIndex).getDouble("feeTotalPrice"));
             tmpMoney = tmpMoney.add(feePrice);
         }
         money = tmpMoney.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();

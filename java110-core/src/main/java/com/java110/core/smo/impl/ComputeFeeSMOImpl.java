@@ -219,7 +219,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         feeDto.setDeadlineTime(targetEndDate);
 
         //动态费用
@@ -229,6 +229,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
+
+        //考虑租金递增
+        dealRentRate(feeDto);
     }
 
     /**
