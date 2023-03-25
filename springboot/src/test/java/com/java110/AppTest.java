@@ -3,6 +3,8 @@ package com.java110;
 import static org.junit.Assert.assertTrue;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.RoomAttrDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.utils.util.DateUtil;
 import org.junit.Test;
 
@@ -24,7 +26,29 @@ public class AppTest
     public void should()
     {
 
-        double usedHours = Math.ceil((DateUtil.getCurrentDate().getTime() - DateUtil.getDateFromStringA("2023-03-13 23:32:18").getTime()) / (60 * 60 * 1000.00));
-        System.out.printf(usedHours+"");
+       String value = "0.51*R+0.03 * L +0.77";
+
+        value = value.replace("\n", "")
+                .replace("\r", "")
+                .trim();
+        if (value.contains("C")) { //处理小区面积
+
+
+        } else if (value.contains("F")) { //处理楼栋
+
+        } else if (value.contains("U")) { //处理单元
+        } else if (value.contains("RL")) {
+
+        } else if (value.contains("R")) { //处理 房屋面积
+            value = value.replace("R", "100");
+        } else if (value.contains("X")) {// 处理 房屋系数
+            value = value.replace("X", "1");
+        }
+        if (value.contains("L")) {//处理房屋层数
+            System.out.printf("L");
+            value = value.replace("L", "1");
+        }
+
+        System.out.printf("value="+value);
     }
 }
