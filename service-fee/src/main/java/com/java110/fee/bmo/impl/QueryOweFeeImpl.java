@@ -95,7 +95,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 //如果金额为0 就排除
                 tmpFeeDto.setFeeTotalPrice(
                         MoneyUtil.computePriceScale(
-                                tmpFeeDto.getFeePrice(),
+                                tmpFeeDto.getFeeTotalPrice(),
                                 tmpFeeDto.getScale(),
                                 Integer.parseInt(tmpFeeDto.getDecimalPlace())
                         )

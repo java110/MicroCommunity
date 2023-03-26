@@ -26,7 +26,7 @@ public class AppTest
     public void should()
     {
 
-       String value = "0.51*R+0.03 * L +0.77";
+       String value = "（0.51 * 96.46 + (0.03*1 + 0.26)*96.46）*12";
 
         value = value.replace("\n", "")
                 .replace("\r", "")
