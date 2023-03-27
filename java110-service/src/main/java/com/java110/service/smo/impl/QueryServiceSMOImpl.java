@@ -431,7 +431,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             }
             results = queryServiceDAOImpl.executeSql(currentSqlNew, currentParams.toArray(), columns);
         } catch (Exception e) {
-            logger.error("解析sql 异常", e);
+            logger.error("解析sql 异常"+currentSql, e);
             throw new BusinessException("1999", e.getLocalizedMessage());
         }
         JSONArray data = null;
