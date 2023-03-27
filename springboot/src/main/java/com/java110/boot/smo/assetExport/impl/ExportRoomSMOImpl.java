@@ -126,7 +126,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-
+        paramIn.put("storeId",result.getStoreId());
         Assert.hasKeyAndValue(paramIn, "communityId", "请求中未包含小区");
         //Assert.hasKeyAndValue(paramIn, "floorIds", "请求中未包含楼栋");
         Assert.hasKeyAndValue(paramIn, "configIds", "请求中未包含费用项");
