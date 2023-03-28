@@ -26,6 +26,7 @@ import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeVo;
@@ -67,6 +68,7 @@ public class ListReturnPayFeesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
@@ -98,30 +100,6 @@ public class ListReturnPayFeesCmd extends Cmd {
                 }
                 returnPayFeeDtos.add(returnPayFee);
             }
-            //List<ReturnPayFeeDto> returnPayFeeDtoList = new ArrayList<>();
-//            for (ReturnPayFeeDto returnPayFee : returnPayFeeDtos) {
-//                //获取付款方标识
-//                String payerObjType = returnPayFee.getPayerObjType();
-//                if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("3333")) { //房屋
-//                    returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
-//                    List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryRoomReturnPayFees(returnPayFeeDto);
-//                    if (returnPayFeeList == null || returnPayFeeList.size() < 1) {
-//                        continue;
-//                    }
-//                    //returnPayFeeDtoList.add(returnPayFeeList.get(0));
-//                    BeanConvertUtil.covertBean(returnPayFeeList.get(0), returnPayFee);
-//                } else if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) { //车辆
-//                    returnPayFeeDto.setReturnFeeId(returnPayFee.getReturnFeeId());
-//                    List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryCarReturnPayFees(returnPayFeeDto);
-//                    if (returnPayFeeList == null || returnPayFeeList.size() < 1) {
-//                        continue;
-//                    }
-//                    BeanConvertUtil.covertBean(returnPayFeeList.get(0), returnPayFee);
-//                    //returnPayFeeDtoList.add(returnPayFeeList.get(0));
-//                } else {
-//                    continue;
-//                }
-//            }
             returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeDtos, ApiReturnPayFeeDataVo.class);
         } else {
             returnPayFees = new ArrayList<>();

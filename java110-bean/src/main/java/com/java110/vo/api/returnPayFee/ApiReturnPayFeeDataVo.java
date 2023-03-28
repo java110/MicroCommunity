@@ -48,6 +48,14 @@ public class ApiReturnPayFeeDataVo implements Serializable {
     private String payerObjType;
     private String payerObjName;
 
+    private String applyPersonId;
+    private String applyPersonName;
+    private String auditPersonId;
+    private String auditPersonName;
+
+
+
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -361,5 +369,37 @@ public class ApiReturnPayFeeDataVo implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getApplyPersonId() {
+        return applyPersonId;
+    }
+
+    public void setApplyPersonId(String applyPersonId) {
+        this.applyPersonId = applyPersonId;
+    }
+
+    public String getApplyPersonName() {
+        return applyPersonName;
+    }
+
+    public void setApplyPersonName(String applyPersonName) {
+        this.applyPersonName = applyPersonName;
+    }
+
+    public String getAuditPersonId() {
+        return auditPersonId;
+    }
+
+    public void setAuditPersonId(String auditPersonId) {
+        this.auditPersonId = auditPersonId;
+    }
+
+    public String getAuditPersonName() {
+        return auditPersonName;
+    }
+
+    public void setAuditPersonName(String auditPersonName) {
+        this.auditPersonName = auditPersonName;
     }
 }
