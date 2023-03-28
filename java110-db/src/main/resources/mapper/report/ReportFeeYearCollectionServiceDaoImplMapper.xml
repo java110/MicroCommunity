@@ -77,7 +77,7 @@
         objName,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.built_up_area,t.built_up_area
         builtUpArea,t.owner_name,t.owner_name ownerName,t.config_id,t.config_id configId,t.obj_id,t.obj_id
         objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.collection_id,t.collection_id
-        collectionId,t.obj_type,t.obj_type objType,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName
+        collectionId,t.obj_type,t.obj_type objType,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName,t.create_time
         from report_fee_year_collection t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
