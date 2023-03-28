@@ -283,6 +283,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         }
         RoomDto tmpRoomDto = new RoomDto();
         tmpRoomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        tmpRoomDto.setRoomNum(roomDto.getRoomNum());
         tmpRoomDto.setCommunityId(roomDto.getCommunityId());
         return queryRooms(tmpRoomDto);
 
