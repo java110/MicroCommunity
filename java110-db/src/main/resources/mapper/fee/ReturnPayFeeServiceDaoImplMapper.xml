@@ -241,7 +241,8 @@
             and t.audit_person_id= #{auditPersonId}
         </if>
         <if test="auditPersonName !=null and auditPersonName != ''">
-        and t.audit_person_name like concat('%',#{auditPersonName},'%')
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
