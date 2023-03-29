@@ -121,7 +121,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
         if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
             payPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
-            certData = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, "cert");
+            certData = MappingCache.getRemark(MappingConstant.WECHAT_STORE_DOMAIN, "cert");
             mchPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId");
         } else {
             payPassword = smallWeChatDtos.get(0).getPayPassword();
