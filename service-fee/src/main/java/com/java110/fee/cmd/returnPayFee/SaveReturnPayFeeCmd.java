@@ -25,10 +25,12 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.returnPayFee.ReturnPayFeePo;
 import com.java110.utils.exception.CmdException;
@@ -71,6 +73,9 @@ public class SaveReturnPayFeeCmd extends Cmd {
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
@@ -92,6 +97,14 @@ public class SaveReturnPayFeeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(reqJson.getString("communityId"));
         feeDto.setFeeId(reqJson.getString("feeId"));
@@ -106,10 +119,12 @@ public class SaveReturnPayFeeCmd extends Cmd {
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(reqJson, ReturnPayFeePo.class);
         returnPayFeePo.setReturnFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         returnPayFeePo.setState(ReturnPayFeeDto.STATE_WAIT);
-        returnPayFeePo.setCycles((reqJson.getDouble("cycles") * -1)+"");
-        returnPayFeePo.setReceivableAmount((reqJson.getDouble("receivableAmount") * -1)+"");
-        returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivedAmount") * -1)+"");
+        returnPayFeePo.setCycles((reqJson.getDouble("cycles") * -1) + "");
+        returnPayFeePo.setReceivableAmount((reqJson.getDouble("receivableAmount") * -1) + "");
+        returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivedAmount") * -1) + "");
         returnPayFeePo.setPrimeRate("7"); //退费默认方式为转账
+        returnPayFeePo.setApplyPersonId(userId);
+        returnPayFeePo.setApplyPersonName(userDtos.get(0).getName());
         int flag = returnPayFeeV1InnerServiceSMOImpl.saveReturnPayFee(returnPayFeePo);
 
         if (flag < 1) {

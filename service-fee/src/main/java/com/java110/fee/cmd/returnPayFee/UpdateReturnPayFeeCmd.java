@@ -37,6 +37,7 @@ import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
@@ -45,6 +46,7 @@ import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.fee.PayFeeDetailPo;
@@ -147,6 +149,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
     private static final String SPEC_MONTH = "89002020980014"; //月份
@@ -176,8 +181,15 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
         FeeDetailDto feeDetailDto = (FeeDetailDto) reqJson.get("feeDetailDto");
-        updateReturnPayFee(reqJson);
+        updateReturnPayFee(reqJson,userDtos.get(0));
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
             //判断退费周期是否为负数如果不是 抛出异常
@@ -383,7 +395,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public void updateReturnPayFee(JSONObject paramInJson) {
+    public void updateReturnPayFee(JSONObject paramInJson,UserDto userDto) {
         ReturnPayFeeDto returnPayFeeDto = new ReturnPayFeeDto();
         returnPayFeeDto.setReturnFeeId(paramInJson.getString("returnFeeId"));
         List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
@@ -392,6 +404,8 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(returnPayFeeDtos.get(0)));
         businessReturnPayFee.putAll(paramInJson);
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, ReturnPayFeePo.class);
+        returnPayFeePo.setAuditPersonId(userDto.getUserId());
+        returnPayFeePo.setAuditPersonName(userDto.getName());
         int flag = returnPayFeeV1InnerServiceSMOImpl.updateReturnPayFee(returnPayFeePo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");

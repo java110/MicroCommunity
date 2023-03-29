@@ -29,6 +29,11 @@ public class ReturnPayFeePo implements Serializable {
     private String payTime;
     private String reason;
 
+    private String applyPersonId;
+    private String applyPersonName;
+    private String auditPersonId;
+    private String auditPersonName;
+
     public String getReturnFeeId() {
         return returnFeeId;
     }
@@ -139,5 +144,37 @@ public class ReturnPayFeePo implements Serializable {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getApplyPersonId() {
+        return applyPersonId;
+    }
+
+    public void setApplyPersonId(String applyPersonId) {
+        this.applyPersonId = applyPersonId;
+    }
+
+    public String getApplyPersonName() {
+        return applyPersonName;
+    }
+
+    public void setApplyPersonName(String applyPersonName) {
+        this.applyPersonName = applyPersonName;
+    }
+
+    public String getAuditPersonId() {
+        return auditPersonId;
+    }
+
+    public void setAuditPersonId(String auditPersonId) {
+        this.auditPersonId = auditPersonId;
+    }
+
+    public String getAuditPersonName() {
+        return auditPersonName;
+    }
+
+    public void setAuditPersonName(String auditPersonName) {
+        this.auditPersonName = auditPersonName;
     }
 }

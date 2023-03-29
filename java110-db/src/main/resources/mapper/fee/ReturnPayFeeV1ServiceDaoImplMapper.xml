@@ -5,183 +5,215 @@
 <mapper namespace="returnPayFeeV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存退费表信息 add by wuxw 2018-07-03 -->
     <insert id="saveReturnPayFeeInfo" parameterType="Map">
         insert into return_pay_fee(
-reason,prime_rate,fee_type_cd,pay_time,detail_id,receivable_amount,cycles,remark,received_amount,fee_id,return_fee_id,config_id,state,community_id
-) values (
-#{reason},#{primeRate},#{feeTypeCd},#{payTime},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{feeId},#{returnFeeId},#{configId},#{state},#{communityId}
-)
+        reason,prime_rate,fee_type_cd,pay_time,detail_id,receivable_amount,cycles,remark,received_amount,
+        fee_id,return_fee_id,config_id,state,community_id,apply_person_id,apply_person_name
+        ) values (
+        #{reason},#{primeRate},#{feeTypeCd},#{payTime},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},
+        #{feeId},#{returnFeeId},#{configId},#{state},#{communityId},#{applyPersonId},#{applyPersonName}
+        )
     </insert>
-
 
 
     <!-- 查询退费表信息 add by wuxw 2018-07-03 -->
     <select id="getReturnPayFeeInfo" parameterType="Map" resultType="Map">
-        select  t.reason,t.prime_rate,t.prime_rate primeRate,t.fee_type_cd,t.fee_type_cd feeTypeCd,t.pay_time,t.pay_time payTime,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.fee_id,t.fee_id feeId,t.return_fee_id,t.return_fee_id returnFeeId,t.config_id,t.config_id configId,t.state,t.community_id,t.community_id communityId 
-from return_pay_fee t 
-where 1 =1 
-<if test="reason !=null and reason != ''">
-   and t.reason= #{reason}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="feeTypeCd !=null and feeTypeCd != ''">
-   and t.fee_type_cd= #{feeTypeCd}
-</if> 
-<if test="payTime !=null and payTime != ''">
-   and t.pay_time= #{payTime}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
-<if test="returnFeeId !=null and returnFeeId != ''">
-   and t.return_fee_id= #{returnFeeId}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.reason,t.prime_rate,t.prime_rate primeRate,t.fee_type_cd,t.fee_type_cd feeTypeCd,t.pay_time,t.pay_time
+        payTime,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount
+        receivableAmount,t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
+        receivedAmount,t.fee_id,t.fee_id feeId,t.return_fee_id,t.return_fee_id returnFeeId,t.config_id,t.config_id
+        configId,t.state,t.community_id,t.community_id communityId,t.apply_person_id applyPersonId,t.apply_person_name applyPersonName,
+        t.audit_person_id auditPersonId,t.audit_person_name auditPersonName
+        from return_pay_fee t
+        where 1 =1
+        <if test="reason !=null and reason != ''">
+            and t.reason= #{reason}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            and t.pay_time= #{payTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="returnFeeId !=null and returnFeeId != ''">
+            and t.return_fee_id= #{returnFeeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改退费表信息 add by wuxw 2018-07-03 -->
     <update id="updateReturnPayFeeInfo" parameterType="Map">
-        update  return_pay_fee t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="reason !=null and reason != ''">
-, t.reason= #{reason}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-, t.prime_rate= #{primeRate}
-</if> 
-<if test="feeTypeCd !=null and feeTypeCd != ''">
-, t.fee_type_cd= #{feeTypeCd}
-</if> 
-<if test="payTime !=null and payTime != ''">
-, t.pay_time= #{payTime}
-</if> 
-<if test="detailId !=null and detailId != ''">
-, t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-, t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-, t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-, t.received_amount= #{receivedAmount}
-</if> 
-<if test="feeId !=null and feeId != ''">
-, t.fee_id= #{feeId}
-</if> 
-<if test="configId !=null and configId != ''">
-, t.config_id= #{configId}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="returnFeeId !=null and returnFeeId != ''">
-and t.return_fee_id= #{returnFeeId}
-</if> 
+        update return_pay_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="reason !=null and reason != ''">
+            , t.reason= #{reason}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            , t.prime_rate= #{primeRate}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            , t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            , t.pay_time= #{payTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            , t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            , t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            , t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            , t.audit_person_name= #{auditPersonName}
+        </if>
+        where 1=1
+        <if test="returnFeeId !=null and returnFeeId != ''">
+            and t.return_fee_id= #{returnFeeId}
+        </if>
 
     </update>
 
     <!-- 查询退费表数量 add by wuxw 2018-07-03 -->
-     <select id="queryReturnPayFeesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from return_pay_fee t 
-where 1 =1 
-<if test="reason !=null and reason != ''">
-   and t.reason= #{reason}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="feeTypeCd !=null and feeTypeCd != ''">
-   and t.fee_type_cd= #{feeTypeCd}
-</if> 
-<if test="payTime !=null and payTime != ''">
-   and t.pay_time= #{payTime}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
-<if test="returnFeeId !=null and returnFeeId != ''">
-   and t.return_fee_id= #{returnFeeId}
-</if> 
-<if test="configId !=null and configId != ''">
-   and t.config_id= #{configId}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryReturnPayFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from return_pay_fee t
+        where 1 =1
+        <if test="reason !=null and reason != ''">
+            and t.reason= #{reason}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and t.fee_type_cd= #{feeTypeCd}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            and t.pay_time= #{payTime}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="returnFeeId !=null and returnFeeId != ''">
+            and t.return_fee_id= #{returnFeeId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name= #{auditPersonName}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

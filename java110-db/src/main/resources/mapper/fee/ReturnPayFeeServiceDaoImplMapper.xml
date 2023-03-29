@@ -161,6 +161,8 @@
         t.b_id,t.b_id bId,
         t.community_id,t.community_id communityId,
         t.create_time,t.create_time createTime,
+        t.apply_person_id applyPersonId,t.apply_person_name applyPersonName,
+        t.audit_person_id auditPersonId,t.audit_person_name auditPersonName,
         d.name feeTypeCdName,
         c.name stateName,
         pf.payer_obj_type payerObjType,
@@ -228,6 +230,18 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
