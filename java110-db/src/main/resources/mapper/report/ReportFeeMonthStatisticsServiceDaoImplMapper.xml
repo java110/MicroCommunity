@@ -1353,6 +1353,9 @@
         <if test="endTime !=null and endTime != ''">
             and t.deadline_time &lt;= #{endTime}
         </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
+        </if>
         group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_name,t.deadline_time
         ) t
     </select>
@@ -1418,6 +1421,9 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.deadline_time &lt;= #{endTime}
+        </if>
+        <if test="feeTypeCd !=null and feeTypeCd != ''">
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
         group by t.config_id,t.fee_name,t.fee_create_time,t.obj_id,t.obj_type,t.obj_name,pfa.`value`,br.built_up_area
         order by pfa.`value`

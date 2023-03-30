@@ -208,7 +208,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         String objType = noticeDto.getObjType();
         switch (objType) {
             case NoticeDto.OBJ_TYPE_ALL: //全部推送
-                sendAllOwners(noticeDto, templateId, accessToken, weChatDto);
+                sendAllOwner(noticeDto, templateId, accessToken, weChatDto);
+                //sendAllOwners(noticeDto, templateId, accessToken, weChatDto);
                 break;
             case NoticeDto.OBJ_TYPE_FLOOR: //楼栋
                 sendFloorOwner(noticeDto, templateId, accessToken, weChatDto);
