@@ -28,6 +28,8 @@ import java.util.Map;
 /*
    拓强智能水表 处理类 -- 6.2 Lora无预付费水表
    http://doc-api.tqdianbiao.com/#/api2/6/2/1
+
+   http://www.chtqdq.com/
  */
 @Service("tqShuiBiaoLoraReadFactoryAdaptImpl")
 public class TqShuiBiaoLoraReadFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
