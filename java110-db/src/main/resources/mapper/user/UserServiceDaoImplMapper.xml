@@ -574,7 +574,7 @@
                 #{item}
             </foreach>
             and uosr.status_cd =0
-            GROUP BY u.user_id u.name,u.email,u.address,u.location_cd,
+            GROUP BY u.user_id,u.name,u.email,u.address,u.location_cd,
             u.age,u.sex,u.tel,u.level_cd ,u.b_id,su.rel_cd ,td.name
         </if>
         order by u.create_time desc
