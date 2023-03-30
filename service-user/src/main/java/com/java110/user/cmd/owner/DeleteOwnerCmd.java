@@ -133,7 +133,7 @@ public class DeleteOwnerCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除失败");
         }
-        if (reqJson.containsKey("ownerTypeCd") && !StringUtil.isEmpty(reqJson.getString("ownerTypeCd")) && reqJson.getString("ownerTypeCd").equals("1001")) {
+        if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
             OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
             ownerAppUserDto.setMemberId(reqJson.getString("ownerId"));
             //查询app用户表

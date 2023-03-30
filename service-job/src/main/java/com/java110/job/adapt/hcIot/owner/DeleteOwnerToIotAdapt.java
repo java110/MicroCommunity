@@ -17,10 +17,12 @@ package com.java110.job.adapt.hcIot.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.RoomDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.IMachineInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
@@ -52,6 +54,9 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
 
     /**
      * {
@@ -65,6 +70,8 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
+        System.out.println("进入删除删除业主的databus 处理类，DeleteOwnerToIotAdapt,{}"+data.toJSONString());
+
         JSONArray  businessMachines = new JSONArray();
         if (data.containsKey(OwnerPo.class.getSimpleName())) {
             Object bObj = data.get(OwnerPo.class.getSimpleName());
@@ -97,6 +104,7 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
         Assert.listOnlyOne(ownerDtos, "未找到删除的业主信息");
+
         //拿到小区ID
         String communityId = ownerPo.getCommunityId();
         //根据小区ID查询现有设备
@@ -105,6 +113,20 @@ public class DeleteOwnerToIotAdapt extends DatabusAdaptImpl {
         //String[] locationObjIds = new String[]{communityId};
         List<String> locationObjIds = new ArrayList<>();
         locationObjIds.add(communityId);
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setOwnerId(ownerPo.getOwnerId());
+        roomDto.setStatusCd("");
+        //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+        List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+
+        if(rooms != null && rooms.size()>0) {
+            for (RoomDto tRoomDto : rooms) {
+                locationObjIds.add(tRoomDto.getUnitId());
+                locationObjIds.add(tRoomDto.getRoomId());
+                locationObjIds.add(tRoomDto.getFloorId());
+            }
+        }
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         for (MachineDto tmpMachineDto : machineDtos) {

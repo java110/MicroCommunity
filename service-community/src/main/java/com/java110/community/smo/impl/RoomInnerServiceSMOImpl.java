@@ -272,6 +272,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setOwnerId(roomDto.getOwnerId());
         ownerRoomRelDto.setOwnerNameLike(roomDto.getOwnerNameLike());
+        ownerRoomRelDto.setStatusCd(roomDto.getStatusCd());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             return new ArrayList<>();
