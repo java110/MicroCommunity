@@ -38,6 +38,7 @@ import com.java110.po.feeAccountDetail.FeeAccountDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
@@ -56,6 +57,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * 前台 现金或者转账收费 缴费处理类
+ *
+ * 假如 缴费 后要处理一些逻辑建议用databus
+ * 这个类已经很复杂 ，最好不要加新逻辑
+ */
 @Java110Cmd(serviceCode = "fee.payFee")
 public class PayFeeCmd extends Cmd {
 
@@ -531,6 +538,8 @@ public class PayFeeCmd extends Cmd {
         //获取车位id
         String psId = ownerCarDtos.get(0).getPsId();
         //获取车辆状态(1001 正常状态，2002 欠费状态  3003 车位释放)
+        boolean sonMotherParking = false;
+        String num = "";
         String carState = ownerCarDtos.get(0).getState();
         if (!StringUtil.isEmpty(psId) && "3003".equals(carState)) {
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
@@ -542,6 +551,18 @@ public class PayFeeCmd extends Cmd {
             if (!StringUtil.isEmpty(state) && !state.equals("F")) {
                 throw new IllegalArgumentException("车位已被使用，不能再缴费！");
             }
+
+            if(ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpaceDtos.get(0).getTypeCd())
+                    && !parkingSpaceDtos.get(0).getTypeCd().contains(ParkingSpaceDto.NUM_MOTHER)
+            ){
+                sonMotherParking = true;
+                num = parkingSpaceDtos.get(0).getNum();
+            }
+        }
+
+        // todo  字母车位，子车位缴费 母车位延期
+        if(sonMotherParking){
+            queryMotherOwnerCars(num,ownerCarDtos,psId);
         }
 
 
@@ -569,6 +590,39 @@ public class PayFeeCmd extends Cmd {
         }
 
 
+
+    }
+
+    /**
+     * 子母车位延期 母车位也需要延期
+     * @param num
+     * @param ownerCarDtos
+     */
+    private void queryMotherOwnerCars(String num, List<OwnerCarDto> ownerCarDtos,String paId) {
+
+        String sonMotherSwitch = CommonCache.getValue("SON_MOTHER_PARKING_AUTO_FEE");
+
+        if(!"ON".equals(sonMotherSwitch)){
+            return ;
+        }
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setNum(num+ParkingSpaceDto.NUM_MOTHER);
+        parkingSpaceDto.setPaId(paId);
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+        Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
+
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(parkingSpaceDtos.get(0).getCommunityId());
+        ownerCarDto.setPsId(parkingSpaceDtos.get(0).getPsId());
+        ownerCarDto.setCarTypeCd("1001"); //业主车辆
+        List<OwnerCarDto> tmpOwnerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        if(ownerCarDtos == null){
+            ownerCarDtos = new ArrayList<>();
+        }
+
+        ownerCarDtos.addAll(tmpOwnerCarDtos);
     }
 
 
