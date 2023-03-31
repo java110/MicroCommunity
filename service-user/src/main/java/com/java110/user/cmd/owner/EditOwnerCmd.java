@@ -194,7 +194,7 @@ public class EditOwnerCmd extends Cmd {
         }
         editOwner(reqJson);
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs.size() < 1) {
+        if (attrs == null && attrs.size() < 1) {
             return;
         }
         JSONObject attr = null;
@@ -203,7 +203,7 @@ public class EditOwnerCmd extends Cmd {
             attr = attrs.getJSONObject(attrIndex);
             attr.put("memberId", reqJson.getString("memberId"));
             attr.put("communityId", reqJson.getString("communityId"));
-            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
+            if (!attr.containsKey("attrId") || StringUtil.isEmpty(attr.getString("attrId")) || attr.getString("attrId").startsWith("-")) {
                 attr.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 OwnerAttrPo ownerAttrPo = BeanConvertUtil.covertBean(attr, OwnerAttrPo.class);
                 flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);

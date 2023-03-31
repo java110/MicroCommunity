@@ -156,7 +156,7 @@ public class UpdateRoomCmd extends Cmd {
             return;
         }
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs.size() < 1) {
+        if (attrs == null || attrs.size() < 1) {
             return;
         }
         JSONObject attr = null;

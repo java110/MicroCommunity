@@ -112,7 +112,7 @@ public class UpdateScheduleClassesCmd extends Cmd {
         ScheduleClassesDayDto scheduleClassesDayDto = new ScheduleClassesDayDto();
         scheduleClassesDayDto.setScheduleId(scheduleClassesDtos.get(0).getScheduleId());
         List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
-        if (scheduleClassesDayDtos != null && scheduleClassesDayDtos.size() == 1) {
+        if (scheduleClassesDayDtos != null && scheduleClassesDayDtos.size() > 0) {
             ScheduleClassesDayPo scheduleClassesDayPo = new ScheduleClassesDayPo();
             scheduleClassesDayPo.setScheduleId(scheduleClassesPo.getScheduleId());
             flag = scheduleClassesDayV1InnerServiceSMOImpl.deleteScheduleClassesDay(scheduleClassesDayPo);
@@ -122,9 +122,9 @@ public class UpdateScheduleClassesCmd extends Cmd {
         }
         ScheduleClassesTimeDto scheduleClassesTimeDto = new ScheduleClassesTimeDto();
         scheduleClassesTimeDto.setScheduleId(scheduleClassesDtos.get(0).getScheduleId());
-        scheduleClassesTimeDto.setDayId(scheduleClassesDayDtos.get(0).getDayId());
+        //scheduleClassesTimeDto.setDayId(scheduleClassesDayDtos.get(0).getDayId());
         List<ScheduleClassesTimeDto> scheduleClassesTimeDtos = scheduleClassesTimeV1InnerServiceSMOImpl.queryScheduleClassesTimes(scheduleClassesTimeDto);
-        if (scheduleClassesTimeDtos != null && scheduleClassesTimeDtos.size() == 1) {
+        if (scheduleClassesTimeDtos != null && scheduleClassesTimeDtos.size() >0) {
             ScheduleClassesTimePo scheduleClassesTimePo = new ScheduleClassesTimePo();
             scheduleClassesTimePo.setScheduleId(scheduleClassesPo.getScheduleId());
             flag = scheduleClassesTimeV1InnerServiceSMOImpl.deleteScheduleClassesTime(scheduleClassesTimePo);

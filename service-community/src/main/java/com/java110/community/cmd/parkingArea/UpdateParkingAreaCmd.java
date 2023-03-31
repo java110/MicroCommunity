@@ -53,7 +53,7 @@ public class UpdateParkingAreaCmd extends Cmd {
         }
 
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs.size() < 1) {
+        if (attrs == null || attrs.size() < 1) {
             return;
         }
 
