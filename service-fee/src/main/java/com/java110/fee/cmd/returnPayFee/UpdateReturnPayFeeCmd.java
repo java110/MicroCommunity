@@ -189,7 +189,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户不存在");
         FeeDetailDto feeDetailDto = (FeeDetailDto) reqJson.get("feeDetailDto");
-        updateReturnPayFee(reqJson,userDtos.get(0));
+        updateReturnPayFee(reqJson, userDtos.get(0));
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
             //判断退费周期是否为负数如果不是 抛出异常
@@ -330,7 +330,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                 for (int index = 0; index < feeAccountDetails.size(); index++) {
                     JSONObject param = feeAccountDetails.getJSONObject(index);
                     String state = param.getString("state");
-                    if (!StringUtil.isEmpty(param.getString("state")) && param.getString("state").equals("1002")) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                    if ("1002".equals(param.getString("state"))) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
                         AccountDto accountDto = new AccountDto();
                         accountDto.setObjId(ownerId);
                         accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
@@ -395,7 +395,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public void updateReturnPayFee(JSONObject paramInJson,UserDto userDto) {
+    public void updateReturnPayFee(JSONObject paramInJson, UserDto userDto) {
         ReturnPayFeeDto returnPayFeeDto = new ReturnPayFeeDto();
         returnPayFeeDto.setReturnFeeId(paramInJson.getString("returnFeeId"));
         List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
