@@ -321,7 +321,7 @@ public class StartChargeCmd extends Cmd {
 
         ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
         chargeMachineOrderAcctPo.setAcctDetailId("-1");
-        chargeMachineOrderAcctPo.setAmount(reqJson.getString("durationPrice"));
+        chargeMachineOrderAcctPo.setAmount("0");
         chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
         chargeMachineOrderAcctPo.setOrderId(orderId);
         chargeMachineOrderAcctPo.setAcctId(reqJson.getString("acctId"));
