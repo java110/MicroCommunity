@@ -330,6 +330,7 @@ public class StartChargeCmd extends Cmd {
         chargeMachineOrderAcctPo.setRemark("优惠券抵扣," + couponNames);
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
         chargeMachineOrderAcctPo.setEnergy("0");
+        chargeMachineOrderAcctPo.setDurationPrice(reqJson.getString("durationPrice"));
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
 
