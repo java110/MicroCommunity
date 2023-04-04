@@ -27,6 +27,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
 import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
+import com.java110.po.chargeMachineOrderCoupon.ChargeMachineOrderCouponPo;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
 import com.java110.utils.exception.CmdException;
@@ -82,6 +83,9 @@ public class StartChargeCmd extends Cmd {
     @Autowired
     private IChargeRuleFeeV1InnerServiceSMO chargeRuleFeeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IChargeMachineOrderCouponV1InnerServiceSMO chargeMachineOrderCouponV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
@@ -124,9 +128,9 @@ public class StartChargeCmd extends Cmd {
         if (chargeRuleFeeDtos == null || chargeRuleFeeDtos.size() < 1) {
             throw new CmdException("未设置充值收费");
         }
-        reqJson.put("durationPrice",chargeRuleFeeDtos.get(chargeRuleFeeDtos.size()-1).getDurationPrice());
+        reqJson.put("durationPrice", chargeRuleFeeDtos.get(chargeRuleFeeDtos.size() - 1).getDurationPrice());
 
-        BigDecimal payMoneyDec = new BigDecimal(Double.parseDouble(chargeRuleFeeDtos.get(chargeRuleFeeDtos.size()-1).getDurationPrice()));
+        BigDecimal payMoneyDec = new BigDecimal(Double.parseDouble(chargeRuleFeeDtos.get(chargeRuleFeeDtos.size() - 1).getDurationPrice()));
 
         double payMoney = payMoneyDec.multiply(new BigDecimal(duration)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
@@ -253,11 +257,11 @@ public class StartChargeCmd extends Cmd {
         resultVo.setData(orderId);
 
         double couponDurationHours = 0.0;
-        //扣款
-        if (reqJson.containsKey("couponIds") && !StringUtil.isEmpty(reqJson.getString("couponIds"))) {
-            //todo 优惠券抵扣
-            couponDurationHours = withholdCoupon(reqJson, chargeMachineDtos, orderId);
-        }
+
+
+        //todo 优惠券抵扣
+        withholdCoupon(reqJson, chargeMachineDtos, orderId);
+
 
         if (durationHours - couponDurationHours > 0) {
             // todo 3.0 账户扣款
@@ -274,10 +278,14 @@ public class StartChargeCmd extends Cmd {
      * @param chargeMachineDtos
      * @param orderId
      */
-    private double withholdCoupon(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
+    private void withholdCoupon(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId) {
+        if (!reqJson.containsKey("couponIds") || StringUtil.isEmpty(reqJson.getString("couponIds"))) {
+            return;
+        }
         int flag;
-        double hours = 0;
-        String couponNames = "";
+//        double hours = 0;
+//        String couponNames = "";
+        ChargeMachineOrderCouponPo chargeMachineOrderCouponPo = null;
         for (String couponId : reqJson.getString("couponIds").split(",")) {
             String requestId = DistributedLock.getLockUUID();
             String key = this.getClass().getSimpleName() + reqJson.getString("couponId");
@@ -301,8 +309,6 @@ public class StartChargeCmd extends Cmd {
                     throw new CmdException("核销失败");
                 }
 
-                couponNames += ("优惠券名称：" + couponPropertyUserDtos.get(0).getCouponName() + ",优惠券编号：" + couponId + ";");
-
                 CouponPropertyPoolConfigDto couponPropertyPoolConfigDto = new CouponPropertyPoolConfigDto();
                 couponPropertyPoolConfigDto.setCouponId(couponPropertyUserDtos.get(0).getCppId());
                 couponPropertyPoolConfigDto.setColumnKey("hours");
@@ -311,30 +317,43 @@ public class StartChargeCmd extends Cmd {
                 Assert.listOnlyOne(couponPropertyPoolConfigDtos, "未包含优惠券配置信息");
 
                 double value = Double.parseDouble(couponPropertyPoolConfigDtos.get(0).getColumnValue());
-                hours += value;
+
+                chargeMachineOrderCouponPo = new ChargeMachineOrderCouponPo();
+                chargeMachineOrderCouponPo.setCouponId(couponId);
+                chargeMachineOrderCouponPo.setCouponName(couponPropertyUserDtos.get(0).getCouponName());
+                chargeMachineOrderCouponPo.setOrderId(orderId);
+                chargeMachineOrderCouponPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+                chargeMachineOrderCouponPo.setState("W");
+                chargeMachineOrderCouponPo.setCmocId(GenerateCodeFactory.getGeneratorId("11"));
+                chargeMachineOrderCouponPo.setHours(value + "");
+                chargeMachineOrderCouponV1InnerServiceSMOImpl.saveChargeMachineOrderCoupon(chargeMachineOrderCouponPo);
+
+//                couponNames += ("优惠券名称：" + couponPropertyUserDtos.get(0).getCouponName() + "(" + couponId + "),小时："+value+";");
+//
+//                hours += value;
             } finally {
                 DistributedLock.releaseDistributedLock(requestId, key);
             }
         }
 
-        hours = Math.ceil(hours);
+//        hours = Math.ceil(hours);
 
-        ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
-        chargeMachineOrderAcctPo.setAcctDetailId("-1");
-        chargeMachineOrderAcctPo.setAmount("0");
-        chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
-        chargeMachineOrderAcctPo.setOrderId(orderId);
-        chargeMachineOrderAcctPo.setAcctId(reqJson.getString("acctId"));
-        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(hours).intValue()));
-        chargeMachineOrderAcctPo.setRemark("优惠券抵扣," + couponNames);
-        chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
-        chargeMachineOrderAcctPo.setEnergy("0");
-        chargeMachineOrderAcctPo.setDurationPrice(reqJson.getString("durationPrice"));
+//        ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
+//        chargeMachineOrderAcctPo.setAcctDetailId("-1");
+//        chargeMachineOrderAcctPo.setAmount("0");
+//        chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
+//        chargeMachineOrderAcctPo.setOrderId(orderId);
+//        chargeMachineOrderAcctPo.setAcctId(reqJson.getString("acctId"));
+//        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(hours).intValue()));
+//        chargeMachineOrderAcctPo.setRemark("优惠券抵扣," + couponNames);
+//        chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
+//        chargeMachineOrderAcctPo.setEnergy("0");
+//        chargeMachineOrderAcctPo.setDurationPrice(reqJson.getString("durationPrice"));
+//
+//        chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
 
-        chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
-
-        return hours;
+//        return hours;
     }
 
     /**

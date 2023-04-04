@@ -1,11 +1,13 @@
 package com.java110.common.charge;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.chargeMachine.ChargeMachineDto;
 import com.java110.dto.chargeMachineFactory.ChargeMachineFactoryDto;
 import com.java110.dto.chargeMachineOrder.ChargeMachineOrderDto;
 import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
+import com.java110.dto.chargeMachineOrderCoupon.ChargeMachineOrderCouponDto;
 import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
 import com.java110.dto.chargeRuleFee.ChargeRuleFeeDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
@@ -13,6 +15,7 @@ import com.java110.intf.common.*;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
 import com.java110.po.chargeMachineOrderAcct.ChargeMachineOrderAcctPo;
+import com.java110.po.chargeMachineOrderCoupon.ChargeMachineOrderCouponPo;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -25,9 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 充电核心类
@@ -56,6 +57,9 @@ public class ChargeCoreImpl implements IChargeCore {
 
     @Autowired
     private IChargeRuleFeeV1InnerServiceSMO chargeRuleFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IChargeMachineOrderCouponV1InnerServiceSMO chargeMachineOrderCouponV1InnerServiceSMOImpl;
 
 
     @Override
@@ -125,11 +129,11 @@ public class ChargeCoreImpl implements IChargeCore {
             return;
         }
 
-        String chargeHours = chargeMachineOrderDtos.get(0).getChargeHours();
-        double cHours = Double.parseDouble(chargeHours);
-        if (999 == cHours) {
-            cHours = 10;
-        }
+//        String chargeHours = chargeMachineOrderDtos.get(0).getChargeHours();
+//        double cHours = Double.parseDouble(chargeHours);
+//        if (999 == cHours) {
+//            cHours = 10;
+//        }
 
         Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
 
@@ -140,6 +144,11 @@ public class ChargeCoreImpl implements IChargeCore {
         if (usedHours < 0) {
             usedHours = 0;
         }
+
+        // todo 优惠券抵扣
+        JSONObject result = useCoupon(usedHours, chargeMachineOrderDtos);
+        usedHours = result.getDoubleValue("usedHours");
+        remark += result.getString("remark");
 
         ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
         chargeRuleFeeDto.setRuleId(chargeMachineDto.getRuleId());
@@ -161,7 +170,7 @@ public class ChargeCoreImpl implements IChargeCore {
 
         String durationPrice = chargeRuleFeeDtos.get(chargeRuleFeeDtos.size() - 1).getDurationPrice();
 
-        BigDecimal usedHoursDec =  new BigDecimal(usedHours).multiply(new BigDecimal(Double.parseDouble(durationPrice))).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal usedHoursDec = new BigDecimal(usedHours).multiply(new BigDecimal(Double.parseDouble(durationPrice))).setScale(2, BigDecimal.ROUND_HALF_UP);
 
         BigDecimal returnMoneyDec = new BigDecimal(Double.parseDouble(chargeMachineOrderDtos.get(0).getAmount())).subtract(usedHoursDec);
 
@@ -206,7 +215,6 @@ public class ChargeCoreImpl implements IChargeCore {
 
 
         //充电表中加入退款金额
-
         ChargeMachineOrderAcctPo chargeMachineOrderAcctPo = new ChargeMachineOrderAcctPo();
         chargeMachineOrderAcctPo.setAcctDetailId(accountDetailPo.getDetailId());
         chargeMachineOrderAcctPo.setAmount((-1 * returnMoney) + "");
@@ -227,6 +235,56 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderAcctPo.setDurationPrice(durationPrice);
 
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
+    }
+
+    /**
+     * 优惠券抵扣 小时
+     *
+     * @param usedHours
+     * @param chargeMachineOrderDtos
+     * @return {
+     * usedHours:'',
+     * remark:''
+     * }
+     */
+    private JSONObject useCoupon(double usedHours, List<ChargeMachineOrderDto> chargeMachineOrderDtos) {
+        double hours = 0;
+        JSONObject useHoursInfo = new JSONObject();
+        ChargeMachineOrderCouponDto chargeMachineOrderCouponDto = new ChargeMachineOrderCouponDto();
+        chargeMachineOrderCouponDto.setOrderId(chargeMachineOrderDtos.get(0).getOrderId());
+        chargeMachineOrderCouponDto.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
+        chargeMachineOrderCouponDto.setState("W");
+        List<ChargeMachineOrderCouponDto> chargeMachineOrderCouponDtos
+                = chargeMachineOrderCouponV1InnerServiceSMOImpl.queryChargeMachineOrderCoupons(chargeMachineOrderCouponDto);
+        if (chargeMachineOrderCouponDtos == null || chargeMachineOrderCouponDtos.size() < 1) {
+            useHoursInfo.put("usedHours", usedHours);
+            useHoursInfo.put("remark", "");
+            return useHoursInfo;
+        }
+        String couponNames = "";
+        for (ChargeMachineOrderCouponDto tmpChargeMachineOrderCouponDto : chargeMachineOrderCouponDtos) {
+            couponNames += ("优惠券名称：" + tmpChargeMachineOrderCouponDto.getCouponName() + "(" + tmpChargeMachineOrderCouponDto.getCouponId() + "),小时：" + tmpChargeMachineOrderCouponDto.getHours() + ";");
+
+            hours += Double.parseDouble(tmpChargeMachineOrderCouponDto.getHours());
+        }
+
+        //将优惠券修改为已使用状态
+        ChargeMachineOrderCouponPo chargeMachineOrderCouponPo = new ChargeMachineOrderCouponPo();
+        chargeMachineOrderCouponPo.setOrderId(chargeMachineOrderDtos.get(0).getOrderId());
+        chargeMachineOrderCouponPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
+        chargeMachineOrderCouponPo.setState("C");
+        chargeMachineOrderCouponV1InnerServiceSMOImpl.updateChargeMachineOrderCoupon(chargeMachineOrderCouponPo);
+
+        BigDecimal useDec = new BigDecimal(usedHours).subtract(new BigDecimal(hours)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        usedHours = useDec.doubleValue();
+        if (usedHours < 0) {
+            useHoursInfo.put("usedHours", 0);
+            useHoursInfo.put("remark", couponNames);
+            return useHoursInfo;
+        }
+        useHoursInfo.put("usedHours", usedHours);
+        useHoursInfo.put("remark", couponNames);
+        return useHoursInfo;
     }
 
     @Override
@@ -316,7 +374,7 @@ public class ChargeCoreImpl implements IChargeCore {
             throw new CmdException("厂家接口未实现");
         }
 
-        chargeFactoryAdapt.workHeartbeat(chargeMachineDtos.get(0),notifyChargeOrderDto.getBodyParam());
+        chargeFactoryAdapt.workHeartbeat(chargeMachineDtos.get(0), notifyChargeOrderDto.getBodyParam());
 
         return new ResultVo(ResultVo.CODE_OK, "成功");
 

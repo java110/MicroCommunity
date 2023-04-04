@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMachineOrderCouponV1ServiceDaoImpl">
+
+
+    <!-- 保存充电优惠券信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMachineOrderCouponInfo" parameterType="Map">
+        insert into charge_machine_order_coupon(
+        coupon_name,hours,order_id,cmoc_id,remark,state,coupon_id,community_id
+        ) values (
+        #{couponName},#{hours},#{orderId},#{cmocId},#{remark},#{state},#{couponId},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询充电优惠券信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMachineOrderCouponInfo" parameterType="Map" resultType="Map">
+        select t.coupon_name,t.coupon_name couponName,t.hours,t.order_id,t.order_id orderId,t.cmoc_id,t.cmoc_id
+        cmocId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.coupon_id,t.coupon_id
+        couponId,t.community_id,t.community_id communityId
+        from charge_machine_order_coupon t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cmocId !=null and cmocId != ''">
+            and t.cmoc_id= #{cmocId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改充电优惠券信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMachineOrderCouponInfo" parameterType="Map">
+        update charge_machine_order_coupon t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="couponName !=null and couponName != ''">
+            , t.coupon_name= #{couponName}
+        </if>
+        <if test="hours !=null and hours != ''">
+            , t.hours= #{hours}
+        </if>
+
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            , t.coupon_id= #{couponId}
+        </if>
+        where 1=1
+        <if test="cmocId !=null and cmocId != ''">
+            and t.cmoc_id= #{cmocId}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询充电优惠券数量 add by wuxw 2018-07-03 -->
+    <select id="queryChargeMachineOrderCouponsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_machine_order_coupon t
+        where 1 =1
+        <if test="couponName !=null and couponName != ''">
+            and t.coupon_name= #{couponName}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cmocId !=null and cmocId != ''">
+            and t.cmoc_id= #{cmocId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="couponId !=null and couponId != ''">
+            and t.coupon_id= #{couponId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>
