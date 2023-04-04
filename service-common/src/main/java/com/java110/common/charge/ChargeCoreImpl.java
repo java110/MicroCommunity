@@ -21,6 +21,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -148,7 +149,12 @@ public class ChargeCoreImpl implements IChargeCore {
         // todo 优惠券抵扣
         JSONObject result = useCoupon(usedHours, chargeMachineOrderDtos);
         usedHours = result.getDoubleValue("usedHours");
-        remark += result.getString("remark");
+        if(StringUtil.isEmpty(remark)) {
+            remark = result.getString("remark");
+        }else{
+            remark = ";"+result.getString("remark");
+
+        }
 
         ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
         chargeRuleFeeDto.setRuleId(chargeMachineDto.getRuleId());
@@ -261,9 +267,9 @@ public class ChargeCoreImpl implements IChargeCore {
             useHoursInfo.put("remark", "");
             return useHoursInfo;
         }
-        String couponNames = "";
+        String couponNames = "使用优惠券-";
         for (ChargeMachineOrderCouponDto tmpChargeMachineOrderCouponDto : chargeMachineOrderCouponDtos) {
-            couponNames += ("优惠券名称：" + tmpChargeMachineOrderCouponDto.getCouponName() + "(" + tmpChargeMachineOrderCouponDto.getCouponId() + "),小时：" + tmpChargeMachineOrderCouponDto.getHours() + ";");
+            couponNames += ("名称：" + tmpChargeMachineOrderCouponDto.getCouponName() + "(" + tmpChargeMachineOrderCouponDto.getCouponId() + "),小时：" + tmpChargeMachineOrderCouponDto.getHours() + ";");
 
             hours += Double.parseDouble(tmpChargeMachineOrderCouponDto.getHours());
         }
