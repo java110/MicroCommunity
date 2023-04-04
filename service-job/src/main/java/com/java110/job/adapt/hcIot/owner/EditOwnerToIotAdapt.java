@@ -146,10 +146,12 @@ public class EditOwnerToIotAdapt extends DatabusAdaptImpl {
         //String[] locationObjIds = new String[]{communityId};
         List<String> locationObjIds = new ArrayList<>();
         locationObjIds.add(communityId);
-        for (RoomDto tRoomDto : rooms) {
-            locationObjIds.add(tRoomDto.getUnitId());
-            locationObjIds.add(tRoomDto.getRoomId());
-            locationObjIds.add(tRoomDto.getFloorId());
+        if(rooms != null && rooms.size() >0) {
+            for (RoomDto tRoomDto : rooms) {
+                locationObjIds.add(tRoomDto.getUnitId());
+                locationObjIds.add(tRoomDto.getRoomId());
+                locationObjIds.add(tRoomDto.getFloorId());
+            }
         }
 
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));

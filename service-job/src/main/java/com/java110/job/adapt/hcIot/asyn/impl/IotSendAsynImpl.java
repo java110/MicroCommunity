@@ -31,6 +31,7 @@ import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -38,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import sun.swing.StringUIClientPropertyKey;
 
 import java.util.List;
 
@@ -1720,7 +1722,9 @@ public class IotSendAsynImpl implements IIotSendAsyn {
     public void saveTranslateLog(MachineTranslateDto machineTranslateDto) {
         machineTranslateDto.setbId("-1");
         machineTranslateDto.setObjBId("-1");
-        machineTranslateDto.setCommunityId("-1");
+        if(StringUtil.isEmpty(machineTranslateDto.getCommunityId())) {
+            machineTranslateDto.setCommunityId("-1");
+        }
         machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
     }
