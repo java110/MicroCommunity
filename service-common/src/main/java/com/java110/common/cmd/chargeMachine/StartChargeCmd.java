@@ -256,17 +256,14 @@ public class StartChargeCmd extends Cmd {
         }
         resultVo.setData(orderId);
 
-        double couponDurationHours = 0.0;
-
 
         //todo 优惠券抵扣
         withholdCoupon(reqJson, chargeMachineDtos, orderId);
 
 
-        if (durationHours - couponDurationHours > 0) {
-            // todo 3.0 账户扣款
-            withholdAccount(reqJson, chargeMachineDtos, orderId, durationHours, couponDurationHours);
-        }
+        // todo 3.0 账户预扣款
+        withholdAccount(reqJson, chargeMachineDtos, orderId, durationHours);
+
 
         context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
@@ -363,20 +360,17 @@ public class StartChargeCmd extends Cmd {
      * @param chargeMachineDtos
      * @param orderId
      */
-    private void withholdAccount(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId, double durationHours, double couponDurationHours) {
+    private void withholdAccount(JSONObject reqJson, List<ChargeMachineDto> chargeMachineDtos, String orderId, double durationHours) {
         AccountDto accountDto = new AccountDto();
         accountDto.setAcctId(reqJson.getString("acctId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
         double amount = 0.0;
         BigDecimal durationPrice = new BigDecimal(Double.parseDouble(reqJson.getString("durationPrice")));
-        if (couponDurationHours > 0) {
-            durationPrice = durationPrice.multiply(new BigDecimal(durationHours - couponDurationHours)).setScale(2, BigDecimal.ROUND_HALF_UP);
-            amount = durationPrice.doubleValue();
-        } else {
-            durationPrice = durationPrice.multiply(new BigDecimal(durationHours)).setScale(2, BigDecimal.ROUND_HALF_UP);
-            amount = durationPrice.doubleValue();
-        }
+
+        durationPrice = durationPrice.multiply(new BigDecimal(durationHours)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        amount = durationPrice.doubleValue();
+
 
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
@@ -392,11 +386,7 @@ public class StartChargeCmd extends Cmd {
         chargeMachineOrderAcctPo.setCmoaId(GenerateCodeFactory.getGeneratorId("11"));
         chargeMachineOrderAcctPo.setOrderId(orderId);
         chargeMachineOrderAcctPo.setAcctId(accountDtos.get(0).getAcctId());
-        if (couponDurationHours > 0) {
-            chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        } else {
-            chargeMachineOrderAcctPo.setStartTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(Math.ceil(couponDurationHours)).intValue()));
-        }
+        chargeMachineOrderAcctPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         chargeMachineOrderAcctPo.setEndTime(DateUtil.getAddHoursStringA(DateUtil.getCurrentDate(), new Double(Math.ceil(durationHours)).intValue()));
         chargeMachineOrderAcctPo.setRemark("账户扣款");
         chargeMachineOrderAcctPo.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
