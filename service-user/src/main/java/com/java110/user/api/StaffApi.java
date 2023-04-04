@@ -15,6 +15,7 @@ import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -116,13 +117,18 @@ public class StaffApi {
     @RequestMapping(value = "/queryStaffAppAuth", method = RequestMethod.GET)
     public ResponseEntity<String> queryStaffAppAuth(@RequestHeader(value = "store-id") String storeId,
                                                     @RequestHeader(value = "user-id") String userId,
+                                                    @RequestParam(value = "staffId",required = false) String staffId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
         StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
         staffAppAuthDto.setPage(page);
         staffAppAuthDto.setRow(row);
         staffAppAuthDto.setStoreId(storeId);
+
         staffAppAuthDto.setStaffId(userId);
+        if(!StringUtil.isEmpty(staffId)){
+            staffAppAuthDto.setStaffId(staffId);
+        }
         return getStaffAppAuthBMOImpl.get(staffAppAuthDto);
     }
 
