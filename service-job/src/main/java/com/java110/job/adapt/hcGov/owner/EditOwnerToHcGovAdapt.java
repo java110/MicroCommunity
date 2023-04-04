@@ -161,7 +161,8 @@ public class EditOwnerToHcGovAdapt extends DatabusAdaptImpl {
                 }
             }
             if ("".equals(extMemberId)) {
-                throw new IllegalArgumentException("未获得业主外部编码！");
+                //throw new IllegalArgumentException("未获得业主外部编码！");
+                return;
             }
             body.put("idType", "1");
             body.put("idCard", ownerPo.getIdCard());
