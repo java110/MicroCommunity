@@ -41,6 +41,8 @@ public class ApiVisitDataVo implements Serializable {
     private String flowId;
     private String roomId;
 
+    private String reasonTypeName;
+
     public String getvId() {
         return vId;
     }
@@ -319,5 +321,13 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setParkAreaNum(String parkAreaNum) {
         this.parkAreaNum = parkAreaNum;
+    }
+
+    public String getReasonTypeName() {
+        return reasonTypeName;
+    }
+
+    public void setReasonTypeName(String reasonTypeName) {
+        this.reasonTypeName = reasonTypeName;
     }
 }

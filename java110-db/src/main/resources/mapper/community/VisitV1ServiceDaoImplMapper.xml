@@ -24,13 +24,15 @@
         phoneNumber,t.free_time,t.free_time freeTime,t.visit_case,t.visit_case
         visitCase,t.state,t.community_id,t.community_id communityId,t.entourage,t.record_state,t.record_state
         recordState,t.create_time createTime,td.name stateName,t.car_num carNum,t.car_state,t.car_state carState,
-        t.car_remark,t.car_remark carStateRemark,td2.name carStateName,t.room_id,t.room_id roomId
+        t.car_remark,t.car_remark carStateRemark,td2.name carStateName,t.room_id,t.room_id roomId,td3.`name` reasonTypeName
         from s_visit_info t
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 's_visit_info' and td.table_columns = 'state'
         left join t_dict td2 on t.car_state = td2.status_cd and td2.table_name = 's_visit_info' and td2.table_columns =
         'car_state'
+        left join t_dict td3 on t.reason_type = td3.status_cd and td3.table_name = 's_visit_info' and td3.table_columns =
+        'reason_type'
         where 1 =1
         <if test="departureTime !=null and departureTime != ''">
             and t.departure_time= #{departureTime}

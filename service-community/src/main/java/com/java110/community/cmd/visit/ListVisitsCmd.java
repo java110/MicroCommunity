@@ -117,8 +117,7 @@ public class ListVisitsCmd extends Cmd {
             responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(initAddVisitParameter), HttpStatus.OK);
         } else {
             VisitDto visitDto = BeanConvertUtil.covertBean(reqJson, VisitDto.class);
-            if (reqJson.containsKey("channel") && !StringUtil.isEmpty(reqJson.getString("channel"))
-                    && "PC".equals(reqJson.getString("channel"))) {
+            if ("PC".equals(reqJson.getString("channel"))) {
                 visitDto.setCreateUserId("");
             }
             int count = visitV1InnerServiceSMO.queryVisitsCount(visitDto);

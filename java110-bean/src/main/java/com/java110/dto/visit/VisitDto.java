@@ -48,6 +48,8 @@ public class VisitDto extends PageDto implements Serializable {
     private String carNum;
     private String entourage;
     private String reasonType;
+
+    private String reasonTypeName;
     private String state;
     private String stateName;
     private String stateRemark;
@@ -396,5 +398,13 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setParkAreaNum(String parkAreaNum) {
         this.parkAreaNum = parkAreaNum;
+    }
+
+    public String getReasonTypeName() {
+        return reasonTypeName;
+    }
+
+    public void setReasonTypeName(String reasonTypeName) {
+        this.reasonTypeName = reasonTypeName;
     }
 }
