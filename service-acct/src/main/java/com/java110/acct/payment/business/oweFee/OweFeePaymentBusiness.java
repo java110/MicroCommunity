@@ -74,6 +74,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
     @Override
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
+        String userId = context.getReqHeaders().get("user-id");
 
         String ownerId = reqJson.getString("ownerId");
         String roomId = reqJson.getString("roomId");
@@ -139,6 +140,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
         JSONObject saveFees = new JSONObject();
         saveFees.put("orderId", orderId);
+        saveFees.put("userId", userId);
         saveFees.put("money", money);
         saveFees.put("roomId", roomId);
         saveFees.put("communityId", reqJson.getString("communityId"));
@@ -155,7 +157,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         JSONObject paramIn = JSONObject.parseObject(order);
         paramIn.put("oId", paymentOrderDto.getOrderId());
         freshFees(paramIn);
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), paramIn, "fee.payOweFee", JSONObject.class, "-1");
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), paramIn, "fee.payOweFee", JSONObject.class, paramIn.getString("userId"));
 
     }
 

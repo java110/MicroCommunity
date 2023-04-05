@@ -12,6 +12,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.ApiBaseBMO;
 import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.intf.common.ICarInoutInnerServiceSMO;
@@ -21,6 +22,7 @@ import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeConfigPo;
@@ -78,6 +80,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -418,11 +423,42 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             payFeeDetail.setPayableAmount("0.0");
         }
         payFeeDetail.setPayOrderId(paramInJson.getString("oId"));
+        // todo 刷入收银人员信息
+        freshCashierInfo(payFeeDetail, paramInJson);
+
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetail);
         if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");
         }
         return businessFeeDetail;
+    }
+
+    /**
+     * 刷入收银人员
+     *
+     * @param payFeeDetail
+     * @param paramInJson
+     */
+    private void freshCashierInfo(PayFeeDetailPo payFeeDetail, JSONObject paramInJson) {
+        String userId = paramInJson.getString("userId");
+        if (StringUtil.isEmpty(userId)) {
+            payFeeDetail.setCashierId("-1");
+            payFeeDetail.setCashierName("系统收银");
+            return;
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos != null && userDtos.size() > 0) {
+            payFeeDetail.setCashierId(userDtos.get(0).getUserId());
+            payFeeDetail.setCashierName(userDtos.get(0).getName());
+            return;
+        }
+
+        payFeeDetail.setCashierId("-1");
+        payFeeDetail.setCashierName("系统收银");
+
     }
 
     /**

@@ -1724,6 +1724,12 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        <if test="cashierId !=null and cashierId != ''">
+            and t.cashier_id= #{cashierId}
+        </if>
+        <if test="cashierName !=null and cashierName != ''">
+            and t.cashier_name= #{cashierName}
+        </if>
         ) t
     </select>
 
@@ -1737,7 +1743,7 @@
         ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,cb.o_id oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
         t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName,
-        fad.amount withholdAmount
+        fad.amount withholdAmount,t.cashier_id cashierId,t.cashier_name cashierName
         from pay_fee_detail t
         left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1818,6 +1824,12 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="cashierId !=null and cashierId != ''">
+            and t.cashier_id= #{cashierId}
+        </if>
+        <if test="cashierName !=null and cashierName != ''">
+            and t.cashier_name= #{cashierName}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

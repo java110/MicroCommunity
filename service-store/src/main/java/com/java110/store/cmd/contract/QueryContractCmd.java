@@ -44,8 +44,10 @@ public class QueryContractCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
         ContractDto contractDto = BeanConvertUtil.covertBean(reqJson, ContractDto.class);
+        contractDto.setStoreId(storeId);
         //如果是到期合同
         if ("1".equals(reqJson.getString("expiration"))) {
             contractDto.setNoStates(new String[]{ContractDto.STATE_COMPLAINT, ContractDto.STATE_FAIL});

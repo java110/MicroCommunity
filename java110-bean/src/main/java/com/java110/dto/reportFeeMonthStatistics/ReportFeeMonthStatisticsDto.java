@@ -149,6 +149,11 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String yearMonth;
 
+
+    private String cashierId;
+    private String cashierName;
+
+
     public String getReceivableAmount() {
         return receivableAmount;
     }
@@ -771,5 +776,21 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setWithholdAmount(String withholdAmount) {
         this.withholdAmount = withholdAmount;
+    }
+
+    public String getCashierId() {
+        return cashierId;
+    }
+
+    public void setCashierId(String cashierId) {
+        this.cashierId = cashierId;
+    }
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
     }
 }
