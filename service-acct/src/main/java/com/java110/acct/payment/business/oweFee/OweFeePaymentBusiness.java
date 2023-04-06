@@ -109,7 +109,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         double money = 0.0;
         BigDecimal tmpMoney = new BigDecimal(money);
-        BigDecimal feePrice = null;
+        BigDecimal feeTotalPrice = null;
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
@@ -118,8 +118,8 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
                 tmpFeeDto.setVal(val);
                 if (tmpFeeDto.getFeePrice() > 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
                     tmpFeeDtos.add(tmpFeeDto);
-                    feePrice = new BigDecimal(tmpFeeDto.getFeePrice());
-                    tmpMoney = tmpMoney.add(feePrice);
+                    feeTotalPrice = new BigDecimal(tmpFeeDto.getFeeTotalPrice());
+                    tmpMoney = tmpMoney.add(feeTotalPrice);
                 }
             } catch (Exception e) {
                 logger.error("可能费用资料有问题导致算费失败", e);

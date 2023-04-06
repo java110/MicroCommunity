@@ -145,6 +145,7 @@ public class PayOweFeeCmd extends Cmd {
                 feeObj.put("remark", "线上公众号支付");
             }
 
+            //todo 去缴费
             getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos);
         }
 
