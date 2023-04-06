@@ -23,9 +23,11 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
@@ -101,6 +103,9 @@ public class PayOweFeeCmd extends Cmd {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -124,7 +129,11 @@ public class PayOweFeeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext dataFlowContext, JSONObject paramObj) throws CmdException, ParseException {
         logger.info("======欠费缴费返回======：" + JSONArray.toJSONString(paramObj));
-
+        String userId = dataFlowContext.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户未登录");
         //添加单元信息
         List<FeeReceiptPo> feeReceiptPos = new ArrayList<>();
         List<FeeReceiptDetailPo> feeReceiptDetailPos = new ArrayList<>();
@@ -145,8 +154,12 @@ public class PayOweFeeCmd extends Cmd {
                 feeObj.put("remark", "线上公众号支付");
             }
 
+<<<<<<< HEAD
             //todo 去缴费
             getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos);
+=======
+            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0));
+>>>>>>> c82d5c3d2643ec93f515ed3c687e139201558ae6
         }
 
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
@@ -177,7 +190,8 @@ public class PayOweFeeCmd extends Cmd {
 
     private void getFeeReceiptDetailPo(ICmdDataFlowContext dataFlowContext, JSONObject paramObj,
                                        List<FeeReceiptDetailPo> feeReceiptDetailPos,
-                                       List<FeeReceiptPo> feeReceiptPos) {
+                                       List<FeeReceiptPo> feeReceiptPos,
+                                       UserDto userDto) {
         int flag = 0;
         if (!paramObj.containsKey("primeRate")) {
             paramObj.put("primeRate", "6");
@@ -192,7 +206,7 @@ public class PayOweFeeCmd extends Cmd {
             paramObj.put("remark", "线上小程序支付");
         }
         paramObj.put("state", "1400");
-        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos);
+        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto);
         modifyOweFee(paramObj, dataFlowContext);
 
         //修改车辆
@@ -314,7 +328,8 @@ public class PayOweFeeCmd extends Cmd {
 
     public void addOweFeeDetail(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext,
                                 List<FeeReceiptDetailPo> feeReceiptDetailPos,
-                                List<FeeReceiptPo> feeReceiptPos) {
+                                List<FeeReceiptPo> feeReceiptPos,
+                                UserDto userDto) {
 
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
@@ -358,12 +373,14 @@ public class PayOweFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(paramInJson.getString("oId"));
         } else {
             String oId = Java110TransactionalFactory.getOId();
-            if(StringUtil.isEmpty(oId)){
+            if (StringUtil.isEmpty(oId)) {
                 oId = payFeeDetailPo.getDetailId();
             }
             payFeeDetailPo.setPayOrderId(oId);
 
         }
+        payFeeDetailPo.setCashierId(userDto.getUserId());
+        payFeeDetailPo.setCashierName(userDto.getName());
 
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
@@ -444,8 +461,8 @@ public class PayOweFeeCmd extends Cmd {
         //车位费用续租
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
             //后付费 或者信用期车辆 加一个月
-            if(FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
-                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())){
+            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
+                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())) {
                 endTimeCalendar = Calendar.getInstance();
                 endTimeCalendar.setTime(feeEndTime);
                 endTimeCalendar.add(Calendar.MONTH, 1);

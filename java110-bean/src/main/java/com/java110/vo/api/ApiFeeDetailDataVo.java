@@ -37,6 +37,9 @@ public class ApiFeeDetailDataVo extends Vo {
     private Date preReadingTime;
     private Date curReadingTime;
 
+    private String cashierId;
+    private String cashierName;
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -247,5 +250,21 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
+    }
+
+    public String getCashierId() {
+        return cashierId;
+    }
+
+    public void setCashierId(String cashierId) {
+        this.cashierId = cashierId;
+    }
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
     }
 }

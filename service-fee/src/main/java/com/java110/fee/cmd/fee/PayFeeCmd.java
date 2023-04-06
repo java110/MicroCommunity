@@ -21,6 +21,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
@@ -29,6 +30,7 @@ import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
@@ -59,7 +61,7 @@ import java.util.*;
 
 /**
  * 前台 现金或者转账收费 缴费处理类
- *
+ * <p>
  * 假如 缴费 后要处理一些逻辑建议用databus
  * 这个类已经很复杂 ，最好不要加新逻辑
  */
@@ -134,6 +136,8 @@ public class PayFeeCmd extends Cmd {
     @Autowired
     private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
 
     @Override
@@ -199,6 +203,13 @@ public class PayFeeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject paramObj) throws CmdException {
         logger.debug("paramObj : {}", paramObj);
+
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + paramObj.get("feeId");
@@ -217,11 +228,13 @@ public class PayFeeCmd extends Cmd {
             dealUserAccount(paramObj, payFeeDetailPo);
 
             String oId = Java110TransactionalFactory.getOId();
-            if(StringUtil.isEmpty(oId)){
+            if (StringUtil.isEmpty(oId)) {
                 oId = payFeeDetailPo.getDetailId();
             }
 
             payFeeDetailPo.setPayOrderId(oId);
+            payFeeDetailPo.setCashierId(userDtos.get(0).getUserId());
+            payFeeDetailPo.setCashierName(userDtos.get(0).getName());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
@@ -552,17 +565,17 @@ public class PayFeeCmd extends Cmd {
                 throw new IllegalArgumentException("车位已被使用，不能再缴费！");
             }
 
-            if(ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpaceDtos.get(0).getTypeCd())
+            if (ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpaceDtos.get(0).getTypeCd())
                     && !parkingSpaceDtos.get(0).getTypeCd().contains(ParkingSpaceDto.NUM_MOTHER)
-            ){
+            ) {
                 sonMotherParking = true;
                 num = parkingSpaceDtos.get(0).getNum();
             }
         }
 
         // todo  字母车位，子车位缴费 母车位延期
-        if(sonMotherParking){
-            queryMotherOwnerCars(num,ownerCarDtos,psId);
+        if (sonMotherParking) {
+            queryMotherOwnerCars(num, ownerCarDtos, psId);
         }
 
 
@@ -590,24 +603,24 @@ public class PayFeeCmd extends Cmd {
         }
 
 
-
     }
 
     /**
      * 子母车位延期 母车位也需要延期
+     *
      * @param num
      * @param ownerCarDtos
      */
-    private void queryMotherOwnerCars(String num, List<OwnerCarDto> ownerCarDtos,String paId) {
+    private void queryMotherOwnerCars(String num, List<OwnerCarDto> ownerCarDtos, String paId) {
 
         String sonMotherSwitch = CommonCache.getValue("SON_MOTHER_PARKING_AUTO_FEE");
 
-        if(!"ON".equals(sonMotherSwitch)){
-            return ;
+        if (!"ON".equals(sonMotherSwitch)) {
+            return;
         }
 
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setNum(num+ParkingSpaceDto.NUM_MOTHER);
+        parkingSpaceDto.setNum(num + ParkingSpaceDto.NUM_MOTHER);
         parkingSpaceDto.setPaId(paId);
         List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
         Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
@@ -618,7 +631,7 @@ public class PayFeeCmd extends Cmd {
         ownerCarDto.setCarTypeCd("1001"); //业主车辆
         List<OwnerCarDto> tmpOwnerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        if(ownerCarDtos == null){
+        if (ownerCarDtos == null) {
             ownerCarDtos = new ArrayList<>();
         }
 

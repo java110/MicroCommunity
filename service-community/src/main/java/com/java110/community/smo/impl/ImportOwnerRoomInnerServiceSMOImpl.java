@@ -397,6 +397,10 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         List<FloorDto> floorDtos = floorV1InnerServiceSMOImpl.queryFloors(floorDto);
         FloorPo floorPo = null;
         String floorId = "";
+        int seq = 1;
+        if(StringUtil.isNumber(importOwnerRoomDto.getFloorNum())){
+            seq = Integer.parseInt(importOwnerRoomDto.getFloorNum());
+        }
 
         int flag = 0;
         if (floorDtos == null || floorDtos.size() < 1) {
@@ -409,6 +413,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
             floorPo.setRemark("房产导入");
             floorPo.setUserId(importOwnerRoomDto.getUserId());
+            floorPo.setSeq(seq);
             flag = floorV1InnerServiceSMOImpl.saveFloor(floorPo);
 
             if (flag < 1) {

@@ -19,9 +19,11 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
@@ -98,6 +100,9 @@ public class PayBatchFeeCmd extends Cmd {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -152,13 +157,20 @@ public class PayBatchFeeCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
         JSONArray datas = new JSONArray();
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
-                doDeal(paramInObj, reqJson.getString("communityId"), cmdDataFlowContext);
+                doDeal(paramInObj, reqJson.getString("communityId"), cmdDataFlowContext, userDtos.get(0));
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -169,7 +181,7 @@ public class PayBatchFeeCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(datas));
     }
 
-    private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext) throws Exception {
+    private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
         paramObj.put("communityId", communityId);
         //获取订单ID
         String oId = Java110TransactionalFactory.getOId();
@@ -182,10 +194,12 @@ public class PayBatchFeeCmd extends Cmd {
             DistributedLock.waitGetDistributedLock(key, requestId);
             JSONObject feeDetail = addFeeDetail(paramObj);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
-            if(StringUtil.isEmpty(oId)){
+            if (StringUtil.isEmpty(oId)) {
                 oId = payFeeDetailPo.getDetailId();
             }
             payFeeDetailPo.setPayOrderId(oId);
+            payFeeDetailPo.setCashierId(userDto.getUserId());
+            payFeeDetailPo.setCashierName(userDto.getName());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

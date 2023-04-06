@@ -25,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 查询缴费历史
+ */
 @Java110Cmd(serviceCode = "fee.queryFeeDetail")
 public class QueryFeeDetailCmd extends Cmd {
 

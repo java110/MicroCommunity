@@ -167,8 +167,11 @@ public class PayFeePreCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         logger.debug("ServiceDataFlowEvent : {}", event);
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
         String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
         reqJson.put("appId", appId);
+        reqJson.put("userId",userId);
 
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(reqJson.getString("feeId"));

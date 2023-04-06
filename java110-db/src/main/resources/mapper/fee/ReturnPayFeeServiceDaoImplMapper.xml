@@ -335,6 +335,18 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -427,6 +439,18 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -514,6 +538,18 @@
         </if>
         <if test="endTime !=null and endTime !=''">
             and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="applyPersonId !=null and applyPersonId != ''">
+            and t.apply_person_id= #{applyPersonId}
+        </if>
+        <if test="applyPersonName !=null and applyPersonName != ''">
+            and t.apply_person_name like concat('%',#{applyPersonName},'%')
+        </if>
+        <if test="auditPersonId !=null and auditPersonId != ''">
+            and t.audit_person_id= #{auditPersonId}
+        </if>
+        <if test="auditPersonName !=null and auditPersonName != ''">
+            and t.audit_person_name like concat('%',#{auditPersonName},'%')
         </if>
     </select>
 </mapper>

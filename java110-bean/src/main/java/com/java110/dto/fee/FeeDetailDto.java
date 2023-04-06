@@ -74,6 +74,9 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     private String payOrderId;
 
+    private String cashierId;
+    private String cashierName;
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -377,5 +380,21 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
+    }
+
+    public String getCashierId() {
+        return cashierId;
+    }
+
+    public void setCashierId(String cashierId) {
+        this.cashierId = cashierId;
+    }
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
     }
 }

@@ -31,6 +31,13 @@ public class PayFeeDetailPo implements Serializable {
 
     private String payOrderId;
 
+    /**
+     * 收银员
+     */
+    private String cashierId;
+    private String cashierName;
+
+
     public String getDetailId() {
         return detailId;
     }
@@ -157,5 +164,21 @@ public class PayFeeDetailPo implements Serializable {
 
     public void setPayOrderId(String payOrderId) {
         this.payOrderId = payOrderId;
+    }
+
+    public String getCashierId() {
+        return cashierId;
+    }
+
+    public void setCashierId(String cashierId) {
+        this.cashierId = cashierId;
+    }
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
     }
 }

@@ -189,7 +189,15 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户不存在");
         FeeDetailDto feeDetailDto = (FeeDetailDto) reqJson.get("feeDetailDto");
-        updateReturnPayFee(reqJson, userDtos.get(0));
+
+        ReturnPayFeeDto returnPayFeeDto = new ReturnPayFeeDto();
+        returnPayFeeDto.setReturnFeeId(reqJson.getString("returnFeeId"));
+        List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+        Assert.listOnlyOne(returnPayFeeDtos, "未找到需要修改的活动 或多条数据");
+
+        // todo 修改退款状态
+        updateReturnPayFee(reqJson, userDtos.get(0), returnPayFeeDtos.get(0));
+
         //退费审核通过
         if ("1100".equals(reqJson.getString("state"))) {
             //判断退费周期是否为负数如果不是 抛出异常
@@ -198,7 +206,8 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("startTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("payOrderId", feeDetailDto.getPayOrderId());
-            addFeeDetail(reqJson);
+            // todo  添加退费明细
+            addFeeDetail(reqJson,returnPayFeeDtos.get(0));
             reqJson.put("state", "1100");
             String receivableAmount = (String) reqJson.get("receivableAmount");
             String receivedAmount = (String) reqJson.get("receivedAmount");
@@ -206,6 +215,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("receivableAmount", unum(receivableAmount));
             reqJson.put("receivedAmount", unum(receivedAmount));
             reqJson.put("createTime", reqJson.get("payTime"));
+            // todo 修改 缴费记录
             updateFeeDetail(reqJson);
             //修改pay_fee 费用到期时间  以及如果是押金则修改状态为结束收费
             FeeDto feeDto = new FeeDto();
@@ -233,6 +243,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             } else {
                 reqJson.put("state", "2008001");
             }
+            //todo 费用退回去
             updateFee(reqJson);
             reqJson.put("feeName", feeDto1.getFeeName());
 //            dealFeeReceipt(reqJson);
@@ -247,125 +258,11 @@ public class UpdateReturnPayFeeCmd extends Cmd {
                 discountJson.put("discountPrice", unum(payFeeDetailDiscountDtos.get(0).getDiscountPrice()));
                 addPayFeeDetailDiscountTwo(reqJson, discountJson);
             }
-            //判读是否有赠送规则优惠
-            PayFeeConfigDiscountDto payFeeConfigDiscountDto = new PayFeeConfigDiscountDto();
-            payFeeConfigDiscountDto.setConfigId(reqJson.getString("configId"));
-            List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos = payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
-            if (payFeeConfigDiscountDtos != null && payFeeConfigDiscountDtos.size() > 0) {
-                for (PayFeeConfigDiscountDto payFeeConfigDiscount : payFeeConfigDiscountDtos) {
-                    FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
-                    feeDiscountDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
-                    List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
-                    Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
-                    FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
-                    feeDiscountRuleDto.setRuleId(feeDiscountDtos.get(0).getRuleId());
-                    List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
-                    Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
-                    //获取实现方式
-                    String beanImpl = feeDiscountRuleDtos.get(0).getBeanImpl();
-                    if (!StringUtil.isEmpty(beanImpl) && beanImpl.equals("reductionMonthFeeRule")) { //赠送规则
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Calendar cal = Calendar.getInstance();
-                        //获取缴费开始时间
-                        Date startTime = DateUtil.getDateFromStringA(reqJson.getString("startTime"));
-                        FeeDiscountSpecDto feeDiscountSpecDto = new FeeDiscountSpecDto();
-                        feeDiscountSpecDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
-                        feeDiscountSpecDto.setSpecId(SPEC_RATE); //赠送规则
-                        //查询打折规格
-                        List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
-                        Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
-                        //获取赠送月份
-                        String specValue = feeDiscountSpecDtos.get(0).getSpecValue();
-                        BigDecimal value = new BigDecimal(specValue);
-                        FeeDiscountSpecDto feeDiscountSpec = new FeeDiscountSpecDto();
-                        feeDiscountSpec.setDiscountId(payFeeConfigDiscount.getDiscountId());
-                        feeDiscountSpec.setSpecId(SPEC_MONTH); //月份
-                        List<FeeDiscountSpecDto> feeDiscountSpecs = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpec);
-                        Assert.listOnlyOne(feeDiscountSpecs, "查询打折规格表错误！");
-                        //获取月份
-                        BigDecimal discountMonth = new BigDecimal(feeDiscountSpecs.get(0).getSpecValue());
-                        //获取周期
-                        BigDecimal cycle = new BigDecimal(reqJson.getString("cycles"));
-                        int flag = discountMonth.compareTo(cycle);
-                        if (flag == 1) { //月份discountMonth大于周期cycle，无法享受赠送规则
-                            continue;
-                        }
-//                        FeeDto feeDto2 = new FeeDto();
-//                        feeDto2.setFeeId(feeDtos.get(0).getFeeId());
-//                        List<FeeDto> fees = feeInnerServiceSMOImpl.queryFees(feeDto2);
-//                        Assert.listOnlyOne(fees, "查询费用表错误");
-                        int monthNum = cycle.add(value).intValue();
-                        //获取费用开始时间
-                        Date endTime = feeDtos.get(0).getEndTime();
-//                        if (endTime.equals(startTime)) {
-//                            continue;
-//                        }
-                        cal.setTime(endTime);
-                        cal.add(Calendar.MONTH, -monthNum);
-                        PayFeePo payFeePo = new PayFeePo();
-                        payFeePo.setFeeId(feeDtos.get(0).getFeeId());
-                        payFeePo.setEndTime(simpleDateFormat.format(cal.getTime()));
-                        feeInnerServiceSMOImpl.updateFee(payFeePo);
-                    }
-                }
-            }
-            //检查是否现金账户抵扣
-            String feeAccountDetailDtoList = reqJson.getString("feeAccountDetailDtoList");
-            JSONArray feeAccountDetails = JSONArray.parseArray(feeAccountDetailDtoList);
-            if (feeAccountDetails != null && feeAccountDetails.size() > 0) {
-                String ownerId = "";
-                if (!StringUtil.isEmpty(reqJson.getString("payerObjType")) && reqJson.getString("payerObjType").equals("3333")) { //房屋
-                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-                    ownerRoomRelDto.setRoomId(reqJson.getString("payerObjId"));
-                    List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                    Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
-                    ownerId = ownerRoomRelDtos.get(0).getOwnerId();
-                } else if (!StringUtil.isEmpty(reqJson.getString("payerObjType")) && reqJson.getString("payerObjType").equals("6666")) { //车辆
-                    OwnerCarDto ownerCarDto = new OwnerCarDto();
-                    ownerCarDto.setMemberId(reqJson.getString("payerObjId"));
-                    List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-                    Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");
-                    ownerId = ownerCarDtos.get(0).getOwnerId();
-                }
-                for (int index = 0; index < feeAccountDetails.size(); index++) {
-                    JSONObject param = feeAccountDetails.getJSONObject(index);
-                    String state = param.getString("state");
-                    if ("1002".equals(param.getString("state"))) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                        AccountDto accountDto = new AccountDto();
-                        accountDto.setObjId(ownerId);
-                        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
-                        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-                        Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
-                        BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
-                        BigDecimal money = new BigDecimal(param.getString("amount"));
-                        BigDecimal newAmount = amount.add(money);
-                        AccountPo accountPo = new AccountPo();
-                        accountPo.setAcctId(accountDtos.get(0).getAcctId());
-                        accountPo.setAmount(String.valueOf(newAmount));
-                        int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
-                        if (flag < 1) {
-                            throw new IllegalArgumentException("更新业主现金账户失败！");
-                        }
-                        AccountDetailPo accountDetailPo = new AccountDetailPo();
-                        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-                        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-                        accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
-                        accountDetailPo.setRelAcctId("-1");
-                        accountDetailPo.setAmount(param.getString("amount"));
-                        accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-                        accountDetailPo.setObjId(ownerId);
-                        accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
-                        accountDetailPo.setbId("-1");
-                        accountDetailPo.setRemark("现金账户退费");
-                        accountDetailPo.setCreateTime(new Date());
-                        int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
-                        if (i < 1) {
-                            throw new IllegalArgumentException("保存业主现金账户明细失败！");
-                        }
-                    }
-                }
-            }
-            //提交线上退费
+            //todo 判读是否有赠送规则优惠
+            returnCoupon(reqJson, feeDtos);
+            //todo 检查是否现金账户抵扣
+            returnAccount(reqJson);
+            //todo 提交线上退费
             returnOnlinePayMoney(feeDetailDto);
         }
         //不通过
@@ -384,6 +281,129 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         }
     }
 
+    private void returnAccount(JSONObject reqJson) {
+        String feeAccountDetailDtoList = reqJson.getString("feeAccountDetailDtoList");
+        JSONArray feeAccountDetails = JSONArray.parseArray(feeAccountDetailDtoList);
+        if (feeAccountDetails == null || feeAccountDetails.size() < 1) {
+            return;
+        }
+        String ownerId = "";
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reqJson.getString("payerObjType"))) { //房屋
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(reqJson.getString("payerObjId"));
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+            Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+            ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reqJson.getString("payerObjType"))) { //车辆
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setMemberId(reqJson.getString("payerObjId"));
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");
+            ownerId = ownerCarDtos.get(0).getOwnerId();
+        }
+        for (int index = 0; index < feeAccountDetails.size(); index++) {
+            JSONObject param = feeAccountDetails.getJSONObject(index);
+            String state = param.getString("state");
+            if (!"1002".equals(param.getString("state"))) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                continue;
+            }
+            AccountDto accountDto = new AccountDto();
+            accountDto.setObjId(ownerId);
+            accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
+            List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+            Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
+            BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+            BigDecimal money = new BigDecimal(param.getString("amount"));
+            BigDecimal newAmount = amount.add(money);
+            AccountPo accountPo = new AccountPo();
+            accountPo.setAcctId(accountDtos.get(0).getAcctId());
+            accountPo.setAmount(String.valueOf(newAmount));
+            int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+            if (flag < 1) {
+                throw new IllegalArgumentException("更新业主现金账户失败！");
+            }
+            AccountDetailPo accountDetailPo = new AccountDetailPo();
+            accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+            accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+            accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+            accountDetailPo.setRelAcctId("-1");
+            accountDetailPo.setAmount(param.getString("amount"));
+            accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+            accountDetailPo.setObjId(ownerId);
+            accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+            accountDetailPo.setbId("-1");
+            accountDetailPo.setRemark("现金账户退费");
+            accountDetailPo.setCreateTime(new Date());
+            int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+            if (i < 1) {
+                throw new IllegalArgumentException("保存业主现金账户明细失败！");
+            }
+        }
+    }
+
+    private void returnCoupon(JSONObject reqJson, List<FeeDto> feeDtos) {
+        PayFeeConfigDiscountDto payFeeConfigDiscountDto = new PayFeeConfigDiscountDto();
+        payFeeConfigDiscountDto.setConfigId(reqJson.getString("configId"));
+        List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos = payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
+        if (payFeeConfigDiscountDtos == null || payFeeConfigDiscountDtos.size() < 1) {
+            return;
+        }
+        for (PayFeeConfigDiscountDto payFeeConfigDiscount : payFeeConfigDiscountDtos) {
+            FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
+            feeDiscountDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
+            List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
+            Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
+            FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
+            feeDiscountRuleDto.setRuleId(feeDiscountDtos.get(0).getRuleId());
+            List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
+            Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
+            //获取实现方式
+            String beanImpl = feeDiscountRuleDtos.get(0).getBeanImpl();
+            if (!"reductionMonthFeeRule".equals(beanImpl)) { //赠送规则
+                continue;
+            }
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            //获取缴费开始时间
+            Date startTime = DateUtil.getDateFromStringA(reqJson.getString("startTime"));
+            FeeDiscountSpecDto feeDiscountSpecDto = new FeeDiscountSpecDto();
+            feeDiscountSpecDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
+            feeDiscountSpecDto.setSpecId(SPEC_RATE); //赠送规则
+            //查询打折规格
+            List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
+            Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+            //获取赠送月份
+            String specValue = feeDiscountSpecDtos.get(0).getSpecValue();
+            BigDecimal value = new BigDecimal(specValue);
+            FeeDiscountSpecDto feeDiscountSpec = new FeeDiscountSpecDto();
+            feeDiscountSpec.setDiscountId(payFeeConfigDiscount.getDiscountId());
+            feeDiscountSpec.setSpecId(SPEC_MONTH); //月份
+            List<FeeDiscountSpecDto> feeDiscountSpecs = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpec);
+            Assert.listOnlyOne(feeDiscountSpecs, "查询打折规格表错误！");
+            //获取月份
+            BigDecimal discountMonth = new BigDecimal(feeDiscountSpecs.get(0).getSpecValue());
+            //获取周期
+            BigDecimal cycle = new BigDecimal(reqJson.getString("cycles"));
+            int flag = discountMonth.compareTo(cycle);
+            if (flag == 1) { //月份discountMonth大于周期cycle，无法享受赠送规则
+                continue;
+            }
+
+            int monthNum = cycle.add(value).intValue();
+            //获取费用开始时间
+            Date endTime = feeDtos.get(0).getEndTime();
+
+            cal.setTime(endTime);
+            cal.add(Calendar.MONTH, -monthNum);
+            PayFeePo payFeePo = new PayFeePo();
+            payFeePo.setFeeId(feeDtos.get(0).getFeeId());
+            payFeePo.setEndTime(simpleDateFormat.format(cal.getTime()));
+            feeInnerServiceSMOImpl.updateFee(payFeePo);
+
+        }
+
+    }
+
     private double unum(String value) {
         double dValue = Double.parseDouble(value);
         return dValue * -1;
@@ -395,13 +415,10 @@ public class UpdateReturnPayFeeCmd extends Cmd {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public void updateReturnPayFee(JSONObject paramInJson, UserDto userDto) {
-        ReturnPayFeeDto returnPayFeeDto = new ReturnPayFeeDto();
-        returnPayFeeDto.setReturnFeeId(paramInJson.getString("returnFeeId"));
-        List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
-        Assert.listOnlyOne(returnPayFeeDtos, "未找到需要修改的活动 或多条数据");
+    public void updateReturnPayFee(JSONObject paramInJson, UserDto userDto, ReturnPayFeeDto returnPayFeeDto) {
+
         JSONObject businessReturnPayFee = new JSONObject();
-        businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(returnPayFeeDtos.get(0)));
+        businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(returnPayFeeDto));
         businessReturnPayFee.putAll(paramInJson);
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, ReturnPayFeePo.class);
         returnPayFeePo.setAuditPersonId(userDto.getUserId());
@@ -427,11 +444,18 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         }
     }
 
-    public void addFeeDetail(JSONObject paramInJson) {
+    /**
+     * 添加退费单
+     * @param paramInJson
+     * @param returnPayFeeDto
+     */
+    public void addFeeDetail(JSONObject paramInJson,ReturnPayFeeDto returnPayFeeDto) {
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(paramInJson);
         businessReturnPayFee.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         PayFeeDetailPo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, PayFeeDetailPo.class);
+        returnPayFeePo.setCashierId(returnPayFeeDto.getApplyPersonId());
+        returnPayFeePo.setCashierName(returnPayFeeDto.getApplyPersonName());
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(returnPayFeePo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");

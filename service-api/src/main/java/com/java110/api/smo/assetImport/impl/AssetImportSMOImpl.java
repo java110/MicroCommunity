@@ -867,7 +867,8 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         long failCount = 0L;
         AssetImportLogDetailDto assetImportLogDetailDto = null;
         try {
-            for (ImportFloor importFloor : floors) {
+            for (int floorIndex = 0; floorIndex < floors.size(); floorIndex++) {
+                ImportFloor importFloor = floors.get(floorIndex);
                 paramIn = new JSONObject();
                 //先保存 楼栋信息
                 JSONObject savedFloorInfo = getExistsFloor(pd, result, importFloor);
@@ -879,6 +880,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
                     paramIn.put("userId", result.getUserId());
                     paramIn.put("name", importFloor.getFloorNum() + "栋");
                     paramIn.put("floorArea", 1.00);
+                    paramIn.put("seq",floorIndex+1);
 
                     responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                     savedFloorInfo = getExistsFloor(pd, result, importFloor);
