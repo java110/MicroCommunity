@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="communityPublicityV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存小区公示信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCommunityPublicityInfo" parameterType="Map">
+        insert into community_publicity(
+create_user_id,pub_id,context,collect_count,pub_type,like_count,create_user_name,title,community_id,read_count,header_img
+) values (
+#{createUserId},#{pubId},#{context},#{collectCount},#{pubType},#{likeCount},#{createUserName},#{title},#{communityId},#{readCount},#{headerImg}
+)
+    </insert>
+
+
+
+    <!-- 查询小区公示信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityPublicityInfo" parameterType="Map" resultType="Map">
+        select  t.create_user_id,t.create_user_id createUserId,t.pub_id,t.pub_id pubId,t.context,t.collect_count,t.collect_count collectCount,t.pub_type,t.pub_type pubType,t.like_count,t.like_count likeCount,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd statusCd,t.title,t.community_id,t.community_id communityId,t.read_count,t.read_count readCount,t.header_img,t.header_img headerImg 
+from community_publicity t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="pubId !=null and pubId != ''">
+   and t.pub_id= #{pubId}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="collectCount !=null and collectCount != ''">
+   and t.collect_count= #{collectCount}
+</if> 
+<if test="pubType !=null and pubType != ''">
+   and t.pub_type= #{pubType}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+   and t.like_count= #{likeCount}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="readCount !=null and readCount != ''">
+   and t.read_count= #{readCount}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+   and t.header_img= #{headerImg}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区公示信息 add by wuxw 2018-07-03 -->
+    <update id="updateCommunityPublicityInfo" parameterType="Map">
+        update  community_publicity t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="createUserId !=null and createUserId != ''">
+, t.create_user_id= #{createUserId}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="collectCount !=null and collectCount != ''">
+, t.collect_count= #{collectCount}
+</if> 
+<if test="pubType !=null and pubType != ''">
+, t.pub_type= #{pubType}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+, t.like_count= #{likeCount}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+, t.create_user_name= #{createUserName}
+</if> 
+<if test="title !=null and title != ''">
+, t.title= #{title}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="readCount !=null and readCount != ''">
+, t.read_count= #{readCount}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+, t.header_img= #{headerImg}
+</if> 
+ where 1=1 <if test="pubId !=null and pubId != ''">
+and t.pub_id= #{pubId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区公示数量 add by wuxw 2018-07-03 -->
+     <select id="queryCommunityPublicitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from community_publicity t 
+where 1 =1 
+<if test="createUserId !=null and createUserId != ''">
+   and t.create_user_id= #{createUserId}
+</if> 
+<if test="pubId !=null and pubId != ''">
+   and t.pub_id= #{pubId}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="collectCount !=null and collectCount != ''">
+   and t.collect_count= #{collectCount}
+</if> 
+<if test="pubType !=null and pubType != ''">
+   and t.pub_type= #{pubType}
+</if> 
+<if test="likeCount !=null and likeCount != ''">
+   and t.like_count= #{likeCount}
+</if> 
+<if test="createUserName !=null and createUserName != ''">
+   and t.create_user_name= #{createUserName}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="readCount !=null and readCount != ''">
+   and t.read_count= #{readCount}
+</if> 
+<if test="headerImg !=null and headerImg != ''">
+   and t.header_img= #{headerImg}
+</if> 
+
+
+     </select>
+
+</mapper>
