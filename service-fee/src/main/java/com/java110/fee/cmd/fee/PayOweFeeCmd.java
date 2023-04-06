@@ -154,12 +154,8 @@ public class PayOweFeeCmd extends Cmd {
                 feeObj.put("remark", "线上公众号支付");
             }
 
-<<<<<<< HEAD
             //todo 去缴费
-            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos);
-=======
             getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0));
->>>>>>> c82d5c3d2643ec93f515ed3c687e139201558ae6
         }
 
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
