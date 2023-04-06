@@ -60,7 +60,7 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setMemberId(reqJson.getString("userId"));
             ownerDto.setCommunityId(reqJson.getString("communityId"));
-            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
             if (ownerDtos == null || ownerDtos.size() < 1) {
                 return ResultVo.error("没有权限开门");
             }
