@@ -385,7 +385,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             }
             cell3.setCellStyle(cellStyle);
             cell4 = row.createCell(4);
-            cell4.setCellValue(feeObj.getString("feePrice"));
+            cell4.setCellValue(feeObj.getString("feeTotalPrice"));
             cell4.setCellStyle(cellStyle);
             cell5 = row.createCell(5);
             cell5.setCellValue("0");
@@ -394,7 +394,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             cell6.setCellValue("");
             cell6.setCellStyle(cellStyle);
             row.setHeight((short) (defaultRowHeight));
-            totalPrice = totalPrice.add(new BigDecimal(feeObj.getString("feePrice")));
+            totalPrice = totalPrice.add(new BigDecimal(feeObj.getString("feeTotalPrice")));
         }
 
         row = sheet.createRow(line + fees.size() + 3);
