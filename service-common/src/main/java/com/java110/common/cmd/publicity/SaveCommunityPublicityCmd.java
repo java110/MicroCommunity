@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ICommunityPublicityV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.communityPublicity.CommunityPublicityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +33,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +56,9 @@ public class SaveCommunityPublicityCmd extends Cmd {
     @Autowired
     private ICommunityPublicityV1InnerServiceSMO communityPublicityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "title", "请求报文中未包含title");
@@ -66,8 +73,21 @@ public class SaveCommunityPublicityCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
         CommunityPublicityPo communityPublicityPo = BeanConvertUtil.covertBean(reqJson, CommunityPublicityPo.class);
         communityPublicityPo.setPubId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        communityPublicityPo.setCollectCount("0");
+        communityPublicityPo.setCreateUserId(userId);
+        communityPublicityPo.setCreateUserName(userDtos.get(0).getName());
+        communityPublicityPo.setLikeCount("0");
+        communityPublicityPo.setReadCount("0");
         int flag = communityPublicityV1InnerServiceSMOImpl.saveCommunityPublicity(communityPublicityPo);
 
         if (flag < 1) {
