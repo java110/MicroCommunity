@@ -193,7 +193,7 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
         //保存数据
         ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
-        reportOweFeePo.setAmountOwed(feeDto.getFeePrice() + "");
+        reportOweFeePo.setAmountOwed(feeDto.getFeeTotalPrice() + "");
         reportOweFeePo.setCommunityId(feeDto.getCommunityId());
         reportOweFeePo.setConfigId(feeConfigDto.getConfigId());
         reportOweFeePo.setConfigName(feeConfigDto.getFeeName());

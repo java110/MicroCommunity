@@ -190,14 +190,14 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         feeDto.setDeadlineTime(targetEndDate);
 
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
 
@@ -226,7 +226,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
 
@@ -250,14 +250,14 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeePrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         feeDto.setDeadlineTime(targetEndDate);
 
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
                 && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeePrice() + "");
+            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
     }

@@ -217,7 +217,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
             //throw new IllegalArgumentException("暂不支持该类型出账" + feeDto.getFeeId());
         }
 
-        if (feeDto.getFeePrice() <= 0) {
+        if (feeDto.getFeeTotalPrice() <= 0) {
             return;//这个没有欠费可算
         }
 
