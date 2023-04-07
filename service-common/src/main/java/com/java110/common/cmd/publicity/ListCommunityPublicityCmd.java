@@ -20,7 +20,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.ICommunityPublicityV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -71,6 +75,8 @@ public class ListCommunityPublicityCmd extends Cmd {
 
         if (count > 0) {
             communityPublicityDtos = communityPublicityV1InnerServiceSMOImpl.queryCommunityPublicitys(communityPublicityDto);
+            //todo 刷入图片地址
+            freshImgUrl(communityPublicityDtos);
         } else {
             communityPublicityDtos = new ArrayList<>();
         }
@@ -80,5 +86,18 @@ public class ListCommunityPublicityCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入图片地址
+     * @param communityPublicityDtos
+     */
+    private void freshImgUrl(List<CommunityPublicityDto> communityPublicityDtos) {
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        for (CommunityPublicityDto communityPublicityDto : communityPublicityDtos) {
+            if (!communityPublicityDto.getHeaderImg().startsWith("http")) {
+                communityPublicityDto.setHeaderImg(imgUrl + communityPublicityDto.getHeaderImg());
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.java110.dto.communityPublicity;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,16 +16,16 @@ import java.util.Date;
 public class CommunityPublicityDto extends PageDto implements Serializable {
 
     private String createUserId;
-private String pubId;
-private String context;
-private String collectCount;
-private String pubType;
-private String likeCount;
-private String createUserName;
-private String title;
-private String communityId;
-private String readCount;
-private String headerImg;
+    private String pubId;
+    private String context;
+    private String collectCount;
+    private String pubType;
+    private String likeCount;
+    private String createUserName;
+    private String title;
+    private String communityId;
+    private String readCount;
+    private String headerImg;
 
 
     private Date createTime;
@@ -35,67 +36,88 @@ private String headerImg;
     public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getPubId() {
+
+    public String getPubId() {
         return pubId;
     }
-public void setPubId(String pubId) {
+
+    public void setPubId(String pubId) {
         this.pubId = pubId;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getCollectCount() {
+
+    public String getCollectCount() {
         return collectCount;
     }
-public void setCollectCount(String collectCount) {
+
+    public void setCollectCount(String collectCount) {
         this.collectCount = collectCount;
     }
-public String getPubType() {
+
+    public String getPubType() {
         return pubType;
     }
-public void setPubType(String pubType) {
+
+    public void setPubType(String pubType) {
         this.pubType = pubType;
     }
-public String getLikeCount() {
+
+    public String getLikeCount() {
         return likeCount;
     }
-public void setLikeCount(String likeCount) {
+
+    public void setLikeCount(String likeCount) {
         this.likeCount = likeCount;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getTitle() {
+
+    public String getTitle() {
         return title;
     }
-public void setTitle(String title) {
+
+    public void setTitle(String title) {
         this.title = title;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getReadCount() {
+
+    public String getReadCount() {
         return readCount;
     }
-public void setReadCount(String readCount) {
+
+    public void setReadCount(String readCount) {
         this.readCount = readCount;
     }
-public String getHeaderImg() {
+
+    public String getHeaderImg() {
         return headerImg;
     }
-public void setHeaderImg(String headerImg) {
+
+    public void setHeaderImg(String headerImg) {
         this.headerImg = headerImg;
     }
 
