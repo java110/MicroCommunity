@@ -287,7 +287,7 @@
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id ownerId,t.b_id bId,
         t.age,t.member_id memberId,
         t.owner_type_cd ownerTypeCd,t.community_id communityId,t.owner_flag ownerFlag,
-        t.id_card idCard,t.state,t.address,t.create_time createTime,uu.`name` userName
+        t.id_card idCard,t.state,t.address,t.create_time createTime,uu.`name` userName,t.operate
         from business_building_owner t
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
