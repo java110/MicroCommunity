@@ -253,7 +253,7 @@
         createTime,t.community_id communityId,t2.name stateName,
         t.start_time startTime,t.end_time endTime,t.state,
         t.car_type_cd carTypeCd,t.member_id memberId,t.lease_type leaseType,
-        t3.name leaseTypeName,t4.name carTypeCdName,t.operate,uu.`name`,bo.`name` ownerName,bo.link
+        t3.name leaseTypeName,t4.name carTypeCdName,t.operate,uu.`name` userName,bo.`name` ownerName,bo.link
         from business_owner_car t
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
