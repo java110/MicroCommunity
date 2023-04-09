@@ -4,11 +4,15 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportOwnerPayFeeServiceDao;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +44,8 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
     @Autowired
     private IReportCommunityServiceDao reportCommunityServiceDaoImpl;
 
-
+    @Autowired
+    private IOwnerAttrInnerServiceSMO ownerAttrInnerServiceSMOImpl;
 
 
     @Override
@@ -85,6 +91,75 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         List<OwnerCarDto> ownerCars = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryHisOwnerCars(BeanConvertUtil.beanCovertMap(ownerCarDto)), OwnerCarDto.class);
 
         return ownerCars;
+    }
+
+    @Override
+    public int queryHisOwnerCount(OwnerDto ownerDto) {
+        return reportCommunityServiceDaoImpl.queryHisOwnerCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
+    @Override
+    public List<OwnerDto> queryHisOwners(OwnerDto ownerDto) {
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
+
+        List<OwnerDto> ownerDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryHisOwners(BeanConvertUtil.beanCovertMap(ownerDto)),
+                OwnerDto.class);
+
+        if (ownerDtos == null || ownerDtos.size()  < 1) {
+            return ownerDtos;
+        }
+        String[] memberIds = getMemberIds(ownerDtos);
+        OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
+        ownerAttrDto.setMemberIds(memberIds);
+        ownerAttrDto.setCommunityId(ownerDto.getCommunityId());
+        List<OwnerAttrDto> ownerAttrDtos = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
+
+        for (OwnerDto owner : ownerDtos) {
+            refreshOwner(owner, ownerAttrDtos);
+        }
+
+
+        return ownerDtos;
+    }
+
+    /**
+     * 获取批量userId
+     *
+     * @param owners 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getMemberIds(List<OwnerDto> owners) {
+        List<String> memberIds = new ArrayList<String>();
+        for (OwnerDto owner : owners) {
+            memberIds.add(owner.getMemberId());
+        }
+
+        return memberIds.toArray(new String[memberIds.size()]);
+    }
+
+    /**
+     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
+     *
+     * @param owner 小区业主信息
+     */
+    private void refreshOwner(OwnerDto owner, List<OwnerAttrDto> ownerAttrDtos) {
+
+        if (ownerAttrDtos == null || ownerAttrDtos.size() < 1) {
+            return;
+        }
+        List<OwnerAttrDto> tmpOwnerAttrDtos = new ArrayList<>();
+        for (OwnerAttrDto ownerAttrDto : ownerAttrDtos) {
+            if (ownerAttrDto.getMemberId().equals(owner.getMemberId())) {
+                tmpOwnerAttrDtos.add(ownerAttrDto);
+            }
+        }
+
+        owner.setOwnerAttrDtos(tmpOwnerAttrDtos);
     }
 
 }

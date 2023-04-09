@@ -95,4 +95,8 @@ public interface IReportCommunityServiceDao {
      * @return
      */
     List<Map> queryHisOwnerCars(Map info);
+
+    int queryHisOwnerCount(Map info);
+
+    List<Map> queryHisOwners(Map info);
 }
