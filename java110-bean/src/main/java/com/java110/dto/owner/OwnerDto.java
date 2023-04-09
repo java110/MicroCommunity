@@ -501,4 +501,12 @@ public class OwnerDto extends PageDto implements Serializable {
     public void setContractCount(String contractCount) {
         this.contractCount = contractCount;
     }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
 }
