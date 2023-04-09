@@ -5,18 +5,22 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
 import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportOwnerPayFeeServiceDao;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -62,6 +66,25 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         List<RoomDto> roomDtos = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryRoomsTree(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
 
         return roomDtos;
+    }
+
+    @Override
+    public int queryHisOwnerCarCount(@RequestBody OwnerCarDto ownerCarDto) {
+        return reportCommunityServiceDaoImpl.queryHisOwnerCarCount(BeanConvertUtil.beanCovertMap(ownerCarDto));
+    }
+
+    @Override
+    public List<OwnerCarDto> queryHisOwnerCars(@RequestBody OwnerCarDto ownerCarDto) {
+
+        int page = ownerCarDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerCarDto.setPage((page - 1) * ownerCarDto.getRow());
+        }
+
+        List<OwnerCarDto> ownerCars = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryHisOwnerCars(BeanConvertUtil.beanCovertMap(ownerCarDto)), OwnerCarDto.class);
+
+        return ownerCars;
     }
 
 }

@@ -49,4 +49,19 @@ public interface IReportCommunityInnerServiceSMO {
     @RequestMapping(value = "/queryRoomsTree", method = RequestMethod.POST)
     List<RoomDto> queryRoomsTree(@RequestBody RoomDto roomDto);
 
+    /**
+     * 查询车辆变更总数
+     * @param ownerCarDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHisOwnerCarCount", method = RequestMethod.POST)
+    int queryHisOwnerCarCount(@RequestBody OwnerCarDto ownerCarDto);
+
+    /**
+     * 查询车辆变更
+     * @param ownerCarDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHisOwnerCars", method = RequestMethod.POST)
+    List<OwnerCarDto> queryHisOwnerCars(@RequestBody OwnerCarDto ownerCarDto);
 }

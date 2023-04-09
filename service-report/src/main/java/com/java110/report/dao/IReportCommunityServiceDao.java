@@ -82,4 +82,17 @@ public interface IReportCommunityServiceDao {
 
     List<Map>  queryRoomsTree(Map info);
 
+    /**
+     * 查询车辆变更记录
+     * @param info
+     * @return
+     */
+    int queryHisOwnerCarCount(Map info);
+
+    /**
+     * 车辆变更记录
+     * @param info
+     * @return
+     */
+    List<Map> queryHisOwnerCars(Map info);
 }

@@ -229,4 +229,45 @@
         order by CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED)
     </select>
 
+    <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from business_owner_car t
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
+        left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
+        where 1=1
+        and t.car_num = #{carNum}
+        and t.community_id= #{communityId}
+    </select>
+
+    <select id="queryHisOwnerCars" parameterType="Map" resultType="Map">
+        select t.car_color carColor,t.car_brand carBrand,t.car_type carType,t1.name
+        carTypeName,
+        t.car_num carNum,t.ps_id psId,t.remark,
+        t.owner_id ownerId,t.b_id bId,t.user_id userId,t.car_id carId ,t.create_time
+        createTime,t.community_id communityId,t2.name stateName,
+        t.start_time startTime,t.end_time endTime,t.state,
+        t.car_type_cd carTypeCd,t.member_id memberId,t.lease_type leaseType,
+        t3.name leaseTypeName,t4.name carTypeCdName,t.operate,uu.`name`
+        from business_owner_car t
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
+        left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
+        where 1=1
+        and t.car_num = #{carNum}
+        and t.community_id= #{communityId}
+        order by t.create_time desc,t.operate
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>
