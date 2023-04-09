@@ -72,6 +72,7 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String userName;
     private String ownerFlag;
+    private String operate;
 
     private List<OwnerAttrDto> ownerAttrDtos;
 
