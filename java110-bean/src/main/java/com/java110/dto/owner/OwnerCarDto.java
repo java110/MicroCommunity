@@ -101,6 +101,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String memberCarCount;
 
+    private String userName;
+
+    private String operate;
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
     public String getCarColor() {
@@ -517,5 +520,21 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setIotRemark(String iotRemark) {
         this.iotRemark = iotRemark;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
     }
 }
