@@ -152,7 +152,7 @@ public class ChargeCoreImpl implements IChargeCore {
         if(StringUtil.isEmpty(remark)) {
             remark = result.getString("remark");
         }else{
-            remark = ";"+result.getString("remark");
+            remark = remark+";"+result.getString("remark");
 
         }
 
