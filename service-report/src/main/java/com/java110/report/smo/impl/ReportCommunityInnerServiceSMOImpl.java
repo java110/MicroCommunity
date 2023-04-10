@@ -4,6 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -94,12 +95,12 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
     }
 
     @Override
-    public int queryHisOwnerCount(OwnerDto ownerDto) {
+    public int queryHisOwnerCount(@RequestBody OwnerDto ownerDto) {
         return reportCommunityServiceDaoImpl.queryHisOwnerCount(BeanConvertUtil.beanCovertMap(ownerDto));
     }
 
     @Override
-    public List<OwnerDto> queryHisOwners(OwnerDto ownerDto) {
+    public List<OwnerDto> queryHisOwners(@RequestBody OwnerDto ownerDto) {
         int page = ownerDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
@@ -125,6 +126,26 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
 
 
         return ownerDtos;
+    }
+
+    @Override
+    public int queryHisFeeCount(@RequestBody FeeDto feeDto) {
+        return reportCommunityServiceDaoImpl.queryHisFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+    @Override
+    public List<FeeDto> queryHisFees(@RequestBody FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> feeDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryHisFees(BeanConvertUtil.beanCovertMap(feeDto)),
+                FeeDto.class);
+
+        return feeDtos;
     }
 
     /**

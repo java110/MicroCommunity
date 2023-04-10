@@ -99,4 +99,8 @@ public interface IReportCommunityServiceDao {
     int queryHisOwnerCount(Map info);
 
     List<Map> queryHisOwners(Map info);
+
+    int queryHisFeeCount(Map info);
+
+    List<Map> queryHisFees(Map info);
 }

@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -71,4 +72,10 @@ public interface IReportCommunityInnerServiceSMO {
 
     @RequestMapping(value = "/queryHisOwners", method = RequestMethod.POST)
     List<OwnerDto> queryHisOwners(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/queryHisFeeCount", method = RequestMethod.POST)
+    int queryHisFeeCount(@RequestBody FeeDto feeDto);
+
+    @RequestMapping(value = "/queryHisFees", method = RequestMethod.POST)
+    List<FeeDto> queryHisFees(@RequestBody FeeDto feeDto);
 }

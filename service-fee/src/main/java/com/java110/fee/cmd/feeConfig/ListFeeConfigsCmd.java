@@ -38,7 +38,7 @@ public class ListFeeConfigsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         FeeConfigDto feeConfigDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
 
-        if(!StringUtil.isEmpty(reqJson.getString("isFlag")) && reqJson.getString("isFlag").equals("0")){
+        if ("0".equals(reqJson.getString("isFlag"))) {
             feeConfigDto.setPage(PageDto.DEFAULT_PAGE);
         }
 
@@ -49,13 +49,13 @@ public class ListFeeConfigsCmd extends Cmd {
         if (count > 0) {
             feeConfigs = BeanConvertUtil.covertBeanList(feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto), ApiFeeConfigDataVo.class);
             //处理 小数点后无效的0
-            for(ApiFeeConfigDataVo feeConfig: feeConfigs){
-                if (!StringUtil.isEmpty(feeConfig.getAdditionalAmount())){
-                    feeConfig.setAdditionalAmount(Double.parseDouble(feeConfig.getAdditionalAmount())+"");
+            for (ApiFeeConfigDataVo feeConfig : feeConfigs) {
+                if (!StringUtil.isEmpty(feeConfig.getAdditionalAmount())) {
+                    feeConfig.setAdditionalAmount(Double.parseDouble(feeConfig.getAdditionalAmount()) + "");
                 }
 
-                if (!StringUtil.isEmpty(feeConfig.getSquarePrice())){
-                    feeConfig.setSquarePrice(Double.parseDouble(feeConfig.getSquarePrice())+"");
+                if (!StringUtil.isEmpty(feeConfig.getSquarePrice())) {
+                    feeConfig.setSquarePrice(Double.parseDouble(feeConfig.getSquarePrice()) + "");
                 }
             }
         } else {
