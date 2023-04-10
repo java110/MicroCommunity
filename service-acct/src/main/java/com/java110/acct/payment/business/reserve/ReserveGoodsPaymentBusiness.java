@@ -1,5 +1,6 @@
 package com.java110.acct.payment.business.reserve;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
@@ -132,7 +133,7 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
         BigDecimal money = new BigDecimal(0);
         for (int goodsIndex = 0; goodsIndex < goodss.size(); goodsIndex++) {
             goodsInfo = goodss.getJSONObject(goodsIndex);
-            assertGoodsAndComputeMoney(goodsInfo);
+            assertGoodsAndComputeMoney(reqJson,goodsInfo);
             money = money.add(new BigDecimal(goodsInfo.getDoubleValue("moneyDec")));
         }
 
@@ -146,12 +147,12 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
         return paymentOrderDto;
     }
 
-    private void assertGoodsAndComputeMoney(JSONObject reqJson) {
+    private void assertGoodsAndComputeMoney(JSONObject reqJson, JSONObject goodsInfo) {
 
         ReserveGoodsDto reserveGoodsDto = new ReserveGoodsDto();
-        reserveGoodsDto.setGoodsId(reqJson.getString("goodsId"));
+        reserveGoodsDto.setGoodsId(goodsInfo.getString("goodsId"));
         List<ReserveGoodsDto> reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
-        if ("1001".equals(reqJson.getString("type"))) {
+        if ("1001".equals(goodsInfo.getString("type"))) {
             Assert.listOnlyOne(reserveGoodsDtos, "就餐不存在");
         } else {
             Assert.listOnlyOne(reserveGoodsDtos, "服务不存在");
@@ -159,11 +160,11 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
 
         checkAppointmentTime(reqJson, reserveGoodsDtos.get(0));
 
-        if (!reqJson.containsKey("hours")) {
+        if (!goodsInfo.containsKey("hours")) {
             throw new IllegalArgumentException("未包含 预约时间");
         }
 
-        JSONArray hours = reqJson.getJSONArray("hours");
+        JSONArray hours = goodsInfo.getJSONArray("hours");
 
         if (hours == null || hours.size() < 1) {
             throw new IllegalArgumentException("未包含 预约时间");
@@ -171,13 +172,13 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
         ReserveGoodsOrderTimeDto reserveGoodsOrderTimeDto = null;
         int flag = 0;
         int quantity = 0;
-        quantity = Integer.parseInt(reqJson.getString("quantity"));
+        quantity = Integer.parseInt(goodsInfo.getString("quantity"));
         for (int timeIndex = 0; timeIndex < hours.size(); timeIndex++) {
             reserveGoodsOrderTimeDto = new ReserveGoodsOrderTimeDto();
             reserveGoodsOrderTimeDto.setCommunityId(reqJson.getString("communityId"));
             reserveGoodsOrderTimeDto.setAppointmentTime(reqJson.getString("appointmentTime"));
             reserveGoodsOrderTimeDto.setHours(hours.getString(timeIndex));
-            reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
+            reserveGoodsOrderTimeDto.setGoodsId(goodsInfo.getString("goodsId"));
             flag = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
             if (flag > 0) {
                 throw new CmdException(reqJson.getString("appointmentTime") + "," + hours.getString(timeIndex) + "已经被预约");
