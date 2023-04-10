@@ -26,29 +26,11 @@ public class AppTest
     public void should()
     {
 
-       String value = "（0.51 * 96.46 + (0.03*1 + 0.26)*96.46）*12";
+        BigDecimal moneyDec = new BigDecimal(1)
+                .multiply(new BigDecimal(1))
+                .multiply(new BigDecimal(Double.parseDouble("0.01")))
+                .setScale(2, BigDecimal.ROUND_HALF_UP);
+        System.out.printf(moneyDec.doubleValue()+"");
 
-        value = value.replace("\n", "")
-                .replace("\r", "")
-                .trim();
-        if (value.contains("C")) { //处理小区面积
-
-
-        } else if (value.contains("F")) { //处理楼栋
-
-        } else if (value.contains("U")) { //处理单元
-        } else if (value.contains("RL")) {
-
-        } else if (value.contains("R")) { //处理 房屋面积
-            value = value.replace("R", "100");
-        } else if (value.contains("X")) {// 处理 房屋系数
-            value = value.replace("X", "1");
-        }
-        if (value.contains("L")) {//处理房屋层数
-            System.out.printf("L");
-            value = value.replace("L", "1");
-        }
-
-        System.out.printf("value="+value);
     }
 }

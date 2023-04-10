@@ -192,7 +192,7 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
                 .multiply(new BigDecimal(quantity))
                 .multiply(new BigDecimal(Double.parseDouble(reserveGoodsDtos.get(0).getPrice())))
                 .setScale(2, BigDecimal.ROUND_HALF_UP);
-        reqJson.put("moneyDec", moneyDec.doubleValue());
+        goodsInfo.put("moneyDec", moneyDec.doubleValue());
     }
 
     private void checkAppointmentTime(JSONObject reqJson, ReserveGoodsDto reserveGoodsDto) {
@@ -242,7 +242,7 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
                 throw new CmdException("保存数据失败");
             }
 
-            JSONArray hours = reqJson.getJSONArray("hours");
+            JSONArray hours = goodsObj.getJSONArray("hours");
 
             ReserveGoodsOrderTimePo reserveGoodsOrderTimePo = null;
             for (int timeIndex = 0; timeIndex < hours.size(); timeIndex++) {
