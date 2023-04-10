@@ -1,36 +1,26 @@
 package com.java110.acct.payment.business.reserve;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.communitySpace.CommunitySpaceDto;
-import com.java110.dto.communitySpacePerson.CommunitySpacePersonDto;
 import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.reserveGoods.ReserveGoodsDto;
 import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;
 import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;
 import com.java110.dto.reserveParams.ReserveParamsDto;
-import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
-import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
-import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
-import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
-import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
 import com.java110.po.reserveGoodsOrderTime.ReserveGoodsOrderTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -133,7 +123,7 @@ public class ReserveGoodsPaymentBusiness implements IPaymentBusiness {
         BigDecimal money = new BigDecimal(0);
         for (int goodsIndex = 0; goodsIndex < goodss.size(); goodsIndex++) {
             goodsInfo = goodss.getJSONObject(goodsIndex);
-            assertGoodsAndComputeMoney(reqJson,goodsInfo);
+            assertGoodsAndComputeMoney(reqJson, goodsInfo);
             money = money.add(new BigDecimal(goodsInfo.getDoubleValue("moneyDec")));
         }
 
