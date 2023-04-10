@@ -21,7 +21,7 @@ public class AppDto extends PageDto implements Serializable {
     public static final String WECHAT_MINA_OWNER_APP_ID = "992019111758490006";
     public static final String WECHAT_MALL_APP_ID = "992021030901240071";
     public static final String OWNER_WECHAT_PAY = "992020011134400001"; // 微信支付
-    public static final String OWNER_APP_PAY = "992020061440050003"; // app微信支付
+    public static final String OWNER_APP_APP_ID = "992020061440050003"; // app微信支付
     public static final String JOB_APP_ID = "992021061746360004"; // 定时任务应用
 
 

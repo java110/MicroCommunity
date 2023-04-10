@@ -75,7 +75,18 @@ public class QrCodePaymentCmd extends Cmd {
 
         Assert.listOnlyOne(communityDtos, "小区不存在");
 
-        String feeName = communityDtos.get(0).getName() + "-" + reqJson.getString("payerObjName") + "-" + reqJson.getString("feeName");
+        String feeName = communityDtos.get(0).getName();
+        if (!StringUtil.isEmpty(reqJson.getString("payerObjName"))) {
+            feeName += ("-" + reqJson.getString("payerObjName"));
+        }
+
+        if (!StringUtil.isEmpty(reqJson.getString("feeName"))) {
+            feeName += ("-" + reqJson.getString("feeName"));
+        }
+
+        if (feeName.length() > 120) {
+            feeName = feeName.substring(0, 120);
+        }
 
         ResultVo resultVo = null;
         try {

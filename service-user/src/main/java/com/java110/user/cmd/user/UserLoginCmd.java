@@ -6,20 +6,30 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.app.AppDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
-import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
-import com.java110.intf.user.IUserInnerServiceSMO;
+import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.user.*;
+import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.po.user.UserPo;
 import com.java110.po.userAttr.UserAttrPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.ValidatorUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -30,6 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 用户登录
+ */
 @Java110Cmd(serviceCode = "user.userLogin")
 public class UserLoginCmd extends Cmd {
 
@@ -44,6 +57,18 @@ public class UserLoginCmd extends Cmd {
 
     @Autowired
     private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -90,12 +115,16 @@ public class UserLoginCmd extends Cmd {
             errorInfo = "临时票据错误";
         }
 
-
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
+        //todo 验证码登录，判断是否是否业主，并且是否绑定关系 如果没有 自动绑定关系
+        if (userDtos == null || userDtos.size() < 1) {
+            userDtos = ifOwnerLoginByPhone(reqJson, context);
+        }
         if (userDtos == null || userDtos.size() < 1) {
             throw new SMOException(errorInfo);
         }
+
 
         //表名登录成功
         UserDto tmpUserDto = userDtos.get(0);
@@ -135,6 +164,87 @@ public class UserLoginCmd extends Cmd {
             logger.error("登录异常：", e);
             throw new SMOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "系统内部错误，请联系管理员");
         }
+    }
+
+    /**
+     * 验证码登录，判断是否是否业主，并且是否绑定关系 如果没有 自动绑定关系
+     *
+     * @param reqJson
+     * @param context
+     */
+    private List<UserDto> ifOwnerLoginByPhone(JSONObject reqJson, ICmdDataFlowContext context) {
+        if (!reqJson.containsKey("loginByPhone") || !reqJson.getBoolean("loginByPhone")) {
+            return null;
+        }
+        String appId = context.getReqHeaders().get("app-id");
+
+        //todo 业主手机端
+        if (!AppDto.WECHAT_OWNER_APP_ID.equals(appId)
+                && !AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)
+                && !AppDto.OWNER_APP_APP_ID.equals(appId)) {
+            return null;
+        }
+
+        if (StringUtil.isEmpty(reqJson.getString("userName"))) {
+            return null;
+        }
+
+        // todo 查询业主或成员
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setLink(reqJson.getString("userName"));
+        ownerDto.setPage(1);
+        ownerDto.setRow(1);
+        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+
+        // 说明业主不存在 直接返回跑异常
+        if (ownerDtos == null || ownerDtos.size() < 1) {
+            return null;
+        }
+
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(ownerDtos.get(0).getCommunityId());
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        Assert.listNotNull(communityDtos, "未包含小区信息");
+        CommunityDto tmpCommunityDto = communityDtos.get(0);
+
+        UserPo userPo = new UserPo();
+        userPo.setUserId(GenerateCodeFactory.getUserId());
+        userPo.setName(ownerDtos.get(0).getName());
+        userPo.setTel(ownerDtos.get(0).getLink());
+        userPo.setPassword(AuthenticationFactory.passwdMd5(reqJson.getString("password")));
+        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
+        userPo.setAge(ownerDtos.get(0).getAge());
+        userPo.setAddress(ownerDtos.get(0).getAddress());
+        userPo.setSex(ownerDtos.get(0).getSex());
+        int flag = userV1InnerServiceSMOImpl.saveUser(userPo);
+        if (flag < 1) {
+            throw new CmdException("注册失败");
+        }
+
+        OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
+        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
+        ownerAppUserPo.setState("12000");
+        ownerAppUserPo.setAppTypeCd("10010");
+        ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
+        ownerAppUserPo.setMemberId(ownerDtos.get(0).getMemberId());
+        ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
+        ownerAppUserPo.setCommunityId(ownerDtos.get(0).getCommunityId());
+        ownerAppUserPo.setAppUserName(ownerDtos.get(0).getName());
+        ownerAppUserPo.setIdCard(ownerDtos.get(0).getIdCard());
+        ownerAppUserPo.setAppType("WECHAT");
+        ownerAppUserPo.setLink(ownerDtos.get(0).getLink());
+        ownerAppUserPo.setUserId(userPo.getUserId());
+        ownerAppUserPo.setOpenId("-1");
+
+        flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+        if (flag < 1) {
+            throw new CmdException("添加用户业主关系失败");
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userPo.getUserId());
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+        return userDtos;
     }
 
     private UserAttrDto getCurrentUserAttrDto(List<UserAttrDto> userAttrDtos, String specCd) {
