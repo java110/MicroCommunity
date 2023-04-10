@@ -22,8 +22,9 @@
         pubType,t.like_count,t.like_count likeCount,t.create_user_name,t.create_user_name
         createUserName,t.status_cd,t.status_cd statusCd,t.title,t.community_id,t.community_id
         communityId,t.read_count,t.read_count readCount,t.header_img,t.header_img headerImg,
-        t.create_time createTime
+        t.create_time createTime,td.`name` pubTypeName
         from community_publicity t
+        left join t_dict td on t.pub_type = td.status_cd and td.table_name = 'community_publicity' and td.table_columns = 'pub_type'
         where 1 =1
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}

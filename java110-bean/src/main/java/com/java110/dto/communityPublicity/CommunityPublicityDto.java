@@ -20,6 +20,8 @@ public class CommunityPublicityDto extends PageDto implements Serializable {
     private String context;
     private String collectCount;
     private String pubType;
+
+    private String pubTypeName;
     private String likeCount;
     private String createUserName;
     private String title;
@@ -136,5 +138,13 @@ public class CommunityPublicityDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPubTypeName() {
+        return pubTypeName;
+    }
+
+    public void setPubTypeName(String pubTypeName) {
+        this.pubTypeName = pubTypeName;
     }
 }
