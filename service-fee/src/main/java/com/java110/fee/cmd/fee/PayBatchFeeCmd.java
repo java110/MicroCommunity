@@ -167,6 +167,7 @@ public class PayBatchFeeCmd extends Cmd {
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
         JSONArray datas = new JSONArray();
+        JSONObject outDetail = null;
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
@@ -175,7 +176,9 @@ public class PayBatchFeeCmd extends Cmd {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
             }
-            datas.add(paramInObj.getString("detailId"));
+            //扫码支付时 不支持 string 方式的JSONArray 只有 JSONObject 的JSONArray
+            outDetail.put("detailId",paramInObj.getString("detailId"));
+            datas.add(outDetail);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(datas));
