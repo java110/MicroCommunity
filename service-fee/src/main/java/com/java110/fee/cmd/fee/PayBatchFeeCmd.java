@@ -177,6 +177,7 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new CmdException(e.getMessage());
             }
             //扫码支付时 不支持 string 方式的JSONArray 只有 JSONObject 的JSONArray
+            outDetail = new JSONObject();
             outDetail.put("detailId",paramInObj.getString("detailId"));
             datas.add(outDetail);
         }
