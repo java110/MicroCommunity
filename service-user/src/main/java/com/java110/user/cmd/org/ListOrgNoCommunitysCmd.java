@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.roleCommunity.RoleCommunityDto;
@@ -48,7 +49,7 @@ public class ListOrgNoCommunitysCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         RoleCommunityDto roleCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
-
+        roleCommunityDto.setPage(PageDto.DEFAULT_PAGE);
         List<RoleCommunityDto> orgCommunityDtos = roleCommunityV1InnerServiceSMO.queryRoleCommunitys(roleCommunityDto);
         List<String> communityIds = new ArrayList<>();
         for(RoleCommunityDto tmpOrgCommunityDto : orgCommunityDtos){
