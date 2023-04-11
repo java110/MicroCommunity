@@ -179,7 +179,7 @@ public class PayFeeCmd extends Cmd {
         //一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
-        if (maxEndTime == null) {
+        if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
         }
 
