@@ -108,7 +108,8 @@ public class ImportFeeApi {
                                                        @RequestParam(value = "floorNum", required = false) String floorNum,
                                                        @RequestParam(value = "unitNum", required = false) String unitNum,
                                                        @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                       @RequestParam(value = "importFeeId") String importFeeId) {
+                                                       @RequestParam(value = "feeId", required = false) String feeId,
+                                                       @RequestParam(value = "importFeeId", required = false) String importFeeId) {
         ImportFeeDetailDto importFeeDetailDto = new ImportFeeDetailDto();
         importFeeDetailDto.setPage(page);
         importFeeDetailDto.setRow(row);
@@ -117,6 +118,7 @@ public class ImportFeeApi {
         importFeeDetailDto.setFloorNum(floorNum);
         importFeeDetailDto.setUnitNum(unitNum);
         importFeeDetailDto.setRoomNum(roomNum);
+        importFeeDetailDto.setFeeId(feeId);
         return getImportFeeDetailBMOImpl.get(importFeeDetailDto);
     }
 
