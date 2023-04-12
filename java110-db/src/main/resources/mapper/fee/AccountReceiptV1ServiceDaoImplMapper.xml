@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountReceiptV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存预存单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveAccountReceiptInfo" parameterType="Map">
+        insert into account_receipt(
+ar_id,owner_name,prime_rate,link,acct_id,receivable_amount,received_amount,community_id,owner_id
+) values (
+#{arId},#{ownerName},#{primeRate},#{link},#{acctId},#{receivableAmount},#{receivedAmount},#{communityId},#{ownerId}
+)
+    </insert>
+
+
+
+    <!-- 查询预存单信息 add by wuxw 2018-07-03 -->
+    <select id="getAccountReceiptInfo" parameterType="Map" resultType="Map">
+        select  t.ar_id,t.ar_id arId,t.owner_name,t.owner_name ownerName,t.prime_rate,t.prime_rate primeRate,t.link,t.acct_id,t.acct_id acctId,t.receivable_amount,t.receivable_amount receivableAmount,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id communityId,t.owner_id,t.owner_id ownerId 
+from account_receipt t 
+where 1 =1 
+<if test="arId !=null and arId != ''">
+   and t.ar_id= #{arId}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="primeRate !=null and primeRate != ''">
+   and t.prime_rate= #{primeRate}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="acctId !=null and acctId != ''">
+   and t.acct_id= #{acctId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改预存单信息 add by wuxw 2018-07-03 -->
+    <update id="updateAccountReceiptInfo" parameterType="Map">
+        update  account_receipt t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+, t.owner_name= #{ownerName}
+</if> 
+<if test="primeRate !=null and primeRate != ''">
+, t.prime_rate= #{primeRate}
+</if> 
+<if test="link !=null and link != ''">
+, t.link= #{link}
+</if> 
+<if test="acctId !=null and acctId != ''">
+, t.acct_id= #{acctId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+, t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+, t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+ where 1=1 <if test="arId !=null and arId != ''">
+and t.ar_id= #{arId}
+</if> 
+
+    </update>
+
+    <!-- 查询预存单数量 add by wuxw 2018-07-03 -->
+     <select id="queryAccountReceiptsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from account_receipt t 
+where 1 =1 
+<if test="arId !=null and arId != ''">
+   and t.ar_id= #{arId}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="primeRate !=null and primeRate != ''">
+   and t.prime_rate= #{primeRate}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="acctId !=null and acctId != ''">
+   and t.acct_id= #{acctId}
+</if> 
+<if test="receivableAmount !=null and receivableAmount != ''">
+   and t.receivable_amount= #{receivableAmount}
+</if> 
+<if test="receivedAmount !=null and receivedAmount != ''">
+   and t.received_amount= #{receivedAmount}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+
+
+     </select>
+
+</mapper>
