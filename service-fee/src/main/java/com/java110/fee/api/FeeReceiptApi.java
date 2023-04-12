@@ -131,6 +131,7 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "detailIds", required = false) String detailIds,
                                                   @RequestParam(value = "qstartTime", required = false) String qstartTime,
                                                   @RequestParam(value = "qendTime", required = false) String qendTime,
+                                                  @RequestParam(value = "feeId", required = false) String feeId,
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row,
                                                   @RequestHeader(value = "user_id") String userId) {
@@ -158,6 +159,7 @@ public class FeeReceiptApi {
         feeReceiptDto.setObjId(objId);
         feeReceiptDto.setStoreName(storeName);
         feeReceiptDto.setPayObjId(payObjId);
+        feeReceiptDto.setFeeId(feeId);
         if (!StringUtil.isEmpty(qstartTime)) {
             feeReceiptDto.setQstartTime(qstartTime + " 00:00:00");
         }

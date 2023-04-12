@@ -81,6 +81,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test="feeId !=null and feeId != ''">
+            and frd.fee_id = #{feeId}
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
@@ -334,6 +337,9 @@
             <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and frd.fee_id = #{feeId}
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
