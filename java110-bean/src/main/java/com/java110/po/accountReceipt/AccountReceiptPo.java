@@ -36,6 +36,7 @@ private String receivableAmount;
 private String receivedAmount;
 private String communityId;
 private String ownerId;
+private String statusCd = "0";
 public String getArId() {
         return arId;
     }
@@ -91,6 +92,11 @@ public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
+    public String getStatusCd() {
+        return statusCd;
+    }
 
-
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
 }
