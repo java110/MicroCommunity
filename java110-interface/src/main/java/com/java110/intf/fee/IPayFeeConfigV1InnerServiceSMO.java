@@ -17,6 +17,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.po.fee.PayFeeConfigPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,4 +65,10 @@ public interface IPayFeeConfigV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryPayFeeConfigsCount", method = RequestMethod.POST)
     int queryPayFeeConfigsCount(@RequestBody FeeConfigDto payFeeConfigDto);
+
+    @RequestMapping(value = "/queryFeeObjsCount", method = RequestMethod.POST)
+    int queryFeeObjsCount(@RequestBody FeeConfigDto feeConfigDto);
+
+    @RequestMapping(value = "/queryFeeObjs", method = RequestMethod.POST)
+    List<FeeDto> queryFeeObjs(@RequestBody FeeConfigDto feeConfigDto);
 }

@@ -74,4 +74,7 @@ public interface IPayFeeConfigV1ServiceDao {
      */
     int queryPayFeeConfigsCount(Map info);
 
+    int queryFeeObjsCount(Map info);
+
+    List<Map> queryFeeObjs(Map info);
 }

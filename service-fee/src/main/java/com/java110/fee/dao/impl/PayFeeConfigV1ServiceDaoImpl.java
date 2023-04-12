@@ -108,5 +108,26 @@ public class PayFeeConfigV1ServiceDaoImpl extends BaseServiceDao implements IPay
         return Integer.parseInt(businessPayFeeConfigInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryFeeObjsCount(Map info) {
+        logger.debug("查询 queryFeeObjsCount 入参 info : {}",info);
+
+        List<Map> datas = sqlSessionTemplate.selectList("payFeeConfigV1ServiceDaoImpl.queryFeeObjsCount", info);
+        if (datas.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(datas.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryFeeObjs(Map info) {
+        logger.debug("查询 queryFeeObjs 入参 info : {}",info);
+
+        List<Map> datas = sqlSessionTemplate.selectList("payFeeConfigV1ServiceDaoImpl.queryFeeObjs",info);
+
+        return datas;
+    }
+
 
 }

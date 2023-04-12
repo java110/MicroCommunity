@@ -19,6 +19,7 @@ package com.java110.fee.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.fee.dao.IPayFeeConfigV1ServiceDao;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeConfigPo;
@@ -84,6 +85,27 @@ public class PayFeeConfigV1InnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryPayFeeConfigsCount(@RequestBody FeeConfigDto payFeeConfigDto) {
         return payFeeConfigV1ServiceDaoImpl.queryPayFeeConfigsCount(BeanConvertUtil.beanCovertMap(payFeeConfigDto));
+    }
+
+    @Override
+    public int queryFeeObjsCount(@RequestBody FeeConfigDto feeConfigDto) {
+        return payFeeConfigV1ServiceDaoImpl.queryFeeObjsCount(BeanConvertUtil.beanCovertMap(feeConfigDto));
+    }
+
+    @Override
+    public List<FeeDto> queryFeeObjs(@RequestBody FeeConfigDto feeConfigDto) {
+        //校验是否传了 分页信息
+
+        int page = feeConfigDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeConfigDto.setPage((page - 1) * feeConfigDto.getRow());
+        }
+
+        List<FeeDto> feeDtos = BeanConvertUtil.covertBeanList(
+                payFeeConfigV1ServiceDaoImpl.queryFeeObjs(BeanConvertUtil.beanCovertMap(feeConfigDto)), FeeDto.class);
+
+        return feeDtos;
     }
 
 }
