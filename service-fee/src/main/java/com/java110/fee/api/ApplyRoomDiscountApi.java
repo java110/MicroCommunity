@@ -415,6 +415,7 @@ public class ApplyRoomDiscountApi {
                                                          @RequestParam(value = "roomId", required = false) String roomId,
                                                          @RequestParam(value = "state", required = false) String state,
                                                          @RequestParam(value = "applyType", required = false) String applyType,
+                                                         @RequestParam(value = "feeId", required = false) String feeId,
                                                          @RequestParam(value = "page") int page,
                                                          @RequestParam(value = "row") int row) {
         ApplyRoomDiscountDto applyRoomDiscountDto = new ApplyRoomDiscountDto();
@@ -426,6 +427,7 @@ public class ApplyRoomDiscountApi {
         applyRoomDiscountDto.setRoomId(roomId);
         applyRoomDiscountDto.setState(state);
         applyRoomDiscountDto.setApplyType(applyType);
+        applyRoomDiscountDto.setFeeId(feeId);
         return getApplyRoomDiscountBMOImpl.get(applyRoomDiscountDto);
     }
 
