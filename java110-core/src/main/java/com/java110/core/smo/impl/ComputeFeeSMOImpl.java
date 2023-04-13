@@ -2300,9 +2300,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
             curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
             oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+            curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
+        }else{
+            curOweMonth = dayCompare(feeDto.getEndTime(), feeDto.getDeadlineTime());
         }
+       // curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
 
-        curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
 
         double maxCycle = Math.ceil(curOweMonth / rateCycle);
 
