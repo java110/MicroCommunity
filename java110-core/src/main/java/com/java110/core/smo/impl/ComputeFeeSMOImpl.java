@@ -2297,20 +2297,26 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         //计算 计费起始时间 到 rateStartTime 时的费用
         double curOweMonth = 0;
         BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
+
+        // todo 如果计费起始时间 小区 递增开始时间
         if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
+            //todo 递增前的欠费
             curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
             oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+            // todo 递增
             curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
         }else{
+            // todo 递增
             curOweMonth = dayCompare(feeDto.getEndTime(), feeDto.getDeadlineTime());
         }
-       // curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
+        double rateMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
 
+        // todo 最大周期
+        double maxCycle = Math.ceil(rateMonth / rateCycle);
 
-        double maxCycle = Math.ceil(curOweMonth / rateCycle);
-
-        // 增长前的欠费
+        // todo 增长前的欠费
         BigDecimal addTotalAmount = oweAmountDec;
+        // todo 递增周期内的 未递增费用
         BigDecimal preCycleAmount = curFeePrice.multiply(new BigDecimal(rateCycle));
         BigDecimal rateDec = null; //递增周期所收费用
         BigDecimal lastRateAmountDec = null;
@@ -2328,7 +2334,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             curEndTimeCalender.setTime(rateStartTime);
             curEndTimeCalender.add(Calendar.MONTH, new Double(curCycle).intValue());
             curEndTime = curEndTimeCalender.getTime();
-            if (curCycle > curOweMonth) {
+            if (curCycle > rateMonth) {
                 //不足增长周期增长率
                 rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
