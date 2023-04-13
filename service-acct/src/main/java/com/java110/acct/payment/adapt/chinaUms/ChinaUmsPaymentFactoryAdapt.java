@@ -9,6 +9,7 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
@@ -108,7 +109,7 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/chinaums/992020011134400001";
+        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/chinaums/992020011134400001/"+smallWeChatDto.getObjId();
 
         String openId = reqJson.getString("openId");
 
@@ -214,8 +215,8 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
 
     @Override
-    public PaymentOrderDto java110NotifyPayment(String param) {
-
+    public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
+        String param = notifyPaymentOrderDto.getParam();
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
 
         JSONObject resJson = new JSONObject();
@@ -225,7 +226,7 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             JSONObject map = JSONObject.parseObject(param);
             logger.info("【银联支付回调】 回调数据： \n" + map);
             //更新数据
-            int result = confirmPayFee(map, paymentOrderDto);
+            int result = confirmPayFee(map, paymentOrderDto,notifyPaymentOrderDto);
             if (result > 0) {
                 //支付成功
                 resJson.put("errCode", "SUCCESS");
@@ -239,18 +240,19 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         return paymentOrderDto;
     }
 
-    public int confirmPayFee(JSONObject map, PaymentOrderDto paymentOrderDto) {
-        String appId;
+    public int confirmPayFee(JSONObject map, PaymentOrderDto paymentOrderDto,NotifyPaymentOrderDto notifyPaymentOrderDto) {
+        String appId = notifyPaymentOrderDto.getAppId();
         //兼容 港币交易时 或者微信有时不会掉参数的问题
-        if (map.containsKey("wId")) {
-            String wId = map.get("wId").toString();
-            wId = wId.replace(" ", "+");
-            appId = WechatFactory.getAppId(wId);
-        } else {
-            appId = map.get("appid").toString();
-        }
+//        if (map.containsKey("wId")) {
+//            String wId = map.get("wId").toString();
+//            wId = wId.replace(" ", "+");
+//            appId = WechatFactory.getAppId(wId);
+//        } else {
+//            appId = map.get("appid").toString();
+//        }
         JSONObject paramIn = new JSONObject();
         paramIn.put("appId", appId);
+        paramIn.put("communityId",notifyPaymentOrderDto.getCommunityId());
         SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
         //String sign = PayUtil.createChinaUmsSign(paramMap, smallWeChatDto.getPayPassword());
         String preSign = map.getString("preSign");
@@ -283,6 +285,7 @@ public class ChinaUmsPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
             smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
             smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
+            smallWeChatDto.setObjId(paramIn.getString("communityId"));
             return smallWeChatDto;
         }
 

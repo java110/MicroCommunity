@@ -2,6 +2,7 @@ package com.java110.acct.payment;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 
 import java.util.Map;
@@ -19,5 +20,5 @@ public interface IPaymentFactoryAdapt {
      * @param param
      * @return
      */
-    PaymentOrderDto java110NotifyPayment(String param);
+    PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto);
 }

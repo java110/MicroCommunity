@@ -10,6 +10,7 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
@@ -89,7 +90,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = UrlCache.getOwnerUrl()+"/app/payment/notify/wechat/992020011134400001";
+        String notifyUrl = UrlCache.getOwnerUrl()+"/app/payment/notify/wechat/992020011134400001/"+smallWeChatDto.getObjId();
 
         String openId = reqJson.getString("openId");
 
@@ -223,24 +224,26 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
 
     @Override
-    public PaymentOrderDto java110NotifyPayment(String param) {
+    public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
+        String param = notifyPaymentOrderDto.getParam();
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         JSONObject json = JSON.parseObject(param);
 
         String signature = json.getString("signature");
         String content = json.getString("content");
-        String appId;
-        if (json.containsKey("wId")) {
-            String wId = json.get("wId").toString();
-            wId = wId.replace(" ", "+");
-            appId = WechatFactory.getAppId(wId);
-        } else {
-            appId = json.get("appid").toString();
-        }
+        String appId = notifyPaymentOrderDto.getAppId();
+//        if (json.containsKey("wId")) {
+//            String wId = json.get("wId").toString();
+//            wId = wId.replace(" ", "+");
+//            appId = WechatFactory.getAppId(wId);
+//        } else {
+//            appId = json.get("appid").toString();
+//        }
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("appId", appId);
+        paramIn.put("communityId",notifyPaymentOrderDto.getCommunityId());
         SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
         if (smallWeChatDto == null) {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
@@ -282,6 +285,8 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
             smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
             smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
+            smallWeChatDto.setObjId(paramIn.getString("communityId"));
+
             return smallWeChatDto;
         }
 

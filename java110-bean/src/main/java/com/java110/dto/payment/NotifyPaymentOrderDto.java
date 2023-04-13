@@ -8,9 +8,12 @@ public class NotifyPaymentOrderDto implements Serializable{
 
     private String param;
 
-    public NotifyPaymentOrderDto(String appId, String param) {
+    private String communityId;
+
+    public NotifyPaymentOrderDto(String appId, String param,String communityId) {
         this.appId = appId;
         this.param = param;
+        this.communityId = communityId;
     }
 
     public NotifyPaymentOrderDto() {
@@ -30,5 +33,13 @@ public class NotifyPaymentOrderDto implements Serializable{
 
     public void setParam(String param) {
         this.param = param;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

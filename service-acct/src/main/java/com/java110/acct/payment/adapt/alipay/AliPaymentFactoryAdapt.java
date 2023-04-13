@@ -16,6 +16,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.fee.ITempCarFeeCreateOrderV1InnerServiceSMO;
@@ -94,7 +95,7 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String communityId = reqJson.getString("communityId");
-        String notifyUrl = UrlCache.getOwnerUrl()+ "/app/payment/notify/common/992020011134400001";
+        String notifyUrl = UrlCache.getOwnerUrl()+ "/app/payment/notify/common/992020011134400001/"+smallWeChatDto.getObjId();
 
         String openId = reqJson.getString("openId");
 
@@ -184,8 +185,8 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
 
     @Override
-    public PaymentOrderDto java110NotifyPayment(String param) {
-        JSONObject reqJson = JSONObject.parseObject(param);
+    public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
+        JSONObject reqJson = JSONObject.parseObject(notifyPaymentOrderDto.getParam());
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         Assert.jsonObjectHaveKey(reqJson, "out_trade_no", "请求报文中未包含订单信息");
@@ -269,6 +270,7 @@ public class AliPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
             smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
             smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
+            smallWeChatDto.setObjId(paramIn.getString("communityId"));
             return smallWeChatDto;
         }
 

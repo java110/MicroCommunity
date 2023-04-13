@@ -25,12 +25,12 @@ public class NotifyPaymentController {
      * @param request
      * @throws Exception
      */
-    @RequestMapping(path = "/common/{appId}", method = RequestMethod.POST)
-    public ResponseEntity<String> notify(@RequestBody String postInfo, @PathVariable String appId, HttpServletRequest request) {
+    @RequestMapping(path = "/common/{appId}/{communityId}", method = RequestMethod.POST)
+    public ResponseEntity<String> notify(@RequestBody String postInfo, @PathVariable String appId,@PathVariable String communityId, HttpServletRequest request) {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,postInfo));
+        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,postInfo,communityId));
 
     }
 }

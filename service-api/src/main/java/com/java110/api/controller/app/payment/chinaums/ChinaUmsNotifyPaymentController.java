@@ -32,8 +32,8 @@ public class ChinaUmsNotifyPaymentController extends BaseController{
      * @param request
      * @throws Exception
      */
-    @RequestMapping(path = "/chinaums/{appId}", method = RequestMethod.POST)
-    public ResponseEntity<String> notify( @PathVariable String appId, HttpServletRequest request) {
+    @RequestMapping(path = "/chinaums/{appId}/{communityId}", method = RequestMethod.POST)
+    public ResponseEntity<String> notify( @PathVariable String appId,@PathVariable String communityId, HttpServletRequest request) {
         JSONObject paramIn = new JSONObject();
         for (String key : request.getParameterMap().keySet()) {
             paramIn.put(key, request.getParameter(key));
@@ -52,7 +52,7 @@ public class ChinaUmsNotifyPaymentController extends BaseController{
         paramIn.put("preSign", preStr);
         paramIn.put("sign", sign);
 
-        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,paramIn.toJSONString()));
+        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,paramIn.toJSONString(),communityId));
 
     }
 

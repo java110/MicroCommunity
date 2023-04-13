@@ -262,7 +262,8 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
 
     @Override
-    public PaymentOrderDto java110NotifyPayment(String param) {
+    public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
+        String param = notifyPaymentOrderDto.getParam();
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         JSONObject json = JSON.parseObject(param);
@@ -383,6 +384,7 @@ public class IcbcPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
             smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
             smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
+            smallWeChatDto.setObjId(paramIn.getString("communityId"));
             return smallWeChatDto;
         }
 

@@ -75,7 +75,7 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 //支付适配器IPayNotifyAdapt
             logger.debug("适配器：" + payNotifyAdapt);
             IPaymentFactoryAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPaymentFactoryAdapt.class);
-            PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto.getParam());
+            PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto);
             logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
 
             if (StringUtil.isEmpty(paymentOrderDto.getOrderId())) {
