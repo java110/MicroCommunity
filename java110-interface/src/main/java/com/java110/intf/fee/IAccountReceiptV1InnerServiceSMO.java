@@ -16,9 +16,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.dto.accountReceipt.AccountReceiptDto;
+import com.java110.po.accountReceipt.AccountReceiptPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,47 +27,42 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2021-09-18 13:28:12 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-04-13 01:28:30 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@FeignClient(name = "${java110.fee-service}", configuration = {FeignConfiguration.class})
-@RequestMapping("/payFeeConfigV1Api")
-public interface IPayFeeConfigV1InnerServiceSMO {
+@FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/accountReceiptV1Api")
+public interface IAccountReceiptV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/savePayFeeConfig", method = RequestMethod.POST)
-    public int savePayFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo);
+    @RequestMapping(value = "/saveAccountReceipt", method = RequestMethod.POST)
+    public int saveAccountReceipt(@RequestBody  AccountReceiptPo accountReceiptPo);
 
-    @RequestMapping(value = "/updatePayFeeConfig", method = RequestMethod.POST)
-    public int updatePayFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo);
+    @RequestMapping(value = "/updateAccountReceipt", method = RequestMethod.POST)
+    public int updateAccountReceipt(@RequestBody  AccountReceiptPo accountReceiptPo);
 
-    @RequestMapping(value = "/deletePayFeeConfig", method = RequestMethod.POST)
-    public int deletePayFeeConfig(@RequestBody PayFeeConfigPo payFeeConfigPo);
+    @RequestMapping(value = "/deleteAccountReceipt", method = RequestMethod.POST)
+    public int deleteAccountReceipt(@RequestBody  AccountReceiptPo accountReceiptPo);
 
     /**
      * <p>查询小区楼信息</p>
      *
-     * @param payFeeConfigDto 数据对象分享
-     * @return PayFeeConfigDto 对象数据
+     *
+     * @param accountReceiptDto 数据对象分享
+     * @return AccountReceiptDto 对象数据
      */
-    @RequestMapping(value = "/queryPayFeeConfigs", method = RequestMethod.POST)
-    List<FeeConfigDto> queryPayFeeConfigs(@RequestBody FeeConfigDto payFeeConfigDto);
+    @RequestMapping(value = "/queryAccountReceipts", method = RequestMethod.POST)
+    List<AccountReceiptDto> queryAccountReceipts(@RequestBody AccountReceiptDto accountReceiptDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param payFeeConfigDto 数据对象分享
+     * @param accountReceiptDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryPayFeeConfigsCount", method = RequestMethod.POST)
-    int queryPayFeeConfigsCount(@RequestBody FeeConfigDto payFeeConfigDto);
-
-    @RequestMapping(value = "/queryFeeObjsCount", method = RequestMethod.POST)
-    int queryFeeObjsCount(@RequestBody FeeConfigDto feeConfigDto);
-
-    @RequestMapping(value = "/queryFeeObjs", method = RequestMethod.POST)
-    List<FeeDto> queryFeeObjs(@RequestBody FeeConfigDto feeConfigDto);
+    @RequestMapping(value = "/queryAccountReceiptsCount", method = RequestMethod.POST)
+    int queryAccountReceiptsCount(@RequestBody AccountReceiptDto accountReceiptDto);
 }

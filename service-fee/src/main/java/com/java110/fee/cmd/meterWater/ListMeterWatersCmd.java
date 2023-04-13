@@ -54,9 +54,9 @@ import org.slf4j.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "meterWater.listMeterWaters")
-public class ListMeterWaterCmd extends Cmd {
+public class ListMeterWatersCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListMeterWaterCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMeterWatersCmd.class);
 
     @Autowired
     private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;

@@ -95,6 +95,9 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
             headers.put(CommonConstant.HTTP_APP_ID, pd.getAppId());
         }
+        if (!headers.containsKey(CommonConstant.APP_ID)) {
+            headers.put(CommonConstant.APP_ID, pd.getAppId());
+        }
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
         }

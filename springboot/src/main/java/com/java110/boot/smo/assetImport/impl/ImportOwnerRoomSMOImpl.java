@@ -73,6 +73,14 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
         return false;
     }
 
+    private boolean hasRoomSpecialCharacters(String str) {
+        if ( str.contains("#") || str.contains("?") || str.contains("&")) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * 数据格式校验
      *
@@ -91,7 +99,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (hasSpecialCharacters(importOwnerRoomDto.getUnitNum())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
-            if (hasSpecialCharacters(importOwnerRoomDto.getRoomNum())) {
+            if (hasRoomSpecialCharacters(importOwnerRoomDto.getRoomNum())) {
                 throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
 
