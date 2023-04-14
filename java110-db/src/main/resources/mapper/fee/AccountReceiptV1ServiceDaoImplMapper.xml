@@ -21,10 +21,10 @@
         primeRate,t.link,t.acct_id,t.acct_id acctId,t.receivable_amount,t.receivable_amount
         receivableAmount,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id
         communityId,t.owner_id,t.owner_id ownerId,t.remark,act.acct_name acctName,act.acct_type acctType,act.amount,
-        td.name primeRateName,td1.name acctTypeName
+        td.name primeRateName,td1.name acctTypeName,t.create_time createTime
         from account_receipt t
         left join account act on t.acct_id = act.acct_id and act.status_cd = '0'
-        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'account_receipt' and td.table_columns = 'prime_rate'
+        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'prime_rate'
         left join t_dict td1 on act.acct_type = td1.status_cd and td1.table_name = 'account' and td1.table_columns = 'acct_type'
         where 1 =1
         <if test="arId !=null and arId != ''">
