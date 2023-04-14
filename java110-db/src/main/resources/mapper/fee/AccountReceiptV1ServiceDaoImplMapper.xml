@@ -30,6 +30,13 @@
         <if test="arId !=null and arId != ''">
             and t.ar_id= #{arId}
         </if>
+        <if test="arIds != null">
+            and t.ar_id in
+            <foreach collection="arIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}
         </if>
@@ -106,6 +113,12 @@
         where 1 =1
         <if test="arId !=null and arId != ''">
             and t.ar_id= #{arId}
+        </if>
+        <if test="arIds != null">
+            and t.ar_id in
+            <foreach collection="arIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}

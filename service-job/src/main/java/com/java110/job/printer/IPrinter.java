@@ -24,4 +24,15 @@ public interface IPrinter {
      * @param repairUserId
      */
     ResultVo printRepair(String repairUserId,String communityId,int quantity, MachinePrinterDto machinePrinterDto);
+
+    /**
+     *  打印预存单
+     * @param arIds
+     * @param communityId
+     * @param quantity
+     * @param machinePrinterDto
+     * @param name
+     * @return
+     */
+    ResultVo printAccountReceipt(String[] arIds, String communityId, int quantity, MachinePrinterDto machinePrinterDto, String name);
 }

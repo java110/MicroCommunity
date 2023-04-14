@@ -17,6 +17,7 @@ import java.util.Date;
 public class AccountReceiptDto extends AccountDto implements Serializable {
 
     private String arId;
+    private String[] arIds;
     private String ownerName;
     private String primeRate;
     private String link;
@@ -151,5 +152,13 @@ public class AccountReceiptDto extends AccountDto implements Serializable {
     @Override
     public void setAcctTypeName(String acctTypeName) {
         this.acctTypeName = acctTypeName;
+    }
+
+    public String[] getArIds() {
+        return arIds;
+    }
+
+    public void setArIds(String[] arIds) {
+        this.arIds = arIds;
     }
 }

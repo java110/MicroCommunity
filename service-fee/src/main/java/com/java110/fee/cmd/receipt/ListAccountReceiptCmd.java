@@ -24,6 +24,7 @@ import com.java110.intf.fee.IAccountReceiptV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.accountReceipt.AccountReceiptDto;
@@ -64,6 +65,10 @@ public class ListAccountReceiptCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         AccountReceiptDto accountReceiptDto = BeanConvertUtil.covertBean(reqJson, AccountReceiptDto.class);
+
+        if(reqJson.containsKey("arIds") && !StringUtil.isEmpty(reqJson.getString("arIds"))){
+            accountReceiptDto.setArIds(reqJson.getString("arIds").split(","));
+        }
 
         int count = accountReceiptV1InnerServiceSMOImpl.queryAccountReceiptsCount(accountReceiptDto);
 

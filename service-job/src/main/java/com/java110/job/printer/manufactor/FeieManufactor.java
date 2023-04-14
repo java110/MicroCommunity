@@ -2,6 +2,7 @@ package com.java110.job.printer.manufactor;
 
 import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.accountReceipt.AccountReceiptDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
@@ -90,6 +91,9 @@ public class FeieManufactor implements IPrinter {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountReceiptV1InnerServiceSMO accountReceiptV1InnerServiceSMOImpl;
 
     /**
      * **************************
@@ -219,6 +223,44 @@ public class FeieManufactor implements IPrinter {
         feieLines.add(new FeieLine("内容", repairDtos.get(0).getContext()));
         printStr = FeieGetRepair.getPrintRepairHeaderContent(feieLines);
         /*************************************内容******************************************/
+
+        doPrint(quantity, machinePrinterDto, printStr);
+
+        return new ResultVo(ResultVo.CODE_OK, "成功");
+    }
+
+    @Override
+    public ResultVo printAccountReceipt(String[] arIds, String communityId, int quantity, MachinePrinterDto machinePrinterDto, String name) {
+        String printStr = "";
+        AccountReceiptDto accountReceiptDto = new AccountReceiptDto();
+        accountReceiptDto.setArIds(arIds);
+        accountReceiptDto.setCommunityId(communityId);
+        List<AccountReceiptDto> accountReceiptDtos = accountReceiptV1InnerServiceSMOImpl.queryAccountReceipts(accountReceiptDto);
+        if(accountReceiptDtos == null || accountReceiptDtos.size() < 1){
+            throw new CmdException("没有打印内容");
+        }
+
+        /*************************************头部******************************************/
+        List<FeieLine> feieLines = new ArrayList<>();
+        feieLines.add(new FeieLine("单号", accountReceiptDtos.get(0).getArId()));
+        feieLines.add(new FeieLine("时间", DateUtil.getFormatTimeString(DateUtil.getCurrentDate(), DateUtil.DATE_FORMATE_STRING_A)));
+        printStr = FeieGetPayFeeDetail.getPrintPayFeeDetailHeaderContent(feieLines);
+        /*************************************头部******************************************/
+
+        feieLines = new ArrayList<>();
+        BigDecimal totalDecimal = new BigDecimal(0);
+        for (AccountReceiptDto tmpAccountReceiptDto : accountReceiptDtos) {
+            feieLines.add(new FeieLine("账户名称", tmpAccountReceiptDto.getAcctName()));
+            feieLines.add(new FeieLine("账户类型", tmpAccountReceiptDto.getAcctTypeName()));
+            feieLines.add(new FeieLine("业主", tmpAccountReceiptDto.getOwnerName()));
+            feieLines.add(new FeieLine("预存金额", tmpAccountReceiptDto.getReceivedAmount()));
+            feieLines.add(new FeieLine("预存方式", tmpAccountReceiptDto.getPrimeRateName()));
+            feieLines.add(new FeieLine("当前余额", tmpAccountReceiptDto.getAmount()));
+            feieLines.add(new FeieLine("备注", tmpAccountReceiptDto.getRemark()));
+            printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailBodyContent(feieLines);
+            totalDecimal = totalDecimal.add(new BigDecimal(Double.parseDouble(tmpAccountReceiptDto.getAmount())));
+        }
+        printStr += FeieGetPayFeeDetail.getPrintPayFeeDetailFloorContent(communityId, totalDecimal.doubleValue(), name, smallWeChatInnerServiceSMOImpl);
 
         doPrint(quantity, machinePrinterDto, printStr);
 
