@@ -33,6 +33,10 @@ public class AccountReceiptDto extends AccountDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String primeRateName;
+
+    private String acctTypeName;
+
 
     public String getArId() {
         return arId;
@@ -129,5 +133,23 @@ public class AccountReceiptDto extends AccountDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getPrimeRateName() {
+        return primeRateName;
+    }
+
+    public void setPrimeRateName(String primeRateName) {
+        this.primeRateName = primeRateName;
+    }
+
+    @Override
+    public String getAcctTypeName() {
+        return acctTypeName;
+    }
+
+    @Override
+    public void setAcctTypeName(String acctTypeName) {
+        this.acctTypeName = acctTypeName;
     }
 }
