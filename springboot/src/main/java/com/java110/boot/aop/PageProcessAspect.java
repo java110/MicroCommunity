@@ -192,17 +192,16 @@ public class PageProcessAspect {
      */
     private String getToken(HttpServletRequest request) throws FilterException {
         String token = "";
-        if (request.getCookies() == null || request.getCookies().length == 0) {
-            return token;
-        }
-        for (Cookie cookie : request.getCookies()) {
-            if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
-                token = cookie.getValue();
+        if (request.getCookies() != null && request.getCookies().length > 0) {
+            for (Cookie cookie : request.getCookies()) {
+                if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
             }
         }
         String authorization = request.getHeader("Authorization");
 
-        if(StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)){
+        if (StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)) {
             token = token.substring("Bearer ".length());
         }
         return token;
