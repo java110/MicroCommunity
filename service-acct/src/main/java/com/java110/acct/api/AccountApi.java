@@ -193,6 +193,8 @@ public class AccountApi {
         Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
         Assert.hasKeyAndValue(reqJson, "amount", "金额不能为空");
         Assert.hasKeyAndValue(reqJson, "acctType", "账户类型不能为空");
+        Assert.hasKeyAndValue(reqJson, "primeRate", "未包含支付方式");
+
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setRemark(reqJson.getString("remark"));
         accountDetailPo.setObjId(reqJson.getString("ownerId"));

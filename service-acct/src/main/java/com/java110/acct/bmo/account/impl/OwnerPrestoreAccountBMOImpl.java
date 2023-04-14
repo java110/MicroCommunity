@@ -9,9 +9,11 @@ import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.fee.IAccountReceiptV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.accountReceipt.AccountReceiptPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
@@ -33,6 +35,9 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountReceiptV1InnerServiceSMO accountReceiptV1InnerServiceSMOImpl;
 
     /**
      * @param accountDetailPo
@@ -75,6 +80,25 @@ public class OwnerPrestoreAccountBMOImpl implements IOwnerPrestoreAccountBMO {
                 return ResultVo.error("预存失败");
             }
         }
+        // todo 记录账户收款单
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(reqJson.getString("ownerId"));
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "业主不存在");
+
+        AccountReceiptPo accountReceiptPo = new AccountReceiptPo();
+        accountReceiptPo.setOwnerId(reqJson.getString("ownerId"));
+        accountReceiptPo.setOwnerName(ownerDtos.get(0).getName());
+        accountReceiptPo.setLink(ownerDtos.get(0).getLink());
+        accountReceiptPo.setArId(GenerateCodeFactory.getGeneratorId("11"));
+        accountReceiptPo.setAcctId(accountDto.getAcctId());
+        accountReceiptPo.setPrimeRate(reqJson.getString("primeRate"));
+        accountReceiptPo.setReceivableAmount(reqJson.getString("amount"));
+        accountReceiptPo.setReceivedAmount(reqJson.getString("amount"));
+        accountReceiptPo.setRemark(reqJson.getString("remark"));
+        accountReceiptPo.setCommunityId(reqJson.getString("communityId"));
+        accountReceiptV1InnerServiceSMOImpl.saveAccountReceipt(accountReceiptPo);
         return ResultVo.success();
     }
 

@@ -8,9 +8,9 @@
     <!-- 保存预存单信息 add by wuxw 2018-07-03 -->
     <insert id="saveAccountReceiptInfo" parameterType="Map">
         insert into account_receipt(
-        ar_id,owner_name,prime_rate,link,acct_id,receivable_amount,received_amount,community_id,owner_id
+        ar_id,owner_name,prime_rate,link,acct_id,receivable_amount,received_amount,community_id,owner_id,remark
         ) values (
-        #{arId},#{ownerName},#{primeRate},#{link},#{acctId},#{receivableAmount},#{receivedAmount},#{communityId},#{ownerId}
+        #{arId},#{ownerName},#{primeRate},#{link},#{acctId},#{receivableAmount},#{receivedAmount},#{communityId},#{ownerId},#{remark}
         )
     </insert>
 
@@ -20,8 +20,9 @@
         select t.ar_id,t.ar_id arId,t.owner_name,t.owner_name ownerName,t.prime_rate,t.prime_rate
         primeRate,t.link,t.acct_id,t.acct_id acctId,t.receivable_amount,t.receivable_amount
         receivableAmount,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id
-        communityId,t.owner_id,t.owner_id ownerId
+        communityId,t.owner_id,t.owner_id ownerId,t.remark,act.acct_name acctName,act.acct_type acctType,act.amount
         from account_receipt t
+        left join account act on t.acct_id = act.acct_id and act.status_cd = '0'
         where 1 =1
         <if test="arId !=null and arId != ''">
             and t.ar_id= #{arId}

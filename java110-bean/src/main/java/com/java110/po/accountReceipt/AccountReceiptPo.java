@@ -17,6 +17,7 @@ package com.java110.po.accountReceipt;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-04-13 01:28:30 mail: 928255095@qq.com
@@ -28,67 +29,87 @@ import java.util.Date;
 public class AccountReceiptPo implements Serializable {
 
     private String arId;
-private String ownerName;
-private String primeRate;
-private String link;
-private String acctId;
-private String receivableAmount;
-private String receivedAmount;
-private String communityId;
-private String ownerId;
-private String statusCd = "0";
-public String getArId() {
+    private String ownerName;
+    private String primeRate;
+    private String link;
+    private String acctId;
+    private String receivableAmount;
+    private String receivedAmount;
+    private String communityId;
+    private String ownerId;
+
+    private String remark;
+    private String statusCd = "0";
+
+    public String getArId() {
         return arId;
     }
-public void setArId(String arId) {
+
+    public void setArId(String arId) {
         this.arId = arId;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getPrimeRate() {
+
+    public String getPrimeRate() {
         return primeRate;
     }
-public void setPrimeRate(String primeRate) {
+
+    public void setPrimeRate(String primeRate) {
         this.primeRate = primeRate;
     }
-public String getLink() {
+
+    public String getLink() {
         return link;
     }
-public void setLink(String link) {
+
+    public void setLink(String link) {
         this.link = link;
     }
-public String getAcctId() {
+
+    public String getAcctId() {
         return acctId;
     }
-public void setAcctId(String acctId) {
+
+    public void setAcctId(String acctId) {
         this.acctId = acctId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -98,5 +119,13 @@ public void setOwnerId(String ownerId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
