@@ -180,7 +180,7 @@
             and t.repair_name like '%${repairName}%'
         </if>
         <if test="repairNameLike !=null and repairNameLike != ''">
-            and t.repair_name like concat('%',${repairNameLike},'%')
+            and t.repair_name like concat('%',#{repairNameLike},'%')
         </if>
         <if test="appointmentTime !=null ">
             and t.appointment_time= #{appointmentTime}
@@ -327,7 +327,7 @@
             and t.repair_name like '%${repairName}%'
         </if>
         <if test="repairNameLike !=null and repairNameLike != ''">
-            and t.repair_name like concat('%',${repairNameLike},'%')
+            and t.repair_name like concat('%',#{repairNameLike},'%')
         </if>
         <if test="appointmentTime !=null ">
             and t.appointment_time= #{appointmentTime}

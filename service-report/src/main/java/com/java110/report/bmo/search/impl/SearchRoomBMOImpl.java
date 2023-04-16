@@ -73,6 +73,9 @@ public class SearchRoomBMOImpl implements ISearchRoomBMO {
         if (tmpRoomDtos == null || tmpRoomDtos.size() < 1) {
             return;
         }
+        for(RoomDto tmpRoomDto : tmpRoomDtos){
+            tmpRoomDto.setRoomName(tmpRoomDto.getFloorNum()+"-"+tmpRoomDto.getUnitNum()+"-"+tmpRoomDto.getRoomNum());
+        }
         roomDtos.addAll(tmpRoomDtos);
     }
 }
