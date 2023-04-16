@@ -203,6 +203,7 @@ public class PageProcessAspect {
 
         if (StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)) {
             token = token.substring("Bearer ".length());
+            System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>token="+token);
         }
         return token;
     }
