@@ -105,9 +105,11 @@ public class JwtFilter implements Filter {
      */
     private String getToken(HttpServletRequest request) throws FilterException {
         String token = "";
-        for (Cookie cookie : request.getCookies()) {
-            if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
-                token = cookie.getValue();
+        if (request.getCookies() != null && request.getCookies().length > 0) {
+            for (Cookie cookie : request.getCookies()) {
+                if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
             }
         }
 
