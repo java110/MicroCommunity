@@ -114,7 +114,7 @@ public class JwtFilter implements Filter {
         String authorization = request.getHeader("Authorization");
 
         if(StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)){
-            token = token.substring("Bearer ".length());
+            token = authorization.substring("Bearer ".length());
             System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>token="+token);
         }
 
