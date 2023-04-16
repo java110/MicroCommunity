@@ -45,7 +45,7 @@ public class SearchStaffBMOImpl implements ISearchStaffBMO {
         if(tmpUserDtos == null || tmpUserDtos.size()< 1){
             return ;
         }
-        userDtos.addAll(userDtos);
+        userDtos.addAll(tmpUserDtos);
     }
 
     private void queryStaffByName(SearchDataDto searchDataDto, List<UserDto> userDtos) {
@@ -57,6 +57,6 @@ public class SearchStaffBMOImpl implements ISearchStaffBMO {
         if(tmpUserDtos == null || tmpUserDtos.size()< 1){
             return ;
         }
-        userDtos.addAll(userDtos);
+        userDtos.addAll(tmpUserDtos);
     }
 }

@@ -1,11 +1,15 @@
 package com.java110.report.bmo.search.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.SearchDataDto;
 import com.java110.dto.visit.VisitDto;
+import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
 import com.java110.report.bmo.search.ISearchStaffBMO;
 import com.java110.report.bmo.search.ISearchVisitBMO;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.api.visit.ApiVisitDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,9 @@ public class SearchVisitBMOImpl implements ISearchVisitBMO {
     @Autowired
     private IVisitV1InnerServiceSMO visitV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
+
     @Override
     public SearchDataDto query(SearchDataDto searchDataDto) {
 
@@ -29,6 +36,8 @@ public class SearchVisitBMOImpl implements ISearchVisitBMO {
         // todo 通过电话
         queryVisitByLink(searchDataDto,visitDtos);
 
+
+        refreshSetting(visitDtos,searchDataDto);
 
         searchDataDto.setVisitDtos(visitDtos);
 
@@ -66,5 +75,20 @@ public class SearchVisitBMOImpl implements ISearchVisitBMO {
         }
 
         visitDtos.addAll(tmpVisitDtos);
+    }
+
+    private void refreshSetting(List<VisitDto> visitDtos, SearchDataDto searchDataDto) {
+        VisitSettingDto visitSettingDto = new VisitSettingDto();
+        visitSettingDto.setCommunityId(searchDataDto.getCommunityId());
+        List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
+        if (visitSettingDtos == null || visitSettingDtos.size() < 1) {
+            return;
+        }
+        if (visitDtos == null || visitDtos.size() < 1) {
+            return;
+        }
+        for (VisitDto visitDto : visitDtos) {
+            visitDto.setFlowId(visitSettingDtos.get(0).getFlowId());
+        }
     }
 }
