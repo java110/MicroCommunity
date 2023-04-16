@@ -174,7 +174,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
             if (fee.containsKey("deadlineTime")) {
                 fee.put("startTime", DateUtil.getFormatTimeString(fee.getDate("endTime"), DateUtil.DATE_FORMATE_STRING_A));
                 fee.put("endTime", DateUtil.getFormatTimeString(fee.getDate("deadlineTime"), DateUtil.DATE_FORMATE_STRING_A));
-                fee.put("receivedAmount", fee.getString("feePrice"));
+                fee.put("receivedAmount", fee.getString("feeTotalPrice"));
                 fee.put("state", "");
             }
         }

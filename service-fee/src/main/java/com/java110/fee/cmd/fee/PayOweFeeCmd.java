@@ -202,6 +202,7 @@ public class PayOweFeeCmd extends Cmd {
             paramObj.put("remark", "线上小程序支付");
         }
         paramObj.put("state", "1400");
+        // todo 添加交费明细
         addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto);
         modifyOweFee(paramObj, dataFlowContext);
 
