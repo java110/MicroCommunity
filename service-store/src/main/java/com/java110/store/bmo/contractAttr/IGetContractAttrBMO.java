@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractAttr;
 
-import com.java110.dto.contractAttr.ContractAttrDto;
+import com.java110.dto.contract.ContractAttrDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetContractAttrBMO {

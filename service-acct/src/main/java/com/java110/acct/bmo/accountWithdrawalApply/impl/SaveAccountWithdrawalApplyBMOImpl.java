@@ -5,7 +5,6 @@ import com.java110.acct.bmo.accountWithdrawalApply.ISaveAccountWithdrawalApplyBM
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 
-import com.java110.dto.accountDetail.AccountDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.IAccountWithdrawalApplyInnerServiceSMO;

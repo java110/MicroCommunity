@@ -1,7 +1,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

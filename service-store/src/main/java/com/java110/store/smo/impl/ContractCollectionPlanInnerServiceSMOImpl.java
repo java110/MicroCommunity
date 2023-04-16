@@ -3,7 +3,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.contractCollectionPlan.ContractCollectionPlanDto;
+import com.java110.dto.contract.ContractCollectionPlanDto;
 import com.java110.intf.store.IContractCollectionPlanInnerServiceSMO;
 import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
 import com.java110.store.dao.IContractCollectionPlanServiceDao;

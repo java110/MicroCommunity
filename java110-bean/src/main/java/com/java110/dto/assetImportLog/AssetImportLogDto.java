@@ -1,7 +1,6 @@
 package com.java110.dto.assetImportLog;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -8,7 +8,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.po.account.AccountPo;
@@ -17,7 +17,6 @@ import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 

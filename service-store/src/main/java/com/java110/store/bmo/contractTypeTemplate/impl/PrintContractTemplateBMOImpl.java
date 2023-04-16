@@ -1,9 +1,9 @@
 package com.java110.store.bmo.contractTypeTemplate.impl;
 
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractAttr.ContractAttrDto;
-import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
-import com.java110.dto.contractTypeTemplate.ContractTypeTemplateDto;
+import com.java110.dto.contract.ContractAttrDto;
+import com.java110.dto.contract.ContractTypeSpecDto;
+import com.java110.dto.contract.ContractTypeTemplateDto;
 import com.java110.entity.mapping.Mapping;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;

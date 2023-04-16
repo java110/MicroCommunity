@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractType.ContractTypeDto;
+import com.java110.dto.contract.ContractTypeDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.rentingPool.RentingPoolDto;

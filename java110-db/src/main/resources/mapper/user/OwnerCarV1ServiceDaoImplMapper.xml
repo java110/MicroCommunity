@@ -30,6 +30,9 @@
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
+        </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
         </if>
@@ -159,6 +162,9 @@
         </if>
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
+        </if>
+        <if test="carNumLike !=null and carNumLike != ''">
+            and t.car_num like concat('%',#{carNumLike},'%')
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}

@@ -6,7 +6,7 @@ import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.communitySpace.CommunitySpacePersonTimeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.reserveGoods.ReserveGoodsDto;
 import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;

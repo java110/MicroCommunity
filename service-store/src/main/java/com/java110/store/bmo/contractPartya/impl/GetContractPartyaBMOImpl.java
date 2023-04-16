@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractPartya.impl;
 
-import com.java110.dto.contractPartya.ContractPartyaDto;
+import com.java110.dto.contract.ContractPartyaDto;
 import com.java110.intf.store.IContractPartyaInnerServiceSMO;
 import com.java110.store.bmo.contractPartya.IGetContractPartyaBMO;
 import com.java110.vo.ResultVo;

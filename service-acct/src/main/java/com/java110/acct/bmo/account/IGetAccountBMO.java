@@ -1,8 +1,7 @@
 package com.java110.acct.bmo.account;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.shopVipAccount.ShopVipAccountDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetAccountBMO {

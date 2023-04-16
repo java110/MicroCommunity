@@ -1,7 +1,7 @@
 package com.java110.store.bmo.contract;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.contract.ContractChangePlanDto;
 import com.java110.po.contract.ContractPo;
 import org.springframework.http.ResponseEntity;
 

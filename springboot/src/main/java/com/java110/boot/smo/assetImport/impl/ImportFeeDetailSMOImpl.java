@@ -9,7 +9,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;

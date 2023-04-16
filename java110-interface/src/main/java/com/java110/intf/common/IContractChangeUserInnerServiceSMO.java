@@ -1,19 +1,15 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.contract.ContractChangePlanDto;
 import com.java110.entity.audit.AuditUser;
-import com.java110.po.contract.ContractPo;
 import com.java110.po.contractChangePlan.ContractChangePlanPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
 @RequestMapping("/contractChangeUserApi")

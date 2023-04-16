@@ -1,8 +1,8 @@
 package com.java110.store.bmo.contract.impl;
 
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractAttr.ContractAttrDto;
-import com.java110.dto.contractChangePlan.ContractChangePlanDto;
+import com.java110.dto.contract.ContractAttrDto;
+import com.java110.dto.contract.ContractChangePlanDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;

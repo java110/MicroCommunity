@@ -1,7 +1,7 @@
 package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
+import com.java110.dto.contract.ContractChangePlanRoomDto;
 import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import com.java110.store.bmo.contractChangePlanRoom.IDeleteContractChangePlanRoomBMO;
 import com.java110.store.bmo.contractChangePlanRoom.IGetContractChangePlanRoomBMO;

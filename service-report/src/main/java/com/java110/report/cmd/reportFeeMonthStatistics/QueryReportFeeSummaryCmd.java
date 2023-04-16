@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;

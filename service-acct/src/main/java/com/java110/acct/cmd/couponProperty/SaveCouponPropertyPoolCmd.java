@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.couponPropertyPool.CouponPropertyPoolDto;
+import com.java110.dto.couponPool.CouponPropertyPoolDto;
 import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;

@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractType;
 
-import com.java110.dto.contractType.ContractTypeDto;
+import com.java110.dto.contract.ContractTypeDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetContractTypeBMO {

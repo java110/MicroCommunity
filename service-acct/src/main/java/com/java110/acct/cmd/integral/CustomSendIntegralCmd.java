@@ -169,7 +169,7 @@ public class CustomSendIntegralCmd extends Cmd {
             reqJson.put("objId", "-1");
             return userDtos.get(0).getName();
         }
-        return "";
+        throw new CmdException("业主不存在");
     }
 
     private void doGiftIntegral(AccountDto accountDto, JSONObject reqJson) {

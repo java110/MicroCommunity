@@ -1,7 +1,7 @@
 package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.contractFile.ContractFileDto;
+import com.java110.dto.contract.ContractFileDto;
 import com.java110.po.contractFile.ContractFilePo;
 import com.java110.store.bmo.contractFile.IDeleteContractFileBMO;
 import com.java110.store.bmo.contractFile.IGetContractFileBMO;

@@ -8,7 +8,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.assetImportLog.AssetImportLogDto;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.assetImport.*;
 import com.java110.entity.component.ComponentValidateResult;

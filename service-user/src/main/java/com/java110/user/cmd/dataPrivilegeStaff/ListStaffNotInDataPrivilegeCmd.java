@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;

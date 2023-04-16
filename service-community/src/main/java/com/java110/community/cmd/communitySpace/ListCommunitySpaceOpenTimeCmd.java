@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.communitySpaceOpenTime.CommunitySpaceOpenTimeDto;
+import com.java110.dto.communitySpace.CommunitySpaceOpenTimeDto;
 import com.java110.intf.community.ICommunitySpaceOpenTimeV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

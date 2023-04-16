@@ -5,7 +5,7 @@ import com.java110.acct.dao.IAccountDetailServiceDao;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.utils.util.BeanConvertUtil;

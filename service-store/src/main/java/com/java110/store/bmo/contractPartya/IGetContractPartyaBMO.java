@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractPartya;
-import com.java110.dto.contractPartya.ContractPartyaDto;
+import com.java110.dto.contract.ContractPartyaDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetContractPartyaBMO {
 

@@ -1,7 +1,7 @@
 package com.java110.common.bmo.assetImportLogDetail.impl;
 
 import com.java110.common.bmo.assetImportLogDetail.IGetAssetImportLogDetailBMO;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.intf.common.IAssetImportLogDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

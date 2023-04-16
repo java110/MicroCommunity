@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractRoom;
-import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.contract.ContractRoomDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetContractRoomBMO {
 

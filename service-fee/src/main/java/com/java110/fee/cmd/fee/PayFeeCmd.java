@@ -12,7 +12,7 @@ import com.java110.core.factory.Java110TransactionalFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;

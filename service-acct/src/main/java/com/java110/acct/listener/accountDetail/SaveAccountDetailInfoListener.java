@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.dao.IAccountServiceDao;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.accountDetail.AccountDetailDto;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.po.account.AccountPo;
 import com.java110.po.accountDetail.AccountDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;

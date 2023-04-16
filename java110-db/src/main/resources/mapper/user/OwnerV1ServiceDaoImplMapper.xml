@@ -33,6 +33,12 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
+        <if test="ownerTypeCds != null">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
@@ -53,6 +59,9 @@
         </if>
         <if test="name !=null and name != ''">
             and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -138,6 +147,12 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
+        <if test="ownerTypeCds != null">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
@@ -158,6 +173,9 @@
         </if>
         <if test="name !=null and name != ''">
             and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

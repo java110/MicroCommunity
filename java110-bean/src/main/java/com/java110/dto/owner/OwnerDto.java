@@ -21,6 +21,9 @@ public class OwnerDto extends PageDto implements Serializable {
     public static final String OWNER_TYPE_CD_OWNER = "1001"; //业主
     public static final String OWNER_TYPE_CD_MEMBER = "1002"; //家庭成员
     public static final String OWNER_TYPE_CD_RENTING = "1003"; //租客
+    public static final String OWNER_TYPE_CD_TEMP = "1004"; //临时人员
+    public static final String OWNER_TYPE_CD_OTHER = "1005"; //其他
+
 
     public static final String OWNER_FLAG_TRUE = "T";//业主标识 T是真实业主 F 是虚拟业主
     public static final String OWNER_FLAG_FALSE = "F";//业主标识 T是真实业主 F 是虚拟业主
@@ -42,6 +45,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String[] roomIds;
     private String sex;
     private String name;
+    private String nameLike;
     private String link;
     private String address;
     private String remark;
@@ -508,5 +512,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOperate(String operate) {
         this.operate = operate;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
     }
 }

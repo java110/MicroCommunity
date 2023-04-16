@@ -17,20 +17,17 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.ICouponPropertyUserV1ServiceDao;
-import com.java110.dto.couponUser.CouponUserDto;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
-import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
+import com.java110.dto.couponPool.CouponPropertyUserDto;
 import com.java110.po.couponPropertyUser.CouponPropertyUserPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -16,7 +16,7 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.communitySpace.CommunitySpacePersonTimeDto;
 import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

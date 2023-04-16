@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractChangePlanDetail;
-import com.java110.dto.contractChangePlanDetail.ContractChangePlanDetailDto;
+import com.java110.dto.contract.ContractChangePlanDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetContractChangePlanDetailBMO {
 

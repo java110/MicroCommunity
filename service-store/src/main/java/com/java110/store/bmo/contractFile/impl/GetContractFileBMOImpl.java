@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractFile.impl;
 
-import com.java110.dto.contractFile.ContractFileDto;
+import com.java110.dto.contract.ContractFileDto;
 import com.java110.intf.store.IContractFileInnerServiceSMO;
 import com.java110.store.bmo.contractFile.IGetContractFileBMO;
 import com.java110.utils.cache.MappingCache;

@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractCollectionPlan;
-import com.java110.dto.contractCollectionPlan.ContractCollectionPlanDto;
+import com.java110.dto.contract.ContractCollectionPlanDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetContractCollectionPlanBMO {
 

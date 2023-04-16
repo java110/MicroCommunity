@@ -489,6 +489,9 @@
         <if test="name !=null and name != ''">
             and u.name like concat('%',#{name},'%')
         </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and u.name like concat('%',#{nameLike},'%')
+        </if>
         <if test="staffName !=null and staffName != ''">
             and u.name like concat('%',#{staffName},'%')
         </if>
@@ -549,6 +552,9 @@
         </if>
         <if test="name !=null and name != ''">
             and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and u.name like concat('%',#{nameLike},'%')
         </if>
         <if test="staffName !=null and staffName != ''">
             and u.name like concat('%',#{staffName},'%')

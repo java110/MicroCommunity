@@ -16,7 +16,7 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.couponPropertyPoolDetail.CouponPropertyPoolDetailDto;
+import com.java110.dto.couponPool.CouponPropertyPoolDetailDto;
 import com.java110.po.couponPropertyPoolDetail.CouponPropertyPoolDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

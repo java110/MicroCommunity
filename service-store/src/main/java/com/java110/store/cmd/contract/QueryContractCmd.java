@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractAttr.ContractAttrDto;
+import com.java110.dto.contract.ContractAttrDto;
 import com.java110.intf.common.IContractApplyUserInnerServiceSMO;
 import com.java110.intf.common.IContractChangeUserInnerServiceSMO;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;

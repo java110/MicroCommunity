@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractFile;
-import com.java110.dto.contractFile.ContractFileDto;
+import com.java110.dto.contract.ContractFileDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetContractFileBMO {
 

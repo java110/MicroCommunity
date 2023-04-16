@@ -2,15 +2,12 @@ package com.java110.common.charge.factory.common;
 
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.java110.common.charge.IChargeFactoryAdapt;
-import com.java110.common.charge.factory.dingding.DingdingChargeUtils;
 import com.java110.dto.chargeMachine.ChargeMachineDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargePortDto;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
+import com.java110.dto.chargeMachine.NotifyChargePortDto;
+import com.java110.dto.chargeMachine.ChargeMachinePortDto;
 import com.java110.vo.ResultVo;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

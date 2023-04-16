@@ -50,6 +50,9 @@ public class RepairDto extends PageDto implements Serializable {
     public static final String REPAIR_CHANNEL_OWNER = "Z"; //Z业主自主保修
 
     private String repairName;
+
+    private String repairNameLike;
+
     private String appointmentTime;
     private String repairType;
     private String context;
@@ -539,5 +542,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairSettingTypeName(String repairSettingTypeName) {
         this.repairSettingTypeName = repairSettingTypeName;
+    }
+
+    public String getRepairNameLike() {
+        return repairNameLike;
+    }
+
+    public void setRepairNameLike(String repairNameLike) {
+        this.repairNameLike = repairNameLike;
     }
 }

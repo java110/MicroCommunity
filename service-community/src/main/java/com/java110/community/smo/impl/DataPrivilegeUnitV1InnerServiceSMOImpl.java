@@ -18,14 +18,13 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IDataPrivilegeUnitV1ServiceDao;
 import com.java110.dto.UnitDto;
-import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.intf.user.IDataPrivilegeStaffV1InnerServiceSMO;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
-import com.java110.dto.dataPrivilegeUnit.DataPrivilegeUnitDto;
+import com.java110.dto.data.DataPrivilegeUnitDto;
 import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

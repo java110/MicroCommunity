@@ -18,17 +18,15 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.ICommunitySpacePersonTimeV1ServiceDao;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
-import com.java110.dto.communitySpacePersonTime.CommunitySpacePersonTimeDto;
+import com.java110.dto.communitySpace.CommunitySpacePersonTimeDto;
 import com.java110.po.communitySpacePersonTime.CommunitySpacePersonTimePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

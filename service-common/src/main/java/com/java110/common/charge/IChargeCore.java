@@ -1,10 +1,9 @@
 package com.java110.common.charge;
 
 import com.java110.dto.chargeMachine.ChargeMachineDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
+import com.java110.dto.chargeMachine.ChargeMachinePortDto;
 import com.java110.vo.ResultVo;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

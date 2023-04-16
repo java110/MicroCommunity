@@ -16,9 +16,9 @@
 package com.java110.scm.smo.impl;
 
 
-import com.java110.dto.couponPropertyPool.CouponPropertyPoolDto;
-import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
-import com.java110.dto.couponPropertyUser.CouponQrCodeDto;
+import com.java110.dto.couponPool.CouponPropertyPoolDto;
+import com.java110.dto.couponPool.CouponPropertyUserDto;
+import com.java110.dto.couponPool.CouponQrCodeDto;
 import com.java110.dto.supplierCoupon.SupplierCouponDto;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
@@ -31,13 +31,11 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

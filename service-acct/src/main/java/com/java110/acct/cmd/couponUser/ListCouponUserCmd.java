@@ -22,7 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.CommunityMemberDto;
-import com.java110.dto.couponUser.CouponUserDto;
+import com.java110.dto.couponPool.CouponUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;

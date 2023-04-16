@@ -28,6 +28,7 @@ public class VisitDto extends PageDto implements Serializable {
 
     private String departureTime;
     private String vName;
+    private String vNameLike;
     private String visitGender;
     private String ownerId;
     private String ownerName;
@@ -406,5 +407,13 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setReasonTypeName(String reasonTypeName) {
         this.reasonTypeName = reasonTypeName;
+    }
+
+    public String getvNameLike() {
+        return vNameLike;
+    }
+
+    public void setvNameLike(String vNameLike) {
+        this.vNameLike = vNameLike;
     }
 }

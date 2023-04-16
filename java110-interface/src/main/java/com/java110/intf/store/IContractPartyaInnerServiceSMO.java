@@ -1,7 +1,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.contractPartya.ContractPartyaDto;
+import com.java110.dto.contract.ContractPartyaDto;
 import com.java110.po.contractPartya.ContractPartyaPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,9 +1,9 @@
 package com.java110.common.charge;
 
 import com.java110.dto.chargeMachine.ChargeMachineDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.chargeMachineOrder.NotifyChargePortDto;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
+import com.java110.dto.chargeMachine.NotifyChargePortDto;
+import com.java110.dto.chargeMachine.ChargeMachinePortDto;
 import com.java110.vo.ResultVo;
 
 import java.util.List;

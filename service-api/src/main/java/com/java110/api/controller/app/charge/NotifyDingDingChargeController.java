@@ -3,8 +3,7 @@ package com.java110.api.controller.app.charge;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
+import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
 import com.java110.intf.common.INotifyChargeV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
@@ -18,7 +17,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @RestController

@@ -1,7 +1,6 @@
 package com.java110.dto.communitySpace;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.communitySpaceOpenTime.CommunitySpaceOpenTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;

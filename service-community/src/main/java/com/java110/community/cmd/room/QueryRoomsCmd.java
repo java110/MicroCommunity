@@ -11,7 +11,7 @@ import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.dataPrivilegeStaff.DataPrivilegeStaffDto;
+import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.*;
 import com.java110.intf.user.IOwnerInnerServiceSMO;

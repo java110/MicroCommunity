@@ -7,8 +7,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.couponPropertyUser.CouponPropertyUserDto;
-import com.java110.dto.couponPropertyUser.CouponQrCodeDto;
+import com.java110.dto.couponPool.CouponPropertyUserDto;
+import com.java110.dto.couponPool.CouponQrCodeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -17,7 +17,6 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.util.List;

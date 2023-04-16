@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
-import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.contract.ContractRoomDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meterWater.ImportExportMeterWaterDto;

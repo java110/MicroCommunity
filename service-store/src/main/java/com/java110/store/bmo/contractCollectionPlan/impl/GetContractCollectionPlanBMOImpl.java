@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractCollectionPlan.impl;
 
-import com.java110.dto.contractCollectionPlan.ContractCollectionPlanDto;
+import com.java110.dto.contract.ContractCollectionPlanDto;
 import com.java110.intf.store.IContractCollectionPlanInnerServiceSMO;
 import com.java110.store.bmo.contractCollectionPlan.IGetContractCollectionPlanBMO;
 import com.java110.vo.ResultVo;

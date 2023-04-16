@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAssetImportLogDetailServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.intf.common.IAssetImportLogDetailInnerServiceSMO;
 import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
 import com.java110.utils.util.BeanConvertUtil;

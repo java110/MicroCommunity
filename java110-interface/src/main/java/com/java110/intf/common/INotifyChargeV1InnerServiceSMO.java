@@ -16,11 +16,9 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.chargeMachineOrder.NotifyChargeOrderDto;
-import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
+import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

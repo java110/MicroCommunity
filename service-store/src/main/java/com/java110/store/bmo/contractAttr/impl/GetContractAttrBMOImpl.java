@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractAttr.impl;
 
-import com.java110.dto.contractAttr.ContractAttrDto;
+import com.java110.dto.contract.ContractAttrDto;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.store.bmo.contractAttr.IGetContractAttrBMO;
 import com.java110.vo.ResultVo;

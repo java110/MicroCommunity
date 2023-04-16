@@ -27,6 +27,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String name;
 
+    private String nameLike;
+
     private String tel;
 
     private String email;
@@ -394,5 +396,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setOrgIds(String[] orgIds) {
         this.orgIds = orgIds;
+    }
+
+    public String getNameLike() {
+        return nameLike;
+    }
+
+    public void setNameLike(String nameLike) {
+        this.nameLike = nameLike;
     }
 }

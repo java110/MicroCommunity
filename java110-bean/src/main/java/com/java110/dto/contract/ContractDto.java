@@ -1,7 +1,6 @@
 package com.java110.dto.contract;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.contractAttr.ContractAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,6 +42,7 @@ public class ContractDto extends PageDto implements Serializable {
     private String objId;
     private String contractName;
     private String contractNameLike;
+
     private String startTime;
     private String endTime;
     private String state;

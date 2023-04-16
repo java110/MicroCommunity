@@ -5,7 +5,7 @@ import com.java110.common.bmo.assetImportLogDetail.IDeleteAssetImportLogDetailBM
 import com.java110.common.bmo.assetImportLogDetail.IGetAssetImportLogDetailBMO;
 import com.java110.common.bmo.assetImportLogDetail.ISaveAssetImportLogDetailBMO;
 import com.java110.common.bmo.assetImportLogDetail.IUpdateAssetImportLogDetailBMO;
-import com.java110.dto.assetImportLogDetail.AssetImportLogDetailDto;
+import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
 import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

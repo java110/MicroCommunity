@@ -3,7 +3,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.contractChangePlanDetailAttr.ContractChangePlanDetailAttrDto;
+import com.java110.dto.contract.ContractChangePlanDetailAttrDto;
 import com.java110.intf.store.IContractChangePlanDetailAttrInnerServiceSMO;
 import com.java110.po.contractChangePlanDetailAttr.ContractChangePlanDetailAttrPo;
 import com.java110.store.dao.IContractChangePlanDetailAttrServiceDao;

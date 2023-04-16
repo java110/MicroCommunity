@@ -4,7 +4,7 @@ package com.java110.store.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomDto;
-import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.contract.ContractRoomDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.po.contractRoom.ContractRoomPo;

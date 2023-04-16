@@ -1,7 +1,6 @@
 package com.java110.dto.classes;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.classesTime.ClassesTimeDto;
 
 import java.io.Serializable;
 import java.util.Date;

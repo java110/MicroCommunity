@@ -40,6 +40,9 @@
         <if test="vName !=null and vName != ''">
             and t.v_name= #{vName}
         </if>
+        <if test="vNameLike !=null and vNameLike != ''">
+            and t.v_name like concat('%',#{vNameLike},'%')
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -196,6 +199,9 @@
         </if>
         <if test="vName !=null and vName != ''">
             and t.v_name= #{vName}
+        </if>
+        <if test="vNameLike !=null and vNameLike != ''">
+            and t.v_name like concat('%',#{vNameLike},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

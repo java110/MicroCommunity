@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractChangePlanRoom.impl;
 
-import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
+import com.java110.dto.contract.ContractChangePlanRoomDto;
 import com.java110.intf.store.IContractChangePlanRoomInnerServiceSMO;
 import com.java110.store.bmo.contractChangePlanRoom.IGetContractChangePlanRoomBMO;
 import com.java110.vo.ResultVo;

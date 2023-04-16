@@ -1,7 +1,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.contractChangePlanRoom.ContractChangePlanRoomDto;
+import com.java110.dto.contract.ContractChangePlanRoomDto;
 import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

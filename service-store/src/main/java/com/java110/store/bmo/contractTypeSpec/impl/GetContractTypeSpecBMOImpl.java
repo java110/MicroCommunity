@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractTypeSpec.impl;
 
-import com.java110.dto.contractTypeSpec.ContractTypeSpecDto;
+import com.java110.dto.contract.ContractTypeSpecDto;
 import com.java110.intf.store.IContractTypeSpecInnerServiceSMO;
 import com.java110.store.bmo.contractTypeSpec.IGetContractTypeSpecBMO;
 import com.java110.vo.ResultVo;

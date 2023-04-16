@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.chargeMachinePort.ChargeMachinePortDto;
+import com.java110.dto.chargeMachine.ChargeMachinePortDto;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
 import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
 import com.java110.utils.exception.CmdException;

@@ -9,7 +9,7 @@ import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.contract.ContractDto;
-import com.java110.dto.contractRoom.ContractRoomDto;
+import com.java110.dto.contract.ContractRoomDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.integralRuleConfig.IntegralRuleConfigDto;
 import com.java110.dto.machine.CarInoutDetailDto;

@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.couponRuleFee.CouponRuleFeeDto;
+import com.java110.dto.couponPool.CouponRuleFeeDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.acct.ICouponRuleFeeV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
