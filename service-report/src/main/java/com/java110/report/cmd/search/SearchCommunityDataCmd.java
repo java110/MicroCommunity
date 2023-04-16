@@ -65,10 +65,10 @@ public class SearchCommunityDataCmd extends Cmd {
 
         SearchDataDto searchDataDto = new SearchDataDto();
         searchDataDto.setCommunityId(reqJson.getString("communityId"));
-        searchDataDto.setSearchValue(reqJson.getString("searchValue"));
+        searchDataDto.setSearchValue(reqJson.getString("searchValue").trim());
         searchDataDto.setStoreId(storeId);
-        if (StringUtil.isNumber(reqJson.getString("searchValue"))) {
-            searchDataDto.setTel(reqJson.getString("searchValue"));
+        if (StringUtil.isNumber(reqJson.getString("searchValue").trim())) {
+            searchDataDto.setTel(reqJson.getString("searchValue").trim());
         }
 
         //todo 搜索房屋
