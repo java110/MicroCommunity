@@ -36,10 +36,17 @@ public class SearchRoomBMOImpl implements ISearchRoomBMO {
     }
 
     private void queryRoomByRoomName(SearchDataDto searchDataDto, List<RoomDto> roomDtos) {
-        if (!searchDataDto.getSearchValue().contains("-")) {
+
+        String searchValue = searchDataDto.getSearchValue();
+        //1栋1单元1001室
+        if(searchValue.contains("栋")){
+            searchValue = searchValue.replace("栋","-").replace("单元","-").replace("室","");
+        }
+
+        if (!searchValue.contains("-")) {
             return;
         }
-        String[] values = searchDataDto.getSearchValue().split("-", 3);
+        String[] values = searchValue.split("-", 3);
 
         if (values.length != 3) {
             return;
