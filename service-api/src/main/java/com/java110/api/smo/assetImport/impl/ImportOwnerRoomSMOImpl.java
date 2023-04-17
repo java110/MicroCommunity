@@ -231,7 +231,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 Assert.hasValue(os[13], (osIndex + 1) + "行性别不能为空");
                 // Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
                 Assert.hasValue(os[14], (osIndex + 1) + "行手机号不能为空");
-                Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
+                //Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
                 Assert.hasValue(os[16], (osIndex + 1) + "行业主类型不能为空");
             }
 

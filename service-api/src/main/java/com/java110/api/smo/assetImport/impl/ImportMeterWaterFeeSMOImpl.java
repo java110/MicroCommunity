@@ -15,6 +15,7 @@ import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ImportExcelUtils;
@@ -232,6 +233,9 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
             importRoomFee.setCurReadingTime(endTime);
             importRoomFee.setPrice(-1);
             rooms.add(importRoomFee);
+            if (Double.parseDouble(importRoomFee.getCurDegrees()) < Double.parseDouble(importRoomFee.getPreDegrees())) {
+                throw new IllegalArgumentException((osIndex + 1) + "行本期读数小于上期读数");
+            }
         }
     }
 
@@ -280,6 +284,9 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
             importRoomFee.setCurDegrees(os[7].toString());
             importRoomFee.setCurReadingTime(endTime);
             rooms.add(importRoomFee);
+            if (Double.parseDouble(importRoomFee.getCurDegrees()) < Double.parseDouble(importRoomFee.getPreDegrees())) {
+                throw new IllegalArgumentException((osIndex + 1) + "行本期读数小于上期读数");
+            }
         }
     }
 

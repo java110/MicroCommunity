@@ -113,6 +113,10 @@ public class SaveMeterWaterCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
+
+        if(reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")){
+            throw new CmdException("当前读数小于上期读数");
+        }
     }
 
     @Override

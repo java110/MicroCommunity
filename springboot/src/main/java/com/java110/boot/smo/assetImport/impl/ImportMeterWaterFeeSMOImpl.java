@@ -230,6 +230,9 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
             importRoomFee.setCurReadingTime(endTime);
             importRoomFee.setPrice(-1);
             rooms.add(importRoomFee);
+            if (Double.parseDouble(importRoomFee.getCurDegrees()) < Double.parseDouble(importRoomFee.getPreDegrees())) {
+                throw new IllegalArgumentException((osIndex + 1) + "行本期读数小于上期读数");
+            }
         }
     }
 
@@ -278,6 +281,9 @@ public class ImportMeterWaterFeeSMOImpl extends DefaultAbstractComponentSMO impl
             importRoomFee.setCurDegrees(os[7].toString());
             importRoomFee.setCurReadingTime(endTime);
             rooms.add(importRoomFee);
+            if (Double.parseDouble(importRoomFee.getCurDegrees()) < Double.parseDouble(importRoomFee.getPreDegrees())) {
+                throw new IllegalArgumentException((osIndex + 1) + "行本期读数小于上期读数");
+            }
         }
     }
 
