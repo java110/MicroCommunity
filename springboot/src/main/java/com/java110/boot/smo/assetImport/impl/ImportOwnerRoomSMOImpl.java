@@ -137,9 +137,9 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 throw new IllegalArgumentException((roomIndex + 1) + "行性别不能为空");
             }
 
-            if (StringUtil.isEmpty(importOwnerRoomDto.getAge())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行年龄不能为空");
-            }
+//            if (StringUtil.isEmpty(importOwnerRoomDto.getAge())) {
+//                throw new IllegalArgumentException((roomIndex + 1) + "行年龄不能为空");
+//            }
             //系统目前 在香港台湾 以及新加坡等地都有商用 所以 并不是中国大陆手机号规则 所以不做严格校验
             //烦请专业测试团队勿喷
             if (StringUtil.isEmpty(importOwnerRoomDto.getTel())) {
@@ -150,11 +150,11 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
                 throw new IllegalArgumentException((roomIndex + 1) + "行手机号超过11位,请核实");
             }
 
-            if (StringUtil.isEmpty(importOwnerRoomDto.getIdCard())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行身份证号不能为空");
-            }
+//            if (StringUtil.isEmpty(importOwnerRoomDto.getIdCard())) {
+//                throw new IllegalArgumentException((roomIndex + 1) + "行身份证号不能为空");
+//            }
 
-            if (importOwnerRoomDto.getIdCard().length() > 18) {
+            if (!StringUtil.isEmpty(importOwnerRoomDto.getIdCard()) && importOwnerRoomDto.getIdCard().length() > 18) {
                 throw new IllegalArgumentException((roomIndex + 1) + " 的身份证超过18位,请核实");
             }
             if (!StringUtil.isNumber(importOwnerRoomDto.getOwnerTypeCd())) {
@@ -229,10 +229,10 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
                 Assert.hasValue(os[12], (osIndex + 1) + "行业主名称不能为空");
                 Assert.hasValue(os[13], (osIndex + 1) + "行性别不能为空");
-                Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
-                Assert.hasValue(os[15], (osIndex + 1) + "行手机号不能为空");
-                Assert.hasValue(os[16], (osIndex + 1) + "行身份证不能为空");
-                Assert.hasValue(os[17], (osIndex + 1) + "行业主类型不能为空");
+               // Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
+                Assert.hasValue(os[14], (osIndex + 1) + "行手机号不能为空");
+                Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
+                Assert.hasValue(os[16], (osIndex + 1) + "行业主类型不能为空");
             }
 
             importOwnerRoomDto = new ImportOwnerRoomDto();
@@ -254,11 +254,12 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
                 importOwnerRoomDto.setOwnerName(os[12].toString().trim());
                 importOwnerRoomDto.setSex("男".equals(os[13].toString().trim()) ? "0" : "1");
-                String age = StringUtil.isNullOrNone(os[14]) ? CommonUtil.getAgeByCertId(os[16].toString().trim()) : os[14].toString().trim();
-                importOwnerRoomDto.setAge(age);
-                importOwnerRoomDto.setTel(os[15].toString().trim());
-                importOwnerRoomDto.setIdCard(os[16].toString().trim());
-                importOwnerRoomDto.setOwnerTypeCd(os[17].toString().trim());
+               // String age = StringUtil.isNullOrNone(os[14]) ? CommonUtil.getAgeByCertId(os[16].toString().trim()) : os[14].toString().trim();
+                importOwnerRoomDto.setAge("1");
+                importOwnerRoomDto.setTel(os[14].toString().trim());
+                String idCard = StringUtil.isNullOrNone(os[15])?"": os[15].toString().trim();
+                importOwnerRoomDto.setIdCard(idCard);
+                importOwnerRoomDto.setOwnerTypeCd(os[16].toString().trim());
             }
 
 
