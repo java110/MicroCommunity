@@ -126,7 +126,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     private void importCarFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId, String batchId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeNameEq(importRoomFee.getFeeName());
+        feeConfigDto.setFeeNameEq(importRoomFee.getFeeName().trim());
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
@@ -202,7 +202,7 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     private void importFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId, String batchId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeName(importRoomFee.getFeeName());
+        feeConfigDto.setFeeName(importRoomFee.getFeeName().trim());
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 

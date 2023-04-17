@@ -30,6 +30,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeDiscount.FeeDiscountDto;
 import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
 import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -152,6 +153,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
     private static final String SPEC_MONTH = "89002020980014"; //月份
@@ -207,7 +209,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("payOrderId", feeDetailDto.getPayOrderId());
             // todo  添加退费明细
-            addFeeDetail(reqJson,returnPayFeeDtos.get(0));
+            addFeeDetail(reqJson, returnPayFeeDtos.get(0));
             reqJson.put("state", "1100");
             String receivableAmount = (String) reqJson.get("receivableAmount");
             String receivedAmount = (String) reqJson.get("receivedAmount");
@@ -442,14 +444,28 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
+        // todo 将收据删除
+        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
+        feeReceiptDetailDto.setDetailId(returnPayFeePo.getDetailId());
+        feeReceiptDetailDto.setCommunityId(returnPayFeePo.getCommunityId());
+        int count = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetailsCount(feeReceiptDetailDto);
+        if (count != 1) {
+            return;
+        }
+        FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
+        feeReceiptDetailPo.setDetailId(returnPayFeePo.getDetailId());
+        feeReceiptDetailPo.setCommunityId(returnPayFeePo.getCommunityId());
+        feeReceiptDetailInnerServiceSMOImpl.deleteFeeReceiptDetail(feeReceiptDetailPo);
     }
 
     /**
      * 添加退费单
+     *
      * @param paramInJson
      * @param returnPayFeeDto
      */
-    public void addFeeDetail(JSONObject paramInJson,ReturnPayFeeDto returnPayFeeDto) {
+    public void addFeeDetail(JSONObject paramInJson, ReturnPayFeeDto returnPayFeeDto) {
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(paramInJson);
         businessReturnPayFee.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
