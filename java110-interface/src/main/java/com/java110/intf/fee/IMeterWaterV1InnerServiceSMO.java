@@ -65,4 +65,7 @@ public interface IMeterWaterV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryMeterWatersCount", method = RequestMethod.POST)
     int queryMeterWatersCount(@RequestBody MeterWaterDto meterWaterDto);
+
+    @RequestMapping(value = "/deleteMeterWaterByBatch", method = RequestMethod.POST)
+    int deleteMeterWaterByBatch(@RequestBody MeterWaterDto meterWaterDto);
 }

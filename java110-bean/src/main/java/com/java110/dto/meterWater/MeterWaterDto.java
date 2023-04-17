@@ -34,6 +34,8 @@ public class MeterWaterDto extends PageDto implements Serializable {
     private String feeId;
     private double price;
 
+    private String batchId;
+
 
     private Date createTime;
 
@@ -169,5 +171,13 @@ public class MeterWaterDto extends PageDto implements Serializable {
 
     public void setMeterTypeName(String meterTypeName) {
         this.meterTypeName = meterTypeName;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }

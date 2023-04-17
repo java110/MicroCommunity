@@ -164,4 +164,13 @@
             and t.obj_type= #{objType}
         </if>
     </select>
+
+    <update id="deleteMeterWaterByBatch" parameterType="Map">
+        update meter_water t,pay_fee pf set t.status_cd = '1'
+        where
+        t.fee_id = pf.fee_id
+        and pf.batch_id = #{batchId}
+        and pf.community_id = #{communityId}
+
+    </update>
 </mapper>

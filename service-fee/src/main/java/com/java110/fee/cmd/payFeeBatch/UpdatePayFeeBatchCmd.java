@@ -20,8 +20,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.meterWater.MeterWaterDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeBatch.PayFeeBatchPo;
@@ -56,6 +58,9 @@ public class UpdatePayFeeBatchCmd extends Cmd {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -92,6 +97,12 @@ public class UpdatePayFeeBatchCmd extends Cmd {
         feePo.setBatchId(payFeeBatchPo.getBatchId());
         feePo.setCommunityId(payFeeBatchPo.getCommunityId());
         feeInnerServiceSMOImpl.deleteFeesByBatch(feePo);
+
+        //todo 删除抄表记录
+        MeterWaterDto meterWaterDto = new MeterWaterDto();
+        meterWaterDto.setCommunityId(payFeeBatchPo.getCommunityId());
+        meterWaterDto.setBatchId(payFeeBatchPo.getBatchId());
+        meterWaterV1InnerServiceSMOImpl.deleteMeterWaterByBatch(meterWaterDto);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

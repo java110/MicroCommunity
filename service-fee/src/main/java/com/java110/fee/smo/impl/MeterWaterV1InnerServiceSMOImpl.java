@@ -47,26 +47,26 @@ public class MeterWaterV1InnerServiceSMOImpl extends BaseServiceSMO implements I
 
 
     @Override
-    public int saveMeterWater(@RequestBody  MeterWaterPo meterWaterPo) {
+    public int saveMeterWater(@RequestBody MeterWaterPo meterWaterPo) {
         int saveFlag = meterWaterV1ServiceDaoImpl.saveMeterWaterInfo(BeanConvertUtil.beanCovertMap(meterWaterPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateMeterWater(@RequestBody  MeterWaterPo meterWaterPo) {
+    @Override
+    public int updateMeterWater(@RequestBody MeterWaterPo meterWaterPo) {
         int saveFlag = meterWaterV1ServiceDaoImpl.updateMeterWaterInfo(BeanConvertUtil.beanCovertMap(meterWaterPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteMeterWater(@RequestBody  MeterWaterPo meterWaterPo) {
-       meterWaterPo.setStatusCd("1");
-       int saveFlag = meterWaterV1ServiceDaoImpl.updateMeterWaterInfo(BeanConvertUtil.beanCovertMap(meterWaterPo));
-       return saveFlag;
+    @Override
+    public int deleteMeterWater(@RequestBody MeterWaterPo meterWaterPo) {
+        meterWaterPo.setStatusCd("1");
+        int saveFlag = meterWaterV1ServiceDaoImpl.updateMeterWaterInfo(BeanConvertUtil.beanCovertMap(meterWaterPo));
+        return saveFlag;
     }
 
     @Override
-    public List<MeterWaterDto> queryMeterWaters(@RequestBody  MeterWaterDto meterWaterDto) {
+    public List<MeterWaterDto> queryMeterWaters(@RequestBody MeterWaterDto meterWaterDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +84,13 @@ public class MeterWaterV1InnerServiceSMOImpl extends BaseServiceSMO implements I
 
     @Override
     public int queryMeterWatersCount(@RequestBody MeterWaterDto meterWaterDto) {
-        return meterWaterV1ServiceDaoImpl.queryMeterWatersCount(BeanConvertUtil.beanCovertMap(meterWaterDto));    }
+        return meterWaterV1ServiceDaoImpl.queryMeterWatersCount(BeanConvertUtil.beanCovertMap(meterWaterDto));
+    }
+
+    @Override
+    public int deleteMeterWaterByBatch(@RequestBody MeterWaterDto meterWaterDto) {
+        return meterWaterV1ServiceDaoImpl.deleteMeterWaterByBatch(BeanConvertUtil.beanCovertMap(meterWaterDto));
+    }
+
 
 }

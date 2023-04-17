@@ -74,4 +74,5 @@ public interface IMeterWaterV1ServiceDao {
      */
     int queryMeterWatersCount(Map info);
 
+    int deleteMeterWaterByBatch(Map info);
 }

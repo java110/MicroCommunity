@@ -108,5 +108,14 @@ public class MeterWaterV1ServiceDaoImpl extends BaseServiceDao implements IMeter
         return Integer.parseInt(businessMeterWaterInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int deleteMeterWaterByBatch(Map info) {
+        logger.debug("修改 deleteMeterWaterByBatch 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("meterWaterV1ServiceDaoImpl.deleteMeterWaterByBatch",info);
+
+        return saveFlag;
+    }
+
 
 }
