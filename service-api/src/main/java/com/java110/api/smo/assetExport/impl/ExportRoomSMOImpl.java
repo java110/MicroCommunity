@@ -126,7 +126,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-
+        paramIn.put("storeId",result.getStoreId());
         Assert.hasKeyAndValue(paramIn, "communityId", "请求中未包含小区");
         //Assert.hasKeyAndValue(paramIn, "floorIds", "请求中未包含楼栋");
         Assert.hasKeyAndValue(paramIn, "configIds", "请求中未包含费用项");
@@ -180,7 +180,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         cell0.setCellStyle(cs);
         row.setHeight((short) (200 * 10));
         row = sheet.createRow(1);
-        row.createCell(0).setCellValue("房号/车牌号");
+        row.createCell(0).setCellValue("车牌号");
         row.createCell(1).setCellValue("类型");
         row.createCell(2).setCellValue("费用项ID");
         row.createCell(3).setCellValue("收费项目");
@@ -265,12 +265,14 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         cell0.setCellStyle(cs);
         row.setHeight((short) (200 * 10));
         row = sheet.createRow(1);
-        row.createCell(0).setCellValue("房号/车牌号");
+        row.createCell(0).setCellValue("房号");
         row.createCell(1).setCellValue("类型");
         row.createCell(2).setCellValue("费用项ID");
         row.createCell(3).setCellValue("收费项目");
         row.createCell(4).setCellValue("建账时间");
         row.createCell(5).setCellValue("计费起始时间");
+        row.createCell(6).setCellValue("房屋状态");
+
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(paramIn.getString("communityId"));
@@ -299,6 +301,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
                 row.createCell(3).setCellValue(tmpFeeConfigDto.getFeeName());
                 row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue("");
+                row.createCell(6).setCellValue(tmpRoomDto.getStateName());
                 roomIndex += 1;
             }
         }
@@ -492,7 +495,6 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        pd.getHeaders().put("store-id",result.getStoreId());
 
         Assert.hasKeyAndValue(paramIn, "communityId", "请求中未包含小区");
         //Assert.hasKeyAndValue(paramIn, "floorIds", "请求中未包含楼栋");

@@ -249,6 +249,11 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         }
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
+        // 如果 当前读数小于等于上期读数
+        if(Double.parseDouble(importExportMeterWaterDto.getCurDegrees()) <= Double.parseDouble(importExportMeterWaterDto.getPreDegrees())){
+            payFeePo.setState(FeeDto.STATE_FINISH);
+        }
+
         payFeePo.setUserId(userId);
         payFeePo.setFeeTypeCd(feeTypeCd);
         payFeePo.setConfigId(configId);
