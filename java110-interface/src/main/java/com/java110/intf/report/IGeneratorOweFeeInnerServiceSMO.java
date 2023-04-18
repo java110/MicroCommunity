@@ -1,6 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,4 +25,11 @@ public interface IGeneratorOweFeeInnerServiceSMO {
     @RequestMapping(value = "/generatorOweData", method = RequestMethod.POST)
     public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 
+    /**
+     * 计算单个费用欠费
+     * @param feeDto
+     * @return
+     */
+    @RequestMapping(value = "/computeOweFee", method = RequestMethod.POST)
+    int computeOweFee(@RequestBody FeeDto feeDto);
 }
