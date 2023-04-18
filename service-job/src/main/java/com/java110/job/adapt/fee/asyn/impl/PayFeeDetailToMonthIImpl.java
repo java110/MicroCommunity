@@ -3,13 +3,21 @@ package com.java110.job.adapt.fee.asyn.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
+import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.fee.asyn.IPayFeeDetailToMonth;
 import com.java110.po.fee.PayFeeDetailPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
+import com.java110.po.reportOweFee.ReportOweFeePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -36,6 +44,12 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
     @Autowired
     private IPayFeeDetailMonthInnerServiceSMO payFeeDetailMonthInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IGeneratorOweFeeInnerServiceSMO generatorOweFeeInnerServiceSMOImpl;
+
     @Override
     @Async
     public void doPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
@@ -60,8 +74,64 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             throw new IllegalArgumentException("时间格式错误");
         }
 
+        //todo 转换为月
+        toMonth(businessPayFeeDetail, feeDto, startTime, endTime, createTime);
+
+        //todo 如果是租金 则延长房屋租期
+        toAddRoomRentTime(feeDtos.get(0),endTime);
+
+        //todo 修改欠费
+        toDeleteOweFee(feeDtos.get(0));
+
+    }
+
+    /**
+     * 处理欠费
+     * @param feeDto
+     */
+    private void toDeleteOweFee(FeeDto feeDto) {
+        generatorOweFeeInnerServiceSMOImpl.computeOweFee(feeDto);
+
+    }
+
+    private void toAddRoomRentTime(FeeDto feeDto,Date endTime) {
+
+        //todo 不是租金直接返回
+        if (!FeeConfigDto.FEE_TYPE_CD_RENT.equals(feeDto.getFeeTypeCd())) {
+            return;
+        }
+        //todo 不是房屋直接返回
+        if(!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())){
+            return;
+        }
+
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
+        ownerRoomRelDto.setCommunityId(feeDto.getCommunityId());
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if(ownerRoomRelDtos == null || ownerRoomRelDtos.size()< 1){
+            return;
+        }
+
+        Date rentEndDate = ownerRoomRelDtos.get(0).getEndTime();
+
+        if(endTime.getTime()< rentEndDate.getTime()){
+            return ;
+        }
+
+        OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+        ownerRoomRelPo.setEndTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_B));
+        ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
+
+        ownerRoomRelV1InnerServiceSMOImpl.updateOwnerRoomRel(ownerRoomRelPo);
+
+
+    }
+
+    private void toMonth(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date endTime, Date createTime) {
         double maxMonth = 1;
-        if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
         }
 
@@ -85,12 +155,11 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 //        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
 //            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
 //        }else{
-            commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
+        commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
 //        }
 
 
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
-
     }
 
     private void commonPropertyCode(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date createTime, double maxMonth, Double feePrice, BigDecimal priRecDec, List<PayFeeDetailMonthPo> payFeeDetailMonthPos, Calendar calendar) {

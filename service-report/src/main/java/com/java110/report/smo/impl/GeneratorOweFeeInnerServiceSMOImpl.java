@@ -101,6 +101,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         return 0;
     }
 
+
     @Async
     private void doGeneratorData(ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo) {
         String communityId = reportFeeMonthStatisticsPo.getCommunityId();
@@ -131,6 +132,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         }
 
     }
+
     private void feeDataFiltering(String communityId) {
 
         Map reportFeeDto = new HashMap();
@@ -237,5 +239,42 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
             reportOweFeeServiceDaoImpl.updateReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         }
     }
+
+    @Override
+    public int computeOweFee(FeeDto feeDto) {
+        //刷入欠费金额
+        computeFeeSMOImpl.computeEveryOweFee(feeDto);
+
+        //保存数据
+        ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
+        reportOweFeePo.setAmountOwed(feeDto.getFeeTotalPrice() + "");
+        reportOweFeePo.setCommunityId(feeDto.getCommunityId());
+        reportOweFeePo.setConfigId(feeDto.getConfigId());
+        reportOweFeePo.setConfigName(feeDto.getFeeName());
+        reportOweFeePo.setDeadlineTime(DateUtil.getFormatTimeString(feeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
+        reportOweFeePo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        reportOweFeePo.setFeeId(feeDto.getFeeId());
+        reportOweFeePo.setFeeName(feeDto.getFeeName());
+        reportOweFeePo.setOwnerId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_ID));
+        reportOweFeePo.setOwnerName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_NAME));
+        reportOweFeePo.setOwnerTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
+        reportOweFeePo.setPayerObjId(feeDto.getPayerObjId());
+        reportOweFeePo.setPayerObjName(computeFeeSMOImpl.getFeeObjName(feeDto));
+        reportOweFeePo.setPayerObjType(feeDto.getPayerObjType());
+        reportOweFeePo.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
+        reportOweFeeDto.setFeeId(feeDto.getFeeId());
+        reportOweFeeDto.setPayerObjId(feeDto.getPayerObjId());
+        List<Map> reportOweFeeDtos = reportOweFeeServiceDaoImpl.queryReportAllOweFees(BeanConvertUtil.beanCovertMap(reportOweFeeDto));
+        if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+            reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
+            reportOweFeeServiceDaoImpl.saveReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
+        } else {
+            reportOweFeePo.setOweId(reportOweFeeDtos.get(0).get("oweId").toString());
+            reportOweFeeServiceDaoImpl.updateReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
+        }
+        return 1;
+    }
+
 
 }

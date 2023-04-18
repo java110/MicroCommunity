@@ -29,7 +29,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public static final String FEE_TYPE_CD_GAS = "888800010009";//煤气
     public static final String FEE_TYPE_CD_SYSTEM = "888800010000";//系统
     public static final String FEE_TYPE_CD_PARKING = "888800010008";//系统
-
+    public static final String FEE_TYPE_CD_RENT = "888800010018";// 租金
     public static final String CONFIG_ID_RENTING = "920000000000000000";//租赁费用项
     public static final String CONFIG_ID_GOODS = "930000000000000000";//商品费用项
 
