@@ -5,7 +5,7 @@ import com.java110.common.bmo.hcGovTranslateDetail.IDeleteHcGovTranslateDetailBM
 import com.java110.common.bmo.hcGovTranslateDetail.IGetHcGovTranslateDetailBMO;
 import com.java110.common.bmo.hcGovTranslateDetail.ISaveHcGovTranslateDetailBMO;
 import com.java110.common.bmo.hcGovTranslateDetail.IUpdateHcGovTranslateDetailBMO;
-import com.java110.dto.hcGovTranslateDetail.HcGovTranslateDetailDto;
+import com.java110.dto.hcGovTranslate.HcGovTranslateDetailDto;
 import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

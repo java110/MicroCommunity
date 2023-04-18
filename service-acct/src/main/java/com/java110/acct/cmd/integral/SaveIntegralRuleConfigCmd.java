@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.integralRuleConfig.IntegralRuleConfigDto;
+import com.java110.dto.integral.IntegralRuleConfigDto;
 import com.java110.intf.acct.IIntegralRuleConfigV1InnerServiceSMO;
 import com.java110.po.integralRuleConfig.IntegralRuleConfigPo;
 import com.java110.utils.exception.CmdException;

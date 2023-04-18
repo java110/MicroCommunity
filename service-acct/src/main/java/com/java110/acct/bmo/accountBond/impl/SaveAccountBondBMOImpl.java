@@ -3,7 +3,7 @@ package com.java110.acct.bmo.accountBond.impl;
 import com.java110.acct.bmo.accountBond.ISaveAccountBondBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.accountBond.AccountBondDto;
+import com.java110.dto.account.AccountBondDto;
 import com.java110.intf.acct.IAccountBondInnerServiceSMO;
 import com.java110.po.accountBond.AccountBondPo;
 import com.java110.vo.ResultVo;

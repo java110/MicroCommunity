@@ -1,10 +1,10 @@
 package com.java110.job.adapt.market;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.marketBlacklist.MarketBlacklistDto;
-import com.java110.dto.marketLog.MarketLogDto;
-import com.java110.dto.marketSmsValue.MarketSmsValueDto;
-import com.java110.dto.marketText.MarketTextDto;
+import com.java110.dto.market.MarketBlacklistDto;
+import com.java110.dto.market.MarketLogDto;
+import com.java110.dto.market.MarketSmsValueDto;
+import com.java110.dto.market.MarketTextDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMarketBlacklistV1InnerServiceSMO;

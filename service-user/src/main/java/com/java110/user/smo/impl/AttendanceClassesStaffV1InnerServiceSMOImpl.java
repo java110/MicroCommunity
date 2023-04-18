@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.user.dao.IAttendanceClassesStaffV1ServiceDao;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
-import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesStaffDto;
 import com.java110.po.attendanceClassesStaff.AttendanceClassesStaffPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

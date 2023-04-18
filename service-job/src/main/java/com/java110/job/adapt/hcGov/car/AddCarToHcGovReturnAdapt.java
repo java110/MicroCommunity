@@ -17,7 +17,7 @@ package com.java110.job.adapt.hcGov.car;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
-import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
+import com.java110.dto.owner.OwnerCarAttrDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;

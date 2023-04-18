@@ -2,7 +2,7 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.ICommunitySettingServiceDao;
-import com.java110.dto.communitySetting.CommunitySettingDto;
+import com.java110.dto.community.CommunitySettingDto;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.po.communitySetting.CommunitySettingPo;
 import com.java110.utils.util.BeanConvertUtil;

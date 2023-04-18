@@ -15,7 +15,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.communitySetting.CommunitySettingDto;
+import com.java110.dto.community.CommunitySettingDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;

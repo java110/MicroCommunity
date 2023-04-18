@@ -3,8 +3,8 @@ package com.java110.job.adapt.market.executor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.OutRestTemplate;
-import com.java110.dto.marketSmsValue.MarketSmsValueDto;
-import com.java110.dto.marketText.MarketTextDto;
+import com.java110.dto.market.MarketSmsValueDto;
+import com.java110.dto.market.MarketTextDto;
 import com.java110.intf.common.IMarketSmsValueV1InnerServiceSMO;
 import com.java110.job.adapt.market.DefaultSendExecutor;
 import com.java110.utils.util.DateUtil;

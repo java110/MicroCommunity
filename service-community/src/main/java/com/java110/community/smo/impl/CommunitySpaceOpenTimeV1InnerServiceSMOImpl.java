@@ -18,7 +18,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.ICommunitySpaceOpenTimeV1ServiceDao;
 import com.java110.intf.community.ICommunitySpaceOpenTimeV1InnerServiceSMO;
-import com.java110.dto.communitySpace.CommunitySpaceOpenTimeDto;
+import com.java110.dto.community.CommunitySpaceOpenTimeDto;
 import com.java110.po.communitySpaceOpenTime.CommunitySpaceOpenTimePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

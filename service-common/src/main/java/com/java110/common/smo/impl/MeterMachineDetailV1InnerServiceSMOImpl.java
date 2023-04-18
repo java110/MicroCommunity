@@ -18,17 +18,15 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMeterMachineDetailV1ServiceDao;
 import com.java110.intf.common.IMeterMachineDetailV1InnerServiceSMO;
-import com.java110.dto.meterMachineDetail.MeterMachineDetailDto;
+import com.java110.dto.meterMachine.MeterMachineDetailDto;
 import com.java110.po.meterMachineDetail.MeterMachineDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

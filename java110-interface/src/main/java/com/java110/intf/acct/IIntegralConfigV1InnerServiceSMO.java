@@ -16,7 +16,7 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.integralConfig.IntegralConfigDto;
+import com.java110.dto.integral.IntegralConfigDto;
 import com.java110.po.integralConfig.IntegralConfigPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
+import com.java110.dto.owner.OwnerCarAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
 import com.java110.entity.assetImport.ImportRoomFee;

@@ -2,7 +2,7 @@ package com.java110.core.language;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.menuCatalog.MenuCatalogDto;
+import com.java110.dto.menu.MenuCatalogDto;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.java110.common.bmo.machineTranslateError.impl;
 
 import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO;
-import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

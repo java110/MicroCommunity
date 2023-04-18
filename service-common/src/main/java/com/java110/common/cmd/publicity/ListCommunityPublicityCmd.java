@@ -20,8 +20,6 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.ICommunityPublicityV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -30,7 +28,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.communityPublicity.CommunityPublicityDto;
+import com.java110.dto.community.CommunityPublicityDto;
 
 import java.util.List;
 import java.util.ArrayList;

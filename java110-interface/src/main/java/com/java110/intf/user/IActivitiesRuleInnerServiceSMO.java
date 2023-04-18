@@ -1,7 +1,7 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.activitiesRule.ActivitiesRuleDto;
+import com.java110.dto.activities.ActivitiesRuleDto;
 import com.java110.po.activitiesRule.ActivitiesRulePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.machine.MachinePrinterDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMachinePrinterV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;

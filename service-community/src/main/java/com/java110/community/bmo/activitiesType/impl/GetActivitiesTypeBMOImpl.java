@@ -1,7 +1,7 @@
 package com.java110.community.bmo.activitiesType.impl;
 
 import com.java110.community.bmo.activitiesType.IGetActivitiesTypeBMO;
-import com.java110.dto.activitiesType.ActivitiesTypeDto;
+import com.java110.dto.activities.ActivitiesTypeDto;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

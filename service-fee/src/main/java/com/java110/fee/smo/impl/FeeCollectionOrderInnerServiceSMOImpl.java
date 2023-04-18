@@ -3,7 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.feeCollectionOrder.FeeCollectionOrderDto;
+import com.java110.dto.feeCollectionDetail.FeeCollectionOrderDto;
 import com.java110.fee.dao.IFeeCollectionOrderServiceDao;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;
 import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;

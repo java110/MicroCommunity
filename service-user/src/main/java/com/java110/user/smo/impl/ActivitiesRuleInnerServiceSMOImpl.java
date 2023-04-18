@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.activitiesRule.ActivitiesRuleDto;
+import com.java110.dto.activities.ActivitiesRuleDto;
 import com.java110.intf.user.IActivitiesRuleInnerServiceSMO;
 import com.java110.po.activitiesRule.ActivitiesRulePo;
 import com.java110.user.dao.IActivitiesRuleServiceDao;

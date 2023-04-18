@@ -7,7 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.machineAuth.MachineAuthDto;
+import com.java110.dto.machine.MachineAuthDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMachineAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;

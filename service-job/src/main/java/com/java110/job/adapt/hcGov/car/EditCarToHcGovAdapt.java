@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
+import com.java110.dto.owner.OwnerCarAttrDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;

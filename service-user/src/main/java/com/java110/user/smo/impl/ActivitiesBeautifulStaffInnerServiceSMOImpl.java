@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.activitiesBeautifulStaff.ActivitiesBeautifulStaffDto;
+import com.java110.dto.activities.ActivitiesBeautifulStaffDto;
 import com.java110.intf.user.IActivitiesBeautifulStaffInnerServiceSMO;
 import com.java110.po.activitiesBeautifulStaff.ActivitiesBeautifulStaffPo;
 import com.java110.user.dao.IActivitiesBeautifulStaffServiceDao;

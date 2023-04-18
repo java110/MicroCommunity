@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.marketLog.MarketLogDto;
+import com.java110.dto.market.MarketLogDto;
 import com.java110.po.marketLog.MarketLogPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

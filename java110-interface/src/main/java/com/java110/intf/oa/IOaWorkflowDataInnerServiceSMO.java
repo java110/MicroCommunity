@@ -1,7 +1,7 @@
 package com.java110.intf.oa;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
 import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -4,7 +4,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.ICommunityLocationAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.communityLocationAttr.CommunityLocationAttrDto;
+import com.java110.dto.community.CommunityLocationAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityLocationAttrInnerServiceSMO;
 import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;

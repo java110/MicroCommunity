@@ -1,6 +1,6 @@
 package com.java110.oa.bmo.oaWorkflowXml.impl;
 
-import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
+import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowXml.IGetOaWorkflowXmlBMO;
 import com.java110.vo.ResultVo;

@@ -2,7 +2,7 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.IAccountBondObjDetailServiceDao;
-import com.java110.dto.accountBond.AccountBondObjDetailDto;
+import com.java110.dto.account.AccountBondObjDetailDto;
 import com.java110.intf.acct.IAccountBondObjDetailInnerServiceSMO;
 import com.java110.po.accountBondObjDetail.AccountBondObjDetailPo;
 import com.java110.utils.util.BeanConvertUtil;

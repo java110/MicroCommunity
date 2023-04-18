@@ -17,7 +17,6 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IVisitSettingV1ServiceDao;
-import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.dto.visitSetting.VisitSettingDto;

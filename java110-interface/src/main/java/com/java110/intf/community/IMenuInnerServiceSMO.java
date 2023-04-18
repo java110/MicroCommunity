@@ -1,11 +1,10 @@
 package com.java110.intf.community;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.basePrivilege.HasPrivilegeDto;
 import com.java110.dto.menu.MenuDto;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuGroupDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

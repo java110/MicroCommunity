@@ -1,5 +1,5 @@
 package com.java110.oa.bmo.oaWorkflowData;
-import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetOaWorkflowDataBMO {
 

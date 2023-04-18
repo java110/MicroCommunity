@@ -5,7 +5,7 @@ import com.java110.community.bmo.applyRoomDiscountRecord.IDeleteApplyRoomDiscoun
 import com.java110.community.bmo.applyRoomDiscountRecord.IGetApplyRoomDiscountRecordBMO;
 import com.java110.community.bmo.applyRoomDiscountRecord.ISaveApplyRoomDiscountRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.applyRoomDiscountRecord.ApplyRoomDiscountRecordDto;
+import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountRecordDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;

@@ -1,7 +1,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.machineAuth.MachineAuthDto;
+import com.java110.dto.machine.MachineAuthDto;
 import com.java110.po.machineAuth.MachineAuthPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

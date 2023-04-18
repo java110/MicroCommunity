@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.notepad.NotepadDto;
-import com.java110.dto.notepadDetail.NotepadDetailDto;
+import com.java110.dto.notepad.NotepadDetailDto;
 import com.java110.intf.user.INotepadDetailV1InnerServiceSMO;
 import com.java110.intf.user.INotepadV1InnerServiceSMO;
 import com.java110.po.notepad.NotepadPo;

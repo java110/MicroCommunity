@@ -5,7 +5,7 @@ import com.java110.community.bmo.activitiesType.IDeleteActivitiesTypeBMO;
 import com.java110.community.bmo.activitiesType.IGetActivitiesTypeBMO;
 import com.java110.community.bmo.activitiesType.ISaveActivitiesTypeBMO;
 import com.java110.community.bmo.activitiesType.IUpdateActivitiesTypeBMO;
-import com.java110.dto.activitiesType.ActivitiesTypeDto;
+import com.java110.dto.activities.ActivitiesTypeDto;
 import com.java110.po.activitiesType.ActivitiesTypePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,6 +1,6 @@
 package com.java110.user.bmo.activitiesBeautifulStaff.impl;
 
-import com.java110.dto.activitiesBeautifulStaff.ActivitiesBeautifulStaffDto;
+import com.java110.dto.activities.ActivitiesBeautifulStaffDto;
 import com.java110.intf.user.IActivitiesBeautifulStaffInnerServiceSMO;
 import com.java110.user.bmo.activitiesBeautifulStaff.IGetActivitiesBeautifulStaffBMO;
 import com.java110.vo.ResultVo;

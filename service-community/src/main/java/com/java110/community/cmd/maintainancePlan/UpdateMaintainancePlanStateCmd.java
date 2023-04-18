@@ -21,7 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.maintainancePlan.MaintainancePlanDto;
+import com.java110.dto.maintainance.MaintainancePlanDto;
 import com.java110.intf.community.IMaintainancePlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanV1InnerServiceSMO;
 import com.java110.po.maintainancePlan.MaintainancePlanPo;

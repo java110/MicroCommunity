@@ -16,7 +16,7 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
+import com.java110.dto.maintainance.MaintainanceTaskDto;
 import com.java110.po.maintainanceTask.MaintainanceTaskPo;
 import com.java110.po.maintainanceTaskDetail.MaintainanceTaskDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;

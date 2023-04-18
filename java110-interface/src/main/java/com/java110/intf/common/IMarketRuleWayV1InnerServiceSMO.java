@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.marketRuleWay.MarketRuleWayDto;
+import com.java110.dto.market.MarketRuleWayDto;
 import com.java110.po.marketRuleWay.MarketRuleWayPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

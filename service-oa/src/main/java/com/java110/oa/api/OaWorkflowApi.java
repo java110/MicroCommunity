@@ -2,9 +2,9 @@ package com.java110.oa.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
-import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
+import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
 import com.java110.oa.bmo.oaWorkflow.IDeleteOaWorkflowBMO;
 import com.java110.oa.bmo.oaWorkflow.IGetOaWorkflowBMO;
 import com.java110.oa.bmo.oaWorkflow.ISaveOaWorkflowBMO;

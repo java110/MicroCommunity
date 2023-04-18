@@ -25,7 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuGroupDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.workflow.WorkflowDto;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;

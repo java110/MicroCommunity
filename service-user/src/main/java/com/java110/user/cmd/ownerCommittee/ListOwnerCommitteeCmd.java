@@ -17,19 +17,16 @@ package com.java110.user.cmd.ownerCommittee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.user.IOwnerCommitteeV1InnerServiceSMO;
-import com.java110.po.ownerCommittee.OwnerCommitteePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.ownerCommittee.OwnerCommitteeDto;
+import com.java110.dto.owner.OwnerCommitteeDto;
 
 import java.util.List;
 import java.util.ArrayList;

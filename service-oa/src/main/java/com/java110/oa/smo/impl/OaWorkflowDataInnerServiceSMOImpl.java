@@ -4,7 +4,7 @@ package com.java110.oa.smo.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.oa.dao.IOaWorkflowDataServiceDao;
 import com.java110.po.oaWorkflowData.OaWorkflowDataPo;

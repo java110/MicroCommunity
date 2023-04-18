@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.marketRuleCommunity.MarketRuleCommunityDto;
+import com.java110.dto.market.MarketRuleCommunityDto;
 import com.java110.intf.common.IMarketRuleCommunityV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.po.marketRuleCommunity.MarketRuleCommunityPo;

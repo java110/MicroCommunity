@@ -3,7 +3,7 @@ package com.java110.oa.bmo.oaWorkflowForm.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
+import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.ISaveOaWorkflowFormBMO;

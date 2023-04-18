@@ -1,7 +1,6 @@
 package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;

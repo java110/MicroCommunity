@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.activitiesType.ActivitiesTypeDto;
+import com.java110.dto.activities.ActivitiesTypeDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.roleCommunity.RoleCommunityDto;
 import com.java110.dto.store.StoreDto;

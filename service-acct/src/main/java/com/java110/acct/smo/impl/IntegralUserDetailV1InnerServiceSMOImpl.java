@@ -18,17 +18,15 @@ package com.java110.acct.smo.impl;
 
 import com.java110.acct.dao.IIntegralUserDetailV1ServiceDao;
 import com.java110.intf.acct.IIntegralUserDetailV1InnerServiceSMO;
-import com.java110.dto.integralUserDetail.IntegralUserDetailDto;
+import com.java110.dto.integral.IntegralUserDetailDto;
 import com.java110.po.integralUserDetail.IntegralUserDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

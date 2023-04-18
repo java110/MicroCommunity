@@ -18,17 +18,15 @@ package com.java110.fee.smo.impl;
 
 import com.java110.fee.dao.IMeterTypeV1ServiceDao;
 import com.java110.intf.fee.IMeterTypeV1InnerServiceSMO;
-import com.java110.dto.meterType.MeterTypeDto;
+import com.java110.dto.meterWater.MeterTypeDto;
 import com.java110.po.meterType.MeterTypePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -16,7 +16,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.feeComboMember.FeeComboMemberDto;
+import com.java110.dto.feeCombo.FeeComboMemberDto;
 import com.java110.po.feeComboMember.FeeComboMemberPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

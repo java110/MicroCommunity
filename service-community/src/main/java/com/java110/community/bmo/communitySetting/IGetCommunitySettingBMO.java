@@ -1,5 +1,5 @@
 package com.java110.community.bmo.communitySetting;
-import com.java110.dto.communitySetting.CommunitySettingDto;
+import com.java110.dto.community.CommunitySettingDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetCommunitySettingBMO {
 

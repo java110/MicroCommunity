@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.accountWithdrawalApply;
-import com.java110.dto.accountWithdrawalApply.AccountWithdrawalApplyDto;
+import com.java110.dto.account.AccountWithdrawalApplyDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetAccountWithdrawalApplyBMO {
 

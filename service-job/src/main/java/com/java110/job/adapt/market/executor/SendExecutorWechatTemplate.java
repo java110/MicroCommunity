@@ -2,18 +2,16 @@ package com.java110.job.adapt.market.executor;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.OutRestTemplate;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.marketSmsValue.MarketSmsValueDto;
-import com.java110.dto.marketText.MarketTextDto;
+import com.java110.dto.market.MarketSmsValueDto;
+import com.java110.dto.market.MarketTextDto;
 import com.java110.entity.wechat.Content;
 import com.java110.entity.wechat.Data;
 import com.java110.entity.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.common.IMarketSmsValueV1InnerServiceSMO;
 import com.java110.job.adapt.market.DefaultSendExecutor;
-import com.java110.job.task.wechat.WeChatPushMessageTemplate;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.DateUtil;
@@ -24,11 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
-import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * https://console.shlianlu.com/#/document/api_4_2

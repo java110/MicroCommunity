@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.accountBank;
-import com.java110.dto.accountBank.AccountBankDto;
+import com.java110.dto.account.AccountBankDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetAccountBankBMO {
 

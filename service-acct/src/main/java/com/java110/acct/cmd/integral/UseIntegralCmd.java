@@ -8,7 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.integralSetting.IntegralSettingDto;
+import com.java110.dto.integral.IntegralSettingDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.IIntegralSettingV1InnerServiceSMO;

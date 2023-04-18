@@ -1,5 +1,5 @@
 package com.java110.common.bmo.hcGovTranslateDetail;
-import com.java110.dto.hcGovTranslateDetail.HcGovTranslateDetailDto;
+import com.java110.dto.hcGovTranslate.HcGovTranslateDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetHcGovTranslateDetailBMO {
 

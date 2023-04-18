@@ -17,14 +17,13 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.IMarketGoodsV1ServiceDao;
-import com.java110.dto.marketGoodsItem.MarketGoodsItemDto;
+import com.java110.dto.market.MarketGoodsItemDto;
 import com.java110.intf.common.IMarketGoodsItemV1InnerServiceSMO;
 import com.java110.intf.common.IMarketGoodsV1InnerServiceSMO;
-import com.java110.dto.marketGoods.MarketGoodsDto;
+import com.java110.dto.market.MarketGoodsDto;
 import com.java110.po.marketGoods.MarketGoodsPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

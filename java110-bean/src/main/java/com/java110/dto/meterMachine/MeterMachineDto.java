@@ -1,7 +1,6 @@
 package com.java110.dto.meterMachine;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.meterMachineSpec.MeterMachineSpecDto;
 
 import java.io.Serializable;
 import java.util.Date;

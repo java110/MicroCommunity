@@ -1,5 +1,5 @@
 package com.java110.user.bmo.activitiesRule;
-import com.java110.dto.activitiesRule.ActivitiesRuleDto;
+import com.java110.dto.activities.ActivitiesRuleDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetActivitiesRuleBMO {
 

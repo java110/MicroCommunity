@@ -1,6 +1,6 @@
 package com.java110.oa.bmo.oaWorkflowData.impl;
 
-import com.java110.dto.oaWorkflowData.OaWorkflowDataDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowData.IGetOaWorkflowDataBMO;
 import com.java110.vo.ResultVo;

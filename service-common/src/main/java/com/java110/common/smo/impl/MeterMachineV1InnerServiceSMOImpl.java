@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
 import com.java110.common.dao.IMeterMachineV1ServiceDao;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.meterMachineFactory.MeterMachineFactoryDto;
+import com.java110.dto.meterMachine.MeterMachineFactoryDto;
 import com.java110.intf.common.IMeterMachineFactoryV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.dto.meterMachine.MeterMachineDto;

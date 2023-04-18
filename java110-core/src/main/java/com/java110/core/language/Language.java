@@ -1,8 +1,7 @@
 package com.java110.core.language;
 
 import com.alibaba.fastjson.JSONArray;
-import com.java110.dto.menu.MenuDto;
-import com.java110.dto.menuCatalog.MenuCatalogDto;
+import com.java110.dto.menu.MenuCatalogDto;
 import com.java110.vo.ResultVo;
 
 import java.util.List;

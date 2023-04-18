@@ -2,7 +2,7 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.IAccountBankServiceDao;
-import com.java110.dto.accountBank.AccountBankDto;
+import com.java110.dto.account.AccountBankDto;
 import com.java110.intf.acct.IAccountBankInnerServiceSMO;
 import com.java110.po.accountBank.AccountBankPo;
 import com.java110.utils.util.BeanConvertUtil;

@@ -18,7 +18,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.ICommunitySettingKeyV1ServiceDao;
 import com.java110.intf.community.ICommunitySettingKeyV1InnerServiceSMO;
-import com.java110.dto.communitySetting.CommunitySettingKeyDto;
+import com.java110.dto.community.CommunitySettingKeyDto;
 import com.java110.po.communitySettingKey.CommunitySettingKeyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

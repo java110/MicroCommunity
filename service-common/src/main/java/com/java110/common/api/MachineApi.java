@@ -9,7 +9,7 @@ import com.java110.common.bmo.machineTranslateError.IGetMachineTranslateErrorBMO
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;
 import com.java110.dto.machine.MachineTranslateDto;
-import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;

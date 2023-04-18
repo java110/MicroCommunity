@@ -1,7 +1,7 @@
 package com.java110.oa.bmo.oaWorkflowForm;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
+import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;

@@ -4,7 +4,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IActivitiesTypeServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.activitiesType.ActivitiesTypeDto;
+import com.java110.dto.activities.ActivitiesTypeDto;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
 import com.java110.po.activitiesType.ActivitiesTypePo;
 import com.java110.utils.util.BeanConvertUtil;

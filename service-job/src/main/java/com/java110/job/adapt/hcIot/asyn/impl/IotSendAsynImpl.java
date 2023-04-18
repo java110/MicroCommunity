@@ -21,7 +21,7 @@ import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
-import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
@@ -39,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import sun.swing.StringUIClientPropertyKey;
 
 import java.util.List;
 

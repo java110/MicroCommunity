@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IItemReleaseTypeV1ServiceDao;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
-import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
+import com.java110.dto.itemRelease.ItemReleaseTypeDto;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.itemReleaseType.ItemReleaseTypePo;
 import com.java110.utils.util.BeanConvertUtil;

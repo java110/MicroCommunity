@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMachineTranslateErrorServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.machineTranslateError.MachineTranslateErrorDto;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
 import com.java110.utils.util.BeanConvertUtil;

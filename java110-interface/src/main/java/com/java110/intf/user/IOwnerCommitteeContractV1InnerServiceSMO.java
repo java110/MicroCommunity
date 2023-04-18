@@ -16,7 +16,7 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.ownerCommitteeContract.OwnerCommitteeContractDto;
+import com.java110.dto.owner.OwnerCommitteeContractDto;
 import com.java110.po.ownerCommitteeContract.OwnerCommitteeContractPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

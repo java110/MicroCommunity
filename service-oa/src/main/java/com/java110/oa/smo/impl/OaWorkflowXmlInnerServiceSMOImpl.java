@@ -3,7 +3,7 @@ package com.java110.oa.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
+import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.oa.dao.IOaWorkflowXmlServiceDao;
 import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;

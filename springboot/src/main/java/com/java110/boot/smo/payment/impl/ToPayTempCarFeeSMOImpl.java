@@ -10,7 +10,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
+import com.java110.dto.owner.OwnerCarOpenUserDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;

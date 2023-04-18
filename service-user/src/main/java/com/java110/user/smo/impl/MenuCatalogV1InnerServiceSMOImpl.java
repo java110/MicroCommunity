@@ -18,8 +18,8 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.menuCatalog.MenuCatalogDto;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuCatalogDto;
+import com.java110.dto.menu.MenuGroupDto;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
 import com.java110.po.menuCatalog.MenuCatalogPo;
 import com.java110.user.dao.IMenuCatalogV1ServiceDao;

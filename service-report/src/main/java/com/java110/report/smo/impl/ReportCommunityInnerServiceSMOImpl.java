@@ -8,25 +8,17 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.ownerCarAttr.OwnerCarAttrDto;
-import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
-import com.java110.dto.user.UserDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
-import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
-import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
 import com.java110.report.dao.IReportCommunityServiceDao;
 import com.java110.report.dao.IReportOwnerPayFeeServiceDao;
-import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl

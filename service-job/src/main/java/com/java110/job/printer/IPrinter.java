@@ -1,6 +1,6 @@
 package com.java110.job.printer;
 
-import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.machine.MachinePrinterDto;
 import com.java110.vo.ResultVo;
 
 /**

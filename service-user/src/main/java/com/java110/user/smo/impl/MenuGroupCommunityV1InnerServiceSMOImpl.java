@@ -18,17 +18,15 @@ package com.java110.user.smo.impl;
 
 import com.java110.user.dao.IMenuGroupCommunityV1ServiceDao;
 import com.java110.intf.user.IMenuGroupCommunityV1InnerServiceSMO;
-import com.java110.dto.menuGroupCommunity.MenuGroupCommunityDto;
+import com.java110.dto.menu.MenuGroupCommunityDto;
 import com.java110.po.menuGroupCommunity.MenuGroupCommunityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

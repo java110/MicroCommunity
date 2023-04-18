@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.marketRuleObj.MarketRuleObjDto;
+import com.java110.dto.market.MarketRuleObjDto;
 import com.java110.intf.common.IMarketRuleObjV1InnerServiceSMO;
 import com.java110.po.marketRuleObj.MarketRuleObjPo;
 import com.java110.utils.exception.CmdException;

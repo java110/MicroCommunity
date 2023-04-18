@@ -4,7 +4,7 @@ package com.java110.oa.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
+import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.oa.dao.IOaWorkflowFormServiceDao;
 import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;

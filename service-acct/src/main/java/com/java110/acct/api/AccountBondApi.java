@@ -5,7 +5,7 @@ import com.java110.acct.bmo.accountBond.IDeleteAccountBondBMO;
 import com.java110.acct.bmo.accountBond.IGetAccountBondBMO;
 import com.java110.acct.bmo.accountBond.ISaveAccountBondBMO;
 import com.java110.acct.bmo.accountBond.IUpdateAccountBondBMO;
-import com.java110.dto.accountBond.AccountBondDto;
+import com.java110.dto.account.AccountBondDto;
 import com.java110.po.accountBond.AccountBondPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

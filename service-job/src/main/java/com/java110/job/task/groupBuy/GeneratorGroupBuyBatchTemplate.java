@@ -1,7 +1,7 @@
 package com.java110.job.task.groupBuy;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.groupBuySetting.GroupBuySettingDto;
+import com.java110.dto.groupBuy.GroupBuySettingDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.goods.IGroupBuyBatchInnerServiceSMO;

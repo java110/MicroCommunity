@@ -5,7 +5,7 @@ import com.java110.acct.bmo.accountWithdrawalApply.IDeleteAccountWithdrawalApply
 import com.java110.acct.bmo.accountWithdrawalApply.IGetAccountWithdrawalApplyBMO;
 import com.java110.acct.bmo.accountWithdrawalApply.ISaveAccountWithdrawalApplyBMO;
 import com.java110.acct.bmo.accountWithdrawalApply.IUpdateAccountWithdrawalApplyBMO;
-import com.java110.dto.accountWithdrawalApply.AccountWithdrawalApplyDto;
+import com.java110.dto.account.AccountWithdrawalApplyDto;
 import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -16,7 +16,7 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.ownerSettledRooms.OwnerSettledRoomsDto;
+import com.java110.dto.owner.OwnerSettledRoomsDto;
 import com.java110.po.ownerSettledRooms.OwnerSettledRoomsPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

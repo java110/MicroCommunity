@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.itemReleaseRes.ItemReleaseResDto;
+import com.java110.dto.itemRelease.ItemReleaseResDto;
 import com.java110.po.itemReleaseRes.ItemReleaseResPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

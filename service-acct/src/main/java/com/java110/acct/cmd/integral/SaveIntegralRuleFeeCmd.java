@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.integralRuleFee.IntegralRuleFeeDto;
+import com.java110.dto.integral.IntegralRuleFeeDto;
 import com.java110.intf.acct.IIntegralRuleFeeV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.integralRuleFee.IntegralRuleFeePo;

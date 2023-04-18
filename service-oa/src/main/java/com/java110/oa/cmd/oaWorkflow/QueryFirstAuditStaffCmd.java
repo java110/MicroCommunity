@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.oaWorkflowXml.OaWorkflowXmlDto;
+import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;

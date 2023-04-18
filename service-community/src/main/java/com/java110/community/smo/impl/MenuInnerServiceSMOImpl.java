@@ -7,7 +7,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.basePrivilege.HasPrivilegeDto;
 import com.java110.dto.menu.MenuDto;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuGroupDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

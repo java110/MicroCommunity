@@ -3,7 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.applyRoomDiscountType.ApplyRoomDiscountTypeDto;
+import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountTypeDto;
 import com.java110.fee.dao.IApplyRoomDiscountTypeServiceDao;
 import com.java110.intf.fee.IApplyRoomDiscountTypeInnerServiceSMO;
 import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;

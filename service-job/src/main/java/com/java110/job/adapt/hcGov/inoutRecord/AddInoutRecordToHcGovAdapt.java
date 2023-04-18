@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.communityLocationAttr.CommunityLocationAttrDto;
+import com.java110.dto.community.CommunityLocationAttrDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.entity.order.Business;

@@ -7,7 +7,7 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
 import com.java110.dto.feeReceipt.FeeReceiptDto;
-import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.machine.MachinePrinterDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;

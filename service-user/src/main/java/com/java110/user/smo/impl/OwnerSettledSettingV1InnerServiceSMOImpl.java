@@ -17,15 +17,13 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.visitSetting.VisitSettingDto;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.user.dao.IOwnerSettledSettingV1ServiceDao;
 import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
-import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
+import com.java110.dto.owner.OwnerSettledSettingDto;
 import com.java110.po.ownerSettledSetting.OwnerSettledSettingPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.communitySpace.CommunitySpacePersonTimeDto;
+import com.java110.dto.community.CommunitySpacePersonTimeDto;
 import com.java110.dto.reserveGoodsConfirmOrder.ReserveGoodsConfirmOrderDto;
 import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;
 import com.java110.dto.reserveGoodsOrderTime.ReserveGoodsOrderTimeDto;

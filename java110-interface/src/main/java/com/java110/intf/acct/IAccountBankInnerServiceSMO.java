@@ -1,7 +1,7 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.accountBank.AccountBankDto;
+import com.java110.dto.account.AccountBankDto;
 import com.java110.po.accountBank.AccountBankPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

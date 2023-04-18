@@ -20,7 +20,6 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
@@ -31,7 +30,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesStaffDto;
 
 import java.util.List;
 import java.util.ArrayList;

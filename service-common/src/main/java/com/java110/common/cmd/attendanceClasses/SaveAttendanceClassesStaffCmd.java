@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IPhotoSMO;
-import com.java110.dto.attendanceClassesStaff.AttendanceClassesStaffDto;
+import com.java110.dto.attendanceClasses.AttendanceClassesStaffDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IAttendanceClassesStaffV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;

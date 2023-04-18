@@ -18,7 +18,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.ICommunitySpaceConfirmOrderV1ServiceDao;
 import com.java110.intf.community.ICommunitySpaceConfirmOrderV1InnerServiceSMO;
-import com.java110.dto.communitySpace.CommunitySpaceConfirmOrderDto;
+import com.java110.dto.community.CommunitySpaceConfirmOrderDto;
 import com.java110.po.communitySpaceConfirmOrder.CommunitySpaceConfirmOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

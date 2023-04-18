@@ -16,7 +16,7 @@
 package com.java110.job.adapt.hcGov.location;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.communityLocationAttr.CommunityLocationAttrDto;
+import com.java110.dto.community.CommunityLocationAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;

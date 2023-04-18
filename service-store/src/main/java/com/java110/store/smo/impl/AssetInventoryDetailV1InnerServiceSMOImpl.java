@@ -16,13 +16,12 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.store.dao.IAssetInventoryDetailV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.assetInventoryDetail.AssetInventoryDetailDto;
+import com.java110.dto.assetInventory.AssetInventoryDetailDto;
 import com.java110.intf.store.IAssetInventoryDetailV1InnerServiceSMO;
 import com.java110.po.assetInventoryDetail.AssetInventoryDetailPo;
 import com.java110.utils.util.BeanConvertUtil;

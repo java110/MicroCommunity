@@ -2,11 +2,11 @@ package com.java110.job.task.maintainance;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.maintainancePlan.MaintainancePlanDto;
-import com.java110.dto.maintainancePlanMachine.MaintainancePlanMachineDto;
-import com.java110.dto.maintainancePlanStaff.MaintainancePlanStaffDto;
-import com.java110.dto.maintainanceTask.MaintainanceTaskDto;
-import com.java110.dto.maintainanceTaskDetail.MaintainanceTaskDetailDto;
+import com.java110.dto.maintainance.MaintainancePlanDto;
+import com.java110.dto.maintainance.MaintainancePlanMachineDto;
+import com.java110.dto.maintainance.MaintainancePlanStaffDto;
+import com.java110.dto.maintainance.MaintainanceTaskDto;
+import com.java110.dto.maintainance.MaintainanceTaskDetailDto;
 import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;

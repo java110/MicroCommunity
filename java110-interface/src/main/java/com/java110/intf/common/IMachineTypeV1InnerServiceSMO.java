@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.machineType.MachineTypeDto;
+import com.java110.dto.machine.MachineTypeDto;
 import com.java110.po.machineType.MachineTypePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

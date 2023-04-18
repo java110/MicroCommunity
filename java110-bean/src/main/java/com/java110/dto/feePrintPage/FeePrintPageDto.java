@@ -1,8 +1,5 @@
 package com.java110.dto.feePrintPage;
 
-import com.java110.dto.PageDto;
-import com.java110.dto.feePrintPageTemplate.FeePrintPageTemplateDto;
-
 import java.io.Serializable;
 import java.util.Date;
 

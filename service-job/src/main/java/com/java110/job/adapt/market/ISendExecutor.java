@@ -1,7 +1,7 @@
 package com.java110.job.adapt.market;
 
 
-import com.java110.dto.marketText.MarketTextDto;
+import com.java110.dto.market.MarketTextDto;
 
 public interface ISendExecutor {
 

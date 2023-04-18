@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.marketBlacklist.MarketBlacklistDto;
+import com.java110.dto.market.MarketBlacklistDto;
 import com.java110.po.marketBlacklist.MarketBlacklistPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

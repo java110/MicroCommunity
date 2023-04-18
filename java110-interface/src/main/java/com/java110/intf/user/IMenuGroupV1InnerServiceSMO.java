@@ -16,7 +16,7 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuGroupDto;
 import com.java110.po.menuGroup.MenuGroupPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,7 +1,7 @@
 package com.java110.community.bmo.applyRoomDiscountRecord.impl;
 
 import com.java110.community.bmo.applyRoomDiscountRecord.IGetApplyRoomDiscountRecordBMO;
-import com.java110.dto.applyRoomDiscountRecord.ApplyRoomDiscountRecordDto;
+import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountRecordDto;
 import com.java110.intf.community.IApplyRoomDiscountRecordInnerServiceSMO;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;

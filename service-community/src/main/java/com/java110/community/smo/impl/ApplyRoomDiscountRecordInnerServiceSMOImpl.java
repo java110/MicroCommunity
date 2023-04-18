@@ -2,7 +2,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IApplyRoomDiscountRecordServiceDao;
 import com.java110.intf.community.IApplyRoomDiscountRecordInnerServiceSMO;
-import com.java110.dto.applyRoomDiscountRecord.ApplyRoomDiscountRecordDto;
+import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountRecordDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
 import com.java110.utils.util.BeanConvertUtil;

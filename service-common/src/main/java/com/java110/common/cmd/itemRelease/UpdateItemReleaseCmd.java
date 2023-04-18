@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.itemReleaseType.ItemReleaseTypeDto;
+import com.java110.dto.itemRelease.ItemReleaseTypeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IItemReleaseResV1InnerServiceSMO;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;

@@ -14,7 +14,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.ownerCarOpenUser.OwnerCarOpenUserDto;
+import com.java110.dto.owner.OwnerCarOpenUserDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;

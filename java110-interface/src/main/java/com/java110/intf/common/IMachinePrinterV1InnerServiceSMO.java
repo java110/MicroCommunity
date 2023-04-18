@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.machinePrinter.MachinePrinterDto;
+import com.java110.dto.machine.MachinePrinterDto;
 import com.java110.po.machinePrinter.MachinePrinterPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

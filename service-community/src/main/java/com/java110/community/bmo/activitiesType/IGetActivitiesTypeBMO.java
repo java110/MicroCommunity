@@ -1,5 +1,5 @@
 package com.java110.community.bmo.activitiesType;
-import com.java110.dto.activitiesType.ActivitiesTypeDto;
+import com.java110.dto.activities.ActivitiesTypeDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetActivitiesTypeBMO {
 

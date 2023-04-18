@@ -1,6 +1,6 @@
 package com.java110.user.bmo.activitiesRule.impl;
 
-import com.java110.dto.activitiesRule.ActivitiesRuleDto;
+import com.java110.dto.activities.ActivitiesRuleDto;
 import com.java110.intf.user.IActivitiesRuleInnerServiceSMO;
 import com.java110.user.bmo.activitiesRule.IGetActivitiesRuleBMO;
 import com.java110.vo.ResultVo;

@@ -1,7 +1,7 @@
 package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMachineAuthServiceDao;
-import com.java110.dto.machineAuth.MachineAuthDto;
+import com.java110.dto.machine.MachineAuthDto;
 import com.java110.intf.common.IMachineAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.machineAuth.MachineAuthPo;

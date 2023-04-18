@@ -2,10 +2,10 @@ package com.java110.job.adapt.market;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.marketRuleCommunity.MarketRuleCommunityDto;
-import com.java110.dto.marketRuleObj.MarketRuleObjDto;
-import com.java110.dto.marketRuleWay.MarketRuleWayDto;
-import com.java110.dto.marketText.MarketTextDto;
+import com.java110.dto.market.MarketRuleCommunityDto;
+import com.java110.dto.market.MarketRuleObjDto;
+import com.java110.dto.market.MarketRuleWayDto;
+import com.java110.dto.market.MarketTextDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.common.*;
 import com.java110.job.adapt.DatabusAdaptImpl;

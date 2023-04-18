@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.language.Language;
-import com.java110.dto.menuGroup.MenuGroupDto;
+import com.java110.dto.menu.MenuGroupDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;

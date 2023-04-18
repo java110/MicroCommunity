@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.accountBond;
-import com.java110.dto.accountBond.AccountBondDto;
+import com.java110.dto.account.AccountBondDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetAccountBondBMO {
 

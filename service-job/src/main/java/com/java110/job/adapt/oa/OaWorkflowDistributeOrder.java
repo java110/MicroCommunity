@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.oaWorkflowForm.OaWorkflowFormDto;
+import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;

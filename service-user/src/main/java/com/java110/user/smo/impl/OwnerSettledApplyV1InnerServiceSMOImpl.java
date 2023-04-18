@@ -18,11 +18,8 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.RoomDto;
-import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.dto.ownerSettledRooms.OwnerSettledRoomsDto;
-import com.java110.dto.ownerSettledSetting.OwnerSettledSettingDto;
-import com.java110.dto.visit.VisitDto;
-import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.dto.owner.OwnerSettledRoomsDto;
+import com.java110.dto.owner.OwnerSettledSettingDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledRoomsV1InnerServiceSMO;
@@ -31,17 +28,15 @@ import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomPo;
 import com.java110.user.dao.IOwnerSettledApplyV1ServiceDao;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
-import com.java110.dto.ownerSettledApply.OwnerSettledApplyDto;
+import com.java110.dto.owner.OwnerSettledApplyDto;
 import com.java110.po.ownerSettledApply.OwnerSettledApplyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
