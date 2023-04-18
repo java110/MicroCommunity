@@ -49,7 +49,7 @@ public class PayFeeAuditApi {
 
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
+        //Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
         Assert.hasKeyAndValue(reqJson, "feeDetailId", "请求报文中未包含缴费ID");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         UserDto userDto = new UserDto();
