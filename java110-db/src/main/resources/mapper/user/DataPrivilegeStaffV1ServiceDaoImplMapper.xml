@@ -138,8 +138,8 @@
         left join data_privilege_staff pu on t.user_id = pu.staff_id and pu.status_cd = '0' and pu.dp_id = #{dpId}
         where t.status_cd = '0'
         and pu.dp_id is null
-        <if test="userName !=null and userName != ''">
-            and t.name like concat('%', #{userName},'%')
+        <if test="staffName !=null and staffName != ''">
+            and t.name like concat('%', #{staffName},'%')
         </if>
         and su.store_id = #{storeId}
         order by t.create_time desc
