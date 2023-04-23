@@ -45,6 +45,7 @@ import java.util.List;
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "link", length = 30, remark = "手机号"),
         @Java110ParamDoc(name = "quantity", length = 30, remark = "赠送积分数量"),
+        @Java110ParamDoc(name = "acctType", length = 30, remark = "账户类型 "),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区"),
 })
 
@@ -59,8 +60,8 @@ import java.util.List;
         reqBody = "{'link':'18909711443','quantity':'10','communityId':'12323123'}",
         resBody = "{'code':0,'msg':'成功'}"
 )
-@Java110Cmd(serviceCode = "integral.customSendIntegral")
-public class CustomSendIntegralCmd extends Cmd {
+@Java110Cmd(serviceCode = "integral.customSendAcct")
+public class CustomSendAcctCmd extends Cmd {
 
     @Autowired
     private IIntegralGiftDetailV1InnerServiceSMO integralGiftDetailV1InnerServiceSMOImpl;
@@ -84,7 +85,8 @@ public class CustomSendIntegralCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         Assert.hasKeyAndValue(reqJson, "link", "未包含手机号");
-        Assert.hasKeyAndValue(reqJson, "quantity", "未包含赠送积分数量");
+        Assert.hasKeyAndValue(reqJson, "acctType", "未包含账户类型");
+        Assert.hasKeyAndValue(reqJson, "quantity", "未包含赠送数量");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
 
     }
@@ -97,7 +99,7 @@ public class CustomSendIntegralCmd extends Cmd {
         //向积分账户中充值积分
         AccountDto accountDto = new AccountDto();
         accountDto.setLink(reqJson.getString("link"));
-        accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL);
+        accountDto.setAcctType(reqJson.getString("acctType"));
         accountDto.setPartId(reqJson.getString("communityId"));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
@@ -139,7 +141,7 @@ public class CustomSendIntegralCmd extends Cmd {
             accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
             accountPo.setObjId(reqJson.getString("objId"));
             accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
-            accountPo.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL);
+            accountPo.setAcctType(reqJson.getString("acctType"));
             accountPo.setAcctName(acctName);
             accountPo.setPartId(reqJson.getString("communityId"));
             accountPo.setLink(reqJson.getString("link"));
