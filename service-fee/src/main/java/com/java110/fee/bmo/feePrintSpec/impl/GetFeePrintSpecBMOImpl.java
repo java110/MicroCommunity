@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feePrintSpec.impl;
 
-import com.java110.dto.feePrintPage.FeePrintSpecDto;
+import com.java110.dto.fee.FeePrintSpecDto;
 import com.java110.fee.bmo.feePrintSpec.IGetFeePrintSpecBMO;
 import com.java110.intf.fee.IFeePrintSpecInnerServiceSMO;
 import com.java110.vo.ResultVo;

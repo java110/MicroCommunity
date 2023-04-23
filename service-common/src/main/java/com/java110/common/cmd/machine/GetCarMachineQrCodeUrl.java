@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parking.ParkingBoxAreaDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;

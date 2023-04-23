@@ -16,7 +16,7 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

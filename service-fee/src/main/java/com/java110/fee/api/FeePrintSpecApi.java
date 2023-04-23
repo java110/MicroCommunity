@@ -1,7 +1,7 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.feePrintPage.FeePrintSpecDto;
+import com.java110.dto.fee.FeePrintSpecDto;
 import com.java110.fee.bmo.feePrintSpec.IDeleteFeePrintSpecBMO;
 import com.java110.fee.bmo.feePrintSpec.IGetFeePrintSpecBMO;
 import com.java110.fee.bmo.feePrintSpec.ISaveFeePrintSpecBMO;

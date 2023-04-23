@@ -1,7 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reportInfoAnswerValue.ReportInfoAnswerValueDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoAnswerValueDto;
 import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

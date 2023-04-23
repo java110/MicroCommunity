@@ -1,7 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reportInfoBackCity.ReportInfoBackCityDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
 import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

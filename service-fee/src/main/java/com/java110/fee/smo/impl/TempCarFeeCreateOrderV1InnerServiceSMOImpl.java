@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.parking.ParkingAreaDto;
-import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
+import com.java110.dto.parkingCoupon.ParkingCouponCarDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;

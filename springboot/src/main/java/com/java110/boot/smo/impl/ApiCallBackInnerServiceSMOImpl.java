@@ -3,7 +3,7 @@ package com.java110.boot.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.boot.websocket.ParkingAreaWebsocket;
 import com.java110.boot.websocket.ParkingBoxWebsocket;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parking.ParkingBoxAreaDto;
 import com.java110.intf.api.IApiCallBackInnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.utils.exception.SMOException;

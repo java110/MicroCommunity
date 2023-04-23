@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
+import com.java110.dto.inspection.InspectionRoutePointRelDto;
 import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
 import com.java110.intf.community.IInspectionRoutePointRelV1InnerServiceSMO;
 import com.java110.po.inspection.InspectionRoutePointRelPo;

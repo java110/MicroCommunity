@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.reserveGoodsDetail.ReserveGoodsDetailDto;
+import com.java110.dto.reserve.ReserveGoodsDetailDto;
 import com.java110.intf.store.IReserveGoodsDetailV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -28,7 +28,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.reserveGoods.ReserveGoodsDto;
+import com.java110.dto.reserve.ReserveGoodsDto;
 
 import java.util.List;
 import java.util.ArrayList;

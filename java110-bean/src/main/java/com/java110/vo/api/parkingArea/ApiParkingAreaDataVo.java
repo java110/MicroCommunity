@@ -1,9 +1,8 @@
 package com.java110.vo.api.parkingArea;
 
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class ApiParkingAreaDataVo implements Serializable {

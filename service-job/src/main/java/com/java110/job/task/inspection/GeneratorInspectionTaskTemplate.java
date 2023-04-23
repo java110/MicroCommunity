@@ -2,11 +2,11 @@ package com.java110.job.task.inspection;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionPlan.InspectionPlanDto;
-import com.java110.dto.inspectionPlan.InspectionPlanStaffDto;
-import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
-import com.java110.dto.inspectionPlan.InspectionTaskDto;
-import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
+import com.java110.dto.inspection.InspectionPlanDto;
+import com.java110.dto.inspection.InspectionPlanStaffDto;
+import com.java110.dto.inspection.InspectionRoutePointRelDto;
+import com.java110.dto.inspection.InspectionTaskDto;
+import com.java110.dto.scheduleClasses.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;

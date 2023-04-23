@@ -10,7 +10,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.couponPool.CouponPropertyPoolConfigDto;
 import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
+import com.java110.dto.parkingCoupon.ParkingCouponCarDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;

@@ -16,7 +16,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.scheduleClassesTime.ScheduleClassesTimeDto;
+import com.java110.dto.scheduleClasses.ScheduleClassesTimeDto;
 import com.java110.po.scheduleClassesTime.ScheduleClassesTimePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

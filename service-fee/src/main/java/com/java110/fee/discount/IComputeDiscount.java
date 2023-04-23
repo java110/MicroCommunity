@@ -17,8 +17,8 @@
 package com.java110.fee.discount;
 
 
-import com.java110.dto.feeDiscount.ComputeDiscountDto;
-import com.java110.dto.feeDiscount.FeeDiscountDto;
+import com.java110.dto.fee.ComputeDiscountDto;
+import com.java110.dto.fee.FeeDiscountDto;
 
 /**
  * 折扣计算

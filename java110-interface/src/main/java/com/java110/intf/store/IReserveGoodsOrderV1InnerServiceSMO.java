@@ -16,7 +16,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;
+import com.java110.dto.reserve.ReserveGoodsOrderDto;
 import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.parking.ParkingAreaDto;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parking.ParkingBoxAreaDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;

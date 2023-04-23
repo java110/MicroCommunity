@@ -1,10 +1,8 @@
 package com.java110.dto.parking;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**

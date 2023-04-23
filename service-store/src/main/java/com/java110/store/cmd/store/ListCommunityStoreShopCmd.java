@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.parkingCouponShop.ParkingCouponShopDto;
+import com.java110.dto.parkingCoupon.ParkingCouponShopDto;
 import com.java110.dto.shopCommunity.ShopCommunityDto;
 import com.java110.dto.storeShopCommunity.StoreShopCommunityDto;
 import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;

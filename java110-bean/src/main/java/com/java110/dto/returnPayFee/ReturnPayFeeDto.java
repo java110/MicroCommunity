@@ -1,11 +1,10 @@
 package com.java110.dto.returnPayFee;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.fee.FeeAccountDetailDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**

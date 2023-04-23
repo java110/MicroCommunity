@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.equipmentOperatingLog.EquipmentOperatingLogDto;
+import com.java110.dto.equipmentAccount.EquipmentOperatingLogDto;
 import com.java110.po.equipmentOperatingLog.EquipmentOperatingLogPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

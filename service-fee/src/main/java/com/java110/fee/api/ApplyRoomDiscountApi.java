@@ -9,7 +9,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountTypeDto;
 import com.java110.dto.fee.FeeDetailDto;
-import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
+import com.java110.dto.fee.FeeDiscountRuleDto;
 import com.java110.fee.bmo.account.IUpdateAccountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IAuditApplyRoomDiscountBMO;
 import com.java110.fee.bmo.applyRoomDiscount.IDeleteApplyRoomDiscountBMO;

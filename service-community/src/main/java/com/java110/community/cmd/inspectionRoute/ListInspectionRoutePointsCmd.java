@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
+import com.java110.dto.inspection.InspectionRoutePointRelDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;

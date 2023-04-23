@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.inspectionPlan.InspectionTaskDto;
+import com.java110.dto.inspection.InspectionTaskDto;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.po.inspection.InspectionPlanPo;

@@ -28,7 +28,7 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
+import com.java110.dto.parking.ParkingSpaceApplyDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;

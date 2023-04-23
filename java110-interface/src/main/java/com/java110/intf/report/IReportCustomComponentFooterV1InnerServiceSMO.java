@@ -16,7 +16,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reportCustomComponentFooter.ReportCustomComponentFooterDto;
+import com.java110.dto.reportCustom.ReportCustomComponentFooterDto;
 import com.java110.po.reportCustomComponentFooter.ReportCustomComponentFooterPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

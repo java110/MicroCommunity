@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscount;
 
-import com.java110.dto.feeDiscount.FeeDiscountDto;
+import com.java110.dto.fee.FeeDiscountDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import org.springframework.http.ResponseEntity;
 

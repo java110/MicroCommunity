@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.reportInfoAnswerValue.ReportInfoAnswerValueDto;
-import com.java110.dto.reportInfoSetting.ReportInfoSettingDto;
-import com.java110.dto.reportInfoSettingTitleValue.ReportInfoSettingTitleValueDto;
-import com.java110.dto.user.UserDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoAnswerValueDto;
+import com.java110.dto.reportInfoSetting.ReportInfoSettingTitleValueDto;
 import com.java110.intf.report.IReportInfoAnswerInnerServiceSMO;
 import com.java110.intf.report.IReportInfoAnswerValueInnerServiceSMO;
 import com.java110.intf.report.IReportInfoSettingInnerServiceSMO;
@@ -15,16 +13,13 @@ import com.java110.intf.report.IReportInfoSettingTitleValueInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.reportInfoAnswer.ReportInfoAnswerPo;
 import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
-import com.java110.po.userQuestionAnswer.UserQuestionAnswerPo;
 import com.java110.report.bmo.reportInfoAnswerValue.ISaveReportInfoAnswerValueBMO;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("saveReportInfoAnswerValueBMOImpl")

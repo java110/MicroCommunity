@@ -18,7 +18,7 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
+import com.java110.dto.reportCustom.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
 import com.java110.report.dao.IReportCustomComponentV1ServiceDao;

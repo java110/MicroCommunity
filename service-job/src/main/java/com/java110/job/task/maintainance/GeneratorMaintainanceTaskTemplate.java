@@ -7,7 +7,7 @@ import com.java110.dto.maintainance.MaintainancePlanMachineDto;
 import com.java110.dto.maintainance.MaintainancePlanStaffDto;
 import com.java110.dto.maintainance.MaintainanceTaskDto;
 import com.java110.dto.maintainance.MaintainanceTaskDetailDto;
-import com.java110.dto.scheduleClassesStaff.ScheduleClassesStaffDto;
+import com.java110.dto.scheduleClasses.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;

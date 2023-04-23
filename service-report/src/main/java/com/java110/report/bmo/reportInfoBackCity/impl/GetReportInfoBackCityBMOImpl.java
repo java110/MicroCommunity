@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoBackCity.impl;
 
-import com.java110.dto.reportInfoBackCity.ReportInfoBackCityDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
 import com.java110.intf.report.IReportInfoBackCityInnerServiceSMO;
 import com.java110.report.bmo.reportInfoBackCity.IGetReportInfoBackCityBMO;
 import com.java110.vo.ResultVo;

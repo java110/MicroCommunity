@@ -17,7 +17,7 @@ package com.java110.job.adapt.hcIot.parkingArea;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.parkingAreaText.ParkingAreaTextDto;
+import com.java110.dto.parking.ParkingAreaTextDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.community.IParkingAreaTextV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;

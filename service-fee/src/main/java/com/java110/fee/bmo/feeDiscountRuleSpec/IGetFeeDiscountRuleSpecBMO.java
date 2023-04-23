@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.feeDiscountRuleSpec;
-import com.java110.dto.feeDiscount.FeeDiscountRuleSpecDto;
+import com.java110.dto.fee.FeeDiscountRuleSpecDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetFeeDiscountRuleSpecBMO {
 

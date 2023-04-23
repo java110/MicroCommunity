@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.FloorDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.parking.ParkingAreaDto;
-import com.java110.dto.parkingBox.ParkingBoxDto;
+import com.java110.dto.parking.ParkingBoxDto;
 import com.java110.intf.community.*;
 import com.java110.po.community.CommunityLocationPo;
 import com.java110.utils.exception.CmdException;

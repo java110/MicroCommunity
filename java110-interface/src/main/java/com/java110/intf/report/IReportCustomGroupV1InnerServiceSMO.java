@@ -16,7 +16,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reportCustomGroup.ReportCustomGroupDto;
+import com.java110.dto.reportCustom.ReportCustomGroupDto;
 import com.java110.po.reportCustomGroup.ReportCustomGroupPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

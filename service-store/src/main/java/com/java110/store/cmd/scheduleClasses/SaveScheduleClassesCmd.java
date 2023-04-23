@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.scheduleClasses.ScheduleClassesDto;
-import com.java110.dto.scheduleClassesDay.ScheduleClassesDayDto;
+import com.java110.dto.scheduleClasses.ScheduleClassesDayDto;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;

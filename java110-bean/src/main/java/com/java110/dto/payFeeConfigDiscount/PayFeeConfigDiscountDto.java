@@ -1,7 +1,7 @@
 package com.java110.dto.payFeeConfigDiscount;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.fee.FeeDiscountSpecDto;
 
 import java.io.Serializable;
 import java.util.Date;

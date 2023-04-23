@@ -18,17 +18,15 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IPrinterRuleRepairV1ServiceDao;
 import com.java110.intf.common.IPrinterRuleRepairV1InnerServiceSMO;
-import com.java110.dto.printerRuleRepair.PrinterRuleRepairDto;
+import com.java110.dto.printerRule.PrinterRuleRepairDto;
 import com.java110.po.printerRuleRepair.PrinterRuleRepairPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

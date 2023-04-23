@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeFormula;
 
-import com.java110.dto.feeFormula.FeeFormulaDto;
+import com.java110.dto.fee.FeeFormulaDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetFeeFormulaBMO {

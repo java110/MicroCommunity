@@ -2,7 +2,7 @@ package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.reportInfoAnswerValue.ReportInfoAnswerValueDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoAnswerValueDto;
 import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
 import com.java110.report.bmo.reportInfoAnswerValue.IDeleteReportInfoAnswerValueBMO;
 import com.java110.report.bmo.reportInfoAnswerValue.IGetReportInfoAnswerValueBMO;

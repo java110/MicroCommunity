@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscountRule;
 
-import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
+import com.java110.dto.fee.FeeDiscountRuleDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetFeeDiscountRuleBMO {

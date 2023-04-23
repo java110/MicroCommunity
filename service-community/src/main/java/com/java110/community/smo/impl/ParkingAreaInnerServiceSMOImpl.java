@@ -6,7 +6,7 @@ import com.java110.community.dao.IParkingAreaServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.parking.ParkingAreaDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;

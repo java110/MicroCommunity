@@ -3,8 +3,8 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.feeReceipt.FeeReceiptDto;
-import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
+import com.java110.dto.fee.FeeReceiptDto;
+import com.java110.dto.fee.FeeReceiptDtoNew;
 import com.java110.fee.dao.IFeeReceiptServiceDao;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.po.feeReceipt.FeeReceiptPo;

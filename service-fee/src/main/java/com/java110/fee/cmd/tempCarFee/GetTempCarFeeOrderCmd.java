@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parking.ParkingBoxAreaDto;
 import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;

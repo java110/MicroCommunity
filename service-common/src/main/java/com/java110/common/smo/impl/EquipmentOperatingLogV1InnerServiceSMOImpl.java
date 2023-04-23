@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IEquipmentOperatingLogV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.equipmentOperatingLog.EquipmentOperatingLogDto;
+import com.java110.dto.equipmentAccount.EquipmentOperatingLogDto;
 import com.java110.intf.common.IEquipmentOperatingLogV1InnerServiceSMO;
 import com.java110.po.equipmentOperatingLog.EquipmentOperatingLogPo;
 import com.java110.utils.util.BeanConvertUtil;

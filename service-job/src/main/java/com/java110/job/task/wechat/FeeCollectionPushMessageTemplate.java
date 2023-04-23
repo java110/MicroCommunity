@@ -7,7 +7,7 @@ import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeCollectionDetail.FeeCollectionOrderDto;
+import com.java110.dto.fee.FeeCollectionOrderDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;

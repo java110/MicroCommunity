@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
+import com.java110.dto.fee.FeeAccountDetailDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
