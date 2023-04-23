@@ -112,13 +112,14 @@ public class CustomSendAcctCmd extends Cmd {
         accountDetailPo.setObjId(accountDtos.get(0).getObjId());
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
         accountDetailPo.setAmount(reqJson.getString("quantity"));
+        accountDetailPo.setRemark("三方平台通过手工赠送");
         int flag = accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
 
         if (flag < 1) {
             throw new CmdException("扣款失败");
         }
 
-        doGiftIntegral(accountDtos.get(0), reqJson,createUserId);
+        //doGiftIntegral(accountDtos.get(0), reqJson,createUserId);
 
 
     }
