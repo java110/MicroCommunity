@@ -1,4 +1,4 @@
-package com.java110.acct.cmd.integral;
+package com.java110.acct.cmd.account;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -36,16 +36,16 @@ import java.util.List;
 @Java110CmdDoc(title = "积分赠送",
         description = "三方平台赠送积分给用户",
         httpMethod = "post",
-        url = "http://{ip}:{port}/app/integral.customSendIntegral",
+        url = "http://{ip}:{port}/app/account.customSendAcct",
         resource = "acctDoc",
         author = "吴学文",
-        serviceCode = "integral.customSendIntegral"
+        serviceCode = "account.customSendAcct"
 )
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "link", length = 30, remark = "手机号"),
         @Java110ParamDoc(name = "quantity", length = 30, remark = "赠送积分数量"),
-        @Java110ParamDoc(name = "acctType", length = 30, remark = "账户类型 "),
+        @Java110ParamDoc(name = "acctType", length = 30, remark = "账户类型 2003 现金账户 2004 积分账户 2006 金币账户"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区"),
 })
 
@@ -60,7 +60,7 @@ import java.util.List;
         reqBody = "{'link':'18909711443','quantity':'10','communityId':'12323123'}",
         resBody = "{'code':0,'msg':'成功'}"
 )
-@Java110Cmd(serviceCode = "integral.customSendAcct")
+@Java110Cmd(serviceCode = "account.customSendAcct")
 public class CustomSendAcctCmd extends Cmd {
 
     @Autowired
