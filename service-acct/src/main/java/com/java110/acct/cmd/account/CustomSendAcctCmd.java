@@ -119,8 +119,10 @@ public class CustomSendAcctCmd extends Cmd {
             throw new CmdException("扣款失败");
         }
 
-        //doGiftIntegral(accountDtos.get(0), reqJson,createUserId);
-
+        //todo 积分 需要补充一下数据
+        if(AccountDto.ACCT_TYPE_INTEGRAL.equals(reqJson.getString("acctType"))) {
+            doGiftIntegral(accountDtos.get(0), reqJson, createUserId);
+        }
 
     }
 
