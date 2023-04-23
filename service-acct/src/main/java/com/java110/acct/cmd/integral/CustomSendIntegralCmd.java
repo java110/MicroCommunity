@@ -92,6 +92,8 @@ public class CustomSendIntegralCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
+        String createUserId = context.getReqHeaders().get("user-id");
+
         //向积分账户中充值积分
         AccountDto accountDto = new AccountDto();
         accountDto.setLink(reqJson.getString("link"));
@@ -114,7 +116,7 @@ public class CustomSendIntegralCmd extends Cmd {
             throw new CmdException("扣款失败");
         }
 
-        doGiftIntegral(accountDtos.get(0), reqJson);
+        doGiftIntegral(accountDtos.get(0), reqJson,createUserId);
 
 
     }
@@ -172,7 +174,7 @@ public class CustomSendIntegralCmd extends Cmd {
         throw new CmdException("业主不存在");
     }
 
-    private void doGiftIntegral(AccountDto accountDto, JSONObject reqJson) {
+    private void doGiftIntegral(AccountDto accountDto, JSONObject reqJson,String createUserId) {
 
         IntegralConfigDto integralConfigDto = new IntegralConfigDto();
         integralConfigDto.setCommunityId(reqJson.getString("communityId"));
@@ -181,10 +183,18 @@ public class CustomSendIntegralCmd extends Cmd {
             throw new CmdException("积分规则不存在，请添加");
         }
 
-        UserDto userDto = new UserDto();
-        userDto.setTel(reqJson.getString("link"));
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        Assert.listOnlyOne(userDtos, "用户不存在");
+//        UserDto userDto = new UserDto();
+//        userDto.setTel(reqJson.getString("link"));
+//        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+//        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        OwnerDto tmpOwnerDto = new OwnerDto();
+        tmpOwnerDto.setLink(reqJson.getString("link"));
+        tmpOwnerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
+        if (ownerDtos != null && ownerDtos.size() > 0) {
+            return;
+        }
         //先加明细
         IntegralGiftDetailPo integralGiftDetailPo = new IntegralGiftDetailPo();
         integralGiftDetailPo.setCommunityId(reqJson.getString("communityId"));
@@ -197,9 +207,9 @@ public class CustomSendIntegralCmd extends Cmd {
         integralGiftDetailPo.setRuleId("-1");
         integralGiftDetailPo.setRuleName(reqJson.getString("ruleName"));
         integralGiftDetailPo.setQuantity(reqJson.getString("quantity"));
-        integralGiftDetailPo.setCreateUserId(userDtos.get(0).getUserId());
-        integralGiftDetailPo.setUserName(userDtos.get(0).getName());
-        integralGiftDetailPo.setTel(userDtos.get(0).getTel());
+        integralGiftDetailPo.setCreateUserId(createUserId);
+        integralGiftDetailPo.setUserName(ownerDtos.get(0).getName());
+        integralGiftDetailPo.setTel(ownerDtos.get(0).getLink());
         integralGiftDetailV1InnerServiceSMOImpl.saveIntegralGiftDetail(integralGiftDetailPo);
 
     }
