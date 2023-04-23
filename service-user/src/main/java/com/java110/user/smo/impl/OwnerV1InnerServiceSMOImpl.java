@@ -109,7 +109,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
     @Override
 
-    public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
+    public List<OwnerDto>  queryOwners(@RequestBody OwnerDto ownerDto) {
 
         //校验是否传了 分页信息
 

@@ -137,7 +137,7 @@ public class CustomSendIntegralCmd extends Cmd {
             accountPo.setAcctId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_acctId));
             accountPo.setObjId(reqJson.getString("objId"));
             accountPo.setObjType(AccountDto.OBJ_TYPE_PERSON);
-            accountPo.setAcctType(AccountDto.ACCT_TYPE_CASH);
+            accountPo.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL);
             accountPo.setAcctName(acctName);
             accountPo.setPartId(reqJson.getString("communityId"));
             accountPo.setLink(reqJson.getString("link"));
