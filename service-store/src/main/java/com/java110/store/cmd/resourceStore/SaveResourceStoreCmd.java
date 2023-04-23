@@ -25,9 +25,11 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.purchase.ResourceStorePo;
+import com.java110.po.resourceStoreTimes.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -64,7 +66,8 @@ public class SaveResourceStoreCmd extends Cmd {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
-
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -110,6 +113,17 @@ public class SaveResourceStoreCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        // 保存至 物品 times表
+        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setApplyOrderId("-1");
+        resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());
+        resourceStoreTimesPo.setStock(resourceStorePo.getStock());
+        resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
+        resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
+        resourceStoreTimesPo.setShId(resourceStorePo.getShId());
+        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
         //将图片插入文件表里
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setObjId(resourceStorePo.getResId());
