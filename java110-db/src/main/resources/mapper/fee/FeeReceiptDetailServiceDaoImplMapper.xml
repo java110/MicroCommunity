@@ -117,17 +117,11 @@
         <if test="feeName !=null and feeName != ''">
             , t.fee_name= #{feeName}
         </if>
-        <if test="detailId !=null and detailId != ''">
-            , t.detail_id= #{detailId}
-        </if>
         <if test="startTime !=null and startTime != ''">
             , t.start_time= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
         </if>
         <if test="feeId !=null and feeId != ''">
             , t.fee_id= #{feeId}
@@ -138,6 +132,12 @@
         where 1=1
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
         </if>
 
     </update>
