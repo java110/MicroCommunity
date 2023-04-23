@@ -57,7 +57,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody = "{'link':'18909711443','quantity':'10','communityId':'12323123'}",
+        reqBody = "{'link':'18909711443','quantity':'10','acctType':'2003','communityId':'12323123'}",
         resBody = "{'code':0,'msg':'成功'}"
 )
 @Java110Cmd(serviceCode = "account.customSendAcct")
