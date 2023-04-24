@@ -140,8 +140,13 @@ public class ChargeCoreImpl implements IChargeCore {
         calendar.add(Calendar.MINUTE, -2); // 这里减掉两分钟，设备反应通知平台的时间
 
         double usedHours = Math.ceil((calendar.getTime().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
+        // 计算平均功率
+        String power = energy;
         if (usedHours < 0) {
             usedHours = 0;
+        }else{
+            BigDecimal powerDec = new BigDecimal(Double.parseDouble(energy)).divide(new BigDecimal(usedHours),2,BigDecimal.ROUND_HALF_UP);
+            power = powerDec.doubleValue()+"";
         }
 
         // todo 优惠券抵扣
@@ -151,13 +156,12 @@ public class ChargeCoreImpl implements IChargeCore {
             remark = result.getString("remark");
         }else{
             remark = remark+";"+result.getString("remark");
-
         }
 
         ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
         chargeRuleFeeDto.setRuleId(chargeMachineDto.getRuleId());
         chargeRuleFeeDto.setCommunityId(chargeMachineDto.getCommunityId());
-        chargeRuleFeeDto.setEnergy(energy);
+        chargeRuleFeeDto.setEnergy(power);
         List<ChargeRuleFeeDto> chargeRuleFeeDtos = chargeRuleFeeV1InnerServiceSMOImpl.queryChargeRuleFees(chargeRuleFeeDto);
 
         if (chargeRuleFeeDtos == null || chargeRuleFeeDtos.size() < 1) {

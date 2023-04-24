@@ -194,7 +194,7 @@ public class EditOwnerCmd extends Cmd {
         }
         editOwner(reqJson);
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs == null && attrs.size() < 1) {
+        if (attrs == null || attrs.size() < 1) {
             return;
         }
         JSONObject attr = null;
