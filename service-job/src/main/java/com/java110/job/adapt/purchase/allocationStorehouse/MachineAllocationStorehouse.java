@@ -3,7 +3,7 @@ package com.java110.job.adapt.purchase.allocationStorehouse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
-import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.allocationStorehouse.AllocationStorehouseApplyDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;

@@ -11,7 +11,7 @@ import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.rentingConfig.RentingConfigDto;
+import com.java110.dto.rentingPool.RentingConfigDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.cache.CommonCache;

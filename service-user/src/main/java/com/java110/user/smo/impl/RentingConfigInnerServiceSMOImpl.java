@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.rentingConfig.RentingConfigDto;
+import com.java110.dto.rentingPool.RentingConfigDto;
 import com.java110.intf.user.IRentingConfigInnerServiceSMO;
 import com.java110.po.rentingConfig.RentingConfigPo;
 import com.java110.user.dao.IRentingConfigServiceDao;

@@ -3,7 +3,7 @@ package com.java110.user.bmo.questionAnswerTitle.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.questionAnswerTitle.QuestionAnswerTitleDto;
+import com.java110.dto.questionAnswer.QuestionAnswerTitleDto;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerTitleInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerTitleValueInnerServiceSMO;

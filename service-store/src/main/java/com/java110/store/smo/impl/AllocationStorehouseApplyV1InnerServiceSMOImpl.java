@@ -18,7 +18,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.allocationStorehouse.AllocationStorehouseApplyDto;
 import com.java110.intf.store.IAllocationStorehouseApplyV1InnerServiceSMO;
 import com.java110.po.allocationStorehouseApply.AllocationStorehouseApplyPo;
 import com.java110.store.dao.IAllocationStorehouseApplyV1ServiceDao;

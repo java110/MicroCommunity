@@ -1,6 +1,6 @@
 package com.java110.user.bmo.questionAnswerTitleValue.impl;
 
-import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
+import com.java110.dto.questionAnswer.QuestionAnswerTitleValueDto;
 import com.java110.intf.user.IQuestionAnswerTitleValueInnerServiceSMO;
 import com.java110.user.bmo.questionAnswerTitleValue.IGetQuestionAnswerTitleValueBMO;
 import com.java110.vo.ResultVo;

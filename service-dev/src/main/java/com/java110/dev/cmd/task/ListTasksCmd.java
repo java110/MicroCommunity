@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.intf.job.ITaskAttrInnerServiceSMO;
 import com.java110.intf.job.ITaskInnerServiceSMO;
 import com.java110.utils.exception.CmdException;

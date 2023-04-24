@@ -3,7 +3,7 @@ package com.java110.job.smo.impl;
 
 import com.java110.job.dao.ITaskAttrServiceDao;
 import com.java110.intf.job.ITaskAttrInnerServiceSMO;
-import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;

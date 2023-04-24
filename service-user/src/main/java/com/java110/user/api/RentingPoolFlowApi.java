@@ -1,7 +1,7 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.rentingPoolFlow.RentingPoolFlowDto;
+import com.java110.dto.rentingPool.RentingPoolFlowDto;
 import com.java110.po.rentingPoolFlow.RentingPoolFlowPo;
 import com.java110.user.bmo.rentingPoolFlow.IDeleteRentingPoolFlowBMO;
 import com.java110.user.bmo.rentingPoolFlow.IGetRentingPoolFlowBMO;

@@ -19,7 +19,7 @@ package com.java110.scm.smo.impl;
 import com.java110.dto.couponPool.CouponPropertyPoolDto;
 import com.java110.dto.couponPool.CouponPropertyUserDto;
 import com.java110.dto.couponPool.CouponQrCodeDto;
-import com.java110.dto.supplierCoupon.SupplierCouponDto;
+import com.java110.dto.supplier.SupplierCouponDto;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
 import com.java110.scm.dao.ISupplierV1ServiceDao;

@@ -5,7 +5,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.logSystemError.LogSystemErrorDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.job.dao.ITaskServiceDao;

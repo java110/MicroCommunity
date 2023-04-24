@@ -16,19 +16,17 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.allocationUserStorehouse.AllocationUserStorehouseDto;
+import com.java110.dto.allocationStorehouse.AllocationUserStorehouseDto;
 import com.java110.po.allocationUserStorehouse.AllocationUserStorehousePo;
 import com.java110.store.dao.IAllocationUserStorehouseV1ServiceDao;
 import com.java110.intf.store.IAllocationUserStorehouseV1InnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

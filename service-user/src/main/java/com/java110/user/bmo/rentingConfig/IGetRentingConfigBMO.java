@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingConfig;
 
-import com.java110.dto.rentingConfig.RentingConfigDto;
+import com.java110.dto.rentingPool.RentingConfigDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetRentingConfigBMO {

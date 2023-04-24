@@ -1,7 +1,7 @@
 package com.java110.intf.goods;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.storeOrderCartReturn.StoreOrderCartReturnDto;
+import com.java110.dto.storeOrder.StoreOrderCartReturnDto;
 import com.java110.po.storeOrderCartReturn.StoreOrderCartReturnPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

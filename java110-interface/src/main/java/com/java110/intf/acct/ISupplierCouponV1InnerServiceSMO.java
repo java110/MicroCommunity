@@ -16,7 +16,7 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.supplierCoupon.SupplierCouponDto;
+import com.java110.dto.supplier.SupplierCouponDto;
 import com.java110.po.supplierCoupon.SupplierCouponPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

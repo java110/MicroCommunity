@@ -1,7 +1,6 @@
 package com.java110.dto.groupBuy;
 
-import com.java110.dto.PageDto;
-import com.java110.dto.productSpecValue.ProductSpecValueDto;
+import com.java110.dto.product.ProductSpecValueDto;
 
 import java.io.Serializable;
 import java.util.Date;

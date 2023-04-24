@@ -16,7 +16,7 @@
 package com.java110.intf.dev;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.po.taskAttr.TaskAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

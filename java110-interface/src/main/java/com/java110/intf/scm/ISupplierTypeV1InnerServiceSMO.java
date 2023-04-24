@@ -16,7 +16,7 @@
 package com.java110.intf.scm;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.supplierType.SupplierTypeDto;
+import com.java110.dto.supplier.SupplierTypeDto;
 import com.java110.po.supplierType.SupplierTypePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

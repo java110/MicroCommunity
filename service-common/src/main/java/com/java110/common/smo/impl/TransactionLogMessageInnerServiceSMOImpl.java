@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.ITransactionLogMessageServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.transactionLogMessage.TransactionLogMessageDto;
+import com.java110.dto.transactionLog.TransactionLogMessageDto;
 import com.java110.intf.common.ITransactionLogMessageInnerServiceSMO;
 import com.java110.po.transactionLog.TransactionLogMessagePo;
 import com.java110.utils.util.BeanConvertUtil;

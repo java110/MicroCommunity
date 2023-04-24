@@ -2,7 +2,7 @@ package com.java110.core.client;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.transactionOutLog.TransactionOutLogDto;
+import com.java110.dto.transactionLog.TransactionOutLogDto;
 import com.java110.intf.common.ITransactionOutLogV1ServiceSMO;
 import com.java110.po.transactionOutLog.TransactionOutLogPo;
 import com.java110.utils.cache.MappingCache;

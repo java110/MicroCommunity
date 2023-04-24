@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.questionAnswerTitleValue.QuestionAnswerTitleValueDto;
+import com.java110.dto.questionAnswer.QuestionAnswerTitleValueDto;
 import com.java110.intf.user.IQuestionAnswerTitleValueInnerServiceSMO;
 import com.java110.po.questionAnswerTitleValue.QuestionAnswerTitleValuePo;
 import com.java110.user.dao.IQuestionAnswerTitleValueServiceDao;

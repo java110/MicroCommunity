@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.rentingPoolFlow.RentingPoolFlowDto;
+import com.java110.dto.rentingPool.RentingPoolFlowDto;
 import com.java110.intf.user.IRentingPoolFlowInnerServiceSMO;
 import com.java110.po.rentingPoolFlow.RentingPoolFlowPo;
 import com.java110.user.dao.IRentingPoolFlowServiceDao;

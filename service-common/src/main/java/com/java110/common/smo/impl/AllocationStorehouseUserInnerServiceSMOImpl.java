@@ -2,7 +2,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouseApply.AllocationStorehouseApplyDto;
+import com.java110.dto.allocationStorehouse.AllocationStorehouseApplyDto;
 import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.storehouse.StorehouseDto;

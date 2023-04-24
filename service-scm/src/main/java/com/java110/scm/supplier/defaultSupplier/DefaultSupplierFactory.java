@@ -3,7 +3,7 @@ package com.java110.scm.supplier.defaultSupplier;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.supplierConfig.SupplierConfigDto;
+import com.java110.dto.supplier.SupplierConfigDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.StringUtil;

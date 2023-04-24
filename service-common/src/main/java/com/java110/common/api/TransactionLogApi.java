@@ -7,7 +7,7 @@ import com.java110.common.bmo.transactionLog.ISaveTransactionLogBMO;
 import com.java110.common.bmo.transactionLog.IUpdateTransactionLogBMO;
 import com.java110.common.bmo.transactionLogMessage.IGetTransactionLogMessageBMO;
 import com.java110.dto.transactionLog.TransactionLogDto;
-import com.java110.dto.transactionLogMessage.TransactionLogMessageDto;
+import com.java110.dto.transactionLog.TransactionLogMessageDto;
 import com.java110.po.transactionLog.TransactionLogPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

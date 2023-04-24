@@ -8,7 +8,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.task.TaskTemplateDto;
 import com.java110.dto.task.TaskTemplateSpecDto;
-import com.java110.dto.taskAttr.TaskAttrDto;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.job.dao.ITaskAttrServiceDao;
 import com.java110.job.dao.ITaskServiceDao;

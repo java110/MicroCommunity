@@ -4,7 +4,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.rentingAppointment.RentingAppointmentDto;
 import com.java110.dto.rentingPool.RentingPoolDto;
-import com.java110.dto.rentingPoolFlow.RentingPoolFlowDto;
+import com.java110.dto.rentingPool.RentingPoolFlowDto;
 import com.java110.intf.user.IRentingAppointmentInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolFlowInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;

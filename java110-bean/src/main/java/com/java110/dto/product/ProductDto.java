@@ -1,8 +1,5 @@
 package com.java110.dto.product;
 
-import com.java110.dto.PageDto;
-import com.java110.dto.productSpecValue.ProductSpecValueDto;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
