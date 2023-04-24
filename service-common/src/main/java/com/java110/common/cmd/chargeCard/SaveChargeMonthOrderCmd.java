@@ -113,7 +113,7 @@ public class SaveChargeMonthOrderCmd extends Cmd {
         chargeMonthOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         chargeMonthOrderPo.setStartTime(DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_A));
         chargeMonthOrderPo.setEndTime(endDate);
-        chargeMonthOrderPo.setPersonTel("personTel");
+
         chargeMonthOrderPo.setPersonName(getPersonName(reqJson));
         int flag = chargeMonthOrderV1InnerServiceSMOImpl.saveChargeMonthOrder(chargeMonthOrderPo);
 
