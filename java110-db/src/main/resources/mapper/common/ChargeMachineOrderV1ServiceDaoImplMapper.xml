@@ -68,6 +68,10 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
+        <if test="queryTime !=null and queryTime != ''">
+            and t.start_time &lt; #{queryTime}
+            and t.end_time &gt; #{queryTime}
+        </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>

@@ -30,6 +30,9 @@ public class ChargeMachineOrderDto extends PageDto implements Serializable {
     private String chargeHours;
     private String startTime;
     private String endTime;
+
+    private String queryTime;
+
     private String state;
     private String personTel;
     private String communityId;
@@ -233,5 +236,13 @@ public class ChargeMachineOrderDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getQueryTime() {
+        return queryTime;
+    }
+
+    public void setQueryTime(String queryTime) {
+        this.queryTime = queryTime;
     }
 }
