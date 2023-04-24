@@ -76,7 +76,6 @@ public class SaveChargeMonthOrderCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cardId", "请求报文中未包含cardId");
-        Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
         Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate");
