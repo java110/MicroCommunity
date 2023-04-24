@@ -1,6 +1,8 @@
 package com.java110.dto.chargeMonthOrder;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.chargeMonthCard.ChargeMonthCardDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,19 +14,24 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class ChargeMonthOrderDto extends PageDto implements Serializable {
+public class ChargeMonthOrderDto extends ChargeMonthCardDto implements Serializable {
 
     private String personName;
-private String primeRate;
-private String orderId;
-private String cardId;
-private String receivableAmount;
-private String startTime;
-private String remark;
-private String receivedAmount;
-private String endTime;
-private String personTel;
-private String communityId;
+    private String primeRate;
+    private String primeRateName;
+
+
+    private String orderId;
+    private String cardId;
+    private String receivableAmount;
+    private String startTime;
+    private String remark;
+    private String receivedAmount;
+    private String endTime;
+    private String personTel;
+    private String communityId;
+
+    private String queryTime;
 
 
     private Date createTime;
@@ -35,67 +42,88 @@ private String communityId;
     public String getPersonName() {
         return personName;
     }
-public void setPersonName(String personName) {
+
+    public void setPersonName(String personName) {
         this.personName = personName;
     }
-public String getPrimeRate() {
+
+    public String getPrimeRate() {
         return primeRate;
     }
-public void setPrimeRate(String primeRate) {
+
+    public void setPrimeRate(String primeRate) {
         this.primeRate = primeRate;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getCardId() {
+
+    public String getCardId() {
         return cardId;
     }
-public void setCardId(String cardId) {
+
+    public void setCardId(String cardId) {
         this.cardId = cardId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getPersonTel() {
+
+    public String getPersonTel() {
         return personTel;
     }
-public void setPersonTel(String personTel) {
+
+    public void setPersonTel(String personTel) {
         this.personTel = personTel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -114,5 +142,21 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQueryTime() {
+        return queryTime;
+    }
+
+    public void setQueryTime(String queryTime) {
+        this.queryTime = queryTime;
+    }
+
+    public String getPrimeRateName() {
+        return primeRateName;
+    }
+
+    public void setPrimeRateName(String primeRateName) {
+        this.primeRateName = primeRateName;
     }
 }

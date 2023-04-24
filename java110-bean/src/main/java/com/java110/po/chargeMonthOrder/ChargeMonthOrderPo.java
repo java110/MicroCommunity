@@ -17,6 +17,7 @@ package com.java110.po.chargeMonthOrder;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-04-24 10:21:05 mail: 928255095@qq.com
@@ -28,90 +29,113 @@ import java.util.Date;
 public class ChargeMonthOrderPo implements Serializable {
 
     private String personName;
-private String primeRate;
-private String orderId;
-private String cardId;
-private String receivableAmount;
-private String startTime;
-private String statusCd = "0";
-private String remark;
-private String receivedAmount;
-private String endTime;
-private String personTel;
-private String communityId;
-public String getPersonName() {
+    private String primeRate;
+    private String orderId;
+    private String cardId;
+    private String receivableAmount;
+    private String startTime;
+    private String statusCd = "0";
+    private String remark;
+    private String receivedAmount;
+    private String endTime;
+    private String personTel;
+    private String communityId;
+
+    public String getPersonName() {
         return personName;
     }
-public void setPersonName(String personName) {
+
+    public void setPersonName(String personName) {
         this.personName = personName;
     }
-public String getPrimeRate() {
+
+    public String getPrimeRate() {
         return primeRate;
     }
-public void setPrimeRate(String primeRate) {
+
+    public void setPrimeRate(String primeRate) {
         this.primeRate = primeRate;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getCardId() {
+
+    public String getCardId() {
         return cardId;
     }
-public void setCardId(String cardId) {
+
+    public void setCardId(String cardId) {
         this.cardId = cardId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getPersonTel() {
+
+    public String getPersonTel() {
         return personTel;
     }
-public void setPersonTel(String personTel) {
+
+    public void setPersonTel(String personTel) {
         this.personTel = personTel;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

@@ -22,15 +22,27 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.chargeMonthCard.ChargeMonthCardDto;
+import com.java110.dto.chargeMonthOrder.ChargeMonthOrderDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.acct.IIntegralConfigV1InnerServiceSMO;
+import com.java110.intf.common.IChargeMonthCardV1InnerServiceSMO;
 import com.java110.intf.common.IChargeMonthOrderV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.chargeMonthOrder.ChargeMonthOrderPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +64,15 @@ public class SaveChargeMonthOrderCmd extends Cmd {
     @Autowired
     private IChargeMonthOrderV1InnerServiceSMO chargeMonthOrderV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IChargeMonthCardV1InnerServiceSMO chargeMonthCardV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cardId", "请求报文中未包含cardId");
@@ -59,17 +80,42 @@ public class SaveChargeMonthOrderCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate");
-        Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
 
+        //校验月卡是否 存在
+        ChargeMonthCardDto chargeMonthCardDto = new ChargeMonthCardDto();
+        chargeMonthCardDto.setCardId(reqJson.getString("cardId"));
+        chargeMonthCardDto.setCommunityId(reqJson.getString("communityId"));
+        List<ChargeMonthCardDto> chargeMonthCardDtos = chargeMonthCardV1InnerServiceSMOImpl.queryChargeMonthCards(chargeMonthCardDto);
+
+        Assert.listOnlyOne(chargeMonthCardDtos, "月卡不存在");
+        reqJson.put("receivableAmount", chargeMonthCardDtos.get(0).getCardPrice());
+        reqJson.put("cardMonth", chargeMonthCardDtos.get(0).getCardMonth());
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        ChargeMonthOrderDto chargeMonthOrderDto = new ChargeMonthOrderDto();
+        chargeMonthOrderDto.setPersonTel(reqJson.getString("personTel"));
+        chargeMonthOrderDto.setQueryTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        List<ChargeMonthOrderDto> chargeMonthOrderDtos = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrders(chargeMonthOrderDto);
+        Date startTime = null;
+        if (chargeMonthOrderDtos == null || chargeMonthOrderDtos.size() < 1) {
+            startTime = DateUtil.getCurrentDate();
+        } else {
+            startTime = DateUtil.getDateFromStringA(chargeMonthOrderDtos.get(0).getEndTime());
+        }
+
+        String endDate = DateUtil.getAddMonthStringA(startTime, reqJson.getIntValue("cardMonth"));
+
         ChargeMonthOrderPo chargeMonthOrderPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderPo.class);
         chargeMonthOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        chargeMonthOrderPo.setStartTime(DateUtil.getFormatTimeString(startTime, DateUtil.DATE_FORMATE_STRING_A));
+        chargeMonthOrderPo.setEndTime(endDate);
+        chargeMonthOrderPo.setPersonTel("personTel");
+        chargeMonthOrderPo.setPersonName(getPersonName(reqJson));
         int flag = chargeMonthOrderV1InnerServiceSMOImpl.saveChargeMonthOrder(chargeMonthOrderPo);
 
         if (flag < 1) {
@@ -77,5 +123,26 @@ public class SaveChargeMonthOrderCmd extends Cmd {
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    private String getPersonName(JSONObject reqJson) {
+
+        // todo 业主用 手机号查询
+        OwnerDto tmpOwnerDto = new OwnerDto();
+        tmpOwnerDto.setLink(reqJson.getString("personTel"));
+        tmpOwnerDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
+        if (ownerDtos != null && ownerDtos.size() > 0) {
+            return ownerDtos.get(0).getName();
+        }
+
+        //todo 非业主是游客
+        UserDto userDto = new UserDto();
+        userDto.setTel(reqJson.getString("personTel"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos != null && userDtos.size() > 0) {
+            return userDtos.get(0).getName();
+        }
+        throw new CmdException("业主不存在");
     }
 }

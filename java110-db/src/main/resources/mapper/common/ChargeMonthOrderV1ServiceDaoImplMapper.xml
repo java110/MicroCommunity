@@ -5,156 +5,172 @@
 <mapper namespace="chargeMonthOrderV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存充电月卡订单信息 add by wuxw 2018-07-03 -->
     <insert id="saveChargeMonthOrderInfo" parameterType="Map">
         insert into charge_month_order(
-person_name,prime_rate,order_id,card_id,receivable_amount,start_time,remark,received_amount,end_time,person_tel,community_id
-) values (
-#{personName},#{primeRate},#{orderId},#{cardId},#{receivableAmount},#{startTime},#{remark},#{receivedAmount},#{endTime},#{personTel},#{communityId}
-)
+        person_name,prime_rate,order_id,card_id,receivable_amount,start_time,remark,received_amount,end_time,person_tel,community_id
+        ) values (
+        #{personName},#{primeRate},#{orderId},#{cardId},#{receivableAmount},#{startTime},#{remark},#{receivedAmount},#{endTime},#{personTel},#{communityId}
+        )
     </insert>
-
 
 
     <!-- 查询充电月卡订单信息 add by wuxw 2018-07-03 -->
     <select id="getChargeMonthOrderInfo" parameterType="Map" resultType="Map">
-        select  t.person_name,t.person_name personName,t.prime_rate,t.prime_rate primeRate,t.order_id,t.order_id orderId,t.card_id,t.card_id cardId,t.receivable_amount,t.receivable_amount receivableAmount,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.remark,t.received_amount,t.received_amount receivedAmount,t.end_time,t.end_time endTime,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId 
-from charge_month_order t 
-where 1 =1 
-<if test="personName !=null and personName != ''">
-   and t.person_name= #{personName}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="cardId !=null and cardId != ''">
-   and t.card_id= #{cardId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="personTel !=null and personTel != ''">
-   and t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.person_name,t.person_name personName,t.prime_rate,t.prime_rate primeRate,t.order_id,t.order_id
+        orderId,t.card_id,t.card_id cardId,t.receivable_amount,t.receivable_amount
+        receivableAmount,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
+        statusCd,t.remark,t.received_amount,t.received_amount receivedAmount,t.end_time,t.end_time
+        endTime,t.person_tel,t.person_tel personTel,t.community_id,t.community_id communityId,
+        cmc.card_name cardName,cmc.card_month cardMonth,cmc.card_price cardPrice,cmc.day_hours dayHours,
+        td.`name` primeRateName,t.create_time createTime
+        from charge_month_order t
+        left join charge_month_card cmc on t.card_id = cmc.card_id and cmc.status_cd = '0'
+        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'prime_rate'
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cardId !=null and cardId != ''">
+            and t.card_id= #{cardId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="queryTime !=null and queryTime != ''">
+            and t.start_time &lt; #{queryTime}
+            and t.end_time &gt; #{queryTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="queryTime !=null and queryTime != ''">
+            order by t.end_time desc
+        </if>
+        <if test="queryTime == null || queryTime == ''">
+            order by t.create_time desc
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改充电月卡订单信息 add by wuxw 2018-07-03 -->
     <update id="updateChargeMonthOrderInfo" parameterType="Map">
-        update  charge_month_order t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="personName !=null and personName != ''">
-, t.person_name= #{personName}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-, t.prime_rate= #{primeRate}
-</if> 
-<if test="cardId !=null and cardId != ''">
-, t.card_id= #{cardId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-, t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-, t.received_amount= #{receivedAmount}
-</if> 
-<if test="endTime !=null and endTime != ''">
-, t.end_time= #{endTime}
-</if> 
-<if test="personTel !=null and personTel != ''">
-, t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="orderId !=null and orderId != ''">
-and t.order_id= #{orderId}
-</if> 
+        update charge_month_order t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="personName !=null and personName != ''">
+            , t.person_name= #{personName}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            , t.prime_rate= #{primeRate}
+        </if>
+        <if test="cardId !=null and cardId != ''">
+            , t.card_id= #{cardId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            , t.person_tel= #{personTel}
+        </if>
 
+        where 1=1
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询充电月卡订单数量 add by wuxw 2018-07-03 -->
-     <select id="queryChargeMonthOrdersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from charge_month_order t 
-where 1 =1 
-<if test="personName !=null and personName != ''">
-   and t.person_name= #{personName}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="orderId !=null and orderId != ''">
-   and t.order_id= #{orderId}
-</if> 
-<if test="cardId !=null and cardId != ''">
-   and t.card_id= #{cardId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="endTime !=null and endTime != ''">
-   and t.end_time= #{endTime}
-</if> 
-<if test="personTel !=null and personTel != ''">
-   and t.person_tel= #{personTel}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
+    <select id="queryChargeMonthOrdersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from charge_month_order t
+        where 1 =1
+        <if test="personName !=null and personName != ''">
+            and t.person_name= #{personName}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="orderId !=null and orderId != ''">
+            and t.order_id= #{orderId}
+        </if>
+        <if test="cardId !=null and cardId != ''">
+            and t.card_id= #{cardId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="personTel !=null and personTel != ''">
+            and t.person_tel= #{personTel}
+        </if>
+        <if test="queryTime !=null and queryTime != ''">
+            and t.start_time &lt; #{queryTime}
+            and t.end_time &gt; #{queryTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
