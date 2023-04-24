@@ -18,17 +18,15 @@ package com.java110.report.smo.impl;
 
 import com.java110.report.dao.IReportCustomGroupV1ServiceDao;
 import com.java110.intf.report.IReportCustomGroupV1InnerServiceSMO;
-import com.java110.dto.reportCustomGroup.ReportCustomGroupDto;
+import com.java110.dto.reportCustom.ReportCustomGroupDto;
 import com.java110.po.reportCustomGroup.ReportCustomGroupPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

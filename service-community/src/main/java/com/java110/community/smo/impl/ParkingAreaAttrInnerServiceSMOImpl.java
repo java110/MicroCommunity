@@ -4,8 +4,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IParkingAreaAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
-import com.java110.dto.user.UserDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
 import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

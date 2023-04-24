@@ -74,6 +74,9 @@
         <if test="partyB !=null and partyB != ''">
             and t.party_b= #{partyB}
         </if>
+        <if test="partyBLike !=null and partyBLike != ''">
+            and t.party_b like  concat('%',#{partyBLike},'%')
+        </if>
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
         </if>
@@ -101,6 +104,12 @@
         <if test="endTime !=null ">
             and t.end_time &lt;= #{endTime}
         </if>
+        <if test="queryStartTime !=null">
+            and t.create_time &gt; #{queryStartTime}
+        </if>
+        <if test="queryEndTime !=null">
+            and t.create_time &lt; #{queryEndTime}
+        </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
@@ -113,6 +122,9 @@
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
         </if>
+        <if test="contractCodeLike !=null and contractCodeLike != ''">
+            and t.contract_code like  concat('%',#{contractCodeLike},'%')
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
@@ -121,6 +133,9 @@
         </if>
         <if test="contractParentId !=null and contractParentId != ''">
             and t.contract_parent_id= #{contractParentId}
+        </if>
+        <if test="parentContractCodeLike !=null and parentContractCodeLike != ''">
+            and tt.contract_code like  concat('%',#{parentContractCodeLike},'%')
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -216,6 +231,7 @@
     <select id="queryContractsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from contract t
+        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id = t.store_id
         where 1 =1
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
@@ -253,8 +269,17 @@
         <if test="partyB !=null and partyB != ''">
             and t.party_b= #{partyB}
         </if>
+        <if test="partyBLike !=null and partyBLike != ''">
+            and t.party_b like  concat('%',#{partyBLike},'%')
+        </if>
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
+        </if>
+        <if test="contractIds !=null">
+            and t.contract_id in
+            <foreach collection="contractIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
@@ -268,11 +293,19 @@
         <if test="contractNameLike !=null and contractNameLike != ''">
             and t.contract_name like  concat('%',#{contractNameLike},'%')
         </if>
-        <if test="startTime !=null ">
+
+
+        <if test="startTime !=null">
             and t.start_time= #{startTime}
         </if>
         <if test="endTime !=null ">
             and t.end_time &lt;= #{endTime}
+        </if>
+        <if test="queryStartTime !=null">
+            and t.create_time &gt; #{queryStartTime}
+        </if>
+        <if test="queryEndTime !=null">
+            and t.create_time &lt; #{queryEndTime}
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
@@ -286,6 +319,9 @@
         <if test="contractCode !=null and contractCode != ''">
             and t.contract_code= #{contractCode}
         </if>
+        <if test="contractCodeLike !=null and contractCodeLike != ''">
+            and t.contract_code like  concat('%',#{contractCodeLike},'%')
+        </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
@@ -295,7 +331,9 @@
         <if test="contractParentId !=null and contractParentId != ''">
             and t.contract_parent_id= #{contractParentId}
         </if>
-
+        <if test="parentContractCodeLike !=null and parentContractCodeLike != ''">
+            and tt.contract_code like  concat('%',#{parentContractCodeLike},'%')
+        </if>
 
     </select>
 

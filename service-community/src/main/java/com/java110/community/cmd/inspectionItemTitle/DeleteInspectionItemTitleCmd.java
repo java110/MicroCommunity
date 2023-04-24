@@ -21,7 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.inspectionItem.InspectionItemTitleValueDto;
+import com.java110.dto.inspection.InspectionItemTitleValueDto;
 import com.java110.intf.community.IInspectionItemTitleV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionItemTitleValueV1InnerServiceSMO;
 import com.java110.po.inspectionItemTitle.InspectionItemTitlePo;

@@ -22,22 +22,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.machine.CarBlackWhiteDto;
-import com.java110.dto.machine.CarInoutDto;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
-import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
-import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
-import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
-import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 /**
  * 类表述： 查询手动开闸记录

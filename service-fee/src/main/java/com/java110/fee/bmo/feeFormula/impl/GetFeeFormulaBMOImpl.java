@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeFormula.impl;
 
-import com.java110.dto.feeFormula.FeeFormulaDto;
+import com.java110.dto.fee.FeeFormulaDto;
 import com.java110.fee.bmo.feeFormula.IGetFeeFormulaBMO;
 import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
 import com.java110.vo.ResultVo;

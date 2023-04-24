@@ -45,11 +45,16 @@ public class ContractDto extends PageDto implements Serializable {
 
     private String startTime;
     private String endTime;
+
+    private String queryStartTime;
+    private String queryEndTime;
     private String state;
     private String[] states;
     private String[] noStates;
     private String stateDesc;
     private String contractCode;
+
+    private String contractCodeLike;
     private String objType;
     private String operatorLink;
     private String contractParentId;
@@ -68,6 +73,8 @@ public class ContractDto extends PageDto implements Serializable {
     private String stateName;
 
     private String parentContractCode;
+    private String parentContractCodeLike;
+
     private String parentContractName;
 
 
@@ -88,6 +95,8 @@ public class ContractDto extends PageDto implements Serializable {
     private String hasAudit;
 
     private String hasEnd;
+
+    private String partyBLike;
 
     private List<ContractAttrDto> attrs;
 
@@ -489,5 +498,45 @@ public class ContractDto extends PageDto implements Serializable {
 
     public void setAudit(String audit) {
         this.audit = audit;
+    }
+
+    public String getContractCodeLike() {
+        return contractCodeLike;
+    }
+
+    public void setContractCodeLike(String contractCodeLike) {
+        this.contractCodeLike = contractCodeLike;
+    }
+
+    public String getQueryStartTime() {
+        return queryStartTime;
+    }
+
+    public void setQueryStartTime(String queryStartTime) {
+        this.queryStartTime = queryStartTime;
+    }
+
+    public String getQueryEndTime() {
+        return queryEndTime;
+    }
+
+    public void setQueryEndTime(String queryEndTime) {
+        this.queryEndTime = queryEndTime;
+    }
+
+    public String getPartyBLike() {
+        return partyBLike;
+    }
+
+    public void setPartyBLike(String partyBLike) {
+        this.partyBLike = partyBLike;
+    }
+
+    public String getParentContractCodeLike() {
+        return parentContractCodeLike;
+    }
+
+    public void setParentContractCodeLike(String parentContractCodeLike) {
+        this.parentContractCodeLike = parentContractCodeLike;
     }
 }

@@ -16,7 +16,7 @@ import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeReceipt.FeeReceiptDetailDto;
+import com.java110.dto.fee.FeeReceiptDetailDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;

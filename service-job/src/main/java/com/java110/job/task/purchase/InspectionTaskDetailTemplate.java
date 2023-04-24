@@ -1,8 +1,8 @@
 package com.java110.job.task.purchase;
 
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionPlan.InspectionTaskDetailDto;
-import com.java110.dto.inspectionPlan.InspectionTaskDto;
+import com.java110.dto.inspection.InspectionTaskDetailDto;
+import com.java110.dto.inspection.InspectionTaskDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;

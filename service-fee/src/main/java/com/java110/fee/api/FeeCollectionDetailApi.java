@@ -1,7 +1,7 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.feeCollectionDetail.FeeCollectionDetailDto;
+import com.java110.dto.fee.FeeCollectionDetailDto;
 import com.java110.fee.bmo.feeCollectionDetail.IDeleteFeeCollectionDetailBMO;
 import com.java110.fee.bmo.feeCollectionDetail.IGetFeeCollectionDetailBMO;
 import com.java110.fee.bmo.feeCollectionDetail.ISaveFeeCollectionDetailBMO;

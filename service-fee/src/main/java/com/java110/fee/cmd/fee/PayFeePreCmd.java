@@ -16,7 +16,7 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeDiscount.ComputeDiscountDto;
+import com.java110.dto.fee.ComputeDiscountDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;

@@ -1,7 +1,6 @@
 package com.java110.dto.fee;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.feeAccountDetail.FeeAccountDetailDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 
 import java.io.Serializable;

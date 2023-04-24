@@ -2,9 +2,9 @@ package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.feeDiscount.FeeDiscountDto;
-import com.java110.dto.feeDiscount.FeeDiscountRuleDto;
-import com.java110.dto.feeDiscount.FeeDiscountRuleSpecDto;
+import com.java110.dto.fee.FeeDiscountDto;
+import com.java110.dto.fee.FeeDiscountRuleDto;
+import com.java110.dto.fee.FeeDiscountRuleSpecDto;
 import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
 import com.java110.fee.bmo.feeDiscount.IDeleteFeeDiscountBMO;
 import com.java110.fee.bmo.feeDiscount.IGetFeeDiscountBMO;

@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.inspectionPlan.InspectionStaffDto;
+import com.java110.dto.inspection.InspectionStaffDto;
 import com.java110.intf.community.IInspectionPlanStaffV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

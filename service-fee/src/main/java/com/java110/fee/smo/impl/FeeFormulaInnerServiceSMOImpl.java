@@ -3,17 +3,15 @@ package com.java110.fee.smo.impl;
 
 import com.java110.fee.dao.IFeeFormulaServiceDao;
 import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
-import com.java110.dto.feeFormula.FeeFormulaDto;
+import com.java110.dto.fee.FeeFormulaDto;
 import com.java110.po.feeFormula.FeeFormulaPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

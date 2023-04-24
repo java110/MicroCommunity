@@ -1,7 +1,7 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.reportInfoBackCity.ReportInfoBackCityDto;
+import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
 import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
 import com.java110.report.bmo.reportInfoBackCity.IDeleteReportInfoBackCityBMO;
 import com.java110.report.bmo.reportInfoBackCity.IGetReportInfoBackCityBMO;
@@ -9,14 +9,9 @@ import com.java110.report.bmo.reportInfoBackCity.ISaveReportInfoBackCityBMO;
 import com.java110.report.bmo.reportInfoBackCity.IUpdateReportInfoBackCityBMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 
 @RestController

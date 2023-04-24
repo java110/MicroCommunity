@@ -17,14 +17,12 @@ package com.java110.job.adapt.hcIot.parkingCouponCar;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.parkingCouponCar.ParkingCouponCarDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

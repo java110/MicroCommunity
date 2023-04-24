@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.community.CommunitySpacePersonDto;
 import com.java110.dto.community.CommunitySpacePersonTimeDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
-import com.java110.dto.reserveGoodsOrder.ReserveGoodsOrderDto;
+import com.java110.dto.reserve.ReserveGoodsOrderDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;

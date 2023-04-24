@@ -2,8 +2,8 @@ package com.java110.fee.bmo.feeReceipt.impl;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeReceipt.FeeReceiptDto;
-import com.java110.dto.feeReceipt.FeeReceiptDtoNew;
+import com.java110.dto.fee.FeeReceiptDto;
+import com.java110.dto.fee.FeeReceiptDtoNew;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.fee.bmo.feeReceipt.IGetFeeReceiptBMO;

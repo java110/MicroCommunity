@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.dto.parkingBoxArea.ParkingBoxAreaDto;
+import com.java110.dto.parking.ParkingBoxAreaDto;
 import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
 import com.java110.intf.common.ICarInoutV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;

@@ -2,7 +2,7 @@ package com.java110.fee.bmo.feeCollectionOrder.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.feeCollectionDetail.FeeCollectionOrderDto;
+import com.java110.dto.fee.FeeCollectionOrderDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.feeCollectionOrder.ISaveFeeCollectionOrderBMO;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;

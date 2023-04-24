@@ -1,10 +1,10 @@
 package com.java110.job.task.inspection;
 
 import com.alibaba.fastjson.JSON;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.inspectionPlan.*;
+import com.java110.dto.inspection.InspectionTaskDetailDto;
+import com.java110.dto.inspection.InspectionTaskDto;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
 import com.java110.dto.staffAppAuth.StaffAppAuthDto;
@@ -18,21 +18,16 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.po.inspection.InspectionTaskDetailPo;
-import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.api.inspectionPoint.ApiInspectionPointDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

@@ -8,7 +8,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeFormula.FeeFormulaDto;
+import com.java110.dto.fee.FeeFormulaDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFeeBatch.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;

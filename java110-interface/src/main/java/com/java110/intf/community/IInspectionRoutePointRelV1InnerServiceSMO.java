@@ -16,7 +16,7 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.inspectionPlan.InspectionRoutePointRelDto;
+import com.java110.dto.inspection.InspectionRoutePointRelDto;
 import com.java110.po.inspection.InspectionRoutePointRelPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

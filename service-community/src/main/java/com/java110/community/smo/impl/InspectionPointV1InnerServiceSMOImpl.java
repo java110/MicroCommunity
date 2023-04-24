@@ -19,7 +19,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IInspectionPointV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.inspectionPlan.InspectionDto;
+import com.java110.dto.inspection.InspectionDto;
 import com.java110.intf.community.IInspectionPointV1InnerServiceSMO;
 import com.java110.po.inspection.InspectionPointPo;
 import com.java110.utils.util.BeanConvertUtil;

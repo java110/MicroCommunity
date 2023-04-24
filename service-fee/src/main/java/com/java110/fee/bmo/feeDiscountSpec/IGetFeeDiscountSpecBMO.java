@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscountSpec;
 
-import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.fee.FeeDiscountSpecDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetFeeDiscountSpecBMO {

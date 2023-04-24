@@ -40,12 +40,14 @@ import com.java110.store.bmo.contractFile.IDeleteContractFileBMO;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("updateContractBMOImpl")
@@ -212,9 +214,14 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             ContractPo contractPo = BeanConvertUtil.covertBean(contractChangePlanDetailDtos.get(0), ContractPo.class);
 
             contractInnerServiceSMOImpl.updateContract(contractPo);
-            //解决合同bug 只有 资产变更时 操作 合同房屋
+            //todo 解决合同bug 只有 资产变更时 操作 合同房屋
             if (ContractChangePlanDto.PLAN_TYPE_CHANGE_ROOM.equals(contractChangePlanDtos.get(0).getPlanType())) {
                 dealContractChangePlanRoom(contractChangePlanDto, contractDtos.get(0));
+            }
+
+            //todo 如果是租期变更时 将房屋的时间修改为变更后的时间
+            if (ContractChangePlanDto.PLAN_TYPE_CHANGE_RENT_DATE.equals(contractChangePlanDtos.get(0).getPlanType())) {
+                changeRoomEndTime(contractChangePlanDto, contractDtos.get(0));
             }
 
         } else { //修改为审核中
@@ -225,6 +232,49 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
             contractChangePlanInnerServiceSMOImpl.updateContractChangePlan(contractChangePlanPo);
         }
         return ResultVo.success();
+    }
+
+    /**
+     * 修改房屋的租期
+     *
+     * @param contractChangePlanDto
+     * @param contractDto
+     */
+    private void changeRoomEndTime(ContractChangePlanDto contractChangePlanDto, ContractDto contractDto) {
+
+        //查询合同房屋
+        ContractRoomDto contractRoomDto = new ContractRoomDto();
+        contractRoomDto.setStoreId(contractChangePlanDto.getStoreId());
+        contractRoomDto.setContractId(contractDto.getContractId());
+        List<ContractRoomDto> oldContractRoomDtos = contractRoomInnerServiceSMOImpl.queryContractRooms(contractRoomDto);
+        if (oldContractRoomDtos == null || oldContractRoomDtos.size() < 1) {
+            return;
+        }
+        Date contractEndDate = DateUtil.getDateFromStringA(contractDto.getEndTime());
+        for (ContractRoomDto oldContractRoomDto : oldContractRoomDtos) {
+            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+            ownerRoomRelDto.setRoomId(oldContractRoomDto.getRoomId());
+            ownerRoomRelDto.setOwnerId(contractDto.getObjId());
+            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) { // 说明业主没有发生变化，后续工作不做处理
+                continue;
+            }
+
+            // todo 如果合同的小于房屋的则 不修改
+            // todo 这块可以根据实际的一个使用情况看看要不要限制
+            Date roomEndDate = ownerRoomRelDtos.get(0).getEndTime();
+            if(contractEndDate.getTime() < roomEndDate.getTime()){
+                continue;
+            }
+
+            //todo 修改时间
+            OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setEndTime(contractDto.getEndTime());
+            ownerRoomRelPo.setStartTime(contractDto.getStartTime());
+            ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+        }
     }
 
     private void dealContractChangePlanRoom(ContractChangePlanDto contractChangePlanDto, ContractDto contractDto) {
@@ -253,8 +303,6 @@ public class UpdateContractBMOImpl implements IUpdateContractBMO {
         doDelOldRoomRel(contractChangePlanRoomDtos, oldContractRoomDtos);
         //增加
         doAddRoomRel(contractDto, oldContractRoomDtos, contractChangePlanRoomDtos);
-
-
 
 
     }

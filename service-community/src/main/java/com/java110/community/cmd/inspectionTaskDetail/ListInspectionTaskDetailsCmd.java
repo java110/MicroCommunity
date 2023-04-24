@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.inspectionPlan.InspectionTaskDetailDto;
+import com.java110.dto.inspection.InspectionTaskDetailDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;

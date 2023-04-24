@@ -17,9 +17,9 @@ package com.java110.fee.discount.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.feeDiscount.ComputeDiscountDto;
-import com.java110.dto.feeDiscount.FeeDiscountDto;
-import com.java110.dto.feeDiscount.FeeDiscountSpecDto;
+import com.java110.dto.fee.ComputeDiscountDto;
+import com.java110.dto.fee.FeeDiscountDto;
+import com.java110.dto.fee.FeeDiscountSpecDto;
 import com.java110.fee.discount.IComputeDiscount;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;

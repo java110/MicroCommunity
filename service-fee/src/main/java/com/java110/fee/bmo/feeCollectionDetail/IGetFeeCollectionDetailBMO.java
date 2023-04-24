@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.feeCollectionDetail;
-import com.java110.dto.feeCollectionDetail.FeeCollectionDetailDto;
+import com.java110.dto.fee.FeeCollectionDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetFeeCollectionDetailBMO {
 

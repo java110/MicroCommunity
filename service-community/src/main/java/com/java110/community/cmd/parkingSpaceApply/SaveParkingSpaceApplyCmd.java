@@ -25,7 +25,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.PayFeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.parkingSpaceApply.ParkingSpaceApplyDto;
+import com.java110.dto.parking.ParkingSpaceApplyDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;

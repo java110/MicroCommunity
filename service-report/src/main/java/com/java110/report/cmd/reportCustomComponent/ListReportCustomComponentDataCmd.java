@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.PageDto;
-import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
+import com.java110.dto.reportCustom.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.service.smo.IQueryServiceSMO;
 import com.java110.utils.exception.CmdException;

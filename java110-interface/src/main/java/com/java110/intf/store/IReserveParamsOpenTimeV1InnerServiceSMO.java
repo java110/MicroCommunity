@@ -16,7 +16,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reserveParamsOpenTime.ReserveParamsOpenTimeDto;
+import com.java110.dto.reserve.ReserveParamsOpenTimeDto;
 import com.java110.po.reserveParamsOpenTime.ReserveParamsOpenTimePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

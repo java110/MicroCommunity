@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.printerRuleRepair.PrinterRuleRepairDto;
+import com.java110.dto.printerRule.PrinterRuleRepairDto;
 import com.java110.po.printerRuleRepair.PrinterRuleRepairPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -16,16 +16,13 @@
 package com.java110.job.adapt.hcGov.parkArea;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.floorAttr.FloorAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
-import com.java110.dto.parkingAreaAttr.ParkingAreaAttrDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.floorAttr.FloorAttrPo;
 import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

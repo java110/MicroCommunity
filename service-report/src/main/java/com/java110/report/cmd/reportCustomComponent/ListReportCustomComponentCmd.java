@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.reportCustomComponent.ReportCustomComponentDto;
+import com.java110.dto.reportCustom.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
