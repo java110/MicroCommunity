@@ -30,6 +30,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：chargeMonthCard.deleteChargeMonthCard
@@ -42,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "chargeCard.deleteChargeMonthCard")
 public class DeleteChargeMonthCardCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteChargeMonthCardCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteChargeMonthCardCmd.class);
 
     @Autowired
     private IChargeMonthCardV1InnerServiceSMO chargeMonthCardV1InnerServiceSMOImpl;
@@ -50,7 +51,7 @@ public class DeleteChargeMonthCardCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cardId", "cardId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -58,7 +59,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ChargeMonthCardPo chargeMonthCardPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthCardPo.class);
+        ChargeMonthCardPo chargeMonthCardPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthCardPo.class);
         int flag = chargeMonthCardV1InnerServiceSMOImpl.deleteChargeMonthCard(chargeMonthCardPo);
 
         if (flag < 1) {

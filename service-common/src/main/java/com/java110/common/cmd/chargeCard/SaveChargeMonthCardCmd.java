@@ -55,10 +55,10 @@ public class SaveChargeMonthCardCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cardName", "请求报文中未包含cardName");
-Assert.hasKeyAndValue(reqJson, "cardMonth", "请求报文中未包含cardMonth");
-Assert.hasKeyAndValue(reqJson, "cardPrice", "请求报文中未包含cardPrice");
-Assert.hasKeyAndValue(reqJson, "dayHours", "请求报文中未包含dayHours");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "cardMonth", "请求报文中未包含cardMonth");
+        Assert.hasKeyAndValue(reqJson, "cardPrice", "请求报文中未包含cardPrice");
+        Assert.hasKeyAndValue(reqJson, "dayHours", "请求报文中未包含dayHours");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
 
@@ -66,7 +66,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ChargeMonthCardPo chargeMonthCardPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthCardPo.class);
+        ChargeMonthCardPo chargeMonthCardPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthCardPo.class);
         chargeMonthCardPo.setCardId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = chargeMonthCardV1InnerServiceSMOImpl.saveChargeMonthCard(chargeMonthCardPo);
 

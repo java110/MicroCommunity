@@ -55,12 +55,12 @@ public class SaveChargeMonthOrderCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "cardId", "请求报文中未包含cardId");
-Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
-Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate");
-Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
-Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
+        Assert.hasKeyAndValue(reqJson, "personName", "请求报文中未包含personName");
+        Assert.hasKeyAndValue(reqJson, "personTel", "请求报文中未包含personTel");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate");
+        Assert.hasKeyAndValue(reqJson, "receivableAmount", "请求报文中未包含receivableAmount");
+        Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receiv
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ChargeMonthOrderPo chargeMonthOrderPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderPo.class);
+        ChargeMonthOrderPo chargeMonthOrderPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderPo.class);
         chargeMonthOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = chargeMonthOrderV1InnerServiceSMOImpl.saveChargeMonthOrder(chargeMonthOrderPo);
 

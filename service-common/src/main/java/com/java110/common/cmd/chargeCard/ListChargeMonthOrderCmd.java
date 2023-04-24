@@ -27,8 +27,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.chargeMonthOrder.ChargeMonthOrderDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "chargeCard.listChargeMonthOrder")
 public class ListChargeMonthOrderCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListChargeMonthOrderCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListChargeMonthOrderCmd.class);
     @Autowired
     private IChargeMonthOrderV1InnerServiceSMO chargeMonthOrderV1InnerServiceSMOImpl;
 
@@ -61,22 +63,22 @@ public class ListChargeMonthOrderCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ChargeMonthOrderDto chargeMonthOrderDto = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderDto.class);
+        ChargeMonthOrderDto chargeMonthOrderDto = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderDto.class);
 
-           int count = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrdersCount(chargeMonthOrderDto);
+        int count = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrdersCount(chargeMonthOrderDto);
 
-           List<ChargeMonthOrderDto> chargeMonthOrderDtos = null;
+        List<ChargeMonthOrderDto> chargeMonthOrderDtos = null;
 
-           if (count > 0) {
-               chargeMonthOrderDtos = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrders(chargeMonthOrderDto);
-           } else {
-               chargeMonthOrderDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            chargeMonthOrderDtos = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrders(chargeMonthOrderDto);
+        } else {
+            chargeMonthOrderDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMonthOrderDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMonthOrderDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
