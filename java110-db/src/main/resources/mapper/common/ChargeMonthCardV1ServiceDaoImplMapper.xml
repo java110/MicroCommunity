@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chargeMonthCardV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存充电月卡信息 add by wuxw 2018-07-03 -->
+    <insert id="saveChargeMonthCardInfo" parameterType="Map">
+        insert into charge_month_card(
+card_name,day_hours,card_month,card_id,card_price,remark,community_id
+) values (
+#{cardName},#{dayHours},#{cardMonth},#{cardId},#{cardPrice},#{remark},#{communityId}
+)
+    </insert>
+
+
+
+    <!-- 查询充电月卡信息 add by wuxw 2018-07-03 -->
+    <select id="getChargeMonthCardInfo" parameterType="Map" resultType="Map">
+        select  t.card_name,t.card_name cardName,t.day_hours,t.day_hours dayHours,t.card_month,t.card_month cardMonth,t.card_id,t.card_id cardId,t.card_price,t.card_price cardPrice,t.status_cd,t.status_cd statusCd,t.remark,t.community_id,t.community_id communityId 
+from charge_month_card t 
+where 1 =1 
+<if test="cardName !=null and cardName != ''">
+   and t.card_name= #{cardName}
+</if> 
+<if test="dayHours !=null and dayHours != ''">
+   and t.day_hours= #{dayHours}
+</if> 
+<if test="cardMonth !=null and cardMonth != ''">
+   and t.card_month= #{cardMonth}
+</if> 
+<if test="cardId !=null and cardId != ''">
+   and t.card_id= #{cardId}
+</if> 
+<if test="cardPrice !=null and cardPrice != ''">
+   and t.card_price= #{cardPrice}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改充电月卡信息 add by wuxw 2018-07-03 -->
+    <update id="updateChargeMonthCardInfo" parameterType="Map">
+        update  charge_month_card t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="cardName !=null and cardName != ''">
+, t.card_name= #{cardName}
+</if> 
+<if test="dayHours !=null and dayHours != ''">
+, t.day_hours= #{dayHours}
+</if> 
+<if test="cardMonth !=null and cardMonth != ''">
+, t.card_month= #{cardMonth}
+</if> 
+<if test="cardPrice !=null and cardPrice != ''">
+, t.card_price= #{cardPrice}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="cardId !=null and cardId != ''">
+and t.card_id= #{cardId}
+</if> 
+
+    </update>
+
+    <!-- 查询充电月卡数量 add by wuxw 2018-07-03 -->
+     <select id="queryChargeMonthCardsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from charge_month_card t 
+where 1 =1 
+<if test="cardName !=null and cardName != ''">
+   and t.card_name= #{cardName}
+</if> 
+<if test="dayHours !=null and dayHours != ''">
+   and t.day_hours= #{dayHours}
+</if> 
+<if test="cardMonth !=null and cardMonth != ''">
+   and t.card_month= #{cardMonth}
+</if> 
+<if test="cardId !=null and cardId != ''">
+   and t.card_id= #{cardId}
+</if> 
+<if test="cardPrice !=null and cardPrice != ''">
+   and t.card_price= #{cardPrice}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+
+
+     </select>
+
+</mapper>
