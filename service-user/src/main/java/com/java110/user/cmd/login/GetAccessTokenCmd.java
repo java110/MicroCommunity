@@ -48,7 +48,7 @@ import java.util.Map;
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "login.getAccessToken",
-        seq = 1
+        seq = 17
 )
 
 @Java110ParamsDoc(
