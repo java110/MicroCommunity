@@ -25,6 +25,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.*;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,8 @@ import java.util.Map;
 @Java110CmdDoc(title = "单点登录accessToken自登陆（自用）",
         description = "1、通过接口/app/login.getAccessToken 获取到accessToken,<br/>" +
                 "2、三方系统通过302 跳转的方式调转到物业系统 http://wuye.xx.com/sso.html?hcAccessToken={accessToken}&targetUrl=您要跳转的页面<br/>" +
-                "3、物业系统即可完成自登陆功能<br/> " ,
+                "3、物业系统即可完成自登陆功能</br>"+
+                "注意：系统默认情况下是不启用单点登录功能的，请联系开发，配置中心中启用（SSO_SWITCH 的值改为ON）</br>",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/login.accessTokenLogin",
         resource = "userDoc",
@@ -167,8 +169,7 @@ public class AccessTokenLoginCmd extends Cmd {
             userLoginPo.setUserId(userDto.getUserId());
             userLoginPo.setUserName(userDto.getUserName());
             userLoginInnerServiceSMOImpl.saveUserLogin(userLoginPo);
-            responseEntity = new ResponseEntity<String>(user.toJSONString(), HttpStatus.OK);
-            context.setResponseEntity(responseEntity);
+            context.setResponseEntity(ResultVo.createResponseEntity(user));
         } catch (Exception e) {
             logger.error("登录异常：", e);
             throw new SMOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "系统内部错误，请联系管理员");

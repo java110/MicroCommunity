@@ -42,7 +42,8 @@ import java.util.Map;
         description = "主要用于其他系统单点登录到物业系统,<br/>" +
                 "1、三方系统通过物业员工的 手机号 和 员工的密码 通过此接口获取accessToken,注意默认有效期为5分钟，<br/>" +
                 "2、三方系统通过302 跳转的方式调转到物业系统 http://wuye.xx.com/sso.html?hcAccessToken={accessToken}&targetUrl=您要跳转的页面<br/> " +
-                "3、物业系统即可完成自登陆功能</br>",
+                "3、物业系统即可完成自登陆功能</br>"+
+                "注意：系统默认情况下是不启用单点登录功能的，请联系开发，配置中心中启用（SSO_SWITCH 的值改为ON）</br>",
         httpMethod = "post",
         url = "http://{ip}:{port}/app/login.getAccessToken",
         resource = "userDoc",
