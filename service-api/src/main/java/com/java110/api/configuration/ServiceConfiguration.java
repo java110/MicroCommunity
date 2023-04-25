@@ -105,6 +105,9 @@ public class ServiceConfiguration {
         exclusions.append("/app/equipments/*,");// 叮叮充电桩通知放开
         exclusions.append("/app/charge/*,");// 通用充电桩通知放开
         exclusions.append("/app/login.pcUserLogin,");// 放开接口登录
+        exclusions.append("/app/login.accessTokenLogin,");// 放开接口登录
+        exclusions.append("/app/login.getAccessToken,");// 放开接口登录
+
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
