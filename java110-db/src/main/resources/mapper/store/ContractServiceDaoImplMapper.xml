@@ -104,10 +104,10 @@
         <if test="endTime !=null ">
             and t.end_time &lt;= #{endTime}
         </if>
-        <if test="queryStartTime !=null">
+        <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}
         </if>
-        <if test="queryEndTime !=null">
+        <if test="queryEndTime !=null and queryEndTime != ''">
             and t.create_time &lt; #{queryEndTime}
         </if>
         <if test="state !=null and state != ''">
@@ -301,10 +301,10 @@
         <if test="endTime !=null ">
             and t.end_time &lt;= #{endTime}
         </if>
-        <if test="queryStartTime !=null">
+        <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}
         </if>
-        <if test="queryEndTime !=null">
+        <if test="queryEndTime !=null and queryEndTime != ''">
             and t.create_time &lt; #{queryEndTime}
         </if>
         <if test="state !=null and state != ''">
