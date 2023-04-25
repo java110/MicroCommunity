@@ -93,6 +93,8 @@ public class AppController extends BaseController {
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
             responseEntity = apiSMOImpl.doApi(postInfo, headers,request);
+            //todo 写入 token
+            wirteToken(request,pd,service,responseEntity);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -316,5 +318,39 @@ public class AppController extends BaseController {
             }
             headers.put(key, claims.get(key));
         }
+    }
+
+    /**
+     * 写入 token
+     * @param request
+     * @param pd
+     * @param service
+     * @param responseEntity
+     */
+    private void wirteToken(HttpServletRequest request, IPageData pd, String service, ResponseEntity<String> responseEntity) {
+        String[] services = new String[]{
+                "login.accessTokenLogin"
+        };
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return;
+        }
+        boolean flag = false;
+        for(String tmpService : services){
+            if(tmpService.equals(service)){
+                flag =true;
+            }
+        }
+
+        if(!flag){
+            return;
+        }
+
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        if(!"0".equals(paramOut.getString("code"))){
+            return;
+        }
+        String token = paramOut.getJSONObject("data").getString("token");
+        pd.setToken(token);
     }
 }
