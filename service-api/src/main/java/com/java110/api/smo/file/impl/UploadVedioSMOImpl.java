@@ -3,12 +3,14 @@ package com.java110.api.smo.file.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.config.properties.code.Java110Properties;
+import com.java110.core.client.CosUploadTemplate;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.api.smo.file.IUploadVedioSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.util.COSUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import java.io.IOException;
  */
 @Service("uploadVedioSMOImpl")
 public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements IUploadVedioSMO {
-
+    private static final String ROOT_PATH = "hc/";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -38,6 +40,9 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
 
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
+
+    @Autowired
+    private CosUploadTemplate cosUploadTemplate;
 
     @Override
     public ResponseEntity<Object> upload(IPageData pd, MultipartFile uploadFile) throws IOException {
@@ -54,13 +59,23 @@ public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements I
         String fileName = "";
         String ossSwitch = MappingCache.getValue(MappingConstant.FILE_DOMAIN, OSSUtil.OSS_SWITCH);
         if (StringUtil.isEmpty(ossSwitch) || !OSSUtil.OSS_SWITCH_OSS.equals(ossSwitch)) {
-            fileName = ftpUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
+            String ftpServer = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_SERVER);
+            int ftpPort = Integer.parseInt(MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_PORT));
+            String ftpUserName = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERNAME);
+            String ftpUserPassword = MappingCache.getValue(FtpUploadTemplate.FTP_DOMAIN, FtpUploadTemplate.FTP_USERPASSWORD);
+
+            fileName = ftpUploadTemplate.upload(uploadFile, ftpServer,
+                    ftpPort, ftpUserName,
+                    ftpUserPassword, ROOT_PATH);
+        } else if (COSUtil.COS_SWITCH_COS.equals(ossSwitch)) {
+            fileName = cosUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), "hc/");
+                    java110Properties.getFtpUserPassword(), ROOT_PATH);
         } else {
+
             fileName = ossUploadTemplate.upload(uploadFile, java110Properties.getFtpServer(),
                     java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
-                    java110Properties.getFtpUserPassword(), "hc/");
+                    java110Properties.getFtpUserPassword(), ROOT_PATH);
         }
         JSONObject outParam = new JSONObject();
         outParam.put("fileName", uploadFile.getOriginalFilename());
