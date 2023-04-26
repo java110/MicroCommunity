@@ -137,6 +137,8 @@
         where 1 =1
         <if test="configId != null and configId != ''">
             and pf.config_id = #{configId}
+        </if>
+        <if test="payerObjId != null and payerObjId != ''">
             and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="ownerId != null and ownerId != ''">
@@ -251,15 +253,15 @@
     <select id="queryFeeDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee_detail t
-        <if test="configId != null and configId != ''">
-            inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        </if>
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="ownerId != null and ownerId != ''">
             left join pay_fee_attrs pfa on pfa.fee_id = t.fee_id and pfa.spec_cd = '390007' and pfa.status_cd = '0'
         </if>
         where 1 =1
         <if test="configId != null and configId != ''">
             and pf.config_id = #{configId}
+        </if>
+        <if test="payerObjId != null and payerObjId != ''">
             and pf.payer_obj_id = #{payerObjId}
         </if>
         <if test="ownerId != null and ownerId != ''">
