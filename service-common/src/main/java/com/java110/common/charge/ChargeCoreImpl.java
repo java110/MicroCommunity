@@ -170,7 +170,7 @@ public class ChargeCoreImpl implements IChargeCore {
         }
 
         if (chargeRuleFeeDtos == null || chargeRuleFeeDtos.size() < 1) {
-            return;
+            throw new CmdException("未找到收费规则");
         }
 
         String durationPrice = chargeRuleFeeDtos.get(chargeRuleFeeDtos.size() - 1).getDurationPrice();
@@ -375,11 +375,11 @@ public class ChargeCoreImpl implements IChargeCore {
         ChargeMachinePortDto chargeMachinePortDto = new ChargeMachinePortDto();
         chargeMachinePortDto.setMachineId(chargeMachineDtos.get(0).getMachineId());
         chargeMachinePortDto.setPortCode(notifyChargeOrderDto.getPortCode());
-        chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
+        //chargeMachinePortDto.setState(ChargeMachinePortDto.STATE_WORKING);
         List<ChargeMachinePortDto> chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
         //Assert.listOnlyOne(chargeMachinePortDtos, "插槽空闲");
         if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
-            return new ResultVo(ResultVo.CODE_OK, "成功");
+            throw new CmdException("插座不存在");
         }
 
         ChargeMachinePortPo chargeMachinePortPo = new ChargeMachinePortPo();
