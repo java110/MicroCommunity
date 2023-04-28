@@ -5,11 +5,13 @@ import com.java110.acct.bmo.account.IGetAccountBMO;
 import com.java110.acct.bmo.account.IOwnerPrestoreAccountBMO;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.account.AccountDetailDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.accountDetail.AccountDetailPo;
@@ -48,6 +50,9 @@ public class AccountApi {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     /**
      * 微信删除消息模板
@@ -112,6 +117,12 @@ public class AccountApi {
                 List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 //                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
                 ownerId = ownerCarDtos.get(0).getOwnerId();
+            } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(payerObjType)) {
+                ContractDto contractDto = new ContractDto();
+                contractDto.setContractId(payerObjId);
+                List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+//                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
+                ownerId = contractDtos.get(0).getObjId();
             } else {
                 ownerId = "-1";
             }
