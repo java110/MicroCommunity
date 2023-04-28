@@ -141,6 +141,9 @@
         <if test="payerObjId != null and payerObjId != ''">
             and pf.payer_obj_id = #{payerObjId}
         </if>
+        <if test="payerObjType != null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
+        </if>
         <if test="ownerId != null and ownerId != ''">
             and pfao.value = #{ownerId}
         </if>
@@ -263,6 +266,9 @@
         </if>
         <if test="payerObjId != null and payerObjId != ''">
             and pf.payer_obj_id = #{payerObjId}
+        </if>
+        <if test="payerObjType != null and payerObjType != ''">
+            and pf.payer_obj_type = #{payerObjType}
         </if>
         <if test="ownerId != null and ownerId != ''">
             and pfa.value = #{ownerId}
