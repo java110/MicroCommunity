@@ -18,6 +18,7 @@ public class ChargeMachineOrderDto extends PageDto implements Serializable {
     public static final String STATE_DOING = "1001";//1001 充电中  2002 充电完成 3003 充电失败
     public static final String STATE_FINISH = "2002";//1001 充电中  2002 充电完成 3003 充电失败
     public static final String STATE_FAIL = "3003";//1001 充电中  2002 充电完成 3003 充电失败
+    public static final String STATE_FINISHING = "4004";//1001 充电中  2002 充电完成 3003 充电失败 4004 结束中
 
     private String amount;
     private String orderId;

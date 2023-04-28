@@ -120,16 +120,7 @@ public class ChargeCoreImpl implements IChargeCore {
                                   String remark,
                                   String energy,
                                   List<ChargeMachineOrderDto> chargeMachineOrderDtos) {
-        // 退款
-//        ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
-//        chargeMachineOrderDto.setMachineId(chargeMachineDto.getMachineId());
-//        chargeMachineOrderDto.setPortId(chargeMachinePortDto.getPortId());
-//        chargeMachineOrderDto.setState(ChargeMachineOrderDto.STATE_DOING);
-//        List<ChargeMachineOrderDto> chargeMachineOrderDtos = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrders(chargeMachineOrderDto);
-//
-//        if (chargeMachineOrderDtos == null || chargeMachineOrderDtos.size() < 1) {
-//            return;
-//        }
+
 
         Date startTime = DateUtil.getDateFromStringA(chargeMachineOrderDtos.get(0).getStartTime());
 
@@ -353,18 +344,10 @@ public class ChargeCoreImpl implements IChargeCore {
     @Override
     public ResultVo finishCharge(NotifyChargeOrderDto notifyChargeOrderDto) {
 
-//        // todo 生成 充电订单
-//        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
-//        chargeMachineOrderPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-//        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISH);
-//        chargeMachineOrderPo.setOrderId(notifyChargeOrderDto.getOrderId());
-//        chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
 
         ChargeMachineDto chargeMachineDto = new ChargeMachineDto();
         chargeMachineDto.setMachineCode(notifyChargeOrderDto.getMachineCode());
         List<ChargeMachineDto> chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
-
-        //Assert.listOnlyOne(chargeMachineDtos, "充电桩 不存在");
 
         if (chargeMachineDtos == null || chargeMachineDtos.size() < 1) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
@@ -395,6 +378,15 @@ public class ChargeCoreImpl implements IChargeCore {
 
         if (chargeMachineOrderDtos == null || chargeMachineOrderDtos.size() < 1) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
+        }
+
+        ChargeMachineOrderPo chargeMachineOrderPo = new ChargeMachineOrderPo();
+        chargeMachineOrderPo.setOrderId(chargeMachineOrderDtos.get(0).getOrderId());
+        chargeMachineOrderPo.setState(ChargeMachineOrderDto.STATE_FINISHING);
+        chargeMachineOrderPo.setCommunityId(chargeMachineOrderDtos.get(0).getCommunityId());
+        int flag = chargeMachineOrderV1InnerServiceSMOImpl.updateChargeMachineOrder(chargeMachineOrderPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("修改订单失败");
         }
 
         //todo 月卡直接修改状态

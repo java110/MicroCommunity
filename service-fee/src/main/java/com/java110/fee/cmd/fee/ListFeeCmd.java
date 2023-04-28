@@ -44,6 +44,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 查询 费用信息
+ */
 @Java110Cmd(serviceCode = "fee.listFee")
 public class ListFeeCmd extends Cmd {
 
@@ -99,39 +102,14 @@ public class ListFeeCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-            String[] roomNums = reqJson.getString("roomNum").split("-", 3);
-            if (roomNums == null || roomNums.length != 3) {
-                throw new IllegalArgumentException("房屋编号格式错误！");
-            }
-            String floorNum = roomNums[0];
-            String unitNum = roomNums[1];
-            String roomNum = roomNums[2];
-            FloorDto floorDto = new FloorDto();
-            floorDto.setFloorNum(floorNum);
-            floorDto.setCommunityId(reqJson.getString("communityId"));
-            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-            if (floorDtos != null && floorDtos.size() > 0) {
-                for (FloorDto floor : floorDtos) {
-                    UnitDto unitDto = new UnitDto();
-                    unitDto.setFloorId(floor.getFloorId());
-                    unitDto.setUnitNum(unitNum);
-                    List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-                    if (unitDtos != null && unitDtos.size() > 0) {
-                        for (UnitDto unit : unitDtos) {
-                            RoomDto roomDto = new RoomDto();
-                            roomDto.setUnitId(unit.getUnitId());
-                            roomDto.setRoomNum(roomNum);
-                            roomDto.setCommunityId(reqJson.getString("communityId"));
-                            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                            Assert.listOnlyOne(roomDtos, "查询不到房屋！");
-                            reqJson.put("payerObjId", roomDtos.get(0).getRoomId());
-                        }
-                    }
-                }
-            }
-        }
+        // todo 房屋名称 刷入 房屋ID
+        freshPayerObjIdByRoomNum(reqJson);
+
         FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
+
+        // todo 处理 多个房屋
+        morePayerObjIds(reqJson, feeDto);
+
         List<ApiFeeDataVo> fees = new ArrayList<>();
         if (reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))) {
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
@@ -170,6 +148,66 @@ public class ListFeeCmd extends Cmd {
         apiFeeVo.setFees(fees);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 处理 多对象 费用
+     *
+     * @param reqJson
+     * @param feeDto
+     */
+    private void morePayerObjIds(JSONObject reqJson, FeeDto feeDto) {
+        if (!reqJson.containsKey("payerObjIds") || StringUtil.isEmpty(reqJson.getString("payerObjIds"))) {
+            return;
+        }
+
+        String payerObjIds = reqJson.getString("payerObjIds");
+        feeDto.setPayerObjIds(payerObjIds.split(","));
+    }
+
+    /**
+     * 根据房屋名称 刷入 payerObjId
+     *
+     * @param reqJson
+     */
+    private void freshPayerObjIdByRoomNum(JSONObject reqJson) {
+        if (!reqJson.containsKey("roomNum") || StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            return;
+        }
+
+        String[] roomNums = reqJson.getString("roomNum").split("-", 3);
+        if (roomNums == null || roomNums.length != 3) {
+            throw new IllegalArgumentException("房屋编号格式错误！");
+        }
+
+        String floorNum = roomNums[0];
+        String unitNum = roomNums[1];
+        String roomNum = roomNums[2];
+        FloorDto floorDto = new FloorDto();
+        floorDto.setFloorNum(floorNum);
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+        if (floorDtos == null || floorDtos.size() < 1) {
+            return;
+        }
+        for (FloorDto floor : floorDtos) {
+            UnitDto unitDto = new UnitDto();
+            unitDto.setFloorId(floor.getFloorId());
+            unitDto.setUnitNum(unitNum);
+            List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+            if (unitDtos == null || unitDtos.size() < 1) {
+                continue;
+            }
+            for (UnitDto unit : unitDtos) {
+                RoomDto roomDto = new RoomDto();
+                roomDto.setUnitId(unit.getUnitId());
+                roomDto.setRoomNum(roomNum);
+                roomDto.setCommunityId(reqJson.getString("communityId"));
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                Assert.listOnlyOne(roomDtos, "查询不到房屋！");
+                reqJson.put("payerObjId", roomDtos.get(0).getRoomId());
+            }
+        }
     }
 
     private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
