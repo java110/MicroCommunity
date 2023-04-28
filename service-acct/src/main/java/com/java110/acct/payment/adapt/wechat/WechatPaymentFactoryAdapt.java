@@ -258,15 +258,15 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     }
 
     public int confirmPayFee(Map<String, Object> map, PaymentOrderDto paymentOrderDto, NotifyPaymentOrderDto notifyPaymentOrderDto) {
-        String appId = notifyPaymentOrderDto.getAppId();
+        String appId = "";
         //兼容 港币交易时 或者微信有时不会掉参数的问题
-//        if (map.containsKey("wId")) {
-//            String wId = map.get("wId").toString();
-//            wId = wId.replace(" ", "+");
-//            appId = WechatFactory.getAppId(wId);
-//        } else {
-//            appId = map.get("appid").toString();
-//        }
+        if (map.containsKey("wId")) {
+            String wId = map.get("wId").toString();
+            wId = wId.replace(" ", "+");
+            appId = WechatFactory.getAppId(wId);
+        } else {
+            appId = map.get("appid").toString();
+        }
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         ResponseEntity<String> responseEntity = null;
         for (String key : map.keySet()) {

@@ -232,14 +232,14 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String signature = json.getString("signature");
         String content = json.getString("content");
-        String appId = notifyPaymentOrderDto.getAppId();
-//        if (json.containsKey("wId")) {
-//            String wId = json.get("wId").toString();
-//            wId = wId.replace(" ", "+");
-//            appId = WechatFactory.getAppId(wId);
-//        } else {
-//            appId = json.get("appid").toString();
-//        }
+        String appId = null;
+        if (json.containsKey("wId")) {
+            String wId = json.get("wId").toString();
+            wId = wId.replace(" ", "+");
+            appId = WechatFactory.getAppId(wId);
+        } else {
+            appId = json.get("appid").toString();
+        }
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("appId", appId);

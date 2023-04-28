@@ -222,7 +222,10 @@ public class PageProcessAspect {
             Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
             cookie.setHttpOnly(true);
             cookie.setPath("/");
+
             response.addCookie(cookie);
+            //response.addHeader("Set-Cookie","SameSite=None");
+
             response.flushBuffer();
         }
 
