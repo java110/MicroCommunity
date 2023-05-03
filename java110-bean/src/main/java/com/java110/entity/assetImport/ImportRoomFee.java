@@ -10,6 +10,7 @@ public class ImportRoomFee {
     private String unitNum;
 
     private String roomNum;
+    private String roomName;
 
     private String carNum;
 
@@ -187,4 +188,12 @@ public class ImportRoomFee {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
 }

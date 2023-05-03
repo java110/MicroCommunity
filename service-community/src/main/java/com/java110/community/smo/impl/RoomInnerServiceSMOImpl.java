@@ -316,6 +316,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             importRoomFee.setFloorNum(infos.get(0).get("floorNum").toString());
             importRoomFee.setUnitNum(infos.get(0).get("unitNum").toString());
             importRoomFee.setRoomNum(infos.get(0).get("roomNum").toString());
+            importRoomFee.setRoomName(importRoomFee.getFloorNum()+"-"+importRoomFee.getUnitNum()+"-"+importRoomFee.getRoomNum());
 
         }
         return importRoomFees;
