@@ -179,7 +179,11 @@ public class FeeApi extends BaseController {
             throw new IllegalArgumentException("费用对象或者业主不能都为空");
         }
         FeeDto feeDto = new FeeDto();
-        feeDto.setPayerObjId(payObjId);
+        if(payObjId.contains(",")){
+            feeDto.setPayerObjIds(payObjId.split(","));
+        }else {
+            feeDto.setPayerObjId(payObjId);
+        }
         feeDto.setPayerObjType(payObjType);
         feeDto.setOwnerId(ownerId);
         feeDto.setCommunityId(communityId);
