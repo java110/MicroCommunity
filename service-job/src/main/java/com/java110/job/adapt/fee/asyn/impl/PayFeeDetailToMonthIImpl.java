@@ -69,7 +69,6 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
             startTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
             endTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
             createTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("createTime"), DateUtil.DATE_FORMATE_STRING_B);
-
         } catch (ParseException e) {
             throw new IllegalArgumentException("时间格式错误");
         }

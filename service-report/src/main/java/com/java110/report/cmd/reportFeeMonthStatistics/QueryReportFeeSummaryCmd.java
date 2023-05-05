@@ -13,6 +13,7 @@ import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -43,24 +44,25 @@ public class QueryReportFeeSummaryCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String configIds = "";
-        if(reqJson.containsKey("configIds")){
+        if (reqJson.containsKey("configIds")) {
             configIds = reqJson.getString("configIds");
             reqJson.remove("configIds");
         }
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson,ReportFeeMonthStatisticsDto.class);
+        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
 
         String staffId = context.getReqHeaders().get("user-id");
         DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
         dataPrivilegeStaffDto.setStaffId(staffId);
         String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
 
-        if(unitIds != null && unitIds.length>0){
+        if (unitIds != null && unitIds.length > 0) {
             reportFeeMonthStatisticsDto.setUnitIds(unitIds);
         }
 

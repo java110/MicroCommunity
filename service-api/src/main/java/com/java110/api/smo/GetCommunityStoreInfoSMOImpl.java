@@ -51,6 +51,10 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(responseEntity.getBody());
         }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        if(paramOut.containsKey("code") && ResultVo.CODE_OK != paramOut.getIntValue("code")){
+            throw new IllegalArgumentException(paramOut.getString("msg"));
+        }
         return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
     }
 
