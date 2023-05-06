@@ -70,7 +70,7 @@ public class NotifySmartMeterV1InnerServiceSMOImpl extends BaseServiceSMO implem
 
         try {
             MeterMachineFactoryDto meterMachineFactoryDto = new MeterMachineFactoryDto();
-            meterMachineFactoryDto.setFactoryId(notifyMeterWaterOrderDto.getImplBean());
+            meterMachineFactoryDto.setBeanImpl(notifyMeterWaterOrderDto.getImplBean());
             List<MeterMachineFactoryDto> meterMachineFactoryDtos = meterMachineFactoryV1InnerServiceSMOImpl.queryMeterMachineFactorys(meterMachineFactoryDto);
             Assert.listOnlyOne(meterMachineFactoryDtos, "智能水电表厂家不存在");
 
