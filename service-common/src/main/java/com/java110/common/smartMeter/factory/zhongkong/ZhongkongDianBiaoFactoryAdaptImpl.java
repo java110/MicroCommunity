@@ -35,11 +35,12 @@ import java.util.Map;
 @Service("zhongkongDianBiaoFactoryAdaptImpl")
 public class ZhongkongDianBiaoFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
 
-    private static final String RECHARGE_URL = "http://watergateway.dev.mj.ink:9900/mjkj-water/mjkj/open/wy/recharge";
 
-    private static final String READ_URL = "http://watergateway.dev.mj.ink:9900/mjkj-water/mjkj/open/wy/get/amount";
+    private static final String RECHARGE_URL = "http://www.zhckxt.com/api/mjkj-water/mjkj/open/wy/recharge";
 
-    private static final String READS_URL = "http://watergateway.dev.mj.ink:9900/mjkj-water/mjkj/open/wy/get/lastNum";
+    private static final String READ_URL = "http://www.zhckxt.com/api/mjkj-water/mjkj/open/wy/get/amount";
+
+    private static final String READS_URL = "http://www.zhckxt.com/api/mjkj-water/mjkj/open/wy/get/lastNum";
 
     private static final String NOTIFY_URL = "/app/smartMeter/notify/ZhongkongDianBiaoFactoryAdaptImpl/992020051967020024";
 
