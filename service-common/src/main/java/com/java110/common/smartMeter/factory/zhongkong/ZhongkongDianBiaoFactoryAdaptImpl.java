@@ -128,9 +128,8 @@ public class ZhongkongDianBiaoFactoryAdaptImpl implements ISmartMeterFactoryAdap
         Map reqParams = new HashMap();
         reqParams.put("callbackUrl",UrlCache.getOwnerUrl() + NOTIFY_URL);
         reqParams.put("bhList",bhLists);
-        String request_content = JSON.toJSONString(req);
 
-        String response = WyRequestUtils.execute(READS_URL, reqParams, HttpMethod.GET);
+        String response = WyRequestUtils.executeReads(READS_URL, reqParams, HttpMethod.GET);
 
         JSONObject paramOut = JSONObject.parseObject(response);
 
