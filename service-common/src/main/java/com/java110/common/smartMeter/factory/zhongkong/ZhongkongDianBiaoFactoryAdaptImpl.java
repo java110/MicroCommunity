@@ -42,7 +42,7 @@ public class ZhongkongDianBiaoFactoryAdaptImpl implements ISmartMeterFactoryAdap
 
     private static final String READS_URL = "http://www.zhckxt.com/api/mjkj-water/mjkj/open/wy/get/lastNum";
 
-    private static final String NOTIFY_URL = "/app/smartMeter/notify/ZhongkongDianBiaoFactoryAdaptImpl/992020051967020024";
+    private static final String NOTIFY_URL = "/app/smartMeter/notify/zhongkongDianBiaoFactoryAdaptImpl/992020051967020024";
 
 
     @Autowired
