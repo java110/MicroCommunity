@@ -113,6 +113,7 @@ public class ZhongkongDianBiaoFactoryAdaptImpl implements ISmartMeterFactoryAdap
         String detailId = "";
         List<String> bhLists = new ArrayList<>();
         for (MeterMachineDto meterMachineDto : meterMachineDtos) {
+            detailId = GenerateCodeFactory.getGeneratorId("11");
             bhLists.add(meterMachineDto.getAddress());
             MeterMachineDetailPo meterMachineDetailPo = new MeterMachineDetailPo();
             meterMachineDetailPo.setCommunityId(meterMachineDto.getCommunityId());
