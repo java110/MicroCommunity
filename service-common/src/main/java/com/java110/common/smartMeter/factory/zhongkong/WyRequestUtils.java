@@ -97,5 +97,36 @@ public class WyRequestUtils {
         return response.getBody();
     }
 
+    /**
+     * 请求充电桩 接口
+     * <p>
+     * MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_ID),
+     * MappingCache.getValue(DING_DING_DOMAIN, DING_DING_APP_SECURE
+     *
+     * @param url
+     * @param reqMap
+     * @param httpMethod
+     * @return
+     * @throws Exception
+     */
+    public static String executeReads(String url, Map<String, String> reqMap, HttpMethod httpMethod)  {
+        RestTemplate outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        HttpEntity httpEntity = null;
+        if(reqMap != null) {
+            //reqMap.put("sign", getSign(reqMap));
+            httpEntity = new HttpEntity(JSONObject.toJSONString(reqMap), httpHeaders);
+        }else{
+            httpEntity = new HttpEntity("", httpHeaders);
+        }
+        ResponseEntity<String> response = null;
+        try {
+            response = outRestTemplate.exchange(url, httpMethod, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) {
+            logger.error("请求异常", e.getResponseBodyAsString());
+            return e.getResponseBodyAsString();
+        }
 
+        return response.getBody();
+    }
 }
