@@ -41,7 +41,6 @@ public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements
     private static final Logger logger = LoggerFactory.getLogger(NotifyChargeV1InnerServiceSMOImpl.class);
 
 
-
     @Autowired
     private IChargeCore chargeCoreImpl;
 
@@ -49,8 +48,15 @@ public class NotifyChargeV1InnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public ResultVo finishCharge(@RequestBody NotifyChargeOrderDto notifyChargeOrderDto) {
 
-       return chargeCoreImpl.finishCharge(notifyChargeOrderDto);
-
+        ResultVo resultVo = null;
+        try {
+            resultVo = chargeCoreImpl.finishCharge(notifyChargeOrderDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("停止充电失败", e);
+            throw e;
+        }
+        return resultVo;
     }
 
     @Override

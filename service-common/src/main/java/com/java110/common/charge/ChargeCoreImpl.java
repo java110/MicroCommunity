@@ -130,7 +130,7 @@ public class ChargeCoreImpl implements IChargeCore {
         double usedHours = Math.ceil((calendar.getTime().getTime() - startTime.getTime()) / (60 * 60 * 1000.00));
         // 计算平均功率
         String power = energy;
-        if (usedHours < 0) {
+        if (usedHours <= 0) {
             usedHours = 0;
         } else {
             BigDecimal powerDec = new BigDecimal(Double.parseDouble(energy)).divide(new BigDecimal(usedHours), 2, BigDecimal.ROUND_HALF_UP);
