@@ -65,6 +65,7 @@ public class UpdateParkingAreaCmd extends Cmd {
             if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
                 attr.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 parkingAreaAttrPo = BeanConvertUtil.covertBean(attr, ParkingAreaAttrPo.class);
+                parkingAreaAttrPo.setPaId(parkingAreaPo.getPaId());
                 flag = parkingAreaAttrV1InnerServiceSMOImpl.saveParkingAreaAttr(parkingAreaAttrPo);
                 if (flag < 1) {
                     throw new CmdException("保存停车场失败");
