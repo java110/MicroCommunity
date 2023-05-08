@@ -187,6 +187,7 @@ public class SaveOwnerCmd extends Cmd {
         }
         //生成memberId
         generateMemberId(reqJson);
+
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(reqJson);
         businessOwner.put("state", "2000");
@@ -215,9 +216,8 @@ public class SaveOwnerCmd extends Cmd {
                 reqJson.getString("memberId"),
                 reqJson.getString("communityId"),
                 "10000");
+
         dealOwnerAttr(reqJson, cmdDataFlowContext);
-
-
 
 
         String autoUser = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "AUTO_GENERATOR_OWNER_USER");

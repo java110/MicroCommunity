@@ -73,6 +73,10 @@ public class DeleteOrgCmd extends Cmd {
 
         Assert.listOnlyOne(orgDtos, "不存在");
 
+        if (OrgDto.ORG_LEVEL_STORE.equals(orgDtos.get(0).getOrgLevel())) {
+            throw new CmdException("一级组织不能删除");
+        }
+
         orgDto = new OrgDto();
         orgDto.setParentOrgId(reqJson.getString("orgId"));
         List<OrgDto> subOrgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
