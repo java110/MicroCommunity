@@ -1,14 +1,3 @@
-jedis:
-  pool:
-    config:
-      maxTotal: 100
-      maxIdle: 20
-      maxWaitMillis: 20000
-    host: dev.redis.java110.com
-    port: 6379
-    timeout: 3000
-    password: ${redispwd}
-
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10

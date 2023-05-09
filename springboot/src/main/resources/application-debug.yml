@@ -1,15 +1,3 @@
-jedis:
-  pool:
-    config:
-      maxTotal: 300
-      maxIdle: 50
-      minIdle: 20
-      maxWaitMillis: 3000
-    host: dev.redis.java110.com
-    port: 6379
-    timeout: 3000
-    password: hc12345678
-
 server:
   port: 8008
   tomcat:
