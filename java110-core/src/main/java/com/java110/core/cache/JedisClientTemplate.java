@@ -140,7 +140,7 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public Object eval(String script, List<String> keys, List<String> args) {
-        DefaultRedisScript redisScript = new DefaultRedisScript(script);
+        DefaultRedisScript redisScript = new DefaultRedisScript(script,Long.class);
         return redisTemplate.execute(redisScript, keys, args);
     }
 }
