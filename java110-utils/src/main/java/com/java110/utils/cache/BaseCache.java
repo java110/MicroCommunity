@@ -13,6 +13,8 @@ public class BaseCache {
 
     public final static String JEDIS_DEFAULT_POOL = "jedisClientPool"; // 单节点模式  集群模式 jedisClientCluster
 
+
+
     protected static Jedis getJedis(){
 //        JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedisPool");
 //        return jedisPool.getResource();

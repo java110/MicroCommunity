@@ -59,8 +59,9 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
         }
     }
 
-    @Bean(name = "jedisCluster")
-    @Autowired
+
+//    @Bean(name = "jedisCluster")
+//    @Autowired
     public JedisCluster jedisCluster(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                      @Value("${jedis.pool.host}") String host,
                                      @Value("${jedis.pool.port}") int port,
@@ -70,10 +71,6 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
         if (timeout == 0) {
             timeout = 2000;
         }
-        if (!host.contains(",")) {
-            return null;
-        }
-
         String[] hosts = host.split(",");
         Set<HostAndPort> nodes = new HashSet<>();
         String[] tmpHosts = null;
@@ -83,7 +80,6 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
         }
         JedisCluster cluster = new JedisCluster(nodes);
         return cluster;
-
     }
 
     @Bean(name = "jedis.pool.config")
