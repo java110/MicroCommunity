@@ -50,12 +50,21 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public String get(String key) {
-        return redisTemplate.opsForValue().get(key).toString();
+        Object value = redisTemplate.opsForValue().get(key);
+        if (value == null) {
+            return null;
+        }
+
+        return value.toString();
     }
 
     @Override
     public byte[] get(byte[] key) {
-        return (byte[]) redisTemplate.opsForValue().get(key);
+        Object value = redisTemplate.opsForValue().get(key);
+        if (value == null) {
+            return null;
+        }
+        return (byte[]) value;
     }
 
     @Override
