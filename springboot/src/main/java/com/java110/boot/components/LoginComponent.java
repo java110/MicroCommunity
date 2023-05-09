@@ -30,6 +30,7 @@ public class LoginComponent {
         try {
                 responseEntity = loginServiceSMOImpl.doLogin(pd);
         } catch (Exception e) {
+            e.printStackTrace();
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
