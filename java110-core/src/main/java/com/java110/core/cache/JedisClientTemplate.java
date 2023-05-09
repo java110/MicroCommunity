@@ -41,7 +41,7 @@ public class JedisClientTemplate implements Jedis {
 //        return "";
         return redisTemplate.execute(new RedisCallback() {
             public String doInRedis(RedisConnection connection) {
-                Jedis jedis = (Jedis) connection.getNativeConnection();
+                redis.clients.jedis.Jedis jedis = (redis.clients.jedis.Jedis) connection.getNativeConnection();
                 return jedis.set(key, value, nxxx, expx, time);
             }
         }, true).toString();
@@ -140,7 +140,7 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public Object eval(String script, List<String> keys, List<String> args) {
-        DefaultRedisScript redisScript = new DefaultRedisScript(script,Long.class);
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript(script,Long.class);
         return redisTemplate.execute(redisScript, keys, args);
     }
 }
