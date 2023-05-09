@@ -36,6 +36,21 @@ spring:
       max-idle: 50
       min-idle: 20
       timeout: 0
+# 集群模式
+#  redis:
+#    timeout: 5000
+#    database: 0
+#    password: hc
+#    cluster:
+#      nodes: 148.70.139.121:7000,148.70.139.121:7001,148.70.139.121:7002,148.70.139.121:7003,148.70.139.121:7004,148.70.139.121:7005
+#      max-redirects: 3
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-wait: -1
+#        max-idle: 8
+#        min-idle: 0
+
   activiti:
     database-schema-update: false
 
