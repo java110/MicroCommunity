@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class BaseCache {
 
-    public final static String JEDIS_DEFAULT_POOL = "jedisClientPool"; // 单节点模式  集群模式 jedisClientCluster
+    public final static String JEDIS_DEFAULT_POOL = "jedisClientTemplate"; // 单节点模式 jedisClientPool  集群模式 jedisClientCluster
 
 
 
