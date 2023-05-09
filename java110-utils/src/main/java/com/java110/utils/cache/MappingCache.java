@@ -6,7 +6,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 import java.util.List;
 

@@ -15,17 +15,21 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by wuxw on 2017/7/23.
  */
 @Configuration
 @EnableCaching
-public class Java110RedisConfig extends CachingConfigurerSupport  {
+public class Java110RedisConfig extends CachingConfigurerSupport {
 
     public final static String REDIS_EXPIRE_TIME_KEY = "#key_expire_time";
 
@@ -36,29 +40,56 @@ public class Java110RedisConfig extends CachingConfigurerSupport  {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Bean(name= "jedisPool")
+    @Bean(name = "jedisPool")
     @Autowired
     public JedisPool jedisPool(@Qualifier("jedis.pool.config") JedisPoolConfig config,
-                               @Value("${jedis.pool.host}")String host,
-                               @Value("${jedis.pool.port}")int port,
-                               @Value("${jedis.pool.timeout}")int timeout,
+                               @Value("${jedis.pool.host}") String host,
+                               @Value("${jedis.pool.port}") int port,
+                               @Value("${jedis.pool.timeout}") int timeout,
                                @Value("${jedis.pool.password}") String password) {
         //没有配置改为默认值
-        if(timeout == 0){
+        if (timeout == 0) {
             timeout = 2000;
         }
 
-        if(StringUtils.isEmpty(password)) {
-            return new JedisPool(config, host, port,timeout);
-        }else{
-            return new JedisPool(config,host,port,timeout,password);
+        if (StringUtils.isEmpty(password)) {
+            return new JedisPool(config, host, port, timeout);
+        } else {
+            return new JedisPool(config, host, port, timeout, password);
         }
     }
 
-    @Bean(name= "jedis.pool.config")
-    public JedisPoolConfig jedisPoolConfig (@Value("${jedis.pool.config.maxTotal}")int maxTotal,
-                                            @Value("${jedis.pool.config.maxIdle}")int maxIdle,
-                                            @Value("${jedis.pool.config.maxWaitMillis}")int maxWaitMillis) {
+    @Bean(name = "jedisCluster")
+    @Autowired
+    public JedisCluster jedisCluster(@Qualifier("jedis.pool.config") JedisPoolConfig config,
+                                     @Value("${jedis.pool.host}") String host,
+                                     @Value("${jedis.pool.port}") int port,
+                                     @Value("${jedis.pool.timeout}") int timeout,
+                                     @Value("${jedis.pool.password}") String password) {
+        //没有配置改为默认值
+        if (timeout == 0) {
+            timeout = 2000;
+        }
+        if (!host.contains(",")) {
+            return null;
+        }
+
+        String[] hosts = host.split(",");
+        Set<HostAndPort> nodes = new HashSet<>();
+        String[] tmpHosts = null;
+        for (String tmpHost : hosts) {
+            tmpHosts = tmpHost.split(":");
+            nodes.add(new HostAndPort(tmpHosts[0], Integer.parseInt(tmpHosts[1])));
+        }
+        JedisCluster cluster = new JedisCluster(nodes);
+        return cluster;
+
+    }
+
+    @Bean(name = "jedis.pool.config")
+    public JedisPoolConfig jedisPoolConfig(@Value("${jedis.pool.config.maxTotal}") int maxTotal,
+                                           @Value("${jedis.pool.config.maxIdle}") int maxIdle,
+                                           @Value("${jedis.pool.config.maxWaitMillis}") int maxWaitMillis) {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(maxTotal);
         config.setMaxIdle(maxIdle);
@@ -67,7 +98,6 @@ public class Java110RedisConfig extends CachingConfigurerSupport  {
 
         return config;
     }
-
 
 
     @Override

@@ -2,7 +2,7 @@ package com.java110.utils.cache;
 
 import com.java110.utils.util.SerializeUtil;
 import com.java110.entity.center.AppRoute;
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 import java.util.List;
 

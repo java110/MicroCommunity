@@ -2,8 +2,6 @@ package com.java110.utils.cache;
 
 
 import com.java110.utils.factory.ApplicationContextFactory;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.util.Set;
 
@@ -13,9 +11,15 @@ import java.util.Set;
  */
 public class BaseCache {
 
+    public final static String JEDIS_DEFAULT_POOL = "jedisClientPool"; // 单节点模式  集群模式 jedisClientCluster
+
     protected static Jedis getJedis(){
-        JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedisPool");
-        return jedisPool.getResource();
+//        JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedisPool");
+//        return jedisPool.getResource();
+        //Jedis jedis = (Jedis) ApplicationContextFactory.getBean("jedisClientCluster");
+        Jedis jedis = (Jedis) ApplicationContextFactory.getBean(JEDIS_DEFAULT_POOL);
+
+        return jedis;
     }
 
     /**

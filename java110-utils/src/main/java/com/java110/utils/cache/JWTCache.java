@@ -1,6 +1,6 @@
 package com.java110.utils.cache;
 
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 /**
  * Created by wuxw on 2018/5/5.

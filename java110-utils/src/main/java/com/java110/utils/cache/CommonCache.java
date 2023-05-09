@@ -3,7 +3,7 @@ package com.java110.utils.cache;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 /**
  * Created by wuxw on 2018/5/5.

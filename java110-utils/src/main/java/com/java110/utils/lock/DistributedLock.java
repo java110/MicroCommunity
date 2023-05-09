@@ -1,7 +1,7 @@
 package com.java110.utils.lock;
 
 import com.java110.utils.cache.BaseCache;
-import redis.clients.jedis.Jedis;
+import com.java110.utils.cache.Jedis;
 
 import java.util.Collections;
 import java.util.UUID;
