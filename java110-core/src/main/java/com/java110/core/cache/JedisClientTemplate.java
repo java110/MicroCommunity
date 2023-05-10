@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
 import java.util.List;
@@ -42,7 +43,17 @@ public class JedisClientTemplate implements Jedis {
         return redisTemplate.execute(new RedisCallback() {
             public String doInRedis(RedisConnection connection) {
                 redis.clients.jedis.Jedis jedis = (redis.clients.jedis.Jedis) connection.getNativeConnection();
-                return jedis.set(key, value, nxxx, expx, time);
+                Object nativeConnection = connection.getNativeConnection();
+                // 集群
+                if (nativeConnection instanceof JedisCluster) {
+                    return ((JedisCluster) nativeConnection).set(key, value, nxxx, expx, time);
+                }
+
+                // 单机
+                if (nativeConnection instanceof Jedis) {
+                    return ((Jedis) nativeConnection).set(key, value, nxxx, expx, time);
+                }
+                return "";
             }
         }, true).toString();
     }
@@ -140,7 +151,21 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public Object eval(String script, List<String> keys, List<String> args) {
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript(script,Long.class);
-        return redisTemplate.execute(redisScript, keys, args);
+        Object exeRet = redisTemplate.execute((RedisCallback<Object>) connection -> {
+            Object nativeConnection = connection.getNativeConnection();
+            // 集群
+            if (nativeConnection instanceof JedisCluster) {
+                return ((JedisCluster) nativeConnection).eval(script, keys, args);
+            }
+
+            // 单机
+            if (nativeConnection instanceof Jedis) {
+                return ((Jedis) nativeConnection).eval(script, keys, args);
+            }
+
+            return null;
+        });
+        //return redisTemplate.execute(redisScript, keys, args);
+        return exeRet;
     }
 }
