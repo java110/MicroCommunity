@@ -6,83 +6,167 @@ import java.util.Date;
 public class PayFeeDetailMonthPo implements Serializable {
 
     private String detailMonth;
-private String detailYear;
-private String detailId;
-private String receivableAmount;
-private String discountAmount;
-private String remark;
-private String statusCd = "0";
-private String receivedAmount;
-private String communityId;
-private String feeId;
-private String monthId;
-public String getDetailMonth() {
+    private String detailYear;
+    private String detailId;
+    private String receivableAmount;
+    private String discountAmount;
+    private String remark;
+    private String statusCd = "0";
+    private String receivedAmount;
+    private String communityId;
+    private String feeId;
+    private String monthId;
+
+    private String objName;
+    private String objId;
+    private String ownerName;
+    private String ownerId;
+    private String link;
+    private String state;
+    private String payFeeTime;
+
+
+    public String getDetailMonth() {
         return detailMonth;
     }
-public void setDetailMonth(String detailMonth) {
+
+    public void setDetailMonth(String detailMonth) {
         this.detailMonth = detailMonth;
     }
-public String getDetailYear() {
+
+    public String getDetailYear() {
         return detailYear;
     }
-public void setDetailYear(String detailYear) {
+
+    public void setDetailYear(String detailYear) {
         this.detailYear = detailYear;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getDiscountAmount() {
+
+    public String getDiscountAmount() {
         return discountAmount;
     }
-public void setDiscountAmount(String discountAmount) {
+
+    public void setDiscountAmount(String discountAmount) {
         this.discountAmount = discountAmount;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getMonthId() {
+
+    public String getMonthId() {
         return monthId;
     }
-public void setMonthId(String monthId) {
+
+    public void setMonthId(String monthId) {
         this.monthId = monthId;
     }
 
+    public String getObjName() {
+        return objName;
+    }
 
+    public void setObjName(String objName) {
+        this.objName = objName;
+    }
 
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPayFeeTime() {
+        return payFeeTime;
+    }
+
+    public void setPayFeeTime(String payFeeTime) {
+        this.payFeeTime = payFeeTime;
+    }
 }

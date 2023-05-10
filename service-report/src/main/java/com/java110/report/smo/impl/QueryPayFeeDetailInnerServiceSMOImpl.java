@@ -87,14 +87,6 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         if (count > 0) {
             //查询缴费明细
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
-            //吴学文 注释 感觉和上面的369 功能重复
-//            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
-//                //查询所有缴费明细记录
-//                ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 = BeanConvertUtil.covertBean(reportFeeMonthStatisticsDto, ReportFeeMonthStatisticsDto.class);
-//                reportFeeMonthStatisticsDto1.setPage(PageDto.DEFAULT_PAGE);
-//                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos1 = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto1);
-//                size = reportFeeMonthStatisticsDtos1.size();
-//            }
             //查询应收、实收总金额(大计)
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryAllPayFeeDetail(reportFeeMonthStatisticsDto);
             //查询(优惠、减免、滞纳金、空置房打折、空置房减免金额等)大计总金额
@@ -159,12 +151,12 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             Double totalLateFee = 0.0;
             List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
-                FeeDetailDto feeDetailDto = new FeeDetailDto();
-                feeDetailDto.setDetailId(reportFeeMonthStatistics.getDetailId());
-                List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-                Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误");
-                reportFeeMonthStatistics.setReceivableAmount(feeDetailDtos.get(0).getReceivableAmount());
-                reportFeeMonthStatistics.setPayableAmount(feeDetailDtos.get(0).getPayableAmount());
+//                FeeDetailDto feeDetailDto = new FeeDetailDto();
+//                feeDetailDto.setDetailId(reportFeeMonthStatistics.getDetailId());
+//                List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+//                Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误");
+//                reportFeeMonthStatistics.setReceivableAmount(feeDetailDtos.get(0).getReceivableAmount());
+//                reportFeeMonthStatistics.setPayableAmount(feeDetailDtos.get(0).getPayableAmount());
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
                 //实收金额
