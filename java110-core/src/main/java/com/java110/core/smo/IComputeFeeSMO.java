@@ -35,6 +35,13 @@ public interface IComputeFeeSMO {
     Date getFeeEndTime();
 
     /**
+     * 获取 deadlineTime
+     * @param feeDto
+     * @return
+     */
+    Date getDeadlineTime(FeeDto feeDto);
+
+    /**
      * 计算欠费金额
      *
      * @param tmpFeeDto

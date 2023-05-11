@@ -102,5 +102,14 @@ public class PayFeeDetailMonthServiceDaoImpl extends BaseServiceDao implements I
         return Integer.parseInt(businessPayFeeDetailMonthInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryPayFeeDetailMaxMonths(Map info) {
+        logger.debug("查询queryPayFeeDetailMaxMonths信息 入参 info : {}", info);
+
+        List<Map> businessPayFeeDetailMonthInfos = sqlSessionTemplate.selectList("payFeeDetailMonthServiceDaoImpl.queryPayFeeDetailMaxMonths", info);
+
+        return businessPayFeeDetailMonthInfos;
+    }
+
 
 }

@@ -84,6 +84,19 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
         return payFeeDetailMonthServiceDaoImpl.queryPayFeeDetailMonthsCount(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto));
     }
 
+    @Override
+    public List<PayFeeDetailMonthDto> queryPayFeeDetailMaxMonths(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto) {
+        int page = payFeeDetailMonthDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeDetailMonthDto.setPage((page - 1) * payFeeDetailMonthDto.getRow());
+        }
+
+        List<PayFeeDetailMonthDto> payFeeDetailMonths = BeanConvertUtil.covertBeanList(payFeeDetailMonthServiceDaoImpl.queryPayFeeDetailMaxMonths(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto)), PayFeeDetailMonthDto.class);
+
+        return payFeeDetailMonths;
+    }
+
     public IPayFeeDetailMonthServiceDao getPayFeeDetailMonthServiceDaoImpl() {
         return payFeeDetailMonthServiceDaoImpl;
     }

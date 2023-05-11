@@ -61,4 +61,5 @@ public interface IPayFeeDetailMonthServiceDao {
     int queryPayFeeDetailMonthsCount(Map info);
 
 
+    List<Map> queryPayFeeDetailMaxMonths(Map info);
 }

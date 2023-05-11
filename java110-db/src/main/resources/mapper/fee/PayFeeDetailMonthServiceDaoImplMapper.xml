@@ -151,6 +151,10 @@
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
         </if>
+        <if test="curMonthStartTime !=null and curMonthStartTime != ''">
+            and t.cur_month_time &gt;= #{curMonthStartTime}
+            and t.cur_month_time &lt;= #{curMonthEndTime}
+        </if>
     </update>
 
     <!-- 查询月缴费表数量 add by wuxw 2018-07-03 -->
@@ -209,7 +213,71 @@
         <if test="payFeeTime !=null and payFeeTime != ''">
             and t.pay_fee_time= #{payFeeTime}
         </if>
+    </select>
 
+    <select id="queryPayFeeDetailMaxMonths" parameterType="Map" resultType="Map">
+        select t.detail_month,t.detail_month detailMonth,t.detail_year,t.detail_year detailYear,t.detail_id,t.detail_id
+        detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.discount_amount,t.discount_amount
+        discountAmount,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
+        receivedAmount,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,t.month_id,t.month_id monthId,
+        t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time payFeeTime
+        from pay_fee_detail_month t
+        where 1 =1
+        <if test="detailMonth !=null and detailMonth != ''">
+            and t.detail_month= #{detailMonth}
+        </if>
+        <if test="detailYear !=null and detailYear != ''">
+            and t.detail_year= #{detailYear}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="discountAmount !=null and discountAmount != ''">
+            and t.discount_amount= #{discountAmount}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="monthId !=null and monthId != ''">
+            and t.month_id= #{monthId}
+        </if>
+        <if test="objName !=null and objName != ''">
+            and t.obj_name= #{objName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="payFeeTime !=null and payFeeTime != ''">
+            and t.pay_fee_time= #{payFeeTime}
+        </if>
+        order by t.detail_year ,t.detail_month
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 

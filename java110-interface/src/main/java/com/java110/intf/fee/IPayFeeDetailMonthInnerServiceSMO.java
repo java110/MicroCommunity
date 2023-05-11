@@ -54,4 +54,7 @@ public interface IPayFeeDetailMonthInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPayFeeDetailMonthsCount", method = RequestMethod.POST)
     int queryPayFeeDetailMonthsCount(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
+
+    @RequestMapping(value = "/queryPayFeeDetailMaxMonths", method = RequestMethod.POST)
+    List<PayFeeDetailMonthDto> queryPayFeeDetailMaxMonths(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
 }

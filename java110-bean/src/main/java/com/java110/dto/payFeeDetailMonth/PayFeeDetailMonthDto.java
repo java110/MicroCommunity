@@ -43,6 +43,8 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
     private String state;
     private String payFeeTime;
 
+    private String curMonthTime;
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -195,5 +197,13 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     public void setPayFeeTime(String payFeeTime) {
         this.payFeeTime = payFeeTime;
+    }
+
+    public String getCurMonthTime() {
+        return curMonthTime;
+    }
+
+    public void setCurMonthTime(String curMonthTime) {
+        this.curMonthTime = curMonthTime;
     }
 }

@@ -1793,6 +1793,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     }
 
+    @Override
+    public Date getDeadlineTime(FeeDto feeDto){
+        Map info = getTargetEndDateAndOweMonth(feeDto);
+        return (Date)info.get("targetEndDate");
+    }
+
     /**
      * 计算 计费结束时间和 欠费月份（可能存在小数点）
      *
@@ -1907,14 +1913,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
-
-//        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-//            OwnerCarDto ownerCarDto = new OwnerCarDto();
-//            ownerCarDto.setCommunityId(feeDto.getCommunityId());
-//            ownerCarDto.setCarId(feeDto.getPayerObjId());
-//            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-//            return getTargetEndDateAndOweMonth(feeDto, ownerCarDtos == null || ownerCarDtos.size() < 1 ? null : ownerCarDtos.get(0));
-//        }
         return getTargetEndDateAndOweMonth(feeDto, null);
     }
 

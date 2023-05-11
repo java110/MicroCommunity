@@ -7,10 +7,12 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.payFeeDetailMonth.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.dto.reportOweFee.ReportOweFeeDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeMonthInnerServiceSMO;
 import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.fee.asyn.IPayFeeDetailToMonth;
@@ -30,6 +32,10 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
 
+/**
+ * 主要用于处理费用离散月 适配器
+ * add by wuxw 2023-05-11
+ */
 @Service
 public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 
@@ -40,7 +46,6 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
-
     @Autowired
     private IPayFeeDetailMonthInnerServiceSMO payFeeDetailMonthInnerServiceSMOImpl;
 
@@ -49,6 +54,9 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 
     @Autowired
     private IGeneratorOweFeeInnerServiceSMO generatorOweFeeInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeMonthInnerServiceSMO payFeeMonthInnerServiceSMOImpl;
 
     @Override
     @Async
@@ -62,22 +70,16 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         Assert.listOnlyOne(feeDtos, "未查询到费用信息");
         feeDto = feeDtos.get(0);
 
-        Date startTime = null;
-        Date endTime = null;
-        Date createTime = null;
-        try {
-            startTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B);
-            endTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
-            createTime = DateUtil.getDateFromString(businessPayFeeDetail.getString("createTime"), DateUtil.DATE_FORMATE_STRING_B);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("时间格式错误");
-        }
+        Date endTime = DateUtil.getDateFromStringB(businessPayFeeDetail.getString("endTime"));
+
+        //todo 转换为月（优化版）
+        toPayFeeDetailMonth(businessPayFeeDetail, feeDto);
 
         //todo 转换为月
-        toMonth(businessPayFeeDetail, feeDto, startTime, endTime, createTime);
+        //toMonth(businessPayFeeDetail, feeDto, startTime, endTime, createTime);
 
         //todo 如果是租金 则延长房屋租期
-        toAddRoomRentTime(feeDtos.get(0),endTime);
+        toAddRoomRentTime(feeDtos.get(0), endTime);
 
         //todo 修改欠费
         toDeleteOweFee(feeDtos.get(0));
@@ -85,22 +87,36 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
     }
 
     /**
+     * 调用fee 模块 处理 离散
+     * @param businessPayFeeDetail
+     * @param feeDto
+     */
+    private void toPayFeeDetailMonth(JSONObject businessPayFeeDetail, FeeDto feeDto) {
+        PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto = new PayFeeDetailRefreshFeeMonthDto();
+        payFeeDetailRefreshFeeMonthDto.setCommunityId(feeDto.getCommunityId());
+        payFeeDetailRefreshFeeMonthDto.setDetailId(businessPayFeeDetail.getString("detailId"));
+        payFeeDetailRefreshFeeMonthDto.setFeeId(feeDto.getFeeId());
+        //todo 调用费用模块 处理
+        payFeeMonthInnerServiceSMOImpl.payFeeDetailRefreshFeeMonth(payFeeDetailRefreshFeeMonthDto);
+    }
+
+    /**
      * 处理欠费
+     *
      * @param feeDto
      */
     private void toDeleteOweFee(FeeDto feeDto) {
         generatorOweFeeInnerServiceSMOImpl.computeOweFee(feeDto);
-
     }
 
-    private void toAddRoomRentTime(FeeDto feeDto,Date endTime) {
+    private void toAddRoomRentTime(FeeDto feeDto, Date endTime) {
 
         //todo 不是租金直接返回
         if (!FeeConfigDto.FEE_TYPE_CD_RENT.equals(feeDto.getFeeTypeCd())) {
             return;
         }
         //todo 不是房屋直接返回
-        if(!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())){
+        if (!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
             return;
         }
 
@@ -109,23 +125,21 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         ownerRoomRelDto.setCommunityId(feeDto.getCommunityId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if(ownerRoomRelDtos == null || ownerRoomRelDtos.size()< 1){
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             return;
         }
 
         Date rentEndDate = ownerRoomRelDtos.get(0).getEndTime();
 
-        if(endTime.getTime()< rentEndDate.getTime()){
-            return ;
+        if (endTime.getTime() < rentEndDate.getTime()) {
+            return;
         }
 
         OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
-        ownerRoomRelPo.setEndTime(DateUtil.getFormatTimeString(endTime,DateUtil.DATE_FORMATE_STRING_B));
+        ownerRoomRelPo.setEndTime(DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B));
         ownerRoomRelPo.setRelId(ownerRoomRelDtos.get(0).getRelId());
 
         ownerRoomRelV1InnerServiceSMOImpl.updateOwnerRoomRel(ownerRoomRelPo);
-
-
     }
 
     private void toMonth(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date endTime, Date createTime) {
@@ -148,15 +162,8 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
-        PayFeeDetailMonthPo tmpPayFeeDetailMonthPo = null;
-        BigDecimal discountAmount = new BigDecimal(0.0);
 
-//        if("bailefu".equals(MappingCache.getValue("payFeeDetailToMonth"))){
-//            bailefuPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-//        }else{
         commonPropertyCode(businessPayFeeDetail, feeDto, startTime, createTime, maxMonth, feePrice, priRecDec, payFeeDetailMonthPos, calendar);
-//        }
-
 
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
     }

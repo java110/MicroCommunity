@@ -123,6 +123,21 @@ public class DateUtil {
         }
     }
 
+    public static String getFormatTimeStringA(Date date) {
+        SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_A);
+
+        synchronized (sDateFormat) {
+            return sDateFormat.format(date);
+        }
+    }
+    public static String getFormatTimeStringB(Date date) {
+        SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_B);
+
+        synchronized (sDateFormat) {
+            return sDateFormat.format(date);
+        }
+    }
+
     public static String getDefaultFormateTimeString(Date date) {
         return getFormatTimeString(date, "yyyyMMddHHmmss");
     }

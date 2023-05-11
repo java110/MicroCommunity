@@ -28,15 +28,9 @@ public class AppTest
     public void should()
     {
 
-       JSONObject param = new JSONObject();
-       param.put("tel","18909715555");
-       param.put("passwd","admin");
-        try {
-            String accessToken = Base64Convert.byteToBase64(param.toJSONString().getBytes("UTF-8"));
-            System.out.printf("accessToken="+accessToken);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
+     Calendar calendar = Calendar.getInstance();
+     calendar.set(Calendar.YEAR,2023);
+     calendar.set(Calendar.MONTH,11);
+        System.out.printf(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
     }
 }

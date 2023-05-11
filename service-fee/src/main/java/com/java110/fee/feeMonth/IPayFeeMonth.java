@@ -22,4 +22,12 @@ public interface IPayFeeMonth {
      */
     void doGeneratorOrRefreshAllFeeMonth(String communityId);
 
+    /**
+     * 缴费 离散数据
+     * @param feeId
+     * @param detailId
+     * @param communityId
+     */
+    void payFeeDetailRefreshFeeMonth(String feeId,String detailId,String communityId);
+
 }

@@ -25,6 +25,12 @@ public class PayFeeDetailMonthPo implements Serializable {
     private String state;
     private String payFeeTime;
 
+    private String curMonthTime;
+
+    private String curMonthStartTime;
+
+    private String curMonthEndTime;
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -168,5 +174,29 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     public void setPayFeeTime(String payFeeTime) {
         this.payFeeTime = payFeeTime;
+    }
+
+    public String getCurMonthTime() {
+        return curMonthTime;
+    }
+
+    public void setCurMonthTime(String curMonthTime) {
+        this.curMonthTime = curMonthTime;
+    }
+
+    public String getCurMonthStartTime() {
+        return curMonthStartTime;
+    }
+
+    public void setCurMonthStartTime(String curMonthStartTime) {
+        this.curMonthStartTime = curMonthStartTime;
+    }
+
+    public String getCurMonthEndTime() {
+        return curMonthEndTime;
+    }
+
+    public void setCurMonthEndTime(String curMonthEndTime) {
+        this.curMonthEndTime = curMonthEndTime;
     }
 }

@@ -4,21 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
-import com.java110.dto.report.ReportRoomDto;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -38,6 +36,9 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     private IPayFeeDetailMonthInnerServiceSMO payFeeDetailMonthInnerServiceSMOImpl;
 
     @Autowired
+    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
     private IPayFeeMonthHelp payFeeMonthHelp;
 
     @Autowired
@@ -48,6 +49,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
     /**
      * 生成单个费用 并 离散到月
+     *
      * @param feeId
      * @param communityId
      */
@@ -70,75 +72,81 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         //todo 计算每月单价
         Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
 
-        // 准备离散的基础数据
+        // todo 准备离散的基础数据
         PayFeeMonthOwnerDto payFeeMonthOwnerDto = payFeeMonthHelp.generatorOwnerRoom(feeDto);
 
-
-        //todo 检查费用是否离散过，如果没有离散过，先离散 start_time 到 end_time 的数据
-        ifHasNoMonthData(feeDto,payFeeMonthOwnerDto,feePrice);
+        //todo 离散start_time 或者 pay_fee_detail_month 最大月份 到  deadlineTime 的数据
+        maxMonthDateToDeadlineTimeData(feeDto, payFeeMonthOwnerDto, feePrice);
 
     }
 
-
-
-
     /**
-     * 如果费用没有month 数据，则直接离散 start_time 到end_time 数据
+     * 离散最大 离散月到 deadlineTime 的数据
+     *
      * @param feeDto
+     * @param payFeeMonthOwnerDto
+     * @param feePrice
      */
-    private void ifHasNoMonthData(FeeDto feeDto,PayFeeMonthOwnerDto payFeeMonthOwnerDto,Double feePrice) {
-
-        //todo 分析建账时间 和开始时间
-        Date startTime = feeDto.getStartTime();
-        if(startTime == null){
-            throw new IllegalArgumentException("数据错误，未包含开始时间");
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        int startYear = calendar.get(Calendar.YEAR);
-        int startMonth = calendar.get(Calendar.MONTH)+1;
-
+    private void maxMonthDateToDeadlineTimeData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice) {
         PayFeeDetailMonthDto payFeeDetailMonthDto = new PayFeeDetailMonthDto();
         payFeeDetailMonthDto.setCommunityId(feeDto.getCommunityId());
         payFeeDetailMonthDto.setFeeId(feeDto.getFeeId());
-        payFeeDetailMonthDto.setDetailYear(startYear+"");
-        payFeeDetailMonthDto.setDetailMonth(startMonth+"");
-        int count = payFeeDetailMonthInnerServiceSMOImpl.queryPayFeeDetailMonthsCount(payFeeDetailMonthDto);
-
-        // todo 说明这个费用已经第一次离散过
-        if(count > 0){
-            return ;
+        List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = payFeeDetailMonthInnerServiceSMOImpl.queryPayFeeDetailMaxMonths(payFeeDetailMonthDto);
+        Date startTime = null;
+        Date deadlineTime = computeFeeSMOImpl.getDeadlineTime(feeDto);
+        if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
+            startTime = feeDto.getStartTime();
+        } else {
+            int detailYear = Integer.parseInt(payFeeDetailMonthDtos.get(0).getDetailYear());
+            int detailMonth = Integer.parseInt(payFeeDetailMonthDtos.get(0).getDetailMonth());
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, detailYear);
+            calendar.set(Calendar.MONTH, detailMonth); //这里不用加1
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            startTime = calendar.getTime();
         }
 
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, feeDto.getEndTime()));
+        // todo 生成一段时间内的数据
+        doGeneratorTimeMonthData(feeDto, payFeeMonthOwnerDto, feePrice, startTime, deadlineTime);
+
+    }
+
+    private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
+        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
 
         if (maxMonth < 1) {
             return;
         }
+        //todo 查询 缴费明细
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setCommunityId(feeDto.getCommunityId());
+        feeDetailDto.setFeeId(feeDto.getFeeId());
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
+        //todo 生成 月离散数据
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
-        String detailId = "";
-        String discountAmount = "";
-        String receivedAmount = "";
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         for (int month = 0; month < maxMonth; month++) {
+            Calendar calendar = Calendar.getInstance();
             calendar.setTime(startTime);
             calendar.add(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
             tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
             tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
             tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
-            tmpPayFeeDetailMonthPo.setDetailId(detailId);
-            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            tmpPayFeeDetailMonthPo.setDetailId(payFeeMonthHelp.getFeeDetailId(feeDetailDtos, calendar.getTime()));
             tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
-            tmpPayFeeDetailMonthPo.setDiscountAmount(discountAmount);
+            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            tmpPayFeeDetailMonthPo.setReceivableAmount(payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
+            tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
+            tmpPayFeeDetailMonthPo.setDiscountAmount(payFeeMonthHelp.getDiscountAmount(feePrice, Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()), calendar.getTime(), feeDto) + "");
             tmpPayFeeDetailMonthPo.setMonthId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_monthId));
-            tmpPayFeeDetailMonthPo.setReceivableAmount(feePrice + "");
-            tmpPayFeeDetailMonthPo.setReceivedAmount(receivedAmount);
             tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
             tmpPayFeeDetailMonthPo.setObjName(payFeeMonthOwnerDto.getObjName());
             tmpPayFeeDetailMonthPo.setObjId(payFeeMonthOwnerDto.getObjId());
             tmpPayFeeDetailMonthPo.setOwnerId(payFeeMonthOwnerDto.getOwnerId());
             tmpPayFeeDetailMonthPo.setOwnerName(payFeeMonthOwnerDto.getOwnerName());
+            tmpPayFeeDetailMonthPo.setCurMonthTime(DateUtil.getFormatTimeStringB(calendar.getTime()));
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
         }
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
@@ -171,6 +179,65 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             doTmpFeeDtoMonths(communityId, tmpFeeDtos);
         }
 
+
+    }
+
+    /**
+     * 物业缴费时离散 报表数据
+     *
+     * @param feeId
+     * @param detailId
+     * @param communityId
+     */
+    @Async
+    @Override
+    public void payFeeDetailRefreshFeeMonth(String feeId, String detailId, String communityId) {
+        // todo 查询费用
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(communityId);
+        feeDto.setFeeId(feeId);
+        List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(tmpFeeDtos, "费用不存在");
+
+        //todo 查询 缴费明细
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setCommunityId(feeDto.getCommunityId());
+        feeDetailDto.setFeeId(feeDto.getFeeId());
+        feeDetailDto.setDetailId(detailId);
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+
+        Assert.listOnlyOne(feeDetailDtos, "缴费记录不存在");
+
+        //todo 计算每月单价
+        Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
+
+        // todo 准备离散的基础数据
+        PayFeeMonthOwnerDto payFeeMonthOwnerDto = payFeeMonthHelp.generatorOwnerRoom(feeDto);
+
+        // todo 删除缴费时间范围内的数据
+        doDeletePayFeeDetailInMonth(feeDto, feeDetailDtos.get(0));
+
+        // todo 生成一段时间内的数据
+        doGeneratorTimeMonthData(feeDto, payFeeMonthOwnerDto, feePrice, feeDetailDtos.get(0).getStartTime(), feeDetailDtos.get(0).getEndTime());
+    }
+
+    /**
+     * 删除缴费范围内的数据
+     *
+     * @param feeDto
+     * @param feeDetailDto
+     */
+    private void doDeletePayFeeDetailInMonth(FeeDto feeDto, FeeDetailDto feeDetailDto) {
+
+        PayFeeDetailMonthPo payFeeDetailMonthPo = new PayFeeDetailMonthPo();
+        payFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(feeDetailDto.getStartTime());
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        payFeeDetailMonthPo.setCurMonthTime(DateUtil.getFormatTimeStringB(calendar.getTime()));
+        payFeeDetailMonthPo.setCurMonthEndTime(DateUtil.getFormatTimeStringB(feeDetailDto.getEndTime()));
+        payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
     }
 
     private void doTmpFeeDtoMonths(String communityId, List<FeeDto> tmpFeeDtos) {
