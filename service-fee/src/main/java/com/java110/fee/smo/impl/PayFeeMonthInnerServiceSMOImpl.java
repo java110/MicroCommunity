@@ -40,4 +40,10 @@ public class PayFeeMonthInnerServiceSMOImpl extends BaseServiceSMO implements IP
                 payFeeDetailRefreshFeeMonthDto.getCommunityId());
         return 1;
     }
+
+    @Override
+    public int doGeneratorOrRefreshAllFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto) {
+        payFeeMonthImpl.doGeneratorOrRefreshAllFeeMonth(payFeeDetailRefreshFeeMonthDto.getCommunityId());
+        return 1;
+    }
 }

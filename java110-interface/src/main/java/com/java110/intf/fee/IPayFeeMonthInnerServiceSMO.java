@@ -30,9 +30,10 @@ public interface IPayFeeMonthInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/payFeeDetailRefreshFeeMonth", method = RequestMethod.POST)
-    int payFeeDetailRefreshFeeMonth(PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
+    int payFeeDetailRefreshFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
 
 
-
+    @RequestMapping(value = "/doGeneratorOrRefreshAllFeeMonth", method = RequestMethod.POST)
+    int doGeneratorOrRefreshAllFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
 
 }

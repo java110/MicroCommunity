@@ -39,7 +39,6 @@ import java.util.*;
 @Service
 public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
 
-
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
@@ -75,7 +74,7 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
         //todo 转换为月（优化版）
         toPayFeeDetailMonth(businessPayFeeDetail, feeDto);
 
-        //todo 转换为月
+        // 转换为月
         //toMonth(businessPayFeeDetail, feeDto, startTime, endTime, createTime);
 
         //todo 如果是租金 则延长房屋租期

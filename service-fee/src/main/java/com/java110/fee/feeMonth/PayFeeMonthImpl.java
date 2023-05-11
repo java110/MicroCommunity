@@ -147,11 +147,18 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setOwnerId(payFeeMonthOwnerDto.getOwnerId());
             tmpPayFeeDetailMonthPo.setOwnerName(payFeeMonthOwnerDto.getOwnerName());
             tmpPayFeeDetailMonthPo.setCurMonthTime(DateUtil.getFormatTimeStringB(calendar.getTime()));
+            tmpPayFeeDetailMonthPo.setState("W"); // todo 这里暂时写死，目前用不到，算是预留字段
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
         }
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
     }
 
+    /**
+     * 小区数据 离散为 月数据
+     *
+     * @param communityId
+     */
+    @Async
     @Override
     public void doGeneratorOrRefreshAllFeeMonth(String communityId) {
 
