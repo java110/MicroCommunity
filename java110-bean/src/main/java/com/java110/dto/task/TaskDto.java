@@ -33,6 +33,8 @@ public class TaskDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String classBean;
+
 
     public String getTaskCron() {
         return taskCron;
@@ -122,5 +124,13 @@ public class TaskDto extends PageDto implements Serializable {
 
     public void setTaskTemplateDto(TaskTemplateDto taskTemplateDto) {
         this.taskTemplateDto = taskTemplateDto;
+    }
+
+    public String getClassBean() {
+        return classBean;
+    }
+
+    public void setClassBean(String classBean) {
+        this.classBean = classBean;
     }
 }
