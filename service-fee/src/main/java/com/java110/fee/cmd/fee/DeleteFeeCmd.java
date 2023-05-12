@@ -7,6 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -40,6 +41,9 @@ public class DeleteFeeCmd extends Cmd {
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         // super.validatePageInfo(pd);
@@ -54,9 +58,6 @@ public class DeleteFeeCmd extends Cmd {
 
         Assert.listOnlyOne(feeDtos, "未查询到费用信息 或查询到多条" + reqJson);
 
-//        if ("T".equals(feeDtos.get(0).getIsDefault())) {
-//            throw new IllegalArgumentException("当前费用为默认费用不能做删除");
-//        }
 
         String feeValidate = MappingCache.getValue("DELETE_FEE_VALIDATE");
         if ("ON".equals(feeValidate)) {
@@ -96,5 +97,8 @@ public class DeleteFeeCmd extends Cmd {
                 throw new IllegalArgumentException("删除失败");
             }
         }
+
+        //todo 离散的月
+        payFeeMonthImpl.deleteFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());
     }
 }

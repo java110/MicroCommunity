@@ -235,6 +235,15 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         doGeneratorTimeMonthData(feeDto, payFeeMonthOwnerDto, feePrice, feeDetailDtos.get(0).getStartTime(), feeDetailDtos.get(0).getEndTime());
     }
 
+    @Override
+    public void deleteFeeMonth(String feeId, String communityId) {
+
+        PayFeeDetailMonthPo payFeeDetailMonthPo = new PayFeeDetailMonthPo();
+        payFeeDetailMonthPo.setFeeId(feeId);
+        payFeeDetailMonthPo.setCommunityId(communityId);
+        payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
+    }
+
     /**
      * 删除缴费范围内的数据
      *

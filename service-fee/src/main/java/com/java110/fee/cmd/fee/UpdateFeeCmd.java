@@ -9,6 +9,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.fee.smo.impl.FeeAttrInnerServiceSMOImpl;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -41,6 +42,9 @@ public class UpdateFeeCmd extends Cmd {
     @Autowired
     private FeeAttrInnerServiceSMOImpl feeAttrInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
@@ -72,6 +76,10 @@ public class UpdateFeeCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("修改费用");
         }
+
+        // todo 重新计算离散月
+        payFeeMonthImpl.deleteFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());
+        payFeeMonthImpl.doGeneratorOrRefreshFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());
 
 
         if (reqJson.containsKey("maxEndTime") && !StringUtil.isEmpty(reqJson.getString("maxEndTime"))) {

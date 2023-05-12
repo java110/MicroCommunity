@@ -30,4 +30,11 @@ public interface IPayFeeMonth {
      */
     void payFeeDetailRefreshFeeMonth(String feeId,String detailId,String communityId);
 
+    /**
+     * 删除 费用离散月
+     * @param feeId
+     * @param communityId
+     */
+    void deleteFeeMonth(String feeId,String communityId);
+
 }
