@@ -152,7 +152,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             return null;
         }
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
-            if (feeDetailDto.getStartTime().getTime() < curDate.getTime() && feeDetailDto.getEndTime().getTime() > curDate.getTime()) {
+            if (feeDetailDto.getStartTime().getTime() <= curDate.getTime() && feeDetailDto.getEndTime().getTime() > curDate.getTime()) {
                 return feeDetailDto;
             }
         }

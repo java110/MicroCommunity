@@ -97,13 +97,8 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
             startTime = feeDto.getStartTime();
         } else {
-            int detailYear = Integer.parseInt(payFeeDetailMonthDtos.get(0).getDetailYear());
-            int detailMonth = Integer.parseInt(payFeeDetailMonthDtos.get(0).getDetailMonth());
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.YEAR, detailYear);
-            calendar.set(Calendar.MONTH, detailMonth); //这里不用加1
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            startTime = calendar.getTime();
+            startTime = DateUtil.getDateFromStringA(payFeeDetailMonthDtos.get(0).getCurMonthTime());
+
         }
 
         // todo 生成一段时间内的数据
@@ -130,7 +125,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(startTime);
             calendar.add(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            //calendar.set(Calendar.DAY_OF_MONTH, 1);
             tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
             tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
             tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
