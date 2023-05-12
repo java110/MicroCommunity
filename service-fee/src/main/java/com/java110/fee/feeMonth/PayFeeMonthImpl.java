@@ -160,7 +160,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
      */
     @Async
     @Override
-    public void doGeneratorOrRefreshAllFeeMonth(String communityId) {
+    public void  doGeneratorOrRefreshAllFeeMonth(String communityId) {
 
 
         FeeDto feeDto = new FeeDto();
@@ -179,7 +179,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo  每次按200条处理
         for (int pageIndex = 0; pageIndex < page; pageIndex++) {
-            feeDto.setPage(pageIndex * max);
+            feeDto.setPage(pageIndex * max+1);
             feeDto.setRow(max);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             // 离散费用
