@@ -97,8 +97,10 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
             startTime = feeDto.getStartTime();
         } else {
-            startTime = DateUtil.getDateFromStringA(payFeeDetailMonthDtos.get(0).getCurMonthTime());
-
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtil.getDateFromStringA(payFeeDetailMonthDtos.get(0).getCurMonthTime()));
+            calendar.add(Calendar.MONTH, 1);
+            startTime = calendar.getTime();
         }
 
         // todo 生成一段时间内的数据
