@@ -45,6 +45,10 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     private String curMonthTime;
 
+    private String feeName;
+    private String configId;
+
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -205,5 +209,21 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     public void setCurMonthTime(String curMonthTime) {
         this.curMonthTime = curMonthTime;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
 }

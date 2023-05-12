@@ -146,8 +146,12 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setObjId(payFeeMonthOwnerDto.getObjId());
             tmpPayFeeDetailMonthPo.setOwnerId(payFeeMonthOwnerDto.getOwnerId());
             tmpPayFeeDetailMonthPo.setOwnerName(payFeeMonthOwnerDto.getOwnerName());
+            tmpPayFeeDetailMonthPo.setLink(payFeeMonthOwnerDto.getLink());
             tmpPayFeeDetailMonthPo.setCurMonthTime(DateUtil.getFormatTimeStringB(calendar.getTime()));
+            tmpPayFeeDetailMonthPo.setPayFeeTime(payFeeMonthHelp.getFeeFeeTime(feeDetailDtos, tmpPayFeeDetailMonthPo.getDetailId()));
             tmpPayFeeDetailMonthPo.setState("W"); // todo 这里暂时写死，目前用不到，算是预留字段
+            tmpPayFeeDetailMonthPo.setFeeName(feeDto.getFeeName());
+            tmpPayFeeDetailMonthPo.setConfigId(feeDto.getConfigId());
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
         }
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
@@ -160,7 +164,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
      */
     @Async
     @Override
-    public void  doGeneratorOrRefreshAllFeeMonth(String communityId) {
+    public void doGeneratorOrRefreshAllFeeMonth(String communityId) {
 
 
         FeeDto feeDto = new FeeDto();
@@ -179,7 +183,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo  每次按200条处理
         for (int pageIndex = 0; pageIndex < page; pageIndex++) {
-            feeDto.setPage(pageIndex * max+1);
+            feeDto.setPage(pageIndex * max + 1);
             feeDto.setRow(max);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             // 离散费用

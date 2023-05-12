@@ -34,4 +34,11 @@ public interface IPayFeeMonthHelp {
      */
     String getFeeDetailId(List<FeeDetailDto> feeDetailDtos, Date time);
 
+    /**
+     * 获取 支付时间
+     * @param feeDetailDtos
+     * @param detailId
+     * @return
+     */
+    String getFeeFeeTime(List<FeeDetailDto> feeDetailDtos, String detailId);
 }

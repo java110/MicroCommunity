@@ -6,6 +6,7 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -125,6 +126,20 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         return feeDetailDto.getDetailId();
     }
 
+    @Override
+    public String getFeeFeeTime(List<FeeDetailDto> feeDetailDtos, String detailId) {
+
+        if(feeDetailDtos == null || feeDetailDtos.size() < 1){
+            return null;
+        }
+        for (FeeDetailDto feeDetailDto : feeDetailDtos) {
+            if (feeDetailDto.getDetailId().equals(detailId)) {
+                return DateUtil.getFormatTimeStringA(feeDetailDto.getCreateTime());
+            }
+        }
+        return null;
+    }
+
     /**
      * 获取当前缴费记录
      *
@@ -133,6 +148,9 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @return
      */
     private FeeDetailDto getCurFeeDetail(List<FeeDetailDto> feeDetailDtos, Date curDate) {
+        if(feeDetailDtos == null || feeDetailDtos.size() < 1){
+            return null;
+        }
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
             if (feeDetailDto.getStartTime().getTime() < curDate.getTime() && feeDetailDto.getEndTime().getTime() > curDate.getTime()) {
                 return feeDetailDto;

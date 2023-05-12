@@ -31,6 +31,9 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     private String curMonthEndTime;
 
+    private String feeName;
+    private String configId;
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -198,5 +201,21 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     public void setCurMonthEndTime(String curMonthEndTime) {
         this.curMonthEndTime = curMonthEndTime;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
 }
