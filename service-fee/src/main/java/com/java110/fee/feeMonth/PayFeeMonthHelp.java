@@ -105,14 +105,14 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
     }
 
     @Override
-    public Double getDiscountAmount(Double feePrice, double parseDouble, Date curDate, FeeDto feeDto) {
+    public Double getDiscountAmount(Double feePrice, double receivedAmount, Date curDate, FeeDto feeDto) {
 
         //todo 这种情况下应该 优惠为0
         if (curDate.getTime() >= feeDto.getEndTime().getTime()) {
             return 0.00;
         }
 
-        BigDecimal discountAmountDec = new BigDecimal(feePrice).subtract(new BigDecimal(parseDouble)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal discountAmountDec = new BigDecimal(feePrice).subtract(new BigDecimal(receivedAmount)).setScale(2, BigDecimal.ROUND_HALF_UP);
         return discountAmountDec.doubleValue();
     }
 

@@ -39,7 +39,8 @@
         detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.discount_amount,t.discount_amount
         discountAmount,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
         receivedAmount,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,t.month_id,t.month_id monthId,
-        t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time payFeeTime
+        t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time payFeeTime,
+        t.cur_month_time curMonthTime
         from pay_fee_detail_month t
         where 1 =1
         <if test="detailMonth !=null and detailMonth != ''">
@@ -225,7 +226,8 @@
         detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.discount_amount,t.discount_amount
         discountAmount,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
         receivedAmount,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,t.month_id,t.month_id monthId,
-        t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time payFeeTime
+        t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time payFeeTime,
+        t.cur_month_time curMonthTime
         from pay_fee_detail_month t
         where 1 =1
         <if test="detailMonth !=null and detailMonth != ''">

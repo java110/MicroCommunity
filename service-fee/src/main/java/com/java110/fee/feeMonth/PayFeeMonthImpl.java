@@ -69,6 +69,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
     public void doGeneratorOrRefreshFeeMonth(FeeDto feeDto, String communityId) {
 
+
         //todo 计算每月单价
         Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
 
@@ -77,6 +78,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo 离散start_time 或者 pay_fee_detail_month 最大月份 到  deadlineTime 的数据
         maxMonthDateToDeadlineTimeData(feeDto, payFeeMonthOwnerDto, feePrice);
+
 
     }
 
@@ -136,7 +138,10 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
             tmpPayFeeDetailMonthPo.setReceivableAmount(payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
             tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
-            tmpPayFeeDetailMonthPo.setDiscountAmount(payFeeMonthHelp.getDiscountAmount(feePrice, Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()), calendar.getTime(), feeDto) + "");
+            tmpPayFeeDetailMonthPo.setDiscountAmount(
+                    payFeeMonthHelp.getDiscountAmount(Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivableAmount()),
+                            Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()),
+                            calendar.getTime(), feeDto) + "");
             tmpPayFeeDetailMonthPo.setMonthId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_monthId));
             tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
             tmpPayFeeDetailMonthPo.setObjName(payFeeMonthOwnerDto.getObjName());

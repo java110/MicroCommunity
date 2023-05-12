@@ -24,7 +24,7 @@ public interface IPayFeeMonthHelp {
      */
     Double getReceivedAmount(List<FeeDetailDto> feeDetailDtos, Double feePrice, Date curDate, FeeDto feeDto);
 
-    Double getDiscountAmount(Double feePrice, double parseDouble, Date curDate, FeeDto feeDto);
+    Double getDiscountAmount(Double feePrice, double receivedAmount, Date curDate, FeeDto feeDto);
 
     /**
      * 计算缴费DetailId
