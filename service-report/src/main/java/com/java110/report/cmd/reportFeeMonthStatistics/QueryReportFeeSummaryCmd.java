@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * 查询费用汇总表
  */
-@Java110Cmd(serviceCode = "/reportFeeMonthStatistics/queryReportFeeSummary")
+@Java110Cmd(serviceCode = "reportFeeMonthStatistics.queryReportFeeSummary")
 public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Autowired
