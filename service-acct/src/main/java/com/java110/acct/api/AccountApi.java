@@ -64,12 +64,17 @@ public class AccountApi {
      */
     @RequestMapping(value = "/queryAccount", method = RequestMethod.GET)
     public ResponseEntity<String> queryAccount(@RequestHeader(value = "store-id", required = false) String storeId,
+                                               @RequestParam(value = "shopId", required = false) String shopId,
                                                @RequestParam(value = "page") int page,
                                                @RequestParam(value = "row") int row) {
         AccountDto accountDto = new AccountDto();
         accountDto.setPage(page);
         accountDto.setRow(row);
-        accountDto.setObjId(storeId);
+        if(!StringUtil.isEmpty(shopId)){
+            accountDto.setObjId(shopId);
+        }else {
+            accountDto.setObjId(storeId);
+        }
         return getAccountBMOImpl.get(accountDto);
     }
 
