@@ -75,6 +75,9 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        queryStatisticsDto.setConfigId(reqJson.getString("configId"));
+        queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
+        queryStatisticsDto.setObjName(reqJson.getString("objName"));
 
         //todo 查询历史欠费
         double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
