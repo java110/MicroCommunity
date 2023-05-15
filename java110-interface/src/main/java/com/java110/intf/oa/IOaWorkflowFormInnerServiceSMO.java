@@ -20,7 +20,7 @@ import java.util.Map;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "${java110.oa-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "oa-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/oaWorkflowFormApi")
 public interface IOaWorkflowFormInnerServiceSMO {
 

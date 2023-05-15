@@ -15,7 +15,7 @@ import java.util.List;
  * @author fqz
  * @date 2021-02-25 8:41
  */
-@FeignClient(name = "${java110.user-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/roomRenovationsApi")
 public interface IRoomRenovationsInnerServiceSMO {
 

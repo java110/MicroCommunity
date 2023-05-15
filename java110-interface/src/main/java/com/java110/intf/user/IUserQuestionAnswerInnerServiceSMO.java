@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "${java110.user-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/userQuestionAnswerApi")
 public interface IUserQuestionAnswerInnerServiceSMO {
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "${java110.report-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "report-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/queryPayFeeDetailInnerServiceSMOApi")
 public interface IQueryPayFeeDetailInnerServiceSMO {
 

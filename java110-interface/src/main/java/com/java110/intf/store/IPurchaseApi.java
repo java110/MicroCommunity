@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * 采购申请类
  */
-@FeignClient(name = "${java110.store-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/purchase")
 public interface IPurchaseApi {
 

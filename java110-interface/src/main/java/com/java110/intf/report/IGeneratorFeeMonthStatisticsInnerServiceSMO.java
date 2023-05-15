@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Version 1.0
  * add by wuxw 2020/10/15
  **/
-@FeignClient(name = "${java110.report-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "report-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/generatorFeeMonthStatisticsApi")
 public interface IGeneratorFeeMonthStatisticsInnerServiceSMO {
 

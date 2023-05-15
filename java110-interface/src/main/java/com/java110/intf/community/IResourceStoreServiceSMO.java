@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-@FeignClient(name = "${java110.community-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/resourceStoreApi")
 public interface IResourceStoreServiceSMO {
 

@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FeeStatisticsImpl implements IFeeStatistics {
+
+    /**
+     * 查询 历史欠费
+     * @param queryFeeStatisticsDto
+     * @return
+     */
     @Override
     public double getHisMonthOweFee(QueryStatisticsDto queryFeeStatisticsDto) {
         return 0;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/purchaseApplyUserApi")
 public interface IPurchaseApplyUserInnerServiceSMO {
 

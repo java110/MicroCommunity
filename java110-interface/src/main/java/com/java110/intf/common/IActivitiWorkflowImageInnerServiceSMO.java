@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "${java110.common-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/activitiWorkflowImageApi")
 public interface IActivitiWorkflowImageInnerServiceSMO {
 

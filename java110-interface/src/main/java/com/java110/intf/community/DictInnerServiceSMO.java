@@ -15,7 +15,7 @@ import java.util.List;
  * Created by hu ping on 10/22/2019
  * <p>
  */
-@FeignClient(name = "${java110.community-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/dictApi")
 public interface DictInnerServiceSMO {
 
