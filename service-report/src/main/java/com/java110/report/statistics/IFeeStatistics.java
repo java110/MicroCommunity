@@ -48,4 +48,11 @@ public interface IFeeStatistics {
      */
     double getReceivedFee(QueryStatisticsDto queryFeeStatisticsDto);
 
+    /**
+     * 查询欠费户数
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    int getOweRoomCount(QueryStatisticsDto queryStatisticsDto);
 }

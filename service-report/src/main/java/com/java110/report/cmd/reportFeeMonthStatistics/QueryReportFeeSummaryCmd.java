@@ -8,10 +8,13 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.community.IDataPrivilegeUnitV1InnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
+import com.java110.report.statistics.IBaseDataStatistics;
+import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -27,182 +30,84 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查询费用汇总表
+ * 查询 费用汇总表
+ * <p>
+ * add by  wuxw
  */
 @Java110Cmd(serviceCode = "reportFeeMonthStatistics.queryReportFeeSummary")
 public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Autowired
-    private IGetReportFeeMonthStatisticsBMO getReportFeeMonthStatisticsBMOImpl;
+    private IFeeStatistics feeStatisticsImpl;
 
     @Autowired
-    private IReportFeeMonthStatisticsInnerServiceSMO reportFeeMonthStatisticsInnerServiceSMOImpl;
+    private IBaseDataStatistics baseDataStatisticsImpl;
 
-    @Autowired
-    private IDataPrivilegeUnitV1InnerServiceSMO dataPrivilegeUnitV1InnerServiceSMOImpl;
 
+    /**
+     * 校验查询条件
+     * <p>
+     * 开始时间
+     * 结束时间
+     * 房屋
+     * 业主
+     * 楼栋
+     * 费用项
+     *
+     * @param event   事件对象
+     * @param context 请求报文数据
+     * @param reqJson
+     * @throws CmdException
+     */
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "startDate", "未包含开始日期");
+        Assert.hasKeyAndValue(reqJson, "endDate", "未包含结束日期");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
     }
 
     @Override
-    @Java110Transactional
-    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        String configIds = "";
-        if (reqJson.containsKey("configIds")) {
-            configIds = reqJson.getString("configIds");
-            reqJson.remove("configIds");
-        }
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-        String staffId = context.getReqHeaders().get("user-id");
-        DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
-        dataPrivilegeStaffDto.setStaffId(staffId);
-        String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
+        QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
+        queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
+        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
+        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
 
-        if (unitIds != null && unitIds.length > 0) {
-            reportFeeMonthStatisticsDto.setUnitIds(unitIds);
-        }
+        //todo 查询历史欠费
+        double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
 
-        if (!StringUtil.isEmpty(configIds)) {
-            reportFeeMonthStatisticsDto.setConfigIds(configIds.split(","));
-        }
-        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryCount(reportFeeMonthStatisticsDto);
+        //todo 查询 单月欠费
+        double curOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
 
-        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
-        if (count > 0) {
-            List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummary(reportFeeMonthStatisticsDto);
-            if (reportFeeMonthStatisticsDto.getConfigIds() != null) {
-                reportFeeMonthStatisticsList = dealConfigReportFeeMonthStatisticsList(reportFeeMonthStatisticsList, "FeeSummary");
-            }
-            for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsList) {
-                //获取应收金额
-                double receivableAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivableAmount());
-                //获取实收金额
-                double receivedAmount = Double.parseDouble(reportFeeMonthStatistics.getReceivedAmount());
-                if (receivableAmount != 0) {
-                    double chargeRate = (receivedAmount / receivableAmount) * 100.0;
-                    reportFeeMonthStatistics.setChargeRate(String.format("%.2f", chargeRate) + "%");
-                } else {
-                    reportFeeMonthStatistics.setChargeRate("0%");
+        //todo 查询 欠费追回
+        double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
 
-                }
-                reportFeeMonthStatisticsDtos.add(reportFeeMonthStatistics);
+        //todo  查询 预交费用
+        double preReceivedFee = feeStatisticsImpl.getPreReceivedFee(queryStatisticsDto);
 
-            }
-            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryReportFeeSummaryMajor(reportFeeMonthStatisticsDto);
-            if (reportFeeMonthStatisticsList != null && reportFeeMonthStatisticsList.size() > 0) {
-                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsList) {
-                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
-                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());
-                    reportFeeMonthStatisticsDto1.setAllHisOweReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllHisOweReceivedAmount());
-                }
-            }
-        } else {
-            reportFeeMonthStatisticsDtos = new ArrayList<>();
-        }
+        //todo 查询实收
+        double receivedFee = feeStatisticsImpl.getReceivedFee(queryStatisticsDto);
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
+        //todo 房屋数
+        long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
-    }
+        //todo 空闲房屋数
+        long freeRoomCount = baseDataStatisticsImpl.getFreeRoomCount(queryStatisticsDto);
 
-    private List<ReportFeeMonthStatisticsDto> dealConfigReportFeeMonthStatisticsList(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsList, String flag) {
-        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = new ArrayList<>();
-        BigDecimal hisOweAmountDec = null;
-        BigDecimal curReceivableAmountDec = null;
-        BigDecimal curReceivedAmountDec = null;
-        BigDecimal hisOweReceivedAmountDec = null;
-        BigDecimal preReceivedAmountDec = null;
-        BigDecimal receivableAmountDec = null;
-        BigDecimal receivedAmountDec = null;
-        List<FeeConfigDto> feeConfigDtos = null;
-        FeeConfigDto feeConfigDto = null;
-        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsList) {
-            ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = hasReportFeeMonthStatisticsDto(reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsDto, flag);
-            if (tmpReportFeeMonthStatisticsDto == null) {
-                feeConfigDtos = new ArrayList<>();
-                feeConfigDto = new FeeConfigDto();
-                feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
-                feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
-                feeConfigDtos.add(feeConfigDto);
-                reportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
-                reportFeeMonthStatisticsDtos.add(reportFeeMonthStatisticsDto);
-                continue;
-            }
-            feeConfigDtos = tmpReportFeeMonthStatisticsDto.getFeeConfigDtos();
-            feeConfigDto = new FeeConfigDto();
-            feeConfigDto.setConfigId(reportFeeMonthStatisticsDto.getConfigId());
-            feeConfigDto.setAmount(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount()));
-            feeConfigDtos.add(feeConfigDto);
-            tmpReportFeeMonthStatisticsDto.setFeeConfigDtos(feeConfigDtos);
+        //todo 欠费户数
+        int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
 
-            //历史欠费
-            hisOweAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweAmount());
-            hisOweAmountDec = hisOweAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweAmount()))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setHisOweAmount(hisOweAmountDec.doubleValue());
-
-
-            //当月应收
-            curReceivableAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivableAmount());
-            curReceivableAmountDec = curReceivableAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivableAmount()))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setCurReceivableAmount(curReceivableAmountDec.doubleValue());
-
-            //当月实收
-            curReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getCurReceivedAmount());
-            curReceivedAmountDec = curReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getCurReceivedAmount()))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setCurReceivedAmount(curReceivedAmountDec.doubleValue());
-
-            //欠费追回
-            hisOweReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getHisOweReceivedAmount());
-            hisOweReceivedAmountDec = hisOweReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getHisOweReceivedAmount()))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setHisOweReceivedAmount(hisOweReceivedAmountDec.doubleValue());
-
-            //预交费
-            preReceivedAmountDec = new BigDecimal(tmpReportFeeMonthStatisticsDto.getPreReceivedAmount());
-            preReceivedAmountDec = preReceivedAmountDec.add(new BigDecimal(reportFeeMonthStatisticsDto.getPreReceivedAmount()))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setPreReceivedAmount(preReceivedAmountDec.doubleValue());
-
-            //总费用
-            receivableAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivableAmount()));
-            receivableAmountDec = receivableAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivableAmount())))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setReceivableAmount(receivableAmountDec.doubleValue() + "");
-
-            //实收
-            receivedAmountDec = new BigDecimal(Double.parseDouble(tmpReportFeeMonthStatisticsDto.getReceivedAmount()));
-            receivedAmountDec = receivedAmountDec.add(new BigDecimal(Double.parseDouble(reportFeeMonthStatisticsDto.getReceivedAmount())))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-            tmpReportFeeMonthStatisticsDto.setReceivedAmount(receivedAmountDec.doubleValue() + "");
-        }
-
-        return reportFeeMonthStatisticsDtos;
-    }
-
-
-    private ReportFeeMonthStatisticsDto hasReportFeeMonthStatisticsDto(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto, String flag) {
-        for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
-            if ("FeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
-                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())) {
-                return tmpReportFeeMonthStatisticsDto;
-            }
-            if ("FloorUnitFeeSummary".equals(flag) && tmpReportFeeMonthStatisticsDto.getFeeYear().equals(reportFeeMonthStatisticsDto.getFeeYear())
-                    && tmpReportFeeMonthStatisticsDto.getFeeMonth().equals(reportFeeMonthStatisticsDto.getFeeMonth())
-                    && tmpReportFeeMonthStatisticsDto.getFloorNum().equals(reportFeeMonthStatisticsDto.getFloorNum())
-                    && tmpReportFeeMonthStatisticsDto.getUnitNum().equals(reportFeeMonthStatisticsDto.getUnitNum())
-            ) {
-                return tmpReportFeeMonthStatisticsDto;
-            }
-        }
-
-        return null;
+        JSONObject data = new JSONObject();
+        data.put("hisOweFee", hisOweFee);
+        data.put("curOweFee", curOweFee);
+        data.put("hisReceivedFee", hisReceivedFee);
+        data.put("preReceivedFee", preReceivedFee);
+        data.put("receivedFee", receivedFee);
+        data.put("roomCount", roomCount);
+        data.put("freeRoomCount", freeRoomCount);
+        data.put("oweRoomCount", oweRoomCount);
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 }

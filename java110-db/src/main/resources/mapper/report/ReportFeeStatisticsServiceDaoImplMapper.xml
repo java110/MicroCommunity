@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportFeeStatisticsServiceDaoImpl">
+
+    <!-- 查询历史欠费 -->
+    <select id="getHisMonthOweFee" parameterType="Map" resultType="Map">
+        select sum(t.receivable_amount - t.received_amount - t.discount_amount) hisOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where
+        1=1
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &lt; #{startDate}
+    </select>
+
+    <!-- 查询单月欠费 -->
+    <select id="getCurMonthOweFee" parameterType="Map" resultType="Map">
+        select sum(t.receivable_amount - t.received_amount - t.discount_amount) curOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where
+        1=1
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+    </select>
+
+    <!-- 查询欠费追回 -->
+    <select id="getHisReceivedFee" parameterType="Map" resultType="Map">
+        select sum(t.received_amount) hisReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt;  #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &lt;  #{startDate}
+    </select>
+
+    <!-- 查询 预交费用 -->
+    <select id="getPreReceivedFee" parameterType="Map" resultType="Map">
+        select sum(t.received_amount) preReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt;  #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &gt;  #{endDate}
+    </select>
+
+    <!-- 查询实收费用 -->
+    <select id="getReceivedFee" parameterType="Map" resultType="Map">
+        select sum(t.received_amount) receivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt;  #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+    </select>
+
+    <!-- 查询欠费户数 -->
+    <select id="getOweRoomCount" parameterType="Map" resultType="Map">
+        select count(1) oweRoomCount
+        from
+        (
+        select t.obj_id from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.status_cd = '0'
+        and pf.payer_obj_type = '3333'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &lt; #{endDate}
+        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        group by t.obj_id
+        ) a
+    </select>
+
+
+
+</mapper>

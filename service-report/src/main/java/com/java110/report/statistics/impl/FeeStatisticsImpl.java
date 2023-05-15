@@ -1,7 +1,9 @@
 package com.java110.report.statistics.impl;
 
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.report.statistics.IFeeStatistics;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,33 +12,63 @@ import org.springframework.stereotype.Service;
 @Service
 public class FeeStatisticsImpl implements IFeeStatistics {
 
+    @Autowired
+    private IReportFeeStatisticsInnerServiceSMO reportFeeStatisticsInnerServiceSMOImpl;
+
     /**
      * 查询 历史欠费
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
     @Override
     public double getHisMonthOweFee(QueryStatisticsDto queryFeeStatisticsDto) {
-        return 0;
+        return reportFeeStatisticsInnerServiceSMOImpl.getHisMonthOweFee(queryFeeStatisticsDto);
     }
 
+    /**
+     * 查询 当月欠费
+     * @param queryFeeStatisticsDto
+     * @return
+     */
     @Override
     public double getCurMonthOweFee(QueryStatisticsDto queryFeeStatisticsDto) {
-        return 0;
+        return reportFeeStatisticsInnerServiceSMOImpl.getCurMonthOweFee(queryFeeStatisticsDto);
     }
 
+
+    /**
+     * 查询 欠费追回
+     * @param queryFeeStatisticsDto
+     * @return
+     */
     @Override
     public double getHisReceivedFee(QueryStatisticsDto queryFeeStatisticsDto) {
-        return 0;
+        return reportFeeStatisticsInnerServiceSMOImpl.getHisReceivedFee(queryFeeStatisticsDto);
     }
 
+    /**
+     * 查询 预交费用
+     * @param queryFeeStatisticsDto
+     * @return
+     */
     @Override
     public double getPreReceivedFee(QueryStatisticsDto queryFeeStatisticsDto) {
-        return 0;
+        return reportFeeStatisticsInnerServiceSMOImpl.getPreReceivedFee(queryFeeStatisticsDto);
+    }
+
+    /**
+     * 查询 实收费用
+     * @param queryFeeStatisticsDto
+     * @return
+     */
+    @Override
+    public double getReceivedFee(QueryStatisticsDto queryFeeStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getReceivedFee(queryFeeStatisticsDto);
     }
 
     @Override
-    public double getReceivedFee(QueryStatisticsDto queryFeeStatisticsDto) {
-        return 0;
+    public int getOweRoomCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getOweRoomCount(queryStatisticsDto);
     }
 }

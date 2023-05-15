@@ -5,7 +5,12 @@ import java.io.Serializable;
 public class QueryStatisticsDto implements Serializable {
 
     private String communityId;
-    private String queryDate;
+    private String startDate;
+
+    /**
+     * 查询历史欠费
+     */
+    private String endDate;
 
 
     public String getCommunityId() {
@@ -16,11 +21,20 @@ public class QueryStatisticsDto implements Serializable {
         this.communityId = communityId;
     }
 
-    public String getQueryDate() {
-        return queryDate;
+
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setQueryDate(String queryDate) {
-        this.queryDate = queryDate;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
