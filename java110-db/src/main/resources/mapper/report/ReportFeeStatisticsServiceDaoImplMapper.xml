@@ -6,7 +6,7 @@
 
     <!-- 查询历史欠费 -->
     <select id="getHisMonthOweFee" parameterType="Map" resultType="Map">
-        select sum(t.receivable_amount - t.received_amount - t.discount_amount) hisOweFee
+        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
@@ -18,7 +18,7 @@
 
     <!-- 查询单月欠费 -->
     <select id="getCurMonthOweFee" parameterType="Map" resultType="Map">
-        select sum(t.receivable_amount - t.received_amount - t.discount_amount) curOweFee
+        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) curOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
@@ -31,7 +31,7 @@
 
     <!-- 查询欠费追回 -->
     <select id="getHisReceivedFee" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) hisReceivedFee
+        select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where t.status_cd = '0'
@@ -43,7 +43,7 @@
 
     <!-- 查询 预交费用 -->
     <select id="getPreReceivedFee" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) preReceivedFee
+        select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where t.status_cd = '0'
@@ -55,7 +55,7 @@
 
     <!-- 查询实收费用 -->
     <select id="getReceivedFee" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) receivedFee
+        select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where t.status_cd = '0'

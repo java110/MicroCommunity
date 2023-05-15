@@ -32,7 +32,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisMonthOweFee", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
@@ -45,7 +45,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getCurMonthOweFee", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
@@ -63,7 +63,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisReceivedFee", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
@@ -81,7 +81,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getPreReceivedFee", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
@@ -99,7 +99,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedFee", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
@@ -112,7 +112,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getOweRoomCount", info);
 
-        if (infos.size() < 1) {
+        if (infos == null || infos.size() < 1) {
             return 0;
         }
 
