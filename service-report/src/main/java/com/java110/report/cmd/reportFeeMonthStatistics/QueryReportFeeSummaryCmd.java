@@ -1,5 +1,6 @@
 package com.java110.report.cmd.reportFeeMonthStatistics;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -108,6 +109,8 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         data.put("roomCount", roomCount);
         data.put("freeRoomCount", freeRoomCount);
         data.put("oweRoomCount", oweRoomCount);
-        context.setResponseEntity(ResultVo.createResponseEntity(data));
+        JSONArray datas = new JSONArray();
+        datas.add(data);
+        context.setResponseEntity(ResultVo.createResponseEntity(datas));
     }
 }
