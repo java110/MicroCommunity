@@ -21,6 +21,23 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
 
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
+        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        if(queryStatisticsDto.getObjName().contains("-")){
+            String[] objNames = queryStatisticsDto.getObjName().split("-");
+            if(objNames.length == 2){
+                roomDto.setFloorNum(objNames[0]);
+                roomDto.setUnitNum("0");
+                roomDto.setRoomNum(objNames[1]);
+            }
+            objNames = queryStatisticsDto.getObjName().split("-",3);
+            if(objNames.length == 3){
+                roomDto.setFloorNum(objNames[0]);
+                roomDto.setUnitNum(objNames[1]);
+                roomDto.setRoomNum(objNames[2]);
+            }
+        }else{
+            roomDto.setRoomNumLike(queryStatisticsDto.getObjName());
+        }
         return roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
     }
 
@@ -29,6 +46,23 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setState(RoomDto.STATE_FREE);
+        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        if(queryStatisticsDto.getObjName().contains("-")){
+            String[] objNames = queryStatisticsDto.getObjName().split("-");
+            if(objNames.length == 2){
+                roomDto.setFloorNum(objNames[0]);
+                roomDto.setUnitNum("0");
+                roomDto.setRoomNum(objNames[1]);
+            }
+            objNames = queryStatisticsDto.getObjName().split("-",3);
+            if(objNames.length == 3){
+                roomDto.setFloorNum(objNames[0]);
+                roomDto.setUnitNum(objNames[1]);
+                roomDto.setRoomNum(objNames[2]);
+            }
+        }else{
+            roomDto.setRoomNumLike(queryStatisticsDto.getObjName());
+        }
         return roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
     }
 }

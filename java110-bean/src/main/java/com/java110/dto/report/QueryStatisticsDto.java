@@ -12,6 +12,12 @@ public class QueryStatisticsDto implements Serializable {
      */
     private String endDate;
 
+    private String floorId;
+
+    private String configId;
+
+    private String objName;
+
 
     public String getCommunityId() {
         return communityId;
@@ -36,5 +42,29 @@ public class QueryStatisticsDto implements Serializable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getObjName() {
+        return objName;
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }
