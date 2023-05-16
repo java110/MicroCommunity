@@ -344,5 +344,157 @@
     </select>
 
 
+    <select id="getFloorFeeSummary" parameterType="Map" resultType="Map">
+
+        select a.floor_id floorId,a.floor_num floorNum,
+        (
+        select count(1) from (
+        select t.obj_id from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and pf.payer_obj_type = '3333'
+        and t.community_id= a.community_id
+        and t.cur_month_time &lt; #{endDate}
+        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_id) b
+        ) oweRoomCount,-- 欠费户
+        (
+        select count(1) from (
+        select t.obj_id
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and pf.payer_obj_type = '3333'
+        and t.community_id= a.community_id
+        and t.cur_month_time &lt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_id) b
+        ) feeRoomCount, -- 收费户
+        (
+        select ifnull(sum(t.received_amount),0.0) receivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) receivedFee, -- 实收
+        (
+        select ifnull(sum(t.received_amount),0.0) preReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &gt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) preReceivedFee, -- 预收
+        (
+        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time &lt; #{startDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) hisOweFee, -- 历史欠费
+        (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time  &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) curReceivableFee -- 当期应收
+        from f_floor a
+        where 1=1
+        and a.status_cd = '0'
+        and a.community_id = #{communityId}
+        order by a.seq
+    </select>
+
 
 </mapper>

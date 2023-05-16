@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportFeeStatisticsInnerServiceSMO
@@ -36,6 +37,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询当月欠费
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
@@ -45,6 +47,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询当月应收
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -62,6 +65,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 欠费户数
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -70,9 +74,19 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询收费房屋数
+     *
      * @param queryStatisticsDto
      * @return
      */
     @RequestMapping(value = "/getFeeRoomCount", method = RequestMethod.POST)
     long getFeeRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 楼栋收费率信息统计
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getFloorFeeSummary", method = RequestMethod.POST)
+    List<Map> getFloorFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

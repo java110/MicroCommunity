@@ -1,5 +1,6 @@
 package com.java110.report.dao;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,4 +67,11 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     int getFeeRoomCount(Map info);
+
+    /**
+     * 统计楼栋 收费率信息
+     * @param info
+     * @return
+     */
+    List<Map> getFloorFeeSummary(Map info);
 }

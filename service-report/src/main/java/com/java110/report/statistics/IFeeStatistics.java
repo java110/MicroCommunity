@@ -3,6 +3,9 @@ package com.java110.report.statistics;
 
 import com.java110.dto.report.QueryStatisticsDto;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 费用统计类
  */
@@ -64,4 +67,11 @@ public interface IFeeStatistics {
      * @return
      */
     long getFeeRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询楼栋费用统计信息
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getFloorFeeSummary(QueryStatisticsDto queryStatisticsDto);
 }

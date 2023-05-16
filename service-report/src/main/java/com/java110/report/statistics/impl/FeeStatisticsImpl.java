@@ -6,6 +6,9 @@ import com.java110.report.statistics.IFeeStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 基础报表统计 实现类
  */
@@ -88,6 +91,16 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     @Override
     public long getFeeRoomCount(QueryStatisticsDto queryStatisticsDto) {
         return reportFeeStatisticsInnerServiceSMOImpl.getFeeRoomCount(queryStatisticsDto);
+    }
+
+    /**
+     * 楼栋收费率信息统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getFloorFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getFloorFeeSummary(queryStatisticsDto);
     }
 
 }

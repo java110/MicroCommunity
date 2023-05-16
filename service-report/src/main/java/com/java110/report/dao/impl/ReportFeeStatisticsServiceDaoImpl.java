@@ -147,5 +147,15 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return Integer.parseInt(infos.get(0).get("feeRoomCount").toString());
     }
 
+    @Override
+    public List<Map> getFloorFeeSummary(Map info) {
+        logger.debug("查询 楼栋收费率 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getFloorFeeSummary", info);
+
+
+        return infos;
+    }
+
 
 }

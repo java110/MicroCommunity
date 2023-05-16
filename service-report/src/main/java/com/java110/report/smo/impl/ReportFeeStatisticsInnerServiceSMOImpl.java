@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +47,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 查询当月应收
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -75,6 +77,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 查询欠费户数
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -86,12 +89,26 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 查询收费房屋数
+     *
      * @param queryStatisticsDto
      * @return
      */
     @Override
     public long getFeeRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
         int info = reportFeeStatisticsServiceDaoImpl.getFeeRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    /**
+     * 楼栋收费率信息统计
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getFloorFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getFloorFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
 }
