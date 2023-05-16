@@ -185,7 +185,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo  每次按200条处理
         for (int pageIndex = 0; pageIndex < page; pageIndex++) {
-            feeDto.setPage(pageIndex * max + 1);
+            feeDto.setPage(pageIndex + 1);
             feeDto.setRow(max);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             // 离散费用

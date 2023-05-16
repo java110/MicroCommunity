@@ -142,7 +142,7 @@ public class CorrectionDataTemplate extends TaskSystemQuartz {
         double record = Math.ceil(count / DEFAULT_ROW);
 
         for (int page = 1; page <= record; page++) {
-            //try {
+            try {
                 feeDto.setPage(page);
                 feeDto.setRow(new Double(DEFAULT_ROW).intValue());
                 List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
@@ -151,25 +151,25 @@ public class CorrectionDataTemplate extends TaskSystemQuartz {
                     continue;
                 }
                 for (FeeDto tmpFeeDto : feeDtos) {
-                    //try {
+                    try {
                         correctionData(tmpFeeDto, feeConfigDto);
-//                    } catch (Exception e) {
-//                        LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
-//                        logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
-//                        logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
-//                        logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
-//                        saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
-//                        logger.error("矫正数据出错", e);
-//                    }
+                    } catch (Exception e) {
+                        LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                        logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                        logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                        logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                        saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                        logger.error("矫正数据出错", e);
+                    }
                 }
-//            } catch (Exception e) {
-//                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
-//                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
-//                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
-//                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
-//                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
-//                logger.error("矫正数据出错" + feeConfigDto.getConfigId(), e);
-//            }
+            } catch (Exception e) {
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_JOB);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                logger.error("矫正数据出错" + feeConfigDto.getConfigId(), e);
+            }
         }
 
     }
