@@ -24,6 +24,21 @@
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
         </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{startDate}
@@ -48,6 +63,21 @@
         </if>
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -76,6 +106,21 @@
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
         </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
         and t.cur_month_time &gt; #{startDate}
@@ -101,6 +146,21 @@
         </if>
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -129,6 +189,21 @@
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
         </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
         and t.pay_fee_time &gt;  #{startDate}
@@ -155,6 +230,21 @@
         </if>
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -183,6 +273,21 @@
         </if>
         <if test="objName != null and objName != ''">
             and t.obj_name like concat('%',#{objName},'%')
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="link != null and link != ''">
+            and t.link = #{link}
+        </if>
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and pf.payer_obj_type = '3333'

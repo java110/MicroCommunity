@@ -16,7 +16,15 @@ public class QueryStatisticsDto implements Serializable {
 
     private String configId;
 
+    private String[] configIds;
+
     private String objName;
+
+    private String ownerName;
+
+    private String link;
+
+    private String feeTypeCd;
 
 
     public String getCommunityId() {
@@ -66,5 +74,37 @@ public class QueryStatisticsDto implements Serializable {
 
     public void setObjName(String objName) {
         this.objName = objName;
+    }
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
     }
 }

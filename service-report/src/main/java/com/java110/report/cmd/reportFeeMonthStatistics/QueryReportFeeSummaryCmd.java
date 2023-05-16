@@ -78,6 +78,10 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setConfigId(reqJson.getString("configId"));
         queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
         queryStatisticsDto.setObjName(reqJson.getString("objName"));
+        queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
+        if(reqJson.containsKey("configIds")){
+            queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
+        }
 
         //todo 查询历史欠费
         double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
@@ -101,7 +105,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
 
         //todo 空闲房屋数
-        long freeRoomCount = baseDataStatisticsImpl.getFreeRoomCount(queryStatisticsDto);
+        long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
 
         //todo 欠费户数
         int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
@@ -113,7 +117,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         data.put("preReceivedFee", preReceivedFee);
         data.put("receivedFee", receivedFee);
         data.put("roomCount", roomCount);
-        data.put("freeRoomCount", freeRoomCount);
+        data.put("feeRoomCount", feeRoomCount);
         data.put("oweRoomCount", oweRoomCount);
         data.put("curReceivableFee", curReceivableFee);
 
