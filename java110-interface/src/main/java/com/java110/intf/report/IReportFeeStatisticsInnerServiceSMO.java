@@ -48,7 +48,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      * @param queryStatisticsDto
      * @return
      */
-    @RequestMapping(value = "/getCurMonthOweFee", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCurReceivableFee", method = RequestMethod.POST)
     double getCurReceivableFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 
     @RequestMapping(value = "/getHisReceivedFee", method = RequestMethod.POST)
