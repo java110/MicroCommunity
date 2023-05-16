@@ -82,5 +82,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
                 data.put("feeRate",0.0);
             }
         }
+
+        context.setResponseEntity(ResultVo.createResponseEntity(datas));
     }
 }
