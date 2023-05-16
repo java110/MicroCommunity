@@ -59,4 +59,11 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     double getCurReceivableFee(Map info);
+
+    /**
+     * 查询收费房屋数
+     * @param info
+     * @return
+     */
+    int getFeeRoomCount(Map info);
 }

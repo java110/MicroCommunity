@@ -48,6 +48,8 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     }
 
 
+
+
     /**
      * 查询 欠费追回
      * @param queryFeeStatisticsDto
@@ -81,6 +83,11 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     @Override
     public int getOweRoomCount(QueryStatisticsDto queryStatisticsDto) {
         return reportFeeStatisticsInnerServiceSMOImpl.getOweRoomCount(queryStatisticsDto);
+    }
+
+    @Override
+    public long getFeeRoomCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getFeeRoomCount(queryStatisticsDto);
     }
 
 }

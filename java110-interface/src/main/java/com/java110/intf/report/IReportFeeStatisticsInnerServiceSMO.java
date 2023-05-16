@@ -68,4 +68,11 @@ public interface IReportFeeStatisticsInnerServiceSMO {
     @RequestMapping(value = "/getOweRoomCount", method = RequestMethod.POST)
     int getOweRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 
+    /**
+     * 查询收费房屋数
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getFeeRoomCount", method = RequestMethod.POST)
+    long getFeeRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

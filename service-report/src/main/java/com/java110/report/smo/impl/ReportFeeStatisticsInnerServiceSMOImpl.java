@@ -83,4 +83,15 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         int info = reportFeeStatisticsServiceDaoImpl.getOweRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    /**
+     * 查询收费房屋数
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public long getFeeRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        int info = reportFeeStatisticsServiceDaoImpl.getFeeRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
 }
