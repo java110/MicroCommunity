@@ -2,6 +2,7 @@ package com.java110.report.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.report.dao.IReportFeeStatisticsServiceDao;
@@ -106,7 +107,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
      * @return
      */
     @Override
-    public List<Map> getFloorFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+    public List<Map> getFloorFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto) {
 
         List<Map> info = reportFeeStatisticsServiceDaoImpl.getFloorFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
@@ -119,9 +120,29 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
      * @return
      */
     @Override
-    public List<Map> getConfigFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+    public List<Map> getConfigFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto) {
 
         List<Map> info = reportFeeStatisticsServiceDaoImpl.getConfigFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public int getObjFeeSummaryCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        int info = reportFeeStatisticsServiceDaoImpl.getObjFeeSummaryCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getObjFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        //校验是否传了 分页信息
+
+        int page = queryStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            queryStatisticsDto.setPage((page - 1) * queryStatisticsDto.getRow());
+        }
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getObjFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
 }

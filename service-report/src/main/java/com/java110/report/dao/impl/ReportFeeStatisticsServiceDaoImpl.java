@@ -167,5 +167,28 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public int getObjFeeSummaryCount(Map info) {
+        logger.debug("查询 收费户数 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjFeeSummaryCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("total").toString());
+    }
+
+    @Override
+    public List<Map> getObjFeeSummary(Map info) {
+        logger.debug("查询 费用项收费率 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjFeeSummary", info);
+
+
+        return infos;
+    }
+
 
 }

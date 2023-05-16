@@ -113,4 +113,14 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getConfigFeeSummary(queryStatisticsDto);
     }
 
+    @Override
+    public int getObjFeeSummaryCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getObjFeeSummaryCount(queryStatisticsDto);
+    }
+
+    @Override
+    public List<Map> getObjFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getObjFeeSummary(queryStatisticsDto);
+    }
+
 }

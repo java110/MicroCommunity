@@ -79,6 +79,9 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
         queryStatisticsDto.setObjName(reqJson.getString("objName"));
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
+        queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
+        queryStatisticsDto.setLink(reqJson.getString("link"));
+
         if(reqJson.containsKey("configIds")){
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
         }

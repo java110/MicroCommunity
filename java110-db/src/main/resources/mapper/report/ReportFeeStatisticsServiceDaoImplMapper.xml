@@ -658,5 +658,90 @@
         and a.table_columns = 'fee_type_cd'
     </select>
 
+    <select id="getObjFeeSummaryCount" parameterType="Map" resultType="Map">
+        select count(1) feeRoomCount
+        from
+        (
+        select a.obj_name objName,a.obj_id objId,a.owner_name ownerName,a.link
+        from pay_fee_detail_month a
+        where a.status_cd = '0'
+        and a.community_id = '2023013154290059'
+        group by a.obj_name,a.obj_id,a.owner_name,a.link
+        ) b
+    </select>
+
+    <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
+        select a.obj_name objName,a.obj_id objId,a.owner_name ownerName,a.link,
+        (
+        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time &lt; #{startDate}
+        ) hisOweFee, -- 历史欠费
+        (
+        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) curOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        ) curOweFee, -- 当期欠费
+        (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        ) curReceivableFee, -- 当月应收
+        (
+        select ifnull(sum(t.received_amount),0.0) hisReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &lt; #{startDate}
+        ) hisReceivedFee, -- 欠费追回
+        (
+        select ifnull(sum(t.received_amount),0.0) preReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &gt; #{endDate}
+        ) preReceivedFee, -- 预交费用
+        (
+        select ifnull(sum(t.received_amount),0.0) receivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.obj_id = a.obj_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        ) receivedFee -- 实收费用
+        from pay_fee_detail_month a
+        where a.status_cd = '0'
+        and a.community_id = #{communityId}
+        group by a.obj_name,a.obj_id,a.owner_name,a.link
+        order by  a.obj_name
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 
 </mapper>

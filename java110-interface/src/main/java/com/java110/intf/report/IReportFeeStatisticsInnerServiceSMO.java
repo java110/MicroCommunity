@@ -97,4 +97,10 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getConfigFeeSummary", method = RequestMethod.POST)
     List<Map> getConfigFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getObjFeeSummaryCount", method = RequestMethod.POST)
+    int getObjFeeSummaryCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getObjFeeSummary", method = RequestMethod.POST)
+    List<Map> getObjFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }
