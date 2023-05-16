@@ -75,23 +75,23 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         Row row = null;
         row = sheet.createRow(step);
         row.createCell(0).setCellValue(floorDto.getFloorName());
-        row.createCell(1).setCellValue(dataObj.getString("feeRoomCount"));
-        row.createCell(2).setCellValue(dataObj.getString("oweRoomCount"));
-        row.createCell(3).setCellValue(dataObj.getString("hisOweFee"));
-        row.createCell(4).setCellValue(dataObj.getString("curOweFee"));
+        row.createCell(1).setCellValue(dataObj.getIntValue("feeRoomCount"));
+        row.createCell(2).setCellValue(dataObj.getIntValue("oweRoomCount"));
+        row.createCell(3).setCellValue(dataObj.getDouble("hisOweFee"));
+        row.createCell(4).setCellValue(dataObj.getDouble("curOweFee"));
 
         BigDecimal curOweFee = new BigDecimal(dataObj.getDouble("curOweFee"));
         BigDecimal hisOweFee = new BigDecimal(dataObj.getDouble("hisOweFee"));
         row.createCell(5).setCellValue(curOweFee.add(hisOweFee).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-        row.createCell(6).setCellValue(dataObj.getString("hisReceivedFee"));
+        row.createCell(6).setCellValue(dataObj.getDouble("hisReceivedFee"));
         //(fee.receivedFee-fee.hisReceivedFee-fee.preReceivedFee)
         BigDecimal receivedFee = new BigDecimal(dataObj.getDouble("receivedFee"));
         BigDecimal hisReceivedFee = new BigDecimal(dataObj.getDouble("hisReceivedFee"));
         BigDecimal preReceivedFee = new BigDecimal(dataObj.getDouble("preReceivedFee"));
         row.createCell(7).setCellValue(receivedFee.subtract(hisReceivedFee).subtract(preReceivedFee).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-        row.createCell(8).setCellValue(dataObj.getString("preReceivedFee"));
-        row.createCell(9).setCellValue(dataObj.getString("receivedFee"));
+        row.createCell(8).setCellValue(dataObj.getDouble("preReceivedFee"));
+        row.createCell(9).setCellValue(dataObj.getDouble("receivedFee"));
         //((fee.feeRoomCount-fee.oweRoomCount)/fee.feeRoomCount*100).toFixed(2)
 
         BigDecimal feeRoomCount = new BigDecimal(dataObj.getDouble("feeRoomCount"));
