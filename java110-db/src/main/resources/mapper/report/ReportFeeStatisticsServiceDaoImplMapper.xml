@@ -346,7 +346,7 @@
 
     <select id="getFloorFeeSummary" parameterType="Map" resultType="Map">
 
-        select a.floor_id floorId,a.floor_num floorNum,a.name floorName
+        select a.floor_id floorId,a.floor_num floorNum,a.name floorName,
         (
         select count(1) from (
         select t.obj_id from pay_fee_detail_month t
