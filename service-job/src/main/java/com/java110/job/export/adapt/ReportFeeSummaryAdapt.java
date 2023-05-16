@@ -83,6 +83,7 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         BigDecimal curOweFee = new BigDecimal(dataObj.getDouble("curOweFee"));
         BigDecimal hisOweFee = new BigDecimal(dataObj.getDouble("hisOweFee"));
         row.createCell(5).setCellValue(curOweFee.add(hisOweFee).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+
         row.createCell(6).setCellValue(dataObj.getString("hisReceivedFee"));
         //(fee.receivedFee-fee.hisReceivedFee-fee.preReceivedFee)
         BigDecimal receivedFee = new BigDecimal(dataObj.getDouble("receivedFee"));
@@ -95,12 +96,18 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
 
         BigDecimal feeRoomCount = new BigDecimal(dataObj.getDouble("feeRoomCount"));
         BigDecimal oweRoomCount = new BigDecimal(dataObj.getDouble("oweRoomCount"));
-        BigDecimal roomFeeRate = feeRoomCount.subtract(oweRoomCount).divide(feeRoomCount, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal roomFeeRate = new BigDecimal(0);
+        if(feeRoomCount.doubleValue()>0){
+            feeRoomCount.subtract(oweRoomCount).divide(feeRoomCount, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
         row.createCell(10).setCellValue(roomFeeRate.doubleValue() + "%");
         //((fee.receivedFee-fee.preReceivedFee)/(fee.hisOweFee+fee.curReceivableFee)*100).toFixed(2)
         BigDecimal curReceivableFee = new BigDecimal(dataObj.getDouble("curReceivableFee"));
         curReceivableFee = hisOweFee.add(curReceivableFee);
-        roomFeeRate = receivedFee.subtract(preReceivedFee).divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        roomFeeRate = new BigDecimal(0);
+        if(curReceivableFee.doubleValue()> 0) {
+            roomFeeRate = receivedFee.subtract(preReceivedFee).divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
         row.createCell(11).setCellValue(roomFeeRate.doubleValue() + "%");
 
     }
