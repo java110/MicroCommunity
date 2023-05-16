@@ -62,7 +62,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
             if(Double.parseDouble(data.get("feeRoomCount").toString())>0){
                 feeRoomCountDec = new BigDecimal(Double.parseDouble(data.get("feeRoomCount").toString()));
                 oweRoomCountDec = new BigDecimal(Double.parseDouble(data.get("oweRoomCount").toString()));
-                feeRoomRate = feeRoomCountDec.subtract(oweRoomCountDec).divide(feeRoomCountDec).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
+                feeRoomRate = feeRoomCountDec.subtract(oweRoomCountDec).divide(feeRoomCountDec,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
                 data.put("feeRoomRate",feeRoomRate.doubleValue());
             }else{
                 data.put("feeRoomRate",0.0);
@@ -76,7 +76,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
             if(hisOweFee.doubleValue()> 0){
                 receivedFee = new BigDecimal(Double.parseDouble(data.get("receivedFee").toString()));
                 preReceivedFee = new BigDecimal(Double.parseDouble(data.get("preReceivedFee").toString()));
-                feeRoomRate = receivedFee.subtract(preReceivedFee).divide(hisOweFee).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
+                feeRoomRate = receivedFee.subtract(preReceivedFee).divide(hisOweFee,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
                 data.put("feeRate",feeRoomRate.doubleValue());
             }else{
                 data.put("feeRate",0.0);
