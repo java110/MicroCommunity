@@ -50,10 +50,8 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         doReportFeeSummary(sheet, reqJson);
 
         //todo 合并 3 4 5
-        CellRangeAddress region = new CellRangeAddress(1, 1, 3, 5);
-        sheet.addMergedRegion(region);
-        CellRangeAddress region1 = new CellRangeAddress(1, 1, 6, 9);
-        sheet.addMergedRegion(region1);
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 3, 5));
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 6, 9));
         return workbook;
 
     }
@@ -75,7 +73,7 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
     private void appendData(JSONObject dataObj, Sheet sheet, int step, FloorDto floorDto) {
 
         Row row = null;
-        row = sheet.createRow(step + 1);
+        row = sheet.createRow(step);
         row.createCell(0).setCellValue(floorDto.getFloorName());
         row.createCell(1).setCellValue(dataObj.getString("feeRoomCount"));
         row.createCell(2).setCellValue(dataObj.getString("oweRoomCount"));
@@ -121,7 +119,7 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         queryStatisticsDto.setConfigId(reqJson.getString("configId"));
-        queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
+        queryStatisticsDto.setFloorId(floorDto.getFloorId());
         queryStatisticsDto.setObjName(reqJson.getString("objName"));
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         if (reqJson.containsKey("configIds")) {
