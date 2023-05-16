@@ -300,7 +300,7 @@
 
     <!-- 查询收费户数 -->
     <select id="getFeeRoomCount" parameterType="Map" resultType="Map">
-        select count(1) oweRoomCount
+        select count(1) feeRoomCount
         from
         (
         select t.obj_id from pay_fee_detail_month t
