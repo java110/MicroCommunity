@@ -89,4 +89,12 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getFloorFeeSummary", method = RequestMethod.POST)
     List<Map> getFloorFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 费用项收费率统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getConfigFeeSummary", method = RequestMethod.POST)
+    List<Map> getConfigFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

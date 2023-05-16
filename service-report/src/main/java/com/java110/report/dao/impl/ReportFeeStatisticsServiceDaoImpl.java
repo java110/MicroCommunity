@@ -157,5 +157,15 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public List<Map> getConfigFeeSummary(Map info) {
+        logger.debug("查询 费用项收费率 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getConfigFeeSummary", info);
+
+
+        return infos;
+    }
+
 
 }

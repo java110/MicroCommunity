@@ -103,4 +103,14 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getFloorFeeSummary(queryStatisticsDto);
     }
 
+    /**
+     * 费用项收费率信息统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getConfigFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getConfigFeeSummary(queryStatisticsDto);
+    }
+
 }

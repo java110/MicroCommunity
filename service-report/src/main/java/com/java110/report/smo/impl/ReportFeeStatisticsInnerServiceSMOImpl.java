@@ -111,4 +111,17 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         List<Map> info = reportFeeStatisticsServiceDaoImpl.getFloorFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    /**
+     * 费用项收费率信息统计
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getConfigFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getConfigFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
 }

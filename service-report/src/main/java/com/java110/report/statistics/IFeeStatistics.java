@@ -74,4 +74,11 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getFloorFeeSummary(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 费用项 费用统计信息
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getConfigFeeSummary(QueryStatisticsDto queryStatisticsDto);
 }
