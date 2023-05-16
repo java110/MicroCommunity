@@ -139,7 +139,8 @@ public class CorrectionDataTemplate extends TaskSystemQuartz {
         //先查询总数
         int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
 
-        double record = Math.ceil(count / DEFAULT_ROW);
+       // double record = Math.ceil(count / DEFAULT_ROW);
+        int record = (int) Math.ceil((double) count / (double) DEFAULT_ROW);
 
         for (int page = 1; page <= record; page++) {
             try {

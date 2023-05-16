@@ -371,7 +371,7 @@
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
         group by t.obj_id) b
-        ) oweRoomCount,-- 欠费户
+        ) oweRoomCount,
         (
         select count(1) from (
         select t.obj_id
@@ -396,7 +396,7 @@
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
         group by t.obj_id) b
-        ) feeRoomCount, -- 收费户
+        ) feeRoomCount,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
@@ -419,7 +419,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) receivedFee, -- 实收
+        ) receivedFee,
         (
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
@@ -443,7 +443,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) preReceivedFee, -- 预收
+        ) preReceivedFee,
         (
         select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
         from pay_fee_detail_month t
@@ -465,7 +465,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) hisOweFee, -- 历史欠费
+        ) hisOweFee,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
@@ -488,7 +488,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) curReceivableFee -- 当期应收
+        ) curReceivableFee
         from f_floor a
         where 1=1
         and a.status_cd = '0'
@@ -524,7 +524,7 @@
         </if>
         and pf.fee_type_cd = a.status_cd
         group by t.obj_id) b
-        ) oweRoomCount,-- 欠费户
+        ) oweRoomCount,
         (
         select count(1) from (
         select t.obj_id
@@ -551,7 +551,7 @@
         </if>
         and pf.fee_type_cd = a.status_cd
         group by t.obj_id) b
-        ) feeRoomCount, -- 收费户
+        ) feeRoomCount,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
@@ -576,7 +576,7 @@
             </foreach>
         </if>
         and pf.fee_type_cd = a.status_cd
-        ) receivedFee, -- 实收
+        ) receivedFee,
         (
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
@@ -602,7 +602,7 @@
             </foreach>
         </if>
         and pf.fee_type_cd = a.status_cd
-        ) preReceivedFee, -- 预收
+        ) preReceivedFee,
         (
         select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
         from pay_fee_detail_month t
@@ -626,7 +626,7 @@
             </foreach>
         </if>
         and pf.fee_type_cd = a.status_cd
-        ) hisOweFee, -- 历史欠费
+        ) hisOweFee,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
@@ -651,7 +651,7 @@
             </foreach>
         </if>
         and pf.fee_type_cd = a.status_cd
-        ) curReceivableFee -- 当期应收
+        ) curReceivableFee
         from t_dict a
         where 1=1
         and a.table_name = 'pay_fee_config'
@@ -680,7 +680,7 @@
         and t.status_cd = '0'
         and t.community_id= a.community_id
         and t.cur_month_time &lt; #{startDate}
-        ) hisOweFee, -- 历史欠费
+        ) hisOweFee,
         (
         select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) curOweFee
         from pay_fee_detail_month t
@@ -690,7 +690,7 @@
         and t.community_id= a.community_id
         and t.cur_month_time &gt; #{startDate}
         and t.cur_month_time &lt; #{endDate}
-        ) curOweFee, -- 当期欠费
+        ) curOweFee,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
@@ -700,7 +700,7 @@
         and t.community_id= a.community_id
         and t.cur_month_time &gt; #{startDate}
         and t.cur_month_time &lt; #{endDate}
-        ) curReceivableFee, -- 当月应收
+        ) curReceivableFee,
         (
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
@@ -711,7 +711,7 @@
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
         and t.cur_month_time &lt; #{startDate}
-        ) hisReceivedFee, -- 欠费追回
+        ) hisReceivedFee,
         (
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
@@ -722,7 +722,7 @@
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
         and t.cur_month_time &gt; #{endDate}
-        ) preReceivedFee, -- 预交费用
+        ) preReceivedFee,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
@@ -732,7 +732,7 @@
         and t.community_id= a.community_id
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        ) receivedFee -- 实收费用
+        ) receivedFee
         from pay_fee_detail_month a
         where a.status_cd = '0'
         and a.community_id = #{communityId}
