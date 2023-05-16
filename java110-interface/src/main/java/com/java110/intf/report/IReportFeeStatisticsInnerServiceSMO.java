@@ -42,6 +42,15 @@ public interface IReportFeeStatisticsInnerServiceSMO {
     @RequestMapping(value = "/getCurMonthOweFee", method = RequestMethod.POST)
     double getCurMonthOweFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
 
+
+    /**
+     * 查询当月应收
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getCurMonthOweFee", method = RequestMethod.POST)
+    double getCurReceivableFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
     @RequestMapping(value = "/getHisReceivedFee", method = RequestMethod.POST)
     double getHisReceivedFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
 
@@ -58,4 +67,5 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getOweRoomCount", method = RequestMethod.POST)
     int getOweRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
 }

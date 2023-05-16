@@ -55,4 +55,6 @@ public interface IFeeStatistics {
      * @return
      */
     int getOweRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    double getCurReceivableFee(QueryStatisticsDto queryStatisticsDto);
 }

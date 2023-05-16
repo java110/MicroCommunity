@@ -52,6 +52,19 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return Double.parseDouble(infos.get(0).get("curOweFee").toString());
     }
 
+    @Override
+    public double getCurReceivableFee(Map info) {
+        logger.debug("查询单月欠费 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getCurReceivableFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("curReceivableFee").toString());
+    }
+
     /**
      * 查询欠费追回
      * @param info
@@ -118,5 +131,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
         return Integer.parseInt(infos.get(0).get("oweRoomCount").toString());
     }
+
+
 
 }

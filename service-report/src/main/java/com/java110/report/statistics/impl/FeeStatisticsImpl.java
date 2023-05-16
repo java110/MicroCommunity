@@ -38,6 +38,17 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
 
     /**
+     * 查询当月应收
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getCurReceivableFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getCurReceivableFee(queryStatisticsDto);
+    }
+
+
+    /**
      * 查询 欠费追回
      * @param queryFeeStatisticsDto
      * @return
@@ -71,4 +82,5 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     public int getOweRoomCount(QueryStatisticsDto queryStatisticsDto) {
         return reportFeeStatisticsInnerServiceSMOImpl.getOweRoomCount(queryStatisticsDto);
     }
+
 }

@@ -85,6 +85,9 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         //todo 查询 单月欠费
         double curOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
 
+        //todo 查询当月应收
+        double curReceivableFee = feeStatisticsImpl.getCurReceivableFee(queryStatisticsDto);
+
         //todo 查询 欠费追回
         double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
 
@@ -112,6 +115,8 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         data.put("roomCount", roomCount);
         data.put("freeRoomCount", freeRoomCount);
         data.put("oweRoomCount", oweRoomCount);
+        data.put("curReceivableFee", curReceivableFee);
+
         JSONArray datas = new JSONArray();
         datas.add(data);
         context.setResponseEntity(ResultVo.createResponseEntity(datas));

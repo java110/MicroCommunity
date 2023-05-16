@@ -44,6 +44,17 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         return info;
     }
 
+    /**
+     * 查询当月应收
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getCurReceivableFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getCurReceivableFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
     @Override
     public double getHisReceivedFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto) {
         double info = reportFeeStatisticsServiceDaoImpl.getHisReceivedFee(BeanConvertUtil.beanCovertMap(queryFeeStatisticsDto));
