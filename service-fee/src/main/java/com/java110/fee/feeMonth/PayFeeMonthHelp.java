@@ -6,7 +6,9 @@ import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -155,7 +157,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         List<FeeDetailDto> tFeeDetailDtos = new ArrayList<>();
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
             if (feeDetailDto.getStartTime().getTime() <= curDate.getTime() && feeDetailDto.getEndTime().getTime() > curDate.getTime()) {
-                tFeeDetailDtos.add(feeDetailDto);
+                tFeeDetailDtos.add(BeanConvertUtil.covertBean(feeDetailDto,FeeDetailDto.class));
             }
         }
 
