@@ -10,9 +10,7 @@ import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
 import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +85,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @param feeDto
      * @param payFeeMonthOwnerDto
      */
-    @Autowired
+    @Override
     public void waitDispersedFeeDetail(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto) {
         PayFeeDetailMonthDto payFeeDetailMonthDto = new PayFeeDetailMonthDto();
         payFeeDetailMonthDto.setCommunityId(feeDto.getCommunityId());
@@ -113,7 +111,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @param feePrice
      * @param deadlineTime
      */
-    @Autowired
+    @Override
     public void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime) {
         // todo 费用已经结束
         if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
