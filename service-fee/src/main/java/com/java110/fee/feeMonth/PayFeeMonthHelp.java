@@ -171,9 +171,9 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             cReceivedAmount = cReceivedAmount.add(new BigDecimal(Double.parseDouble(feeDetailDto.getReceivedAmount()))).setScale(4, BigDecimal.ROUND_HALF_UP);
         }
 
-        feeDetailDtos.get(0).setReceivedAmount(cReceivedAmount.doubleValue() + "");
+        tFeeDetailDtos.get(0).setReceivedAmount(cReceivedAmount.doubleValue() + "");
 
-        return feeDetailDtos.get(0);
+        return tFeeDetailDtos.get(0);
     }
 
 
