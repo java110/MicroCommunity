@@ -111,5 +111,19 @@ public class PayFeeDetailMonthServiceDaoImpl extends BaseServiceDao implements I
         return businessPayFeeDetailMonthInfos;
     }
 
+    @Override
+    public List<Map> getWaitDispersedFeeDetail(Map info) {
+        logger.debug("查询getWaitDispersedFeeDetail信息 入参 info : {}", info);
+
+        List<Map> businessPayFeeDetailMonthInfos = sqlSessionTemplate.selectList("payFeeDetailMonthServiceDaoImpl.getWaitDispersedFeeDetail", info);
+
+        return businessPayFeeDetailMonthInfos;
+    }
+
+    @Override
+    public void deletePayFeeDetailMonthInfo(Map info) {
+        sqlSessionTemplate.update("payFeeDetailMonthServiceDaoImpl.deletePayFeeDetailMonthInfo", info);
+    }
+
 
 }

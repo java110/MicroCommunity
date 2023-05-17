@@ -3,6 +3,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
 import com.java110.fee.dao.IPayFeeDetailMonthServiceDao;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
@@ -41,8 +42,12 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
     @Override
     public int savePayFeeDetailMonths(@RequestBody List<PayFeeDetailMonthPo> payFeeDetailMonthPos) {
         int saveFlag = 1;
+        if (payFeeDetailMonthPos == null || payFeeDetailMonthPos.size() < 1) {
+            return saveFlag;
+        }
+
         Map info = new HashMap();
-        info.put("payFeeDetailMonthPos",payFeeDetailMonthPos);
+        info.put("payFeeDetailMonthPos", payFeeDetailMonthPos);
         payFeeDetailMonthServiceDaoImpl.savePayFeeDetailMonthInfos(info);
         return saveFlag;
     }
@@ -57,8 +62,7 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
     @Override
     public int deletePayFeeDetailMonth(@RequestBody PayFeeDetailMonthPo payFeeDetailMonthPo) {
         int saveFlag = 1;
-        payFeeDetailMonthPo.setStatusCd("1");
-        payFeeDetailMonthServiceDaoImpl.updatePayFeeDetailMonthInfo(BeanConvertUtil.beanCovertMap(payFeeDetailMonthPo));
+        payFeeDetailMonthServiceDaoImpl.deletePayFeeDetailMonthInfo(BeanConvertUtil.beanCovertMap(payFeeDetailMonthPo));
         return saveFlag;
     }
 
@@ -93,6 +97,19 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
         }
 
         List<PayFeeDetailMonthDto> payFeeDetailMonths = BeanConvertUtil.covertBeanList(payFeeDetailMonthServiceDaoImpl.queryPayFeeDetailMaxMonths(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto)), PayFeeDetailMonthDto.class);
+
+        return payFeeDetailMonths;
+    }
+
+    /**
+     * 查询需要离散的 缴费记录
+     *
+     * @param payFeeDetailMonthDto
+     * @return
+     */
+    @Override
+    public List<FeeDetailDto> getWaitDispersedFeeDetail(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto) {
+        List<FeeDetailDto> payFeeDetailMonths = BeanConvertUtil.covertBeanList(payFeeDetailMonthServiceDaoImpl.getWaitDispersedFeeDetail(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto)), FeeDetailDto.class);
 
         return payFeeDetailMonths;
     }

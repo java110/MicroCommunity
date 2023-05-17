@@ -62,4 +62,13 @@ public interface IPayFeeDetailMonthServiceDao {
 
 
     List<Map> queryPayFeeDetailMaxMonths(Map info);
+
+    /**
+     * 处理需要离散的 缴费记录
+     * @param info
+     * @return
+     */
+    List<Map> getWaitDispersedFeeDetail(Map info);
+
+    void deletePayFeeDetailMonthInfo(Map info);
 }

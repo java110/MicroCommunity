@@ -45,4 +45,7 @@ public interface IPayFeeMonthHelp {
     String getFeeFeeTime(List<FeeDetailDto> feeDetailDtos, String detailId);
 
 
+    void waitDispersedFeeDetail(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto);
+
+    void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime);
 }

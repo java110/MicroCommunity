@@ -17,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
  * 费用离散为月 实现类
+ * V2
+ * <p>
+ * case 1 定时任务 调用
  */
 @Service
 public class PayFeeMonthImpl implements IPayFeeMonth {
@@ -46,128 +50,8 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
     public static final int DEFAULT_DEAL_COUNT = 200;
 
-
     /**
-     * 生成单个费用 并 离散到月
-     *
-     * @param feeId
-     * @param communityId
-     */
-    @Override
-    public void doGeneratorOrRefreshFeeMonth(String feeId, String communityId) {
-
-        // todo 查询费用
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(communityId);
-        feeDto.setFeeId(feeId);
-        List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        Assert.listOnlyOne(tmpFeeDtos, "费用不存在");
-
-        doGeneratorOrRefreshFeeMonth(tmpFeeDtos.get(0), communityId);
-    }
-
-    public void doGeneratorOrRefreshFeeMonth(FeeDto feeDto, String communityId) {
-
-
-        //todo 计算每月单价
-        Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
-
-        // todo 准备离散的基础数据
-        PayFeeMonthOwnerDto payFeeMonthOwnerDto = payFeeMonthHelp.generatorOwnerRoom(feeDto);
-
-        //todo 离散start_time 或者 pay_fee_detail_month 最大月份 到  deadlineTime 的数据
-        maxMonthDateToDeadlineTimeData(feeDto, payFeeMonthOwnerDto, feePrice);
-
-
-    }
-
-    /**
-     * 离散最大 离散月到 deadlineTime 的数据
-     *
-     * @param feeDto
-     * @param payFeeMonthOwnerDto
-     * @param feePrice
-     */
-    private void maxMonthDateToDeadlineTimeData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice) {
-        PayFeeDetailMonthDto payFeeDetailMonthDto = new PayFeeDetailMonthDto();
-        payFeeDetailMonthDto.setCommunityId(feeDto.getCommunityId());
-        payFeeDetailMonthDto.setFeeId(feeDto.getFeeId());
-        List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = payFeeDetailMonthInnerServiceSMOImpl.queryPayFeeDetailMaxMonths(payFeeDetailMonthDto);
-        Date startTime = null;
-        Date deadlineTime = computeFeeSMOImpl.getDeadlineTime(feeDto);
-        if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
-            startTime = feeDto.getStartTime();
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtil.getDateFromStringA(payFeeDetailMonthDtos.get(0).getCurMonthTime()));
-            calendar.add(Calendar.MONTH, 1);
-            startTime = calendar.getTime();
-        }
-
-        // todo 生成一段时间内的数据
-        doGeneratorTimeMonthData(feeDto, payFeeMonthOwnerDto, feePrice, startTime, deadlineTime);
-
-    }
-
-    private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
-
-        if (maxMonth < 1) {
-            return;
-        }
-        //todo 查询 缴费明细
-        FeeDetailDto feeDetailDto = new FeeDetailDto();
-        feeDetailDto.setCommunityId(feeDto.getCommunityId());
-        feeDetailDto.setFeeId(feeDto.getFeeId());
-        feeDetailDto.setStates(new String[]{FeeDetailDto.STATE_NORMAL,FeeDetailDto.STATE_RETURNING});
-        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-
-        //todo 生成 月离散数据
-        PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
-        List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
-        double receivableAmount = 0.0;
-        for (int month = 0; month < maxMonth; month++) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startTime);
-            calendar.add(Calendar.MONTH, month);
-            //calendar.set(Calendar.DAY_OF_MONTH, 1);
-            tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
-            tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
-            tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
-            tmpPayFeeDetailMonthPo.setDetailId(payFeeMonthHelp.getFeeDetailId(feeDetailDtos, calendar.getTime()));
-            tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
-            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
-            receivableAmount = payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto);
-            //todo 应收小于等于0 不统计
-            if(receivableAmount <=0){
-                continue;
-            }
-            tmpPayFeeDetailMonthPo.setReceivableAmount( receivableAmount + "");
-            tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
-            tmpPayFeeDetailMonthPo.setDiscountAmount(
-                    payFeeMonthHelp.getDiscountAmount(Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivableAmount()),
-                            Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()),
-                            calendar.getTime(), feeDto) + "");
-            tmpPayFeeDetailMonthPo.setMonthId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_monthId));
-            tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
-            tmpPayFeeDetailMonthPo.setObjName(payFeeMonthOwnerDto.getObjName());
-            tmpPayFeeDetailMonthPo.setObjId(payFeeMonthOwnerDto.getObjId());
-            tmpPayFeeDetailMonthPo.setOwnerId(payFeeMonthOwnerDto.getOwnerId());
-            tmpPayFeeDetailMonthPo.setOwnerName(payFeeMonthOwnerDto.getOwnerName());
-            tmpPayFeeDetailMonthPo.setLink(payFeeMonthOwnerDto.getLink());
-            tmpPayFeeDetailMonthPo.setCurMonthTime(DateUtil.getFormatTimeStringB(calendar.getTime()));
-            tmpPayFeeDetailMonthPo.setPayFeeTime(payFeeMonthHelp.getFeeFeeTime(feeDetailDtos, tmpPayFeeDetailMonthPo.getDetailId()));
-            tmpPayFeeDetailMonthPo.setState("W"); // todo 这里暂时写死，目前用不到，算是预留字段
-            tmpPayFeeDetailMonthPo.setFeeName(feeDto.getFeeName());
-            tmpPayFeeDetailMonthPo.setConfigId(feeDto.getConfigId());
-            payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
-        }
-        payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
-    }
-
-    /**
-     * 小区数据 离散为 月数据
+     * 1.0 定时任务离散 小区数据 离散为 月数据
      *
      * @param communityId
      */
@@ -203,7 +87,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     }
 
     /**
-     * 物业缴费时离散 报表数据
+     * 2.0 物业缴费时离散 报表数据
      *
      * @param feeId
      * @param detailId
@@ -239,9 +123,38 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         doDeletePayFeeDetailInMonth(feeDto, feeDetailDtos.get(0));
 
         // todo 生成一段时间内的数据
-        doGeneratorTimeMonthData(feeDto, payFeeMonthOwnerDto, feePrice, feeDetailDtos.get(0).getStartTime(), feeDetailDtos.get(0).getEndTime());
+        maxMonthDateToDeadlineTimeData(feeDto, payFeeMonthOwnerDto, feePrice);
     }
 
+    /**
+     * 生成单个费用 并 离散到月
+     *
+     * @param feeId
+     * @param communityId
+     */
+    @Override
+    public void doGeneratorOrRefreshFeeMonth(String feeId, String communityId) {
+
+        // todo 查询费用
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(communityId);
+        feeDto.setFeeId(feeId);
+        List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(tmpFeeDtos, "费用不存在");
+
+        doGeneratorOrRefreshFeeMonth(tmpFeeDtos.get(0), communityId);
+    }
+
+
+
+
+    /**
+     * 删除月费用
+     *
+     * @param feeId
+     * @param communityId
+     */
     @Override
     public void deleteFeeMonth(String feeId, String communityId) {
 
@@ -250,6 +163,42 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         payFeeDetailMonthPo.setCommunityId(communityId);
         payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
     }
+
+    private void doGeneratorOrRefreshFeeMonth(FeeDto feeDto, String communityId) {
+
+        //todo 计算每月单价
+        Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
+
+        // todo 准备离散的基础数据
+        PayFeeMonthOwnerDto payFeeMonthOwnerDto = payFeeMonthHelp.generatorOwnerRoom(feeDto);
+
+        //todo 离散start_time 或者 pay_fee_detail_month 最大月份 到  deadlineTime 的数据
+        maxMonthDateToDeadlineTimeData(feeDto, payFeeMonthOwnerDto, feePrice);
+
+
+    }
+
+    /**
+     * 离散最大 离散月到 deadlineTime 的数据
+     * <p>
+     * 核心方法处理
+     *
+     * @param feeDto
+     * @param payFeeMonthOwnerDto
+     * @param feePrice
+     */
+    private void maxMonthDateToDeadlineTimeData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice) {
+
+        //todo 处理已经交过费的记录处理
+        payFeeMonthHelp.waitDispersedFeeDetail(feeDto, payFeeMonthOwnerDto);
+
+
+        //todo 处理 endTime 到 deadlineTime 的费用
+        Date deadlineTime = computeFeeSMOImpl.getDeadlineTime(feeDto);
+        payFeeMonthHelp.waitDispersedOweFee(feeDto,payFeeMonthOwnerDto,feePrice,deadlineTime);
+
+    }
+
 
     /**
      * 删除缴费范围内的数据

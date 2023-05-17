@@ -1,6 +1,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
 import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -57,4 +58,12 @@ public interface IPayFeeDetailMonthInnerServiceSMO {
 
     @RequestMapping(value = "/queryPayFeeDetailMaxMonths", method = RequestMethod.POST)
     List<PayFeeDetailMonthDto> queryPayFeeDetailMaxMonths(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
+
+    /**
+     * 处理需要离散的缴费记录
+     * @param payFeeDetailMonthDto
+     * @return
+     */
+    @RequestMapping(value = "/getWaitDispersedFeeDetail", method = RequestMethod.POST)
+    List<FeeDetailDto> getWaitDispersedFeeDetail(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
 }

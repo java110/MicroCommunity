@@ -756,4 +756,16 @@ public class DateUtil {
         return list;
     }
 
+    /**
+     * 除去 小时 分 秒
+     * @param time
+     * @return
+     */
+    public static Date timeToDate(Date time){
+        Calendar calendar =Calendar.getInstance();
+        calendar.setTime(time);
+        setTimeToMidnight(calendar);
+        return calendar.getTime();
+    }
+
 }
