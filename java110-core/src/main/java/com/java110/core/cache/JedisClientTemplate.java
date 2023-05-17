@@ -159,8 +159,8 @@ public class JedisClientTemplate implements Jedis {
             }
 
             // 单机
-            if (nativeConnection instanceof Jedis) {
-                return ((Jedis) nativeConnection).eval(script, keys, args);
+            if (nativeConnection instanceof redis.clients.jedis.Jedis) {
+                return ((redis.clients.jedis.Jedis) nativeConnection).eval(script, keys, args);
             }
 
             return null;
