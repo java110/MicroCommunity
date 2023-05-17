@@ -173,6 +173,10 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setConfigId(feeDto.getConfigId());
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
         }
+        //todo 没有数据就返回
+        if(payFeeDetailMonthPos.size()<1){
+            return;
+        }
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
     }
 
