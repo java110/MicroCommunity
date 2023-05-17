@@ -118,7 +118,12 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
     private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
        // double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endTime);
+        calendar.add(Calendar.DAY_OF_MONTH,-1);
+        if(startTime.getTime()< calendar.getTime().getTime()){
+            endTime = calendar.getTime();
+        }
         List<String> months = DateUtil.getMonthBetweenDate(startTime,endTime);
 
         if (months == null || months.size() < 1) {
@@ -145,7 +150,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             detailYear = Integer.parseInt(month.split("-")[0]);
             detailMonth = Integer.parseInt(month.split("-")[1]);
 
-            Calendar calendar = Calendar.getInstance();
+            calendar = Calendar.getInstance();
             calendar.setTime(startTime);
             calendar.set(Calendar.YEAR, detailYear);
             calendar.set(Calendar.MONTH, detailMonth-1);
