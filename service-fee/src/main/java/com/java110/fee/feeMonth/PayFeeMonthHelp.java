@@ -167,7 +167,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         }
         //todo 这种应该是数据异常 也就是一个月费用变更后重复缴费
         BigDecimal cReceivedAmount = new BigDecimal(0.00);
-        for (FeeDetailDto feeDetailDto : feeDetailDtos) {
+        for (FeeDetailDto feeDetailDto : tFeeDetailDtos) {
             cReceivedAmount = cReceivedAmount.add(new BigDecimal(Double.parseDouble(feeDetailDto.getReceivedAmount()))).setScale(4, BigDecimal.ROUND_HALF_UP);
         }
 
