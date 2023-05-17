@@ -16,33 +16,8 @@ public interface IPayFeeMonthHelp {
     Double getMonthFeePrice(FeeDto feeDto);
 
 
-    Double getReceivableAmount(List<FeeDetailDto> feeDetailDtos, Double feePrice, Date curDate, FeeDto feeDto);
-
-    /**
-     * 计算实收
-     * @param feeDetailDtos
-     * @param feePrice
-     * @return
-     */
-    Double getReceivedAmount(List<FeeDetailDto> feeDetailDtos, Double feePrice, Date curDate, FeeDto feeDto);
 
     Double getDiscountAmount(Double feePrice, double receivedAmount, Date curDate, FeeDto feeDto);
-
-    /**
-     * 计算缴费DetailId
-     * @param feeDetailDtos
-     * @param time
-     * @return
-     */
-    String getFeeDetailId(List<FeeDetailDto> feeDetailDtos, Date time);
-
-    /**
-     * 获取 支付时间
-     * @param feeDetailDtos
-     * @param detailId
-     * @return
-     */
-    String getFeeFeeTime(List<FeeDetailDto> feeDetailDtos, String detailId);
 
 
     void waitDispersedFeeDetail(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto);

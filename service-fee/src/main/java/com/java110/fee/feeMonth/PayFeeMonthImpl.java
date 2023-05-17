@@ -166,7 +166,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
     private void doGeneratorOrRefreshFeeMonth(FeeDto feeDto, String communityId) {
 
-        //todo 计算每月单价
+        // todo 计算每月单价
         Double feePrice = payFeeMonthHelp.getMonthFeePrice(feeDto);
 
         // todo 准备离散的基础数据
