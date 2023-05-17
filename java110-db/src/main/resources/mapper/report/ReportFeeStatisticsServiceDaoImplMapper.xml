@@ -254,17 +254,17 @@
 
     <!-- 查询欠费户数 -->
     <select id="getOweRoomCount" parameterType="Map" resultType="Map">
+
         select count(1) oweRoomCount
-        from
-        (
-        select t.obj_id from pay_fee_detail_month t
+        from (
+        select a.room_id
+        from building_room a
+        left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+            left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
         </if>
-        where
-        1=1
+        where 1=1
         <if test="floorId != null and floorId != ''">
             and bu.floor_id = #{floorId}
         </if>
@@ -289,28 +289,27 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        and t.status_cd = '0'
+        and a.status_cd = '0'
         and pf.payer_obj_type = '3333'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
         and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
-        group by t.obj_id
+        group by a.room_id
         ) a
     </select>
 
     <!-- 查询收费户数 -->
     <select id="getFeeRoomCount" parameterType="Map" resultType="Map">
         select count(1) feeRoomCount
-        from
-        (
-        select t.obj_id from pay_fee_detail_month t
+        from (
+        select a.room_id
+        from building_room a
+        left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+            left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
         </if>
-        where
-        1=1
+        where 1=1
         <if test="floorId != null and floorId != ''">
             and bu.floor_id = #{floorId}
         </if>
@@ -335,11 +334,11 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        and t.status_cd = '0'
+        and a.status_cd = '0'
         and pf.payer_obj_type = '3333'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
-        group by t.obj_id
+        group by a.room_id
         ) a
     </select>
 
