@@ -6,7 +6,6 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.MonthFeeDetailDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
 import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
 import com.java110.intf.fee.*;
@@ -100,14 +99,9 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
             startTime = feeDto.getStartTime();
         } else {
-
-            //todo 删除最大月 从最大月开始离散,主要担心缴费时间不是1号导致 最大月收入不对
-            PayFeeDetailMonthPo payFeeDetailMonthPo = new PayFeeDetailMonthPo();
-            payFeeDetailMonthPo.setMonthId(payFeeDetailMonthDtos.get(0).getMonthId());
-            payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtil.getDateFromStringA(payFeeDetailMonthDtos.get(0).getCurMonthTime()));
-            //calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.MONTH, 1);
             startTime = calendar.getTime();
         }
 
@@ -117,16 +111,9 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     }
 
     private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
-       // double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endTime);
-        calendar.add(Calendar.DAY_OF_MONTH,-1);
-        if(startTime.getTime()< calendar.getTime().getTime()){
-            endTime = calendar.getTime();
-        }
-        List<String> months = DateUtil.getMonthBetweenDate(startTime,endTime);
+        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
 
-        if (months == null || months.size() < 1) {
+        if (maxMonth < 1) {
             return;
         }
         //todo 查询 缴费明细
@@ -136,39 +123,28 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         feeDetailDto.setStates(new String[]{FeeDetailDto.STATE_NORMAL,FeeDetailDto.STATE_RETURNING});
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
-
-        //todo 将缴费记录转换为月的方式
-        Map<String ,MonthFeeDetailDto> monthFeeDetailDtos = payFeeMonthHelp.analysisMonthFeeDetail(feeDetailDtos);
-
         //todo 生成 月离散数据
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         double receivableAmount = 0.0;
-        int detailYear = 0;
-        int detailMonth = 0;
-        for (String month:months) {
-            detailYear = Integer.parseInt(month.split("-")[0]);
-            detailMonth = Integer.parseInt(month.split("-")[1]);
-
-            calendar = Calendar.getInstance();
+        for (int month = 0; month < maxMonth; month++) {
+            Calendar calendar = Calendar.getInstance();
             calendar.setTime(startTime);
-            calendar.set(Calendar.YEAR, detailYear);
-            calendar.set(Calendar.MONTH, detailMonth-1);
-
+            calendar.add(Calendar.MONTH, month);
             //calendar.set(Calendar.DAY_OF_MONTH, 1);
             tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
             tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
             tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
             tmpPayFeeDetailMonthPo.setDetailId(payFeeMonthHelp.getFeeDetailId(feeDetailDtos, calendar.getTime()));
-            tmpPayFeeDetailMonthPo.setDetailYear(detailYear + "");
-            tmpPayFeeDetailMonthPo.setDetailMonth(detailMonth + "");
-            receivableAmount = payFeeMonthHelp.getReceivableAmount(feeDetailDtos,monthFeeDetailDtos, feePrice, calendar.getTime(), feeDto);
+            tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
+            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            receivableAmount = payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto);
             //todo 应收小于等于0 不统计
             if(receivableAmount <=0){
                 continue;
             }
             tmpPayFeeDetailMonthPo.setReceivableAmount( receivableAmount + "");
-            tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos,monthFeeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
+            tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
             tmpPayFeeDetailMonthPo.setDiscountAmount(
                     payFeeMonthHelp.getDiscountAmount(Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivableAmount()),
                             Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()),
@@ -186,10 +162,6 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setFeeName(feeDto.getFeeName());
             tmpPayFeeDetailMonthPo.setConfigId(feeDto.getConfigId());
             payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
-        }
-        //todo 没有数据就返回
-        if(payFeeDetailMonthPos.size()<1){
-            return;
         }
         payFeeDetailMonthInnerServiceSMOImpl.savePayFeeDetailMonths(payFeeDetailMonthPos);
     }
