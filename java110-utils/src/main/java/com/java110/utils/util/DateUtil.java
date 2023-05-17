@@ -5,10 +5,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wuxw on 2017/7/24.
@@ -130,6 +127,7 @@ public class DateUtil {
             return sDateFormat.format(date);
         }
     }
+
     public static String getFormatTimeStringB(Date date) {
         SimpleDateFormat sDateFormat = getDateFormat(DateUtil.DATE_FORMATE_STRING_B);
 
@@ -620,7 +618,6 @@ public class DateUtil {
 
     /**
      * 　　 *字符串的日期格式的计算
-     *
      */
     public static int daysBetween(String smdate, String bdate) {
         long between_days = 0;
@@ -696,14 +693,63 @@ public class DateUtil {
 
     /**
      * 通过时间秒毫秒数判断两个时间的间隔
+     *
      * @param date1
      * @param date2
      * @return
      */
-    public static int differentDaysUp(Date date1,Date date2)
-    {
-        double days = ((date2.getTime() - date1.getTime()) / (1000*3600*24*1.00));
+    public static int differentDaysUp(Date date1, Date date2) {
+        double days = ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24 * 1.00));
         return new Double(Math.ceil(days)).intValue();
+    }
+
+    /**
+     * 获取两个日期之间的所有月份 (年月)
+     *
+     * @param startTime
+     * @param endTime
+     * @return：list
+     */
+    public static List<String> getMonthBetweenDate(Date startTime, Date endTime) {
+        return getMonthBetweenDate(DateUtil.getFormatTimeStringA(startTime), DateUtil.getFormatTimeStringA(endTime));
+    }
+
+    /**
+     * 获取两个日期之间的所有月份 (年月)
+     *
+     * @param startTime
+     * @param endTime
+     * @return：list
+     */
+    public static List<String> getMonthBetweenDate(String startTime, String endTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMATE_STRING_M);
+        // 声明保存日期集合
+        List<String> list = new ArrayList<>();
+        try {
+            // 转化成日期类型
+            Date startDate = sdf.parse(startTime);
+            Date endDate = sdf.parse(endTime);
+
+            //用Calendar 进行日期比较判断
+            Calendar calendar = Calendar.getInstance();
+            while (startDate.getTime() <= endDate.getTime()) {
+
+                // 把日期添加到集合
+                list.add(sdf.format(startDate));
+
+                // 设置日期
+                calendar.setTime(startDate);
+
+                //把月数增加 1
+                calendar.add(Calendar.MONTH, 1);
+
+                // 获取增加后的日期
+                startDate = calendar.getTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
