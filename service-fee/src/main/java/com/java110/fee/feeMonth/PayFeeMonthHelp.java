@@ -164,12 +164,19 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         Map<String, MonthFeeDetailDto> monthFeeDetailDtos = new HashMap<>();
 
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
+            Date endTime =  feeDetailDto.getEndTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(endTime);
+            calendar.add(Calendar.DAY_OF_MONTH,-1);
+            if(feeDetailDto.getStartTime().getTime()< calendar.getTime().getTime()){
+                endTime = calendar.getTime();
+            }
             //计算两个日期包含的月份
-            List<String> months = DateUtil.getMonthBetweenDate(feeDetailDto.getStartTime(), feeDetailDto.getEndTime());
+            List<String> months = DateUtil.getMonthBetweenDate(feeDetailDto.getStartTime(), endTime);
 
             if (months == null || months.size() < 1) {
                 putReceivedAmountToMonthFeeDetailDtos(monthFeeDetailDtos,
-                        DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_M),
+                        DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_Q),
                         Double.parseDouble(feeDetailDto.getReceivedAmount()),
                         feeDetailDto);
                 continue;

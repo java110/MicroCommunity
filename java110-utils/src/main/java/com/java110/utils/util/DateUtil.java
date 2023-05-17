@@ -33,6 +33,8 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_M = "yyyyMM";
     public static final String DATE_FORMATE_STRING_N = "HHmmss";
     public static final String DATE_FORMATE_STRING_O = "yyyyMMddHHmm";
+    public static final String DATE_FORMATE_STRING_Q = "yyyy-MM";
+
 
 
     static {
@@ -52,6 +54,8 @@ public class DateUtil {
         formats.put("yyyyMM", new SimpleDateFormat("yyyyMM"));
         formats.put("HHmmss", new SimpleDateFormat("HHmmss"));
         formats.put("yyyyMMddHHmm", new SimpleDateFormat("yyyyMMddHHmm"));
+        formats.put("yyyy-MM", new SimpleDateFormat("yyyy-MM"));
+
     }
 
 
@@ -722,7 +726,7 @@ public class DateUtil {
      * @return：list
      */
     public static List<String> getMonthBetweenDate(String startTime, String endTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMATE_STRING_M);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMATE_STRING_Q);
         // 声明保存日期集合
         List<String> list = new ArrayList<>();
         try {
