@@ -77,11 +77,11 @@ public class PayFeeDetailMonthServiceDaoImpl extends BaseServiceDao implements I
     public void updatePayFeeDetailMonthInfo(Map info) throws DAOException {
         logger.debug("修改月缴费表信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("payFeeDetailMonthServiceDaoImpl.updatePayFeeDetailMonthInfo", info);
+         sqlSessionTemplate.update("payFeeDetailMonthServiceDaoImpl.updatePayFeeDetailMonthInfo", info);
 
-        if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改月缴费表信息Instance数据失败：" + JSONObject.toJSONString(info));
-        }
+//        if (saveFlag < 1) {
+//            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改月缴费表信息Instance数据失败：" + JSONObject.toJSONString(info));
+//        }
     }
 
     /**
