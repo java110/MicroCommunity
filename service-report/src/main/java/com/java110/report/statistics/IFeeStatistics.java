@@ -81,4 +81,18 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getConfigFeeSummary(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询对象明细表（数量）
+     * @param queryStatisticsDto
+     * @return
+     */
+    int getObjFeeSummaryCount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询对象明细表
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getObjFeeSummary(QueryStatisticsDto queryStatisticsDto);
 }

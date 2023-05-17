@@ -159,9 +159,9 @@ public class BootApplicationStart {
 
         //设置超时时间
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectionRequestTimeout(5000);
-        httpRequestFactory.setConnectTimeout(5000);
-        httpRequestFactory.setReadTimeout(5000);
+        httpRequestFactory.setConnectionRequestTimeout(10000);
+        httpRequestFactory.setConnectTimeout(10000);
+        httpRequestFactory.setReadTimeout(10000);
         restTemplate.setRequestFactory(httpRequestFactory);
         return restTemplate;
     }

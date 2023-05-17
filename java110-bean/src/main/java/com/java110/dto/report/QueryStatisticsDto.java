@@ -1,8 +1,10 @@
 package com.java110.dto.report;
 
+import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 
-public class QueryStatisticsDto implements Serializable {
+public class QueryStatisticsDto extends PageDto implements Serializable {
 
     private String communityId;
     private String startDate;
@@ -25,6 +27,8 @@ public class QueryStatisticsDto implements Serializable {
     private String link;
 
     private String feeTypeCd;
+
+    private String[] unitIds;
 
 
     public String getCommunityId() {
@@ -106,5 +110,13 @@ public class QueryStatisticsDto implements Serializable {
 
     public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
+    }
+
+    public String[] getUnitIds() {
+        return unitIds;
+    }
+
+    public void setUnitIds(String[] unitIds) {
+        this.unitIds = unitIds;
     }
 }

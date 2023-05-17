@@ -81,4 +81,18 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getConfigFeeSummary(Map info);
+
+    /**
+     * 查询费用明细表（总数）
+     * @param info
+     * @return
+     */
+    int getObjFeeSummaryCount(Map info);
+
+    /**
+     * 查询费用明细表
+     * @param info
+     * @return
+     */
+    List<Map> getObjFeeSummary(Map info);
 }

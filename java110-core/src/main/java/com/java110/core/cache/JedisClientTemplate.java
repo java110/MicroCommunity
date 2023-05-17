@@ -42,7 +42,7 @@ public class JedisClientTemplate implements Jedis {
 //        return "";
         return redisTemplate.execute(new RedisCallback() {
             public String doInRedis(RedisConnection connection) {
-                redis.clients.jedis.Jedis jedis = (redis.clients.jedis.Jedis) connection.getNativeConnection();
+                //redis.clients.jedis.Jedis jedis = (redis.clients.jedis.Jedis) connection.getNativeConnection();
                 Object nativeConnection = connection.getNativeConnection();
                 // 集群
                 if (nativeConnection instanceof JedisCluster) {
@@ -50,8 +50,8 @@ public class JedisClientTemplate implements Jedis {
                 }
 
                 // 单机
-                if (nativeConnection instanceof Jedis) {
-                    return ((Jedis) nativeConnection).set(key, value, nxxx, expx, time);
+                if (nativeConnection instanceof redis.clients.jedis.Jedis) {
+                    return ((redis.clients.jedis.Jedis) nativeConnection).set(key, value, nxxx, expx, time);
                 }
                 return "";
             }
@@ -159,8 +159,8 @@ public class JedisClientTemplate implements Jedis {
             }
 
             // 单机
-            if (nativeConnection instanceof Jedis) {
-                return ((Jedis) nativeConnection).eval(script, keys, args);
+            if (nativeConnection instanceof redis.clients.jedis.Jedis) {
+                return ((redis.clients.jedis.Jedis) nativeConnection).eval(script, keys, args);
             }
 
             return null;

@@ -125,6 +125,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         //todo 生成 月离散数据
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
+        double receivableAmount = 0.0;
         for (int month = 0; month < maxMonth; month++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(startTime);
@@ -136,7 +137,12 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             tmpPayFeeDetailMonthPo.setDetailId(payFeeMonthHelp.getFeeDetailId(feeDetailDtos, calendar.getTime()));
             tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
             tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
-            tmpPayFeeDetailMonthPo.setReceivableAmount(payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
+            receivableAmount = payFeeMonthHelp.getReceivableAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto);
+            //todo 应收小于等于0 不统计
+            if(receivableAmount <=0){
+                continue;
+            }
+            tmpPayFeeDetailMonthPo.setReceivableAmount( receivableAmount + "");
             tmpPayFeeDetailMonthPo.setReceivedAmount(payFeeMonthHelp.getReceivedAmount(feeDetailDtos, feePrice, calendar.getTime(), feeDto) + "");
             tmpPayFeeDetailMonthPo.setDiscountAmount(
                     payFeeMonthHelp.getDiscountAmount(Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivableAmount()),
@@ -185,7 +191,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo  每次按200条处理
         for (int pageIndex = 0; pageIndex < page; pageIndex++) {
-            feeDto.setPage(pageIndex * max + 1);
+            feeDto.setPage(pageIndex + 1);
             feeDto.setRow(max);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
             // 离散费用
