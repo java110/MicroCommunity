@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
 
         BigDecimal totalRecDec = new BigDecimal(feeDetailDto.getReceivedAmount());
         //每月平均值
-        BigDecimal priRecDec = totalRecDec.divide(new BigDecimal(maxMonth), 2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal priRecDec = totalRecDec.divide(new BigDecimal(maxMonth), 4, BigDecimal.ROUND_HALF_UP);
 
         return priRecDec.doubleValue();
     }
@@ -112,7 +113,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             return 0.00;
         }
 
-        BigDecimal discountAmountDec = new BigDecimal(feePrice).subtract(new BigDecimal(receivedAmount)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal discountAmountDec = new BigDecimal(feePrice).subtract(new BigDecimal(receivedAmount)).setScale(4, BigDecimal.ROUND_HALF_UP);
         return discountAmountDec.doubleValue();
     }
 
@@ -129,7 +130,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
     @Override
     public String getFeeFeeTime(List<FeeDetailDto> feeDetailDtos, String detailId) {
 
-        if(feeDetailDtos == null || feeDetailDtos.size() < 1){
+        if (feeDetailDtos == null || feeDetailDtos.size() < 1) {
             return null;
         }
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
@@ -148,15 +149,31 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @return
      */
     private FeeDetailDto getCurFeeDetail(List<FeeDetailDto> feeDetailDtos, Date curDate) {
-        if(feeDetailDtos == null || feeDetailDtos.size() < 1){
+        if (feeDetailDtos == null || feeDetailDtos.size() < 1) {
             return null;
         }
+        List<FeeDetailDto> tFeeDetailDtos = new ArrayList<>();
         for (FeeDetailDto feeDetailDto : feeDetailDtos) {
             if (feeDetailDto.getStartTime().getTime() <= curDate.getTime() && feeDetailDto.getEndTime().getTime() > curDate.getTime()) {
-                return feeDetailDto;
+                tFeeDetailDtos.add(feeDetailDto);
             }
         }
-        return null;
+
+        if (tFeeDetailDtos.size() < 1) {
+            return null;
+        }
+        if (tFeeDetailDtos.size() == 1) {
+            return tFeeDetailDtos.get(0);
+        }
+        //todo 这种应该是数据异常 也就是一个月费用变更后重复缴费
+        BigDecimal cReceivedAmount = new BigDecimal(0.00);
+        for (FeeDetailDto feeDetailDto : feeDetailDtos) {
+            cReceivedAmount = cReceivedAmount.add(new BigDecimal(Double.parseDouble(feeDetailDto.getReceivedAmount()))).setScale(4, BigDecimal.ROUND_HALF_UP);
+        }
+
+        feeDetailDtos.get(0).setReceivedAmount(cReceivedAmount.doubleValue() + "");
+
+        return feeDetailDtos.get(0);
     }
 
 

@@ -120,6 +120,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setCommunityId(feeDto.getCommunityId());
         feeDetailDto.setFeeId(feeDto.getFeeId());
+        feeDetailDto.setStates(new String[]{FeeDetailDto.STATE_NORMAL,FeeDetailDto.STATE_RETURNING});
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
         //todo 生成 月离散数据
