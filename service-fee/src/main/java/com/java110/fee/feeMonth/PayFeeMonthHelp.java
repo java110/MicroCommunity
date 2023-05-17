@@ -230,7 +230,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @return
      */
     private MonthFeeDetailDto getCurMonthFeeDetail(Map<String, MonthFeeDetailDto> monthFeeDetailDtos, Date curDate) {
-        String month = DateUtil.getFormatTimeString(curDate, DateUtil.DATE_FORMATE_STRING_M);
+        String month = DateUtil.getFormatTimeString(curDate, DateUtil.DATE_FORMATE_STRING_Q);
         if (monthFeeDetailDtos == null) {
             return null;
         }
