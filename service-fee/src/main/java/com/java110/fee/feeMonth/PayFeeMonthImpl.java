@@ -117,9 +117,11 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     }
 
     private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+       // double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
 
-        if (maxMonth < 1) {
+        List<String> months = DateUtil.getMonthBetweenDate(startTime,endTime);
+
+        if (months == null || months.size() < 1) {
             return;
         }
         //todo 查询 缴费明细
@@ -137,17 +139,24 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         PayFeeDetailMonthPo tmpPayFeeDetailMonthPo;
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         double receivableAmount = 0.0;
-        for (int month = 0; month < maxMonth; month++) {
+        int detailYear = 0;
+        int detailMonth = 0;
+        for (String month:months) {
+            detailYear = Integer.parseInt(month.split("-")[0]);
+            detailMonth = Integer.parseInt(month.split("-")[1]);
+
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(startTime);
-            calendar.add(Calendar.MONTH, month);
+            calendar.set(Calendar.YEAR, detailYear);
+            calendar.set(Calendar.MONTH, detailMonth-1);
+
             //calendar.set(Calendar.DAY_OF_MONTH, 1);
             tmpPayFeeDetailMonthPo = new PayFeeDetailMonthPo();
             tmpPayFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
             tmpPayFeeDetailMonthPo.setCommunityId(feeDto.getCommunityId());
             tmpPayFeeDetailMonthPo.setDetailId(payFeeMonthHelp.getFeeDetailId(feeDetailDtos, calendar.getTime()));
-            tmpPayFeeDetailMonthPo.setDetailYear(calendar.get(Calendar.YEAR) + "");
-            tmpPayFeeDetailMonthPo.setDetailMonth((calendar.get(Calendar.MONTH) + 1) + "");
+            tmpPayFeeDetailMonthPo.setDetailYear(detailYear + "");
+            tmpPayFeeDetailMonthPo.setDetailMonth(detailMonth + "");
             receivableAmount = payFeeMonthHelp.getReceivableAmount(feeDetailDtos,monthFeeDetailDtos, feePrice, calendar.getTime(), feeDto);
             //todo 应收小于等于0 不统计
             if(receivableAmount <=0){
