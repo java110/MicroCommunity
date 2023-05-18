@@ -56,8 +56,8 @@ public class AppTest
      */
     public void testApp()
     {
-        Date startTime = DateUtil.getDateFromStringB("2022-07-01");
-        Date endTime = DateUtil.getDateFromStringB("2022-07-27");
+        Date startTime = DateUtil.getDateFromStringB("2022-06-30");
+        Date endTime = DateUtil.getDateFromStringB("2024-01-01");
         double month = dayCompare(startTime,endTime);
         System.out.println(month);
     }

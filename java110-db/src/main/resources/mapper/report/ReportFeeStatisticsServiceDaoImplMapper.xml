@@ -6,7 +6,7 @@
 
     <!-- 查询历史欠费 -->
     <select id="getHisMonthOweFee" parameterType="Map" resultType="Map">
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="floorId != null and floorId != ''">
@@ -40,13 +40,14 @@
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
+        and t.detail_id = '-1'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{startDate}
     </select>
 
     <!-- 查询单月欠费 -->
     <select id="getCurMonthOweFee" parameterType="Map" resultType="Map">
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) curOweFee
+        select ifnull(sum(t.receivable_amount),0.0) curOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="floorId != null and floorId != ''">
@@ -80,6 +81,7 @@
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
+        and t.detail_id = '-1'
         and t.community_id= #{communityId}
         and t.cur_month_time &gt; #{startDate}
         and t.cur_month_time &lt; #{endDate}
@@ -450,7 +452,7 @@
         </if>
         ) preReceivedFee,
         (
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
@@ -460,6 +462,7 @@
         and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
+        and t.detail_id = '-1'
         and t.cur_month_time &lt; #{startDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -608,7 +611,7 @@
         and pf.fee_type_cd = a.status_cd
         ) preReceivedFee,
         (
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         <if test="floorId != null and floorId != ''">
@@ -622,6 +625,7 @@
         </if>
         and t.status_cd = '0'
         and t.community_id=  #{communityId}
+        and t.detail_id = '-1'
         and t.cur_month_time &lt; #{startDate}
         <if test="configIds !=null ">
             and t.config_id in
