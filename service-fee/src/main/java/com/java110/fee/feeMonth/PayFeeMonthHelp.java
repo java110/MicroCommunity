@@ -52,16 +52,16 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
 
         Double feePrice = Double.parseDouble(feePriceAll.get("feePrice").toString());
         //todo 如果是一次性费用 除以
-        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getPayerObjType())) {
-            return feePrice;
-        }
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(feeDto.getStartTime(), feeDto.getEndTime()));
-        if (maxMonth <= 0) {
-            return feePrice;
-
-        }
-        BigDecimal feePriceDec = new BigDecimal(feePrice).divide(new BigDecimal(maxMonth), 2, BigDecimal.ROUND_HALF_UP);
-        feePrice = feePriceDec.doubleValue();
+//        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getPayerObjType())) {
+//            return feePrice;
+//        }
+//        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(feeDto.getStartTime(), feeDto.getEndTime()));
+//        if (maxMonth <= 0) {
+//            return feePrice;
+//
+//        }
+//        BigDecimal feePriceDec = new BigDecimal(feePrice).divide(new BigDecimal(maxMonth), 2, BigDecimal.ROUND_HALF_UP);
+//        feePrice = feePriceDec.doubleValue();
         return feePrice;
     }
 
@@ -132,6 +132,17 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
 
         BigDecimal receivableAmount = new BigDecimal(feePrice);
 
+        BigDecimal dayReceivableAmount = null;
+
+        //todo 一次性费用 日应收计算
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            int day = DateUtil.daysBetween(endTime, startTime);
+            if (day < 1) {
+                day = 1;
+            }
+            dayReceivableAmount = receivableAmount.divide(new BigDecimal(day), 4, BigDecimal.ROUND_HALF_UP);// 日 应收
+        }
+
         // todo 寻找第一个自然月 一日
         Calendar firstMonthDayCal = Calendar.getInstance();
         firstMonthDayCal.setTime(startTime);
@@ -144,15 +155,18 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         int curDay = 0;
         int curMonthMaxDay = 30;
         BigDecimal curMonthReceivableAmount = null;
-        BigDecimal dayReceivableAmount = null;
+
         while (firstMonthDayTime.getTime() < endTime.getTime()) {
             curDay = DateUtil.daysBetween(firstMonthDayTime, startMonthDayTime);
 
-            // todo 计算当月天数
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startMonthDayTime);
-            curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+            //todo 周期性费用 日应收重新算
+            if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                // todo 计算当月天数
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(startMonthDayTime);
+                curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+                dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+            }
             // todo 计算 应收
             curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
 
@@ -172,12 +186,14 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         }
 
         curDay = DateUtil.daysBetween(endTime, startMonthDayTime);
-
-        // todo 计算当月天数
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startMonthDayTime);
-        curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+        //todo 周期性费用 日应收重新算
+        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            // todo 计算当月天数
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startMonthDayTime);
+            curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+        }
         // todo 计算 应收
         curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
 
@@ -305,7 +321,6 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
 
     }
-
 
 
 }
