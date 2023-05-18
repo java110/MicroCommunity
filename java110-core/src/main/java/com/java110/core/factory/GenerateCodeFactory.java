@@ -347,7 +347,9 @@ public class GenerateCodeFactory {
      */
     public static String getGeneratorId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
-            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+            //2+14+4+6
+            //7920230518235714886
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) + nextId("%06d");
         }
         //调用服务
         return getCode(prefix);
@@ -360,7 +362,7 @@ public class GenerateCodeFactory {
      */
     public static String getDetailId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
-            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_O) + nextId("%04d",false);
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_O) + nextId("%06d",false);
         }
         //调用服务
         return getCode(prefix);
