@@ -130,7 +130,9 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-        Assert.listOnlyOne(feeConfigDtos, "费用项不存在或存在多条");
+        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+            return;
+        }
 
         FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
 
@@ -202,11 +204,13 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
     private void importFeeDetail(ImportRoomFee importRoomFee, String storeId, String userId, String batchId) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeName(importRoomFee.getFeeName().trim());
+        feeConfigDto.setFeeNameEq(importRoomFee.getFeeName().trim());
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-        Assert.listOnlyOne(feeConfigDtos, "费用项不存在或存在多条");
+        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+            return;
+        }
 
         FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
 
