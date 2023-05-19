@@ -3,6 +3,8 @@ package com.java110.report.statistics.impl;
 import com.java110.dto.RoomDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
+import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IBaseDataStatisticsInnerServiceSMO baseDataStatisticsInnerServiceSMOImpl;
 
     /**
      * 查询全部房屋

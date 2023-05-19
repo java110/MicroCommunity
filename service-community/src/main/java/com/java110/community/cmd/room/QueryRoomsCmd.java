@@ -122,16 +122,7 @@ public class QueryRoomsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
-        //导致业务受理搜索查询
-//        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("1")) {
-//            if (reqJson.containsKey("roomNumLike") && !StringUtil.isEmpty(reqJson.getString("roomNumLike"))) {
-//                String[] roomNumLikes = reqJson.getString("roomNumLike").split("-");
-//                roomDto.setFloorNum(roomNumLikes[0]);
-//                roomDto.setUnitNum(roomNumLikes[1]);
-//                roomDto.setRoomNum(roomNumLikes[2]);
-//                roomDto.setRoomNumLike("");
-//            }
-//        }
+
 
         //员工数据权限
         String staffId = cmdDataFlowContext.getReqHeaders().get("user-id");
