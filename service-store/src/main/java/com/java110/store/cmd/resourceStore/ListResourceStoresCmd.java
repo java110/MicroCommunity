@@ -1,6 +1,7 @@
 package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.protobuf.Api;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -8,6 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
 import com.java110.dto.storehouse.StorehouseDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
@@ -79,8 +81,8 @@ public class ListResourceStoresCmd extends Cmd {
         BigDecimal totalPrice = BigDecimal.ZERO;
         if (count > 0) {
             resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
-            //查询总价
-            //queryResourceStoreAndResourceTotalPrice(resourceStores);
+            //todo 计算物品 库存和 价格
+            queryResourceStoreAndResourceTotalPrice(resourceStores);
             resourceStoreDto.setPage(Integer.valueOf(reqJson.getString("page")));
             subTotalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
             resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);
@@ -96,5 +98,36 @@ public class ListResourceStoresCmd extends Cmd {
         apiResourceStoreVo.setSubTotal(String.format("%.2f", subTotalPrice));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiResourceStoreVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 计算物品的数量和金额
+     *
+     * @param resourceStores
+     */
+    private void queryResourceStoreAndResourceTotalPrice(List<ApiResourceStoreDataVo> resourceStores) {
+
+        if (resourceStores == null || resourceStores.size() < 1) {
+            return;
+        }
+
+
+        BigDecimal stock = new BigDecimal(0.0);
+        BigDecimal totalPrice = new BigDecimal(0.0);
+        for (ApiResourceStoreDataVo resourceStore : resourceStores) {
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStore.getTimes();
+            if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
+                continue;
+            }
+
+            for (ResourceStoreTimesDto resourceStoreTimesDto : resourceStoreTimesDtos) {
+                stock = stock.add(new BigDecimal(resourceStoreTimesDto.getStock()));
+                totalPrice = totalPrice.add(new BigDecimal(resourceStoreTimesDto.getTotalPrice()));
+            }
+
+            resourceStore.setStock(stock.doubleValue() + "");
+            resourceStore.setTotalPrice(totalPrice.doubleValue() + "");
+        }
+
     }
 }

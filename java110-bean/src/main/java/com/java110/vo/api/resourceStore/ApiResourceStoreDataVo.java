@@ -59,6 +59,8 @@ public class ApiResourceStoreDataVo implements Serializable {
     private String isFixed;
     private String isFixedName;
 
+    private String totalPrice;
+
     private List<ResourceStoreTimesDto> times;
     public String getResId() {
         return resId;
@@ -338,5 +340,13 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setTimes(List<ResourceStoreTimesDto> times) {
         this.times = times;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

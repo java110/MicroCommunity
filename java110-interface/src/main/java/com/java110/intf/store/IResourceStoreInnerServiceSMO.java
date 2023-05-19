@@ -61,4 +61,5 @@ public interface IResourceStoreInnerServiceSMO {
     String queryResourceStoresTotalPrice(@RequestBody ResourceStoreDto resourceResourceStoreDto);
 
 
+
 }
