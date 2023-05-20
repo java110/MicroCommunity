@@ -39,6 +39,6 @@ public interface IBaseDataStatisticsInnerServiceSMO {
      *
      * @param queryFeeStatisticsDto 数据对象分享
      */
-    @RequestMapping(value = "/getRoomCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/getRoomInfo", method = RequestMethod.POST)
     List<RoomDto> getRoomInfo(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
 }
