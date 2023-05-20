@@ -1,6 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.RoomDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 /**
  * @ClassName IReportFeeStatisticsInnerServiceSMO
- * @Description 费用统计类 服务类
+ * @Description 报表 基础数据统计表
  * @Author wuxw
  * @Date 2019/4/24 9:04
  * @Version 1.0
@@ -24,79 +25,20 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
 
     /**
-     * <p>查询历史月欠费</p>
+     * <p>查询房屋总数</p>
      *
      * @param queryFeeStatisticsDto 数据对象分享
      */
-    @RequestMapping(value = "/getHisMonthOweFee", method = RequestMethod.POST)
-    double getHisMonthOweFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
+    @RequestMapping(value = "/getRoomCount", method = RequestMethod.POST)
+    double getRoomCount(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
+
+
 
     /**
-     * 查询当月欠费
+     * <p>查询房屋</p>
      *
-     * @param queryFeeStatisticsDto
-     * @return
+     * @param queryFeeStatisticsDto 数据对象分享
      */
-    @RequestMapping(value = "/getCurMonthOweFee", method = RequestMethod.POST)
-    double getCurMonthOweFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
-
-
-    /**
-     * 查询当月应收
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
-    @RequestMapping(value = "/getCurReceivableFee", method = RequestMethod.POST)
-    double getCurReceivableFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    @RequestMapping(value = "/getHisReceivedFee", method = RequestMethod.POST)
-    double getHisReceivedFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
-
-    @RequestMapping(value = "/getPreReceivedFee", method = RequestMethod.POST)
-    double getPreReceivedFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
-
-    @RequestMapping(value = "/getReceivedFee", method = RequestMethod.POST)
-    double getReceivedFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
-
-    /**
-     * 欠费户数
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
-    @RequestMapping(value = "/getOweRoomCount", method = RequestMethod.POST)
-    int getOweRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    /**
-     * 查询收费房屋数
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
-    @RequestMapping(value = "/getFeeRoomCount", method = RequestMethod.POST)
-    long getFeeRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    /**
-     * 楼栋收费率信息统计
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
-    @RequestMapping(value = "/getFloorFeeSummary", method = RequestMethod.POST)
-    List<Map> getFloorFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    /**
-     * 费用项收费率统计
-     * @param queryStatisticsDto
-     * @return
-     */
-    @RequestMapping(value = "/getConfigFeeSummary", method = RequestMethod.POST)
-    List<Map> getConfigFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    @RequestMapping(value = "/getObjFeeSummaryCount", method = RequestMethod.POST)
-    int getObjFeeSummaryCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
-
-    @RequestMapping(value = "/getObjFeeSummary", method = RequestMethod.POST)
-    List<Map> getObjFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
+    @RequestMapping(value = "/getRoomCount", method = RequestMethod.POST)
+    List<RoomDto> getRoomInfo(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
 }
