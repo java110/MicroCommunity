@@ -143,7 +143,7 @@ public class ListChargeMachineCmd extends Cmd {
         smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         String appId = "";
-        if (smallWeChatDtos != null || smallWeChatDtos.size() > 0) {
+        if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
             appId = smallWeChatDtos.get(0).getAppId();
         }
         String ownerUrl = UrlCache.getOwnerUrl();
