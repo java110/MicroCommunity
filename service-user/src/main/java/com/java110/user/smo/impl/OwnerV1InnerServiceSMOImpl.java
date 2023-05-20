@@ -69,6 +69,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
         if (StringUtil.isEmpty(ownerId)) {
             return;
         }
+
         //开始锁代码
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + "AddCountDto" + ownerId;

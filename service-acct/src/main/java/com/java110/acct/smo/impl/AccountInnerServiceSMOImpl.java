@@ -101,6 +101,16 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
 
     @Override
     public int saveAccount(@RequestBody AccountPo accountPo) {
+        //todo 查询账户是否已经存在
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(accountPo.getObjId());
+        accountDto.setPartId(accountPo.getPartId());
+        accountDto.setLink(accountPo.getLink());
+        int flag = accountServiceDaoImpl.queryAccountsCount(BeanConvertUtil.beanCovertMap(accountDto));
+        if (flag > 0) {
+            return flag;
+        }
+        //todo 保存
         accountServiceDaoImpl.saveAccount(BeanConvertUtil.beanCovertMap(accountPo));
         return 1;
     }
@@ -149,13 +159,13 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             DistributedLock.releaseDistributedLock(requestId, key);
         }
         accountDetailPo.setDetailType(AccountDetailDto.DETAIL_TYPE_IN);
-        if(StringUtil.isEmpty(accountDetailPo.getDetailId())) {
+        if (StringUtil.isEmpty(accountDetailPo.getDetailId())) {
             accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         }
-        if(StringUtil.isEmpty(accountDetailPo.getOrderId())){
+        if (StringUtil.isEmpty(accountDetailPo.getOrderId())) {
             accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
         }
-        if(StringUtil.isEmpty(accountDetailPo.getRelAcctId())){
+        if (StringUtil.isEmpty(accountDetailPo.getRelAcctId())) {
             accountDetailPo.setRelAcctId("-1");
         }
 
@@ -195,7 +205,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             double amount = Double.parseDouble(accounts.get(0).getAmount());
             BigDecimal amountBig = new BigDecimal(amount);
             amount = amountBig.subtract(new BigDecimal(Double.parseDouble(accountDetailPo.getAmount()))).doubleValue();
-            if(amount < 0){
+            if (amount < 0) {
                 throw new IllegalArgumentException("余额不足");
             }
             AccountPo accountPo = new AccountPo();
@@ -208,16 +218,16 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             }
             accountDetailPo.setObjType(accounts.get(0).getObjType());
         } finally {
-            DistributedLock.releaseDistributedLock(key,requestId);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
         accountDetailPo.setDetailType(AccountDetailDto.DETAIL_TYPE_OUT);
-        if(StringUtil.isEmpty(accountDetailPo.getDetailId())) {
+        if (StringUtil.isEmpty(accountDetailPo.getDetailId())) {
             accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         }
-        if(StringUtil.isEmpty(accountDetailPo.getOrderId())){
+        if (StringUtil.isEmpty(accountDetailPo.getOrderId())) {
             accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
         }
-        if(StringUtil.isEmpty(accountDetailPo.getRelAcctId())){
+        if (StringUtil.isEmpty(accountDetailPo.getRelAcctId())) {
             accountDetailPo.setRelAcctId("-1");
         }
         //保存交易明细
