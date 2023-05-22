@@ -718,7 +718,7 @@
     <!-- 查询业主费用明细表 -->
     <select id="getOwnerFeeSummary" parameterType="Map" resultType="Map">
         select
-        a.owner_id,GROUP_CONCAT(a.obj_name) objName,pfc.fee_type_cd,
+        a.owner_id ownerId,GROUP_CONCAT(a.obj_name) objName,pfc.fee_type_cd feeTypeCd,
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
