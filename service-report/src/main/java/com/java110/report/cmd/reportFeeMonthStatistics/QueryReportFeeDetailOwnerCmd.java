@@ -153,7 +153,7 @@ public class QueryReportFeeDetailOwnerCmd extends Cmd {
             objName += (oName + ",");
         }
         if (objName.endsWith(",")) {
-            objName = objName.substring(0, objNames.length - 1);
+            objName = objName.substring(0, objName.length - 1);
         }
 
         data.put("objName", objName);
