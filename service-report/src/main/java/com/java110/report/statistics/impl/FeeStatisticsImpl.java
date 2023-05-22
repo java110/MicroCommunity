@@ -123,4 +123,14 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getObjFeeSummary(queryStatisticsDto);
     }
 
+    /**
+     * 查询 业主明细表
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getOwnerFeeSummary(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getOwnerFeeSummary(queryStatisticsDto);
+    }
+
 }

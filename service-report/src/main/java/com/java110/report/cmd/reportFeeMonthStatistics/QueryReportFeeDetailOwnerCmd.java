@@ -6,10 +6,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
-import com.java110.intf.community.IRoomV1InnerServiceSMO;
-import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
@@ -26,19 +24,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 查询房屋费用明细表
- * 以房屋为维度统计 房屋的各个费用项 欠费和实收
+ * 根据业主查询 费用明细
  */
-
-@Java110Cmd(serviceCode = "reportFeeMonthStatistics.queryReportFeeDetailRoom")
-public class QueryReportFeeDetailRoomCmd extends Cmd {
+@Java110Cmd(serviceCode = "reportFeeMonthStatistics.queryReportFeeDetailOwner")
+public class QueryReportFeeDetailOwnerCmd extends Cmd {
 
     @Autowired
     private IFeeStatistics feeStatisticsImpl;
 
     @Autowired
     private IBaseDataStatistics baseDataStatisticsImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -50,88 +45,86 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         queryStatisticsDto.setConfigId(reqJson.getString("configId"));
-        queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
         queryStatisticsDto.setObjName(reqJson.getString("objName"));
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
         queryStatisticsDto.setPage(reqJson.getInteger("page"));
         queryStatisticsDto.setRow(reqJson.getInteger("row"));
-        long count = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
-        List<RoomDto> rooms = null;
+        long count = baseDataStatisticsImpl.getOwnerCount(queryStatisticsDto);
+        List<OwnerDto> owners = null;
         if (count > 0) {
-            rooms = baseDataStatisticsImpl.getRoomInfo(queryStatisticsDto);
+            owners = baseDataStatisticsImpl.getOwnerInfo(queryStatisticsDto);
         } else {
-            rooms = new ArrayList<>();
+            owners = new ArrayList<>();
         }
 
-        // todo 计算 房屋欠费实收数据
-        JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
+        // todo 计算 业主欠费实收数据
+        JSONArray datas = computeOwnerOweReceivedFee(owners, queryStatisticsDto);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) queryStatisticsDto.getRow()), count, datas);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
-
     }
 
     /**
-     * 计算房屋欠费 实收费用
+     * 计算业主欠费 实收费用
      *
-     * @param rooms
+     * @param owners
      * @return
      */
-    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms,QueryStatisticsDto queryStatisticsDto) {
-        if (rooms == null || rooms.size() < 1) {
+    private JSONArray computeOwnerOweReceivedFee(List<OwnerDto> owners, QueryStatisticsDto queryStatisticsDto) {
+        if (owners == null || owners.size() < 1) {
             return new JSONArray();
         }
 
         JSONArray datas = new JSONArray();
         JSONObject data = null;
 
-        List<String> objIds = new ArrayList<>();
-        for (RoomDto roomDto : rooms) {
-            objIds.add(roomDto.getRoomId());
+        List<String> ownerIds = new ArrayList<>();
+        for (OwnerDto ownerDto : owners) {
+            ownerIds.add(ownerDto.getOwnerId());
             data = new JSONObject();
-            data.put("roomId",roomDto.getRoomId());
-            data.put("roomName",roomDto.getFloorNum()+"-"+roomDto.getUnitNum()+"-"+roomDto.getRoomNum());
-            data.put("ownerName",roomDto.getOwnerName());
-            data.put("ownerId",roomDto.getOwnerId());
-            data.put("link",roomDto.getLink());
+            data.put("ownerName", ownerDto.getName());
+            data.put("ownerId", ownerDto.getOwnerId());
+            data.put("link", ownerDto.getLink());
             datas.add(data);
         }
 
-        queryStatisticsDto.setObjIds(objIds.toArray(new String[objIds.size()]));
-        List<Map> infos = feeStatisticsImpl.getObjFeeSummary(queryStatisticsDto);
+        queryStatisticsDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
+        List<Map> infos = feeStatisticsImpl.getOwnerFeeSummary(queryStatisticsDto);
 
-        if(infos == null || infos.size() < 1){
+        if (infos == null || infos.size() < 1) {
             return datas;
         }
 
         BigDecimal oweFee = new BigDecimal(0.00);
         BigDecimal receivedFee = new BigDecimal(0.00);
-        for(int dataIndex = 0; dataIndex < datas.size();dataIndex ++){
+        for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
             data = datas.getJSONObject(dataIndex);
-            for(Map info : infos){
-                if(!data.get("roomId").toString().equals(info.get("objId"))){
+            for (Map info : infos) {
+                if (!data.get("ownerId").toString().equals(info.get("ownerId"))) {
                     continue;
                 }
 
                 oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
                 receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
-                data.put("oweFee"+info.get("feeTypeCd").toString(),info.get("oweFee"));
-                data.put("receivedFee"+info.get("feeTypeCd").toString(),info.get("receivedFee"));
+                data.put("oweFee" + info.get("feeTypeCd").toString(), info.get("oweFee"));
+                data.put("receivedFee" + info.get("feeTypeCd").toString(), info.get("receivedFee"));
+                data.put("objName",info.get("objName"));
             }
-            data.put("oweFee",oweFee.doubleValue());
-            data.put("receivedFee",receivedFee.doubleValue());
+            data.put("oweFee", oweFee.doubleValue());
+            data.put("receivedFee", receivedFee.doubleValue());
         }
 
         return datas;
     }
+
+
 }

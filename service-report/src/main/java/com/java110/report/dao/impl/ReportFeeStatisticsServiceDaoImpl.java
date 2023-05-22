@@ -68,6 +68,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询欠费追回
+     *
      * @param info
      * @return
      */
@@ -86,6 +87,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询预交费用
+     *
      * @param info
      * @return
      */
@@ -104,6 +106,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 实收费用
+     *
      * @param info
      * @return
      */
@@ -182,7 +185,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     @Override
     public List<Map> getObjFeeSummary(Map info) {
-        logger.debug("查询 费用项收费率 入参 info : {}", JSONObject.toJSONString(info));
+        logger.debug("查询 房屋明细表 入参 info : {}", JSONObject.toJSONString(info));
 
         List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjFeeSummary", info);
 
@@ -190,5 +193,14 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public List<Map> getOwnerFeeSummary(Map info) {
+        logger.debug("查询 业主明细表 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getOwnerFeeSummary", info);
+
+
+        return infos;
+    }
 
 }

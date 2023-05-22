@@ -166,9 +166,9 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.pay_fee_time &gt;  #{startDate}
+        and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &lt;  #{startDate}
+        and t.cur_month_time &lt; #{startDate}
     </select>
 
     <!-- 查询 预交费用 -->
@@ -208,9 +208,9 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.pay_fee_time &gt;  #{startDate}
+        and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &gt;  #{endDate}
+        and t.cur_month_time &gt; #{endDate}
     </select>
 
     <!-- 查询实收费用 -->
@@ -253,7 +253,7 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.create_time &gt;  #{startDate}
+        and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
     </select>
 
@@ -352,29 +352,29 @@
 
         select a.floor_id floorId,a.floor_num floorNum,a.name floorName,
         (
-            select count(1) from (
-            select bu.floor_id,a.room_id
-            from building_room a
-            left join pay_fee_detail_month t on t.obj_id = a.room_id
-            INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-            left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
-            where
-            1=1
-            and a.status_cd = '0'
-            and pf.payer_obj_type = '3333'
-            and t.community_id= a.community_id
-            and t.cur_month_time &lt; #{endDate}
-            and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
-            <if test="configIds !=null ">
-                and t.config_id in
-                <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="feeTypeCd != null and feeTypeCd != ''">
-                and pf.fee_type_cd = #{feeTypeCd}
-            </if>
-            group by bu.floor_id,t.obj_id
+        select count(1) from (
+        select bu.floor_id,a.room_id
+        from building_room a
+        left join pay_fee_detail_month t on t.obj_id = a.room_id
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and a.status_cd = '0'
+        and pf.payer_obj_type = '3333'
+        and t.community_id= a.community_id
+        and t.cur_month_time &lt; #{endDate}
+        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by bu.floor_id,t.obj_id
         ) b
         where b.floor_id = a.floor_id
         ) oweRoomCount,
@@ -485,7 +485,7 @@
         and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
-        and t.cur_month_time  &gt; #{startDate}
+        and t.cur_month_time &gt; #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -544,7 +544,7 @@
         1=1
         and a.status_cd = '0'
         and pf.payer_obj_type = '3333'
-        and t.community_id=  #{communityId}
+        and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -573,7 +573,7 @@
             and bu.floor_id = a.floor_id
         </if>
         and t.status_cd = '0'
-        and t.community_id=  #{communityId}
+        and t.community_id= #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         <if test="configIds !=null ">
@@ -598,7 +598,7 @@
             and bu.floor_id = a.floor_id
         </if>
         and t.status_cd = '0'
-        and t.community_id=  #{communityId}
+        and t.community_id= #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
         and t.cur_month_time &gt; #{endDate}
@@ -624,7 +624,7 @@
             and bu.floor_id = a.floor_id
         </if>
         and t.status_cd = '0'
-        and t.community_id=  #{communityId}
+        and t.community_id= #{communityId}
         and t.detail_id = '-1'
         and t.cur_month_time &lt; #{startDate}
         <if test="configIds !=null ">
@@ -650,7 +650,7 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.cur_month_time  &gt; #{startDate}
+        and t.cur_month_time &gt; #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -677,7 +677,7 @@
         group by a.obj_name,a.obj_id,a.owner_name,a.link
         ) b
     </select>
-
+    <!-- 查询房屋费用明细表-->
     <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
         select
         a.obj_id objId,pfc.fee_type_cd feeTypeCd,
@@ -715,5 +715,42 @@
         group by a.obj_id,pfc.fee_type_cd,a.community_id
     </select>
 
+    <!-- 查询业主费用明细表 -->
+    <select id="getOwnerFeeSummary" parameterType="Map" resultType="Map">
+        select
+        a.owner_id,GROUP_CONCAT(a.obj_name) objName,pfc.fee_type_cd,
+        (
+        select ifnull(sum(t.receivable_amount),0.0) hisOweFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
+        where 1=1
+        and t.status_cd = '0'
+        and t.detail_id = '-1'
+        and t.community_id= a.community_id
+        and t.owner_id = a.owner_id
+        and pfc1.fee_type_cd = pfc.fee_type_cd
+        and t.cur_month_time &lt; #{endDate}
+        ) oweFee,
+        (
+        select ifnull(sum(t.received_amount),0.0) receivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
+        where t.owner_id = a.owner_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and pfc1.fee_type_cd = pfc.fee_type_cd
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        ) receivedFee
+        from pay_fee_detail_month a
+        inner join pay_fee_config pfc on a.config_id = pfc.config_id and pfc.status_cd = '0'
+        where a.owner_id in
+        <foreach collection="ownerIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by a.owner_id,pfc.fee_type_cd,a.community_id
+    </select>
 
 </mapper>

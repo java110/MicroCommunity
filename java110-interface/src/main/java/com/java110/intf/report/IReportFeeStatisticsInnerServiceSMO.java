@@ -103,4 +103,12 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getObjFeeSummary", method = RequestMethod.POST)
     List<Map> getObjFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 业主明细表
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getOwnerFeeSummary", method = RequestMethod.POST)
+    List<Map> getOwnerFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

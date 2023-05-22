@@ -1,10 +1,12 @@
 package com.java110.report.statistics.impl;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
 
     @Autowired
     private IBaseDataStatisticsInnerServiceSMO baseDataStatisticsInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
     /**
      * 查询全部房屋
@@ -72,6 +77,26 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
+    }
+
+    @Override
+    public long getOwnerCount(QueryStatisticsDto queryStatisticsDto) {
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        ownerDto.setNameLike(queryStatisticsDto.getOwnerName());
+        ownerDto.setLink(queryStatisticsDto.getLink());
+        return ownerV1InnerServiceSMOImpl.queryOwnersCount(ownerDto);
+    }
+
+    @Override
+    public List<OwnerDto> getOwnerInfo(QueryStatisticsDto queryStatisticsDto) {
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
+        ownerDto.setNameLike(queryStatisticsDto.getOwnerName());
+        ownerDto.setLink(queryStatisticsDto.getLink());
+        ownerDto.setPage(queryStatisticsDto.getPage());
+        ownerDto.setRow(queryStatisticsDto.getRow());
+        return ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
     }
 
 

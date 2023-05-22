@@ -145,4 +145,16 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         List<Map> info = reportFeeStatisticsServiceDaoImpl.getObjFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    @Override
+    public List<Map> getOwnerFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        int page = queryStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            queryStatisticsDto.setPage((page - 1) * queryStatisticsDto.getRow());
+        }
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getOwnerFeeSummary(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
 }

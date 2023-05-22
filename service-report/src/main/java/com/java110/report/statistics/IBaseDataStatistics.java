@@ -1,6 +1,7 @@
 package com.java110.report.statistics;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 
 import java.util.List;
@@ -32,7 +33,17 @@ public interface IBaseDataStatistics {
     long getFreeRoomCount(QueryStatisticsDto queryStatisticsDto);
 
 
+    /**
+     * 查询 业主数量
+     * @param queryStatisticsDto
+     * @return
+     */
+    long getOwnerCount(QueryStatisticsDto queryStatisticsDto);
 
-
-
+    /**
+     * 查询业主信息
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<OwnerDto> getOwnerInfo(QueryStatisticsDto queryStatisticsDto);
 }

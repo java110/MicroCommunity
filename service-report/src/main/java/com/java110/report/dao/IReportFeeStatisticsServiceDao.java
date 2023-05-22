@@ -49,6 +49,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询欠费户数
+     *
      * @param info
      * @return
      */
@@ -56,6 +57,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询当月应收费用
+     *
      * @param info
      * @return
      */
@@ -63,6 +65,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询收费房屋数
+     *
      * @param info
      * @return
      */
@@ -70,6 +73,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 统计楼栋 收费率信息
+     *
      * @param info
      * @return
      */
@@ -77,6 +81,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 统计费用项 收费率信息
+     *
      * @param info
      * @return
      */
@@ -84,6 +89,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询费用明细表（总数）
+     *
      * @param info
      * @return
      */
@@ -91,8 +97,17 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询费用明细表
+     *
      * @param info
      * @return
      */
     List<Map> getObjFeeSummary(Map info);
+
+    /**
+     * 查询业主明细表
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getOwnerFeeSummary(Map info);
 }

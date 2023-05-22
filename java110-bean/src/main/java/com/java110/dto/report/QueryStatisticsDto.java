@@ -32,6 +32,8 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
 
     private String[] objIds;
 
+    private String[] ownerIds;
+
 
     public String getCommunityId() {
         return communityId;
@@ -128,5 +130,13 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
 
     public void setObjIds(String[] objIds) {
         this.objIds = objIds;
+    }
+
+    public String[] getOwnerIds() {
+        return ownerIds;
+    }
+
+    public void setOwnerIds(String[] ownerIds) {
+        this.ownerIds = ownerIds;
     }
 }
