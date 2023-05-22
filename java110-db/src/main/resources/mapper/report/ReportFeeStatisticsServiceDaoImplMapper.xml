@@ -673,82 +673,46 @@
         select a.obj_name objName,a.obj_id objId,a.owner_name ownerName,a.link
         from pay_fee_detail_month a
         where a.status_cd = '0'
-        and a.community_id = '2023013154290059'
+        and a.community_id = #{communityId}
         group by a.obj_name,a.obj_id,a.owner_name,a.link
         ) b
     </select>
 
     <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
-        select a.obj_name objName,a.obj_id objId,a.owner_name ownerName,a.link,
+        select
+        a.objId,pfc.feeTypeCd,
         (
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) hisOweFee
+        select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
         where t.obj_id = a.obj_id
         and t.status_cd = '0'
+        and t.detail_id = '-1'
         and t.community_id= a.community_id
-        and t.cur_month_time &lt; #{startDate}
-        ) hisOweFee,
-        (
-        select ifnull(sum(t.receivable_amount - t.received_amount - t.discount_amount),0.0) curOweFee
-        from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        where t.obj_id = a.obj_id
-        and t.status_cd = '0'
-        and t.community_id= a.community_id
-        and t.cur_month_time &gt;= #{startDate}
+        and t.obj_id = a.obj_id
+        and pfc1.fee_type_cd = pfc.fee_type_cd
         and t.cur_month_time &lt; #{endDate}
-        ) curOweFee,
-        (
-        select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
-        from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        where t.obj_id = a.obj_id
-        and t.status_cd = '0'
-        and t.community_id= a.community_id
-        and t.cur_month_time &gt; #{startDate}
-        and t.cur_month_time &lt; #{endDate}
-        ) curReceivableFee,
-        (
-        select ifnull(sum(t.received_amount),0.0) hisReceivedFee
-        from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        where t.obj_id = a.obj_id
-        and t.status_cd = '0'
-        and t.community_id= a.community_id
-        and t.pay_fee_time &gt; #{startDate}
-        and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &lt; #{startDate}
-        ) hisReceivedFee,
-        (
-        select ifnull(sum(t.received_amount),0.0) preReceivedFee
-        from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        where t.obj_id = a.obj_id
-        and t.status_cd = '0'
-        and t.community_id= a.community_id
-        and t.pay_fee_time &gt; #{startDate}
-        and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &gt; #{endDate}
-        ) preReceivedFee,
+        ) oweFee,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
         where t.obj_id = a.obj_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
+        and pfc1.fee_type_cd = pfc.fee_type_cd
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
         ) receivedFee
         from pay_fee_detail_month a
-        where a.status_cd = '0'
-        and a.community_id = #{communityId}
-        group by a.obj_name,a.obj_id,a.owner_name,a.link
-        order by  a.obj_name
-        <if test="page != -1 and page != null ">
-            limit #{page}, #{row}
-        </if>
+        inner join pay_fee_config pfc on a.config_id = pfc.config_id and pfc.status_cd = '0'
+        where a.obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by a.obj_id,pfc.fee_type_cd,a.community_id
     </select>
 
 

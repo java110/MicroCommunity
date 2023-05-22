@@ -27,18 +27,18 @@ public interface IBaseDataStatisticsInnerServiceSMO {
     /**
      * <p>查询房屋总数</p>
      *
-     * @param queryFeeStatisticsDto 数据对象分享
+     * @param roomDto 数据对象分享
      */
     @RequestMapping(value = "/getRoomCount", method = RequestMethod.POST)
-    double getRoomCount(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
+    long getRoomCount(@RequestBody RoomDto roomDto);
 
 
 
     /**
      * <p>查询房屋</p>
      *
-     * @param queryFeeStatisticsDto 数据对象分享
+     * @param roomDto 数据对象分享
      */
     @RequestMapping(value = "/getRoomInfo", method = RequestMethod.POST)
-    List<RoomDto> getRoomInfo(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
+    List<RoomDto> getRoomInfo(@RequestBody RoomDto roomDto);
 }

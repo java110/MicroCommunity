@@ -34,30 +34,30 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
     /**
      * 查询房屋总数
      *
-     * @param queryStatisticsDto 数据对象分享
+     * @param roomDto 数据对象分享
      * @return
      */
     @Override
-    public double getRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
-        int info = baseDataStatisticsServiceDaoImpl.getRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+    public long getRoomCount(@RequestBody RoomDto roomDto) {
+        int info = baseDataStatisticsServiceDaoImpl.getRoomCount(BeanConvertUtil.beanCovertMap(roomDto));
         return info;
     }
 
     /**
      * 查询房屋信息
      *
-     * @param queryStatisticsDto 数据对象分享
+     * @param roomDto 数据对象分享
      * @return
      */
     @Override
-    public List<RoomDto> getRoomInfo(@RequestBody QueryStatisticsDto queryStatisticsDto) {
-        int page = queryStatisticsDto.getPage();
+    public List<RoomDto> getRoomInfo(@RequestBody RoomDto roomDto) {
+        int page = roomDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
-            queryStatisticsDto.setPage((page - 1) * queryStatisticsDto.getRow());
+            roomDto.setPage((page - 1) * roomDto.getRow());
         }
 
-        List<Map> info = baseDataStatisticsServiceDaoImpl.getRoomInfo(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        List<Map> info = baseDataStatisticsServiceDaoImpl.getRoomInfo(BeanConvertUtil.beanCovertMap(roomDto));
         return BeanConvertUtil.covertBeanList(info, RoomDto.class);
     }
 }

@@ -5,6 +5,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,16 +38,12 @@ public class AppTest
      */
     public void testApp()
     {
-        String startTime = "2023-03-02 04:00:00";
-        String endTime = "2024-01-01 00:00:00";
+        BigDecimal curFeePrice = new BigDecimal(346.815+"");
+        curFeePrice = curFeePrice.multiply(new BigDecimal(1));
 
+        curFeePrice = curFeePrice.setScale(2,BigDecimal.ROUND_HALF_UP);
 
-        List<String> months = DateUtil.getMonthBetweenDate(startTime,endTime);
-
-        for(String month : months) {
-            System.out.println(month);
-        }
-
+        System.out.printf(curFeePrice.doubleValue()+"");
 
     }
 }

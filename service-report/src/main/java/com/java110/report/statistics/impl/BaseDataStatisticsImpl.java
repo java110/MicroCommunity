@@ -10,6 +10,8 @@ import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 基础数据统计类
  */
@@ -35,7 +37,24 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         addRoomNumCondition(queryStatisticsDto, roomDto);
-        return roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
+        return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
+    }
+
+    /**
+     * 查询房屋信息
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<RoomDto> getRoomInfo(QueryStatisticsDto queryStatisticsDto) {
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
+        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        roomDto.setPage(queryStatisticsDto.getPage());
+        roomDto.setRow(queryStatisticsDto.getRow());
+        addRoomNumCondition(queryStatisticsDto, roomDto);
+        return baseDataStatisticsInnerServiceSMOImpl.getRoomInfo(roomDto);
     }
 
 

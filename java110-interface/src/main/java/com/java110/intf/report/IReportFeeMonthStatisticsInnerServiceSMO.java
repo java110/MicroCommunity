@@ -6,6 +6,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.dto.report.ReportDeposit;
 import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
@@ -248,6 +249,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/queryOweFeeDetailMajor", method = RequestMethod.POST)
     ReportFeeMonthStatisticsDto queryOweFeeDetailMajor(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表个数
      *
@@ -413,6 +415,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询华宁物业 欠费总数
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -421,6 +424,7 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
 
     /**
      * 查询华宁物业 欠费明细 按楼栋 group by
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -446,10 +450,11 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo);
 
     /**
-     *
      * @param ownerDto
      * @return
      */
     @RequestMapping(value = "/queryRoomAndParkingSpace", method = RequestMethod.POST)
     List<OwnerDto> queryRoomAndParkingSpace(@RequestBody OwnerDto ownerDto);
+
+
 }
