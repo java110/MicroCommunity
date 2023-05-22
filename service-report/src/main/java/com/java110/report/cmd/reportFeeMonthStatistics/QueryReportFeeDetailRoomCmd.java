@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,15 +116,22 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
             return datas;
         }
 
+        BigDecimal oweFee = new BigDecimal(0.00);
+        BigDecimal receivedFee = new BigDecimal(0.00);
         for(int dataIndex = 0; dataIndex < datas.size();dataIndex ++){
             data = datas.getJSONObject(dataIndex);
             for(Map info : infos){
                 if(!data.get("roomId").toString().equals(info.get("objId"))){
                     continue;
                 }
+
+                oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
+                receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
                 data.put("oweFee"+info.get("feeTypeCd").toString(),info.get("oweFee"));
                 data.put("receivedFee"+info.get("feeTypeCd").toString(),info.get("receivedFee"));
             }
+            data.put("oweFee",oweFee.doubleValue());
+            data.put("receivedFee",receivedFee.doubleValue());
         }
 
         return datas;
