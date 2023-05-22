@@ -2,6 +2,7 @@ package com.java110.report.statistics;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 
@@ -56,4 +57,18 @@ public interface IBaseDataStatistics {
     long getContractCount(QueryStatisticsDto queryStatisticsDto);
 
     List<ContractDto> getContract(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询车辆数量
+     * @param queryStatisticsDto
+     * @return
+     */
+    long getCarCount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询车辆
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<OwnerCarDto> getCar(QueryStatisticsDto queryStatisticsDto);
 }

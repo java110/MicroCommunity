@@ -2,12 +2,14 @@ package com.java110.report.statistics.impl;
 
 import com.java110.dto.RoomDto;
 import com.java110.dto.contract.ContractDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.utils.util.StringUtil;
@@ -34,6 +36,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
     @Autowired
     private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
     /**
      * 查询全部房屋
      *
@@ -44,8 +49,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
     public long getRoomCount(QueryStatisticsDto queryStatisticsDto) {
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
+
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
     }
@@ -90,6 +96,7 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         ownerDto.setNameLike(queryStatisticsDto.getOwnerName());
         ownerDto.setLink(queryStatisticsDto.getLink());
+        ownerDto.setCommunityId(queryStatisticsDto.getCommunityId());
         return ownerV1InnerServiceSMOImpl.queryOwnersCount(ownerDto);
     }
 
@@ -98,6 +105,7 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         ownerDto.setNameLike(queryStatisticsDto.getOwnerName());
+        ownerDto.setCommunityId(queryStatisticsDto.getCommunityId());
         ownerDto.setLink(queryStatisticsDto.getLink());
         ownerDto.setPage(queryStatisticsDto.getPage());
         ownerDto.setRow(queryStatisticsDto.getRow());
@@ -107,6 +115,7 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
     @Override
     public long getContractCount(QueryStatisticsDto queryStatisticsDto) {
         ContractDto contractDto = new ContractDto();
+        contractDto.setContractNameLike(queryStatisticsDto.getObjName());
         contractDto.setStoreId(queryStatisticsDto.getStoreId());
         contractDto.setbLink(queryStatisticsDto.getLink());
         contractDto.setPartyBLike(queryStatisticsDto.getOwnerName());
@@ -118,10 +127,35 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         ContractDto contractDto = new ContractDto();
         contractDto.setStoreId(queryStatisticsDto.getStoreId());
         contractDto.setbLink(queryStatisticsDto.getLink());
+        contractDto.setContractNameLike(queryStatisticsDto.getObjName());
         contractDto.setPartyBLike(queryStatisticsDto.getOwnerName());
         contractDto.setPage(queryStatisticsDto.getPage());
         contractDto.setRow(queryStatisticsDto.getRow());
         return contractInnerServiceSMOImpl.queryContracts(contractDto);
+    }
+
+    @Override
+    public long getCarCount(QueryStatisticsDto queryStatisticsDto) {
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(queryStatisticsDto.getCommunityId());
+        ownerCarDto.setCarNumLike(queryStatisticsDto.getObjName());
+        ownerCarDto.setOwnerName(queryStatisticsDto.getOwnerName());
+        ownerCarDto.setLink(queryStatisticsDto.getLink());
+        ownerCarDto.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
+        return ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
+    }
+
+    @Override
+    public List<OwnerCarDto> getCar(QueryStatisticsDto queryStatisticsDto) {
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCommunityId(queryStatisticsDto.getCommunityId());
+        ownerCarDto.setCarNumLike(queryStatisticsDto.getObjName());
+        ownerCarDto.setOwnerName(queryStatisticsDto.getOwnerName());
+        ownerCarDto.setLink(queryStatisticsDto.getLink());
+        ownerCarDto.setPage(queryStatisticsDto.getPage());
+        ownerCarDto.setRow(queryStatisticsDto.getRow());
+        ownerCarDto.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
+        return ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
     }
 
 
