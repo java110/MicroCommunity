@@ -1,11 +1,13 @@
 package com.java110.report.statistics.impl;
 
 import com.java110.dto.RoomDto;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.utils.util.StringUtil;
@@ -28,6 +30,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
 
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     /**
      * 查询全部房屋
@@ -97,6 +102,26 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         ownerDto.setPage(queryStatisticsDto.getPage());
         ownerDto.setRow(queryStatisticsDto.getRow());
         return ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+    }
+
+    @Override
+    public long getContractCount(QueryStatisticsDto queryStatisticsDto) {
+        ContractDto contractDto = new ContractDto();
+        contractDto.setStoreId(queryStatisticsDto.getStoreId());
+        contractDto.setbLink(queryStatisticsDto.getLink());
+        contractDto.setPartyBLike(queryStatisticsDto.getOwnerName());
+        return contractInnerServiceSMOImpl.queryContractsCount(contractDto);
+    }
+
+    @Override
+    public List<ContractDto> getContract(QueryStatisticsDto queryStatisticsDto) {
+        ContractDto contractDto = new ContractDto();
+        contractDto.setStoreId(queryStatisticsDto.getStoreId());
+        contractDto.setbLink(queryStatisticsDto.getLink());
+        contractDto.setPartyBLike(queryStatisticsDto.getOwnerName());
+        contractDto.setPage(queryStatisticsDto.getPage());
+        contractDto.setRow(queryStatisticsDto.getRow());
+        return contractInnerServiceSMOImpl.queryContracts(contractDto);
     }
 
 
