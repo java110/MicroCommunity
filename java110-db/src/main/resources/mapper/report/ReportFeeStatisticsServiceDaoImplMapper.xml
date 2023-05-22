@@ -680,7 +680,7 @@
 
     <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
         select
-        a.objId,pfc.feeTypeCd,
+        a.obj_id objId,pfc.fee_type_cd feeTypeCd,
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
