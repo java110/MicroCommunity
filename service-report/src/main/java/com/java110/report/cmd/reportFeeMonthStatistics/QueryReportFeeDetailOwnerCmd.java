@@ -12,6 +12,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,13 +118,45 @@ public class QueryReportFeeDetailOwnerCmd extends Cmd {
                 receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
                 data.put("oweFee" + info.get("feeTypeCd").toString(), info.get("oweFee"));
                 data.put("receivedFee" + info.get("feeTypeCd").toString(), info.get("receivedFee"));
-                data.put("objName",info.get("objName"));
+                data.put("objName", info.get("objName"));
             }
             data.put("oweFee", oweFee.doubleValue());
             data.put("receivedFee", receivedFee.doubleValue());
+            // todo 处理 收费对象重复问题
+            delRepeatObjName(data);
         }
 
+
         return datas;
+    }
+
+    /**
+     * 去除 重复的objName
+     * @param data
+     */
+    private void delRepeatObjName(JSONObject data) {
+
+        String objName = data.getString("objName");
+        if (StringUtil.isEmpty(objName)) {
+            return;
+        }
+
+        String[] objNames = objName.split(",");
+        List<String> oNames = new ArrayList<>();
+        for (String oName : objNames) {
+            if (!oNames.contains(oName)) {
+                oNames.add(oName);
+            }
+        }
+        objName = "";
+        for (String oName : oNames) {
+            objName += (oName + ",");
+        }
+        if (objName.endsWith(",")) {
+            objName = objName.substring(0, objNames.length - 1);
+        }
+
+        data.put("objName", objName);
     }
 
 
