@@ -155,36 +155,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         );
 
 
-        if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
-            if (TRADE_TYPE_JSAPI.equals(tradeType)) {
-
-                resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-                resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
-                resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
-            } else if (TRADE_TYPE_APP.equals(tradeType)) {
-                resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-                resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("partnerid", smallWeChatDto.getMchId());
-                resultMap.put("prepayid", resMap.get("prepay_id"));
-                //resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
-            } else if (TRADE_TYPE_NATIVE.equals(tradeType)) {
-                resultMap.put("prepayId", resMap.get("prepay_id"));
-                resultMap.put("codeUrl", resMap.get("code_url"));
-            }
-            resultMap.put("code", "0");
-            resultMap.put("msg", "下单成功");
-            logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap + "===notifyUrl===" + notifyUrl);
-        } else {
-            resultMap.put("code", resMap.get("return_code"));
-            resultMap.put("msg", resMap.get("return_msg"));
-            logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.get("return_msg") + "===code===" + resMap.get("return_code") + "===notifyUrl===" + notifyUrl);
-        }
-        return resultMap;
+        return resMap;
     }
 
 
