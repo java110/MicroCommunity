@@ -496,29 +496,6 @@ public class ReportFeeMonthStatisticsApi {
      *
      * @param communityId 小区ID
      * @return
-     * @serviceCode /reportFeeMonthStatistics/queryPrePayment
-     * @path /app/reportFeeMonthStatistics/queryPrePayment
-     */
-    @RequestMapping(value = "/queryPrePayment", method = RequestMethod.GET)
-    public ResponseEntity<String> queryPrePayment(@RequestParam(value = "communityId") String communityId,
-                                                  @RequestParam(value = "page") int page,
-                                                  @RequestParam(value = "row") int row) {
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
-        reportFeeMonthStatisticsDto.setCommunityId(communityId);
-        reportFeeMonthStatisticsDto.setPage(page);
-        reportFeeMonthStatisticsDto.setRow(row);
-        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
-        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
-        return getReportFeeMonthStatisticsBMOImpl.queryPrePayment(reportFeeMonthStatisticsDto);
-    }
-
-    /**
-     * 查询费用分项表
-     *
-     * @param communityId 小区ID
-     * @return
      * @serviceCode /reportFeeMonthStatistics/queryOwePaymentCount
      * @path /app/reportFeeMonthStatistics/queryOwePaymentCount
      */

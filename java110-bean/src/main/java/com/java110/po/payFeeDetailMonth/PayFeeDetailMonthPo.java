@@ -34,6 +34,8 @@ public class PayFeeDetailMonthPo implements Serializable {
     private String feeName;
     private String configId;
 
+    private String deadlineTime;
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -217,5 +219,13 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
     }
 }

@@ -1255,7 +1255,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        apiUrl = "/reportFeeMonthStatistics/queryPrePayment" + mapToUrlParam(reqJson);
+        apiUrl = "/reportFeeMonthStatistics.queryPrePayment" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
             return null;
@@ -1278,7 +1278,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        apiUrl = "/reportFeeMonthStatistics/queryDeadlineFee" + mapToUrlParam(reqJson);
+        apiUrl = "/reportFeeMonthStatistics.queryDeadlineFee" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
             return null;
