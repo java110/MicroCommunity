@@ -119,7 +119,7 @@ public class OwnerUnBindRoomToIotAdapt extends DatabusAdaptImpl {
     private void dealOwnerData(OwnerDto tOwnerDto, OwnerRoomRelPo ownerRoomRelPo) {
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setRoomId(ownerRoomRelPo.getRoomId());
+        roomDto.setOwnerId(tOwnerDto.getOwnerId());
         roomDto.setCommunityId(tOwnerDto.getCommunityId());
         //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
         List<RoomDto> rooms = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);

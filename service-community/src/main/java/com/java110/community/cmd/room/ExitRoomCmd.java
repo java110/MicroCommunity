@@ -114,7 +114,7 @@ public class ExitRoomCmd extends Cmd {
         businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
         //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         OwnerRoomRelPo roomPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
-
+        roomPo.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
         int flag = ownerRoomRelV1InnerServiceSMOImpl.deleteOwnerRoomRel(roomPo);
 
         if (flag < 1) {
