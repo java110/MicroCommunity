@@ -124,15 +124,11 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
 
         String communityId = "";
 
-        String mchtNo_RSA2 = CommunitySettingFactory.getValue(communityId, "mchtNo_RSA2");
-        String productNo_RSA2 = CommunitySettingFactory.getValue(communityId, "productNo_RSA2");
-        String opToken_RSA2 = CommunitySettingFactory.getValue(communityId, "opToken_RSA2");
-        String mcht_PrivateKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "mcht_PrivateKey_RSA2");
-        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "bank_PublicKey_RSA2");
+        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
 
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
-        params.put("mcht_no", mchtNo_RSA2);// 收款商户编号
+        params.put("mcht_no", mchtNo_SM4);// 收款商户编号
         params.put("tran_no", onlinePayDto.getOrderId());// 商户流水
         params.put("org_txn_no", onlinePayDto.getTransactionId());// 原平台流水
         params.put("device_ip", "172.0.0.1");// 设备发起交易IP
@@ -140,56 +136,8 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         params.put("ware_name", onlinePayDto.getPayName());// 摘要备注
 
         // 对准备加签参数排序
-        Map<String, Object> soreMap = JsonUtil.sortMapByKey(params);
-        // 格式为json
-        String json = JsonUtil.mapToJson(soreMap);
-        System.out.println("加密前：" + json);
-        // 开始加密
-        byte[] en = AesEncrypt.encryptByte(json, "utf-8", opToken_RSA2);
-        if (en == null || en.length <= 0) {
-            System.err.println("加密失败");
-            return;
-        }
-        String encryptBase64Str = AesEncrypt.parseByte2HexStr(en);
-        System.out.println("加密后：" + encryptBase64Str);
+        String decryParams = EncryptDecryptFactory.execute(communityId, refundUrl, params);
 
-        String signtBase64Str = CAUtil.rsa256Sign(json, "utf-8", mcht_PrivateKey_RSA2);
-        System.out.println("加签串：" + signtBase64Str);
-
-        Map<String, Object> signParams = new HashMap<>();
-        signParams.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        signParams.put("sign_type", SIGN_TYPE);
-        signParams.put("sign", signtBase64Str);
-        signParams.put("enc_data", encryptBase64Str);// 加密后请求参数
-
-        String requestParams = JsonUtil.mapToJson(signParams);
-        System.out.println("最终请求参数：" + requestParams);
-        System.err.println("");
-        String returnResult = HttpRequestUtil.httpPost(refundUrl, requestParams);
-        System.out.println("支付结果返回值(原文):" + returnResult);
-        if (returnResult == null) {
-            System.err.println("通道响应异常");
-            return;
-        }
-        // 开始解密
-        Map<String, Object> responseParams = JsonUtil.jsonToMap(returnResult);
-        // 开始解密
-        String decryptBase64Str = (String) responseParams.get("enc_data");
-        String verifyBase64Str = (String) responseParams.get("sign");
-        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
-        byte[] decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
-        if (decrypt == null) {
-            System.err.println("解密失败");
-            return;
-        }
-        boolean isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
-        System.out.println("数据验签：" + isSuccess);
-        if (!isSuccess) {
-            System.err.println("验签失败");
-            return;
-        }
-        String decryParams = new String(decrypt);
-        System.out.println("支付结果返回值(解密后):" + decryParams);
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"0000".equals(paramOut.getString("return_code"))
                 || !"SUCCESS".equals(paramOut.getString("status"))

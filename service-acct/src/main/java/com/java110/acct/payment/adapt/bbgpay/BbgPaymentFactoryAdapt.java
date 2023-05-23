@@ -195,11 +195,10 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
-        String mchtNo_RSA2 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "mchtNo_RSA2");
-        String productNo_RSA2 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "productNo_RSA2");
-        String opToken_RSA2 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "opToken_RSA2");
-        String mcht_PrivateKey_RSA2 = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "mcht_PrivateKey_RSA2");
-        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "bank_PublicKey_RSA2");
+
+        String mchtNo_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "mchtNo_SM4");
+        String productNo_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "productNo_SM4");
+        String publicKey_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "publicKey_SM4");
 
         if (feeName.length() > 127) {
             feeName = feeName.substring(0, 126);
@@ -207,8 +206,8 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
-        params.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        params.put("product_no", productNo_RSA2);// 产品编号
+        params.put("mcht_no", mchtNo_SM4);// 收款商户编号
+        params.put("product_no", productNo_SM4);// 产品编号
         params.put("biz_type", "WX_GZH");// 业务类型
         params.put("tran_no", String.valueOf(System.nanoTime()));// 商户流水
         params.put("code", "");// 授权码
@@ -218,58 +217,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("ware_name", feeName);// 商品名称
         params.put("ware_describe", "");// 商户数据包
         params.put("asyn_url", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));// 通知地址
-        String json = JsonUtil.mapToJson(params);
-        System.out.println("加密前：" + json);
-
-        Map<String, Object> soreMap = JsonUtil.sortMapByKey(params);
-
-        // 开始加密
-        byte[] en = AesEncrypt.encryptByte(json, "utf-8", opToken_RSA2);
-        if (en == null || en.length <= 0) {
-            System.err.println("加密失败");
-            throw new IllegalArgumentException("加密失败");
-        }
-        String encryptBase64Str = AesEncrypt.parseByte2HexStr(en);
-        System.out.println("加密后：" + encryptBase64Str);
-
-        String signtBase64Str = CAUtil.rsa256Sign(json, "utf-8", mcht_PrivateKey_RSA2);
-        System.out.println("加签串：" + signtBase64Str);
-
-        Map<String, Object> signParams = new HashMap<>();
-        signParams.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        signParams.put("sign_type", SIGN_TYPE);
-        signParams.put("sign", signtBase64Str);
-        signParams.put("enc_data", encryptBase64Str);// 加密后请求参数
-
-        String requestParams = JsonUtil.mapToJson(signParams);
-        System.out.println("最终请求参数：" + requestParams);
-        System.err.println("");
-        String returnResult = HttpRequestUtil.httpPost(gzhPayUrl, requestParams);
-        System.out.println("支付结果返回值(原文):" + returnResult);
-        if (returnResult == null) {
-            System.err.println("通道响应异常");
-            throw new IllegalArgumentException("通道响应异常");
-        }
-        // 开始解密
-        Map<String, Object> responseParams = JsonUtil.jsonToMap(returnResult);
-        // 开始解密
-        String decryptBase64Str = (String) responseParams.get("enc_data");
-        String verifyBase64Str = (String) responseParams.get("sign");
-        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
-        byte[] decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
-        if (decrypt == null) {
-            System.err.println("解密失败");
-            throw new IllegalArgumentException("解密失败");
-        }
-        boolean isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
-        System.out.println("数据验签：" + isSuccess);
-        if (!isSuccess) {
-            System.err.println("验签失败");
-            throw new IllegalArgumentException("验签失败");
-        }
-        String decryParams = new String(decrypt);
-        System.out.println("支付结果返回值(解密后):" + decryParams);
-
+        String decryParams = EncryptDecryptFactory.execute(smallWeChatDto.getObjId(), gzhPayUrl, params);
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"0000".equals(paramOut.getString("return_code"))
                 || !"SUCCESS".equals(paramOut.getString("status"))
@@ -294,39 +242,26 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Override
     public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
 
-        String opToken_RSA2 = CommunitySettingFactory.getValue(notifyPaymentOrderDto.getCommunityId(), "opToken_RSA2");
-        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(notifyPaymentOrderDto.getCommunityId(), "bank_PublicKey_RSA2");
+        String privateKey_SM4 = CommunitySettingFactory.getValue(notifyPaymentOrderDto.getCommunityId(), "privateKey_SM4");
 
         String resXml = "";
         String param = notifyPaymentOrderDto.getParam();
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
-        Map<String, Object> responseParams = JsonUtil.jsonToMap(param);
         // 开始解密
-        String decryptBase64Str = (String) responseParams.get("enc_data");
-        String verifyBase64Str = (String) responseParams.get("sign");
-        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
-        byte[] decrypt = new byte[0];
-        try {
-            decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Map<String, Object> responseParams = JsonUtil.jsonToMap(param);
+        if (!responseParams.containsKey("enc_data")) {
+            System.err.println("通知失败");
+            throw new IllegalArgumentException("通知失败");
         }
-        if (decrypt == null) {
+        String decryptStr = (String) responseParams.get("enc_data");
+        String messageKey = (String) responseParams.get("message_key");
+        String secretKey = GmUtil.decryptSm2(messageKey, privateKey_SM4);
+        if (secretKey == null) {
             System.err.println("解密失败");
             throw new IllegalArgumentException("解密失败");
         }
-        boolean isSuccess = false;
-        try {
-            isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("数据验签：" + isSuccess);
-        if (!isSuccess) {
-            System.err.println("验签失败");
-            throw new IllegalArgumentException("验签失败");
-        }
-        String decryParams = new String(decrypt);
+        String decryParams = GmUtil.decryptSm4(decryptStr, secretKey);
+
         System.out.println("支付结果返回值(解密后):" + decryParams);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);

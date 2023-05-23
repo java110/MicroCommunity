@@ -1,6 +1,7 @@
 package com.java110.acct.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
 import com.java110.acct.payment.adapt.bbgpay.lib.AesEncrypt;
 import com.java110.acct.payment.adapt.bbgpay.lib.CAUtil;
 import com.java110.acct.payment.adapt.bbgpay.lib.HttpRequestUtil;
@@ -70,16 +71,14 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         logger.debug("resMap=" + resMap);
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
-        String mchtNo_RSA2 = CommunitySettingFactory.getValue(communityId, "mchtNo_RSA2");
-        String productNo_RSA2 = CommunitySettingFactory.getValue(communityId, "productNo_RSA2");
-        String opToken_RSA2 = CommunitySettingFactory.getValue(communityId, "opToken_RSA2");
-        String mcht_PrivateKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "mcht_PrivateKey_RSA2");
-        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "bank_PublicKey_RSA2");
+        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
+        String productNo_SM4 = CommunitySettingFactory.getValue(communityId, "productNo_SM4");
+        String publicKey_SM4 = CommunitySettingFactory.getValue(communityId, "publicKey_SM4");
 
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
-        params.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        params.put("product_no", productNo_RSA2);// 产品编号
+        params.put("mcht_no", mchtNo_SM4);// 收款商户编号
+        params.put("product_no", productNo_SM4);// 产品编号
         params.put("tran_no", orderNum);// 商户流水
         params.put("auth_code", authCode);// 码类型
         params.put("amt", payAmount);// 交易金额
@@ -87,57 +86,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         params.put("device_ip", "172.0.0.1");// 商户数据包
         params.put("recog_no", "123123");// 交易终端编号
 
-        String json = JsonUtil.mapToJson(params);
-        System.out.println("加密前：" + json);
-
-        Map<String, Object> soreMap = JsonUtil.sortMapByKey(params);
-
-        // 开始加密
-        byte[] en = AesEncrypt.encryptByte(json, "utf-8", opToken_RSA2);
-        if (en == null || en.length <= 0) {
-            System.err.println("加密失败");
-            throw new IllegalArgumentException("加密失败");
-        }
-        String encryptBase64Str = AesEncrypt.parseByte2HexStr(en);
-        System.out.println("加密后：" + encryptBase64Str);
-
-        String signtBase64Str = CAUtil.rsa256Sign(json, "utf-8", mcht_PrivateKey_RSA2);
-        System.out.println("加签串：" + signtBase64Str);
-
-        Map<String, Object> signParams = new HashMap<>();
-        signParams.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        signParams.put("sign_type", SIGN_TYPE);
-        signParams.put("sign", signtBase64Str);
-        signParams.put("enc_data", encryptBase64Str);// 加密后请求参数
-
-        String requestParams = JsonUtil.mapToJson(signParams);
-        System.out.println("最终请求参数：" + requestParams);
-        System.err.println("");
-        String returnResult = HttpRequestUtil.httpPost(gzhPayUrl, requestParams);
-        System.out.println("支付结果返回值(原文):" + returnResult);
-        if (returnResult == null) {
-            System.err.println("通道响应异常");
-            throw new IllegalArgumentException("通道响应异常");
-        }
-        // 开始解密
-        Map<String, Object> responseParams = JsonUtil.jsonToMap(returnResult);
-        // 开始解密
-        String decryptBase64Str = (String) responseParams.get("enc_data");
-        String verifyBase64Str = (String) responseParams.get("sign");
-        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
-        byte[] decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
-        if (decrypt == null) {
-            System.err.println("解密失败");
-            throw new IllegalArgumentException("解密失败");
-        }
-        boolean isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
-        System.out.println("数据验签：" + isSuccess);
-        if (!isSuccess) {
-            System.err.println("验签失败");
-            throw new IllegalArgumentException("验签失败");
-        }
-        String decryParams = new String(decrypt);
-        System.out.println("支付结果返回值(解密后):" + decryParams);
+        String decryParams = EncryptDecryptFactory.execute(communityId, gzhPayUrl, params);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"0000".equals(paramOut.getString("return_code"))
@@ -160,93 +109,17 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
 
     public ResultVo checkPayFinish(String communityId, String orderNum) {
         Map<String, String> result = null;
-        String mchtNo_RSA2 = CommunitySettingFactory.getValue(communityId, "mchtNo_RSA2");
-        String productNo_RSA2 = CommunitySettingFactory.getValue(communityId, "productNo_RSA2");
-        String opToken_RSA2 = CommunitySettingFactory.getValue(communityId, "opToken_RSA2");
-        String mcht_PrivateKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "mcht_PrivateKey_RSA2");
-        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "bank_PublicKey_RSA2");
+        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
+        String productNo_SM4 = CommunitySettingFactory.getValue(communityId, "productNo_SM4");
+        String publicKey_SM4 = CommunitySettingFactory.getValue(communityId, "publicKey_SM4");
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
-        params.put("mcht_no", orderNum);// 收款商户编号
+        params.put("mcht_no", mchtNo_SM4);// 收款商户编号
         params.put("tran_no", orderNum);// 商户流水
         params.put("txn_no", "");// 支付流水
 
         // 对准备加签参数排序
-        Map<String, Object> soreMap = JsonUtil.sortMapByKey(params);
-        // 格式为json
-        String json = JsonUtil.mapToJson(soreMap);
-        System.out.println("加密前：" + json);
-        // 开始加密
-        byte[] en = new byte[0];
-        try {
-            en = AesEncrypt.encryptByte(json, "utf-8", opToken_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        if (en == null || en.length <= 0) {
-            System.err.println("加密失败");
-            throw new IllegalArgumentException("加密失败");
-        }
-        String encryptBase64Str = AesEncrypt.parseByte2HexStr(en);
-        System.out.println("加密后：" + encryptBase64Str);
-
-        String signtBase64Str = null;
-        try {
-            signtBase64Str = CAUtil.rsa256Sign(json, "utf-8", mcht_PrivateKey_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("加签串：" + signtBase64Str);
-
-        Map<String, Object> signParams = new HashMap<>();
-        signParams.put("mcht_no", mchtNo_RSA2);// 收款商户编号
-        signParams.put("sign_type", SIGN_TYPE);
-        signParams.put("sign", signtBase64Str);
-        signParams.put("enc_data", encryptBase64Str);// 加密后请求参数
-
-        String requestParams = JsonUtil.mapToJson(signParams);
-        System.out.println("最终请求参数：" + requestParams);
-        System.err.println("");
-        String returnResult = null;
-        try {
-            returnResult = HttpRequestUtil.httpPost(queryUrl, requestParams);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("支付结果返回值(原文):" + returnResult);
-        if (returnResult == null) {
-            System.err.println("通道响应异常");
-            throw new IllegalArgumentException("通道响应异常");
-        }
-        // 开始解密
-        Map<String, Object> responseParams = JsonUtil.jsonToMap(returnResult);
-        // 开始解密
-        String decryptBase64Str = (String) responseParams.get("enc_data");
-        String verifyBase64Str = (String) responseParams.get("sign");
-        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
-        byte[] decrypt = new byte[0];
-        try {
-            decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        if (decrypt == null) {
-            System.err.println("解密失败");
-            throw new IllegalArgumentException("解密失败");
-        }
-        boolean isSuccess = false;
-        try {
-            isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("数据验签：" + isSuccess);
-        if (!isSuccess) {
-            System.err.println("验签失败");
-            throw new IllegalArgumentException("验签失败");
-        }
-        String decryParams = new String(decrypt);
-        System.out.println("支付结果返回值(解密后):" + decryParams);
+        String decryParams = EncryptDecryptFactory.execute(communityId, queryUrl, params);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"0000".equals(paramOut.getString("return_code"))
