@@ -45,15 +45,11 @@ import java.util.*;
  * VALUES ( '9070', '北部湾银行支付', '北部湾银行支付', '2022-08-16 15:51:55', 'community_setting_key', 'setting_type');
  * <p>
  * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('82', '9070', 'mchtNo_RSA2', 'mchtNo_RSA2', 'mchtNo_RSA2', '2021-10-10 21:25:46', '0');
+ * VALUES ('82', '9070', 'mchtNo_SM4', 'mchtNo_SM4', 'mchtNo_SM4', '2021-10-10 21:25:46', '0');
  * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('88', '9070', 'productNo_RSA2', 'productNo_RSA2', 'productNo_RSA2', '2021-10-10 21:25:46', '0');
+ * VALUES ('88', '9070', 'productNo_SM4', 'productNo_SM4', 'productNo_SM4', '2021-10-10 21:25:46', '0');
  * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('83', '9070', 'mcht_PrivateKey_RSA2', 'mcht_PrivateKey_RSA2', '值请填写1 私钥 请填写在备注中', '2021-10-10 21:25:46', '0');
- * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('84', '9070', 'bank_PublicKey_RSA2', 'bank_PublicKey_RSA2', '值请填写1 公钥 请填写在备注中 ', '2021-10-10 21:25:46', '0');
- * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('85', '9070', 'opToken_RSA2', 'opToken_RSA2', 'opToken_RSA2', '2021-10-10 21:25:46', '0');
+ * VALUES ('83', '9070', 'publicKey_SM4', 'publicKey_SM4', '值请填写1 私钥 请填写在备注中', '2021-10-10 21:25:46', '0');
  * // 以下数据先查询是否存在 存在则修改 不存在添加
  * INSERT INTO `TT`.`c_mapping` (`domain`, `name`, `key`, `value`, `remark`, `create_time`, `status_cd`)
  * VALUES ('WECHAT', '被扫支付厂家', 'PAY_QR_ADAPT', 'qrCodeBbgPaymentAdapt', '', '2023-02-18 18:47:14', '0');
