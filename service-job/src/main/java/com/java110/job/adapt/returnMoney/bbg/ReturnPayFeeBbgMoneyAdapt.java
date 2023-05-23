@@ -1,22 +1,25 @@
-package com.java110.job.adapt.fee;
+package com.java110.job.adapt.returnMoney.bbg;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.onlinePay.OnlinePayDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.entity.order.Business;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.adapt.returnMoney.bbg.lib.AesEncrypt;
+import com.java110.job.adapt.returnMoney.bbg.lib.CAUtil;
+import com.java110.job.adapt.returnMoney.bbg.lib.HttpRequestUtil;
+import com.java110.job.adapt.returnMoney.bbg.lib.JsonUtil;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.PayUtil;
@@ -46,8 +49,8 @@ import java.util.*;
  * @author fqz
  * @Date 2021-08-19 10:12
  */
-@Component(value = "returnPayFeeMoneyAdapt")
-public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
+@Component(value = "returnPayFeeBbgMoneyAdapt")
+public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
 
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
@@ -61,6 +64,12 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
     private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
+
+    private static String VERSION = "1.0";
+
+    private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
+
+    private static String refundUrl = "https://epaytest.bankofbbg.com/www/corepaycer/Refund";// 退款地址
 
     @Autowired
     private IReturnPayFeeInnerServiceSMO returnPayFeeInnerServiceSMOImpl;
@@ -79,7 +88,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
 
     public static final String wechatReturnUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 
-    private static Logger logger = LoggerFactory.getLogger(ReturnPayFeeMoneyAdapt.class);
+    private static Logger logger = LoggerFactory.getLogger(ReturnPayFeeBbgMoneyAdapt.class);
 
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
@@ -101,94 +110,95 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
     /**
      * 通知退款
      *
-     * @param oaWorkflowDataPo
+     * @param onlinePayPo
      */
-    public void doPayFeeMoney(OnlinePayPo oaWorkflowDataPo) throws Exception {
+    public void doPayFeeMoney(OnlinePayPo onlinePayPo) throws Exception {
         //查询小区信息
         OnlinePayDto onlinePayDto = new OnlinePayDto();
-        onlinePayDto.setPayId(oaWorkflowDataPo.getPayId());
+        onlinePayDto.setPayId(onlinePayPo.getPayId());
         onlinePayDto.setState(OnlinePayDto.STATE_WT);
         List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
         if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
             return;
         }
-        String payPassword = "";
-        String certData = "";
-        String mchPassword = "";
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setMchId(onlinePayDtos.get(0).getMchId());
-        smallWeChatDto.setAppId(onlinePayDtos.get(0).getAppId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            payPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
-            certData = MappingCache.getRemark(MappingConstant.WECHAT_STORE_DOMAIN, "cert");
-            mchPassword = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId");
-        } else {
-            payPassword = smallWeChatDtos.get(0).getPayPassword();
-            certData = smallWeChatDtos.get(0).getCertPath();
-            mchPassword = smallWeChatDtos.get(0).getMchId();
-            if(StringUtil.isEmpty(certData)){
-                certData = MappingCache.getRemark(MappingConstant.WECHAT_STORE_DOMAIN, "cert");
-            }
-        }
 
+        String communityId = "";
 
-        SortedMap<String, String> parameters = new TreeMap<String, String>();
-        String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
-        parameters.put("appid", onlinePayDtos.get(0).getAppId());//appid
-        parameters.put("mch_id", onlinePayDtos.get(0).getMchId());//商户号
-        if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
-            mchPassword = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
-            parameters.put("mch_id", mchPassword);//商户号
-            parameters.put("sub_mch_id", onlinePayDtos.get(0).getMchId());//商户号
+        String mchtNo_RSA2 = CommunitySettingFactory.getValue(communityId, "mchtNo_RSA2");
+        String productNo_RSA2 = CommunitySettingFactory.getValue(communityId, "productNo_RSA2");
+        String opToken_RSA2 = CommunitySettingFactory.getValue(communityId, "opToken_RSA2");
+        String mcht_PrivateKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "mcht_PrivateKey_RSA2");
+        String bank_PublicKey_RSA2 = CommunitySettingFactory.getRemark(communityId, "bank_PublicKey_RSA2");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("version", VERSION);// 版本号 1.0
+        params.put("mcht_no", mchtNo_RSA2);// 收款商户编号
+        params.put("tran_no", onlinePayDto.getOrderId());// 商户流水
+        params.put("org_txn_no", onlinePayDto.getTransactionId());// 原平台流水
+        params.put("device_ip", "172.0.0.1");// 设备发起交易IP
+        params.put("amt", onlinePayDto.getRefundFee());// 交易金额
+        params.put("ware_name", onlinePayDto.getPayName());// 摘要备注
+
+        // 对准备加签参数排序
+        Map<String, Object> soreMap = JsonUtil.sortMapByKey(params);
+        // 格式为json
+        String json = JsonUtil.mapToJson(soreMap);
+        System.out.println("加密前：" + json);
+        // 开始加密
+        byte[] en = AesEncrypt.encryptByte(json, "utf-8", opToken_RSA2);
+        if (en == null || en.length <= 0) {
+            System.err.println("加密失败");
+            return;
         }
-        parameters.put("nonce_str", PayUtil.makeUUID(32));//随机数
-        parameters.put("out_trade_no", onlinePayDtos.get(0).getOrderId());//商户订单号
-        parameters.put("out_refund_no", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
-        parameters.put("total_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getTotalFee())));//订单金额 单位为分！！！这里稍微注意一下
-        parameters.put("refund_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getRefundFee())));//退款金额 单位为分！！！
-        parameters.put("sign", PayUtil.createSign(parameters, payPassword));
-        String xmlData = PayUtil.mapToXml(parameters);
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(getPkcs12(certData));
-        try {
-            //这里写密码..默认是你的MCHID
-            keyStore.load(inputStream, mchPassword.toCharArray());
-        } finally {
-            inputStream.close();
+        String encryptBase64Str = AesEncrypt.parseByte2HexStr(en);
+        System.out.println("加密后：" + encryptBase64Str);
+
+        String signtBase64Str = CAUtil.rsa256Sign(json, "utf-8", mcht_PrivateKey_RSA2);
+        System.out.println("加签串：" + signtBase64Str);
+
+        Map<String, Object> signParams = new HashMap<>();
+        signParams.put("mcht_no", mchtNo_RSA2);// 收款商户编号
+        signParams.put("sign_type", SIGN_TYPE);
+        signParams.put("sign", signtBase64Str);
+        signParams.put("enc_data", encryptBase64Str);// 加密后请求参数
+
+        String requestParams = JsonUtil.mapToJson(signParams);
+        System.out.println("最终请求参数：" + requestParams);
+        System.err.println("");
+        String returnResult = HttpRequestUtil.httpPost(refundUrl, requestParams);
+        System.out.println("支付结果返回值(原文):" + returnResult);
+        if (returnResult == null) {
+            System.err.println("通道响应异常");
+            return;
         }
-        SSLContext sslcontext = SSLContexts.custom()
-                //这里也是写密码的
-                .loadKeyMaterial(keyStore, mchPassword.toCharArray())
-                .build();
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
-                SSLConnectionSocketFactory.getDefaultHostnameVerifier());
-        CloseableHttpClient httpclient = HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .build();
-        String jsonStr = "";
-        try {
-            HttpPost httpost = new HttpPost(wechatReturnUrl);
-            httpost.setEntity(new StringEntity(xmlData, "UTF-8"));
-            CloseableHttpResponse response = httpclient.execute(httpost);
-            try {
-                HttpEntity entity = response.getEntity();
-                //接受到返回信息
-                jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
-                EntityUtils.consume(entity);
-            } finally {
-                response.close();
-            }
-        } finally {
-            httpclient.close();
+        // 开始解密
+        Map<String, Object> responseParams = JsonUtil.jsonToMap(returnResult);
+        // 开始解密
+        String decryptBase64Str = (String) responseParams.get("enc_data");
+        String verifyBase64Str = (String) responseParams.get("sign");
+        byte[] bt = AesEncrypt.parseHexStr2Byte(decryptBase64Str);
+        byte[] decrypt = AesEncrypt.decryptByte(bt, opToken_RSA2);
+        if (decrypt == null) {
+            System.err.println("解密失败");
+            return;
         }
-        Map<String, String> resMap = PayUtil.xmlStrToMap(jsonStr);
-        if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
-        } else {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, resMap.get("return_msg"));
+        boolean isSuccess = CAUtil.rsa256Verify(decrypt, verifyBase64Str, bank_PublicKey_RSA2);
+        System.out.println("数据验签：" + isSuccess);
+        if (!isSuccess) {
+            System.err.println("验签失败");
+            return;
         }
+        String decryParams = new String(decrypt);
+        System.out.println("支付结果返回值(解密后):" + decryParams);
+        JSONObject paramOut = JSONObject.parseObject(decryParams);
+        if (!"0000".equals(paramOut.getString("return_code"))
+                || !"SUCCESS".equals(paramOut.getString("status"))
+                || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
+            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, "退款失败" + paramOut.getString("return_message"));
+            return;
+        }
+        doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
+
     }
 
     private void doUpdateOnlinePay(String orderId, String state, String message) {

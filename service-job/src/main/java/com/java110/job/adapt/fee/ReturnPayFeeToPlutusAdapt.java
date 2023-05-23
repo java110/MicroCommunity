@@ -15,6 +15,7 @@ import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.adapt.returnMoney.wechat.ReturnPayFeeMoneyAdapt;
 import com.java110.po.onlinePay.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
