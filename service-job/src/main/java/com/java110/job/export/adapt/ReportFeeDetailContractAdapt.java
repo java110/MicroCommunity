@@ -95,8 +95,6 @@ public class ReportFeeDetailContractAdapt implements IExportDataAdapt {
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
-        queryStatisticsDto.setPage(reqJson.getInteger("page"));
-        queryStatisticsDto.setRow(reqJson.getInteger("row"));
         queryStatisticsDto.setStoreId(reqJson.getString("storeId"));
         long count = getContractCount(queryStatisticsDto);
         List<ContractDto> contractDtos = null;

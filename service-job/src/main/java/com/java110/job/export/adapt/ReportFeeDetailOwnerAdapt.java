@@ -92,8 +92,6 @@ public class ReportFeeDetailOwnerAdapt implements IExportDataAdapt {
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
-        queryStatisticsDto.setPage(reqJson.getInteger("page"));
-        queryStatisticsDto.setRow(reqJson.getInteger("row"));
         long count = getOwnerCount(queryStatisticsDto);
         List<OwnerDto> ownerDtos = null;
         for (int page = 1; page <= count; page++) {
