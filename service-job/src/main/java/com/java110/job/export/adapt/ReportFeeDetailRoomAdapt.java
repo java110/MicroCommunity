@@ -110,6 +110,8 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
     private void appendData(JSONArray datas, Sheet sheet, int step,List<DictDto> dictDtos) {
         Row row = null;
         JSONObject dataObj = null;
+        String oweFee = "";
+        String receivedFee = "";
         for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
             row = sheet.createRow(roomIndex +step + 1);
             dataObj = datas.getJSONObject(roomIndex);
@@ -119,8 +121,16 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
             row.createCell(3).setCellValue(dataObj.getString("receivedFee"));
 
             for(int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                row.createCell(4 + dictIndex*2).setCellValue(dataObj.getString("oweFee"+dictDtos.get(0).getStatusCd()));
-                row.createCell(4 + dictIndex*2+1).setCellValue(dataObj.getString("receivedFee"+dictDtos.get(0).getStatusCd()));
+                oweFee = dataObj.getString("oweFee"+dictDtos.get(0).getStatusCd());
+                if(StringUtil.isEmpty(oweFee)){
+                    oweFee = "0";
+                }
+                receivedFee = dataObj.getString("receivedFee"+dictDtos.get(0).getStatusCd());
+                if(StringUtil.isEmpty(receivedFee)){
+                    receivedFee = "0";
+                }
+                row.createCell(4 + dictIndex*2).setCellValue(oweFee);
+                row.createCell(4 + dictIndex*2+1).setCellValue(receivedFee);
             }
         }
 
