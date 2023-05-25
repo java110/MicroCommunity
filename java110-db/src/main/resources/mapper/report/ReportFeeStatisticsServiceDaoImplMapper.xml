@@ -795,7 +795,7 @@
 
     <!-- 优惠费用-->
     <select id="getDiscountFee" parameterType="Map" resultType="Map">
-        select SUM(t.discount_amount) discountFee
+        select ifnull(SUM(t.discount_amount),0.0) discountFee
         from pay_fee_detail_month t
         where 1=1
         and t.status_cd = '0'
@@ -808,7 +808,7 @@
 
     <!-- 滞纳金费用-->
     <select id="getLateFee" parameterType="Map" resultType="Map">
-        select SUM(t.discount_amount) lateFee
+        select ifnull(SUM(t.discount_amount),0.0) lateFee
         from pay_fee_detail_month t
         where 1=1
         and t.status_cd = '0'
@@ -821,7 +821,7 @@
 
     <!-- 查询预存账户-->
     <select id="getPrestoreAccount" parameterType="Map" resultType="Map">
-        select SUM(t.discount_amount) prestoreAccount lateFee
+        select ifnull(SUM(t.discount_amount),0.0) prestoreAccount lateFee
         from account_detail t
         INNER JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0'
         where 1=1
@@ -835,7 +835,7 @@
 
     <!-- 查询账户扣款-->
     <select id="getWithholdAccount" parameterType="Map" resultType="Map">
-        select SUM(t.discount_amount) withholdAccount lateFee
+        select ifnull(SUM(t.discount_amount),0.0) withholdAccount lateFee
         from account_detail t
         INNER JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0'
         where 1=1
@@ -849,7 +849,7 @@
 
     <!-- 查询临时车费 -->
     <select id="getTempCarFee" parameterType="Map" resultType="Map">
-        select sum(t.pay_charge) tempCarFee
+        select ifnull(sum(t.pay_charge),0.0) tempCarFee
         from car_inout_payment t
         where 1=1
         and ac.part_id= #{communityId}
@@ -860,7 +860,7 @@
 
     <!-- 押金退款金额 -->
     <select id="geRefundDeposit" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) refundDeposit from return_pay_fee t
+        select ifnull(sum(t.received_amount),0.0) refundDeposit from return_pay_fee t
         where t.fee_type_cd = '888800010006'
         and t.status_cd = '0'
         and t.state = '1001'
@@ -881,7 +881,7 @@
 
     <!-- 退款金额 -->
     <select id="geRefundFee" parameterType="Map" resultType="Map">
-        select sum(t.received_amount) refundFee from return_pay_fee t
+        select ifnull(sum(t.received_amount),0.0) refundFee from return_pay_fee t
         where  t.status_cd = '0'
         and t.state = '1001'
         and t.community_id = #{communityId}
@@ -891,7 +891,7 @@
 
     <!-- 查询充电费用-->
     <select id="getChargeFee" parameterType="Map" resultType="Map">
-        select sum(t.amount) chargeFee
+        select ifnull(sum(t.amount),0.0) chargeFee
         from charge_machine_order t
         where t.status_cd = '0'
         and t.community_id = #{communityId}
