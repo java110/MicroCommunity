@@ -102,4 +102,18 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getOwnerFeeSummary(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 优惠金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getDiscountFee(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 滞纳金
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getLateFee(QueryStatisticsDto queryStatisticsDto);
 }

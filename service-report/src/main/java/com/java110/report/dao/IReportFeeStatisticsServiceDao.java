@@ -110,4 +110,18 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getOwnerFeeSummary(Map info);
+
+    /**
+     * 查询优惠费用
+     * @param info
+     * @return
+     */
+    double getDiscountFee(Map info);
+
+    /**
+     * 查询滞纳金
+     * @param info
+     * @return
+     */
+    double getLateFee(Map info);
 }

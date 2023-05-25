@@ -133,4 +133,24 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getOwnerFeeSummary(queryStatisticsDto);
     }
 
+    /**
+     * 优惠金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getDiscountFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getDiscountFee(queryStatisticsDto);
+    }
+
+    /**
+     * 滞纳金
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getLateFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getLateFee(queryStatisticsDto);
+    }
+
 }

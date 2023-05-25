@@ -217,8 +217,10 @@ public class PageProcessAspect {
      */
     private void writeCookieInfo(IPageData pd, ServletRequestAttributes attributes) throws IOException {
         // 这里目前只写到组件级别，如果需要 写成方法级别 && "login".equals(pd.getComponentCode())
-        if (!StringUtil.isNullOrNone(pd.getToken()) ) {
-            HttpServletResponse response = attributes.getResponse();
+        HttpServletResponse response = attributes.getResponse();
+        String contentType = response.getHeader("content-type");
+
+        if (!StringUtil.isNullOrNone(pd.getToken()) && contentType.indexOf("application/octet-stream") < 0) {
             Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
             cookie.setHttpOnly(true);
             cookie.setPath("/");

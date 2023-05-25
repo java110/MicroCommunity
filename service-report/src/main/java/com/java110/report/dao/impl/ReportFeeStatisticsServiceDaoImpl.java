@@ -203,4 +203,36 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    /**
+     * 查询优惠费用
+     * @param info
+     * @return
+     */
+    @Override
+    public double getDiscountFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getDiscountFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("discountFee").toString());
+    }
+
+    /**
+     * 查询滞纳金
+     * @param info
+     * @return
+     */
+    @Override
+    public double getLateFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getLateFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("lateFee").toString());
+    }
+
 }

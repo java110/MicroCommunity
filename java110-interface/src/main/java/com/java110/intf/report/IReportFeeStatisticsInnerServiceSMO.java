@@ -111,4 +111,20 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getOwnerFeeSummary", method = RequestMethod.POST)
     List<Map> getOwnerFeeSummary(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 优惠费用
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getDiscountFee", method = RequestMethod.POST)
+    double getDiscountFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 滞纳金
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getLateFee", method = RequestMethod.POST)
+    double getLateFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }
