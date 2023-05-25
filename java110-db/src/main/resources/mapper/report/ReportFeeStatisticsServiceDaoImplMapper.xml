@@ -852,7 +852,7 @@
         select ifnull(sum(t.pay_charge),0.0) tempCarFee
         from car_inout_payment t
         where 1=1
-        and ac.part_id= #{communityId}
+        and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
