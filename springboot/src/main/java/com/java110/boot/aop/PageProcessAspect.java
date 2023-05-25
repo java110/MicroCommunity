@@ -132,7 +132,9 @@ public class PageProcessAspect {
             String headerName = (String) reqHeaderEnum.nextElement();
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
-        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
+        //pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
+        headers.put("_java110_token",this.getToken(request));
+        pd = PageData.newInstance().builder(userId, userName, "", reqData, componentCode, componentMethod, url, sessionId, appId, headers);
         pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
 
         logger.debug("切面 获取到的pd=" + JSONObject.toJSONString(pd));
@@ -167,7 +169,7 @@ public class PageProcessAspect {
             return;
         }
         //写cookies信息
-       // writeCookieInfo(pd, attributes);
+        writeCookieInfo(pd, attributes);
 
     }
 
@@ -222,11 +224,6 @@ public class PageProcessAspect {
             return;
         }
         HttpServletResponse response = attributes.getResponse();
-        String contentType = response.getHeader("content-type");
-        //流信息不做处理
-        if (!StringUtil.isEmpty(contentType) && contentType.indexOf("application/octet-stream") > 0) {
-            return;
-        }
 
         //讲token写入到cookies 中
         Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());

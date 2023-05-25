@@ -58,9 +58,7 @@ public class LoginServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
             pd.setToken(userInfo.getString("token"));
-
             //清理缓存
-
             clearUserCache(userInfo);
         }
         return responseEntity;
