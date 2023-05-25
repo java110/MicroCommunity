@@ -167,7 +167,7 @@ public class PageProcessAspect {
             return;
         }
         //写cookies信息
-        writeCookieInfo(pd, attributes);
+       // writeCookieInfo(pd, attributes);
 
     }
 
