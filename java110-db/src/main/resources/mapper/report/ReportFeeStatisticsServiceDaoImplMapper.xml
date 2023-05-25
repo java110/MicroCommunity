@@ -834,7 +834,7 @@
     </select>
 
     <!-- 查询账户扣款-->
-    <select id="getPrestoreAccount" parameterType="Map" resultType="Map">
+    <select id="getWithholdAccount" parameterType="Map" resultType="Map">
         select SUM(t.discount_amount) withholdAccount lateFee
         from account_detail t
         INNER JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0'
