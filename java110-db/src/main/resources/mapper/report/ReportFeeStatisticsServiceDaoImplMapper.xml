@@ -821,7 +821,7 @@
 
     <!-- 查询预存账户-->
     <select id="getPrestoreAccount" parameterType="Map" resultType="Map">
-        select ifnull(SUM(t.discount_amount),0.0) prestoreAccount
+        select ifnull(SUM(t.amount),0.0) prestoreAccount
         from account_detail t
         INNER JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0'
         where 1=1
@@ -835,7 +835,7 @@
 
     <!-- 查询账户扣款-->
     <select id="getWithholdAccount" parameterType="Map" resultType="Map">
-        select ifnull(SUM(t.discount_amount),0.0) lateFee
+        select ifnull(SUM(t.amount),0.0) lateFee
         from account_detail t
         INNER JOIN account ac on t.acct_id = ac.acct_id and ac.status_cd = '0'
         where 1=1
