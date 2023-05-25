@@ -53,6 +53,19 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
     }
 
     @Override
+    public double getOweFee(Map info) {
+        logger.debug("查询单月欠费 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getOweFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("oweFee").toString());
+    }
+
+    @Override
     public double getCurReceivableFee(Map info) {
         logger.debug("查询单月欠费 入参 info : {}", JSONObject.toJSONString(info));
 
@@ -233,6 +246,98 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         }
 
         return Double.parseDouble(infos.get(0).get("lateFee").toString());
+    }
+
+    /**
+     * 查询预存账户
+     * @param info
+     * @return
+     */
+    @Override
+    public double getPrestoreAccount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getPrestoreAccount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("prestoreAccount").toString());
+    }
+
+    /**
+     * 查询扣款
+     * @param info
+     * @return
+     */
+    @Override
+    public double getWithholdAccount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getWithholdAccount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("withholdAccount").toString());
+    }
+
+    @Override
+    public double getTempCarFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getTempCarFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("tempCarFee").toString());
+    }
+
+    /**
+     * 押金 退还
+     * @param info
+     * @return
+     */
+    @Override
+    public double geRefundDeposit(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.geRefundDeposit", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("refundDeposit").toString());
+    }
+
+    @Override
+    public double geRefundOrderCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.geRefundOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("refundOrderCount").toString());
+    }
+
+    @Override
+    public double geRefundFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.geRefundFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("refundFee").toString());
+    }
+
+    @Override
+    public double getChargeFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getChargeFee", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("chargeFee").toString());
     }
 
 }

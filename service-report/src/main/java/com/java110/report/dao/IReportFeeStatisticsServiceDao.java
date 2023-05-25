@@ -23,6 +23,14 @@ public interface IReportFeeStatisticsServiceDao {
      */
     double getCurMonthOweFee(Map info);
 
+
+    /**
+     * 欠费信息查询
+     * @param info
+     * @return
+     */
+    double getOweFee(Map info);
+
     /**
      * 查询欠费追回
      *
@@ -124,4 +132,53 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     double getLateFee(Map info);
+
+    /**
+     * 查询预存款
+     * @param info
+     * @return
+     */
+    double getPrestoreAccount(Map info);
+
+    /**
+     * 查询扣款
+     * @param info
+     * @return
+     */
+    double getWithholdAccount(Map info);
+
+    /**
+     * 查询临时车费用
+     * @param info
+     * @return
+     */
+    double getTempCarFee(Map info);
+
+    /**
+     * 查询退款押金
+     * @param info
+     * @return
+     */
+    double geRefundDeposit(Map info);
+
+    /**
+     * 退款订单
+     * @param info
+     * @return
+     */
+    double geRefundOrderCount(Map info);
+
+    /**
+     * 退款金额
+     * @param info
+     * @return
+     */
+    double geRefundFee(Map info);
+
+    /**
+     * 查询充电金额
+     * @param info
+     * @return
+     */
+    double getChargeFee(Map info);
 }

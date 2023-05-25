@@ -46,6 +46,12 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         return info;
     }
 
+    @Override
+    public double getOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getOweFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
     /**
      * 查询当月应收
      *
@@ -167,6 +173,58 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
     @Override
     public double getLateFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
         double info = reportFeeStatisticsServiceDaoImpl.getLateFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getPrestoreAccount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getPrestoreAccount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getWithholdAccount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getWithholdAccount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    /**
+     * 临时车收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getTempCarFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getTempCarFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    /**
+     * 查询退款押金
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double geRefundDeposit(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.geRefundDeposit(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double geRefundOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.geRefundOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double geRefundFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.geRefundFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getChargeFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getChargeFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
 }

@@ -26,6 +26,13 @@ public interface IFeeStatistics {
      */
     double getCurMonthOweFee(QueryStatisticsDto queryFeeStatisticsDto);
 
+    /**
+     * 查询欠费
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getOweFee(QueryStatisticsDto queryStatisticsDto);
+
 
     /**
      * 欠费追回
@@ -116,4 +123,54 @@ public interface IFeeStatistics {
      * @return
      */
     double getLateFee(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 预存账户
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getPrestoreAccount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 扣款账户
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getWithholdAccount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询临时车费用收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getTempCarFee(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询退款押金
+     * @param queryStatisticsDto
+     * @return
+     */
+    double geRefundDeposit(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 退款订单数
+     * @param queryStatisticsDto
+     * @return
+     */
+    double geRefundOrderCount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 退款金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    double geRefundFee(QueryStatisticsDto queryStatisticsDto);
+
+
+    /**
+     * 充电桩充电金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    double getChargeFee(QueryStatisticsDto queryStatisticsDto);
 }

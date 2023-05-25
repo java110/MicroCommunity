@@ -39,6 +39,16 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getCurMonthOweFee(queryFeeStatisticsDto);
     }
 
+    /**
+     * 查询总欠费
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getOweFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getOweFee(queryStatisticsDto);
+    }
+
 
     /**
      * 查询当月应收
@@ -151,6 +161,46 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     @Override
     public double getLateFee(QueryStatisticsDto queryStatisticsDto) {
         return reportFeeStatisticsInnerServiceSMOImpl.getLateFee(queryStatisticsDto);
+    }
+
+    @Override
+    public double getPrestoreAccount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getPrestoreAccount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getWithholdAccount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getWithholdAccount(queryStatisticsDto);
+    }
+
+    /**
+     * 查询临时车收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public double getTempCarFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getTempCarFee(queryStatisticsDto);
+    }
+
+    @Override
+    public double geRefundDeposit(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.geRefundDeposit(queryStatisticsDto);
+    }
+
+    @Override
+    public double geRefundOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.geRefundOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double geRefundFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.geRefundFee(queryStatisticsDto);
+    }
+
+    @Override
+    public double getChargeFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getChargeFee(queryStatisticsDto);
     }
 
 }

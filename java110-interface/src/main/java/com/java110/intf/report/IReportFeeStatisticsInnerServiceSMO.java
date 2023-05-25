@@ -44,6 +44,13 @@ public interface IReportFeeStatisticsInnerServiceSMO {
     @RequestMapping(value = "/getCurMonthOweFee", method = RequestMethod.POST)
     double getCurMonthOweFee(@RequestBody QueryStatisticsDto queryFeeStatisticsDto);
 
+    /**
+     * 查询欠费金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getOweFee", method = RequestMethod.POST)
+    double getOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 
     /**
      * 查询当月应收
@@ -127,4 +134,50 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getLateFee", method = RequestMethod.POST)
     double getLateFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询预存金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getPrestoreAccount", method = RequestMethod.POST)
+    double getPrestoreAccount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询扣款金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getWithholdAccount", method = RequestMethod.POST)
+    double getWithholdAccount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询临时车收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getTempCarFee", method = RequestMethod.POST)
+    double getTempCarFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询退款押金
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/geRefundDeposit", method = RequestMethod.POST)
+    double geRefundDeposit(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/geRefundOrderCount", method = RequestMethod.POST)
+    double geRefundOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/geRefundFee", method = RequestMethod.POST)
+    double geRefundFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询充电桩 充电金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getChargeFee", method = RequestMethod.POST)
+    double getChargeFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }
