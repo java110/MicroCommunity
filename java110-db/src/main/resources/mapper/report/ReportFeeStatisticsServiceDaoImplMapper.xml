@@ -760,11 +760,25 @@
         from pay_fee_detail_month t
         where 1=1
         and t.status_cd = '0'
-        and t.community_id = '2023052267100146'
         and t.detail_id != '-1'
-        and t.discount_amount> 0
-        and t.cur_month_time > '2023-05-01'
-        and t.cur_month_time < '2023-06-01'
+        and t.discount_amount &gt; 0
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
     </select>
+
+    <!-- 滞纳金费用-->
+    <select id="getLateFee" parameterType="Map" resultType="Map">
+        select SUM(t.discount_amount) lateFee
+        from pay_fee_detail_month t
+        where 1=1
+        and t.status_cd = '0'
+        and t.detail_id != '-1'
+        and t.discount_amount &lt; 0
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+    </select>
+
 
 </mapper>
