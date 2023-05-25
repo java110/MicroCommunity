@@ -217,19 +217,27 @@ public class PageProcessAspect {
      */
     private void writeCookieInfo(IPageData pd, ServletRequestAttributes attributes) throws IOException {
         // 这里目前只写到组件级别，如果需要 写成方法级别 && "login".equals(pd.getComponentCode())
+        //todo 未包含token 不做处理
+        if (StringUtil.isNullOrNone(pd.getToken())) {
+            return;
+        }
         HttpServletResponse response = attributes.getResponse();
         String contentType = response.getHeader("content-type");
-
-        if (!StringUtil.isNullOrNone(pd.getToken()) && contentType.indexOf("application/octet-stream") < 0) {
-            Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            //response.addHeader("Set-Cookie","SameSite=None");
-
-            response.flushBuffer();
+        //流信息不做处理
+        if (!StringUtil.isEmpty(contentType) && contentType.indexOf("application/octet-stream") > 0) {
+            return;
         }
+
+        //讲token写入到cookies 中
+        Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
+        //response.addHeader("Set-Cookie","SameSite=None");
+
+        response.flushBuffer();
+
 
     }
 }
