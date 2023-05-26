@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportOrderStatisticsServiceDaoImpl">
+
+    <!-- 查询投诉单 -->
+    <select id="getComplaintOrderCount" parameterType="Map" resultType="Map">
+        select count(1) complaintCount
+        from complaint t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询未完成投诉单 -->
+    <select id="getUndoComplaintOrderCount" parameterType="Map" resultType="Map">
+        select count(1) complaintCount
+        from complaint t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state = '10001'
+    </select>
+
+    <!-- 查询已完成投诉单 -->
+    <select id="getFinishComplaintOrderCount" parameterType="Map" resultType="Map">
+        select count(1) complaintCount
+        from complaint t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state = '10002'
+    </select>
+
+    <!-- 查询报修单 -->
+    <select id="getRepairOrderCount" parameterType="Map" resultType="Map">
+        select count(1) repairCount
+        from r_repair_pool t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询未完成报修单 -->
+    <select id="getUndoRepairOrderCount" parameterType="Map" resultType="Map">
+        select count(1) repairCount
+        from r_repair_pool t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state in ('1000','1100','1200','1300','2001')
+    </select>
+
+    <!-- 查询已完成报修单 -->
+    <select id="getFinishRepairOrderCount" parameterType="Map" resultType="Map">
+        select count(1) repairCount
+        from r_repair_pool t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state in ('1700','1800','1900','2000','1400','1500')
+    </select>
+
+    <!-- 查询巡检单 -->
+    <select id="getInspectionOrderCount" parameterType="Map" resultType="Map">
+        select count(1) inspectionCount
+        from inspection_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询未完成巡检单 -->
+    <select id="getUndoInspectionOrderCount" parameterType="Map" resultType="Map">
+        select count(1) inspectionCount
+        from inspection_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state in ('20200405','20200406')
+    </select>
+
+    <!-- 查询已完成巡检单 -->
+    <select id="getFinishInspectionOrderCount" parameterType="Map" resultType="Map">
+        select count(1) inspectionCount
+        from inspection_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state = '20200407'
+    </select>
+
+</mapper>
