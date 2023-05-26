@@ -47,6 +47,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
@@ -120,6 +121,7 @@ import java.util.concurrent.TimeUnit;
                 "com.java110.scm.cmd",
                 "com.java110.user.cmd"
         })
+@EnableScheduling
 @EnableAsync
 //文档
 @Java110ApiDocDiscovery(basePackages = {"com.java110.boot.rest"}, apiDocClass = ApiDocPublishing.class)
