@@ -147,4 +147,82 @@ public class ReportOrderStatisticsServiceDaoImpl extends BaseServiceDao implemen
         return Double.parseDouble(infos.get(0).get("inspectionCount").toString());
     }
 
+    @Override
+    public double getMaintainanceOrderCount(Map info) {
+        logger.debug("查询 getMaintainanceOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getMaintainanceOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("maintainanceCount").toString());
+    }
+
+    @Override
+    public double getUndoMaintainanceOrderCount(Map info) {
+        logger.debug("查询 getUndoMaintainanceOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getUndoMaintainanceOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("maintainanceCount").toString());
+    }
+
+    @Override
+    public double getFinishMaintainanceOrderCount(Map info) {
+        logger.debug("查询 getFinishMaintainanceOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getFinishMaintainanceOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("maintainanceCount").toString());
+    }
+
+    @Override
+    public double getNotepadOrderCount(Map info) {
+        logger.debug("查询 getNotepadOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getNotepadOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("notepadCount").toString());
+    }
+
+    @Override
+    public double getChargeMachineOrderCount(Map info) {
+        logger.debug("查询 getChargeMachineOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getChargeMachineOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("chargeMachineCount").toString());
+    }
+
+    @Override
+    public double getChargeMonthOrderCount(Map info) {
+        logger.debug("查询 getChargeMonthOrderCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getChargeMonthOrderCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("chargeMonthMoney").toString());
+    }
+
 }

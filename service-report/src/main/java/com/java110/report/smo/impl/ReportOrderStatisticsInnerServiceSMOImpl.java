@@ -100,4 +100,40 @@ public class ReportOrderStatisticsInnerServiceSMOImpl extends BaseServiceSMO imp
         return info;
     }
 
+    @Override
+    public double getMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getMaintainanceOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getUndoMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getUndoMaintainanceOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getFinishMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getFinishMaintainanceOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getNotepadOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getNotepadOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getChargeMachineOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getChargeMachineOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getChargeMonthOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportOrderStatisticsServiceDaoImpl.getChargeMonthOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
 }

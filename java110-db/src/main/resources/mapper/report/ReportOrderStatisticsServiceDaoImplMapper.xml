@@ -109,4 +109,74 @@
         and t.state = '20200407'
     </select>
 
+
+    <!-- 查询保养单 -->
+    <select id="getMaintainanceOrderCount" parameterType="Map" resultType="Map">
+        select count(1) maintainanceCount
+        from maintainance_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询未完成保养单 -->
+    <select id="getUndoMaintainanceOrderCount" parameterType="Map" resultType="Map">
+        select count(1) maintainanceCount
+        from maintainance_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state in ('20200405','20200406')
+    </select>
+
+    <!-- 查询已完成保养单 -->
+    <select id="getFinishMaintainanceOrderCount" parameterType="Map" resultType="Map">
+        select count(1) maintainanceCount
+        from maintainance_task t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state = '20200407'
+    </select>
+
+    <!-- 查询保养单 -->
+    <select id="getNotepadOrderCount" parameterType="Map" resultType="Map">
+        select count(1) notepadCount
+        from notepad t
+        left join building_room br on t.room_id = br.room_id and br.status_cd = '0'
+        where 1=1
+        and br.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询未完成保养单 -->
+    <select id="getChargeMachineOrderCount" parameterType="Map" resultType="Map">
+        select count(1) chargeMachineCount
+        from charge_machine_order t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 查询已完成保养单 -->
+    <select id="getChargeMonthOrderCount" parameterType="Map" resultType="Map">
+        select ifnull(sum(t.received_amount),0.0) chargeMonthMoney
+        from charge_month_order t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
 </mapper>

@@ -65,4 +65,22 @@ public interface IReportOrderStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getFinishInspectionOrderCount", method = RequestMethod.POST)
     double getFinishInspectionOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getMaintainanceOrderCount", method = RequestMethod.POST)
+    double getMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getUndoMaintainanceOrderCount", method = RequestMethod.POST)
+    double getUndoMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getFinishMaintainanceOrderCount", method = RequestMethod.POST)
+    double getFinishMaintainanceOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getNotepadOrderCount", method = RequestMethod.POST)
+    double getNotepadOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getChargeMachineOrderCount", method = RequestMethod.POST)
+    double getChargeMachineOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getChargeMonthOrderCount", method = RequestMethod.POST)
+    double getChargeMonthOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

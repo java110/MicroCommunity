@@ -80,4 +80,34 @@ public class OrderStatisticsImpl implements IOrderStatistics {
     public double getFinishInspectionOrderCount(QueryStatisticsDto queryStatisticsDto) {
         return reportOrderStatisticsInnerServiceSMOImpl.getFinishInspectionOrderCount(queryStatisticsDto);
     }
+
+    @Override
+    public double getMaintainanceOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getMaintainanceOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getUndoMaintainanceOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getUndoMaintainanceOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getFinishMaintainanceOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getFinishMaintainanceOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getNotepadOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getNotepadOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getChargeMachineOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getChargeMachineOrderCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getChargeMonthOrderCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportOrderStatisticsInnerServiceSMOImpl.getChargeMonthOrderCount(queryStatisticsDto);
+    }
 }

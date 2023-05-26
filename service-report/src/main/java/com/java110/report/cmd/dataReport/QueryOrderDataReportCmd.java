@@ -99,18 +99,60 @@ public class QueryOrderDataReportCmd extends Cmd {
         data.put("value", inspectionOrderCount);
         datas.add(data);
 
-        // todo 查询 报修单
+        // todo 查询 未完成巡检
         double undoInspectionOrderCount = orderStatisticsImpl.getUndoInspectionOrderCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","未完成巡检");
         data.put("value", undoInspectionOrderCount);
         datas.add(data);
 
-        // todo 查询 报修单
+        // todo 查询 完成巡检
         double finishInspectionOrderCount = orderStatisticsImpl.getFinishInspectionOrderCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","完成巡检");
         data.put("value", finishInspectionOrderCount);
+        datas.add(data);
+
+        // todo 查询 保养
+        double maintainanceOrderCount = orderStatisticsImpl.getMaintainanceOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","保养");
+        data.put("value", maintainanceOrderCount);
+        datas.add(data);
+
+        // todo 查询 未完成 保养
+        double undoMaintainanceOrderCount = orderStatisticsImpl.getUndoMaintainanceOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","未完成保养");
+        data.put("value", undoMaintainanceOrderCount);
+        datas.add(data);
+
+        // todo 查询 已完成 保养
+        double finishMaintainanceOrderCount = orderStatisticsImpl.getFinishMaintainanceOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","完成保养");
+        data.put("value", finishMaintainanceOrderCount);
+        datas.add(data);
+
+        // todo 查询 业主反馈
+        double notepadOrderCount = orderStatisticsImpl.getNotepadOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","保养");
+        data.put("value", notepadOrderCount);
+        datas.add(data);
+
+        // todo 查询 充电订单
+        double chargeMachineOrderCount = orderStatisticsImpl.getChargeMachineOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","充电订单");
+        data.put("value", chargeMachineOrderCount);
+        datas.add(data);
+
+        // todo 查询 月卡金额
+        double chargeMonthOrderMoney = orderStatisticsImpl.getChargeMonthOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","月卡实收");
+        data.put("value", chargeMonthOrderMoney);
         datas.add(data);
 
 

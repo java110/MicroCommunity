@@ -40,4 +40,16 @@ public interface IReportOrderStatisticsServiceDao {
     double getUndoInspectionOrderCount(Map info);
 
     double getFinishInspectionOrderCount(Map info);
+
+    double getMaintainanceOrderCount(Map info);
+
+    double getUndoMaintainanceOrderCount(Map info);
+
+    double getFinishMaintainanceOrderCount(Map info);
+
+    double getNotepadOrderCount(Map info);
+
+    double getChargeMachineOrderCount(Map info);
+
+    double getChargeMonthOrderCount(Map info);
 }
