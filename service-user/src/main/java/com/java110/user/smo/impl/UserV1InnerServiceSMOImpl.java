@@ -114,7 +114,7 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
 
     @Override
     public String getUserIdByQrCode(@RequestBody String qrCode) {
-        qrCode = AuthenticationFactory.AesDecrypt(qrCode, AuthenticationFactory.PASSWD_SALT);
+        qrCode = AuthenticationFactory.AesDecrypt(qrCode, AuthenticationFactory.AES_KEY);
         JSONObject qrCodeJson = JSONObject.parseObject(qrCode);
         long time = qrCodeJson.getLongValue("time");
         if (DateUtil.getCurrentDate().getTime() - time > 5 * 60 * 1000) {
@@ -129,7 +129,7 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
         JSONObject qrCodeJson = new JSONObject();
         qrCodeJson.put("userId", userId);
         qrCodeJson.put("time", DateUtil.getCurrentDate().getTime());
-        String qrCode = AuthenticationFactory.AesEncrypt(qrCodeJson.toJSONString(), AuthenticationFactory.PASSWD_SALT);
+        String qrCode = AuthenticationFactory.AesEncrypt(qrCodeJson.toJSONString(), AuthenticationFactory.AES_KEY);
         return qrCode;
     }
 
