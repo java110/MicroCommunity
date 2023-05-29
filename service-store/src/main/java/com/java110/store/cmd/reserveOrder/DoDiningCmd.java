@@ -63,6 +63,34 @@ public class DoDiningCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "qrCode", "未包含二维码");
         Assert.hasKeyAndValue(reqJson, "goodsId", "未包含商品");
 
+        ReserveGoodsDto reserveGoodsDto = new ReserveGoodsDto();
+        reserveGoodsDto.setGoodsId(reqJson.getString("goodsId"));
+        List<ReserveGoodsDto> reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
+        Assert.listOnlyOne(reserveGoodsDtos, "就餐不存在");
+
+        ReserveGoodsOrderTimeDto reserveGoodsOrderTimeDto = null;
+        int flag = 0;
+        int quantity = 0;
+        Calendar calendar = Calendar.getInstance();
+        reserveGoodsOrderTimeDto = new ReserveGoodsOrderTimeDto();
+        reserveGoodsOrderTimeDto.setCommunityId(reqJson.getString("communityId"));
+        reserveGoodsOrderTimeDto.setAppointmentTime(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()));
+        reserveGoodsOrderTimeDto.setHours(calendar.get(Calendar.HOUR) + "");
+        reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
+        flag = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
+        if (flag > 0) {
+            throw new CmdException(reserveGoodsOrderTimeDto.getAppointmentTime() + "," + reserveGoodsOrderTimeDto.getHours() + "已经就餐");
+        }
+
+        reserveGoodsOrderTimeDto = new ReserveGoodsOrderTimeDto();
+        reserveGoodsOrderTimeDto.setCommunityId(reqJson.getString("communityId"));
+        reserveGoodsOrderTimeDto.setAppointmentTime(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()));
+        reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
+        quantity = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
+
+        if (quantity > Integer.parseInt(reserveGoodsDtos.get(0).getHoursMaxQuantity())) {
+            throw new CmdException("就餐数量超过设定数量");
+        }
 
     }
 
@@ -77,7 +105,7 @@ public class DoDiningCmd extends Cmd {
 
         String userId = userV1InnerServiceSMOImpl.getUserIdByQrCode(reqJson.getString("qrCode"));
 
-        if(StringUtil.isEmpty(userId)){
+        if (StringUtil.isEmpty(userId)) {
             throw new CmdException("二维码过期");
         }
 
