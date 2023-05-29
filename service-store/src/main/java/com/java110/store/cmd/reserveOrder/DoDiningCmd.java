@@ -98,7 +98,7 @@ public class DoDiningCmd extends Cmd {
         reserveGoodsOrderPo.setPersonTel(userDtos.get(0).getTel());
         reserveGoodsOrderPo.setReceivableAmount(reserveGoodsDtos.get(0).getPrice());
         reserveGoodsOrderPo.setReceivedAmount("0");
-        reserveGoodsOrderPo.setType("type");
+        reserveGoodsOrderPo.setType(reserveGoodsDtos.get(0).getType());
         if (StringUtil.isEmpty(reserveGoodsOrderPo.getExtOrderId())) {
             reserveGoodsOrderPo.setExtOrderId("-1");
         }
