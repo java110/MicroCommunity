@@ -166,7 +166,7 @@ public class ReportOthersStatisticsServiceDaoImpl extends BaseServiceDao impleme
             return 0D;
         }
 
-        return Double.parseDouble(infos.get(0).get("amount").toString());
+        return Double.parseDouble(infos.get(0).get("count").toString());
     }
 
     @Override

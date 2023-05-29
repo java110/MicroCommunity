@@ -137,7 +137,7 @@ public class QueryOrderDataReportCmd extends Cmd {
         // todo 查询 业主反馈
         double notepadOrderCount = orderStatisticsImpl.getNotepadOrderCount(queryStatisticsDto);
         data = new JSONObject();
-        data.put("name","保养");
+        data.put("name","业主反馈");
         data.put("value", notepadOrderCount);
         datas.add(data);
 
