@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportOthersStatisticsServiceDaoImpl">
+
+    <!-- 场地预约数 -->
+    <select id="venueReservationCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from community_space_person t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 合同数 -->
+    <select id="contractCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract t
+        where 1=1
+        and t.state in ('11','22','44')
+        and t.store_id =  #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 合同资产变更 -->
+    <select id="contractChangeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_change_plan t
+        where 1=1
+        and t.plan_type = '3003'
+        and t.state in ('11','22','55')
+        and t.store_id =  #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 合同租期变更 -->
+    <select id="leaseChangeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_change_plan t
+        where 1=1
+        and t.plan_type = '2002'
+        and t.state in ('11','22','55')
+        and t.store_id =  #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 主体变更 -->
+    <select id="mainChange" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract_change_plan t
+        where 1=1
+        and t.plan_type = '1001'
+        and t.state in ('11','22','55')
+        and t.store_id =  #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 到期合同 -->
+    <select id="expirationContract" parameterType="Map" resultType="Map">
+        select count(1) count
+        from contract t
+        where 1=1
+        and t.state in ('11','22','44')
+        and t.store_id =  #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.end_time &lt; now()
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 车辆数 -->
+    <select id="carCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_car t
+        where 1=1
+        and t.car_type in ('1001','1002')
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 车位申请数 -->
+    <select id="carApplyCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_space_apply t
+        where 1=1
+        and t.state in ('1001','2002','3003')
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 停车券购买 -->
+    <select id="buyParkingCouponCount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.received_amount),0) amount
+        from parking_coupon_order t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+
+    <!-- 停车券核销 -->
+    <select id="writeOffParkingCouponCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from parking_coupon_car_order t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 赠送优惠券 -->
+    <select id="sendCouponCount" parameterType="Map" resultType="Map">
+        select ifnull(sum(t.send_count),0) count
+        from coupon_property_pool_detail t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 使用优惠券 -->
+    <select id="writeOffCouponCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from coupon_property_user_detail t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 赠送积分 -->
+    <select id="sendIntegralCount" parameterType="Map" resultType="Map">
+        select ifnull(sum(t.quantity),0) count
+        from integral_gift_detail t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 使用积分 -->
+    <select id="writeOffIntegralCount" parameterType="Map" resultType="Map">
+        select ifnull(sum(t.use_quantity),0) count
+        from integral_user_detail t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+</mapper>

@@ -7,7 +7,6 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.report.QueryStatisticsDto;
-import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.report.statistics.IOrderStatistics;
 import com.java110.utils.exception.CmdException;
@@ -15,9 +14,7 @@ import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.xml.ws.Action;
 import java.text.ParseException;
-import java.util.List;
 
 /**
  * 查询费用类统计
