@@ -86,8 +86,9 @@ public class ReportInoutStatisticsServiceDaoImpl extends BaseServiceDao implemen
         if (infos == null || infos.size() < 1) {
             return 0;
         }
-
-        return Long.parseLong(infos.get(0).get("count").toString());
+        Number num = Float.parseFloat(infos.get(0).get("count").toString());
+        long value = Long.valueOf(num.intValue());
+        return value;
     }
 
     @Override
@@ -100,7 +101,9 @@ public class ReportInoutStatisticsServiceDaoImpl extends BaseServiceDao implemen
             return 0;
         }
 
-        return Long.parseLong(infos.get(0).get("count").toString());
+        Number num = Float.parseFloat(infos.get(0).get("count").toString());
+        long value = Long.valueOf(num.intValue());
+        return value;
     }
 
     @Override
@@ -139,7 +142,9 @@ public class ReportInoutStatisticsServiceDaoImpl extends BaseServiceDao implemen
             return 0;
         }
 
-        return Long.parseLong(infos.get(0).get("count").toString());
+        Number num = Float.parseFloat(infos.get(0).get("count").toString());
+        long value = Long.valueOf(num.intValue());
+        return value;
     }
 
     @Override
