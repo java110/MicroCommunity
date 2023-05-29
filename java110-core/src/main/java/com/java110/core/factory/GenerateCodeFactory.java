@@ -350,6 +350,7 @@ public class GenerateCodeFactory {
             //2+14+4+6
             //7920230518235714886
             return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) + nextId("%06d");
+            //return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
         //调用服务
         return getCode(prefix);
