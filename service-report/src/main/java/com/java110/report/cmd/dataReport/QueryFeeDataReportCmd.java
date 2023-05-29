@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
+import com.java110.report.statistics.IOrderStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
@@ -26,6 +27,9 @@ public class QueryFeeDataReportCmd extends Cmd {
 
     @Autowired
     private IFeeStatistics feeStatisticsImpl;
+
+    @Autowired
+    private IOrderStatistics orderStatisticsImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -130,6 +134,13 @@ public class QueryFeeDataReportCmd extends Cmd {
         data = new JSONObject();
         data.put("name","充电金额");
         data.put("value", chargeFee);
+        datas.add(data);
+
+        // todo 查询 月卡金额
+        double chargeMonthOrderMoney = orderStatisticsImpl.getChargeMonthOrderCount(queryStatisticsDto);
+        data = new JSONObject();
+        data.put("name","月卡实收");
+        data.put("value", chargeMonthOrderMoney);
         datas.add(data);
 
 

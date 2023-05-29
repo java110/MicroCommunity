@@ -148,12 +148,7 @@ public class QueryOrderDataReportCmd extends Cmd {
         data.put("value", chargeMachineOrderCount);
         datas.add(data);
 
-        // todo 查询 月卡金额
-        double chargeMonthOrderMoney = orderStatisticsImpl.getChargeMonthOrderCount(queryStatisticsDto);
-        data = new JSONObject();
-        data.put("name","月卡实收");
-        data.put("value", chargeMonthOrderMoney);
-        datas.add(data);
+
 
 
         context.setResponseEntity(ResultVo.createResponseEntity(datas));
