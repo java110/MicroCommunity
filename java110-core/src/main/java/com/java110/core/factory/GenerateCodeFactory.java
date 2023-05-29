@@ -346,11 +346,24 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getGeneratorId(String prefix) throws GenerateCodeException {
+        return getGeneratorId(prefix,false);
+    }
+
+    /**
+     * pgId生成
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getGeneratorId(String prefix,boolean longId) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             //2+14+4+6
             //7920230518235714886
-            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) + nextId("%06d");
-            //return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+            if(longId) {
+                return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) + nextId("%06d");
+            }else {
+                return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
+            }
         }
         //调用服务
         return getCode(prefix);
