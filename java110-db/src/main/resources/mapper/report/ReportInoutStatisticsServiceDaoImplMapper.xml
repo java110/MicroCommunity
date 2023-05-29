@@ -56,7 +56,7 @@
         select IFNULL(sum(t.quantity),0) count from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
-        and t.community_id = #{communityId}
+        and pa.store_id = #{storeId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -67,7 +67,7 @@
         select IFNULL(sum(t.quantity),0) count from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
-        and t.community_id = #{communityId}
+        and pa.store_id = #{storeId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -78,7 +78,7 @@
         select IFNULL(sum(t.quantity*t.price),0) amount from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
-        and t.community_id = #{communityId}
+        and pa.store_id = #{storeId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -89,7 +89,7 @@
         select IFNULL(sum(t.quantity*t.price),0) amount from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
-        and t.store_id = #{storeId}
+        and pa.store_id = #{storeId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
