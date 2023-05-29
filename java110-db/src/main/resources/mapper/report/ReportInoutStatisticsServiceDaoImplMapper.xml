@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportInoutStatisticsServiceDaoImpl">
+
+    <!-- 进场车辆数 -->
+    <select id="getCarInCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_inout_detail t
+        where 1=1
+        and t.car_inout = '3306'
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 出场车辆数 -->
+    <select id="getCarOutCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_inout_detail t
+        where 1=1
+        and t.car_inout = '3307'
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 人员进场数 -->
+    <select id="getPersonInCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine_record t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 同步人脸数 -->
+    <select id="getPersonFaceToMachineCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine_translate t
+        where 1=1
+        and t.type_cd = '8899'
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 入库数 -->
+    <select id="purchaseInCount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.quantity),0) count from purchase_apply_detail t
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 出库数 -->
+    <select id="purchaseOutCount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.quantity),0) count from purchase_apply_detail t
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 入库金额 -->
+    <select id="purchaseInAmount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.quantity*t.price),0) amount from purchase_apply_detail t
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 出库金额 -->
+    <select id="purchaseOutAmount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.quantity*t.price),0) amount from purchase_apply_detail t
+        inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
+        where 1=1
+        and t.store_id = #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 调拨数 -->
+    <select id="allocationCount" parameterType="Map" resultType="Map">
+        select IFNULL(sum(t.apply_count),0) count
+        from allocation_storehouse_apply t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+
+    <!-- 装修申请 -->
+    <select id="roomRenovationCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from room_renovation t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 物品放行 -->
+    <select id="itemReleaseCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from item_release t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        and t.state in ('W','D','C')
+    </select>
+
+    <!-- 交房数 -->
+    <select id="roomInCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_owner_room_rel t
+        inner join building_room br on t.room_id = br.room_id and br.status_cd = '0'
+        inner join building_owner bo on t.owner_id = bo.owner_id and bo.status_cd = '0'
+        where 1=1
+        and br.community_id =  #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 退房数 -->
+    <select id="roomOutCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_owner_room_rel t
+        inner join building_room br on t.room_id = br.room_id and br.status_cd = '0'
+        inner join building_owner bo on t.owner_id = bo.owner_id
+        where 1=1
+        and br.community_id =  #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '1'
+    </select>
+
+    <!-- 业主绑定数 -->
+    <select id="ownerRegisterCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_app_user t
+        where 1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+    <!-- 未考勤人员 -->
+    <select id="noAttendanceCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from attendance_classes_task t
+        inner join attendance_classes ac on t.class_id = ac.classes_id and ac.status_cd = '0'
+        where 1=1
+        and t.state =  '10000'
+        and t.store_id = #{storeId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+    </select>
+
+</mapper>
