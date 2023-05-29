@@ -16,14 +16,19 @@
 package com.java110.user.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.AuthenticationFactory;
 import com.java110.user.dao.IUserV1ServiceDao;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.po.user.UserPo;
+import com.java110.utils.cache.CommonCache;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,26 +52,26 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
 
 
     @Override
-    public int saveUser(@RequestBody  UserPo userPo) {
+    public int saveUser(@RequestBody UserPo userPo) {
         int saveFlag = userV1ServiceDaoImpl.saveUserInfo(BeanConvertUtil.beanCovertMap(userPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateUser(@RequestBody  UserPo userPo) {
+    @Override
+    public int updateUser(@RequestBody UserPo userPo) {
         int saveFlag = userV1ServiceDaoImpl.updateUserInfo(BeanConvertUtil.beanCovertMap(userPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteUser(@RequestBody  UserPo userPo) {
-       userPo.setStatusCd("1");
-       int saveFlag = userV1ServiceDaoImpl.updateUserInfo(BeanConvertUtil.beanCovertMap(userPo));
-       return saveFlag;
+    @Override
+    public int deleteUser(@RequestBody UserPo userPo) {
+        userPo.setStatusCd("1");
+        int saveFlag = userV1ServiceDaoImpl.updateUserInfo(BeanConvertUtil.beanCovertMap(userPo));
+        return saveFlag;
     }
 
     @Override
-    public List<UserDto> queryUsers(@RequestBody  UserDto userDto) {
+    public List<UserDto> queryUsers(@RequestBody UserDto userDto) {
 
         //校验是否传了 分页信息
 
@@ -84,10 +89,11 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
 
     @Override
     public int queryUsersCount(@RequestBody UserDto userDto) {
-        return userV1ServiceDaoImpl.queryUsersCount(BeanConvertUtil.beanCovertMap(userDto));    }
+        return userV1ServiceDaoImpl.queryUsersCount(BeanConvertUtil.beanCovertMap(userDto));
+    }
 
     @Override
-    public int queryStaffsNoInOrgCount(@RequestBody  UserDto userDto) {
+    public int queryStaffsNoInOrgCount(@RequestBody UserDto userDto) {
         return userV1ServiceDaoImpl.queryStaffsNoInOrgCount(BeanConvertUtil.beanCovertMap(userDto));
     }
 
@@ -103,6 +109,28 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
 
         List<UserDto> users = BeanConvertUtil.covertBeanList(userV1ServiceDaoImpl.queryStaffsNoInOrg(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
 
-        return users;    }
+        return users;
+    }
+
+    @Override
+    public String getUserIdByQrCode(@RequestBody String qrCode) {
+        qrCode = AuthenticationFactory.AesDecrypt(qrCode, AuthenticationFactory.PASSWD_SALT);
+        JSONObject qrCodeJson = JSONObject.parseObject(qrCode);
+        long time = qrCodeJson.getLongValue("time");
+        if (DateUtil.getCurrentDate().getTime() - time > 5 * 60 * 1000) {
+            throw new IllegalArgumentException("二维码失效");
+        }
+
+        return qrCodeJson.getString("userId");
+    }
+
+    @Override
+    public String generatorUserIdQrCode(@RequestBody String userId) {
+        JSONObject qrCodeJson = new JSONObject();
+        qrCodeJson.put("userId", userId);
+        qrCodeJson.put("time", DateUtil.getCurrentDate().getTime());
+        String qrCode = AuthenticationFactory.AesEncrypt(qrCodeJson.toJSONString(), AuthenticationFactory.PASSWD_SALT);
+        return qrCode;
+    }
 
 }
