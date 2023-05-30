@@ -198,7 +198,7 @@
                 and t.link= #{link}
             </if>
             and t.status_cd = '0'
-            group by t.owner_id,t.name,t.link
+            group by t.owner_id,t.name,t.link,rg.goods_name
             HAVING count(1) > 0
         ) a
     </select>
@@ -219,7 +219,7 @@
             and t.link= #{link}
         </if>
         and t.status_cd = '0'
-        group by t.owner_id,t.name,t.link
+        group by t.owner_id,t.name,t.link,rg.goods_name
         HAVING count(1) > 0
         order by t.owner_id
         <if test="page != -1 and page != null ">
