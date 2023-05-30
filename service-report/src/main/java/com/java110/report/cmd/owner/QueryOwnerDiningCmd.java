@@ -31,17 +31,18 @@ public class QueryOwnerDiningCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
-        Assert.hasKeyAndValue(reqJson, "startDate", "未包含开始时间");
-        Assert.hasKeyAndValue(reqJson, "endDate", "未包含结束时间");
-        String startDate = reqJson.getString("startDate");
-        String endDate = reqJson.getString("endDate");
-        if (!startDate.contains(":")) {
-            startDate += " 00:00:00";
-            reqJson.put("startDate", startDate);
-        }
-        if (!endDate.contains(":")) {
-            endDate += " 23:59:59";
-            reqJson.put("endDate", endDate);
+
+        if(reqJson.containsKey("startDate") && reqJson.containsKey("endDate")) {
+            String startDate = reqJson.getString("startDate");
+            String endDate = reqJson.getString("endDate");
+            if (!startDate.contains(":")) {
+                startDate += " 00:00:00";
+                reqJson.put("startDate", startDate);
+            }
+            if (!endDate.contains(":")) {
+                endDate += " 23:59:59";
+                reqJson.put("endDate", endDate);
+            }
         }
     }
 
