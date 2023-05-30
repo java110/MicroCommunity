@@ -1,6 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,4 +84,16 @@ public interface IReportOrderStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getChargeMonthOrderCount", method = RequestMethod.POST)
     double getChargeMonthOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getOwnerReserveGoodsCount", method = RequestMethod.POST)
+    int getOwnerReserveGoodsCount(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/getOwnerReserveGoods", method = RequestMethod.POST)
+    List<Map> getOwnerReserveGoods(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/getOwnerDiningCount", method = RequestMethod.POST)
+    int getOwnerDiningCount(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/getOwnerDinings", method = RequestMethod.POST)
+    List<Map> getOwnerDinings(@RequestBody OwnerDto ownerDto);
 }

@@ -225,4 +225,48 @@ public class ReportOrderStatisticsServiceDaoImpl extends BaseServiceDao implemen
         return Double.parseDouble(infos.get(0).get("chargeMonthMoney").toString());
     }
 
+    @Override
+    public int getOwnerReserveGoodsCount(Map info) {
+        logger.debug("查询 getOwnerReserveGoodsCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getOwnerReserveGoodsCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getOwnerReserveGoods(Map info) {
+        logger.debug("查询 getOwnerReserveGoods 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getOwnerReserveGoods", info);
+
+        return infos;
+    }
+
+    @Override
+    public int getOwnerDiningCount(Map info) {
+        logger.debug("查询 getOwnerDiningCount 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getOwnerDiningCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getOwnerDinings(Map info) {
+        logger.debug("查询 getOwnerDinings 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportOrderStatisticsServiceDaoImpl.getOwnerDinings", info);
+
+        return infos;
+    }
+
 }

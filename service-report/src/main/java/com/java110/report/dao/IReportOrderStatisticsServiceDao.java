@@ -52,4 +52,14 @@ public interface IReportOrderStatisticsServiceDao {
     double getChargeMachineOrderCount(Map info);
 
     double getChargeMonthOrderCount(Map info);
+
+    int getOwnerReserveGoodsCount(Map info);
+
+    List<Map> getOwnerReserveGoods(Map info);
+
+
+    int getOwnerDiningCount(Map info);
+
+    List<Map> getOwnerDinings(Map info);
+
 }

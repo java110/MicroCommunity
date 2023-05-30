@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service("importPayFeeDetailBMOImpl")
@@ -102,6 +103,10 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
             if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
                 continue;
             }
+
+            String endTime = importRoomFee.getEndTime();
+
+
             importFeeDetail(importRoomFee, storeId, userId, batchId);
         }
     }
@@ -318,6 +323,15 @@ public class ImportPayFeeDetailBMOImpl implements IImportPayFeeBMODetail {
         payFeeDetailPo.setPrimeRate("1.0");
         payFeeDetailPo.setFeeId(tmpFeeDto.getFeeId());
         payFeeDetailPo.setStartTime(importRoomFee.getStartTime());
+        String endTime = importRoomFee.getEndTime();
+        //todo 周期性费用时时间自动加一天，因为物业统计的Excel 一般少一天
+        if (!FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtil.getDateFromStringB(endTime));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            endTime = DateUtil.getFormatTimeStringB(calendar.getTime());
+            importRoomFee.setEndTime(endTime);
+        }
         payFeeDetailPo.setEndTime(importRoomFee.getEndTime());
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
