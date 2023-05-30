@@ -45,7 +45,9 @@ import java.util.UUID;
  */
 public class AuthenticationFactory {
 
-    private final static String PASSWD_SALT = "hc@java110";
+    public final static String PASSWD_SALT = "hc@java110";
+
+    public final static String AES_KEY = "whoisyourdaddy!!";
     /**
      * 偏移变量，固定占8位字节
      */

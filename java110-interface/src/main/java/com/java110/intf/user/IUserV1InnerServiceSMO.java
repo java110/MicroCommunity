@@ -79,4 +79,20 @@ public interface IUserV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryStaffsNoInOrg", method = RequestMethod.POST)
     List<UserDto> queryStaffsNoInOrg(@RequestBody UserDto userDto);
+
+    /**
+     * 根据 二维码获取用户手机号
+     * @param qrCode
+     * @return
+     */
+    @RequestMapping(value = "/getUserIdByQrCode", method = RequestMethod.POST)
+    String getUserIdByQrCode(@RequestBody String qrCode);
+
+    /**
+     * 根据 二维码获取用户手机号
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/generatorUserIdQrCode", method = RequestMethod.POST)
+    String generatorUserIdQrCode(@RequestBody String userId);
 }
