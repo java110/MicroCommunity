@@ -61,8 +61,21 @@ public class QueryOwnerReserveGoodsCmd extends Cmd {
             infos = new ArrayList<>();
         }
 
+        freshStartDateAndEndDate(infos,ownerDto);
+
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, infos);
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void freshStartDateAndEndDate(List<Map> infos,OwnerDto ownerDto) {
+        if(infos == null || infos.size() < 1){
+            return ;
+        }
+
+        for(Map info :infos){
+            info.put("startDate",ownerDto.getStartDate());
+            info.put("endDate",ownerDto.getEndDate());
+        }
     }
 }
