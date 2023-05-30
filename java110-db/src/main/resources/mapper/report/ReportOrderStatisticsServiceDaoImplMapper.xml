@@ -182,9 +182,11 @@
     <select id="getOwnerReserveGoodsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-            select t.owner_id,t.name,t.link,count(1) from building_owner t
+            select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1)
+            from building_owner t
             left join building_owner bom on t.owner_id = bom.owner_id and bom.status_cd = '0'
             left join reserve_goods_order rgo on (bom.link = rgo.person_tel or t.link = rgo.person_tel) and rgo.status_cd = '0'
+            left join reserve_goods rg on rgo.goods_id = rg.goods_id and rg.status_cd = '0'
             where t.owner_type_cd = '1001'
             and t.community_id = #{communityId}
             and t.create_time &gt; #{startDate}
@@ -201,10 +203,11 @@
         ) a
     </select>
     <select id="getOwnerReserveGoods" parameterType="Map" resultType="Map">
-        select t.owner_id ownerId,t.name,t.link,count(1) frequency
+        select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1)
         from building_owner t
         left join building_owner bom on t.owner_id = bom.owner_id and bom.status_cd = '0'
         left join reserve_goods_order rgo on (bom.link = rgo.person_tel or t.link = rgo.person_tel) and rgo.status_cd = '0'
+        left join reserve_goods rg on rgo.goods_id = rg.goods_id and rg.status_cd = '0'
         where t.owner_type_cd = '1001'
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
@@ -218,6 +221,7 @@
         and t.status_cd = '0'
         group by t.owner_id,t.name,t.link
         HAVING count(1) > 0
+        order by t.owner_id
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
