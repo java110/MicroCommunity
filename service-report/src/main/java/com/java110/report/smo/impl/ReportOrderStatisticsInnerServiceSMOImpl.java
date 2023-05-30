@@ -145,6 +145,12 @@ public class ReportOrderStatisticsInnerServiceSMOImpl extends BaseServiceSMO imp
 
     @Override
     public List<Map> getOwnerReserveGoods(@RequestBody OwnerDto ownerDto) {
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
+
         List<Map> infos = reportOrderStatisticsServiceDaoImpl.getOwnerReserveGoods(BeanConvertUtil.beanCovertMap(ownerDto));
         return infos;
     }

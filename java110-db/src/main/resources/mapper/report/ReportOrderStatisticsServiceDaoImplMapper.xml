@@ -182,7 +182,7 @@
     <select id="getOwnerReserveGoodsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from (
-            select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1)
+            select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1) frequency
             from building_owner t
             left join building_owner bom on t.owner_id = bom.owner_id and bom.status_cd = '0'
             left join reserve_goods_order rgo on (bom.link = rgo.person_tel or t.link = rgo.person_tel) and rgo.status_cd = '0'
@@ -203,7 +203,7 @@
         ) a
     </select>
     <select id="getOwnerReserveGoods" parameterType="Map" resultType="Map">
-        select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1)
+        select t.owner_id,t.name, t.link,rg.goods_name goodName,count(1) frequency
         from building_owner t
         left join building_owner bom on t.owner_id = bom.owner_id and bom.status_cd = '0'
         left join reserve_goods_order rgo on (bom.link = rgo.person_tel or t.link = rgo.person_tel) and rgo.status_cd = '0'
