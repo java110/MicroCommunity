@@ -3,6 +3,7 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportOrderStatisticsInnerServiceSMO;
@@ -134,6 +135,18 @@ public class ReportOrderStatisticsInnerServiceSMOImpl extends BaseServiceSMO imp
     public double getChargeMonthOrderCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
         double info = reportOrderStatisticsServiceDaoImpl.getChargeMonthOrderCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
+    }
+
+    @Override
+    public int getOwnerReserveGoodsCount(@RequestBody OwnerDto ownerDto) {
+        int info = reportOrderStatisticsServiceDaoImpl.getOwnerReserveGoodsCount(BeanConvertUtil.beanCovertMap(ownerDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getOwnerReserveGoods(@RequestBody OwnerDto ownerDto) {
+        List<Map> infos = reportOrderStatisticsServiceDaoImpl.getOwnerReserveGoods(BeanConvertUtil.beanCovertMap(ownerDto));
+        return infos;
     }
 
 }

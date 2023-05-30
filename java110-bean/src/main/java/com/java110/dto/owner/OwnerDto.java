@@ -78,6 +78,9 @@ public class OwnerDto extends PageDto implements Serializable {
     private String ownerFlag;
     private String operate;
 
+    private String startDate;
+    private String endDate;
+
     private List<OwnerAttrDto> ownerAttrDtos;
 
     private List<RoomDto> rooms;
@@ -520,5 +523,21 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setNameLike(String nameLike) {
         this.nameLike = nameLike;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
