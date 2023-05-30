@@ -10,6 +10,7 @@ import com.java110.intf.report.IReportOrderStatisticsInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +36,11 @@ public class QueryOwnerDiningCmd extends Cmd {
         if(reqJson.containsKey("startDate") && reqJson.containsKey("endDate")) {
             String startDate = reqJson.getString("startDate");
             String endDate = reqJson.getString("endDate");
-            if (!startDate.contains(":")) {
+            if (!StringUtil.isEmpty(startDate) && !startDate.contains(":")) {
                 startDate += " 00:00:00";
                 reqJson.put("startDate", startDate);
             }
-            if (!endDate.contains(":")) {
+            if (!StringUtil.isEmpty(endDate) && !endDate.contains(":")) {
                 endDate += " 23:59:59";
                 reqJson.put("endDate", endDate);
             }
