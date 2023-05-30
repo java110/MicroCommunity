@@ -56,4 +56,10 @@ public interface IReportOrderStatisticsServiceDao {
     int getOwnerReserveGoodsCount(Map info);
 
     List<Map> getOwnerReserveGoods(Map info);
+
+
+    int getOwnerDiningCount(Map info);
+
+    List<Map> getOwnerDinings(Map info);
+
 }

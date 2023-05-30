@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 查询业主就餐情况
+ * 业主 家庭成员 就餐明细
  */
-@Java110Cmd(serviceCode = "owner.queryOwnerReserveGoods")
-public class QueryOwnerReserveGoodsCmd extends Cmd {
+@Java110Cmd(serviceCode = "owner.queryOwnerDining")
+public class QueryOwnerDiningCmd extends Cmd {
 
     @Autowired
     private IReportOrderStatisticsInnerServiceSMO reportOrderStatisticsInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        Assert.hasKeyAndValue(reqJson,"startDate","未包含开始时间");
-        Assert.hasKeyAndValue(reqJson,"endDate","未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "startDate", "未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endDate", "未包含结束时间");
         String startDate = reqJson.getString("startDate");
         String endDate = reqJson.getString("endDate");
         if (!startDate.contains(":")) {
@@ -50,30 +50,17 @@ public class QueryOwnerReserveGoodsCmd extends Cmd {
         int row = reqJson.getInteger("row");
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
 
-        int total = reportOrderStatisticsInnerServiceSMOImpl.getOwnerReserveGoodsCount(ownerDto);
+        // todo 查询总数量
+        int total = reportOrderStatisticsInnerServiceSMOImpl.getOwnerDiningCount(ownerDto);
 //        int count = 0;
         List<Map> infos = null;
         if (total > 0) {
-            infos = reportOrderStatisticsInnerServiceSMOImpl.getOwnerReserveGoods(ownerDto);
+            infos = reportOrderStatisticsInnerServiceSMOImpl.getOwnerDinings(ownerDto);
         } else {
             infos = new ArrayList<>();
         }
 
-        freshStartDateAndEndDate(infos,ownerDto);
-
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, infos);
         context.setResponseEntity(responseEntity);
-
-    }
-
-    private void freshStartDateAndEndDate(List<Map> infos,OwnerDto ownerDto) {
-        if(infos == null || infos.size() < 1){
-            return ;
-        }
-
-        for(Map info :infos){
-            info.put("startDate",ownerDto.getStartDate());
-            info.put("endDate",ownerDto.getEndDate());
-        }
     }
 }

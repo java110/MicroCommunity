@@ -155,4 +155,22 @@ public class ReportOrderStatisticsInnerServiceSMOImpl extends BaseServiceSMO imp
         return infos;
     }
 
+    @Override
+    public int getOwnerDiningCount(@RequestBody OwnerDto ownerDto) {
+        int info = reportOrderStatisticsServiceDaoImpl.getOwnerDiningCount(BeanConvertUtil.beanCovertMap(ownerDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getOwnerDinings(@RequestBody OwnerDto ownerDto) {
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
+
+        List<Map> infos = reportOrderStatisticsServiceDaoImpl.getOwnerDinings(BeanConvertUtil.beanCovertMap(ownerDto));
+        return infos;
+    }
+
 }

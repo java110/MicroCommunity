@@ -227,4 +227,52 @@
         </if>
     </select>
 
+    <select id="getOwnerDiningCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from reserve_goods_confirm_order t
+        left join reserve_goods_order rgo on t.order_id = rgo.order_id and t.goods_id = rgo.goods_id and rgo.status_cd = '0'
+        left join reserve_goods_order_time rgco on t.time_id = rgco.time_id and rgco.order_id = rgo.order_id and rgco.status_cd = '0'
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        left join building_owner bo on rgo.person_tel = bo.link and bo.status_cd = '0'
+        left join building_owner bo1 on bo.owner_id = bo1.owner_id and bo1.owner_type_cd = '1001' and bo1.status_cd = '0'
+        where 1 =1
+        and t.community_id = #{communityId}
+        <if test="startDate !=null and startDate != ''">
+            and t.create_time &gt; #{startDate}
+            and t.create_time &lt; #{endDate}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and bol.name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="personName !=null and personName != ''">
+            and rgo.person_name like concat('%',#{personName},'%')
+        </if>
+    </select>
+    <select id="getOwnerDinings" parameterType="Map" resultType="Map">
+        select t.time_id,t.time_id timeId,t.order_id,t.order_id orderId,t.goods_id,t.goods_id goodsId,t.co_id,t.co_id
+        coId,t.remark,t.status_cd,t.status_cd statusCd,t.type,t.community_id,t.community_id communityId,
+        rgo.person_name personName,rgo.person_tel personTel,rgo.appointment_time appointmentTime,rgco.hours,rgco.quantity,
+        rg.goods_name goodsName,rg.img_url imgUrl,t.create_time createTime,bo1.name ownerName
+        from reserve_goods_confirm_order t
+        left join reserve_goods_order rgo on t.order_id = rgo.order_id and t.goods_id = rgo.goods_id and rgo.status_cd = '0'
+        left join reserve_goods_order_time rgco on t.time_id = rgco.time_id and rgco.order_id = rgo.order_id and rgco.status_cd = '0'
+        left join reserve_goods rg on t.goods_id = rg.goods_id and rg.status_cd = '0'
+        left join building_owner bo on rgo.person_tel = bo.link and bo.status_cd = '0'
+        left join building_owner bo1 on bo.owner_id = bo1.owner_id and bo1.owner_type_cd = '1001' and bo1.status_cd = '0'
+        where 1 =1
+        and t.community_id = #{communityId}
+        <if test="startDate !=null and startDate != ''">
+            and t.create_time &gt; #{startDate}
+            and t.create_time &lt; #{endDate}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and bol.name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="personName !=null and personName != ''">
+            and rgo.person_name like concat('%',#{personName},'%')
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 </mapper>

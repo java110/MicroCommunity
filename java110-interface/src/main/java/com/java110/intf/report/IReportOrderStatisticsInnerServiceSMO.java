@@ -90,4 +90,10 @@ public interface IReportOrderStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getOwnerReserveGoods", method = RequestMethod.POST)
     List<Map> getOwnerReserveGoods(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/getOwnerDiningCount", method = RequestMethod.POST)
+    int getOwnerDiningCount(@RequestBody OwnerDto ownerDto);
+
+    @RequestMapping(value = "/getOwnerDinings", method = RequestMethod.POST)
+    List<Map> getOwnerDinings(@RequestBody OwnerDto ownerDto);
 }
