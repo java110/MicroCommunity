@@ -872,7 +872,7 @@
     <!-- 退款订单数 -->
     <select id="geRefundOrderCount" parameterType="Map" resultType="Map">
         select count(1) refundOrderCount from return_pay_fee t
-        where  t.status_cd = '0'
+        where t.status_cd = '0'
         and t.state = '1001'
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
@@ -882,7 +882,7 @@
     <!-- 退款金额 -->
     <select id="geRefundFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.received_amount),0.0) refundFee from return_pay_fee t
-        where  t.status_cd = '0'
+        where t.status_cd = '0'
         and t.state = '1001'
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
@@ -897,6 +897,56 @@
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
+    </select>
+
+    <!-- 查询楼栋实收-->
+    <select id="getReceivedFeeByFloor" parameterType="Map" resultType="Map">
+        select a.floor_id floorId,a.floor_num floorNum,a.name floorName,td.status_cd feeTypeCd,
+        (
+        select count(1)
+        from building_room br
+        left join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and a.status_cd = '0'
+        and br.status_cd = '0'
+        and bu.floor_id = a.floor_id
+        ) roomCount,
+        (
+        select count(1) from (
+        select bu.floor_id,br.room_id
+        from building_room br
+        INNER JOIN pay_fee pf on br.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and br.status_cd = '0'
+        and br.community_id= #{communityId}
+        group by bu.floor_id,br.room_id
+        ) b
+        where b.floor_id = a.floor_id
+        ) feeRoomCount,
+        (
+        select ifnull(sum(t.received_amount),0.0) receivedFee
+        from pay_fee_detail t
+        INNER JOIN pay_fee pf1 on t.fee_id = pf1.fee_id and pf1.payer_obj_type='3333' and pf1.status_cd = '0'
+        LEFT JOIN building_room br on pf1.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and pf1.fee_type_cd = td.status_cd
+        ) receivedFee
+        from f_floor a
+        left join t_dict td on td.table_name='pay_fee_config' and td.table_columns = 'fee_type_cd_show'
+        where 1=1
+        and a.status_cd = '0'
+        and a.community_id = #{communityId}
+        order by a.seq
     </select>
 
 

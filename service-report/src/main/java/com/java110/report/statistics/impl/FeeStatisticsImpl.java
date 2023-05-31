@@ -203,4 +203,9 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getChargeFee(queryStatisticsDto);
     }
 
+    @Override
+    public List<Map> getReceivedFeeByFloor(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getReceivedFeeByFloor(queryStatisticsDto);
+    }
+
 }

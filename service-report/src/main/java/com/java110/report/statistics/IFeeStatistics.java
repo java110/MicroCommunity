@@ -173,4 +173,11 @@ public interface IFeeStatistics {
      * @return
      */
     double getChargeFee(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 按楼栋计算实收
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getReceivedFeeByFloor(QueryStatisticsDto queryStatisticsDto);
 }

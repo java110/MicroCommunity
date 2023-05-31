@@ -340,4 +340,10 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return Double.parseDouble(infos.get(0).get("chargeFee").toString());
     }
 
+    @Override
+    public List<Map> getReceivedFeeByFloor(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedFeeByFloor", info);
+        return infos;
+    }
+
 }

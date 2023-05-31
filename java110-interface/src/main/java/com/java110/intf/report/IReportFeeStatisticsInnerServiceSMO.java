@@ -180,4 +180,12 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getChargeFee", method = RequestMethod.POST)
     double getChargeFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询楼栋实收统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getReceivedFeeByFloor", method = RequestMethod.POST)
+    List<Map> getReceivedFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

@@ -26,6 +26,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 欠费信息查询
+     *
      * @param info
      * @return
      */
@@ -121,6 +122,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询优惠费用
+     *
      * @param info
      * @return
      */
@@ -128,6 +130,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询滞纳金
+     *
      * @param info
      * @return
      */
@@ -135,6 +138,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询预存款
+     *
      * @param info
      * @return
      */
@@ -142,6 +146,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询扣款
+     *
      * @param info
      * @return
      */
@@ -149,6 +154,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询临时车费用
+     *
      * @param info
      * @return
      */
@@ -156,6 +162,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询退款押金
+     *
      * @param info
      * @return
      */
@@ -163,6 +170,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 退款订单
+     *
      * @param info
      * @return
      */
@@ -170,6 +178,7 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 退款金额
+     *
      * @param info
      * @return
      */
@@ -177,8 +186,17 @@ public interface IReportFeeStatisticsServiceDao {
 
     /**
      * 查询充电金额
+     *
      * @param info
      * @return
      */
     double getChargeFee(Map info);
+
+    /**
+     * 查询楼栋实收
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getReceivedFeeByFloor(Map info);
 }
