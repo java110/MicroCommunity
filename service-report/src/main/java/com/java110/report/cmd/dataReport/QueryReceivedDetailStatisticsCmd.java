@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 查询实收统计
+ * 查询实收明细统计
  */
-@Java110Cmd(serviceCode = "dataReport.queryReceivedStatistics")
-public class QueryReceivedStatisticsCmd extends Cmd {
+@Java110Cmd(serviceCode = "dataReport.queryReceivedDetailStatistics")
+public class QueryReceivedDetailStatisticsCmd extends Cmd {
 
     @Autowired
     private IFeeStatistics feeStatisticsImpl;

@@ -116,6 +116,9 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
     public String getUserIdByQrCode(@RequestBody String qrCode) {
         qrCode = AuthenticationFactory.AesDecrypt(qrCode, AuthenticationFactory.AES_KEY);
         JSONObject qrCodeJson = JSONObject.parseObject(qrCode);
+        if (qrCodeJson == null || !qrCodeJson.containsKey("time")) {
+            throw new IllegalArgumentException("二维码非法");
+        }
         long time = qrCodeJson.getLongValue("time");
         if (DateUtil.getCurrentDate().getTime() - time > 5 * 60 * 1000) {
             throw new IllegalArgumentException("二维码失效");
