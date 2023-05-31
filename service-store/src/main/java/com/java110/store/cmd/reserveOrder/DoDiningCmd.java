@@ -75,7 +75,7 @@ public class DoDiningCmd extends Cmd {
         }
 
         UserDto userDto = new UserDto();
-        userDto.setUserId(reqJson.getString("userId"));
+        userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户不存在");
