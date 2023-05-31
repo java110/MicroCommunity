@@ -346,4 +346,10 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public List<Map> getReceivedFeeByPrimeRate(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedFeeByPrimeRate", info);
+        return infos;
+    }
+
 }

@@ -180,4 +180,11 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getReceivedFeeByFloor(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询 收款方式统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getReceivedFeeByPrimeRate(QueryStatisticsDto queryStatisticsDto);
 }

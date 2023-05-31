@@ -950,4 +950,17 @@
     </select>
 
 
+    <!-- 按缴费方式统计 -->
+    <select id="getReceivedFeeByPrimeRate" parameterType="Map" resultType="Map">
+        select td.`name`,td.status_cd primeRate,SUM(t.received_amount) receivedAmount
+        from pay_fee_detail t
+        left join t_dict td on td.status_cd = t.prime_rate and td.table_name = 'pay_fee_detail' and td.table_columns = 'prime_rate'
+        where
+        1=1
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and t.status_cd = '0'
+        group by td.status_cd,td.`name`
+    </select>
 </mapper>

@@ -208,4 +208,14 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getReceivedFeeByFloor(queryStatisticsDto);
     }
 
+    /**
+     * 收款方式统计
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getReceivedFeeByPrimeRate(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getReceivedFeeByPrimeRate(queryStatisticsDto);
+    }
+
 }

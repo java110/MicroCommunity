@@ -188,4 +188,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getReceivedFeeByFloor", method = RequestMethod.POST)
     List<Map> getReceivedFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getReceivedFeeByPrimeRate", method = RequestMethod.POST)
+    List<Map> getReceivedFeeByPrimeRate(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

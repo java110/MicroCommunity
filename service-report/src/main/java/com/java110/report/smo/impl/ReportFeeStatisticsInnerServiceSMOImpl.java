@@ -233,4 +233,15 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         List<Map> infos = reportFeeStatisticsServiceDaoImpl.getReceivedFeeByFloor(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return infos;
     }
+
+    /**
+     * 按收款方式统计收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getReceivedFeeByPrimeRate(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getReceivedFeeByPrimeRate(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
 }
