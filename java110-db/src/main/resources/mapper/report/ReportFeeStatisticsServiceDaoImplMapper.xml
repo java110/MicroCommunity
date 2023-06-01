@@ -1003,7 +1003,7 @@
         and br.status_cd = '0'
         and br.community_id= #{communityId}
         and pf.detail_id = '-1'
-        and pf.cur_month_time &lt; {endDate}
+        and pf.cur_month_time &lt; #{endDate}
         group by bu.floor_id,br.room_id
         ) b
         where b.floor_id = a.floor_id
@@ -1020,7 +1020,7 @@
         and t.status_cd = '0'
         and t.community_id = #{communityId}
         and t.detail_id = '-1'
-        and pf.cur_month_time &lt; {endDate}
+        and pf.cur_month_time &lt; #{endDate}
         and pf1.fee_type_cd = td.status_cd
         ) oweFee
         from f_floor a
