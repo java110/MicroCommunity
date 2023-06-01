@@ -1017,7 +1017,6 @@
         where
         1=1
         and bu.floor_id = a.floor_id
-        and t.status_cd = '0'
         and t.community_id = #{communityId}
         and t.amount_owed > 0
         and pf1.fee_type_cd = td.status_cd
