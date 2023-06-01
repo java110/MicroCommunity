@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -165,13 +166,17 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
         }
 
         List<Map> tmpInfos = null;
+        Map dInfo = null;
         for (Map nInfo : newInfos) {
             for (Map info : infos) {
                 if (!nInfo.get("payerObjId").equals(info.get("payerObjId"))) {
                     continue;
                 }
                 tmpInfos = getTmpInfos(nInfo, info);
-                tmpInfos.add(BeanConvertUtil.beanCovertMap(info));
+                //todo 深拷贝
+                dInfo = new HashMap();
+                dInfo.putAll(info);
+                tmpInfos.add(dInfo);
                 //计算单项 欠费金额
                 computeOweAmount(tmpInfos, info.get("feeTypeCd").toString(), nInfo);
                 nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
