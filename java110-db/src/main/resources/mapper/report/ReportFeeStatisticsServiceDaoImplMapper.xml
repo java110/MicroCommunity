@@ -1033,7 +1033,8 @@
 
     <!-- 对象欠费 -->
     <select id="getObjOweFee" parameterType="Map" resultType="Map">
-        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,t.end_time endTime,t.deadline_time deadlineTime,t.amount_owed amountOwed
+        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,
+        DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,DATE_FORMAT(t.deadline_time,'%Y-%m-%d') deadlineTime,t.amount_owed amountOwed
         from report_owe_fee t
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where t.amount_owed > 0
