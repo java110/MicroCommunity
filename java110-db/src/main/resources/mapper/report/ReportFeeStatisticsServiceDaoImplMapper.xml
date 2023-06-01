@@ -1020,7 +1020,7 @@
         and t.status_cd = '0'
         and t.community_id = #{communityId}
         and t.detail_id = '-1'
-        and pf.cur_month_time &lt; #{endDate}
+        and t.cur_month_time &lt; #{endDate}
         and pf1.fee_type_cd = td.status_cd
         ) oweFee
         from f_floor a
