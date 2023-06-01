@@ -591,7 +591,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
             if (StringUtil.isJsonObject(body)) {
                 JSONObject bodyObj = JSONObject.parseObject(body);
-                if (bodyObj.containsKey("message") && !StringUtil.isEmpty(bodyObj.getString("message"))) {
+                if (bodyObj != null && bodyObj.containsKey("message") && !StringUtil.isEmpty(bodyObj.getString("message"))) {
                     body = bodyObj.getString("message");
                 }
             }

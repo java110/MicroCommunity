@@ -12,6 +12,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +137,7 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
             data = datas.getJSONObject(dataIndex);
             //todo 这里循环费用大类
             for (Map info : infos) {
-                if (!data.get("roomId").toString().equals(info.get("payerObjId"))) {
+                if (!data.getString("roomId").equals(info.get("payerObjId"))) {
                     continue;
                 }
                 feeTypeCd = info.get("feeTypeCd").toString();
@@ -170,7 +171,7 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
                     continue;
                 }
                 tmpInfos = getTmpInfos(nInfo, info);
-                tmpInfos.add(info);
+                tmpInfos.add(BeanConvertUtil.beanCovertMap(info));
                 //计算单项 欠费金额
                 computeOweAmount(tmpInfos, info.get("feeTypeCd").toString(), nInfo);
                 nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
