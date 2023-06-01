@@ -206,4 +206,11 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getReceivedFeeByPrimeRate(Map info);
+
+    /**
+     * 根据楼栋查询欠费
+     * @param info
+     * @return
+     */
+    List<Map> getOweFeeByFloor(Map info);
 }

@@ -31,6 +31,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询 当月欠费
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
@@ -41,6 +42,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询总欠费
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -52,6 +54,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询当月应收
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -61,10 +64,9 @@ public class FeeStatisticsImpl implements IFeeStatistics {
     }
 
 
-
-
     /**
      * 查询 欠费追回
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
@@ -75,6 +77,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询 预交费用
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
@@ -85,6 +88,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询 实收费用
+     *
      * @param queryFeeStatisticsDto
      * @return
      */
@@ -105,6 +109,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 楼栋收费率信息统计
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -115,6 +120,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 费用项收费率信息统计
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -135,6 +141,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询 业主明细表
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -145,6 +152,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 优惠金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -155,6 +163,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 滞纳金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -175,6 +184,7 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 查询临时车收入
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -210,12 +220,24 @@ public class FeeStatisticsImpl implements IFeeStatistics {
 
     /**
      * 收款方式统计
+     *
      * @param queryStatisticsDto
      * @return
      */
     @Override
     public List<Map> getReceivedFeeByPrimeRate(QueryStatisticsDto queryStatisticsDto) {
         return reportFeeStatisticsInnerServiceSMOImpl.getReceivedFeeByPrimeRate(queryStatisticsDto);
+    }
+
+    /**
+     * 根据楼栋查询欠费信息
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getOweFeeByFloor(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getOweFeeByFloor(queryStatisticsDto);
     }
 
 }

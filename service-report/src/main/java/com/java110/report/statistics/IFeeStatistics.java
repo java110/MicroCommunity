@@ -28,6 +28,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询欠费
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -70,6 +71,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询收费房屋数
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -77,6 +79,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询楼栋费用统计信息
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -84,6 +87,7 @@ public interface IFeeStatistics {
 
     /**
      * 费用项 费用统计信息
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -91,6 +95,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询对象明细表（数量）
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -98,6 +103,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询对象明细表
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -105,6 +111,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询业主对象明细表
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -112,6 +119,7 @@ public interface IFeeStatistics {
 
     /**
      * 优惠金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -119,6 +127,7 @@ public interface IFeeStatistics {
 
     /**
      * 滞纳金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -126,6 +135,7 @@ public interface IFeeStatistics {
 
     /**
      * 预存账户
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -133,6 +143,7 @@ public interface IFeeStatistics {
 
     /**
      * 扣款账户
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -140,6 +151,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询临时车费用收入
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -147,6 +159,7 @@ public interface IFeeStatistics {
 
     /**
      * 查询退款押金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -154,6 +167,7 @@ public interface IFeeStatistics {
 
     /**
      * 退款订单数
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -161,6 +175,7 @@ public interface IFeeStatistics {
 
     /**
      * 退款金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -169,6 +184,7 @@ public interface IFeeStatistics {
 
     /**
      * 充电桩充电金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -176,6 +192,7 @@ public interface IFeeStatistics {
 
     /**
      * 按楼栋计算实收
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -183,8 +200,17 @@ public interface IFeeStatistics {
 
     /**
      * 查询 收款方式统计
+     *
      * @param queryStatisticsDto
      * @return
      */
     List<Map> getReceivedFeeByPrimeRate(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 根据楼栋查询欠费信息
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getOweFeeByFloor(QueryStatisticsDto queryStatisticsDto);
 }

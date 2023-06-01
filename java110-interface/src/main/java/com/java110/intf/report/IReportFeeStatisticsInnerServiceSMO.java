@@ -46,6 +46,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询欠费金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -99,6 +100,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 费用项收费率统计
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -113,6 +115,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 业主明细表
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -121,6 +124,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 优惠费用
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -129,6 +133,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 滞纳金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -137,6 +142,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询预存金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -145,6 +151,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询扣款金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -153,6 +160,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询临时车收入
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -161,6 +169,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询退款押金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -175,6 +184,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询充电桩 充电金额
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -183,6 +193,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     /**
      * 查询楼栋实收统计
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -191,4 +202,13 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getReceivedFeeByPrimeRate", method = RequestMethod.POST)
     List<Map> getReceivedFeeByPrimeRate(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 根据楼栋查询欠费信息
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getOweFeeByFloor", method = RequestMethod.POST)
+    List<Map> getOweFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

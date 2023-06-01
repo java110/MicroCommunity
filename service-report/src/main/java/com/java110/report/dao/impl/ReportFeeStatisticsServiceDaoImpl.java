@@ -352,4 +352,10 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public List<Map> getOweFeeByFloor(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getOweFeeByFloor", info);
+        return infos;
+    }
+
 }
