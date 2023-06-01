@@ -1009,9 +1009,9 @@
         where b.floor_id = a.floor_id
         ) oweRoomCount,
         (
-        select ifnull(sum(t.received_amount),0.0) oweFee
-        from pay_fee_detail_month t
-        INNER JOIN pay_fee pf1 on t.fee_id = pf1.fee_id and pf1.payer_obj_type='3333' and pf1.status_cd = '0'
+        select ifnull(sum(t.amount_owed),0.0) oweFee
+        from report_owe_fee t
+        left join pay_fee pf1 on t.fee_id = pf1.fee_id and pf1.status_cd = '0'
         LEFT JOIN building_room br on pf1.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where
@@ -1019,8 +1019,7 @@
         and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id = #{communityId}
-        and t.detail_id = '-1'
-        and t.cur_month_time &lt; #{endDate}
+        and t.amount_owed > 0
         and pf1.fee_type_cd = td.status_cd
         ) oweFee
         from f_floor a
