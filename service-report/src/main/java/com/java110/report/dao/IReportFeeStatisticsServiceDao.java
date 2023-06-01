@@ -213,4 +213,12 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getOweFeeByFloor(Map info);
+
+    /**
+     * 计算对象欠费明细
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getObjOweFee(Map info);
 }

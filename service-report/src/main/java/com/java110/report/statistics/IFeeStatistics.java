@@ -213,4 +213,12 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getOweFeeByFloor(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 计算对象欠费明细
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getObjOweFee(QueryStatisticsDto queryStatisticsDto);
 }

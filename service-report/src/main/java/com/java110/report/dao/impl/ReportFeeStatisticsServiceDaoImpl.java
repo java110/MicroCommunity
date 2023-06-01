@@ -358,4 +358,15 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    /**
+     * 查询欠费对象
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> getObjOweFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjOweFee", info);
+        return infos;
+    }
+
 }

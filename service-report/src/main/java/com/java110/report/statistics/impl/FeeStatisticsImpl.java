@@ -240,4 +240,15 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getOweFeeByFloor(queryStatisticsDto);
     }
 
+    /**
+     * 计算对象欠费明细
+     *
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getObjOweFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getObjOweFee(queryStatisticsDto);
+    }
+
 }

@@ -211,4 +211,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getOweFeeByFloor", method = RequestMethod.POST)
     List<Map> getOweFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getObjOweFee", method = RequestMethod.POST)
+    List<Map> getObjOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }
