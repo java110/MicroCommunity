@@ -229,4 +229,11 @@ public interface IReportFeeStatisticsServiceDao {
     long getHisOweReceivedRoomCount(Map info);
 
     double getHisOweReceivedRoomAmount(Map info);
+
+    /**
+     * 费用对象实收
+     * @param info
+     * @return
+     */
+    List<Map> getObjReceivedFee(Map info);
 }

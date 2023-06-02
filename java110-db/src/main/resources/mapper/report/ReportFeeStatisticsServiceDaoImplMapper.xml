@@ -735,15 +735,15 @@
         ) oweFee,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
-        from pay_fee_detail_month t
+        from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
-        where t.obj_id = a.obj_id
+        inner join pay_fee_config pfc1 on pfc1.config_id = pf.config_id and pfc1.status_cd = '0'
+        where pf.payer_obj_id = a.obj_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
         and pfc1.fee_type_cd = pfc.fee_type_cd
-        and t.pay_fee_time &gt; #{startDate}
-        and t.pay_fee_time &lt; #{endDate}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
         ) receivedFee
         from pay_fee_detail_month a
         inner join pay_fee_config pfc on a.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -1038,6 +1038,23 @@
         where t.amount_owed > 0
         and t.payer_obj_type = '3333'
         and t.community_id = #{communityId}
+        and t.payer_obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 对象实收 -->
+    <select id="getObjReceivedFee" parameterType="Map" resultType="Map">
+        select pf.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,pf.fee_name feeName,
+        DATE_FORMAT(t.start_time,'%Y-%m-%d') startTime,DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,t.received_amount receivedAmount
+        from pay_fee_detail t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where 1=1
+        and t.payer_obj_type = '3333'
+        and t.community_id = #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
         and t.payer_obj_id in
         <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
             #{item}

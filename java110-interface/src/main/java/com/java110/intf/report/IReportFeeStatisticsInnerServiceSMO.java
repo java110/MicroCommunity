@@ -241,4 +241,7 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getHisOweReceivedRoomAmount", method = RequestMethod.POST)
     double getHisOweReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getObjReceivedFee", method = RequestMethod.POST)
+    List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

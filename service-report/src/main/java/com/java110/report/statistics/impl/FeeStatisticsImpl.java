@@ -271,4 +271,9 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getHisOweReceivedRoomAmount(queryStatisticsDto);
     }
 
+    @Override
+    public List<Map> getObjReceivedFee(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getObjReceivedFee(queryStatisticsDto);
+    }
+
 }

@@ -218,6 +218,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询优惠费用
+     *
      * @param info
      * @return
      */
@@ -234,6 +235,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询滞纳金
+     *
      * @param info
      * @return
      */
@@ -250,6 +252,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询预存账户
+     *
      * @param info
      * @return
      */
@@ -266,6 +269,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询扣款
+     *
      * @param info
      * @return
      */
@@ -293,6 +297,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 押金 退还
+     *
      * @param info
      * @return
      */
@@ -360,6 +365,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询欠费对象
+     *
      * @param info
      * @return
      */
@@ -411,6 +417,15 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         }
 
         return Double.parseDouble(infos.get(0).get("amount").toString());
+    }
+
+    @Override
+    public List<Map> getObjReceivedFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjReceivedFee", info);
+
+
+        return infos;
+
     }
 
 }

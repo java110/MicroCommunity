@@ -280,4 +280,10 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         double info = reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    @Override
+    public List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjReceivedFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
 }

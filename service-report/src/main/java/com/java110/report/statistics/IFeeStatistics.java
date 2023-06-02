@@ -229,4 +229,11 @@ public interface IFeeStatistics {
     long getHisOweReceivedRoomCount(QueryStatisticsDto queryStatisticsDto);
 
     double getHisOweReceivedRoomAmount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询实收
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<Map> getObjReceivedFee(QueryStatisticsDto queryStatisticsDto);
 }
