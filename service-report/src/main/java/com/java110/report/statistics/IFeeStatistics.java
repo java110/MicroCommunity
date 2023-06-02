@@ -221,4 +221,12 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getObjOweFee(QueryStatisticsDto queryStatisticsDto);
+
+    long getReceivedRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    double getReceivedRoomAmount(QueryStatisticsDto queryStatisticsDto);
+
+    long getHisOweReceivedRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    double getHisOweReceivedRoomAmount(QueryStatisticsDto queryStatisticsDto);
 }

@@ -214,4 +214,31 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getObjOweFee", method = RequestMethod.POST)
     List<Map> getObjOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询当日 或者当月已收房屋数
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getReceivedRoomCount", method = RequestMethod.POST)
+    long getReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询当日 或者当月已收金额
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getReceivedRoomAmount", method = RequestMethod.POST)
+    double getReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询历史欠费 清缴户
+     * @param queryStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/getHisOweReceivedRoomCount", method = RequestMethod.POST)
+    long getHisOweReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getHisOweReceivedRoomAmount", method = RequestMethod.POST)
+    double getHisOweReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

@@ -369,4 +369,48 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         return infos;
     }
 
+    @Override
+    public long getReceivedRoomCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedRoomCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Long.parseLong(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public double getReceivedRoomAmount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedRoomAmount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("amount").toString());
+    }
+
+    @Override
+    public long getHisOweReceivedRoomCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Long.parseLong(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public double getHisOweReceivedRoomAmount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomAmount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("amount").toString());
+    }
+
 }

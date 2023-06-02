@@ -256,4 +256,28 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjOweFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return infos;
     }
+
+    @Override
+    public long getReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getReceivedRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getReceivedRoomAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public long getHisOweReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getHisOweReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
 }

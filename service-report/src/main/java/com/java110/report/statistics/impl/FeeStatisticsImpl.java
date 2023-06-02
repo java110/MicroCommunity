@@ -251,4 +251,24 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getObjOweFee(queryStatisticsDto);
     }
 
+    @Override
+    public long getReceivedRoomCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getReceivedRoomAmount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomAmount(queryStatisticsDto);
+    }
+
+    @Override
+    public long getHisOweReceivedRoomCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getHisOweReceivedRoomCount(queryStatisticsDto);
+    }
+
+    @Override
+    public double getHisOweReceivedRoomAmount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getHisOweReceivedRoomAmount(queryStatisticsDto);
+    }
+
 }

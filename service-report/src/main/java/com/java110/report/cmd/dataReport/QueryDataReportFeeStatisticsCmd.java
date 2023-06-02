@@ -1,14 +1,17 @@
 package com.java110.report.cmd.dataReport;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,9 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
 
     @Autowired
     private IFeeStatistics feeStatisticsImpl;
+
+    @Autowired
+    private IBaseDataStatistics baseDataStatisticsImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -48,63 +55,85 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        String[] floorIds = reqJson.getString("floorIds").split(",");
+        //todo 如果没有包含楼栋信息 直接返回空
+        if (floorIds == null || floorIds.length < 1) {
+            return;
+        }
+        JSONArray data = new JSONArray();
+        //todo 根据楼栋ID循环查询
+        for (String floorId : floorIds) {
+            //todo 获取到数据
+            doGetData(floorId, data,reqJson);
+        }
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
+    }
+
+    /**
+     * 查询数据
+     * @param floorId
+     * @param datas
+     */
+    private void doGetData(String floorId, JSONArray datas,JSONObject reqJson) {
+        JSONObject data = new JSONObject();
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
+        queryStatisticsDto.setFloorId(floorId);
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
-        queryStatisticsDto.setConfigId(reqJson.getString("configId"));
-        queryStatisticsDto.setObjName(reqJson.getString("objName"));
-        queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
-        queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
 
-        List<Map> datas = null;
-        // todo 按楼栋计算实收情况
-        datas = feeStatisticsImpl.getReceivedFeeByFloor(queryStatisticsDto);
+        // todo 查询户数
+        long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
+        data.put("roomCount",roomCount);
 
-        datas = computeFloorReceivedFee(datas);
+        // todo 查询空置户数
+        long freeCount = baseDataStatisticsImpl.getFreeRoomCount(queryStatisticsDto);
+        data.put("freeCount",freeCount);
 
-        context.setResponseEntity(ResultVo.createResponseEntity(datas));
+        // todo 查询 历史欠费
+        double hisMonthOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
+        data.put("hisMonthOweFee",hisMonthOweFee);
+
+        // todo 查询总欠费
+        double oweFee = feeStatisticsImpl.getOweFee(queryStatisticsDto);
+        data.put("oweFee",oweFee);
+
+        // todo 本日已交户数
+        queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate())+" 00:00:00");
+        queryStatisticsDto.setEndDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate())+" 23:59:59");
+        double todayReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
+        data.put("todayReceivedRoomCount",todayReceivedRoomCount);
+
+        // todo 本日已交金额
+        double todayReceivedRoomAmount = feeStatisticsImpl.getReceivedRoomAmount(queryStatisticsDto);
+        data.put("todayReceivedRoomAmount",todayReceivedRoomAmount);
+
+        // todo 历史欠费清缴户
+        double hisOweReceivedRoomCount = feeStatisticsImpl.getHisOweReceivedRoomCount(queryStatisticsDto);
+        data.put("hisOweReceivedRoomCount",hisOweReceivedRoomCount);
+        // todo 历史欠费清缴金额
+        double hisOweReceivedRoomAmount = feeStatisticsImpl.getHisOweReceivedRoomAmount(queryStatisticsDto);
+        data.put("hisOweReceivedRoomAmount",hisOweReceivedRoomAmount);
+
+        // todo 这里时间又改回来
+        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
+        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        // todo 本月已收户
+        double monthReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
+        data.put("monthReceivedRoomCount",monthReceivedRoomCount);
+
+        // todo 已收金额
+        double monthReceivedRoomAmount = feeStatisticsImpl.getReceivedRoomAmount(queryStatisticsDto);
+        data.put("monthReceivedRoomAmount",monthReceivedRoomAmount);
+        // todo 剩余未收
+        double curMonthOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
+        data.put("curMonthOweFee",curMonthOweFee);
+
+        datas.add(data);
+
+
     }
 
-    private List<Map> computeFloorReceivedFee(List<Map> datas) {
-        if (datas == null || datas.size() < 1) {
-            return new ArrayList<>();
-        }
-
-        List<Map> tmpDatas = new ArrayList<>();
-        for (Map data : datas) {
-            if (!hasInTmp(tmpDatas, data)) {
-                tmpDatas.add(data);
-            }
-        }
-
-        if (tmpDatas == null || tmpDatas.size() < 1) {
-            return new ArrayList<>();
-        }
-
-        BigDecimal receivedFee = new BigDecimal(0.00);
-        for (Map tmpData : tmpDatas) {
-            for (Map data : datas) {
-                if (!data.get("floorId").toString().equals(tmpData.get("floorId"))) {
-                    continue;
-                }
-
-                receivedFee = receivedFee.add(new BigDecimal(data.get("receivedFee").toString()));
-                tmpData.put("receivedFee" + data.get("feeTypeCd").toString(), data.get("receivedFee"));
-            }
-            tmpData.put("receivedFee", receivedFee.doubleValue());
-        }
-
-        return tmpDatas;
-    }
-
-    private boolean hasInTmp(List<Map> tmpDatas, Map data) {
-        for (Map tmpData : tmpDatas) {
-            if (tmpData.get("floorId").equals(data.get("floorId"))) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

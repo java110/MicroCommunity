@@ -221,4 +221,12 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getObjOweFee(Map info);
+
+    long getReceivedRoomCount(Map info);
+
+    double getReceivedRoomAmount(Map info);
+
+    long getHisOweReceivedRoomCount(Map info);
+
+    double getHisOweReceivedRoomAmount(Map info);
 }
