@@ -1054,6 +1054,9 @@
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
     </select>
     <!-- 已收房屋金额 -->
     <select id="getReceivedRoomAmount" parameterType="Map" resultType="Map">
@@ -1066,6 +1069,9 @@
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
     </select>
     <!-- 欠费清缴户 -->
     <select id="getHisOweReceivedRoomCount" parameterType="Map" resultType="Map">
@@ -1080,6 +1086,9 @@
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
         and t.cur_month_time &lt; #{hisDate}
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
         and t.detail_id != '-1'
         and t.status_cd = '0'
     </select>
@@ -1096,6 +1105,9 @@
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
         and t.cur_month_time &lt; #{hisDate}
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
         and t.detail_id != '-1'
         and t.status_cd = '0'
     </select>
