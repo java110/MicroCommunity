@@ -1075,7 +1075,7 @@
         LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where 1=1
-        bu.floor_id = #{floorId}
+        and bu.floor_id = #{floorId}
         and t.community_id =  #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
@@ -1091,7 +1091,7 @@
         LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where 1=1
-        bu.floor_id = #{floorId}
+       and bu.floor_id = #{floorId}
         and t.community_id =  #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
