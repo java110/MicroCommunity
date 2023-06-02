@@ -1046,10 +1046,11 @@
 
     <!-- 对象实收 -->
     <select id="getObjReceivedFee" parameterType="Map" resultType="Map">
-        select pf.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,pf.fee_name feeName,
+        select pf.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,pfc.fee_name feeName,
         DATE_FORMAT(t.start_time,'%Y-%m-%d') startTime,DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,t.received_amount receivedAmount
         from pay_fee_detail t
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         where 1=1
         and t.payer_obj_type = '3333'
         and t.community_id = #{communityId}
