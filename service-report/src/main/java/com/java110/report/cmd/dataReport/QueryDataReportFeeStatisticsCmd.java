@@ -102,6 +102,7 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         // todo 本日已交户数
         queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate())+" 00:00:00");
         queryStatisticsDto.setEndDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate())+" 23:59:59");
+        queryStatisticsDto.setHisDate(DateUtil.getFormatTimeStringB(DateUtil.getFirstDate()));
         double todayReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("todayReceivedRoomCount",todayReceivedRoomCount);
 
