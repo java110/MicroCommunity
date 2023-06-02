@@ -88,6 +88,7 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         queryStatisticsDto.setFloorId(floorId);
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
 
         // todo 查询楼栋
         FloorDto floorDto = new FloorDto();
