@@ -1043,4 +1043,61 @@
             #{item}
         </foreach>
     </select>
+    <!-- 已收房屋金额 -->
+    <select id="getReceivedRoomCount" parameterType="Map" resultType="Map">
+        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,
+        DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,DATE_FORMAT(t.deadline_time,'%Y-%m-%d') deadlineTime,t.amount_owed amountOwed
+        from report_owe_fee t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.amount_owed > 0
+        and t.payer_obj_type = '3333'
+        and t.community_id = #{communityId}
+        and t.payer_obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <!-- 已收房屋金额 -->
+    <select id="getReceivedRoomAmount" parameterType="Map" resultType="Map">
+        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,
+        DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,DATE_FORMAT(t.deadline_time,'%Y-%m-%d') deadlineTime,t.amount_owed amountOwed
+        from report_owe_fee t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.amount_owed > 0
+        and t.payer_obj_type = '3333'
+        and t.community_id = #{communityId}
+        and t.payer_obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <!-- 欠费清缴户 -->
+    <select id="getHisOweReceivedRoomCount" parameterType="Map" resultType="Map">
+        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,
+        DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,DATE_FORMAT(t.deadline_time,'%Y-%m-%d') deadlineTime,t.amount_owed amountOwed
+        from report_owe_fee t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.amount_owed > 0
+        and t.payer_obj_type = '3333'
+        and t.community_id = #{communityId}
+        and t.payer_obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <!-- 欠费清缴金额 -->
+    <select id="getHisOweReceivedRoomAmount" parameterType="Map" resultType="Map">
+        select t.payer_obj_id payerObjId, pf.fee_type_cd feeTypeCd,t.fee_name feeName,
+        DATE_FORMAT(t.end_time,'%Y-%m-%d') endTime,DATE_FORMAT(t.deadline_time,'%Y-%m-%d') deadlineTime,t.amount_owed amountOwed
+        from report_owe_fee t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where t.amount_owed > 0
+        and t.payer_obj_type = '3333'
+        and t.community_id = #{communityId}
+        and t.payer_obj_id in
+        <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>
