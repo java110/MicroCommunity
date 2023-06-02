@@ -1045,7 +1045,7 @@
     </select>
     <!-- 已收房屋数 -->
     <select id="getReceivedRoomCount" parameterType="Map" resultType="Map">
-        select count(DISTINCT pf.payer_obj_id) from pay_fee_detail t
+        select count(DISTINCT pf.payer_obj_id) count from pay_fee_detail t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
