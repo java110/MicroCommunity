@@ -57,6 +57,7 @@ public class DataReportEarnedStatisticsAdapt implements IExportDataAdapt {
         row.createCell(0).setCellValue("楼栋");
         row.createCell(1).setCellValue("户数");
         row.createCell(2).setCellValue("收费户数");
+        row.createCell(3).setCellValue("实收");
         DictDto dictDto = new DictDto();
         dictDto.setTableName("pay_fee_config");
         dictDto.setTableColumns("fee_type_cd_show");
@@ -86,10 +87,15 @@ public class DataReportEarnedStatisticsAdapt implements IExportDataAdapt {
         return workbook;
     }
 
+    /**
+     * 封装数据到Excel中
+     * @param datas
+     * @param sheet
+     * @param dictDtos
+     */
     private void appendData(List<Map> datas, Sheet sheet, List<DictDto> dictDtos) {
         Row row = null;
         Map dataObj = null;
-        String oweFee = "";
         String receivedFee = "";
         for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
@@ -97,13 +103,14 @@ public class DataReportEarnedStatisticsAdapt implements IExportDataAdapt {
             row.createCell(0).setCellValue(dataObj.get("floorNum").toString());
             row.createCell(1).setCellValue(dataObj.get("roomCount").toString());
             row.createCell(2).setCellValue(dataObj.get("feeRoomCount").toString());
+            row.createCell(3).setCellValue(dataObj.get("receivedFee").toString());
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                oweFee = dataObj.get("oweFee" + dictDtos.get(0).getStatusCd()).toString();
-                if (StringUtil.isEmpty(oweFee)) {
-                    oweFee = "0";
+                receivedFee = dataObj.get("receivedFee" + dictDtos.get(0).getStatusCd()).toString();
+                if (StringUtil.isEmpty(receivedFee)) {
+                    receivedFee = "0";
                 }
-                row.createCell(3 + dictIndex).setCellValue(oweFee);
+                row.createCell(4 + dictIndex).setCellValue(receivedFee);
             }
         }
 
