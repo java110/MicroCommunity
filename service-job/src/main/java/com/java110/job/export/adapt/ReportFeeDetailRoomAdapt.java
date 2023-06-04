@@ -91,6 +91,7 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
         queryStatisticsDto.setLink(reqJson.getString("link"));
         //todo 查询记录数
         long count = getRoomCount(queryStatisticsDto);
+
         List<RoomDto> rooms = null;
         for(int page = 1;page <= count; page++){
             queryStatisticsDto.setPage(page);

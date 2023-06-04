@@ -64,7 +64,7 @@ public class DataReportEarnedStatisticsAdapt implements IExportDataAdapt {
         List<DictDto> dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
 
         for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-            row.createCell(3 + dictIndex).setCellValue(dictDtos.get(dictIndex).getName());
+            row.createCell(4 + dictIndex).setCellValue(dictDtos.get(dictIndex).getName());
         }
 
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
