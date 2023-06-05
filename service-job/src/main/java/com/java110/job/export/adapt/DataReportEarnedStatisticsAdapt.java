@@ -106,7 +106,7 @@ public class DataReportEarnedStatisticsAdapt implements IExportDataAdapt {
             row.createCell(3).setCellValue(dataObj.get("receivedFee").toString());
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                receivedFee = dataObj.get("receivedFee" + dictDtos.get(0).getStatusCd()).toString();
+                receivedFee = dataObj.get("receivedFee" + dictDtos.get(dictIndex).getStatusCd()).toString();
                 if (StringUtil.isEmpty(receivedFee)) {
                     receivedFee = "0";
                 }

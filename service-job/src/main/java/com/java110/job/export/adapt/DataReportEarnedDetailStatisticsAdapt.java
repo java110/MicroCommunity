@@ -114,22 +114,37 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
      */
     private void appendData(JSONArray datas, Sheet sheet, List<DictDto> dictDtos,int step) {
         Row row = null;
-        Map dataObj = null;
+        JSONObject dataObj = null;
         String receivedFee = "";
+        String feeTypeCd = "";
+        JSONArray feeTypeCdData = null;
+        String feeTypeCdValue = "";
+        JSONObject feeTypeData = null;
         for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = datas.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.get("floorNum").toString());
-            row.createCell(1).setCellValue(dataObj.get("roomCount").toString());
-            row.createCell(2).setCellValue(dataObj.get("feeRoomCount").toString());
-            row.createCell(3).setCellValue(dataObj.get("receivedFee").toString());
+            row.createCell(0).setCellValue(dataObj.getString("roomName"));
+            row.createCell(1).setCellValue(dataObj.getString("ownerName")+"("+dataObj.getString("link")+")");
+            row.createCell(3).setCellValue(dataObj.getString("receivedFee"));
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                receivedFee = dataObj.get("receivedFee" + dictDtos.get(0).getStatusCd()).toString();
-                if (StringUtil.isEmpty(receivedFee)) {
-                    receivedFee = "0";
+                feeTypeCd = "receivedFee"+dictDtos.get(dictIndex).getStatusCd();
+                if(!dataObj.containsKey(feeTypeCd)){
+                    row.createCell(3 + dictIndex).setCellValue(0);
+                    continue;
                 }
-                row.createCell(4 + dictIndex).setCellValue(receivedFee);
+                feeTypeCdData = dataObj.getJSONArray(feeTypeCd);
+                if(feeTypeCdData == null || feeTypeCdData.size() < 1){
+                    row.createCell(3 + dictIndex).setCellValue(0);
+                    continue;
+                }
+                feeTypeCdValue = "";
+                for(int feeTypeIndex = 0;feeTypeIndex < feeTypeCdData.size(); feeTypeIndex++) {
+                    feeTypeData = feeTypeCdData.getJSONObject(feeTypeIndex);
+                    feeTypeCdValue += (feeTypeData.getString("feeName")+"("+feeTypeData.getString("startTime")+"~"+feeTypeData.getString("endTime"))+")="+feeTypeData.getString("receivedAmount");
+                    feeTypeCdValue +="\r\n";
+                }
+                row.createCell(3 + dictIndex).setCellValue(feeTypeCdValue);
             }
         }
 
