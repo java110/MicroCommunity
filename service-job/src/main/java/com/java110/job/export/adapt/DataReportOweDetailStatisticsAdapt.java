@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 导出实收明细表
+ * 欠费明细
  */
-@Service("dataReportEarnedDetailStatistics")
-public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
+@Service("dataReportOweDetailStatistics")
+public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
 
     @Autowired
     private IDictV1InnerServiceSMO dictV1InnerServiceSMOImpl;
@@ -40,8 +40,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
     private IBaseDataStatisticsInnerServiceSMO baseDataStatisticsInnerServiceSMOImpl;
 
     private static final int MAX_ROW = 100;
-
-
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {
@@ -62,11 +60,11 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         workbook = new SXSSFWorkbook();
         workbook.setCompressTempFiles(false);
 
-        Sheet sheet = workbook.createSheet("实收明细");
+        Sheet sheet = workbook.createSheet("欠费明细");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("房屋");
         row.createCell(1).setCellValue("业主");
-        row.createCell(2).setCellValue("实收");
+        row.createCell(2).setCellValue("欠费");
         DictDto dictDto = new DictDto();
         dictDto.setTableName("pay_fee_config");
         dictDto.setTableColumns("fee_type_cd_show");
@@ -101,9 +99,7 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
             JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
             appendData(datas, sheet, dictDtos,(page - 1) * MAX_ROW);
         }
-
-
-        return workbook;
+        return null;
     }
 
     /**
@@ -125,10 +121,10 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
             dataObj = datas.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("roomName"));
             row.createCell(1).setCellValue(dataObj.getString("ownerName")+"("+dataObj.getString("link")+")");
-            row.createCell(2).setCellValue(dataObj.getString("receivedFee"));
+            row.createCell(2).setCellValue(dataObj.getString("oweFee"));
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                feeTypeCd = "receivedFee"+dictDtos.get(dictIndex).getStatusCd();
+                feeTypeCd = "oweFee"+dictDtos.get(dictIndex).getStatusCd();
                 if(!dataObj.containsKey(feeTypeCd)){
                     row.createCell(3 + dictIndex).setCellValue(0);
                     continue;
@@ -141,7 +137,7 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
                 feeTypeCdValue = "";
                 for(int feeTypeIndex = 0;feeTypeIndex < feeTypeCdData.size(); feeTypeIndex++) {
                     feeTypeData = feeTypeCdData.getJSONObject(feeTypeIndex);
-                    feeTypeCdValue += (feeTypeData.getString("feeName")+"("+feeTypeData.getString("startTime")+"~"+feeTypeData.getString("endTime"))+")="+feeTypeData.getString("receivedAmount");
+                    feeTypeCdValue += (feeTypeData.getString("feeName")+"("+feeTypeData.getString("endTime")+"~"+feeTypeData.getString("deadlineTime"))+")="+feeTypeData.getString("amountOwed");
                     feeTypeCdValue +="\r\n";
                 }
                 row.createCell(3 + dictIndex).setCellValue(feeTypeCdValue);
@@ -150,13 +146,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
 
     }
 
-
-    /**
-     * 查询全部房屋
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
     public long getRoomCount(QueryStatisticsDto queryStatisticsDto) {
 
         RoomDto roomDto = new RoomDto();
@@ -169,12 +158,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
     }
 
-    /**
-     * 查询房屋信息
-     *
-     * @param queryStatisticsDto
-     * @return
-     */
     public List<RoomDto> getRoomInfo(QueryStatisticsDto queryStatisticsDto) {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
@@ -187,7 +170,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return baseDataStatisticsInnerServiceSMOImpl.getRoomInfo(roomDto);
     }
-
 
     /**
      * roomNum 拆分 查询房屋信息
@@ -219,7 +201,13 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
 
     }
 
-    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms,QueryStatisticsDto queryStatisticsDto) {
+    /**
+     * 计算房屋欠费 实收费用
+     *
+     * @param rooms
+     * @return
+     */
+    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms, QueryStatisticsDto queryStatisticsDto) {
         if (rooms == null || rooms.size() < 1) {
             return new JSONArray();
         }
@@ -231,17 +219,17 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         for (RoomDto roomDto : rooms) {
             objIds.add(roomDto.getRoomId());
             data = new JSONObject();
-            data.put("roomId",roomDto.getRoomId());
-            data.put("roomName",roomDto.getFloorNum()+"-"+roomDto.getUnitNum()+"-"+roomDto.getRoomNum());
-            data.put("ownerName",roomDto.getOwnerName());
-            data.put("ownerId",roomDto.getOwnerId());
-            data.put("link",roomDto.getLink());
+            data.put("roomId", roomDto.getRoomId());
+            data.put("roomName", roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
+            data.put("ownerName", roomDto.getOwnerName());
+            data.put("ownerId", roomDto.getOwnerId());
+            data.put("link", roomDto.getLink());
             datas.add(data);
         }
 
         queryStatisticsDto.setObjIds(objIds.toArray(new String[objIds.size()]));
-        List<Map> infos = reportFeeStatisticsInnerServiceSMOImpl.getObjReceivedFee(queryStatisticsDto);
-
+        //todo 查询房屋 欠费信息 返回 payerObjId, feeTypeCd,feeName,endTime,deadlineTime,amountOwed
+        List<Map> infos = reportFeeStatisticsInnerServiceSMOImpl.getObjOweFee(queryStatisticsDto);
 
         if (infos == null || infos.size() < 1) {
             return datas;
@@ -253,10 +241,9 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal oweFee = new BigDecimal(0.00);
         List<Map> itemFees = null;
         String feeTypeCd = "";
-        data.put("receivedFee", "0");
 
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
@@ -268,10 +255,10 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
                     continue;
                 }
                 feeTypeCd = info.get("feeTypeCd").toString();
-                receivedFee = receivedFee.add(new BigDecimal(info.get(feeTypeCd + "receivedFee").toString()));
-                data.put("receivedFee" + feeTypeCd, info.get(feeTypeCd));
+                oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
+                data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
             }
-            data.put("receivedFee", receivedFee.doubleValue());
+            data.put("oweFee", oweFee.doubleValue());
         }
 
         return datas;
@@ -304,7 +291,7 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
                 dInfo.putAll(info);
                 tmpInfos.add(dInfo);
                 //计算单项 欠费金额
-                computeReceivedAmount(tmpInfos, info.get("feeTypeCd").toString(), nInfo);
+                computeOweAmount(tmpInfos, info.get("feeTypeCd").toString(), nInfo);
                 nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
             }
         }
@@ -320,17 +307,17 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
      * @param feeTypeCd
      * @param nInfo
      */
-    private void computeReceivedAmount(List<Map> tmpInfos, String feeTypeCd, Map nInfo) {
+    private void computeOweAmount(List<Map> tmpInfos, String feeTypeCd, Map nInfo) {
         if (tmpInfos == null || tmpInfos.size() < 1) {
-            nInfo.put(feeTypeCd + "receivedFee", 0.0);
+            nInfo.put(feeTypeCd + "oweFee", 0.0);
             return;
         }
-        BigDecimal receivedAmount = new BigDecimal(0.0);
+        BigDecimal oweFee = new BigDecimal(0.0);
         for (Map tInfo : tmpInfos) {
-            receivedAmount = receivedAmount.add(new BigDecimal(tInfo.get("receivedAmount").toString()));
+            oweFee = oweFee.add(new BigDecimal(tInfo.get("amountOwed").toString()));
         }
-        receivedAmount = receivedAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
-        nInfo.put(feeTypeCd + "receivedFee", receivedAmount.doubleValue());
+        oweFee = oweFee.setScale(2, BigDecimal.ROUND_HALF_UP);
+        nInfo.put(feeTypeCd + "oweFee", oweFee.doubleValue());
     }
 
     private List<Map> getTmpInfos(Map nInfo, Map info) {
