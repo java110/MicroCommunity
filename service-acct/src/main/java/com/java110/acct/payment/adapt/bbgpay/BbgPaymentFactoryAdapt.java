@@ -186,9 +186,14 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("asyn_url", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));// 通知地址
         String decryParams = EncryptDecryptFactory.execute(smallWeChatDto.getObjId(), gzhPayUrl, params);
         JSONObject paramOut = JSONObject.parseObject(decryParams);
+        if (!"SUCCESS".equals(paramOut.getString("status"))
+                        || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
+            throw new IllegalArgumentException("支付失败" + paramOut.getString("return_message"));
+        }
+
         if (!"0000".equals(paramOut.getString("return_code"))
-                || !"SUCCESS".equals(paramOut.getString("status"))
-                || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
+                && !"0001".equals(paramOut.getString("return_code"))
+        ) {
             throw new IllegalArgumentException("支付失败" + paramOut.getString("return_message"));
         }
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
