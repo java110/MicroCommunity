@@ -24,12 +24,17 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
 import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
+import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IMenuGroupCommunityV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.menuGroupCommunity.MenuGroupCommunityPo;
 import com.java110.po.store.StorePo;
+import com.java110.po.store.StoreUserPo;
+import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -86,10 +91,16 @@ public class DeletePropertyCmd extends Cmd {
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     @Autowired
+    private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
+
+    @Autowired
     private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
 
     @Autowired
     private IMenuGroupCommunityV1InnerServiceSMO menuGroupCommunityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -109,6 +120,9 @@ public class DeletePropertyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        // todo 删除 物业下的所有员工数据
+        deleteStaff(storePo);
 
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberId(storePo.getStoreId());
@@ -138,5 +152,27 @@ public class DeletePropertyCmd extends Cmd {
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    /**
+     * 删除 员工信息
+     * @param storePo
+     */
+    private void deleteStaff(StorePo storePo) {
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setStoreId(storePo.getStoreId());
+        List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
+        if(storeUserDtos == null || storeUserDtos.size() < 1){
+            return;
+        }
+        StoreUserPo storeUserPo = new StoreUserPo();
+        storeUserPo.setStoreId(storePo.getStoreId());
+        storeUserV1InnerServiceSMOImpl.deleteStoreUser(storeUserPo);
+        UserPo userPo = null;
+        for(StoreUserDto staff : storeUserDtos){
+            userPo = new UserPo();
+            userPo.setUserId(staff.getUserId());
+            userV1InnerServiceSMOImpl.deleteUser(userPo);
+        }
     }
 }
