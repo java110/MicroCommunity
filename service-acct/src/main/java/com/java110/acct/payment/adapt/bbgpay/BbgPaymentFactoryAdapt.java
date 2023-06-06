@@ -85,7 +85,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
     private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
 
-    private static String gzhPayUrl = "https://epaytest.bankofbbg.com/www/corepaycer/WxGzhPay";
+    private static String gzhPayUrl = "https://mbank.bankofbbg.com/www/corepaycer/WxGzhPay";
 
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;

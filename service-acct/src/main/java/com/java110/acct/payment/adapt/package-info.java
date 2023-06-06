@@ -15,5 +15,8 @@
  *   public PaymentOrderDto java110NotifyPayment(String param)
  *   微信平台支付完成通知接口
  *
+ *
+ *   需要开发者账户 修改 PAYMENT_ADAPT 的值为适配器 beanName
+ *
  */
 package com.java110.acct.payment.adapt;

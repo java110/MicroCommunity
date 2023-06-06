@@ -69,7 +69,7 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
 
     private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
 
-    private static String refundUrl = "https://epaytest.bankofbbg.com/www/corepaycer/Refund";// 退款地址
+    private static String refundUrl = "https://mbank.bankofbbg.com/www/corepaycer/Refund";// 退款地址
 
     @Autowired
     private IReturnPayFeeInnerServiceSMO returnPayFeeInnerServiceSMOImpl;
