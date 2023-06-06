@@ -7,6 +7,9 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
 import com.java110.user.bmo.rentingPool.IGetRentingPoolBMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,11 +93,26 @@ public class GetRentingPoolBMOImpl implements IGetRentingPoolBMO {
         //刷入图片信息
         List<String> photoVos = null;
         String url = null;
+//        for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
+//            photoVos = new ArrayList<>();
+//            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+//                if (rentingPoolDto.getRentingId().equals(tmpFileRelDto.getObjId())){
+//                    url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + rentingPoolDto.getCommunityId();
+//                    photoVos.add(url);
+//                }
+//            }
+//            rentingPoolDto.setPhotos(photoVos);
+//        }
+        
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        imgUrl += (!StringUtil.isEmpty(imgUrl) && imgUrl.endsWith("/") ? "" : "/");
+        //for (StoreInfoDto tmpDto : storeInfoDtos) {
         for (RentingPoolDto rentingPoolDto : rentingPoolDtos) {
-            photoVos = new ArrayList<>();
+          photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
-                if (rentingPoolDto.getRentingId().equals(tmpFileRelDto.getObjId())){
-                    url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + rentingPoolDto.getCommunityId();
+                if (rentingPoolDto.getRentingId().equals(tmpFileRelDto.getObjId())) {
+                    //url = "/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=-1";
+                    url = imgUrl + tmpFileRelDto.getFileRealName();
                     photoVos.add(url);
                 }
             }
