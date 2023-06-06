@@ -247,7 +247,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         JSONObject resJson = new JSONObject();
         resJson.put("return_code", "SUCCESS");
-        resJson.put("return_code", "成功");
+        resJson.put("return message", "成功");
 
         paymentOrderDto.setResponseEntity(new ResponseEntity<String>(resJson.toJSONString(), HttpStatus.OK));
         return paymentOrderDto;
