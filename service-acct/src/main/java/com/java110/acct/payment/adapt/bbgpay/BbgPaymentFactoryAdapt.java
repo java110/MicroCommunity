@@ -49,7 +49,9 @@ import java.util.*;
  * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
  * VALUES ('88', '9070', 'productNo_SM4', 'productNo_SM4', 'productNo_SM4', '2021-10-10 21:25:46', '0');
  * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
- * VALUES ('83', '9070', 'publicKey_SM4', 'publicKey_SM4', '值请填写1 私钥 请填写在备注中', '2021-10-10 21:25:46', '0');
+ * VALUES ('83', '9070', 'publicKey_SM4', 'publicKey_SM4', '值请填写 公钥 ', '2021-10-10 21:25:46', '0');
+ * INSERT INTO `TT`.`community_setting_key` (`key_id`, `setting_type`, `setting_name`, `setting_key`, `remark`, `create_time`, `status_cd`)
+ *   VALUES ('84', '9070', 'privateKey_SM4', 'privateKey_SM4', '值请填写 私钥 ', '2021-10-10 21:25:46', '0');
  * // 以下数据先查询是否存在 存在则修改 不存在添加
  * INSERT INTO `TT`.`c_mapping` (`domain`, `name`, `key`, `value`, `remark`, `create_time`, `status_cd`)
  * VALUES ('WECHAT', '被扫支付厂家', 'PAY_QR_ADAPT', 'qrCodeBbgPaymentAdapt', '', '2023-02-18 18:47:14', '0');
@@ -176,7 +178,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("mcht_no", mchtNo_SM4);// 收款商户编号
         params.put("product_no", productNo_SM4);// 产品编号
         params.put("biz_type", "WX_GZH");// 业务类型
-        params.put("tran_no", String.valueOf(System.nanoTime()));// 商户流水
+        params.put("tran_no", orderNum);// 商户流水
         params.put("code", "");// 授权码
         params.put("openid", openid);// 用户标识id
         params.put("appid", smallWeChatDto.getAppId());// 公众号appid
