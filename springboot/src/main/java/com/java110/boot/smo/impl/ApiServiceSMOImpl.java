@@ -85,21 +85,21 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         String resJson = "";
 
         try {
-            //在post和 put 时才存在报文加密的情况
+            //todo 在post和 put 时才存在报文加密的情况
             if ("POST,PUT".contains(headers.get(CommonConstant.HTTP_METHOD))) {
                 reqJson = decrypt(reqJson, headers);
             }
 
-            //1.0 创建数据流 appId serviceCode
+            //todo 1.0 创建数据流 appId serviceCode
             dataFlow = DataFlowFactory.newInstance(ApiDataFlow.class).builder(reqJson, headers);
 
-            //2.0 加载配置信息
+            //todo 2.0 加载配置信息
             initConfigData(dataFlow);
 
-            //3.0 校验 APPID是否有权限操作serviceCode
+            //todo 3.0 校验 APPID是否有权限操作serviceCode
             judgeAuthority(dataFlow);
 
-            //6.0 调用下游系统
+            //todo 6.0 调用下游系统
             invokeBusinessSystem(dataFlow);
 
             responseEntity = dataFlow.getResponseEntity();
@@ -328,13 +328,13 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "requestTime 格式不对，遵循yyyyMMddHHmmss格式");
         }
-        //用户ID校验
+        //todo 用户ID校验
         if (StringUtil.isNullOrNone(dataFlow.getUserId())) {
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "USER_ID 不能为空");
         }
 
 
-        //判断 AppId 是否有权限操作相应的服务
+        //todo 判断 AppId 是否有权限操作相应的服务
         AppService appService = DataFlowFactory.getService(dataFlow, dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
 
         //这里调用缓存 查询缓存信息
@@ -373,9 +373,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
      */
     private void invokeBusinessSystem(ApiDataFlow dataFlow) throws BusinessException {
         Date startDate = DateUtil.getCurrentDate();
-        //拿到当前服务
+        //todo 拿到当前服务
         AppService appService = DataFlowFactory.getService(dataFlow, dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
-        //这里对透传类处理
+        //todo 这里对透传类处理,目前很少用到，可以不用关注
         if ("NT".equals(appService.getIsInstance())) {
             //如果是透传类 请求方式必须与接口提供方调用方式一致
             String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
@@ -386,8 +386,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             //dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER);
             doNT(appService, dataFlow, dataFlow.getReqJson());
             return;
-        } else if ("T".equals(appService.getIsInstance())) {
-            //如果是透传类 请求方式必须与接口提供方调用方式一致
+        } else if ("T".equals(appService.getIsInstance())) { // todo 通过透传方式 调用 目前很少用到，可以不用关注
+            //todo 如果是透传类 请求方式必须与接口提供方调用方式一致
             String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
             if (!appService.getMethod().equals(httpMethod)) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
@@ -395,13 +395,14 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             }
             doTransfer(appService, dataFlow, dataFlow.getReqJson());
             return;
-        } else if ("CMD".equals(appService.getIsInstance())) {
+        } else if ("CMD".equals(appService.getIsInstance())) { // todo 微服务调用方式，目前主要用这种方式调度分发 到不同的微服务，这里是通过c_service 中配置 调用到不同的微服务
             //如果是透传类 请求方式必须与接口提供方调用方式一致
             String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
             if (!appService.getMethod().equals(httpMethod)) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
                         "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为：" + httpMethod);
             }
+            // todo 根据接口编码找到 appService 也就是c_service 表中的内容
             dealCmd(appService, dataFlow, dataFlow.getReqJson());
             return;
         } else {
@@ -503,11 +504,11 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 oId = headers.get(OrderDto.O_ID).get(0);
             }
 
-            //进入databus
-            if (!CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
-
-                // dealDatabus(serviceCode, reqJson, oId);
-            }
+//            //进入databus
+//            if (!CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
+//
+//                // dealDatabus(serviceCode, reqJson, oId);
+//            }
 
 
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
@@ -545,12 +546,20 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         dataFlow.setResponseEntity(responseEntity);
     }
 
+    /**
+     * 开始调度微服务
+     * @param appService
+     * @param dataFlow
+     * @param reqJson
+     */
     private void dealCmd(AppService appService, ApiDataFlow dataFlow, JSONObject reqJson) {
         Map<String, String> reqHeader = dataFlow.getRequestCurrentHeaders();
         HttpHeaders header = new HttpHeaders();
+        //todo 对头信息重新包装
         for (String key : dataFlow.getRequestCurrentHeaders().keySet()) {
             header.add(key, reqHeader.get(key));
         }
+        //todo 用户信息再次包装
         if (reqHeader.containsKey(CommonConstant.USER_ID)
                 && (!reqJson.containsKey("userId") || StringUtil.isEmpty(reqJson.getString("userId")))) {
             reqJson.put("userId", reqHeader.get(CommonConstant.USER_ID));
@@ -570,14 +579,18 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
+        //todo 组装调用微服务的地址
         String requestUrl = "http://127.0.0.1:8008/cmd" + serviceCode;
         //
         ResponseEntity responseEntity = null;
+        //todo url 带了地址这里 拼接
         if (!StringUtil.isNullOrNone(orgRequestUrl)) {
             String param = orgRequestUrl.contains("?") ? orgRequestUrl.substring(orgRequestUrl.indexOf("?") + 1, orgRequestUrl.length()) : "";
             requestUrl += ("?" + param);
         }
         try {
+            //todo http的方式调用微服务，相应的java类可以到相应微服务下的cmd下根据serviceCode 的寻找
+            //todo 这里会调用到 java110-service 模块下的 CmdApi 类，这个类各个微服务都会集成
             responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             HttpHeaders headers = responseEntity.getHeaders();
             String oId = "-1";
@@ -585,7 +598,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 oId = headers.get(OrderDto.O_ID).get(0);
             }
 
-        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+        } catch (HttpStatusCodeException e) { //todo 这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
             logger.error("请求下游服务【" + requestUrl + "】异常，参数为" + httpEntity + e.getResponseBodyAsString(), e);
             String body = e.getResponseBodyAsString();
 
@@ -603,7 +616,6 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, String.valueOf(responseEntity.getBody()));
             dataFlow.setResponseEntity(responseEntity);
-
             return;
         }
         if (StringUtils.isEmpty(responseEntity.getBody() + "")) {

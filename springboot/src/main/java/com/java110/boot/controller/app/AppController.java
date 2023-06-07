@@ -63,7 +63,7 @@ public class AppController extends BaseController {
     private IPrivilegeSMO privilegeSMOImpl;
 
     /**
-     * 资源请求 post方式
+     * 资源请求 post方式 统一入口类
      * <p>
      * /app/user.listUser
      * <p>
@@ -86,12 +86,18 @@ public class AppController extends BaseController {
         ResponseEntity<String> responseEntity = null;
         try {
             Map<String, String> headers = new HashMap<String, String>();
+            //todo 封装请求中的 头信息
             this.getRequestInfo(request, headers);
+            //todo 将接口编码（服务编码） 放入头信息 通过头信息的方式 传递到后端
             headers.put(CommonConstant.HTTP_SERVICE, service);
+            // todo 请求方式 放入到头信息
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
+            //todo 获取由 PageProcessAspect aop 拦截封装的 pd 页面数据对象
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            //todo 根据登录用户 的权限 校验 用户是否有权限访问该接口,此时的"/app/" + service 为 开发这账户 菜单权限下的资源地址
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
+            //todo 进入 接口相关 业务处理
             responseEntity = apiSMOImpl.doApi(postInfo, headers,request);
             //todo 写入 token
             wirteToken(request,pd,service,responseEntity);
@@ -105,7 +111,7 @@ public class AppController extends BaseController {
     }
 
     /**
-     * 资源请求 get方式
+     * 资源请求 get方式 统一入口类
      *
      * @param service 请求接口方式
      * @param request 请求对象 查询头信息 url等信息
@@ -121,12 +127,18 @@ public class AppController extends BaseController {
         ResponseEntity<String> responseEntity = null;
         try {
             Map<String, String> headers = new HashMap<String, String>();
+            //todo 封装请求中的 头信息
             this.getRequestInfo(request, headers);
+            //todo 将接口编码（服务编码） 放入头信息 通过头信息的方式 传递到后端
             headers.put(CommonConstant.HTTP_SERVICE, service);
+            // todo 请求方式 放入到头信息
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            //todo 获取由 PageProcessAspect aop 拦截封装的 pd 页面数据对象
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            //todo 根据登录用户 的权限 校验 用户是否有权限访问该接口,此时的"/app/" + service 为 开发这账户 菜单权限下的资源地址
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
+            //todo 进入 接口相关 业务处理
             responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
 
         } catch (Throwable e) {

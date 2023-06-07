@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IApiServiceSMO {
 
     /**
-     * 业务统一处理服务方法
+     * 业务统一处理服务方法 应用是否有接口权限校验
      * @param reqJson 请求报文json
      * @return
      */

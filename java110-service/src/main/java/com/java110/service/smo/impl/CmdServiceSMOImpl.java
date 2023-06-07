@@ -53,7 +53,7 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
 
 
     /**
-     * 服务调度
+     * cmd 服务调度
      *
      * @param reqJson 请求报文json
      * @param headers
@@ -70,11 +70,11 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
 
         ResponseEntity<String> responseEntity = null;
 
-        //1.0 创建数据流 appId serviceCode
+        //todo 1.0 创建数据流 appId serviceCode
         cmdDataFlowContext = DataFlowFactory.newInstance(CmdDataFlow.class).builder(reqJson, headers);
 
 
-        //6.0 调用下游系统
+        //todo 2.0 调用下游系统
         invokeBusinessSystem(cmdDataFlowContext);
 
         responseEntity = cmdDataFlowContext.getResponseEntity();
@@ -89,12 +89,13 @@ public class CmdServiceSMOImpl extends LoggerEngine implements ICmdServiceSMO {
 
 
     /**
-     * 6.0 调用下游系统
+     * 2.0 调用下游系统
      *
      * @param cmdDataFlowContext
      * @throws BusinessException
      */
     private void invokeBusinessSystem(ICmdDataFlowContext cmdDataFlowContext) throws Exception {
+        //todo 发布 cmd 事件
         ServiceCmdEventPublishing.multicastEvent(cmdDataFlowContext);
     }
 
