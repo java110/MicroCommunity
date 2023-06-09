@@ -84,6 +84,9 @@
         <if test="roomId != null and roomId != ''">
             and t.room_id = #{roomId}
         </if>
+        <if test="communityId != null and communityId != ''">
+            and t.community_id = #{communityId}
+        </if>
         <if test="ownerId != null and ownerId != ''">
             and bo.owner_id = #{ownerId}
         </if>
