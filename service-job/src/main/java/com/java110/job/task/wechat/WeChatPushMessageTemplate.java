@@ -368,7 +368,7 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
         String wechatUrl = UrlCache.getOwnerUrl();
         Miniprogram miniprogram = null;
         if (wechatUrl.startsWith("https://") || wechatUrl.startsWith("http://")) {
-            miniprogram = new Miniprogram();
+            //miniprogram = new Miniprogram();
         } else {
             miniprogram = new Miniprogram();
             miniprogram.setAppid(wechatUrl);

@@ -9,10 +9,12 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
@@ -20,6 +22,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.po.account.AccountPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
@@ -103,6 +106,9 @@ public class EditOwnerCmd extends Cmd {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -192,7 +198,11 @@ public class EditOwnerCmd extends Cmd {
         if (reqJson.containsKey("ownerPhoto") && !StringUtils.isEmpty(reqJson.getString("ownerPhoto"))) {
             editOwnerPhoto(reqJson);
         }
+        //todo 修改 业主信息
         editOwner(reqJson);
+
+
+
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
@@ -247,7 +257,7 @@ public class EditOwnerCmd extends Cmd {
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
 
-        //查询app用户表
+        //todo 查询app用户表
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
         if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
             for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
@@ -260,6 +270,22 @@ public class EditOwnerCmd extends Cmd {
                 }
             }
         }
+        //todo 判断业主手机号和账户手机号是否相同，不相同修改账户手机号
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(ownerDtos.get(0).getMemberId());
+        accountDto.setPartId(ownerDtos.get(0).getCommunityId());
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        if(accountDtos == null || accountDtos.size()< 1){
+            return ;
+        }
+        if(accountDtos.get(0).getLink().equals(ownerDtos.get(0).getLink())){
+            return;
+        }
+
+        AccountPo accountPo = new AccountPo();
+        accountPo.setLink(ownerDtos.get(0).getLink());
+        accountPo.setAcctId(accountDtos.get(0).getAcctId());
+        accountInnerServiceSMOImpl.updateAccount(accountPo);
     }
 
     public void editOwnerPhoto(JSONObject paramInJson) {

@@ -115,31 +115,31 @@ public class AccountApi {
                 ownerRoomRelDto.setRoomId(payerObjId);
                 List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
                 Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
-                ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+                link = ownerRoomRelDtos.get(0).getLink();
             } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
                 OwnerCarDto ownerCarDto = new OwnerCarDto();
                 ownerCarDto.setCarId(payerObjId);
                 List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 //                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
-                ownerId = ownerCarDtos.get(0).getOwnerId();
+                link = ownerCarDtos.get(0).getLink();
             } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(payerObjType)) {
                 ContractDto contractDto = new ContractDto();
                 contractDto.setContractId(payerObjId);
                 List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
 //                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆关系表错误！");
-                ownerId = contractDtos.get(0).getObjId();
+                link = contractDtos.get(0).getbLink();
             } else {
-                ownerId = "-1";
+
             }
-            accountDto.setObjId(ownerId);
+            accountDto.setLink(link);
         } else {
-            accountDto.setObjId(ownerId);
+            accountDto.setLink(link);
         }
         accountDto.setObjType(AccountDto.OBJ_TYPE_PERSON);
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
         accountDto.setAcctType(acctType);
-        accountDto.setLink(link);
+        accountDto.setObjId(ownerId);
         accountDto.setAcctId(acctId);
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerId);

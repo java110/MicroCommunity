@@ -254,6 +254,9 @@
             <if test="acctName !=null and acctName != ''">
                 t.acct_name= #{acctName},
             </if>
+            <if test="link !=null and link != ''">
+                t.link= #{link},
+            </if>
         </set>
         where 1=1
         <if test="acctId !=null and acctId != ''">
