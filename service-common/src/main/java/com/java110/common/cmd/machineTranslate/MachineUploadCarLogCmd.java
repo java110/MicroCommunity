@@ -322,7 +322,7 @@ public class MachineUploadCarLogCmd extends Cmd {
                 return;
             }
 
-            carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+            return;
 
         }
 
