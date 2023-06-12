@@ -128,10 +128,11 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
             userDto.setUserAttrs(userAttrDtos);
             for (UserAttrDto userAttrDto : userAttrDtos) {
                 //openId 单独出来处理
-                if ("100201911001".equals(userAttrDto.getSpecCd())) {
+                if (UserAttrDto.SPEC_OPEN_ID.equals(userAttrDto.getSpecCd())) {
                     userDto.setOpenId(userAttrDto.getValue());
                 }
 
+                // 商城 openId
                 if (UserAttrDto.SPEC_MALL_OPEN_ID.equals(userAttrDto.getSpecCd())){
                     userDto.setMallOpenId(userAttrDto.getValue());
                 }
