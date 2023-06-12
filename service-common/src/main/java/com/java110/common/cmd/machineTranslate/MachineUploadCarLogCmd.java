@@ -321,6 +321,9 @@ public class MachineUploadCarLogCmd extends Cmd {
             if (CarInoutDto.STATE_IN_FAIL.equals(state)) {
                 return;
             }
+
+            carInoutDtos = carInoutV1InnerServiceSMOImpl.queryCarInouts(carInoutDto);
+
         }
 
         //保存出场明细
