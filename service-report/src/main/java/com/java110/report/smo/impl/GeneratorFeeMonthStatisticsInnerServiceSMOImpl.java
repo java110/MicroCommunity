@@ -617,6 +617,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (curDate.getTime() < tmpReportFeeDto.getEndTime().getTime()) {
             return 0.0;
         }
+        if(FeeDto.STATE_FINISH.equals(tmpReportFeeDto.getState())){
+            return 0.0;
+        }
 
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             //说明一次性费用都欠了
