@@ -18,6 +18,7 @@ package com.java110.user.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.user.dao.IUserV1ServiceDao;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -29,6 +30,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -114,8 +116,15 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
 
     @Override
     public String getUserIdByQrCode(@RequestBody String qrCode) {
+        qrCode = CommonCache.getValue(qrCode);
+        if(StringUtil.isEmpty(qrCode)){
+            throw new IllegalArgumentException("二维码失效");
+        }
         qrCode = AuthenticationFactory.AesDecrypt(qrCode, AuthenticationFactory.AES_KEY);
         JSONObject qrCodeJson = JSONObject.parseObject(qrCode);
+        if (qrCodeJson == null || !qrCodeJson.containsKey("time")) {
+            throw new IllegalArgumentException("二维码非法");
+        }
         long time = qrCodeJson.getLongValue("time");
         if (DateUtil.getCurrentDate().getTime() - time > 5 * 60 * 1000) {
             throw new IllegalArgumentException("二维码失效");
@@ -130,7 +139,9 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
         qrCodeJson.put("userId", userId);
         qrCodeJson.put("time", DateUtil.getCurrentDate().getTime());
         String qrCode = AuthenticationFactory.AesEncrypt(qrCodeJson.toJSONString(), AuthenticationFactory.AES_KEY);
-        return qrCode;
+        String key = GenerateCodeFactory.getUUID();
+        CommonCache.setValue(key, qrCode, CommonCache.defaultExpireTime);
+        return key;
     }
 
 }

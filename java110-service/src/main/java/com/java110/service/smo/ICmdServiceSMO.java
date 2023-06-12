@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ICmdServiceSMO {
 
     /**
-     * 业务统一处理服务方法
+     * cmd 调用 处理类
      * @param reqJson 请求报文json
      * @return
      */

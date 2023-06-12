@@ -80,6 +80,7 @@ public class SaveOwnerCarCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
         ownerCarDto.setCarNum(reqJson.getString("carNum"));
+        ownerCarDto.setPaIds(new String[]{parkingSpaceDtos.get(0).getPaId()});
         ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY, OwnerCarDto.CAR_TYPE_MEMBER}); // 临时车除外
         int count = ownerCarInnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
 

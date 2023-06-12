@@ -88,19 +88,17 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
-
+        //todo 校验员工时 是否有访问小区的权限
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        //todo 如果 登录用户不为空 则将 前段传递的user-id 重写
         if (!StringUtil.isEmpty(result.getLoginUserId())) {
             headers.remove("user-id");
             headers.remove("user_id");
             headers.put("user-id", result.getUserId());
             headers.put("user_id", result.getUserId());
             headers.put("login-user-id",result.getLoginUserId());
-//            if (!StringUtil.isEmpty(result.getUserName())) {
-//                headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
-//            }
         }
-
+        // todo 如果 商户不为空则 商户ID写入只头信息中 这里的商户ID 可以是物业ID 或者商家ID
         if (!StringUtil.isEmpty(result.getStoreId())) {
             headers.remove("store-id");
             headers.put("store-id", result.getStoreId());
@@ -113,6 +111,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             headers.put("user-id", "-1");
         }
         headers.put("store-id", result.getStoreId());
+        // todo 应用是否有接口权限校验
         ResponseEntity<String> responseEntity = apiServiceSMOImpl.service(body, headers);
         return responseEntity;
     }

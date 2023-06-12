@@ -41,6 +41,13 @@ public class CmdApi extends BaseController {
     ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
 
+    /**
+     * 微服务 /cmd/xx.xx 接受类
+     * @param service
+     * @param postInfo
+     * @param request
+     * @return
+     */
     @RequestMapping(path = "/{service:.+}", method = RequestMethod.POST)
     public ResponseEntity<String> service(@PathVariable String service,
                                           @RequestBody String postInfo,
@@ -48,17 +55,22 @@ public class CmdApi extends BaseController {
         ResponseEntity<String> responseEntity = null;
         Map<String, String> headers = new HashMap<String, String>();
         try {
-
+            //todo 头信息封装
             this.getRequestInfo(request, headers);
+            //todo 将serviceCode 写入到头信息
             headers.put(CommonConstant.HTTP_SERVICE, service);
+            //todo 将请求方式 写入到头信息
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
+            //todo 开始调用 cmd 类
             responseEntity = cmdServiceSMOImpl.cmd(postInfo, headers);
         } catch (Throwable e) {
+            //todo 异常信息进行记录
             LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
             logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
             logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_CMD);
             logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+            //todo 日志
             saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

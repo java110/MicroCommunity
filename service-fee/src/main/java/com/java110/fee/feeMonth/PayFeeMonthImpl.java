@@ -103,7 +103,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         Assert.listOnlyOne(tmpFeeDtos, "费用不存在");
-
+        feeDto = tmpFeeDtos.get(0);
         //todo 查询 缴费明细
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setCommunityId(feeDto.getCommunityId());

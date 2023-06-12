@@ -110,6 +110,7 @@ public class ServiceCmdEventPublishing {
      */
     public static void multicastEvent(ICmdDataFlowContext cmdDataFlowContext) throws Exception {
         Assert.notNull(cmdDataFlowContext.getServiceCode(), "当前没有可处理的业务信息！");
+        //todo 根据cmd serviceCode 发布事件
         multicastEvent(cmdDataFlowContext.getServiceCode(), cmdDataFlowContext, null);
     }
 
@@ -132,8 +133,10 @@ public class ServiceCmdEventPublishing {
      */
     public static void multicastEvent(String serviceCode, ICmdDataFlowContext dataFlowContext, String asyn) throws Exception {
         try {
+            //todo 组装事件
             CmdEvent targetDataFlowEvent = new CmdEvent(serviceCode, dataFlowContext);
 
+            //todo 发布事件
             multicastEvent(serviceCode, targetDataFlowEvent, asyn);
         } catch (Exception e) {
             logger.error("发布侦听失败，失败原因为：", e);
@@ -151,6 +154,7 @@ public class ServiceCmdEventPublishing {
      * @param asyn  A 表示异步处理
      */
     public static void multicastEvent(String serviceCode, final CmdEvent event, String asyn) throws Exception {
+        //todo 根据serviceCode 去寻找 处理的Cmd处理类 如果java类中 @Java110Cmd(serviceCode = "xx.xx") 写了该注解就会被寻找到
         List<ServiceCmdListener> listeners = getListeners(serviceCode);
         //这里判断 serviceCode + httpMethod 的侦听，如果没有注册直接报错。
         if (listeners == null || listeners.size() == 0) {
@@ -159,7 +163,7 @@ public class ServiceCmdEventPublishing {
         }
         for (final ServiceCmdListener listener : listeners) {
 
-            if (CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)) { //异步处理
+            if (CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)) { //todo 异步处理,一般很少用
 
                 Executor executor = getTaskExecutor();
                 executor.execute(new Runnable() {
@@ -174,6 +178,7 @@ public class ServiceCmdEventPublishing {
                 });
                 break;
             } else {
+                // todo 通过同步的方式调用CMDjava类
                 invokeListener(listener, event);
                 break;
             }
@@ -192,7 +197,7 @@ public class ServiceCmdEventPublishing {
     }
 
     /**
-     * Invoke the given listener with the given event.
+     * 执行 根据serviceCode 找到的cmd 类
      *
      * @param listener the ApplicationListener to invoke
      * @param event    the current event to propagate
@@ -201,15 +206,17 @@ public class ServiceCmdEventPublishing {
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected static void invokeListener(ServiceCmdListener listener, CmdEvent event) throws Exception {
         try {
-            //        //这里处理业务逻辑数据
+            //todo 获取 cmd 上下文对象
             ICmdDataFlowContext dataFlowContext = event.getCmdDataFlowContext();
-            //获取请求数据
+            //todo 获取请求数据
             JSONObject reqJson = dataFlowContext.getReqJson();
 
             logger.debug("API服务 --- 请求参数为：{}", reqJson.toJSONString());
 
+            //todo 调用 cmd的校验方法
             listener.validate(event, dataFlowContext, reqJson);
 
+            //todo 调用 cmd的业务处理方法
             listener.doCmd(event, dataFlowContext, reqJson);
 
             //logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());

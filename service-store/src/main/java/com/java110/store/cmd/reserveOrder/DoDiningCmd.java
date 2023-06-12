@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunitySpacePersonTimeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.reserve.ReserveGoodsConfirmOrderDto;
 import com.java110.dto.reserve.ReserveGoodsDto;
 import com.java110.dto.reserve.ReserveGoodsOrderDto;
@@ -18,6 +19,7 @@ import com.java110.intf.store.IReserveGoodsConfirmOrderV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderTimeV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;
 import com.java110.intf.store.IReserveGoodsV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.reserveGoodsConfirmOrder.ReserveGoodsConfirmOrderPo;
 import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
@@ -57,11 +59,36 @@ public class DoDiningCmd extends Cmd {
     @Autowired
     private IReserveGoodsConfirmOrderV1InnerServiceSMO reserveGoodsConfirmOrderV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
         Assert.hasKeyAndValue(reqJson, "qrCode", "未包含二维码");
         Assert.hasKeyAndValue(reqJson, "goodsId", "未包含商品");
+
+        String userId = userV1InnerServiceSMOImpl.getUserIdByQrCode(reqJson.getString("qrCode"));
+
+        if (StringUtil.isEmpty(userId)) {
+            throw new CmdException("二维码过期");
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        // todo 判断用户是否为这个小区业主
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setLink(userDtos.get(0).getTel());
+        int count = ownerV1InnerServiceSMOImpl.queryOwnersCount(ownerDto);
+        if (count < 1) {
+            throw new CmdException("业主不存在");
+        }
+        reqJson.put("userId", userId);
 
         ReserveGoodsDto reserveGoodsDto = new ReserveGoodsDto();
         reserveGoodsDto.setGoodsId(reqJson.getString("goodsId"));
@@ -77,6 +104,7 @@ public class DoDiningCmd extends Cmd {
         reserveGoodsOrderTimeDto.setAppointmentTime(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()));
         reserveGoodsOrderTimeDto.setHours(calendar.get(Calendar.HOUR) + "");
         reserveGoodsOrderTimeDto.setGoodsId(reqJson.getString("goodsId"));
+        reserveGoodsOrderTimeDto.setPersonTel(userDtos.get(0).getTel());
         flag = reserveGoodsOrderTimeV1InnerServiceSMOImpl.queryReserveGoodsOrderTimesCount(reserveGoodsOrderTimeDto);
         if (flag > 0) {
             throw new CmdException(reserveGoodsOrderTimeDto.getAppointmentTime() + "," + reserveGoodsOrderTimeDto.getHours() + "已经就餐");
@@ -103,17 +131,13 @@ public class DoDiningCmd extends Cmd {
         List<ReserveGoodsDto> reserveGoodsDtos = reserveGoodsV1InnerServiceSMOImpl.queryReserveGoodss(reserveGoodsDto);
         Assert.listOnlyOne(reserveGoodsDtos, "就餐不存在");
 
-        String userId = userV1InnerServiceSMOImpl.getUserIdByQrCode(reqJson.getString("qrCode"));
-
-        if (StringUtil.isEmpty(userId)) {
-            throw new CmdException("二维码过期");
-        }
 
         UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
+        userDto.setUserId(reqJson.getString("userId"));
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户不存在");
+
 
         ReserveGoodsOrderPo reserveGoodsOrderPo = new ReserveGoodsOrderPo();
         reserveGoodsOrderPo.setOrderId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));

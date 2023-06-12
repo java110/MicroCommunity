@@ -218,6 +218,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询优惠费用
+     *
      * @param info
      * @return
      */
@@ -234,6 +235,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询滞纳金
+     *
      * @param info
      * @return
      */
@@ -250,6 +252,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询预存账户
+     *
      * @param info
      * @return
      */
@@ -266,6 +269,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 查询扣款
+     *
      * @param info
      * @return
      */
@@ -293,6 +297,7 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     /**
      * 押金 退还
+     *
      * @param info
      * @return
      */
@@ -338,6 +343,89 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
         }
 
         return Double.parseDouble(infos.get(0).get("chargeFee").toString());
+    }
+
+    @Override
+    public List<Map> getReceivedFeeByFloor(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedFeeByFloor", info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getReceivedFeeByPrimeRate(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedFeeByPrimeRate", info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getOweFeeByFloor(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getOweFeeByFloor", info);
+        return infos;
+    }
+
+    /**
+     * 查询欠费对象
+     *
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> getObjOweFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjOweFee", info);
+        return infos;
+    }
+
+    @Override
+    public long getReceivedRoomCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedRoomCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Long.parseLong(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public double getReceivedRoomAmount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getReceivedRoomAmount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("amount").toString());
+    }
+
+    @Override
+    public long getHisOweReceivedRoomCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Long.parseLong(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public double getHisOweReceivedRoomAmount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomAmount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Double.parseDouble(infos.get(0).get("amount").toString());
+    }
+
+    @Override
+    public List<Map> getObjReceivedFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getObjReceivedFee", info);
+
+
+        return infos;
+
     }
 
 }

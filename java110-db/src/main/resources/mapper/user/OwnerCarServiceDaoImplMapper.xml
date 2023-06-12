@@ -338,6 +338,8 @@
         from owner_car t
         left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
         t.community_id
+        left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         <if test="memberCarNumLike !=null and memberCarNumLike != ''">
             left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002'
         </if>
@@ -420,6 +422,12 @@
         <if test="carIds !=null">
             and t.car_id in
             <foreach collection="carIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="paIds !=null">
+            and pa.pa_id in
+            <foreach collection="paIds" item="item" index="index" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>

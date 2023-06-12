@@ -8,5 +8,13 @@ import java.util.Map;
 
 public interface IApiSMO {
 
-    public ResponseEntity<String> doApi(String body, Map<String, String> headers, HttpServletRequest request) throws UnsupportedEncodingException;
+    /**
+     *  主要完成员工是否有访问小区的权限校验
+     * @param body
+     * @param headers
+     * @param request
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+     ResponseEntity<String> doApi(String body, Map<String, String> headers, HttpServletRequest request) throws UnsupportedEncodingException;
 }

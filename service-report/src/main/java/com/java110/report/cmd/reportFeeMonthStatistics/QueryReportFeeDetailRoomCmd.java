@@ -124,7 +124,7 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
                 }
 
                 oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
-                receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
+                receivedFee = receivedFee.add(new BigDecimal(info.get("receivedFee").toString()));
                 data.put("oweFee"+info.get("feeTypeCd").toString(),info.get("oweFee"));
                 data.put("receivedFee"+info.get("feeTypeCd").toString(),info.get("receivedFee"));
             }

@@ -49,9 +49,9 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
 
     private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
 
-    private static String gzhPayUrl = "https://epaytest.bankofbbg.com/www/corepaycer/ScanCodePay";
+    private static String gzhPayUrl = "https://mbank.bankofbbg.com/www/corepaycer/ScanCodePay";
 
-    private static String queryUrl = "https://epaytest.bankofbbg.com/www/corepaycer/QueryTxnInfo";// 交易查询地址
+    private static String queryUrl = "https://mbank.bankofbbg.com/www/corepaycer/QueryTxnInfo";// 交易查询地址
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;

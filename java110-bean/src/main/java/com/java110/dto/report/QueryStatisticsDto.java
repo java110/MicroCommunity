@@ -7,6 +7,8 @@ import java.io.Serializable;
 public class QueryStatisticsDto extends PageDto implements Serializable {
 
     private String communityId;
+
+    private String hisDate;
     private String startDate;
 
     /**
@@ -148,5 +150,13 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getHisDate() {
+        return hisDate;
+    }
+
+    public void setHisDate(String hisDate) {
+        this.hisDate = hisDate;
     }
 }

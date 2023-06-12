@@ -227,4 +227,63 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         double info = reportFeeStatisticsServiceDaoImpl.getChargeFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    @Override
+    public List<Map> getReceivedFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getReceivedFeeByFloor(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
+
+    /**
+     * 按收款方式统计收入
+     * @param queryStatisticsDto
+     * @return
+     */
+    @Override
+    public List<Map> getReceivedFeeByPrimeRate(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getReceivedFeeByPrimeRate(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
+
+    @Override
+    public List<Map> getOweFeeByFloor(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getOweFeeByFloor(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
+
+    @Override
+    public List<Map> getObjOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjOweFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
+
+    @Override
+    public long getReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getReceivedRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getReceivedRoomAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public long getHisOweReceivedRoomCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getHisOweReceivedRoomAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getHisOweReceivedRoomAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjReceivedFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return infos;
+    }
 }

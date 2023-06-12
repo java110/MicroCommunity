@@ -523,14 +523,21 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         roomDto.setCommunityId(communityId);
 
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        Assert.listOnlyOne(roomDtos, "未找到房屋信息");
+        //Assert.listOnlyOne(roomDtos, "未找到房屋信息");
+        if(roomDtos == null || roomDtos.size() < 1){
+            throw new IllegalArgumentException("未找到房屋信息");
+        }
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setRoomId(roomDtos.get(0).getRoomId());
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "未找到业主信息");
+        //Assert.listOnlyOne(ownerDtos, "未找到业主信息");
+        if(ownerDtos == null || ownerDtos.size() < 1){
+            throw new IllegalArgumentException("未找到业主信息");
+        }
+
         //查询是否有脱敏权限
         List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
         List<OwnerDto> ownerDtoList = new ArrayList<>();

@@ -51,7 +51,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         RoomDto roomDto = new RoomDto();
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
-
+        roomDto.setOwnerName(queryStatisticsDto.getOwnerName());
+        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        roomDto.setLink(queryStatisticsDto.getLink());
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
     }
@@ -69,6 +71,9 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setPage(queryStatisticsDto.getPage());
         roomDto.setRow(queryStatisticsDto.getRow());
+        roomDto.setOwnerName(queryStatisticsDto.getOwnerName());
+        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        roomDto.setLink(queryStatisticsDto.getLink());
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return baseDataStatisticsInnerServiceSMOImpl.getRoomInfo(roomDto);
     }
