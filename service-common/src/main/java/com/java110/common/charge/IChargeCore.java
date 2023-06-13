@@ -51,5 +51,5 @@ public interface IChargeCore {
      */
     void queryChargeMachineState(List<ChargeMachineDto> chargeMachineDtos);
 
-     boolean ifMonthCard(String personTel, String communityId);
+     boolean ifStartMonthCard(String personTel, String communityId);
 }

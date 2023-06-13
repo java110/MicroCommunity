@@ -145,7 +145,7 @@ public class StartChargeCmd extends Cmd {
         Assert.listOnlyOne(userDtos, "用户不存在");
 
         //todo 如果是 月卡充值 ，后面不做校验
-        if (chargeCoreImpl.ifMonthCard(userDtos.get(0).getTel(), chargeMachinePortDtos.get(0).getCommunityId())) {
+        if (chargeCoreImpl.ifStartMonthCard(userDtos.get(0).getTel(), chargeMachinePortDtos.get(0).getCommunityId())) {
             reqJson.put("acctId", "-1");
             return;
         }
@@ -267,8 +267,9 @@ public class StartChargeCmd extends Cmd {
         resultVo.setData(orderId);
 
         //todo 如果是 月卡充值 ，后面不做校验
-        if (chargeCoreImpl.ifMonthCard(userDtos.get(0).getTel(), chargeMachinePortDtos.get(0).getCommunityId())) {
+        if (chargeCoreImpl.ifStartMonthCard(userDtos.get(0).getTel(), chargeMachinePortDtos.get(0).getCommunityId())) {
             monthCardOrder(reqJson, chargeMachineDtos, orderId, durationHours);
+            context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
             return;
         }
 

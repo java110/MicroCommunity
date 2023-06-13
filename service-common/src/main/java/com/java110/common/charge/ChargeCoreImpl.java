@@ -233,7 +233,7 @@ public class ChargeCoreImpl implements IChargeCore {
         chargeMachineOrderAcctV1InnerServiceSMOImpl.saveChargeMachineOrderAcct(chargeMachineOrderAcctPo);
     }
 
-    public boolean ifMonthCard(String personTel, String communityId) {
+    public boolean ifMonthCard(String personTel, String communityId ) {
 
         ChargeMonthOrderDto chargeMonthOrderDto = new ChargeMonthOrderDto();
         chargeMonthOrderDto.setPersonTel(personTel);
@@ -248,7 +248,36 @@ public class ChargeCoreImpl implements IChargeCore {
         ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
         chargeMachineOrderDto.setPersonTel(personTel);
         chargeMachineOrderDto.setCommunityId(communityId);
-        chargeMachineOrderDto.setQueryTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        chargeMachineOrderDto.setQueryTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        chargeMachineOrderDto.setState(ChargeMachineOrderDto.STATE_FINISH);
+        int count = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrdersCount(chargeMachineOrderDto);
+
+        if(count >1){
+            return false;
+        }
+
+        return true;
+    }
+
+    @Autowired
+    public boolean ifStartMonthCard(String personTel, String communityId ) {
+
+        ChargeMonthOrderDto chargeMonthOrderDto = new ChargeMonthOrderDto();
+        chargeMonthOrderDto.setPersonTel(personTel);
+        chargeMonthOrderDto.setCommunityId(communityId);
+        chargeMonthOrderDto.setQueryTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        List<ChargeMonthOrderDto> chargeMonthOrderDtos = chargeMonthOrderV1InnerServiceSMOImpl.queryChargeMonthOrders(chargeMonthOrderDto);
+        if (chargeMonthOrderDtos == null || chargeMonthOrderDtos.size() < 1) {
+            return false;
+        }
+
+        //todo 今天是否又充过电
+        ChargeMachineOrderDto chargeMachineOrderDto = new ChargeMachineOrderDto();
+        chargeMachineOrderDto.setPersonTel(personTel);
+        chargeMachineOrderDto.setCommunityId(communityId);
+        chargeMachineOrderDto.setQueryStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        chargeMachineOrderDto.setQueryEndTime(DateUtil.getAddDayStringB(DateUtil.getCurrentDate(),1));
+        chargeMachineOrderDto.setState(ChargeMachineOrderDto.STATE_FINISH);
         List<ChargeMachineOrderDto> chargeMachineOrderDtos = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrders(chargeMachineOrderDto);
 
         if (chargeMachineOrderDtos == null || chargeMachineOrderDtos.size() < 1) {
@@ -268,6 +297,7 @@ public class ChargeCoreImpl implements IChargeCore {
 
         return false;
     }
+
 
     /**
      * 优惠券抵扣 小时
