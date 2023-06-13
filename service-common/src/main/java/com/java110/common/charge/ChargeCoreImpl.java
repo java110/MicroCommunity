@@ -259,7 +259,7 @@ public class ChargeCoreImpl implements IChargeCore {
         return true;
     }
 
-    @Autowired
+    @Override
     public boolean ifStartMonthCard(String personTel, String communityId ) {
 
         ChargeMonthOrderDto chargeMonthOrderDto = new ChargeMonthOrderDto();
