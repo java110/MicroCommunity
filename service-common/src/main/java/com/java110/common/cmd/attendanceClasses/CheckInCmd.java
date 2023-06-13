@@ -186,7 +186,7 @@ public class CheckInCmd extends Cmd {
             attendanceClassesTaskDetailDto.setStaffId(reqJson.getString("staffId"));
             attendanceClassesTaskDetailDtos = attendanceClassesTaskDetailInnerServiceSMOImpl.queryAttendanceClassesTaskDetails(attendanceClassesTaskDetailDto);
 
-            if (attendanceClassesTaskDetailDtos != null || attendanceClassesTaskDetailDtos.size() > 0) {
+            if (attendanceClassesTaskDetailDtos != null && attendanceClassesTaskDetailDtos.size() > 0) {
                 String specName = "上班:";
                 if (!AttendanceClassesTaskDetailDto.SPEC_CD_START.equals(attendanceClassesTaskDetailDtos.get(0).getSpecCd())) {
                     specName = "下班:";
