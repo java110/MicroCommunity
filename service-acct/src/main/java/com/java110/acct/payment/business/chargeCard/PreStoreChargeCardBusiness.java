@@ -123,7 +123,7 @@ public class PreStoreChargeCardBusiness implements IPaymentBusiness {
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
         paymentOrderDto.setMoney(Double.parseDouble(chargeMonthCardDtos.get(0).getCardPrice()));
-        paymentOrderDto.setName("账户充值");
+        paymentOrderDto.setName("购买充电月卡");
 
         reqJson.put("receivableAmount", paymentOrderDto.getMoney());
         reqJson.put("receivedAmount", paymentOrderDto.getMoney());
@@ -153,7 +153,7 @@ public class PreStoreChargeCardBusiness implements IPaymentBusiness {
             startTime = DateUtil.getDateFromStringA(chargeMonthOrderDtos.get(0).getEndTime());
         }
 
-        String endDate = DateUtil.getAddMonthStringA(startTime, reqJson.getIntValue("cardMonth"));
+        String endDate = DateUtil.getAddMonthStringA(startTime, Integer.parseInt(chargeMonthCardDtos.get(0).getCardMonth()));
 
         ChargeMonthOrderPo chargeMonthOrderPo = BeanConvertUtil.covertBean(reqJson, ChargeMonthOrderPo.class);
         chargeMonthOrderPo.setOrderId(paymentOrderDto.getOrderId());
