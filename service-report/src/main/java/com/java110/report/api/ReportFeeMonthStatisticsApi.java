@@ -301,6 +301,8 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "configId", required = false) String configId,
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                                    @RequestParam(value = "feeStartTime", required = false) String feeStartTime,
+                                                    @RequestParam(value = "feeEndTime", required = false) String feeEndTime,
                                                     @RequestParam(value = "objId", required = false) String objId,
                                                     @RequestParam(value = "roomName", required = false) String roomName,
                                                     @RequestParam(value = "page") int page,
@@ -321,6 +323,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
         reportFeeMonthStatisticsDto.setEndTime(endTime);
+        reportFeeMonthStatisticsDto.setFeeStartTime(feeStartTime);
+        reportFeeMonthStatisticsDto.setFeeEndTime(feeEndTime);
         reportFeeMonthStatisticsDto.setObjId(objId);
         if(!StringUtil.isEmpty(roomName)){
             String[] roomNameArray = roomName.split("-",3);

@@ -1725,6 +1725,12 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        <if test="feeStartTime !=null and feeStartTime != ''">
+            and t.start_time &gt;= #{feeStartTime}
+        </if>
+        <if test="feeEndTime !=null and feeEndTime != ''">
+            and t.end_time &lt;= #{feeEndTime}
+        </if>
         <if test="cashierId !=null and cashierId != ''">
             and t.cashier_id= #{cashierId}
         </if>
@@ -1826,6 +1832,12 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="feeStartTime !=null and feeStartTime != ''">
+            and t.start_time &gt;= #{feeStartTime}
+        </if>
+        <if test="feeEndTime !=null and feeEndTime != ''">
+            and t.end_time &lt;= #{feeEndTime}
         </if>
         <if test="cashierId !=null and cashierId != ''">
             and t.cashier_id= #{cashierId}

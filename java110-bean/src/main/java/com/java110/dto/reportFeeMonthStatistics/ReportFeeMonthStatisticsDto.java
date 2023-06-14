@@ -61,6 +61,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String startTime;
     private String endTime;
 
+
     private String statusCd = "0";
 
     private int oweDay;
