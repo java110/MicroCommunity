@@ -99,7 +99,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String feeTypeCd = reqJson.getString("feeTypeCd");//费用大类
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
-        String feeName = reqJson.getString("feeName");
+        String feeName = reqJson.getString("feeName").trim();
         String batchId = reqJson.getString("batchId");
 
 
@@ -121,7 +121,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setFeeNameEq(feeName);
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
