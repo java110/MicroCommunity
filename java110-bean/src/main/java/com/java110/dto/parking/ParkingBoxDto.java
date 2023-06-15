@@ -18,6 +18,7 @@ public class ParkingBoxDto extends PageDto implements Serializable {
     private String yelowCarIn;
     private String fee;
     private String tempCarIn;
+    private String tempAuth;
     private String boxName;
     private String remark;
     private String communityId;
@@ -127,5 +128,13 @@ public class ParkingBoxDto extends PageDto implements Serializable {
 
     public void setPaNum(String paNum) {
         this.paNum = paNum;
+    }
+
+    public String getTempAuth() {
+        return tempAuth;
+    }
+
+    public void setTempAuth(String tempAuth) {
+        this.tempAuth = tempAuth;
     }
 }

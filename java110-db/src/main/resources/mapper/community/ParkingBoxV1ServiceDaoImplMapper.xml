@@ -8,9 +8,9 @@
     <!-- 保存岗亭信息 add by wuxw 2018-07-03 -->
     <insert id="saveParkingBoxInfo" parameterType="Map">
         insert into parking_box(
-        yelow_car_in,fee,temp_car_in,box_name,remark,community_id,blue_car_in,box_id
+        yelow_car_in,fee,temp_car_in,box_name,remark,community_id,blue_car_in,box_id,temp_auth
         ) values (
-        #{yelowCarIn},#{fee},#{tempCarIn},#{boxName},#{remark},#{communityId},#{blueCarIn},#{boxId}
+        #{yelowCarIn},#{fee},#{tempCarIn},#{boxName},#{remark},#{communityId},#{blueCarIn},#{boxId},#{tempAuth}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getParkingBoxInfo" parameterType="Map" resultType="Map">
         select t.yelow_car_in,t.yelow_car_in yelowCarIn,t.fee,t.temp_car_in,t.temp_car_in
         tempCarIn,t.box_name,t.box_name boxName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.blue_car_in,t.blue_car_in blueCarIn,t.box_id,t.box_id boxId,pba.pa_id paId,pa.num paNum
+        communityId,t.blue_car_in,t.blue_car_in blueCarIn,t.box_id,t.box_id boxId,pba.pa_id paId,pa.num paNum,t.temp_auth tempAuth
         from parking_box t
         left join parking_box_area pba on t.box_id = pba.box_id and pba.default_area = 'T' and pba.status_cd ='0'
         left join parking_area pa on pba.pa_id = pa.pa_id and pa.community_id = t.community_id and pa.status_cd = '0'
@@ -32,6 +32,9 @@
         </if>
         <if test="tempCarIn !=null and tempCarIn != ''">
             and t.temp_car_in= #{tempCarIn}
+        </if>
+        <if test="tempAuth !=null and tempAuth != ''">
+            and t.temp_auth= #{tempAuth}
         </if>
         <if test="boxName !=null and boxName != ''">
             and t.box_name= #{boxName}
@@ -80,17 +83,19 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="blueCarIn !=null and blueCarIn != ''">
             , t.blue_car_in= #{blueCarIn}
+        </if>
+        <if test="tempAuth !=null and tempAuth != ''">
+            , t.temp_auth= #{tempAuth}
         </if>
         where 1=1
         <if test="boxId !=null and boxId != ''">
             and t.box_id= #{boxId}
         </if>
-
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询岗亭数量 add by wuxw 2018-07-03 -->
@@ -108,6 +113,9 @@
         </if>
         <if test="tempCarIn !=null and tempCarIn != ''">
             and t.temp_car_in= #{tempCarIn}
+        </if>
+        <if test="tempAuth !=null and tempAuth != ''">
+            and t.temp_auth= #{tempAuth}
         </if>
         <if test="boxName !=null and boxName != ''">
             and t.box_name= #{boxName}

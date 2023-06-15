@@ -95,4 +95,32 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
 
     }
 
+    /**
+     * 临时车审核
+     *
+     * @param reqJson 业务信息
+     * @return
+     */
+    @Override
+    public ResultVo tempCarAuth(JSONObject reqJson) {
+
+        JSONObject postParameters = new JSONObject();
+        postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        postParameters.put("authId", reqJson.getString("authId"));
+        postParameters.put("state",  reqJson.getString("state"));
+        postParameters.put("msg",  reqJson.getString("msg"));
+
+
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH), HttpMethod.POST, httpEntity, String.class);
+        System.out.println("缴费通知"+IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH));
+        System.out.println("请求报文"+postParameters.toJSONString());
+        System.out.println("返回报文"+responseEntity);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+
+    }
 }

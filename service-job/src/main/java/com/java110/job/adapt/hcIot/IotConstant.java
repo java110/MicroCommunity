@@ -123,6 +123,8 @@ public class IotConstant {
     //查询临时停车费订单
     public static final String NOTIFY_TEMP_CAR_FEE_ORDER = "/extApi/fee/notifyTempCarFeeOrder";
 
+    public static final String TEMP_CAR_AUTH = "/extApi/tempCarAuth/updateCarInoutTempAuths";
+
     //添加车辆
     public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
     //添加修改停车劵

@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.parking.ParkingBoxDto;
 import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class ListParkingBoxCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override

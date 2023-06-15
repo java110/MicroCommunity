@@ -110,4 +110,7 @@ public interface IDataBusInnerServiceSMO {
 
     @RequestMapping(value = "/getManualOpenDoorLogs", method = RequestMethod.POST)
     ResultVo getManualOpenDoorLogs(@RequestBody JSONObject reqJson);
+
+    @RequestMapping(value = "/tempCarAuth", method = RequestMethod.POST)
+    ResultVo tempCarAuth(@RequestBody JSONObject reqJson);
 }

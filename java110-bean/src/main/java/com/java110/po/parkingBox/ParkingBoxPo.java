@@ -30,6 +30,8 @@ public class ParkingBoxPo implements Serializable {
     private String yelowCarIn;
     private String fee;
     private String tempCarIn;
+
+    private String tempAuth;
     private String boxName;
     private String remark;
     private String statusCd = "0";
@@ -109,5 +111,11 @@ public class ParkingBoxPo implements Serializable {
         this.boxId = boxId;
     }
 
+    public String getTempAuth() {
+        return tempAuth;
+    }
 
+    public void setTempAuth(String tempAuth) {
+        this.tempAuth = tempAuth;
+    }
 }

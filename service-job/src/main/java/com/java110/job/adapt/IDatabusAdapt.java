@@ -87,4 +87,6 @@ public interface IDatabusAdapt {
     ResultVo updateCarInoutCarNum(CarInoutDto carInoutDto);
 
     ResultVo getManualOpenDoorLogs(JSONObject reqJson);
+
+    ResultVo tempCarAuth(JSONObject reqJson);
 }

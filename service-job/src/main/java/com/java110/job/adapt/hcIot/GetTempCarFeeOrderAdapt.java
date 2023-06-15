@@ -122,4 +122,6 @@ public class GetTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"), paramOut.getJSONArray("data"));
     }
 
+
+
 }
