@@ -252,15 +252,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             if(!"H".equals(ownerCarDto.getSpaceSate()) && !"S".equals(ownerCarDto.getSpaceSate())){
                 throw new IllegalArgumentException(ownerCarDto.getCarNum()+"车位状态应填写 S（出售）或者 H （出租）");
             }
-            //获取房屋名称
-            String roomName = ownerCarDto.getRoomName().trim();
-            if(!roomName.contains("-")){
-                throw new IllegalArgumentException(ownerCarDto.getCarNum()+"房屋号格式错误 格式应为：楼栋-单元-房屋，如果是商铺 楼栋-0-商铺编号");
-            }
-            String[] split = roomName.split("-", 3);
-            if(split.length != 3){
-                throw new IllegalArgumentException(ownerCarDto.getCarNum()+"房屋号格式错误 格式应为：楼栋-单元-房屋，如果是商铺 楼栋-0-商铺编号");
-            }
+
 
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setName(ownerCarDto.getOwnerName());
